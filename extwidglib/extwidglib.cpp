@@ -9,9 +9,14 @@
 //    return "Extwidglib::getName()";
 //}
 
-QString getExportString(LCTestDllInterface* _t)
+QString getTestDllInterface(LCTestDllInterface* _t)
 {
     return _t->getString();
+}
+
+QString getTestDllclass(LCTestDllClass* _c)
+{
+    return _c->getString();
 }
 
 

@@ -7,6 +7,46 @@
 #include <QSharedPointer>
 #include "lqextendevent.h"
 
+enum class ERemoteDataStatus
+{
+    DS_UNDEF,
+    DS_OK,
+    DS_WRONG
+};
+
+class LCRemoteDataReadListnerInterface
+{
+public:
+    LCRemoteDataReadListnerInterface(){}
+    virtual void dataIsRead(ERemoteDataStatus status, const QByteArray& _data);
+};
+
+class LCRemoteDataWriteListnerInterface
+{
+public:
+    LCRemoteDataWriteListnerInterface(){}
+    virtual void dataIsWrite(const QByteArray& _data);
+};
+
+class LCRemoteDataReaderInterface
+{
+public:
+    LCRemoteDataReaderInterface(){}
+};
+
+class LCRemoteDataWriterInterface
+{
+public:
+    LCRemoteDataWriterInterface(){}
+};
+
+class LCQRemoteDataSourceInterface
+{
+public:
+    LCQRemoteDataSourceInterface(){}
+    virtual LCRemoteDataReaderInterface* createReader();
+    virtual LCRemoteDataReaderInterface* createWriter();
+};
 
 
 class LCQRemoteDataSourceBase
@@ -20,6 +60,7 @@ public:
         DS_WRONG,
     };
 
+protected:
     //---------------------------------------------------------------------------------------------------CQEventDataRead
     class CQEventDataIsRead : public QEvent
     {

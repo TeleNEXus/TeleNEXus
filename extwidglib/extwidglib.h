@@ -6,6 +6,7 @@
 #include <QString>
 
 #include "../srdt/testdllinterface.h"
+#include "../srdt/lctestdllclass.h"
 
 
 
@@ -16,6 +17,7 @@
 //    QString getName();
 //};
 
-extern "C" QString EXTWIDGLIB_EXPORT getExportString(LCTestDllInterface*);
+extern "C" QString EXTWIDGLIB_EXPORT getTestDllInterface(LCTestDllInterface*);
+extern "C" QString EXTWIDGLIB_EXPORT getTestDllclass(LCTestDllClass*);
 
 #endif // EXTWIDGLIB_H
