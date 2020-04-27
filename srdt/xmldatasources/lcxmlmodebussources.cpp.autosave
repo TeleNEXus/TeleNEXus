@@ -1,0 +1,11 @@
+#include "lcxmlmodebussources.h"
+
+LCXmlModebusSources::LCXmlModebusSources()
+{
+
+}
+
+QMap<QString, LCQRemoteDataSourceBase*> create(const QDomElement& _element)
+{
+    
+}
