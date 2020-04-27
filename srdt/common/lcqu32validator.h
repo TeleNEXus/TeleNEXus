@@ -2,12 +2,11 @@
 #define LCQUINT32VALIDATOR_H
 
 #include <QValidator>
-#include <ltypedef.h>
 
 class LCQValidatorU32 : public QValidator
 {
     Q_OBJECT
-    using MTUint32 = lstd::U32;
+    using MTUint32 = quint32;
     MTUint32 mMin;
     MTUint32 mMax;
 public:

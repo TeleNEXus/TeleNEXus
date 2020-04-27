@@ -13,9 +13,9 @@ class LCDataStrFormatBase
 {
 protected:
     static QChar  msFillCharUndefDef;         //Символы заполнения при неопределенных данных.
-    static TUint8 msFillCharUndefDefLength;   //Длина заполнения при неопределенных данных.
+    static quint8 msFillCharUndefDefLength;   //Длина заполнения при неопределенных данных.
     static QChar  msFillCharWrongDef;         //Символы заполнения при ошибочных данных.
-    static TUint8 msFillCharWrongDefLength;   //Длина заполнения при ошибочных данных.
+    static quint8 msFillCharWrongDefLength;   //Длина заполнения при ошибочных данных.
 public:
     LCDataStrFormatBase();
     virtual QString toString(const QByteArray& _data) = 0;
@@ -31,9 +31,9 @@ public:
     static QString getWrongStateString(int _fieldWidth = msFillCharWrongDefLength,
                                         QChar _charWrong = msFillCharWrongDef);
 public:
-    static void setFillCharUndefDef(QChar _c, TUint8 _length);
+    static void setFillCharUndefDef(QChar _c, quint8 _length);
     static void setFillCharUndefDef(QChar _c);
-    static void setFillCharWrongDef(QChar _c, TUint8 _length);
+    static void setFillCharWrongDef(QChar _c, quint8 _length);
     static void setFillCharWrongDef(QChar _c);
 };
 

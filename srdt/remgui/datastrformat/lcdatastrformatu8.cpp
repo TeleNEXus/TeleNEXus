@@ -19,7 +19,7 @@ LCDataStrFormatU8::
                                                      _fillCharUndef,
                                                      _fillCharWrong)
 {
-    mValidator.setRange(std::numeric_limits<TUint8>::min(), std::numeric_limits<TUint8>::max());
+    mValidator.setRange(std::numeric_limits<quint8>::min(), std::numeric_limits<quint8>::max());
 }
 
 //--------------------------------------------------------------------------------------------------------------toString
@@ -31,14 +31,14 @@ QString LCDataStrFormatU8::toString(const QByteArray& _data)
         int length = (mFieldWidth == 0) ? (msFillCharWrongDefLength) : (abs(mFieldWidth));
         return QString(length, ch);
     }
-    return QString("%1").arg( ((TUint8*)_data.constData())[0], mFieldWidth, mBase, mFillChar);
+    return QString("%1").arg( ((quint8*)_data.constData())[0], mFieldWidth, mBase, mFillChar);
 }
 
 //---------------------------------------------------------------------------------------------------------------toBytes
 QByteArray LCDataStrFormatU8::toBytes(const QString& _str)
 {
     bool ok = false;
-    TUint16 r = ((TUint16)_str.toUShort(&ok, mBase));
+    quint16 r = ((quint16)_str.toUShort(&ok, mBase));
     if((!ok) || ((r & 0xff00) != 0)) return QByteArray();
     return QByteArray((char*)(&r), 1);
 }

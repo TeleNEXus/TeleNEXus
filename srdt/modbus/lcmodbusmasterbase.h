@@ -1,7 +1,6 @@
 #ifndef LCMODBUSMASTERBASE_H
 #define LCMODBUSMASTERBASE_H
 
-#include "ltypedef.h"
 #include <QModbusClient>
 #include <QMutex>
 #include <QWaitCondition>
@@ -9,8 +8,6 @@
 
 namespace modbus
 {
-
-using namespace lstd;
 
 class LCModbusMasterBase : public QObject
 {
@@ -32,9 +29,9 @@ public:
             UNREC_ERROR
         };
         EStatus status;
-        TUint8  modbusExceptionCode;
+        quint8  modbusExceptionCode;
         SReply() : status(EStatus::UNDEF), modbusExceptionCode(0){}
-        SReply(EStatus _status, TUint8 _except_code) : status(_status), modbusExceptionCode(_except_code){}
+        SReply(EStatus _status, quint8 _except_code) : status(_status), modbusExceptionCode(_except_code){}
     };
 
 private:
@@ -48,24 +45,24 @@ public:
     explicit LCModbusMasterBase(QObject* _parent = nullptr);
     virtual ~LCModbusMasterBase();
 
-    virtual SReply readInputRegisters(TUint8 _devId,
-                                                  TUint16 _addr, TUint16 _regQuant, TUint16 _regs[]) final;
-    virtual SReply readHoldingRegisters(TUint8 _devId,
-                                                  TUint16 _addr, TUint16 _regQuant, TUint16 _regs[]) final;
+    virtual SReply readInputRegisters(quint8 _devId,
+                                                  quint16 _addr, quint16 _regQuant, quint16 _regs[]) final;
+    virtual SReply readHoldingRegisters(quint8 _devId,
+                                                  quint16 _addr, quint16 _regQuant, quint16 _regs[]) final;
 
-    virtual SReply writeSingleRegister(TUint8 _devId, TUint16 _addr, TUint16 _reg) final;
+    virtual SReply writeSingleRegister(quint8 _devId, quint16 _addr, quint16 _reg) final;
 
-    virtual SReply writeMultipleRegisters(TUint8 _devId,
-                                                    TUint16 _addr, TUint16 _regQuan, const TUint16 _regs[]) final;
+    virtual SReply writeMultipleRegisters(quint8 _devId,
+                                                    quint16 _addr, quint16 _regQuan, const quint16 _regs[]) final;
 
-    virtual SReply readCoils(TUint8 _devId, TUint16 _startAddr, TUint16 _coilsQuant, TUint8 _bits[]) final;
+    virtual SReply readCoils(quint8 _devId, quint16 _startAddr, quint16 _coilsQuant, quint8 _bits[]) final;
 
-    virtual SReply writeSingleCoils(TUint8 _devId, TUint16 _addr, TUint8 _bit) final;
+    virtual SReply writeSingleCoils(quint8 _devId, quint16 _addr, quint8 _bit) final;
 
-    virtual SReply writeMultipleCoils(TUint8 _devId,
-                                                    TUint16 _addr, TUint16 _regQuan, const TUint8 _bits[]) final;
+    virtual SReply writeMultipleCoils(quint8 _devId,
+                                                    quint16 _addr, quint16 _regQuan, const quint8 _bits[]) final;
 
-    virtual SReply readDiscreteInputs(TUint8 _devId, TUint16 _startAddr, TUint16 _inputsQuant, TUint8 _bits[]) final;
+    virtual SReply readDiscreteInputs(quint8 _devId, quint16 _startAddr, quint16 _inputsQuant, quint8 _bits[]) final;
 
 protected:
     void connectRequest();

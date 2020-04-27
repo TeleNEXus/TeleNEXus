@@ -117,11 +117,11 @@ void LCQModbusDataSource::CControllerRegistersBase::CDataItem::notifyReaders()
 
 //----------------------------------------------------------------------------------------------------------------------
 LCQModbusDataSource::CControllerRegistersBase::
-        CControllerRegistersBase(const TUint8& _devId,
+        CControllerRegistersBase(const quint8& _devId,
                                     QSharedPointer<LCModbusMasterBase> _master) : mDevId(_devId),
                                                                                  mwpMaster(_master)
 {
-    mRegBuff = new TUint16[MODBUS_MAX_READ_REGISTER_COUNT + 1];
+    mRegBuff = new quint16[MODBUS_MAX_READ_REGISTER_COUNT + 1];
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -145,7 +145,7 @@ void LCQModbusDataSource::CControllerRegistersBase::deleteReadDataItem(CDataItem
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-void LCQModbusDataSource::CControllerRegistersBase::read(TUint16 _addr, TUint16 _size, QObject* _reader)
+void LCQModbusDataSource::CControllerRegistersBase::read(quint16 _addr, quint16 _size, QObject* _reader)
 {
 //    QSharedPointer<LCModbusMasterBase> master = mwpMaster.lock();
 
@@ -167,8 +167,8 @@ void LCQModbusDataSource::CControllerRegistersBase::read(TUint16 _addr, TUint16 
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-void LCQModbusDataSource::CControllerRegistersBase::write(TUint16 _addr,
-                                                             TUint16 _size,
+void LCQModbusDataSource::CControllerRegistersBase::write(quint16 _addr,
+                                                             quint16 _size,
                                                              const QByteArray& _data,
                                                              QObject* _writer)
 {
@@ -177,13 +177,13 @@ void LCQModbusDataSource::CControllerRegistersBase::write(TUint16 _addr,
     status = EDataStatus::DS_WRONG;
     if(_data.size() % 2 == 0)
     {
-        TUint16 length = _data.size() >> 1;
+        quint16 length = _data.size() >> 1;
         if(length == _size)
         {
 //            QSharedPointer<LCModbusMasterBase> sp = mwpMaster.lock();
             if(!mwpMaster.isNull())
             {
-                if(writeRegs(mwpMaster.data(), _addr, length, ((TUint16*)_data.constData())).status ==
+                if(writeRegs(mwpMaster.data(), _addr, length, ((quint16*)_data.constData())).status ==
                         LCModbusMasterBase::SReply::EStatus::OK)
                     status = EDataStatus::DS_OK;
             }
@@ -216,7 +216,7 @@ void LCQModbusDataSource::CControllerRegistersBase::update()
 
 //===========================================================================================CControllerHoldingRegisters
 LCQModbusDataSource::CControllerHoldingRegisters::
-        CControllerHoldingRegisters(const TUint8& _devId,
+        CControllerHoldingRegisters(const quint8& _devId,
                                     QSharedPointer<LCModbusMasterBase> _master) :
                                                     CControllerRegistersBase(_devId, _master)
 {
@@ -232,7 +232,7 @@ LCQModbusDataSource::CControllerHoldingRegisters::
 LCModbusMasterBase::SReply
             LCQModbusDataSource::
                 CControllerHoldingRegisters::
-                    readRegs(LCModbusMasterBase* master, TUint16 _addr, TUint16 _size, TUint16 _regs[])
+                    readRegs(LCModbusMasterBase* master, quint16 _addr, quint16 _size, quint16 _regs[])
 {
 
     return master->readHoldingRegisters(mDevId, _addr, _size, _regs);
@@ -242,7 +242,7 @@ LCModbusMasterBase::SReply
 LCModbusMasterBase::SReply
         LCQModbusDataSource::
             CControllerHoldingRegisters::
-                writeRegs(LCModbusMasterBase* master, TUint16 _addr, TUint16 _size, TUint16 _regs[])
+                writeRegs(LCModbusMasterBase* master, quint16 _addr, quint16 _size, quint16 _regs[])
 {
     if(_size == 1)
     {
@@ -253,7 +253,7 @@ LCModbusMasterBase::SReply
 
 //=============================================================================================CControllerInputRegisters
 LCQModbusDataSource::CControllerInputRegisters::
-        CControllerInputRegisters(const TUint8& _devId,
+        CControllerInputRegisters(const quint8& _devId,
                                     QWeakPointer<LCModbusMasterBase> _master) :
                                                     CControllerRegistersBase(_devId, _master)
 {
@@ -269,7 +269,7 @@ LCQModbusDataSource::CControllerInputRegisters::
 LCModbusMasterBase::SReply
             LCQModbusDataSource::
                 CControllerInputRegisters::
-                    readRegs(LCModbusMasterBase* master, TUint16 _addr, TUint16 _size, TUint16 _regs[])
+                    readRegs(LCModbusMasterBase* master, quint16 _addr, quint16 _size, quint16 _regs[])
 {
     return master->readInputRegisters(mDevId, _addr, _size, _regs);
 }
@@ -278,7 +278,7 @@ LCModbusMasterBase::SReply
 LCModbusMasterBase::SReply
         LCQModbusDataSource::
             CControllerInputRegisters::
-                writeRegs(LCModbusMasterBase* master, TUint16 _addr, TUint16 _size, TUint16 _regs[])
+                writeRegs(LCModbusMasterBase* master, quint16 _addr, quint16 _size, quint16 _regs[])
 {
     Q_UNUSED(master);
     Q_UNUSED(_addr);
@@ -323,11 +323,11 @@ void LCQModbusDataSource::CControllerBitsBase::CDataItem::notifyReaders()
 
 //----------------------------------------------------------------------------------------------------------------------
 LCQModbusDataSource::CControllerBitsBase::
-        CControllerBitsBase(const TUint8& _devId,
+        CControllerBitsBase(const quint8& _devId,
                                     QWeakPointer<LCModbusMasterBase> _master) :  mDevId(_devId),
                                                                                  mwpMaster(_master)
 {
-    mBitsBuff = new TUint8[MODBUS_MAX_READ_COIL_COUNT + 1];
+    mBitsBuff = new quint8[MODBUS_MAX_READ_COIL_COUNT + 1];
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -351,7 +351,7 @@ void LCQModbusDataSource::CControllerBitsBase::deleteReadDataItem(CDataItem* _da
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-void LCQModbusDataSource::CControllerBitsBase::read(TUint16 _addr, TUint16 _size, QObject* _reader)
+void LCQModbusDataSource::CControllerBitsBase::read(quint16 _addr, quint16 _size, QObject* _reader)
 {
     QSharedPointer<LCModbusMasterBase> master = mwpMaster.lock();
 
@@ -373,8 +373,8 @@ void LCQModbusDataSource::CControllerBitsBase::read(TUint16 _addr, TUint16 _size
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-void LCQModbusDataSource::CControllerBitsBase::write(TUint16 _addr,
-                                                             TUint16 _size,
+void LCQModbusDataSource::CControllerBitsBase::write(quint16 _addr,
+                                                             quint16 _size,
                                                              const QByteArray& _data,
                                                              QObject* _writer)
 {
@@ -387,7 +387,7 @@ void LCQModbusDataSource::CControllerBitsBase::write(TUint16 _addr,
         QSharedPointer<LCModbusMasterBase> sp = mwpMaster.lock();
         if(!sp.isNull())
         {
-            if(writeBits(sp.data(), _addr, _size, ((TUint8*)_data.constData())).status ==
+            if(writeBits(sp.data(), _addr, _size, ((quint8*)_data.constData())).status ==
                     LCModbusMasterBase::SReply::EStatus::OK)
                 status = EDataStatus::DS_OK;
         }
@@ -419,7 +419,7 @@ void LCQModbusDataSource::CControllerBitsBase::update()
 
 //=============================================================================================CControllerDiscreteInputs
 LCQModbusDataSource::CControllerCoils::
-        CControllerCoils(const TUint8& _devId,
+        CControllerCoils(const quint8& _devId,
                                     QWeakPointer<LCModbusMasterBase> _master) :
                                                     CControllerBitsBase(_devId, _master)
 {
@@ -435,7 +435,7 @@ LCQModbusDataSource::CControllerCoils::
 LCModbusMasterBase::SReply
             LCQModbusDataSource::
                 CControllerCoils::
-                    readBits(LCModbusMasterBase* master, TUint16 _addr, TUint16 _size, TUint8 _bits[])
+                    readBits(LCModbusMasterBase* master, quint16 _addr, quint16 _size, quint8 _bits[])
 {
 
     return master->readCoils(mDevId, _addr, _size, _bits);
@@ -445,7 +445,7 @@ LCModbusMasterBase::SReply
 LCModbusMasterBase::SReply
         LCQModbusDataSource::
             CControllerCoils::
-                writeBits(LCModbusMasterBase* master, TUint16 _addr, TUint16 _size, TUint8 _bits[])
+                writeBits(LCModbusMasterBase* master, quint16 _addr, quint16 _size, quint8 _bits[])
 {
     if(_size == 1)
     {
@@ -456,7 +456,7 @@ LCModbusMasterBase::SReply
 
 //=============================================================================================CControllerDiscreteInputs
 LCQModbusDataSource::CControllerDiscreteInputs::
-        CControllerDiscreteInputs(const TUint8& _devId,
+        CControllerDiscreteInputs(const quint8& _devId,
                                     QWeakPointer<LCModbusMasterBase> _master) :
                                                     CControllerBitsBase(_devId, _master)
 {
@@ -472,7 +472,7 @@ LCQModbusDataSource::CControllerDiscreteInputs::
 LCModbusMasterBase::SReply
             LCQModbusDataSource::
                 CControllerDiscreteInputs::
-                    readBits(LCModbusMasterBase* master, TUint16 _addr, TUint16 _size, TUint8 _bits[])
+                    readBits(LCModbusMasterBase* master, quint16 _addr, quint16 _size, quint8 _bits[])
 {
 
     return master->readDiscreteInputs(mDevId, _addr, _size, _bits);
@@ -482,7 +482,7 @@ LCModbusMasterBase::SReply
 LCModbusMasterBase::SReply
         LCQModbusDataSource::
             CControllerDiscreteInputs::
-                writeBits(LCModbusMasterBase* master, TUint16 _addr, TUint16 _size, TUint8 _bits[])
+                writeBits(LCModbusMasterBase* master, quint16 _addr, quint16 _size, quint8 _bits[])
 {
     Q_UNUSED(master);
     Q_UNUSED(_addr);
@@ -515,8 +515,8 @@ LCModbusMasterBase::SReply
 //==================================================================================================CDataMapItemRegsBase
 LCQModbusDataSource::
                 CDataMapItemRegsBase::
-                    CDataMapItemRegsBase(TUint16 _addr,
-                                            TUint16 _size,
+                    CDataMapItemRegsBase(quint16 _addr,
+                                            quint16 _size,
                                             CControllerRegistersBase& _controller): mDataItem(_addr, _size),
                                                                                     mController(_controller)
 {
@@ -557,8 +557,8 @@ void LCQModbusDataSource::
 //===============================================================================================CDataMapItemHoldingRegs
 LCQModbusDataSource::
                 CDataMapItemHoldingRegs::
-                    CDataMapItemHoldingRegs(TUint16 _addr,
-                                            TUint16 _size,
+                    CDataMapItemHoldingRegs(quint16 _addr,
+                                            quint16 _size,
                                             CControllerHoldingRegisters& _controller):
                                                 CDataMapItemRegsBase(_addr, _size, _controller)
 {
@@ -581,8 +581,8 @@ void LCQModbusDataSource::
 //=================================================================================================CDataMapItemInputRegs
 LCQModbusDataSource::
                 CDataMapItemInputRegs::
-                    CDataMapItemInputRegs(  TUint16 _addr,
-                                            TUint16 _size,
+                    CDataMapItemInputRegs(  quint16 _addr,
+                                            quint16 _size,
                                             CControllerInputRegisters& _controller):
                                             CDataMapItemRegsBase(_addr, _size, _controller)
 {
@@ -611,8 +611,8 @@ void LCQModbusDataSource::
 //==================================================================================================CDataMapItemBitsBase
 LCQModbusDataSource::
                 CDataMapItemBitsBase::
-                    CDataMapItemBitsBase(TUint16 _addr,
-                                            TUint16 _size,
+                    CDataMapItemBitsBase(quint16 _addr,
+                                            quint16 _size,
                                             CControllerBitsBase& _controller): mDataItem(_addr, _size),
                                                                                mController(_controller)
 {
@@ -653,8 +653,8 @@ void LCQModbusDataSource::
 //=====================================================================================================CDataMapItemCoils
 LCQModbusDataSource::
                 CDataMapItemCoils::
-                    CDataMapItemCoils(TUint16 _addr,
-                                            TUint16 _size,
+                    CDataMapItemCoils(quint16 _addr,
+                                            quint16 _size,
                                             CControllerBitsBase& _controller):
                                                 CDataMapItemBitsBase(_addr, _size, _controller)
 {
@@ -677,8 +677,8 @@ void LCQModbusDataSource::
 //=================================================================================================CDataMapItemInputRegs
 LCQModbusDataSource::
                 CDataMapItemDiscreteInputs::
-                    CDataMapItemDiscreteInputs(  TUint16 _addr,
-                                            TUint16 _size,
+                    CDataMapItemDiscreteInputs(  quint16 _addr,
+                                            quint16 _size,
                                             CControllerBitsBase& _controller):
                                             CDataMapItemBitsBase(_addr, _size, _controller)
 {
@@ -710,7 +710,7 @@ void LCQModbusDataSource::
 //==============================================================================================================CDataMap
 LCQModbusDataSource::
         CDataMap::
-            CDataMap(const TUint8& _devId,
+            CDataMap(const quint8& _devId,
                      QSharedPointer<LCModbusMasterBase> _master) :  mControllerHoldingRegs(_devId, _master),
                                                                     mControllerInputRegs(_devId, _master),
                                                                     mControllerCoils(_devId, _master),
@@ -740,7 +740,7 @@ void LCQModbusDataSource::CDataMap::update()
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-void LCQModbusDataSource::CDataMap::addItemHoldingRegs(const QString& _name, TUint16 _addr, TUint16 _size)
+void LCQModbusDataSource::CDataMap::addItemHoldingRegs(const QString& _name, quint16 _addr, quint16 _size)
 {
     MTItemIterator it = mMapItems.find(_name);
     if(it != mMapItems.end())
@@ -751,7 +751,7 @@ void LCQModbusDataSource::CDataMap::addItemHoldingRegs(const QString& _name, TUi
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-void LCQModbusDataSource::CDataMap::addItemInputRegs(const QString& _name, TUint16 _addr, TUint16 _size)
+void LCQModbusDataSource::CDataMap::addItemInputRegs(const QString& _name, quint16 _addr, quint16 _size)
 {
     MTItemIterator it = mMapItems.find(_name);
     if(it != mMapItems.end())
@@ -762,7 +762,7 @@ void LCQModbusDataSource::CDataMap::addItemInputRegs(const QString& _name, TUint
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-void LCQModbusDataSource::CDataMap::addItemDiscreteInputs(const QString& _name, TUint16 _addr, TUint16 _size)
+void LCQModbusDataSource::CDataMap::addItemDiscreteInputs(const QString& _name, quint16 _addr, quint16 _size)
 {
     MTItemIterator it = mMapItems.find(_name);
     if(it != mMapItems.end())
@@ -773,7 +773,7 @@ void LCQModbusDataSource::CDataMap::addItemDiscreteInputs(const QString& _name, 
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-void LCQModbusDataSource::CDataMap::addItemCoils(const QString& _name, TUint16 _addr, TUint16 _size)
+void LCQModbusDataSource::CDataMap::addItemCoils(const QString& _name, quint16 _addr, quint16 _size)
 {
     MTItemIterator it = mMapItems.find(_name);
     if(it != mMapItems.end())
@@ -824,7 +824,7 @@ bool LCQModbusDataSource::CDataMap::disconnectReader(QObject* _reader)
 int __i = 0;
 //===================================================================================================LCQModbusDataSource
 LCQModbusDataSource::
-                LCQModbusDataSource(TUint8 _devId,
+                LCQModbusDataSource(quint8 _devId,
                                     QSharedPointer<LCModbusMasterBase> _modbusMaster,
                                     QObject *_parent) :
                                                                 QObject(_parent),
@@ -852,7 +852,7 @@ static void doDeleteLater(LCQModbusDataSource* _obj)
 }
 
 //----------------------------------------------------------------------------------------------------------------create
-QSharedPointer<LCQModbusDataSource> LCQModbusDataSource::create(TUint8 _devId,
+QSharedPointer<LCQModbusDataSource> LCQModbusDataSource::create(quint8 _devId,
                                                                 QSharedPointer<LCModbusMasterBase> _modbusMaster,
                                                                 QObject *_parent)
 {
@@ -862,26 +862,26 @@ QSharedPointer<LCQModbusDataSource> LCQModbusDataSource::create(TUint8 _devId,
 
 
 //------------------------------------------------------------------------------------------------addDataItemHoldingRegs
-void LCQModbusDataSource::addDataItemHoldingRegs(const QString& _name, TUint16 _addr, TUint16 _size)
+void LCQModbusDataSource::addDataItemHoldingRegs(const QString& _name, quint16 _addr, quint16 _size)
 {
     mDataMap.addItemHoldingRegs(_name, _addr, _size);
 }
 
 
 //----------------------------------------------------------------------------------------------------------------------
-void LCQModbusDataSource::addDataItemInputRegs(const QString& _name, TUint16 _addr, TUint16 _size)
+void LCQModbusDataSource::addDataItemInputRegs(const QString& _name, quint16 _addr, quint16 _size)
 {
     mDataMap.addItemInputRegs(_name, _addr, _size);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-void LCQModbusDataSource::addDataItemDiscreteInputs(const QString& _name, TUint16 _addr, TUint16 _size)
+void LCQModbusDataSource::addDataItemDiscreteInputs(const QString& _name, quint16 _addr, quint16 _size)
 {
     mDataMap.addItemDiscreteInputs(_name, _addr, _size);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-void LCQModbusDataSource::addDataItemCoils(const QString& _name, TUint16 _addr, TUint16 _size)
+void LCQModbusDataSource::addDataItemCoils(const QString& _name, quint16 _addr, quint16 _size)
 {
     mDataMap.addItemCoils(_name, _addr, _size);
 }

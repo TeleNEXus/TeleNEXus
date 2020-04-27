@@ -23,7 +23,7 @@ QString LCDataStrFormatBool::toString(const QByteArray& _data)
                                         mFillCharWrong);
     }
 
-    TUint8 byte = 0;
+    quint8 byte = 0;
     for(int i = 0; i < _data.size(); i++)
     {
         byte |= _data[i];

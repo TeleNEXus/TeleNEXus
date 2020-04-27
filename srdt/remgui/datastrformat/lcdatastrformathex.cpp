@@ -23,11 +23,11 @@ QString LCDataStrFormatHex::toString(const QByteArray& _data)
     {
         if(mSeparator.isNull())
         {
-            str = str + QString("%1").arg(((TUint8*)_data.constData())[i], 2, 16, QChar('0'));
+            str = str + QString("%1").arg(((quint8*)_data.constData())[i], 2, 16, QChar('0'));
         }
         else
         {
-            str = str + QString("%1%2").arg(((TUint8*)_data.constData())[i], 2, 16, QChar('0')).arg(mSeparator);
+            str = str + QString("%1%2").arg(((quint8*)_data.constData())[i], 2, 16, QChar('0')).arg(mSeparator);
         }
     }
     return str;

@@ -8,6 +8,7 @@
 #include "lqextendevent.h"
 
 
+
 class LCQRemoteDataSourceBase
 {
 public:
