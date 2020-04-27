@@ -27,14 +27,14 @@ QString LCDataStrFormatU32::toString(const QByteArray& _data)
         int length = (mFieldWidth == 0) ? (msFillCharWrongDefLength) : (abs(mFieldWidth));
         return QString(length, ch);
     }
-    return QString("%1").arg( ((TUint32*)_data.constData())[0], mFieldWidth, mBase, mFillChar);
+    return QString("%1").arg( ((quint32*)_data.constData())[0], mFieldWidth, mBase, mFillChar);
 }
 
 //---------------------------------------------------------------------------------------------------------------toBytes
 QByteArray LCDataStrFormatU32::toBytes(const QString& _str)
 {
     bool ok = false;
-    TUint32 r = ((TUint32)_str.toUInt(&ok, mBase));
+    quint32 r = ((quint32)_str.toUInt(&ok, mBase));
     if(!ok) return QByteArray();
     return QByteArray((char*)(&r), 4);
 }

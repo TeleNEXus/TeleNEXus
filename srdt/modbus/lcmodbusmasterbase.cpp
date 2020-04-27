@@ -113,7 +113,7 @@ namespace modbus {
                             mReply.status = errorTranslate(mpModbusReply->error());
                         }
                         mReply.modbusExceptionCode =
-                                static_cast<TUint8>(mpModbusReply->rawResult().exceptionCode());
+                                static_cast<quint8>(mpModbusReply->rawResult().exceptionCode());
                         mpModbusReply->deleteLater();
                         mpWaitCond->wakeOne();
                     });
@@ -135,18 +135,18 @@ namespace modbus {
             HOLDING
         };
 
-        TUint8                      mDevId;
-        TUint16                     mStartAddr;
-        TUint16                     mRegQuant;
-        TUint16*                    mpRegs;
+        quint8                      mDevId;
+        quint16                     mStartAddr;
+        quint16                     mRegQuant;
+        quint16*                    mpRegs;
 
         QModbusDataUnit::RegisterType mRegType;
 
 
-        explicit CDataRequestReadRegs(   TUint8 _devId,
-                                TUint16 _startAddr,
-                                TUint16 _regQuant,
-                                TUint16* _regs,
+        explicit CDataRequestReadRegs(   quint8 _devId,
+                                quint16 _startAddr,
+                                quint16 _regQuant,
+                                quint16* _regs,
                                 EMode    _mode,
                                 QWaitCondition* _waitCond) :    CDataReqBase(_waitCond),
                                                                 mDevId(_devId),
@@ -176,7 +176,7 @@ namespace modbus {
                 return  MTMaster::SReply::EStatus::WRONG_RESP;
             }
 
-            for(TUint16 i = 0; i < mRegQuant; i++)
+            for(quint16 i = 0; i < mRegQuant; i++)
             {
                 mpRegs[i] = result.value(i);
             }
@@ -189,15 +189,15 @@ namespace modbus {
     class CDataRequestWriteSingleReg : public CDataReqBase
     {
     public:
-        TUint8                      mDevId;
-        TUint16                     mAddr;
-        TUint16                     mReg;
+        quint8                      mDevId;
+        quint16                     mAddr;
+        quint16                     mReg;
 
 //        QModbusRequest mReq;
 
-        explicit CDataRequestWriteSingleReg(TUint8   _devId,
-                                            TUint16  _addr,
-                                            TUint16  _reg,
+        explicit CDataRequestWriteSingleReg(quint8   _devId,
+                                            quint16  _addr,
+                                            quint16  _reg,
                                             QWaitCondition* _waitCond) : CDataReqBase(_waitCond),
             mDevId(_devId),
             mAddr(_addr),
@@ -227,15 +227,15 @@ namespace modbus {
     class CDataRequestWriteMultipleRegs : public CDataReqBase
     {
     public:
-        TUint8                      mDevId;
-        TUint16                     mStartAddr;
-        TUint16                     mRegQuant;
+        quint8                      mDevId;
+        quint16                     mStartAddr;
+        quint16                     mRegQuant;
         QModbusDataUnit             mDataUnit;
 
-        explicit CDataRequestWriteMultipleRegs(  TUint8 _devId,
-                                        TUint16 _startAddr,
-                                        TUint16 _regQuant,
-                                        const TUint16* _regs,
+        explicit CDataRequestWriteMultipleRegs(  quint8 _devId,
+                                        quint16 _startAddr,
+                                        quint16 _regQuant,
+                                        const quint16* _regs,
                                         QWaitCondition* _waitCond) : CDataReqBase(_waitCond),
                 mDevId(_devId),
                 mStartAddr(_startAddr),
@@ -278,16 +278,16 @@ namespace modbus {
             INPUTS
         };
 
-        TUint8                      mDevId;
-        TUint16                     mStartAddr;
-        TUint16                     mBitsQuant;
-        TUint8*                     mpBitsArray;
+        quint8                      mDevId;
+        quint16                     mStartAddr;
+        quint16                     mBitsQuant;
+        quint8*                     mpBitsArray;
         QModbusDataUnit::RegisterType mRegType;
 
-        explicit CDataRequestReadBits(  TUint8          _devId,
-                                        TUint16         _startAddr,
-                                        TUint16         _bitsQuant,
-                                        TUint8*         _bitsArray,
+        explicit CDataRequestReadBits(  quint8          _devId,
+                                        quint16         _startAddr,
+                                        quint16         _bitsQuant,
+                                        quint8*         _bitsArray,
                                         EMode           _mode,
                                         QWaitCondition* _waitCond) : CDataReqBase(_waitCond),
                 mDevId(_devId),
@@ -316,7 +316,7 @@ namespace modbus {
                 return MTMaster::SReply::EStatus::WRONG_RESP;
             }
 
-            for(TUint16 i = 0; i < mBitsQuant; i++)
+            for(quint16 i = 0; i < mBitsQuant; i++)
             {
                 mpBitsArray[i] = result.value(i);
             }
@@ -328,13 +328,13 @@ namespace modbus {
     class CDataRequestWriteSingleBit : public CDataReqBase
     {
     public:
-        TUint8          mDevId;
-        TUint16         mAddr;
-        TUint8          mBit;
+        quint8          mDevId;
+        quint16         mAddr;
+        quint8          mBit;
 
-        explicit CDataRequestWriteSingleBit(TUint8   _devId,
-                                   TUint16  _addr,
-                                   TUint8   _bit,
+        explicit CDataRequestWriteSingleBit(quint8   _devId,
+                                   quint16  _addr,
+                                   quint8   _bit,
                                    QWaitCondition* _waitCond) : CDataReqBase(_waitCond),
             mDevId(_devId),
             mAddr(_addr),
@@ -348,7 +348,7 @@ namespace modbus {
 
         virtual QModbusReply* sendRequest(QModbusClient* _client) final
         {
-            TUint16 data = (mBit == 0) ? (0) : (0xff00);
+            quint16 data = (mBit == 0) ? (0) : (0xff00);
 
             return _client->sendRawRequest(QModbusRequest(QModbusRequest::FunctionCode::WriteSingleCoil,
                                                           mAddr,
@@ -373,16 +373,16 @@ namespace modbus {
     class CDataRequestWriteMultipleBits : public CDataReqBase
     {
     public:
-        TUint8                      mDevId;
-        TUint16                     mStartAddr;
-        TUint16                     mSize;
+        quint8                      mDevId;
+        quint16                     mStartAddr;
+        quint16                     mSize;
         LCModbusMasterBase::SReply  mReply;
         QModbusDataUnit             mDataUnit;
 
-        CDataRequestWriteMultipleBits(  TUint8 _devId,
-                                        TUint16 _startAddr,
-                                        TUint16 _size,
-                                        const TUint8* _bits,
+        CDataRequestWriteMultipleBits(  quint8 _devId,
+                                        quint16 _startAddr,
+                                        quint16 _size,
+                                        const quint8* _bits,
                                         QWaitCondition* _waitCond) : CDataReqBase(_waitCond),
                 mDevId(_devId),
                 mStartAddr(_startAddr),
@@ -431,7 +431,7 @@ LCModbusMasterBase::~LCModbusMasterBase()
 
 //----------------------------------------------------------------------------------------------------------------------
 LCModbusMasterBase::SReply LCModbusMasterBase::
-    readInputRegisters(TUint8 _devId,TUint16 _addr, TUint16 _regQuant, TUint16 _regs[])
+    readInputRegisters(quint8 _devId,quint16 _addr, quint16 _regQuant, quint16 _regs[])
 {
     if((_regQuant > MODBUS_MAX_READ_REGISTER_COUNT)||
             (_regQuant == 0)||(_regs == nullptr))
@@ -454,7 +454,7 @@ LCModbusMasterBase::SReply LCModbusMasterBase::
 
 //----------------------------------------------------------------------------------------------------------------------
 LCModbusMasterBase::SReply
-        LCModbusMasterBase::readHoldingRegisters(TUint8 _devId, TUint16 _addr, TUint16 _regQuant, TUint16 _regs[])
+        LCModbusMasterBase::readHoldingRegisters(quint8 _devId, quint16 _addr, quint16 _regQuant, quint16 _regs[])
 {
     if((_regQuant > MODBUS_MAX_READ_REGISTER_COUNT)||
             (_regQuant == 0)||(_regs == nullptr))
@@ -476,7 +476,7 @@ LCModbusMasterBase::SReply
 
 //----------------------------------------------------------------------------------------------------------------------
 LCModbusMasterBase::SReply
-        LCModbusMasterBase::writeSingleRegister(TUint8 _devId, TUint16 _addr, TUint16 _reg)
+        LCModbusMasterBase::writeSingleRegister(quint8 _devId, quint16 _addr, quint16 _reg)
 {
 
     CDataRequestWriteSingleReg req(_devId, _addr, _reg, &mWaitCond);
@@ -494,8 +494,8 @@ LCModbusMasterBase::SReply
 
 //----------------------------------------------------------------------------------------------------------------------
 LCModbusMasterBase::SReply
-        LCModbusMasterBase::writeMultipleRegisters(TUint8 _devId, TUint16 _addr,
-                                                        TUint16 _regQuant, const TUint16 _regs[])
+        LCModbusMasterBase::writeMultipleRegisters(quint8 _devId, quint16 _addr,
+                                                        quint16 _regQuant, const quint16 _regs[])
 {
     if((_regQuant > MODBUS_MAX_READ_REGISTER_COUNT)||
             (_regQuant == 0)||(_regs == nullptr))
@@ -518,8 +518,8 @@ LCModbusMasterBase::SReply
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-LCModbusMasterBase::SReply LCModbusMasterBase::readCoils(TUint8 _devId, TUint16 _startAddr,
-                                                            TUint16 _coilsQuant, TUint8 _bits[])
+LCModbusMasterBase::SReply LCModbusMasterBase::readCoils(quint8 _devId, quint16 _startAddr,
+                                                            quint16 _coilsQuant, quint8 _bits[])
 {
     if((_coilsQuant > MODBUS_MAX_READ_COIL_COUNT)||
             (_coilsQuant == 0) || (_bits == nullptr))
@@ -544,7 +544,7 @@ LCModbusMasterBase::SReply LCModbusMasterBase::readCoils(TUint8 _devId, TUint16 
 
 //----------------------------------------------------------------------------------------------------------------------
 LCModbusMasterBase::SReply
-        LCModbusMasterBase::writeSingleCoils(TUint8 _devId, TUint16 _addr, TUint8 _bit)
+        LCModbusMasterBase::writeSingleCoils(quint8 _devId, quint16 _addr, quint8 _bit)
 {
     CDataRequestWriteSingleBit req(_devId, _addr,
                                    _bit,
@@ -563,8 +563,8 @@ LCModbusMasterBase::SReply
 
 //----------------------------------------------------------------------------------------------------------------------
 LCModbusMasterBase::SReply
-        LCModbusMasterBase::writeMultipleCoils(TUint8 _devId, TUint16 _addr,
-                                                        TUint16 _size, const TUint8 _bits[])
+        LCModbusMasterBase::writeMultipleCoils(quint8 _devId, quint16 _addr,
+                                                        quint16 _size, const quint8 _bits[])
 {
     if((_size > MODBUS_MAX_READ_COIL_COUNT)||
             (_size == 0)||(_bits == nullptr))
@@ -586,8 +586,8 @@ LCModbusMasterBase::SReply
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-LCModbusMasterBase::SReply LCModbusMasterBase::readDiscreteInputs(TUint8 _devId, TUint16 _startAddr,
-                                                            TUint16 _inputsQuant, TUint8 _bits[])
+LCModbusMasterBase::SReply LCModbusMasterBase::readDiscreteInputs(quint8 _devId, quint16 _startAddr,
+                                                            quint16 _inputsQuant, quint8 _bits[])
 {
     if((_inputsQuant > MODBUS_MAX_READ_COIL_COUNT)||
             (_inputsQuant == 0) || (_bits == nullptr))

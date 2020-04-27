@@ -12,7 +12,7 @@ namespace modbus {
 class LCQModbusMasterTcp : public LCModbusMasterBase
 {
 private:
-    TUint16             mPort;
+    quint16             mPort;
     QString             mHostName;
     QModbusTcpClient*   mpMaster;
     QThread*            mpThread;

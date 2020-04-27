@@ -18,7 +18,7 @@ LCDataStrFormatF32::LCDataStrFormatF32(
                                     mFillCharUndef(_fillCharUndef),
                                     mFillCharWrong(_fillCharWrong)
 {
-    mValidator.setRange((-1.0f)*std::numeric_limits<TFloat32>::max(), std::numeric_limits<TFloat32>::max(), _decimals);
+    mValidator.setRange((-1.0f)*std::numeric_limits<float>::max(), std::numeric_limits<float>::max(), _decimals);
     mValidator.setLocale(QLocale::c());
 }
 
@@ -31,14 +31,14 @@ QString LCDataStrFormatF32::toString(const QByteArray& _data)
         int length = (mFieldWidth == 0) ? (msFillCharWrongDefLength) : (abs(mFieldWidth));
         return QString(length, ch);
     }
-    return QString("%1").arg(((TFloat32*)_data.constData())[0], mFieldWidth, mFormat, mPrecision, mFillChar);
+    return QString("%1").arg(((float*)_data.constData())[0], mFieldWidth, mFormat, mPrecision, mFillChar);
 }
 
 //---------------------------------------------------------------------------------------------------------------toBytes
 QByteArray LCDataStrFormatF32::toBytes(const QString& _str)
 {
     bool ok = false;
-    TFloat32 r = ((TFloat32)_str.toFloat(&ok));
+    float r = ((float)_str.toFloat(&ok));
     if(!ok) return QByteArray();
     return QByteArray((char*)(&r), 4);
 }

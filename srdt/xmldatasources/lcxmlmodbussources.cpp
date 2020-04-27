@@ -110,7 +110,7 @@ static void createSources(const QDomNodeList& nodes,
 
     TMastersMap::iterator itm;
 
-    TUint32 devid = 0;
+    quint32 devid = 0;
     bool boolBuff = false;
 
     for(int i = 0; i < nodes.size(); i++)

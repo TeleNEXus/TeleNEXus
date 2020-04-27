@@ -98,43 +98,43 @@ private:
         class CDataItem
         {
         public:
-            TUint16 mAddr;
-            TUint16 mSize;
+            quint16 mAddr;
+            quint16 mSize;
             EDataStatus mStatus;
-            TUint16 *mpData;
+            quint16 *mpData;
             QLinkedList<QObject*> mReadersList;
         public:
             CDataItem() = delete;
 
-            explicit CDataItem(TUint16 _addr, TUint16 _size) :  mAddr(_addr),
+            explicit CDataItem(quint16 _addr, quint16 _size) :  mAddr(_addr),
                                                                 mSize(_size),
                                                                 mStatus(EDataStatus::DS_UNDEF)
             {
-                mpData = new TUint16[_size];
+                mpData = new quint16[_size];
             }
             ~CDataItem(){delete [] mpData;}
             void notifyReaders();
         };
     protected:
-        const TUint8& mDevId;
+        const quint8& mDevId;
     private:
-        TUint16* mRegBuff;
+        quint16* mRegBuff;
         QSharedPointer<LCModbusMasterBase> mwpMaster;
         QLinkedList<CDataItem*> mReadDataList;
 
     public:
-        CControllerRegistersBase(const TUint8& _devId, QSharedPointer<LCModbusMasterBase> _master);
+        CControllerRegistersBase(const quint8& _devId, QSharedPointer<LCModbusMasterBase> _master);
         ~CControllerRegistersBase();
         void addReadDataItem(CDataItem* _dataItem);
         void deleteReadDataItem(CDataItem* _dataItem);
-        void read(TUint16 _addr, TUint16 _size, QObject* _reader);
-        void write(TUint16 _addr, TUint16 _size, const QByteArray& _data, QObject* _writer);
+        void read(quint16 _addr, quint16 _size, QObject* _reader);
+        void write(quint16 _addr, quint16 _size, const QByteArray& _data, QObject* _writer);
         void update();
     protected:
         virtual LCModbusMasterBase::SReply readRegs(LCModbusMasterBase* master,
-                                                        TUint16 _addr, TUint16 _size, TUint16 _regs[]) = 0;
+                                                        quint16 _addr, quint16 _size, quint16 _regs[]) = 0;
         virtual LCModbusMasterBase::SReply writeRegs(LCModbusMasterBase* master,
-                                                        TUint16 _addr, TUint16 _size, TUint16 _regs[]) = 0;
+                                                        quint16 _addr, quint16 _size, quint16 _regs[]) = 0;
     };
 
     //---------------------------------------------------------------------------------------CControllerHoldingRegisters
@@ -143,12 +143,12 @@ private:
     public:
 
     public:
-        CControllerHoldingRegisters(const TUint8& _devId, QSharedPointer<LCModbusMasterBase> _master);
+        CControllerHoldingRegisters(const quint8& _devId, QSharedPointer<LCModbusMasterBase> _master);
         ~CControllerHoldingRegisters();
         virtual LCModbusMasterBase::SReply readRegs(LCModbusMasterBase* master,
-                                                        TUint16 _addr, TUint16 _size, TUint16 _regs[]) override;
+                                                        quint16 _addr, quint16 _size, quint16 _regs[]) override;
         virtual LCModbusMasterBase::SReply writeRegs(LCModbusMasterBase* master,
-                                                        TUint16 _addr, TUint16 _size, TUint16 _regs[]) override;
+                                                        quint16 _addr, quint16 _size, quint16 _regs[]) override;
     };
 
     //-----------------------------------------------------------------------------------------CControllerInputRegisters
@@ -157,12 +157,12 @@ private:
     public:
 
     public:
-        CControllerInputRegisters(const TUint8& _devId, QWeakPointer<LCModbusMasterBase> _master);
+        CControllerInputRegisters(const quint8& _devId, QWeakPointer<LCModbusMasterBase> _master);
         ~CControllerInputRegisters();
         virtual LCModbusMasterBase::SReply readRegs(LCModbusMasterBase* master,
-                                                        TUint16 _addr, TUint16 _size, TUint16 _regs[]) override;
+                                                        quint16 _addr, quint16 _size, quint16 _regs[]) override;
         virtual LCModbusMasterBase::SReply writeRegs(LCModbusMasterBase* master,
-                                                        TUint16 _addr, TUint16 _size, TUint16 _regs[]) override;
+                                                        quint16 _addr, quint16 _size, quint16 _regs[]) override;
     };
 
 
@@ -182,43 +182,43 @@ private:
         class CDataItem
         {
         public:
-            TUint16 mAddr;
-            TUint16 mSize;
+            quint16 mAddr;
+            quint16 mSize;
             EDataStatus mStatus;
-            TUint8 *mpData;
+            quint8 *mpData;
             QLinkedList<QObject*> mReadersList;
         public:
             CDataItem() = delete;
 
-            explicit CDataItem(TUint16 _addr, TUint16 _size) :  mAddr(_addr),
+            explicit CDataItem(quint16 _addr, quint16 _size) :  mAddr(_addr),
                                                                 mSize(_size),
                                                                 mStatus(EDataStatus::DS_UNDEF)
             {
-                mpData = new TUint8[_size];
+                mpData = new quint8[_size];
             }
             ~CDataItem(){delete [] mpData;}
             void notifyReaders();
         };
     protected:
-        const TUint8& mDevId;
+        const quint8& mDevId;
     private:
-        TUint8* mBitsBuff;
+        quint8* mBitsBuff;
         QWeakPointer<LCModbusMasterBase> mwpMaster;
         QLinkedList<CDataItem*> mReadDataList;
 
     public:
-        CControllerBitsBase(const TUint8& _devId, QWeakPointer<LCModbusMasterBase> _master);
+        CControllerBitsBase(const quint8& _devId, QWeakPointer<LCModbusMasterBase> _master);
         ~CControllerBitsBase();
         void addReadDataItem(CDataItem* _dataItem);
         void deleteReadDataItem(CDataItem* _dataItem);
-        void read(TUint16 _addr, TUint16 _size, QObject* _reader);
-        void write(TUint16 _addr, TUint16 _size, const QByteArray& _data, QObject* _writer);
+        void read(quint16 _addr, quint16 _size, QObject* _reader);
+        void write(quint16 _addr, quint16 _size, const QByteArray& _data, QObject* _writer);
         void update();
     protected:
         virtual LCModbusMasterBase::SReply readBits(LCModbusMasterBase* master,
-                                                        TUint16 _addr, TUint16 _size, TUint8 _bits[]) = 0;
+                                                        quint16 _addr, quint16 _size, quint8 _bits[]) = 0;
         virtual LCModbusMasterBase::SReply writeBits(LCModbusMasterBase* master,
-                                                        TUint16 _addr, TUint16 _size, TUint8 _bits[]) = 0;
+                                                        quint16 _addr, quint16 _size, quint8 _bits[]) = 0;
     };
 
 
@@ -228,12 +228,12 @@ private:
     public:
 
     public:
-        CControllerDiscreteInputs(const TUint8& _devId, QWeakPointer<LCModbusMasterBase> _master);
+        CControllerDiscreteInputs(const quint8& _devId, QWeakPointer<LCModbusMasterBase> _master);
         ~CControllerDiscreteInputs();
         virtual LCModbusMasterBase::SReply readBits(LCModbusMasterBase* master,
-                                                        TUint16 _addr, TUint16 _size, TUint8 _bits[]) override;
+                                                        quint16 _addr, quint16 _size, quint8 _bits[]) override;
         virtual LCModbusMasterBase::SReply writeBits(LCModbusMasterBase* master,
-                                                        TUint16 _addr, TUint16 _size, TUint8 _bits[]) override;
+                                                        quint16 _addr, quint16 _size, quint8 _bits[]) override;
     };
 
     //-----------------------------------------------------------------------------------------CControllerDiscreteInputs
@@ -242,12 +242,12 @@ private:
     public:
 
     public:
-        CControllerCoils(const TUint8& _devId, QWeakPointer<LCModbusMasterBase> _master);
+        CControllerCoils(const quint8& _devId, QWeakPointer<LCModbusMasterBase> _master);
         ~CControllerCoils();
         virtual LCModbusMasterBase::SReply readBits(LCModbusMasterBase* master,
-                                                        TUint16 _addr, TUint16 _size, TUint8 _bits[]) override;
+                                                        quint16 _addr, quint16 _size, quint8 _bits[]) override;
         virtual LCModbusMasterBase::SReply writeBits(LCModbusMasterBase* master,
-                                                        TUint16 _addr, TUint16 _size, TUint8 _bits[]) override;
+                                                        quint16 _addr, quint16 _size, quint8 _bits[]) override;
     };
     //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -276,7 +276,7 @@ private:
         CControllerRegistersBase::CDataItem mDataItem;
         CControllerRegistersBase& mController;
     public:
-        explicit CDataMapItemRegsBase(TUint16 _addr, TUint16 _size, CControllerRegistersBase& _controller);
+        explicit CDataMapItemRegsBase(quint16 _addr, quint16 _size, CControllerRegistersBase& _controller);
         virtual ~CDataMapItemRegsBase();
 
         virtual void connectReader(QObject* reader) override;
@@ -288,7 +288,7 @@ private:
     class CDataMapItemHoldingRegs : public CDataMapItemRegsBase
     {
     public:
-        explicit CDataMapItemHoldingRegs(TUint16 _addr, TUint16 _size, CControllerHoldingRegisters& _controller);
+        explicit CDataMapItemHoldingRegs(quint16 _addr, quint16 _size, CControllerHoldingRegisters& _controller);
         virtual ~CDataMapItemHoldingRegs();
         virtual void write(const QByteArray& _data, QObject* _writer) override;
     };
@@ -297,7 +297,7 @@ private:
     class CDataMapItemInputRegs : public CDataMapItemRegsBase
     {
     public:
-        explicit CDataMapItemInputRegs(TUint16 _addr, TUint16 _size, CControllerInputRegisters& _controller);
+        explicit CDataMapItemInputRegs(quint16 _addr, quint16 _size, CControllerInputRegisters& _controller);
         virtual ~CDataMapItemInputRegs();
         virtual void write(const QByteArray& _data, QObject* _writer) override;
     };
@@ -314,7 +314,7 @@ private:
         CControllerBitsBase::CDataItem mDataItem;
         CControllerBitsBase& mController;
     public:
-        explicit CDataMapItemBitsBase(TUint16 _addr, TUint16 _size, CControllerBitsBase& _controller);
+        explicit CDataMapItemBitsBase(quint16 _addr, quint16 _size, CControllerBitsBase& _controller);
         virtual ~CDataMapItemBitsBase();
 
         virtual void connectReader(QObject* reader) override;
@@ -326,7 +326,7 @@ private:
     class CDataMapItemCoils : public CDataMapItemBitsBase
     {
     public:
-        explicit CDataMapItemCoils(TUint16 _addr, TUint16 _size, CControllerBitsBase& _controller);
+        explicit CDataMapItemCoils(quint16 _addr, quint16 _size, CControllerBitsBase& _controller);
         virtual ~CDataMapItemCoils();
         virtual void write(const QByteArray& _data, QObject* _writer) override;
     };
@@ -335,7 +335,7 @@ private:
     class CDataMapItemDiscreteInputs : public CDataMapItemBitsBase
     {
     public:
-        explicit CDataMapItemDiscreteInputs(TUint16 _addr, TUint16 _size, CControllerBitsBase& _controller);
+        explicit CDataMapItemDiscreteInputs(quint16 _addr, quint16 _size, CControllerBitsBase& _controller);
         virtual ~CDataMapItemDiscreteInputs();
         virtual void write(const QByteArray& _data, QObject* _writer) override;
     };
@@ -360,15 +360,15 @@ private:
         QMap<QObject*, CDataMapItemBase*> mMapReaders;
 
     public:
-        CDataMap(const TUint8& _devId, QSharedPointer<LCModbusMasterBase> _master);
+        CDataMap(const quint8& _devId, QSharedPointer<LCModbusMasterBase> _master);
         ~CDataMap();
 
         void update();
 
-        void addItemHoldingRegs(const QString& _name, TUint16 _addr, TUint16 _size);
-        void addItemInputRegs(const QString& _name, TUint16 _addr, TUint16 _size);
-        void addItemDiscreteInputs(const QString& _name, TUint16 _addr, TUint16 _size);
-        void addItemCoils(const QString& _name, TUint16 _addr, TUint16 _size);
+        void addItemHoldingRegs(const QString& _name, quint16 _addr, quint16 _size);
+        void addItemInputRegs(const QString& _name, quint16 _addr, quint16 _size);
+        void addItemDiscreteInputs(const QString& _name, quint16 _addr, quint16 _size);
+        void addItemCoils(const QString& _name, quint16 _addr, quint16 _size);
 
         bool write(const QString& _name, const QByteArray& _data, QObject* _writer);
         bool read(const QString& _name, QObject* _reader);
@@ -376,7 +376,7 @@ private:
         bool disconnectReader(QObject* reader);
     };
 
-    TUint8 mDevId;
+    quint8 mDevId;
     QSharedPointer<LCModbusMasterBase> mModbusMaster;
     int mUpdateInterval;
     QTimer mTimer;
@@ -384,20 +384,20 @@ private:
     CDataMap mDataMap;
     QSharedPointer<QThread> mspThread;
 private:
-    explicit LCQModbusDataSource(TUint8 _devId,
+    explicit LCQModbusDataSource(quint8 _devId,
                                  QSharedPointer<LCModbusMasterBase> _modbusMaster,
                                  QObject *_parent = nullptr);
     LCQModbusDataSource(const LCQModbusDataSource&) = delete;
     LCQModbusDataSource& operator=(const LCQModbusDataSource&) = delete;
 public:
     virtual ~LCQModbusDataSource();
-    static QSharedPointer<LCQModbusDataSource> create(  TUint8 _devId,
+    static QSharedPointer<LCQModbusDataSource> create(  quint8 _devId,
                                                         QSharedPointer<LCModbusMasterBase> _modbusMaster,
                                                         QObject *_parent = nullptr);
-    void addDataItemHoldingRegs(    const QString& _name, TUint16 _addr, TUint16 _size);
-    void addDataItemInputRegs(      const QString& _name, TUint16 _addr, TUint16 _size);
-    void addDataItemDiscreteInputs( const QString& _name, TUint16 _addr, TUint16 _size);
-    void addDataItemCoils(          const QString& _name, TUint16 _addr, TUint16 _size);
+    void addDataItemHoldingRegs(    const QString& _name, quint16 _addr, quint16 _size);
+    void addDataItemInputRegs(      const QString& _name, quint16 _addr, quint16 _size);
+    void addDataItemDiscreteInputs( const QString& _name, quint16 _addr, quint16 _size);
+    void addDataItemCoils(          const QString& _name, quint16 _addr, quint16 _size);
     void start(int _updateIntervalMs = 500);
     void start(QSharedPointer<QThread> _thread, int _updateIntervalMs = 500);
     void stop();

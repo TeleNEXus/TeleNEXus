@@ -156,6 +156,19 @@ int testXmlDom1(int argc, char *argv[]);
 #include "lcxmlwidgetcreatorsmap.h"
 #include "xmlwidgets/lcxmlwidget.h"
 #include "xmlwidgets/lcxmllabel.h"
+
+#include <QLibrary>
+
+#include "testdllinterface.h"
+
+class CTestDllRecurse : public LCTestDllInterface
+{
+public:
+    CTestDllRecurse(){}
+    virtual ~CTestDllRecurse(){}
+    virtual QString getString() override {return "Test Dll String";}
+};
+
 int main(int argc, char *argv[])
 {
 
@@ -173,7 +186,33 @@ int main(int argc, char *argv[])
 
 //    return testXmlDom1(argc, argv);
 
+    QLibrary lib("D:/Dokuments/Kuzmenko/Programs/PROGRAM_PROJECTS/srdtrep/build-extwidglib-Desktop-Debug/debug/extwidglib");
+    typedef const QString (*TFct)(LCTestDllInterface*);
+    qDebug()<< "pass0";
+    TFct fct = (TFct)(lib.resolve("getExportString"));
+    qDebug()<< "pass1";
 
+    CTestDllRecurse tci;
+    if(!fct)
+    {
+        qDebug()<< "No recognize function";
+    }
+    else
+    {
+        qDebug()<< fct(&tci);
+    }
+
+//    if(lib.resolve("Extwidglib"))
+//    {
+//        qDebug()<< "resolve yes";
+//    }
+//    else
+//    {
+//        qDebug()<< "resolve no";
+//    }
+
+
+//    return 0;
 
     return LCXmlApplication::instance().exec(argc, argv);
 
@@ -292,7 +331,7 @@ int testMasterTcp1(int argc, char *argv[])
             using namespace modbus;
             unsigned int pass_counter = 0;
             QString status;
-            TUint16 regs[128];
+            quint16 regs[128];
             forever
             {
 //                const LCQModbusMasterTcp::SReply reply = master->readHoldingRegisters(7, 0, 1, regs);
@@ -354,8 +393,8 @@ int testMasterTcp1(int argc, char *argv[])
             using namespace modbus;
             unsigned int pass_counter = 0;
             QString status;
-            TUint16 regs[128];
-            TUint8  bitArray[127];
+            quint16 regs[128];
+            quint8  bitArray[127];
             forever
             {
 //                const LCQModbusMasterTcp::SReply reply = master->readHoldingRegisters(7, 1, 1, regs);
@@ -610,7 +649,7 @@ int testGui1(int argc, char *argv[])
 
                 sp_mbmaster->writeSingleRegister(7, 0, pass_counter);
                 sp_mbmaster->writeSingleCoils(7, 0, pass_counter & 1);
-                TUint8 bits[3];
+                quint8 bits[3];
                 bits[0] = pass_counter & 1;
                 bits[1] = (pass_counter >> 1) & 1;
                 bits[2] = (pass_counter >> 2) & 1;
@@ -632,7 +671,7 @@ int testGui1(int argc, char *argv[])
             {
                 sp_mbmaster->writeSingleRegister(7, 0, pass_counter);
                 sp_mbmaster->writeSingleCoils(7, 0, pass_counter & 1);
-                TUint8 bits[3];
+                quint8 bits[3];
                 bits[0] = pass_counter & 1;
                 bits[1] = (pass_counter >> 1) & 1;
                 bits[2] = (pass_counter >> 2) & 1;
@@ -893,26 +932,26 @@ int testGui1(int argc, char *argv[])
 
     window->setLayout(hboxLayout);
 
-    qDebug() << "MAX TUint8" << std::numeric_limits<TUint8>::max();
-    qDebug() << "MIN TUint8" << std::numeric_limits<TUint8>::min();
+    qDebug() << "MAX quint8" << std::numeric_limits<quint8>::max();
+    qDebug() << "MIN quint8" << std::numeric_limits<quint8>::min();
 
-    qDebug() << "MAX TInt8" << std::numeric_limits<TInt8>::max();
-    qDebug() << "MIN TInt8" << std::numeric_limits<TInt8>::min();
+    qDebug() << "MAX qint8" << std::numeric_limits<qint8>::max();
+    qDebug() << "MIN qint8" << std::numeric_limits<qint8>::min();
 
-    qDebug() << "MAX TUint16" << std::numeric_limits<TUint16>::max();
-    qDebug() << "MIN TUint16" << std::numeric_limits<TUint16>::min();
+    qDebug() << "MAX quint16" << std::numeric_limits<quint16>::max();
+    qDebug() << "MIN quint16" << std::numeric_limits<quint16>::min();
 
-    qDebug() << "MAX TInt16" << std::numeric_limits<TInt16>::max();
-    qDebug() << "MIN TInt16" << std::numeric_limits<TInt16>::min();
+    qDebug() << "MAX qint16" << std::numeric_limits<qint16>::max();
+    qDebug() << "MIN qint16" << std::numeric_limits<qint16>::min();
 
-    qDebug() << "MAX TUint32" << std::numeric_limits<TUint32>::max();
-    qDebug() << "MIN TUint32" << std::numeric_limits<TUint32>::min();
+    qDebug() << "MAX quint32" << std::numeric_limits<quint32>::max();
+    qDebug() << "MIN quint32" << std::numeric_limits<quint32>::min();
 
-    qDebug() << "MAX TInt32" << std::numeric_limits<TInt32>::max();
-    qDebug() << "MIN TInt32" << std::numeric_limits<TInt32>::min();
+    qDebug() << "MAX qint32" << std::numeric_limits<qint32>::max();
+    qDebug() << "MIN qint32" << std::numeric_limits<qint32>::min();
 
-    qDebug() << "MAX TFloat32" << std::numeric_limits<TFloat32>::max();
-    qDebug() << "MIN TFloat32" << std::numeric_limits<TFloat32>::min();
+    qDebug() << "MAX float" << std::numeric_limits<float>::max();
+    qDebug() << "MIN float" << std::numeric_limits<float>::min();
 
 
     LCDataStrFormatU16 df(4, true, 16);
@@ -920,7 +959,7 @@ int testGui1(int argc, char *argv[])
     qDebug() << "undefStateString()" << df.undefStateString();
     qDebug() << "toBytes()" << df.toBytes("ffff");
 
-    TUint16 a = 256;
+    quint16 a = 256;
 
     qDebug() << "toString("<< a << ")" << df.toString(QByteArray((char*)&a, 2));
 
@@ -1070,10 +1109,10 @@ int testGui1(int argc, char *argv[])
 
 //    QObject::connect(th1, &QThread::started,
 //        [&](){
-//            lstd::TUint8  devId  = 7;
-//            lstd::TUint16 addr   = 200;
-//            lstd::TUint16 length = 4;
-//            lstd::TUint16 regs[length];
+//            lstd::quint8  devId  = 7;
+//            lstd::quint16 addr   = 200;
+//            lstd::quint16 length = 4;
+//            lstd::quint16 regs[length];
 //            forever{
 //                qDebug() << "-----------------------------------------thread #1 pass =" << pass_counter_thread1;
 //                qDebug() << "-----------------------------------------readHoldingRegisters";
@@ -1156,18 +1195,18 @@ int testGui1(int argc, char *argv[])
 //                pass_counter_thread3++;
 //                QThread::msleep(1000);
 
-//                lstd::TUint8  devId  = 7;
-//                lstd::TUint16 addr   = 202;
-//                lstd::TUint16 length = 4;
-////                lstd::TUint16 regs[length];
+//                lstd::quint8  devId  = 7;
+//                lstd::quint16 addr   = 202;
+//                lstd::quint16 length = 4;
+////                lstd::quint16 regs[length];
 
-//                lstd::TUint32 pass_counter = 0;
-//                lstd::TUint32 reg = 0;
+//                lstd::quint32 pass_counter = 0;
+//                lstd::quint32 reg = 0;
 
 //                forever{
 //                    qDebug() << "-----------------------------------------thread #3 pass =" << pass_counter;
 //                    qDebug() << "-----------------------------------------writeMultipleRegisters";
-//                    switch(master_sim->writeMultipleRegisters(devId, addr, 2, (lstd::TUint16*)(&reg)))
+//                    switch(master_sim->writeMultipleRegisters(devId, addr, 2, (lstd::quint16*)(&reg)))
 //                    {
 //                    case modbus::LCQModbusMasterTcp::EOperationStatus::UNREC_ERROR:
 //                        qDebug() << "writeMultipleRegisters EOperationStatus::UNREC";
@@ -1442,85 +1481,85 @@ int testGui1(int argc, char *argv[])
 //    lineDevRegEdit1->setValidator(formatterUint8.data()->validator());
 //    QObject::connect(lineDevRegEdit1, &QLineEdit::returnPressed,
 //                     [&](){
-//                         mbmaster->setRegister(1, (TUint16)lineDevRegEdit1->text().toInt());
+//                         mbmaster->setRegister(1, (quint16)lineDevRegEdit1->text().toInt());
 //                     });
 
 //    lineDevRegEdit2->setValidator(formatterInt8.data()->validator());
 //    QObject::connect(lineDevRegEdit2, &QLineEdit::returnPressed,
 //                     [&](){
-//                            mbmaster->setRegister(2, (TUint16)lineDevRegEdit2->text().toInt());
+//                            mbmaster->setRegister(2, (quint16)lineDevRegEdit2->text().toInt());
 //                     });
 
 //    lineDevRegEdit3->setValidator(formatterUint16.data()->validator());
 //    QObject::connect(lineDevRegEdit3, &QLineEdit::returnPressed,
 //                     [&](){
-//                         mbmaster->setRegister(3, (TUint16)lineDevRegEdit3->text().toInt());
+//                         mbmaster->setRegister(3, (quint16)lineDevRegEdit3->text().toInt());
 //                     });
 
 //    lineDevRegEdit4->setValidator(formatterInt16.data()->validator());
 //    QObject::connect(lineDevRegEdit4, &QLineEdit::returnPressed,
 //                     [&](){
-//                        mbmaster->setRegister(4, (TUint16)lineDevRegEdit4->text().toInt());
+//                        mbmaster->setRegister(4, (quint16)lineDevRegEdit4->text().toInt());
 //                     });
 
 //    lineDevRegEdit5->setValidator(formatterUint32.data()->validator());
 //    QObject::connect(lineDevRegEdit5, &QLineEdit::returnPressed,
 //                     [&](){
-//                         TUint32 r = lineDevRegEdit5->text().toUInt();
-//                         mbmaster->setRegister(5, ((TUint16*)&r)[0] );
-//                         mbmaster->setRegister(6, ((TUint16*)&r)[1] );
+//                         quint32 r = lineDevRegEdit5->text().toUInt();
+//                         mbmaster->setRegister(5, ((quint16*)&r)[0] );
+//                         mbmaster->setRegister(6, ((quint16*)&r)[1] );
 //                     });
 //    lineDevRegEdit6->setValidator(new QIntValidator(0, 65535, lineDevRegEdit6));
 //    QObject::connect(lineDevRegEdit6, &QLineEdit::returnPressed,
 //                     [&](){
-//                         mbmaster->setRegister(6, (TUint16)lineDevRegEdit6->text().toInt());
+//                         mbmaster->setRegister(6, (quint16)lineDevRegEdit6->text().toInt());
 //                     });
 //    lineDevRegEdit7->setValidator(formatterInt32.data()->validator());
 //    QObject::connect(lineDevRegEdit7, &QLineEdit::returnPressed,
 //                     [&](){
-//                        TInt32 r = lineDevRegEdit7->text().toInt();
-//                        mbmaster->setRegister(7, ((TUint16*)&r)[0] );
-//                        mbmaster->setRegister(8, ((TUint16*)&r)[1] );
+//                        qint32 r = lineDevRegEdit7->text().toInt();
+//                        mbmaster->setRegister(7, ((quint16*)&r)[0] );
+//                        mbmaster->setRegister(8, ((quint16*)&r)[1] );
 //                     });
 //    lineDevRegEdit8->setValidator(new QIntValidator(0, 65535, lineDevRegEdit8));
 //    QObject::connect(lineDevRegEdit8, &QLineEdit::returnPressed,
 //                     [&](){
-//                         mbmaster->setRegister(8, (TUint16)lineDevRegEdit8->text().toInt());
+//                         mbmaster->setRegister(8, (quint16)lineDevRegEdit8->text().toInt());
 //                     });
 //    lineDevRegEdit9->setValidator(formatterFloat32.data()->validator());
 //    QObject::connect(lineDevRegEdit9, &QLineEdit::returnPressed,
 //                     [&](){
-//                            TFloat32 r = lineDevRegEdit9->text().toFloat();
-//                            mbmaster->setRegister(9, ((TUint16*)&r)[0] );
-//                            mbmaster->setRegister(10, ((TUint16*)&r)[1] );
+//                            float r = lineDevRegEdit9->text().toFloat();
+//                            mbmaster->setRegister(9, ((quint16*)&r)[0] );
+//                            mbmaster->setRegister(10, ((quint16*)&r)[1] );
 //                     });
 //    lineDevRegEdit10->setValidator(new QIntValidator(0, 65535, lineDevRegEdit10));
 //    QObject::connect(lineDevRegEdit10, &QLineEdit::returnPressed,
 //                     [&](){
-//                         mbmaster->setRegister(10, (TUint16)lineDevRegEdit10->text().toInt());
+//                         mbmaster->setRegister(10, (quint16)lineDevRegEdit10->text().toInt());
 //                     });
 
 
-//    qDebug() << "MAX TUint8" << std::numeric_limits<TUint8>::max();
-//    qDebug() << "MIN TUint8" << std::numeric_limits<TUint8>::min();
+//    qDebug() << "MAX quint8" << std::numeric_limits<quint8>::max();
+//    qDebug() << "MIN quint8" << std::numeric_limits<quint8>::min();
 
-//    qDebug() << "MAX TInt8" << std::numeric_limits<TInt8>::max();
-//    qDebug() << "MIN TInt8" << std::numeric_limits<TInt8>::min();
+//    qDebug() << "MAX qint8" << std::numeric_limits<qint8>::max();
+//    qDebug() << "MIN qint8" << std::numeric_limits<qint8>::min();
 
-//    qDebug() << "MAX TUint16" << std::numeric_limits<TUint16>::max();
-//    qDebug() << "MIN TUint16" << std::numeric_limits<TUint16>::min();
+//    qDebug() << "MAX quint16" << std::numeric_limits<quint16>::max();
+//    qDebug() << "MIN quint16" << std::numeric_limits<quint16>::min();
 
-//    qDebug() << "MAX TInt16" << std::numeric_limits<TInt16>::max();
-//    qDebug() << "MIN TInt16" << std::numeric_limits<TInt16>::min();
+//    qDebug() << "MAX qint16" << std::numeric_limits<qint16>::max();
+//    qDebug() << "MIN qint16" << std::numeric_limits<qint16>::min();
 
-//    qDebug() << "MAX TUint32" << std::numeric_limits<TUint32>::max();
-//    qDebug() << "MIN TUint32" << std::numeric_limits<TUint32>::min();
+//    qDebug() << "MAX quint32" << std::numeric_limits<quint32>::max();
+//    qDebug() << "MIN quint32" << std::numeric_limits<quint32>::min();
 
-//    qDebug() << "MAX TInt32" << std::numeric_limits<TInt32>::max();
-//    qDebug() << "MIN TInt32" << std::numeric_limits<TInt32>::min();
+//    qDebug() << "MAX qint32" << std::numeric_limits<qint32>::max();
+//    qDebug() << "MIN qint32" << std::numeric_limits<qint32>::min();
 
-//    qDebug() << "MAX TFloat32" << std::numeric_limits<TFloat32>::max();
-//    qDebug() << "MIN TFloat32" << std::numeric_limits<TFloat32>::min();
+//    qDebug() << "MAX float" << std::numeric_limits<float>::max();
+//    qDebug() << "MIN float" << std::numeric_limits<float>::min();
 
 
 //    LCDataStrFormatU16 df(4, true, 16);
@@ -1528,7 +1567,7 @@ int testGui1(int argc, char *argv[])
 //    qDebug() << "undefStateString()" << df.undefStateString();
 //    qDebug() << "toBytes()" << df.toBytes("ffff");
 
-//    TUint16 a = 256;
+//    quint16 a = 256;
 
 //    qDebug() << "toString("<< a << ")" << df.toString(QByteArray((char*)&a, 2));
 

@@ -24,27 +24,26 @@ INCLUDEPATH +=                  \
         common/                 \
         remgui/                 \
         remgui/datastrformat/   \
-        datasources/modbus/     \
         xml/                    \
+
 
 SOURCES += \
         common/lcqremotedatareader.cpp \
         common/lcqremotedatasourcebase.cpp \
         common/lcqremotedatawriter.cpp \
         common/lcqu32validator.cpp \
+        modbus/lcqmodbusdatasource.cpp \
+        modbus/lcmodbusmasterbase.cpp \
+        modbus/lcqmodbusmasterrtu.cpp \
+        modbus/lcqmodbusmastertcp.cpp \
         cqclientecho2.cpp \
         cqclientechoblocking1.cpp \
         cqclienttcpecho.cpp \
         cqmythread.cpp \
         cqsocketclient1.cpp \
         cqtestimer.cpp \
-        datasources/modbus/cqreaderholdingregs.cpp \
-        datasources/modbus/lcqmodbusdatasource.cpp \
         lcxmltestwidgetcreators.cpp \
         lqtestsaxhandler.cpp \
-        modbus/lcmodbusmasterbase.cpp \
-        modbus/lcqmodbusmasterrtu.cpp \
-        modbus/lcqmodbusmastertcp.cpp \
         remgui/datastrformat/lcdatastrformatbase.cpp \
         remgui/datastrformat/lcdatastrformatbool.cpp \
         remgui/datastrformat/lcdatastrformatf32.cpp \
@@ -72,6 +71,9 @@ SOURCES += \
         xmlwidgets/lcxmlremlineedit.cpp \
         xmlwidgets/lcxmlwidget.cpp
 
+
+
+
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
@@ -83,7 +85,6 @@ HEADERS += \
     common/lcqremotedatawriter.h \
     common/lcqu32validator.h \
     common/lqextendevent.h \
-    common/ltypedef.h \
     cqclientecho2.h \
     cqclientechoblocking1.h \
     cqclienttcpecho.h \
@@ -111,6 +112,7 @@ HEADERS += \
     remgui/lcqremlabel.h \
     remgui/lcqremlineedit.h \
     remgui/lremgui.h \ \
+    testdllinterface.h \
     xml/lcxmlapplication.h \
     xml/lcxmllayoutsfactory.h \
     xml/lcxmlremotedatasourcemap.h \

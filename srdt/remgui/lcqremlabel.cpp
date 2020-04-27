@@ -1,5 +1,4 @@
 ﻿#include "lcqremlabel.h"
-#include "ltypedef.h"
 #include <QCoreApplication>
 #include <QDebug>
 

@@ -19,7 +19,7 @@ LCDataStrFormatS16::
                                                       _fillCharUndef,
                                                       _fillCharWrong)
 {
-    mValidator.setRange(std::numeric_limits<TInt16>::min(), std::numeric_limits<TInt16>::max());
+    mValidator.setRange(std::numeric_limits<qint16>::min(), std::numeric_limits<qint16>::max());
 }
 
 //--------------------------------------------------------------------------------------------------------------toString
@@ -31,14 +31,14 @@ QString LCDataStrFormatS16::toString(const QByteArray& _data)
         int length = (mFieldWidth == 0) ? (msFillCharWrongDefLength) : (abs(mFieldWidth));
         return QString(length, ch);
     }
-    return QString("%1").arg( ((TInt16*)_data.constData())[0], mFieldWidth, mBase, mFillChar);
+    return QString("%1").arg( ((qint16*)_data.constData())[0], mFieldWidth, mBase, mFillChar);
 }
 
 //---------------------------------------------------------------------------------------------------------------toBytes
 QByteArray LCDataStrFormatS16::toBytes(const QString& _str)
 {
     bool ok = false;
-    TInt16 r = _str.toShort(&ok, mBase);
+    qint16 r = _str.toShort(&ok, mBase);
     if(!ok) return QByteArray();
     return QByteArray((char*)(&r), 2);
 }
