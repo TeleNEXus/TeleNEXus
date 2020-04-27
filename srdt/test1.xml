@@ -1,0 +1,174 @@
+<?xml version = "1.0"?>
+
+<widget title="TITLE CHECK">
+    <layout type="box" direction="LeftToRight">
+        <label text="Label0" />
+        <label text="Label1" />
+        <label text="Label2" />
+        <layout type="box" direction="BottomToTop">
+            <label text="Label0" />
+            <layout type="box" direction="LeftToRight">
+                <label text="Label0" />
+                <label text="Label1" />
+                <label text="Label2" />
+            </layout>
+            <label text="Label1" />
+            <label text="Label2" />
+        </layout>
+    </layout>
+</widget>
+
+<!--widget title="TITLE CHECK">
+    <layout type="grid">
+        <row>
+            <label text="row" />
+            <label text="row" />
+                            
+        </row>              
+        <row>               
+            <label text="row" />
+            <label text="row" />
+        </row>              
+        <row>               
+            <label text="row" />
+            <label text="row" />
+        </row>              
+                            
+        <col>               
+            <label text="col" />
+            <label text="col" />
+        </col>              
+                            
+        <row>               
+            <label text="row" />
+            <label text="row" />
+            <label text="row" />
+            <label text="row" />
+        </row>              
+                            
+        <col>               
+            <label text="col" />
+            <label text="col" />
+            <label text="col" />
+            <label text="col" />
+            <label text="col" />
+            <label text="col" />
+            <label text="col" />
+            <label text="col" />
+            <label text="col" />
+            <label text="col" />
+            <label text="col" />
+            <label text="col" />
+            <label text="col" />
+            <label text="col" />
+        </col>              
+                            
+        <row>               
+            <label text="row" />
+            <label text="row" />
+            <label text="row" />
+            <label text="row" />
+            <label text="row" />
+            <label text="row" />
+            <label text="row" />
+            <label text="row" />
+            <label text="row" />
+            <label text="row" />
+            <label text="row" />
+            <label text="row" />
+        </row>              
+                            
+        <col>          
+<layout type="grid">
+                <row>
+                    <label>Проверка лабела1</label>
+                    <label>Проверка лабела2</label>
+                </row>                     
+                <row>                      
+                    <label>Проверка лабела1</label>
+                    <label>Проверка лабела2</label>    
+                </row>                     
+            </layout>             
+            <label text="col" />
+            <label text="col" />
+            <label text="col" />
+            <label text="col" />
+            <label text="col" />
+            <label text="col" />
+            <label text="col" />
+            <label text="col" />
+            <label text="col" />
+            <label text="col" />
+            <label text="col" />
+            <label text="col" />
+            <label text="col" />
+            <label text="col" />
+            <label text="col" />
+            <label text="col" />
+            <label text="col" />
+            <label text="col" />
+            <label text="col" />
+            <label text="col" />
+            <label text="col" />
+            <label text="col" />
+            <label text="col" />
+        </col>
+        <col>               
+            <label text="col" />
+            <label text="col" />
+            <label text="col" />
+            <label text="col" />
+            <label text="col" />
+            <label text="col" />
+            <label text="col" />
+            <label text="col" />
+            <label text="col" />
+            <label text="col" />
+            <label text="col" />
+            <label text="col" />
+            <label text="col" />
+            <label text="col" />
+        </col> 
+    </layout>
+</widget-->
+
+<!--widget title="TITLE CHECK">
+    <layout type="grid">
+        <row>
+            <label text="text controll" />
+            <label>Проверка лабела2</label>
+            
+        </row>
+        <row>
+            <label>Проверка лабела1</label>
+            <label>Проверка лабела2</label>    
+        </row>
+        <row>
+            <layout type="grid">
+                <row>
+                    <label>Проверка лабела1</label>
+                    <label>Проверка лабела2</label>
+                </row>                     
+                <row>                      
+                    <label>Проверка лабела1</label>
+                    <label>Проверка лабела2</label>    
+                </row>                     
+            </layout>                      
+                                           
+            <layout type="grid">           
+                <row>                      
+                    <label>Проверка лабела1</label>
+                    <label>Проверка лабела2</label>
+                                           
+                </row>                     
+                <row>                      
+                    <label>Проверка лабела1</label>
+                    <label>Проверка лабела2</label>    
+                </row>
+            </layout>
+        </row>
+        
+    </layout>
+</widget -->
+
+<!--label> Проверка лабела </label> -->

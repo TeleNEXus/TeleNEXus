@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<application>
+    <widgets file="widgets.xml"/>
+    <modbussources file="modbussources.xml"/>
+</application>

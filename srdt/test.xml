@@ -1,0 +1,14 @@
+<?xml version = "1.0"?>
+<!-- Му Address Book -->
+<addressbook>
+    <contact number = "l">
+        <name>Piggy</name>
+        <phone>+49 631322187</phone>
+        <email>piggy@mega.de</email>
+    </contact>
+    <contact number = "2">
+        <name>Kermit</name>
+        <phone>+49 631322181</phone>
+        <email>kermit@mega.de</email>
+    </contact>
+</addressbook>
