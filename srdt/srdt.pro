@@ -36,6 +36,7 @@ SOURCES += \
         modbus/lcmodbusmasterbase.cpp \
         modbus/lcqmodbusmasterrtu.cpp \
         modbus/lcqmodbusmastertcp.cpp \
+        lctestdllclass.cpp \
         cqclientecho2.cpp \
         cqclientechoblocking1.cpp \
         cqclienttcpecho.cpp \
@@ -91,13 +92,14 @@ HEADERS += \
     cqmythread.h \
     cqsocketclient1.h \
     cqtestimer.h \
-    datasources/modbus/lcqmodbusdatasource.h \
+    lctestdllclass.h \
     lcxmltestwidgetcreators.h \
     lqtestsaxhandler.h \
     modbus/lcmodbusmasterbase.h \
     modbus/lcqmodbusmasterrtu.h \
     modbus/lcqmodbusmastertcp.h \
     modbus/lmodbusdefs.h \
+    modbus/lcqmodbusdatasource.h \
     remgui/datastrformat/lcdatastrformatbase.h \
     remgui/datastrformat/lcdatastrformatbool.h \
     remgui/datastrformat/lcdatastrformatf32.h \
