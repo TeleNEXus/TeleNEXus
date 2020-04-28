@@ -9,15 +9,28 @@
 //    return "Extwidglib::getName()";
 //}
 
-QString getTestDllInterface(LCTestDllInterface* _t)
+QString getTestDllInterfaceString(LCTestDllInterface* _t)
 {
     return _t->getString();
 }
 
-QString getTestDllclass(LCTestDllClass* _c)
+class LCTestDll : public LCTestDllInterface
 {
-    return _c->getString();
+public:
+    LCTestDll(){qDebug() << "LCTestDll";}
+    virtual ~LCTestDll(){qDebug() << "~LCTestDll";}
+    virtual QString getString()
+    {
+        return QString("class LCTestDll : public LCTestDllInterface");
+    }
+};
+
+QSharedPointer<LCTestDllInterface> EXTWIDGLIB_EXPORT getTestDllInterface()
+{
+    return QSharedPointer<LCTestDllInterface>(new LCTestDll());
 }
+
+
 
 
 

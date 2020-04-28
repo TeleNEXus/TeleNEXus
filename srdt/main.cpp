@@ -188,32 +188,21 @@ int main(int argc, char *argv[])
 //    return testXmlDom1(argc, argv);
 
     QLibrary lib("D:/Dokuments/Kuzmenko/Programs/PROGRAM_PROJECTS/srdtrep/build-extwidglib-Desktop-Debug/debug/extwidglib");
-    typedef const QString (*TFct)(LCTestDllInterface*);
+    typedef QSharedPointer<LCTestDllInterface> (*TFct)();
 
     TFct fct = (TFct)(lib.resolve("getTestDllInterface"));
 
-    CTestDllRecurse tci;
+//    CTestDllRecurse tci;
     if(!fct)
     {
         qDebug()<< "No recognize function";
     }
     else
     {
-        qDebug()<< fct(&tci);
+        QSharedPointer<LCTestDllInterface> test = fct();
+        qDebug()<< test->getString();
     }
-
-    typedef const QString (*TFct2)(LCTestDllClass*);
-    TFct2 fct2 = (TFct2)(lib.resolve("getTestDllclass"));
-    LCTestDllClass tc;
-    if(!fct)
-    {
-        qDebug()<< "No recognize function";
-    }
-    else
-    {
-        qDebug()<< fct2(&tc);
-    }
-
+    qDebug()<< "End programm";
 
 //    if(lib.resolve("Extwidglib"))
 //    {
@@ -223,7 +212,6 @@ int main(int argc, char *argv[])
 //    {
 //        qDebug()<< "resolve no";
 //    }
-
 
 //    return 0;
 

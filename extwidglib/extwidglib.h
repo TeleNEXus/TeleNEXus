@@ -5,6 +5,8 @@
 
 #include <QString>
 
+#include <QSharedPointer>
+
 #include "../srdt/testdllinterface.h"
 #include "../srdt/lctestdllclass.h"
 
@@ -17,7 +19,7 @@
 //    QString getName();
 //};
 
-extern "C" QString EXTWIDGLIB_EXPORT getTestDllInterface(LCTestDllInterface*);
-extern "C" QString EXTWIDGLIB_EXPORT getTestDllclass(LCTestDllClass*);
+extern "C" QString EXTWIDGLIB_EXPORT getTestDllInterfaceString(LCTestDllInterface*);
+extern "C" QSharedPointer<LCTestDllInterface> EXTWIDGLIB_EXPORT getTestDllInterface();
 
 #endif // EXTWIDGLIB_H

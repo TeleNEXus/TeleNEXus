@@ -14,31 +14,47 @@ enum class ERemoteDataStatus
     DS_WRONG
 };
 
+class LCQRemoteDataSourceInterface;
+
 class LCRemoteDataReadListnerInterface
 {
 public:
     LCRemoteDataReadListnerInterface(){}
-    virtual void dataIsRead(ERemoteDataStatus status, const QByteArray& _data);
-};
 
-class LCRemoteDataWriteListnerInterface
-{
-public:
-    LCRemoteDataWriteListnerInterface(){}
-    virtual void dataIsWrite(const QByteArray& _data);
+    virtual void dataIsRead(QSharedPointer<QByteArray> _data, ERemoteDataStatus status) = 0;
 };
 
 class LCRemoteDataReaderInterface
 {
 public:
     LCRemoteDataReaderInterface(){}
+    ~LCRemoteDataReaderInterface(){}
+    virtual void setDataName(const QString& _dataName) = 0;
+    virtual void setDataSource(QWeakPointer<LCQRemoteDataSourceInterface> _dataSource) = 0;
+    virtual void setDataReadListener(LCRemoteDataReadListnerInterface* _listener) = 0;
+    virtual void readRequest() = 0;
+    virtual void connectToSource() = 0;
+    virtual void disconnectFromSource() = 0;
+};
+
+class LCRemoteDataWriteListnerInterface
+{
+public:
+    LCRemoteDataWriteListnerInterface(){}
+    virtual void dataIsWrite(ERemoteDataStatus _status) = 0;
 };
 
 class LCRemoteDataWriterInterface
 {
 public:
     LCRemoteDataWriterInterface(){}
+
+    virtual void setDataName(const QString& _dataName) = 0;
+    virtual void setDataSource(QWeakPointer<LCQRemoteDataSourceInterface> _dataSource) = 0;
+    virtual void setDataWriteListener(LCRemoteDataWriteListnerInterface* _listener) = 0;
+    virtual void writeRequest(const QByteArray& _data) = 0;
 };
+
 
 class LCQRemoteDataSourceInterface
 {
