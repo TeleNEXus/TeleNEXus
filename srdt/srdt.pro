@@ -114,6 +114,11 @@ HEADERS += \
     remgui/lcqremlabel.h \
     remgui/lcqremlineedit.h \
     remgui/lremgui.h \ \
+    remotedatainterface/LCRemoteDataReadListnerInterface.h \
+    remotedatainterface/LCRemoteDataReaderInterface.h \
+    remotedatainterface/LCRemoteDataSourceInterface.h \
+    remotedatainterface/LCRemoteDataWriteListnerInterface.h \
+    remotedatainterface/LCRemoteDataWriterInterface.h \
     testdllinterface.h \
     xml/lcxmlapplication.h \
     xml/lcxmllayoutsfactory.h \

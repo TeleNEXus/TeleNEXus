@@ -2,12 +2,13 @@
 #define TESTDLLINTERFACE_H
 
 #include <QString>
+#include <QDebug>
 
 class LCTestDllInterface
 {
 public:
-    LCTestDllInterface(){}
-    virtual ~LCTestDllInterface(){}
+    LCTestDllInterface(){qDebug() << "LCTestDllInterface";}
+    virtual ~LCTestDllInterface(){qDebug() << "~LCTestDllInterface";}
     virtual QString getString() = 0;
 };
 
