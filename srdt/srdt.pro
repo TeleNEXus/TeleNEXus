@@ -25,6 +25,7 @@ INCLUDEPATH +=                  \
         remgui/                 \
         remgui/datastrformat/   \
         xml/                    \
+        remotedatainterface/
 
 
 SOURCES += \
@@ -32,8 +33,10 @@ SOURCES += \
         common/lcqremotedatasourcebase.cpp \
         common/lcqremotedatawriter.cpp \
         common/lcqu32validator.cpp \
+        modbus/lcqmodbusdatareader.cpp \
         modbus/lcqmodbusdatasource.cpp \
         modbus/lcmodbusmasterbase.cpp \
+        modbus/lcqmodbusdatawriter.cpp \
         modbus/lcqmodbusmasterrtu.cpp \
         modbus/lcqmodbusmastertcp.cpp \
         lctestdllclass.cpp \
@@ -96,6 +99,8 @@ HEADERS += \
     lcxmltestwidgetcreators.h \
     lqtestsaxhandler.h \
     modbus/lcmodbusmasterbase.h \
+    modbus/lcqmodbusdatareader.h \
+    modbus/lcqmodbusdatawriter.h \
     modbus/lcqmodbusmasterrtu.h \
     modbus/lcqmodbusmastertcp.h \
     modbus/lmodbusdefs.h \
