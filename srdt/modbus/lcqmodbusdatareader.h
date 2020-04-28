@@ -1,9 +1,9 @@
 #ifndef LCQMODBUSDATAREADER_H
 #define LCQMODBUSDATAREADER_H
 
+#include "lqextendevent.h"
+#include "LCRemoteDataSourceInterface.h"
 #include "LCRemoteDataReaderInterface.h"
-
-#include "lcqmodbusdatasource.h"
 
 namespace modbus {
 
@@ -24,18 +24,15 @@ private:
     };
 
     QString mDataName;
-    QWeakPointer<LCQModbusDataSource> mDataSource;
+    QWeakPointer<LCRemoteDataSourceInterface> mDataSource;
     QWeakPointer<LCRemoteDataReadListnerInterface> mpReadListener;
 
 public:
 
     LCQModbusDataReader(  QObject* _parent = nullptr);
-    LCQModbusDataReader(  const QString& _dataName,
-                          QWeakPointer<LCQModbusDataSource> _dataSource,
-                          QObject* _parent = nullptr);
-
     virtual ~LCQModbusDataReader();
     virtual void setDataName(const QString& _dataName) override;
+    virtual void setDataSource(QWeakPointer<LCRemoteDataSourceInterface> _source) override;
     virtual void setDataReadListener(QWeakPointer<LCRemoteDataReadListnerInterface> _listener) override;
     virtual void readRequest() override;
     virtual void connectToSource() override;

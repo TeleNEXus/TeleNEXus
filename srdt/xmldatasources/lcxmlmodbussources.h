@@ -7,7 +7,7 @@ class LCXmlModbusSources : public LCXmlRemoteDataSourceCreateBase
 {
 public:
     LCXmlModbusSources();
-    virtual LCRemoteDataSourceMap create(const QString& _xmlfilename) override;
+    virtual LTDataSources create(const QString &_xmlfilename) override;
 private:
 };
 

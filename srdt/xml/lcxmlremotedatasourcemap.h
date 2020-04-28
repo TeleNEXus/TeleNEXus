@@ -3,15 +3,14 @@
 
 #include <QMap>
 #include <QSharedPointer>
-
-class LCQRemoteDataSourceBase;
+#include "LCRemoteDataSourceInterface.h"
 
 #include "xmldatasources/lcxmlremotedatasourcecreatebase.h"
 
 class LCXmlRemoteDataSourceMap
 {
 private:
-    QMap<QString, QSharedPointer<LCQRemoteDataSourceBase>> mMap;
+    LTDataSources mMap;
 private:
     static LCXmlRemoteDataSourceMap mInstance;
     LCXmlRemoteDataSourceMap();
@@ -19,10 +18,9 @@ private:
     LCXmlRemoteDataSourceMap& operator=(const LCXmlRemoteDataSourceMap&) = delete;
 public:
     static LCXmlRemoteDataSourceMap& instace();
-    void addRemoteDataSorce(const QString& _name, QSharedPointer<LCQRemoteDataSourceBase> _source);
-    void addRemoteDataSorce(const LCRemoteDataSourceMap& _sources);
-    QSharedPointer<LCQRemoteDataSourceBase> getRemoteDataSorce(const QString& _name);
-
+    void addRemoteDataSorce(const QString& _name, QSharedPointer<LCRemoteDataSourceInterface> _source);
+    void addRemoteDataSorce(const LTDataSources& _sources);
+    QSharedPointer<LCRemoteDataSourceInterface> getRemoteDataSorce(const QString& _name);
 };
 
 #endif // LCXMLREMOTEDATASOURCEMAP_H

@@ -14,6 +14,11 @@ LCXmlRemLabel::LCXmlRemLabel()
 
 }
 
+LCXmlRemLabel::~LCXmlRemLabel()
+{
+
+}
+
 const struct
 {
     QString data    = "data";
@@ -26,7 +31,7 @@ QWidget* LCXmlRemLabel::create(const QDomElement& _element)
 
     QString data;
     QString attr = _element.attribute(__attrNames.source);
-    QSharedPointer<LCQRemoteDataSourceBase> source;
+    QSharedPointer<LCRemoteDataSourceInterface> source;
     QSharedPointer<LCDataStrFormatBase> format;
 
     if(attr.isNull())

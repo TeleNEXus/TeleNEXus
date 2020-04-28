@@ -27,6 +27,7 @@ private:
         bool mFlagActive;
     public:
         CReadListener(LCQRemLineEdit& _lineEdit);
+        virtual ~CReadListener(){}
         virtual void dataIsRead(QSharedPointer<QByteArray> _data, ERemoteDataStatus status) override;
         void setActive(bool _flag){mFlagActive = _flag;}
     };
@@ -37,6 +38,7 @@ private:
         LCQRemLineEdit& mLineEdit;
     public:
         CWriteListener(LCQRemLineEdit& _lineEdit);
+        virtual ~CWriteListener(){}
         virtual void dataIsWrite(ERemoteDataStatus _status) override;
     };
 
@@ -62,6 +64,7 @@ public:
                             QSharedPointer<LCDataStrFormatBase> _formatter,
                             QWidget* _parent = nullptr);
 
+    virtual ~LCQRemLineEdit();
     void setActive(bool _flag);
 protected:
     virtual void keyPressEvent(QKeyEvent *_ev) override;

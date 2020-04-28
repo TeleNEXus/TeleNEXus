@@ -6,13 +6,15 @@
 
 #include "LCRemoteDataSourceInterface.h"
 
-using LCRemoteDataSourceMap = QMap<QString, QSharedPointer<LCRemoteDataSourceInterface>>;
+using LTDataSources = QMap<QString, QSharedPointer<LCRemoteDataSourceInterface>>;
+
 class LCXmlRemoteDataSourceCreateBase
 {
+public:
 
 public:
-    LCXmlRemoteDataSourceCreateBase();
-    virtual LCRemoteDataSourceMap create(const QString& _xmlfilename) = 0;
+    LCXmlRemoteDataSourceCreateBase(){};
+    virtual LTDataSources create(const QString& _xmlfilename) = 0;
 };
 
 #endif // LCXMLDATASOURCECREATEBASE_H

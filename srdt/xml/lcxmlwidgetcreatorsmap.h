@@ -5,10 +5,12 @@
 
 #include <QMap>
 
+using LTXmlWidgetsCreators = QMap<QString, LCXmlWidgetCreatorBase*>;
+
 class LCXmlWidgetCreatorsMap
 {
 private:
-    QMap<QString, LCXmlWidgetCreatorBase*> mMap;
+    LTXmlWidgetsCreators mMap;
 private:
     static LCXmlWidgetCreatorsMap mInstance;
     LCXmlWidgetCreatorsMap();

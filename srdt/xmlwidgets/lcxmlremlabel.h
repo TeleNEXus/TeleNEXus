@@ -10,6 +10,7 @@ class LCXmlRemLabel : public LCXmlWidgetCreatorBase
 {
 public:
     LCXmlRemLabel();
+    virtual ~LCXmlRemLabel();
     virtual QWidget* create(const QDomElement& _element) override;
 };
 

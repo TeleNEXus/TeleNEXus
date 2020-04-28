@@ -858,6 +858,7 @@ void LCQModbusDataSource::start(QSharedPointer<QThread> _thread, int _updateInte
 
     _updateIntervalMs = (_updateIntervalMs > 50) ? (_updateIntervalMs) : (50);
 
+    qDebug()<<"Modbus Source Started";
     QCoreApplication::postEvent(this, new CQEventStart(_updateIntervalMs));
 }
 
@@ -899,6 +900,18 @@ void LCQModbusDataSource::customEvent(QEvent* _event)
         reinterpret_cast<CQEventBase*>(_event)->handle(this);
     }
     qDebug()<<"LCQModbusDataSource::customEvent";
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+QSharedPointer<LCRemoteDataReaderInterface> LCQModbusDataSource::createReader()
+{
+    return QSharedPointer<LCRemoteDataReaderInterface>(new LCQModbusDataReader());
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+QSharedPointer<LCRemoteDataWriterInterface> LCQModbusDataSource::createWriter()
+{
+    return QSharedPointer<LCRemoteDataWriterInterface>(new LCQModbusDataWriter());
 }
 
 } /* namespace modbus */

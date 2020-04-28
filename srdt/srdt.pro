@@ -25,7 +25,7 @@ INCLUDEPATH +=                  \
         remgui/datastrformat/   \
         xml/                    \
         remotedatainterface/    \
-#common/                 \
+        common/                 \
 
 
 SOURCES += \
@@ -66,10 +66,8 @@ SOURCES += \
         xml/lcxmllayoutsfactory.cpp \
         xml/lcxmlremotedatasourcemap.cpp \
         xml/lcxmlstddataformatterfactory.cpp \
-        xml/lcxmlwidgetcreatorbase.cpp \
         xml/lcxmlwidgetcreatorsmap.cpp \
         xmldatasources/lcxmlmodbussources.cpp \
-        xmldatasources/lcxmlremotedatasourcecreatebase.cpp \
         xmlwidgets/lcxmllabel.cpp \
         xmlwidgets/lcxmlremlabel.cpp \
         xmlwidgets/lcxmlremlineedit.cpp \
