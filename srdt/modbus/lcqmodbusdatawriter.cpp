@@ -1,10 +1,11 @@
 #include "lcqmodbusdatawriter.h"
+#include "lcqmodbusdatasource.h"
 #include "LCRemoteDataWriteListnerInterface.h"
 
 namespace modbus
 {
 
-//======================================================================================================CQEventDataWrite
+//======================================================================================================================
 __LQ_EXTENDED_QEVENT_IMPLEMENTATION(LCQModbusDataWriter::CQEventDataIsWrite);
 
 LCQModbusDataWriter::
@@ -14,29 +15,39 @@ LCQModbusDataWriter::
 {
 }
 
-//===================================================================================================LCQModbusDataWriter
+//======================================================================================================================
 LCQModbusDataWriter::LCQModbusDataWriter(QObject *_parent) : QObject(_parent)
 {
 
 }
 
-LCQModbusDataWriter::LCQModbusDataWriter(   QWeakPointer<LCQModbusDataSource> _dataSource,
-                                            QObject* _parent) : QObject(_parent),
-                                                                mDataSource(_dataSource)
-{
-
-}
-
-//-----------------------------------------------------------------------------------------------------------setDataName
+//----------------------------------------------------------------------------------------------------------------------
 void LCQModbusDataWriter::setDataName(const QString& _dataName)
 {
     mDataName = _dataName;
 }
 
-//----------------------------------------------------------------------------------------------------------writeRequest
+//----------------------------------------------------------------------------------------------------------------------
+void LCQModbusDataWriter::setDataSource(QWeakPointer<LCRemoteDataSourceInterface> _source)
+{
+    QSharedPointer<LCRemoteDataSourceInterface> sp = _source.lock();
+    if(!sp.isNull())
+    {
+        if(dynamic_cast<LCQModbusDataSource*>(sp.data())) mDataSource = sp;
+    }
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+void LCQModbusDataWriter::setDataWriteListener(QWeakPointer<LCRemoteDataWriteListnerInterface> _listener)
+{
+    QSharedPointer<LCRemoteDataWriteListnerInterface> sp = _listener.lock();
+    if(!sp.isNull()) mwpWriteListener = sp;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
 void LCQModbusDataWriter::writeRequest(const QByteArray& _data)
 {
-    QSharedPointer<LCQModbusDataSource> sp = mDataSource.lock();
+    QSharedPointer<LCRemoteDataSourceInterface> sp = mDataSource.lock();
     if(sp.isNull())
     {
         QSharedPointer<LCRemoteDataWriteListnerInterface> listener = mwpWriteListener.lock();
@@ -44,11 +55,11 @@ void LCQModbusDataWriter::writeRequest(const QByteArray& _data)
     }
     else
     {
-        sp->write(mDataName, _data, this);
+        ((LCQModbusDataSource*)sp.data())->write(mDataName, _data, this);
     }
 }
 
-//-----------------------------------------------------------------------------------------------------------customEvent
+//----------------------------------------------------------------------------------------------------------------------
 void LCQModbusDataWriter::customEvent(QEvent *_event)
 {
     if(_event->type() == CQEventDataIsWrite::msExtendedEventType)

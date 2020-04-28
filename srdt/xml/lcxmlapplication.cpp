@@ -170,7 +170,7 @@ int LCXmlApplication::exec(int argc, char *argv[])
         return -1;
     }
 
-    LCRemoteDataSourceMap smap = LCXmlModbusSources().create(sourcesFile);
+    LTDataSources smap = LCXmlModbusSources().create(sourcesFile);
 
     if(smap.isEmpty())
     {

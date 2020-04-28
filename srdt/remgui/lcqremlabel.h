@@ -24,6 +24,7 @@ private:
         LCQRemLabel& mLabel;
     public:
         CReadListener(LCQRemLabel& _label);
+        virtual ~CReadListener(){}
         virtual void dataIsRead(QSharedPointer<QByteArray> _data, ERemoteDataStatus status) override;
     };
 

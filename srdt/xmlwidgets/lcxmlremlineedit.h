@@ -10,6 +10,7 @@ class LCXmlRemLineEdit : public LCXmlWidgetCreatorBase
 {
 public:
     LCXmlRemLineEdit();
+    virtual ~LCXmlRemLineEdit();
     virtual QWidget* create(const QDomElement& _element) override;
 };
 

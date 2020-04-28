@@ -15,7 +15,7 @@
 
 using namespace modbus;
 
-using TMastersMap = QMap<QString, QSharedPointer<LCModbusMasterBase>>;
+using LTMastersMap = QMap<QString, QSharedPointer<LCModbusMasterBase>>;
 
 //======================================================================================================================
 LCXmlModbusSources::LCXmlModbusSources()
@@ -24,17 +24,17 @@ LCXmlModbusSources::LCXmlModbusSources()
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-static TMastersMap createMasters(const QDomNodeList& nodes);
+static LTMastersMap createMasters(const QDomNodeList& nodes);
 
 //----------------------------------------------------------------------------------------------------------------------
 static void createSources(const QDomNodeList& nodes,
-                          TMastersMap _masters,
-                          LCRemoteDataSourceMap& _sourcesmap);
+                          LTMastersMap _masters,
+                          LTDataSources& _sourcesmap);
 
 //----------------------------------------------------------------------------------------------------------------------
-LCRemoteDataSourceMap LCXmlModbusSources::create(const QString& _xmlfilename)
+LTDataSources LCXmlModbusSources::create(const QString& _xmlfilename)
 {
-    LCRemoteDataSourceMap map;
+    LTDataSources map;
 
     QFile file(LCXmlApplication::instance().getXmlMainFileWay() + _xmlfilename);
 
@@ -66,7 +66,7 @@ LCRemoteDataSourceMap LCXmlModbusSources::create(const QString& _xmlfilename)
         return map;
     }
 
-    TMastersMap masters = createMasters(nodes);
+    LTMastersMap masters = createMasters(nodes);
 
     if(masters.isEmpty())
     {
@@ -102,13 +102,13 @@ static const struct
 }__sourceAttributes;
 //----------------------------------------------------------------------------------------------------------------------
 static void createSources(const QDomNodeList& nodes,
-                          TMastersMap _masters,
-                          LCRemoteDataSourceMap& _sourcesmap)
+                          LTMastersMap _masters,
+                          LTDataSources& _sourcesmap)
 {
     QString attr;
     QString attrName;
 
-    TMastersMap::iterator itm;
+    LTMastersMap::iterator itm;
 
     quint32 devid = 0;
     bool boolBuff = false;
@@ -179,9 +179,9 @@ static QSharedPointer<LCModbusMasterBase> createMasterRtu(const QDomElement _ele
 static QSharedPointer<LCModbusMasterBase> createMasterTcp(const QDomElement _element);
 
 //----------------------------------------------------------------------------------------------------------------------
-static TMastersMap createMasters(const QDomNodeList& nodes)
+static LTMastersMap createMasters(const QDomNodeList& nodes)
 {
-    TMastersMap map;
+    LTMastersMap map;
     QString attrType;
     QString attrName;
     for(int i = 0; i < nodes.size(); i++)

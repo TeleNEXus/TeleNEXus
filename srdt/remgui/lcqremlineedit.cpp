@@ -31,7 +31,7 @@ LCQRemLineEdit::CWriteListener::CWriteListener(LCQRemLineEdit& _lineEdit) : mLin
 
 void LCQRemLineEdit::CWriteListener::dataIsWrite(ERemoteDataStatus _status)
 {
-
+    Q_UNUSED(_status);
 }
 
 //======================================================================================================================
@@ -49,13 +49,16 @@ LCQRemLineEdit::LCQRemLineEdit(const QString& _dataName,
     mDataReader->setDataName(_dataName);
     mReadListener = QSharedPointer<CReadListener>(new CReadListener(*this));
     mDataReader->setDataReadListener(mReadListener);
+    mDataReader->setDataSource(_dataSource);
 
     mDataWriter = _dataSource->createWriter();
     mDataWriter->setDataName(_dataName);
     mWriteListener = QSharedPointer<CWriteListener>(new CWriteListener(*this));
     mDataWriter->setDataWriteListener(mWriteListener);
+    mDataWriter->setDataSource(_dataSource);
 }
 
+//----------------------------------------------------------------------------------------------------------------------
 LCQRemLineEdit::LCQRemLineEdit(const QString& _dataNameRead,
                                const QString& _dataNameWrite,
                                QSharedPointer<LCRemoteDataSourceInterface> _dataSource,
@@ -76,6 +79,12 @@ LCQRemLineEdit::LCQRemLineEdit(const QString& _dataNameRead,
     mDataWriter->setDataName(_dataNameWrite);
     mWriteListener = QSharedPointer<CWriteListener>(new CWriteListener(*this));
     mDataWriter->setDataWriteListener(mWriteListener);
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+LCQRemLineEdit::~LCQRemLineEdit()
+{
+
 }
 
 void LCQRemLineEdit::setActive(bool _flag)

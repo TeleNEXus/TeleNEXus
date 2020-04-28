@@ -8,8 +8,8 @@ class QWidget;
 class LCXmlWidgetCreatorBase
 {
 public:
-    LCXmlWidgetCreatorBase();
-    virtual ~LCXmlWidgetCreatorBase();
+    LCXmlWidgetCreatorBase(){}
+    virtual ~LCXmlWidgetCreatorBase(){}
     virtual QWidget* create(const QDomElement& _element) = 0;
 };
 

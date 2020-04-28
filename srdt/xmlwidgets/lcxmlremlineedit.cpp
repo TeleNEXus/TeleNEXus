@@ -13,6 +13,11 @@ LCXmlRemLineEdit::LCXmlRemLineEdit()
 
 }
 
+LCXmlRemLineEdit::~LCXmlRemLineEdit()
+{
+
+}
+
 const struct
 {
     QString data    = "data";
@@ -24,7 +29,7 @@ QWidget* LCXmlRemLineEdit::create(const QDomElement& _element)
 {
     QString data;
     QString attr = _element.attribute(__attrNames.source);
-    QSharedPointer<LCQRemoteDataSourceBase> source;
+    QSharedPointer<LCRemoteDataSourceInterface> source;
     QSharedPointer<LCDataStrFormatBase> format;
 
     if(attr.isNull())

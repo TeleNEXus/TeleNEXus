@@ -402,18 +402,18 @@ public:
     void start(QSharedPointer<QThread> _thread, int _updateIntervalMs = 500);
     void stop();
 
-    virtual QSharedPointer<LCRemoteDataReaderInterface> createReader() override;
-    virtual QSharedPointer<LCRemoteDataWriterInterface> createWriter() override;
 
-
-    //----------------------------------------------------------------------------------------------------------override
 private:
-
     void connectReader(const QString& _name, QObject* _reader);
     void disconnectReader(QObject* _reader);
     void read(const QString& _name, QObject* _reader);
     void write(const QString& _name, const QByteArray& _data, QObject* _writer = nullptr);
     virtual void customEvent(QEvent* _event) override;
+
+public:
+    //----------------------------------------------------------------------------------------------------------override
+    virtual QSharedPointer<LCRemoteDataReaderInterface> createReader() override;
+    virtual QSharedPointer<LCRemoteDataWriterInterface> createWriter() override;
 
     friend class LCQModbusDataReader;
     friend class LCQModbusDataWriter;
