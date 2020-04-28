@@ -1,9 +1,13 @@
-﻿#include "lcqmodbusdatasource.h"
-#include "lmodbusdefs.h"
-#include <QThread>
+﻿#include <QThread>
 #include <typeinfo>
 #include <QCoreApplication>
 #include <QDebug>
+
+#include "lcqmodbusdatasource.h"
+#include "lmodbusdefs.h"
+
+#include "lcqmodbusdatareader.h"
+#include "lcqmodbusdatawriter.h"
 
 namespace modbus
 {
@@ -54,7 +58,7 @@ void LCQModbusDataSource::
 {
     if(_base->mDataMap.read(mDataName,mpReader)) return;
     QCoreApplication::postEvent( mpReader,
-                                new CQEventDataIsRead(EDataStatus::DS_WRONG));
+                                new LCQModbusDataReader::CQEventDataIsRead(ERemoteDataStatus::DS_WRONG));
 }
 
 //=======================================================================================================CQEventReqWrite
@@ -74,7 +78,7 @@ void LCQModbusDataSource::
         CQEventReqWrite::handle(LCQModbusDataSource* _base)
 {
     if(_base->mDataMap.write(mDataName,mData, mpWriter)) return;
-    QCoreApplication::postEvent( mpWriter, new CQEventDataIsWrite(EDataStatus::DS_WRONG));
+    QCoreApplication::postEvent( mpWriter, new LCQModbusDataWriter::CQEventDataIsWrite(ERemoteDataStatus::DS_WRONG));
 }
 //===============================================================================================CQEventReqConnectReader
 LCQModbusDataSource::
@@ -111,7 +115,9 @@ void LCQModbusDataSource::CControllerRegistersBase::CDataItem::notifyReaders()
     QLinkedList<QObject*>::iterator it_end = mReadersList.end();
     for(;it != it_end; it++)
     {
-        QCoreApplication::postEvent( *it, new CQEventDataIsRead(QByteArray( (char*)(mpData), mSize * 2), mStatus));
+        QCoreApplication::postEvent( *it,
+                new LCQModbusDataReader::CQEventDataIsRead(QByteArray(
+                                                               (char*)(mpData), mSize * 2), mStatus));
     }
 }
 
@@ -149,19 +155,19 @@ void LCQModbusDataSource::CControllerRegistersBase::read(quint16 _addr, quint16 
 {
 //    QSharedPointer<LCModbusMasterBase> master = mwpMaster.lock();
 
-    EDataStatus status = EDataStatus::DS_WRONG;
+    ERemoteDataStatus status = ERemoteDataStatus::DS_WRONG;
 
     if(!mwpMaster.isNull())
     {
         if(readRegs(mwpMaster.data(), _addr, _size, mRegBuff).status ==
                 LCModbusMasterBase::SReply::EStatus::OK)
         {
-            status = EDataStatus::DS_OK;
+            status = ERemoteDataStatus::DS_OK;
         }
     }
 
     QCoreApplication::postEvent( _reader,
-                                new LCQRemoteDataSourceBase::CQEventDataIsRead(
+                                new LCQModbusDataReader::CQEventDataIsRead(
                                     QByteArray( (char*)mRegBuff, _size * 2),
                                     status));
 }
@@ -172,9 +178,9 @@ void LCQModbusDataSource::CControllerRegistersBase::write(quint16 _addr,
                                                              const QByteArray& _data,
                                                              QObject* _writer)
 {
-    EDataStatus status = EDataStatus::DS_UNDEF;
+    ERemoteDataStatus status = ERemoteDataStatus::DS_UNDEF;
 
-    status = EDataStatus::DS_WRONG;
+    status = ERemoteDataStatus::DS_WRONG;
     if(_data.size() % 2 == 0)
     {
         quint16 length = _data.size() >> 1;
@@ -185,11 +191,11 @@ void LCQModbusDataSource::CControllerRegistersBase::write(quint16 _addr,
             {
                 if(writeRegs(mwpMaster.data(), _addr, length, ((quint16*)_data.constData())).status ==
                         LCModbusMasterBase::SReply::EStatus::OK)
-                    status = EDataStatus::DS_OK;
+                    status = ERemoteDataStatus::DS_OK;
             }
         }
     }
-    QCoreApplication::postEvent(_writer, new CQEventDataIsWrite(status));
+    QCoreApplication::postEvent(_writer, new LCQModbusDataWriter::CQEventDataIsWrite(status));
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -203,11 +209,11 @@ void LCQModbusDataSource::CControllerRegistersBase::update()
         QLinkedList<CDataItem*>::iterator it_end = mReadDataList.end();
         for(;it != it_end; it++)
         {
-            (*it)->mStatus = EDataStatus::DS_WRONG;
+            (*it)->mStatus = ERemoteDataStatus::DS_WRONG;
             if(readRegs(mwpMaster.data(), (*it)->mAddr, (*it)->mSize, (*it)->mpData).status ==
                     LCModbusMasterBase::SReply::EStatus::OK)
             {
-                (*it)->mStatus = EDataStatus::DS_OK;
+                (*it)->mStatus = ERemoteDataStatus::DS_OK;
             }
             (*it)->notifyReaders();
         }
@@ -287,29 +293,6 @@ LCModbusMasterBase::SReply
     return LCModbusMasterBase::SReply(LCModbusMasterBase::SReply::EStatus::WRONG_REQ, 0);
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-
-
 //==============================================================================================CControllerRegistersBase
 void LCQModbusDataSource::CControllerBitsBase::CDataItem::notifyReaders()
 {
@@ -317,7 +300,8 @@ void LCQModbusDataSource::CControllerBitsBase::CDataItem::notifyReaders()
     QLinkedList<QObject*>::iterator it_end = mReadersList.end();
     for(;it != it_end; it++)
     {
-        QCoreApplication::postEvent( *it, new CQEventDataIsRead(QByteArray( (char*)(mpData), mSize), mStatus));
+        QCoreApplication::postEvent(
+                    *it, new LCQModbusDataReader::CQEventDataIsRead(QByteArray( (char*)(mpData), mSize), mStatus));
     }
 }
 
@@ -355,19 +339,19 @@ void LCQModbusDataSource::CControllerBitsBase::read(quint16 _addr, quint16 _size
 {
     QSharedPointer<LCModbusMasterBase> master = mwpMaster.lock();
 
-    EDataStatus status = EDataStatus::DS_WRONG;
+    ERemoteDataStatus status = ERemoteDataStatus::DS_WRONG;
 
     if(!master.isNull())
     {
         if(readBits(master.data(), _addr, _size, mBitsBuff).status ==
                 LCModbusMasterBase::SReply::EStatus::OK)
         {
-            status = EDataStatus::DS_OK;
+            status = ERemoteDataStatus::DS_OK;
         }
     }
 
     QCoreApplication::postEvent( _reader,
-                                new LCQRemoteDataSourceBase::CQEventDataIsRead(
+                                new LCQModbusDataReader::CQEventDataIsRead(
                                     QByteArray( (char*)mBitsBuff, _size),
                                     status));
 }
@@ -378,9 +362,9 @@ void LCQModbusDataSource::CControllerBitsBase::write(quint16 _addr,
                                                              const QByteArray& _data,
                                                              QObject* _writer)
 {
-    EDataStatus status = EDataStatus::DS_UNDEF;
+    ERemoteDataStatus status = ERemoteDataStatus::DS_UNDEF;
 
-    status = EDataStatus::DS_WRONG;
+    status = ERemoteDataStatus::DS_WRONG;
 
     if(_data.size() == _size)
     {
@@ -389,10 +373,10 @@ void LCQModbusDataSource::CControllerBitsBase::write(quint16 _addr,
         {
             if(writeBits(sp.data(), _addr, _size, ((quint8*)_data.constData())).status ==
                     LCModbusMasterBase::SReply::EStatus::OK)
-                status = EDataStatus::DS_OK;
+                status = ERemoteDataStatus::DS_OK;
         }
     }
-    QCoreApplication::postEvent(_writer, new CQEventDataIsWrite(status));
+    QCoreApplication::postEvent(_writer, new LCQModbusDataWriter::CQEventDataIsWrite(status));
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -406,11 +390,11 @@ void LCQModbusDataSource::CControllerBitsBase::update()
         QLinkedList<CDataItem*>::iterator it_end = mReadDataList.end();
         for(;it != it_end; it++)
         {
-            (*it)->mStatus = EDataStatus::DS_WRONG;
+            (*it)->mStatus = ERemoteDataStatus::DS_WRONG;
             if(readBits(master.data(), (*it)->mAddr, (*it)->mSize, (*it)->mpData).status ==
                     LCModbusMasterBase::SReply::EStatus::OK)
             {
-                (*it)->mStatus = EDataStatus::DS_OK;
+                (*it)->mStatus = ERemoteDataStatus::DS_OK;
             }
             (*it)->notifyReaders();
         }
@@ -490,27 +474,6 @@ LCModbusMasterBase::SReply
     Q_UNUSED(_bits);
     return LCModbusMasterBase::SReply(LCModbusMasterBase::SReply::EStatus::WRONG_REQ, 0);
 }
-
-
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 //==================================================================================================CDataMapItemRegsBase
 LCQModbusDataSource::
@@ -601,7 +564,7 @@ void LCQModbusDataSource::
 {
     Q_UNUSED(_data);
     Q_UNUSED(_writer);
-    QCoreApplication::postEvent(_writer, new CQEventDataIsWrite(EDataStatus::DS_WRONG));
+    QCoreApplication::postEvent(_writer, new LCQModbusDataWriter::CQEventDataIsWrite(ERemoteDataStatus::DS_WRONG));
 }
 
 
@@ -697,15 +660,8 @@ void LCQModbusDataSource::
 {
     Q_UNUSED(_data);
     Q_UNUSED(_writer);
-    QCoreApplication::postEvent(_writer, new CQEventDataIsWrite(EDataStatus::DS_WRONG));
+    QCoreApplication::postEvent(_writer, new LCQModbusDataWriter::CQEventDataIsWrite(ERemoteDataStatus::DS_WRONG));
 }
-
-
-
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-
-
 
 //==============================================================================================================CDataMap
 LCQModbusDataSource::

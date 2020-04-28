@@ -4,9 +4,9 @@
 #include <QMap>
 #include <QSharedPointer>
 
-#include "lcqremotedatasourcebase.h"
+#include "LCRemoteDataSourceInterface.h"
 
-using LCRemoteDataSourceMap = QMap<QString, QSharedPointer<LCQRemoteDataSourceBase>>;
+using LCRemoteDataSourceMap = QMap<QString, QSharedPointer<LCRemoteDataSourceInterface>>;
 class LCXmlRemoteDataSourceCreateBase
 {
 

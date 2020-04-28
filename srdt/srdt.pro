@@ -21,17 +21,17 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 INCLUDEPATH +=                  \
         modbus/                 \
-        common/                 \
         remgui/                 \
         remgui/datastrformat/   \
         xml/                    \
-        remotedatainterface/
+        remotedatainterface/    \
+#common/                 \
 
 
 SOURCES += \
-        common/lcqremotedatareader.cpp \
-        common/lcqremotedatasourcebase.cpp \
-        common/lcqremotedatawriter.cpp \
+        #common/lcqremotedatareader.cpp \
+        #common/lcqremotedatasourcebase.cpp \
+        #common/lcqremotedatawriter.cpp \
         common/lcqu32validator.cpp \
         modbus/lcqmodbusdatareader.cpp \
         modbus/lcqmodbusdatasource.cpp \
@@ -84,9 +84,9 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 HEADERS += \
-    common/lcqremotedatareader.h \
-    common/lcqremotedatasourcebase.h \
-    common/lcqremotedatawriter.h \
+    #common/lcqremotedatareader.h \
+    #common/lcqremotedatasourcebase.h \
+    #common/lcqremotedatawriter.h \
     common/lcqu32validator.h \
     common/lqextendevent.h \
     cqclientecho2.h \

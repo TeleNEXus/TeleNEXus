@@ -92,9 +92,12 @@ void LCQModbusDataReader::disconnectFromSource()
 //-----------------------------------------------------------------------------------------------------------customEvent
 void LCQModbusDataReader::customEvent(QEvent* _event)
 {
-    if(_event->type() != LCQModbusDataSource::CQEventDataIsRead::msExtendedEventType) return;
-    LCQModbusDataSource::CQEventDataIsRead *e = dynamic_cast<LCQModbusDataSource::CQEventDataIsRead*>(_event);
+    if(_event->type() != CQEventDataIsRead::msExtendedEventType) return;
+
+    CQEventDataIsRead *e = dynamic_cast<CQEventDataIsRead*>(_event);
+
     if(e == nullptr) return;
+
     QSharedPointer<LCRemoteDataReadListnerInterface> listener = mpReadListener.lock();
     if(!listener.isNull())
     {
