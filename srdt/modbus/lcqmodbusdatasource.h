@@ -1,7 +1,7 @@
 ﻿#ifndef LCQMODBUSDATASOURCE_H
 #define LCQMODBUSDATASOURCE_H
 
-#include "lcqremotedatasourcebase.h"
+//#include "lcqremotedatasourcebase.h"
 #include "lcqmodbusmastertcp.h"
 #include "lqextendevent.h"
 
@@ -11,11 +11,13 @@
 #include <QMap>
 #include <QTimerEvent>
 
+#include "LCRemoteDataSourceInterface.h"
+
 namespace modbus
 {
 
 //===============================================================================================LCQModbusDataController
-class LCQModbusDataSource : public QObject, public LCQRemoteDataSourceBase
+class LCQModbusDataSource : public QObject, public LCRemoteDataSourceInterface
 {
     Q_OBJECT
 
@@ -100,7 +102,7 @@ private:
         public:
             quint16 mAddr;
             quint16 mSize;
-            EDataStatus mStatus;
+            ERemoteDataStatus mStatus;
             quint16 *mpData;
             QLinkedList<QObject*> mReadersList;
         public:
@@ -108,7 +110,7 @@ private:
 
             explicit CDataItem(quint16 _addr, quint16 _size) :  mAddr(_addr),
                                                                 mSize(_size),
-                                                                mStatus(EDataStatus::DS_UNDEF)
+                                                                mStatus(ERemoteDataStatus::DS_UNDEF)
             {
                 mpData = new quint16[_size];
             }
@@ -184,7 +186,7 @@ private:
         public:
             quint16 mAddr;
             quint16 mSize;
-            EDataStatus mStatus;
+            ERemoteDataStatus mStatus;
             quint8 *mpData;
             QLinkedList<QObject*> mReadersList;
         public:
@@ -192,7 +194,7 @@ private:
 
             explicit CDataItem(quint16 _addr, quint16 _size) :  mAddr(_addr),
                                                                 mSize(_size),
-                                                                mStatus(EDataStatus::DS_UNDEF)
+                                                                mStatus(ERemoteDataStatus::DS_UNDEF)
             {
                 mpData = new quint8[_size];
             }
@@ -402,17 +404,42 @@ public:
     void start(QSharedPointer<QThread> _thread, int _updateIntervalMs = 500);
     void stop();
 
+    virtual QSharedPointer<LCRemoteDataReaderInterface> createReader() override;
+    virtual QSharedPointer<LCRemoteDataWriterInterface> createWriter() override;
 
 
     //----------------------------------------------------------------------------------------------------------override
-protected:
-    virtual void connectReader(const QString& _name, QObject* _reader) override;
-    virtual void disconnectReader(QObject* _reader) override;
-    virtual void read(const QString& _name, QObject* _reader) override;
-    virtual void write(const QString& _name, const QByteArray& _data, QObject* _writer = nullptr) override;
+private:
 
-protected:
+    //---------------------------------------------------------------------------------------------------CQEventDataRead
+    class CQEventDataIsRead : public QEvent
+    {
+        __LQ_EXTENDED_QEVENT_DECLARATION
+    public:
+        QSharedPointer<QByteArray> mData;
+        ERemoteDataStatus mStatus;
+        explicit CQEventDataIsRead(const QByteArray& _data, ERemoteDataStatus _status);
+        explicit CQEventDataIsRead(ERemoteDataStatus _status);
+    };
+
+    //--------------------------------------------------------------------------------------------------CQEventDataWrite
+    class CQEventDataIsWrite : public QEvent
+    {
+        __LQ_EXTENDED_QEVENT_DECLARATION
+    public:
+        const ERemoteDataStatus mStatus;
+        explicit CQEventDataIsWrite(ERemoteDataStatus _status);
+    };
+
+
+
+    void connectReader(const QString& _name, QObject* _reader);
+    void disconnectReader(QObject* _reader);
+    void read(const QString& _name, QObject* _reader);
+    void write(const QString& _name, const QByteArray& _data, QObject* _writer = nullptr);
     virtual void customEvent(QEvent* _event) override;
+
+    friend class LCQModbusDataReader;
 };
 
 }
