@@ -8,6 +8,23 @@ namespace remgui
 {
 
 //===========================================================================================================LCQRemLabel
+LCQRemLabel::CReadListener::CReadListener(LCQRemLabel& _label) : mLabel(_label)
+{
+
+}
+
+void LCQRemLabel::CReadListener::dataIsRead(QSharedPointer<QByteArray> _data, ERemoteDataStatus _status)
+{
+    if(_status != ERemoteDataStatus::DS_OK)
+    {
+        mLabel.setText(mLabel.mFormatter.data()->undefStateString());
+        return;
+    }
+    mLabel.setText(mLabel.mFormatter.data()->toString(*_data));
+}
+
+
+//===========================================================================================================LCQRemLabel
 LCQRemLabel::LCQRemLabel(QWidget* _parent) : QLabel(_parent)
 {
     setText(LCDataStrFormatBase::getUndefStateString());
@@ -18,24 +35,16 @@ LCQRemLabel::LCQRemLabel(QString _text, QWidget* _parent) : QLabel(_text, _paren
 }
 
 LCQRemLabel::LCQRemLabel(const QString& _dataName,
-                         QWeakPointer<LCQRemoteDataSourceBase> _dataSource,
+                         QSharedPointer<LCRemoteDataSourceInterface> _dataSource,
                          QSharedPointer<LCDataStrFormatBase> _formatter,
                          QWidget* _parent) :    QLabel(_parent),
                                                 mDataName(_dataName),
-                                                mDataReader(mDataName, _dataSource),
                                                 mFormatter(_formatter)
 {
     setText(mFormatter.data()->undefStateString());
-    connect(&mDataReader, &LCQRemoteDataReader::dataIsRead,
-            [=](    QSharedPointer<QByteArray> _data,
-                    LCQRemoteDataSourceBase::EDataStatus _status){
-                if(_status != LCQRemoteDataSourceBase::EDataStatus::DS_OK)
-                {
-                    setText(mFormatter.data()->undefStateString());
-                    return;
-                }
-                setText(mFormatter.data()->toString(*_data));
-            });
+    mDataListener = QSharedPointer<CReadListener>(new CReadListener(*this));
+    mDataReader = _dataSource->createReader();
+    mDataReader->setDataReadListener(mDataListener);
 }
 
 LCQRemLabel::~LCQRemLabel()
@@ -48,11 +57,11 @@ void LCQRemLabel::setActive(bool _flag)
 {
     if(_flag)
     {
-        mDataReader.connectToSource();
+        mDataReader->connectToSource();
     }
     else
     {
-        mDataReader.disconnectFromSource();
+        mDataReader->disconnectFromSource();
     }
 }
 
@@ -63,11 +72,11 @@ bool LCQRemLabel::event(QEvent *_event)
     switch(_event->type())
     {
     case QEvent::Type::Show:
-        mDataReader.connectToSource();
+        mDataReader->connectToSource();
         ret = true;
         break;
     case QEvent::Type::Hide:
-        mDataReader.disconnectFromSource();
+        mDataReader->disconnectFromSource();
         ret = true;
         break;
     default:

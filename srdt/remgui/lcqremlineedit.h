@@ -1,12 +1,15 @@
 ﻿#ifndef LCQREMLINEEDIT_H
 #define LCQREMLINEEDIT_H
 
-#include "lqextendevent.h"
-#include "lcqremotedatareader.h"
-#include "lcqremotedatawriter.h"
-#include "lcdatastrformatbase.h"
-
 #include <QLineEdit>
+
+#include "lqextendevent.h"
+#include "lcdatastrformatbase.h"
+#include "LCRemoteDataReaderInterface.h"
+#include "LCRemoteDataWriterInterface.h"
+#include "LCRemoteDataReadListnerInterface.h"
+#include "LCRemoteDataWriteListnerInterface.h"
+#include "LCRemoteDataSourceInterface.h"
 
 namespace remgui
 {
@@ -16,26 +19,51 @@ class LCQRemLineEdit : public QLineEdit
     Q_OBJECT
 
 private:
-    LCQRemoteDataReader mDataReader;
-    LCQRemoteDataWriter mDataWriter;
+
+    class CReadListener : public LCRemoteDataReadListnerInterface
+    {
+    private:
+        LCQRemLineEdit& mLineEdit;
+        bool mFlagActive;
+    public:
+        CReadListener(LCQRemLineEdit& _lineEdit);
+        virtual void dataIsRead(QSharedPointer<QByteArray> _data, ERemoteDataStatus status) override;
+        void setActive(bool _flag){mFlagActive = _flag;}
+    };
+
+    class CWriteListener : public LCRemoteDataWriteListnerInterface
+    {
+    private:
+        LCQRemLineEdit& mLineEdit;
+    public:
+        CWriteListener(LCQRemLineEdit& _lineEdit);
+        virtual void dataIsWrite(ERemoteDataStatus _status) override;
+    };
+
+    QString mDataName;
+
+    QSharedPointer<LCRemoteDataReaderInterface>  mDataReader;
+    QSharedPointer<LCRemoteDataWriterInterface>  mDataWriter;
+
+    QSharedPointer<CReadListener>   mReadListener;
+    QSharedPointer<CWriteListener>  mWriteListener;
+
     QSharedPointer<LCDataStrFormatBase> mFormatter;
-    QMetaObject::Connection mConnection;
+
 public:
     explicit LCQRemLineEdit(const QString& _dataName,
-                            QWeakPointer<LCQRemoteDataSourceBase> _dataSource,
+                            QSharedPointer<LCRemoteDataSourceInterface> _dataSource,
                             QSharedPointer<LCDataStrFormatBase> _formatter,
                             QWidget* _parent = nullptr);
 
     explicit LCQRemLineEdit(const QString& _dataNameRead,
                             const QString& _dataNameWrite,
-                            QWeakPointer<LCQRemoteDataSourceBase> _dataSource,
+                            QSharedPointer<LCRemoteDataSourceInterface> _dataSource,
                             QSharedPointer<LCDataStrFormatBase> _formatter,
                             QWidget* _parent = nullptr);
 
     void setActive(bool _flag);
 protected:
-    virtual void updateText(QSharedPointer<QByteArray> _data,
-                            LCQRemoteDataSourceBase::EDataStatus _status);
     virtual void keyPressEvent(QKeyEvent *_ev) override;
     virtual void focusInEvent(QFocusEvent *) override;
     virtual void focusOutEvent(QFocusEvent *) override;

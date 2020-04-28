@@ -1,16 +1,14 @@
 ﻿#ifndef LCQMODBUSDATASOURCE_H
 #define LCQMODBUSDATASOURCE_H
 
-//#include "lcqremotedatasourcebase.h"
-#include "lcqmodbusmastertcp.h"
-#include "lqextendevent.h"
-
 #include <QThread>
 #include <QList>
 #include <QLinkedList>
 #include <QMap>
 #include <QTimerEvent>
 
+#include "lqextendevent.h"
+#include "lcmodbusmasterbase.h"
 #include "LCRemoteDataSourceInterface.h"
 
 namespace modbus
@@ -411,28 +409,6 @@ public:
     //----------------------------------------------------------------------------------------------------------override
 private:
 
-    //---------------------------------------------------------------------------------------------------CQEventDataRead
-    class CQEventDataIsRead : public QEvent
-    {
-        __LQ_EXTENDED_QEVENT_DECLARATION
-    public:
-        QSharedPointer<QByteArray> mData;
-        ERemoteDataStatus mStatus;
-        explicit CQEventDataIsRead(const QByteArray& _data, ERemoteDataStatus _status);
-        explicit CQEventDataIsRead(ERemoteDataStatus _status);
-    };
-
-    //--------------------------------------------------------------------------------------------------CQEventDataWrite
-    class CQEventDataIsWrite : public QEvent
-    {
-        __LQ_EXTENDED_QEVENT_DECLARATION
-    public:
-        const ERemoteDataStatus mStatus;
-        explicit CQEventDataIsWrite(ERemoteDataStatus _status);
-    };
-
-
-
     void connectReader(const QString& _name, QObject* _reader);
     void disconnectReader(QObject* _reader);
     void read(const QString& _name, QObject* _reader);
@@ -440,6 +416,7 @@ private:
     virtual void customEvent(QEvent* _event) override;
 
     friend class LCQModbusDataReader;
+    friend class LCQModbusDataWriter;
 };
 
 }
