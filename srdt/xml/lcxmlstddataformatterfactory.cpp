@@ -1,14 +1,14 @@
 #include "lcxmlstddataformatterfactory.h"
 
-#include "lcdatastrformathex.h"
-#include "lcdatastrformatbool.h"
-#include "lcdatastrformatu8.h"
-#include "lcdatastrformats8.h"
-#include "lcdatastrformatu16.h"
-#include "lcdatastrformats16.h"
-#include "lcdatastrformatu32.h"
-#include "lcdatastrformats32.h"
-#include "lcdatastrformatf32.h"
+#include "lcstringdataformatterhex.h"
+#include "lcstringdataformatterbool.h"
+#include "lcstringdataformatteru8.h"
+#include "lcstringdataformatters8.h"
+#include "lcstringdataformatteru16.h"
+#include "lcstringdataformatters16.h"
+#include "lcstringdataformatteru32.h"
+#include "lcstringdataformatters32.h"
+#include "lcstringdataformatterf32.h"
 
 #include <QSharedPointer>
 
@@ -17,34 +17,34 @@
 
 using namespace remgui;
 
-static QSharedPointer<LCDataStrFormatBase> __formatterHex;
-static QSharedPointer<LCDataStrFormatBase> __formatterBool;
-static QSharedPointer<LCDataStrFormatBase> __formatterUint8;
-static QSharedPointer<LCDataStrFormatBase> __formatterInt8;
-static QSharedPointer<LCDataStrFormatBase> __formatterUint16;
-static QSharedPointer<LCDataStrFormatBase> __formatterInt16;
-static QSharedPointer<LCDataStrFormatBase> __formatterUint32;
-static QSharedPointer<LCDataStrFormatBase> __formatterInt32;
-static QSharedPointer<LCDataStrFormatBase> __formatterFloat32;
+static QSharedPointer<LCStringDataFormatterBase> __formatterHex;
+static QSharedPointer<LCStringDataFormatterBase> __formatterBool;
+static QSharedPointer<LCStringDataFormatterBase> __formatterUint8;
+static QSharedPointer<LCStringDataFormatterBase> __formatterInt8;
+static QSharedPointer<LCStringDataFormatterBase> __formatterUint16;
+static QSharedPointer<LCStringDataFormatterBase> __formatterInt16;
+static QSharedPointer<LCStringDataFormatterBase> __formatterUint32;
+static QSharedPointer<LCStringDataFormatterBase> __formatterInt32;
+static QSharedPointer<LCStringDataFormatterBase> __formatterFloat32;
 
 //======================================================================================================================
 
 using TFormatterCreators =
-    QMap<QString, std::function<QSharedPointer<LCDataStrFormatBase>(const QDomNamedNodeMap& _attr)>>;
+    QMap<QString, std::function<QSharedPointer<LCStringDataFormatterBase>(const QDomNamedNodeMap& _attr)>>;
 
 TFormatterCreators __formatterCreators;
 
 LCXmlStdDataFormatterFactory::LCXmlStdDataFormatterFactory()
 {
-    __formatterHex.reset(     new LCDataStrFormatHex());
-    __formatterBool.reset(    new LCDataStrFormatBool());
-    __formatterUint8.reset(   new LCDataStrFormatU8());
-    __formatterInt8.reset(    new LCDataStrFormatS8());
-    __formatterUint16.reset(  new LCDataStrFormatU16());
-    __formatterInt16.reset(   new LCDataStrFormatS16());
-    __formatterUint32.reset(  new LCDataStrFormatU32());
-    __formatterInt32.reset(   new LCDataStrFormatS32());
-    __formatterFloat32.reset( new LCDataStrFormatF32());
+    __formatterHex.reset(     new LCStringDataFormatterHex());
+    __formatterBool.reset(    new LCStringDataFormatterBool());
+    __formatterUint8.reset(   new LCStringDataFormatterU8());
+    __formatterInt8.reset(    new LCStringDataFormatterS8());
+    __formatterUint16.reset(  new LCStringDataFormatterU16());
+    __formatterInt16.reset(   new LCStringDataFormatterS16());
+    __formatterUint32.reset(  new LCStringDataFormatterU32());
+    __formatterInt32.reset(   new LCStringDataFormatterS32());
+    __formatterFloat32.reset( new LCStringDataFormatterF32());
 
     __formatterCreators.insert("hex",
                                [](const QDomNamedNodeMap& _attr){Q_UNUSED(_attr); return __formatterHex;});
@@ -74,7 +74,7 @@ LCXmlStdDataFormatterFactory& LCXmlStdDataFormatterFactory::instance()
     return ins;
 }
 
-QSharedPointer<LCStringDataFormatter> LCXmlStdDataFormatterFactory::create(const QDomNamedNodeMap& _attr)
+QSharedPointer<LCStringDataFormatter> LCXmlStdDataFormatterFactory::createStringFormatter(const QDomNamedNodeMap& _attr)
 {
     QDomNode node = _attr.namedItem("format");
     if(node.isNull()) return nullptr;

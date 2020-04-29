@@ -33,7 +33,7 @@ QWidget* LCXmlRemLabel::create(const QDomElement& _element)
     QString data;
     QString attr = _element.attribute(__attrNames.source);
     QSharedPointer<LCRemoteDataSourceInterface> source;
-    QSharedPointer<LCDataStrFormatBase> format;
+    QSharedPointer<LCStringDataFormatterBase> format;
 
     if(attr.isNull())
     {
@@ -54,7 +54,7 @@ QWidget* LCXmlRemLabel::create(const QDomElement& _element)
         goto LABEL_WRONG_EXIT;
     }
 
-    format = LCXmlStdDataFormatterFactory::instance().create(_element.attributes());
+    format = LCXmlStdDataFormatterFactory::instance().createStringFormatter(_element.attributes());
 
     if(format.isNull())
     {

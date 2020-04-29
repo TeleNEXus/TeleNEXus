@@ -28,7 +28,7 @@ void LCQRemLabel::CReadListener::dataIsRead(QSharedPointer<QByteArray> _data, ER
 //===========================================================================================================LCQRemLabel
 LCQRemLabel::LCQRemLabel(QWidget* _parent) : QLabel(_parent)
 {
-    setText(LCDataStrFormatBase::getUndefStateString());
+    setText(LCStringDataFormatterBase::getUndefStateString());
 }
 
 LCQRemLabel::LCQRemLabel(QString _text, QWidget* _parent) : QLabel(_text, _parent)
@@ -37,7 +37,7 @@ LCQRemLabel::LCQRemLabel(QString _text, QWidget* _parent) : QLabel(_text, _paren
 
 LCQRemLabel::LCQRemLabel(const QString& _dataName,
                          QSharedPointer<LCRemoteDataSourceInterface> _dataSource,
-                         QSharedPointer<LCDataStrFormatBase> _formatter,
+                         QSharedPointer<LCStringDataFormatterBase> _formatter,
                          QWidget* _parent) :    QLabel(_parent),
                                                 mDataName(_dataName),
                                                 mFormatter(_formatter)

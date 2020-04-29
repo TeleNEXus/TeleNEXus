@@ -1,22 +1,19 @@
-#ifndef LCDATASTRFORMATHEX_H
-#define LCDATASTRFORMATHEX_H
+#ifndef LCSTRINGDATAFORMATTERHEX_H
+#define LCSTRINGDATAFORMATTERHEX_H
 
-#include "lcdatastrformatbase.h"
+#include "lcstringdataformatterbase.h"
 
-namespace remgui
-{
-
-class LCDataStrFormatHex : public LCDataStrFormatBase
+class LCStringDataFormatterHex : public LCStringDataFormatterBase
 {
 private:
     QChar   mSeparator;         //Разделитель между отображаемыми числами.
     QChar   mFillCharUndef;     //Заполнение при отсутствии значения.
     QChar   mFillCharWrong;     //Заполнение при ошибочном значении.
 public:
-    explicit LCDataStrFormatHex(    QChar   _separator      = QChar(' '),
+    explicit LCStringDataFormatterHex(    QChar   _separator      = QChar(' '),
                                     QChar   _fillCharUndef  = msFillCharUndefDef,
                                     QChar   _fillCharWrong  = msFillCharWrongDef);
-    virtual ~LCDataStrFormatHex(){}
+    virtual ~LCStringDataFormatterHex(){}
     virtual QString     toString(const QByteArray& _data) override;
     virtual QByteArray  toBytes(const QString& _str) override;
     virtual QString     undefStateString() override;
@@ -26,5 +23,5 @@ public:
     void setFillCharWrong(QChar _c){mFillCharWrong = _c;}
 };
 
-}//namespace
-#endif // LCDATASTRFORMATHEX_H
+
+#endif // LCSTRINGDATAFORMATTERHEX_H

@@ -1,9 +1,6 @@
-#include "lcdatastrformatbool.h"
+#include "lcstringdataformatterbool.h"
 
-namespace remgui
-{
-
-LCDataStrFormatBool::LCDataStrFormatBool(const QString& _strFalse,
+LCStringDataFormatterBool::LCStringDataFormatterBool(const QString& _strFalse,
                                          const QString& _strTrue,
                                          QChar   _fillCharUndef,
                                          QChar   _fillCharWrong) :  mStrFalse(_strFalse),
@@ -14,7 +11,7 @@ LCDataStrFormatBool::LCDataStrFormatBool(const QString& _strFalse,
 
 }
 
-QString LCDataStrFormatBool::toString(const QByteArray& _data)
+QString LCStringDataFormatterBool::toString(const QByteArray& _data)
 {
     if(_data.size() == 0)
     {
@@ -32,17 +29,16 @@ QString LCDataStrFormatBool::toString(const QByteArray& _data)
     return mStrFalse;
 }
 
-QByteArray LCDataStrFormatBool::toBytes(const QString& _str)
+QByteArray LCStringDataFormatterBool::toBytes(const QString& _str)
 {
     if(_str == mStrTrue) return QByteArray(1,1);
     else if(_str == mStrFalse) return QByteArray(1,0);
     return QByteArray();
 }
 
-QString     LCDataStrFormatBool::undefStateString()
+QString     LCStringDataFormatterBool::undefStateString()
 {
     return getUndefStateString((mStrTrue.size() > mStrFalse.size()) ?
                                      (mStrTrue.size()) : (mStrFalse.size()), mFillCharUndef);
 }
 
-}//namespace

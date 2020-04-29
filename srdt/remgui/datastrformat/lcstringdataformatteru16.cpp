@@ -1,18 +1,15 @@
-﻿#include "lcdatastrformatu16.h"
+﻿#include "lcstringdataformatteru16.h"
 #include <limits>
 #include <math.h>
 
-namespace remgui
-{
-
 //================================================================================================LCQDataFormatterUInt16
-LCDataStrFormatU16::
-    LCDataStrFormatU16(   int     _fieldWidth,
+LCStringDataFormatterU16::
+    LCStringDataFormatterU16(   int     _fieldWidth,
                           QChar   _fillChar,
                           int     _base,
                           QChar   _fillCharUndef,
                           QChar   _fillCharWrong) :
-                              LCDataStrFormatIntBase( _fieldWidth,
+                              LCStringDataFormatterIntBase( _fieldWidth,
                                                       _fillChar,
                                                       _base,
                                                       _fillCharUndef,
@@ -22,7 +19,7 @@ LCDataStrFormatU16::
 }
 
 //--------------------------------------------------------------------------------------------------------------toString
-QString LCDataStrFormatU16::toString(const QByteArray& _data)
+QString LCStringDataFormatterU16::toString(const QByteArray& _data)
 {
     if(_data.size() < 2)
     {
@@ -34,7 +31,7 @@ QString LCDataStrFormatU16::toString(const QByteArray& _data)
 }
 
 //---------------------------------------------------------------------------------------------------------------toBytes
-QByteArray LCDataStrFormatU16::toBytes(const QString& _str)
+QByteArray LCStringDataFormatterU16::toBytes(const QString& _str)
 {
     bool ok = false;
     quint16 r = _str.toUShort(&ok, mBase);
@@ -43,15 +40,14 @@ QByteArray LCDataStrFormatU16::toBytes(const QString& _str)
 }
 
 //------------------------------------------------------------------------------------------------------undefStateString
-QString LCDataStrFormatU16::undefStateString()
+QString LCStringDataFormatterU16::undefStateString()
 {
     return getUndefStateString(mFieldWidth, mFillCharUndef);
 }
 
 //-------------------------------------------------------------------------------------------------------------validator
-QValidator* LCDataStrFormatU16::validator()
+QValidator* LCStringDataFormatterU16::validator()
 {
     return &mValidator;
 }
 
-}

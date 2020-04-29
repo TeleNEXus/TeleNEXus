@@ -1,12 +1,9 @@
 #ifndef LCDATAFORMATBOOL_H
 #define LCDATAFORMATBOOL_H
 
-#include "lcdatastrformatbase.h"
+#include "lcstringdataformatterbase.h"
 
-namespace remgui
-{
-
-class LCDataStrFormatBool : public LCDataStrFormatBase
+class LCStringDataFormatterBool : public LCStringDataFormatterBase
 {
 private:
     QString mStrFalse;
@@ -14,11 +11,11 @@ private:
     QChar   mFillCharUndef;     //Заполнение при отсутствии значения.
     QChar   mFillCharWrong;     //Заполнение при ошибочном значении.
 public:
-    explicit LCDataStrFormatBool(   const QString& _strFalse = "false",
+    explicit LCStringDataFormatterBool(   const QString& _strFalse = "false",
                                     const QString& _strTrue = "true",
                                     QChar   _fillCharUndef  = QChar(),
                                     QChar   _fillCharWrong  = QChar());
-    virtual ~LCDataStrFormatBool(){}
+    virtual ~LCStringDataFormatterBool(){}
     virtual QString     toString(const QByteArray& _data) override;
     virtual QByteArray  toBytes(const QString& _str) override;
     virtual QString     undefStateString() override;
@@ -30,6 +27,5 @@ public:
     void setFillCharWrong(QChar _c){mFillCharWrong = _c;}
 };
 
-}//namespace
 
 #endif // LCDATAFORMATBOOL_H

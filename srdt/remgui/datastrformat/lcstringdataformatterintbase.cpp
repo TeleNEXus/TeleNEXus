@@ -1,9 +1,7 @@
-#include "lcdatastrformatintbase.h"
+#include "lcstringdataformatterintbase.h"
 
-namespace remgui
-{
 
-LCDataStrFormatIntBase::LCDataStrFormatIntBase(  int     _fieldWidth,
+LCStringDataFormatterIntBase::LCStringDataFormatterIntBase(  int     _fieldWidth,
                                                  QChar   _fillChar,
                                                  int     _base,
                                                  QChar   _fillCharUndef,
@@ -14,4 +12,3 @@ LCDataStrFormatIntBase::LCDataStrFormatIntBase(  int     _fieldWidth,
                                                                             mFillCharWrong(_fillCharWrong)
 {};
 
-}

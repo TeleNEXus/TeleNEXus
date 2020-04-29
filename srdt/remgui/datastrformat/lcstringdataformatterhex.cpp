@@ -1,9 +1,7 @@
-#include "lcdatastrformathex.h"
+#include "lcstringdataformatterhex.h"
 
-namespace remgui
-{
 
-LCDataStrFormatHex::LCDataStrFormatHex(QChar   _separator,
+LCStringDataFormatterHex::LCStringDataFormatterHex(QChar   _separator,
                                        QChar _fillCharUndef,
                                        QChar _fillCharWrong) :  mSeparator(_separator),
                                                                 mFillCharUndef(_fillCharUndef),
@@ -12,7 +10,7 @@ LCDataStrFormatHex::LCDataStrFormatHex(QChar   _separator,
 
 }
 
-QString LCDataStrFormatHex::toString(const QByteArray& _data)
+QString LCStringDataFormatterHex::toString(const QByteArray& _data)
 {
     QString str;
     if(_data.size() < 1)
@@ -34,7 +32,7 @@ QString LCDataStrFormatHex::toString(const QByteArray& _data)
 }
 
 
-QByteArray LCDataStrFormatHex::toBytes(const QString& _str)
+QByteArray LCStringDataFormatterHex::toBytes(const QString& _str)
 {
     QByteArray arr;
     bool conv_flag = false;
@@ -54,9 +52,8 @@ QByteArray LCDataStrFormatHex::toBytes(const QString& _str)
     return arr;
 }
 
-QString     LCDataStrFormatHex::undefStateString()
+QString     LCStringDataFormatterHex::undefStateString()
 {
     return QString(msFillCharUndefDefLength, mFillCharUndef);
 }
 
-}
