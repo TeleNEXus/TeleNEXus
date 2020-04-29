@@ -1,13 +1,15 @@
 #ifndef LCXMLREMLINEEDIT_H
 #define LCXMLREMLINEEDIT_H
 
-#include "lcxmlwidgetcreatorbase.h"
+#include "lcxmlwidgetcreatorinterface.h"
 
 namespace xmlwidgetcreators
 {
 
-class LCXmlRemLineEdit : public LCXmlWidgetCreatorBase
+class LCXmlRemLineEdit : public LCXmlWidgetCreatorInterface
 {
+public:
+    LCXmlWidgetOrderControlInterface* mpOrderCtrl;
 public:
     LCXmlRemLineEdit();
     virtual ~LCXmlRemLineEdit();

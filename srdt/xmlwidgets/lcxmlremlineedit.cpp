@@ -8,7 +8,7 @@ using namespace remgui;
 namespace xmlwidgetcreators
 {
 
-LCXmlRemLineEdit::LCXmlRemLineEdit()
+LCXmlRemLineEdit::LCXmlRemLineEdit() : mpOrderCtrl(nullptr)
 {
 
 }
@@ -27,6 +27,8 @@ const struct
 
 QWidget* LCXmlRemLineEdit::create(const QDomElement& _element)
 {
+    QWidget* ret = nullptr;
+
     QString data;
     QString attr = _element.attribute(__attrNames.source);
     QSharedPointer<LCRemoteDataSourceInterface> source;
@@ -58,10 +60,13 @@ QWidget* LCXmlRemLineEdit::create(const QDomElement& _element)
         goto LABEL_WRONG_EXIT;
     }
 
-    return new LCQRemLineEdit(data, source, format);
+    ret= new LCQRemLineEdit(data, source, format);
+    return ret;
 
 LABEL_WRONG_EXIT:
-    return new QLineEdit(_element.tagName());
+
+    ret= new QLineEdit(_element.tagName());
+    return ret;
 }
 
 } //namespace

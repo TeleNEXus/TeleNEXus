@@ -1,12 +1,12 @@
 #ifndef LCXMLREMLABEL_H
 #define LCXMLREMLABEL_H
 
-#include "lcxmlwidgetcreatorbase.h"
+#include "lcxmlwidgetcreatorinterface.h"
 
 namespace xmlwidgetcreators
 {
 
-class LCXmlRemLabel : public LCXmlWidgetCreatorBase
+class LCXmlRemLabel : public LCXmlWidgetCreatorInterface
 {
 public:
     LCXmlRemLabel();

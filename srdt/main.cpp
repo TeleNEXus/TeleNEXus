@@ -217,37 +217,57 @@ int main(int argc, char *argv[])
 
     return LCXmlApplication::instance().exec(argc, argv);
 
-//    remgui::LCDataStrFormatHex formatter;
 
-//    QByteArray arr;
-//    arr[0]  = 0;
-//    arr[1]  = 1;
-//    arr[2]  = 2;
-//    arr[3]  = 3;
-//    arr[4]  = 4;
-//    arr[5]  = 5;
-//    arr[6]  = 6;
-//    arr[7]  = 7;
-//    arr[8]  = 8;
-//    arr[9]  = 9;
-//    arr[10] = 10;
-//    arr[11] = 11;
-//    arr[12] = 12;
-//    arr[13] = 13;
-//    arr[14] = 14;
-//    arr[15] = 15;
-//    arr[16] = 16;
-//    arr[17] = 17;
-//    arr[18] = 18;
-//    arr[19] = 19;
-//    arr[20] = (char)255;
+    QApplication app(argc, argv);
 
+        // Grid layout with 3 buttons
+        QGridLayout *gridLayout = new QGridLayout;
+        QLineEdit *b1 = new QLineEdit("A");
+        QLineEdit *b2 = new QLineEdit("B");
+        QLineEdit *b3 = new QLineEdit("C");
+        QLineEdit *b4 = new QLineEdit("D");
+        QLineEdit *b5 = new QLineEdit("E");
+        QLineEdit *b6 = new QLineEdit("F");
 
-//    qDebug() << "toString\t" << formatter.toString(arr);
+        // addWidget(*Widget, row, column, rowspan, colspan)
+        // 0th row
+//        gridLayout->addWidget(b1,0,0,1,1);
+//        gridLayout->addWidget(b2,0,1,1,1);
+//        gridLayout->addWidget(b3,0,2,1,1);
 
-//    QString str = "00h01h02h03h04h05h06h07h01h01h01h01h01h01h01h";
-//    qDebug() << "toBytes\t" << formatter.toString(formatter.toBytes(formatter.toString(arr)));
-//    return 0;
+        gridLayout->addWidget(b1,0,0);
+        gridLayout->addWidget(b2,1,0);
+        gridLayout->addWidget(b3,2,0);
+        gridLayout->addWidget(b4,0,1);
+        gridLayout->addWidget(b5,1,1);
+        gridLayout->addWidget(b6,2,1);
+//        gridLayout->addWidget(b1,0,0);
+//        gridLayout->addWidget(b2,0,1);
+//        gridLayout->addWidget(b3,0,2);
+
+        // 1st row
+//        gridLayout->addWidget(b4,1,0,1,1);
+
+        // 2nd row with 2-column span
+//        gridLayout->addWidget(b5,2,0,1,2);
+
+        // 3rd row with 3-column span
+//        gridLayout->addWidget(b6,3,0,1,3);
+
+        // Create a widget
+        QWidget *w = new QWidget();
+
+        // Set the grid layout as a main layout
+        w->setLayout(gridLayout);
+
+        // Window title
+        w->setWindowTitle("Grid Layouts (3x4)");
+
+        // Display
+        w->show();
+
+        // Event loop
+        return app.exec();
 
 }
 

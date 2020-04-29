@@ -110,7 +110,7 @@ void LCQRemLineEdit::keyPressEvent(QKeyEvent *_ev)
     }
     else
     {
-
+        mReadListener->setActive(false);
     }
     QLineEdit::keyPressEvent(_ev);
 }
@@ -130,21 +130,21 @@ void LCQRemLineEdit::focusOutEvent(QFocusEvent *_event)
 //-----------------------------------------------------------------------------------------------------------------event
 bool LCQRemLineEdit::event(QEvent *_event)
 {
-    bool ret = false;
+    bool ret = true;
     switch(_event->type())
     {
     case QEvent::Type::Show:
         setActive(true);
-        ret = true;
+        ret = false;
         break;
     case QEvent::Type::Hide:
         setActive(false);
-        ret = true;
+        ret = false;
         break;
     default:
+        QLineEdit::event(_event);
         break;
     }
-    QLineEdit::event(_event);
     return ret;
 }
 

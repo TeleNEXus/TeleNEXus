@@ -26,6 +26,7 @@ const struct
     QString format  = "format";
 } __attrNames;
 
+//----------------------------------------------------------------------------------------------------------------------
 QWidget* LCXmlRemLabel::create(const QDomElement& _element)
 {
 

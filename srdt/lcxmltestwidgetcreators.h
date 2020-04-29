@@ -1,20 +1,20 @@
 #ifndef LCXMLTESTWIDGETCREATORS_H
 #define LCXMLTESTWIDGETCREATORS_H
 
-#include "lcxmlwidgetcreatorbase.h"
+#include "lcxmlwidgetcreatorinterface.h"
 #include <QLabel>
 
 namespace xmltestwidget
 {
 
-class LCXmlWidget : public LCXmlWidgetCreatorBase
+class LCXmlWidget : public LCXmlWidgetCreatorInterface
 {
 public:
     LCXmlWidget();
     virtual QWidget* create(const QDomElement& _element) override;
 };
 
-class LCXmlWidgetLabel : public LCXmlWidgetCreatorBase
+class LCXmlWidgetLabel : public LCXmlWidgetCreatorInterface
 {
 public:
     LCXmlWidgetLabel();
