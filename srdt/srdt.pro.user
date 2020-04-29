@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProject>
-<!-- Written by QtCreator 4.11.0, 2020-04-29T08:11:00. -->
+<!-- Written by QtCreator 4.11.0, 2020-04-29T16:41:10. -->
 <qtcreator>
  <data>
   <variable>EnvironmentId</variable>
@@ -289,7 +289,7 @@
     <valuelist type="QVariantList" key="PE.EnvironmentAspect.Changes"/>
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">Qt4ProjectManager.Qt4RunConfiguration:D:/Dokuments/Kuzmenko/Programs/PROGRAM_PROJECTS/srdtrep/srdt/srdt.pro</value>
     <value type="QString" key="ProjectExplorer.RunConfiguration.BuildKey">D:/Dokuments/Kuzmenko/Programs/PROGRAM_PROJECTS/srdtrep/srdt/srdt.pro</value>
-    <value type="QString" key="RunConfiguration.Arguments">--xmlfile main.xml --xmlpath D:/Dokuments/Kuzmenko/Programs/PROGRAM_PROJECTS/srdtrep/srdt/xmlfiles</value>
+    <value type="QString" key="RunConfiguration.Arguments">--xmlpath=D:\Dokuments\Kuzmenko\Programs\PROGRAM_PROJECTS\srdtrep\srdt\xmlfiles</value>
     <value type="bool" key="RunConfiguration.Arguments.multi">false</value>
     <value type="QString" key="RunConfiguration.OverrideDebuggerStartup"></value>
     <value type="bool" key="RunConfiguration.UseCppDebugger">false</value>
