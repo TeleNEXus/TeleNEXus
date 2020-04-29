@@ -40,17 +40,17 @@ SOURCES += \
         modbus/lcqmodbusmasterrtu.cpp \
         modbus/lcqmodbusmastertcp.cpp \
         lctestdllclass.cpp \
-        remgui/datastrformat/lcdatastrformatbase.cpp \
-        remgui/datastrformat/lcdatastrformatbool.cpp \
-        remgui/datastrformat/lcdatastrformatf32.cpp \
-        remgui/datastrformat/lcdatastrformathex.cpp \
-        remgui/datastrformat/lcdatastrformatintbase.cpp \
-        remgui/datastrformat/lcdatastrformats16.cpp \
-        remgui/datastrformat/lcdatastrformats32.cpp \
-        remgui/datastrformat/lcdatastrformats8.cpp \
-        remgui/datastrformat/lcdatastrformatu16.cpp \
-        remgui/datastrformat/lcdatastrformatu32.cpp \
-        remgui/datastrformat/lcdatastrformatu8.cpp \
+        remgui/datastrformat/lcstringdataformatterbase.cpp \
+        remgui/datastrformat/lcstringdataformatterbool.cpp \
+        remgui/datastrformat/lcstringdataformatterf32.cpp \
+        remgui/datastrformat/lcstringdataformatterhex.cpp \
+        remgui/datastrformat/lcstringdataformatterintbase.cpp \
+        remgui/datastrformat/lcstringdataformatters16.cpp \
+        remgui/datastrformat/lcstringdataformatters32.cpp \
+        remgui/datastrformat/lcstringdataformatters8.cpp \
+        remgui/datastrformat/lcstringdataformatteru16.cpp \
+        remgui/datastrformat/lcstringdataformatteru32.cpp \
+        remgui/datastrformat/lcstringdataformatteru8.cpp \
         remgui/lcqremlabel.cpp \
         remgui/lcqremlineedit.cpp\
         main.cpp \
@@ -79,6 +79,7 @@ HEADERS += \
     #common/lcqremotedatawriter.h \
     common/lcqu32validator.h \
     common/lqextendevent.h \
+    dataformatters/LCStringDataFormatterInterface.h \
     lctestdllclass.h \
     modbus/lcmodbusmasterbase.h \
     modbus/lcqmodbusdatareader.h \
@@ -87,17 +88,17 @@ HEADERS += \
     modbus/lcqmodbusmastertcp.h \
     modbus/lmodbusdefs.h \
     modbus/lcqmodbusdatasource.h \
-    remgui/datastrformat/lcdatastrformatbase.h \
-    remgui/datastrformat/lcdatastrformatbool.h \
-    remgui/datastrformat/lcdatastrformatf32.h \
-    remgui/datastrformat/lcdatastrformathex.h \
-    remgui/datastrformat/lcdatastrformatintbase.h \
-    remgui/datastrformat/lcdatastrformats16.h \
-    remgui/datastrformat/lcdatastrformats32.h \
-    remgui/datastrformat/lcdatastrformats8.h \
-    remgui/datastrformat/lcdatastrformatu16.h \
-    remgui/datastrformat/lcdatastrformatu32.h \
-    remgui/datastrformat/lcdatastrformatu8.h \
+    remgui/datastrformat/lcstringdataformatterbase.h \
+    remgui/datastrformat/lcstringdataformatterbool.h \
+    remgui/datastrformat/lcstringdataformatterf32.h \
+    remgui/datastrformat/lcstringdataformatterhex.h \
+    remgui/datastrformat/lcstringdataformatterintbase.h \
+    remgui/datastrformat/lcstringdataformatters16.h \
+    remgui/datastrformat/lcstringdataformatters32.h \
+    remgui/datastrformat/lcstringdataformatters8.h \
+    remgui/datastrformat/lcstringdataformatteru16.h \
+    remgui/datastrformat/lcstringdataformatteru32.h \
+    remgui/datastrformat/lcstringdataformatteru8.h \
     remgui/lcqremlabel.h \
     remgui/lcqremlineedit.h \
     remgui/lremgui.h \ \
@@ -107,6 +108,7 @@ HEADERS += \
     remotedatainterface/LCRemoteDataWriteListnerInterface.h \
     remotedatainterface/LCRemoteDataWriterInterface.h \
     testdllinterface.h \
+    xml/LCXmlStdDataFormatterFactoryInterface.h \
     xml/LCXmlWidgetCreatorsMapInterface.h \
     xml/lcxmlapplication.h \
     xml/lcxmllayoutsfactory.h \

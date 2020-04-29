@@ -1,10 +1,8 @@
-﻿#include "lcdatastrformatf32.h"
+﻿#include "lcstringdataformatterf32.h"
 
-namespace remgui
-{
 
 //=========================================================================================LCQDataStringFormatterFloat32
-LCDataStrFormatF32::LCDataStrFormatF32(
+LCStringDataFormatterF32::LCStringDataFormatterF32(
         int     _fieldWidth,
         char    _format,
         int     _precision,
@@ -23,7 +21,7 @@ LCDataStrFormatF32::LCDataStrFormatF32(
 }
 
 //--------------------------------------------------------------------------------------------------------------toString
-QString LCDataStrFormatF32::toString(const QByteArray& _data)
+QString LCStringDataFormatterF32::toString(const QByteArray& _data)
 {
     if(_data.size() < 4)
     {
@@ -35,7 +33,7 @@ QString LCDataStrFormatF32::toString(const QByteArray& _data)
 }
 
 //---------------------------------------------------------------------------------------------------------------toBytes
-QByteArray LCDataStrFormatF32::toBytes(const QString& _str)
+QByteArray LCStringDataFormatterF32::toBytes(const QString& _str)
 {
     bool ok = false;
     float r = ((float)_str.toFloat(&ok));
@@ -44,15 +42,14 @@ QByteArray LCDataStrFormatF32::toBytes(const QString& _str)
 }
 
 //------------------------------------------------------------------------------------------------------undefStateString
-QString LCDataStrFormatF32::undefStateString()
+QString LCStringDataFormatterF32::undefStateString()
 {
     return getUndefStateString(mFieldWidth, mFillCharUndef);
 }
 
 //-------------------------------------------------------------------------------------------------------------validator
-QValidator* LCDataStrFormatF32::validator()
+QValidator* LCStringDataFormatterF32::validator()
 {
     return &mValidator;
 }
 
-}

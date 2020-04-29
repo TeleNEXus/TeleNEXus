@@ -46,21 +46,21 @@ QThread* __gStopTh1 = nullptr;
 #include "lcqremlabel.h"
 #include "lcqremlineedit.h"
 
-#include "lcdatastrformatbool.h"
+#include "lcstringdataformatterbool.h"
 
-#include "lcdatastrformatu8.h"
-#include "lcdatastrformats8.h"
+#include "lcstringdataformatteru8.h"
+#include "lcstringdataformatters8.h"
 
-#include "lcdatastrformatu16.h"
-#include "lcdatastrformats16.h"
+#include "lcstringdataformatteru16.h"
+#include "lcstringdataformatters16.h"
 
-#include "lcdatastrformatu32.h"
-#include "lcdatastrformats32.h"
+#include "lcstringdataformatteru32.h"
+#include "lcstringdataformatters32.h"
 
-#include "lcdatastrformatf32.h"
+#include "lcstringdataformatterf32.h"
 #include "lcqu32validator.h"
 
-#include "lcdatastrformathex.h"
+#include "lcstringdataformatterhex.h"
 
 #include "lcqmodbusmastertcp.h"
 
@@ -93,7 +93,6 @@ public:
 //======================================================================================================================
 int main(int argc, char *argv[])
 {
-
     QLibrary lib("D:/Dokuments/Kuzmenko/Programs/PROGRAM_PROJECTS/srdtrep/build-extwidglib-Desktop-Debug/debug/extwidglib");
     typedef QSharedPointer<LCTestDllInterface> (*TFct)();
 

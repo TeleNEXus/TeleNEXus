@@ -1,15 +1,13 @@
-﻿#ifndef LCQDATASTRINGFORMATTERBASE_H
-#define LCQDATASTRINGFORMATTERBASE_H
+﻿#ifndef LCSTRINGDATAFORMATTERBASE_H
+#define LCSTRINGDATAFORMATTERBASE_H
 
 #include <QString>
 #include <QByteArray>
 #include <QValidator>
 #include "lremgui.h"
 
-namespace remgui
-{
 
-class LCDataStrFormatBase
+class LCStringDataFormatterBase
 {
 protected:
     static QChar  msFillCharUndefDef;         //Символы заполнения при неопределенных данных.
@@ -17,7 +15,8 @@ protected:
     static QChar  msFillCharWrongDef;         //Символы заполнения при ошибочных данных.
     static quint8 msFillCharWrongDefLength;   //Длина заполнения при ошибочных данных.
 public:
-    LCDataStrFormatBase();
+    LCStringDataFormatterBase();
+    virtual ~LCStringDataFormatterBase();
     virtual QString toString(const QByteArray& _data) = 0;
     virtual QByteArray toBytes(const QString& _str) = 0;
     virtual QString undefStateString()=0;
@@ -37,6 +36,5 @@ public:
     static void setFillCharWrongDef(QChar _c);
 };
 
-}
 
-#endif // LCQDATASTRINGFORMATTERBASE_H
+#endif //LCSTRINGDATAFORMATTERBASE_H

@@ -1,12 +1,9 @@
-#ifndef LCDATASTRFORMATINTBASE_H
-#define LCDATASTRFORMATINTBASE_H
+#ifndef LCSTRINGDATASTRFORMATTERBASEINT_H
+#define LCSTRINGDATASTRFORMATTERBASEINT_H
 
-#include "lcdatastrformatbase.h"
+#include "lcstringdataformatterbase.h"
 
-namespace remgui
-{
-
-class LCDataStrFormatIntBase : public LCDataStrFormatBase
+class LCStringDataFormatterIntBase : public LCStringDataFormatterBase
 {
 protected:
 
@@ -17,8 +14,8 @@ protected:
     QChar   mFillCharWrong;     //Заполнение при ошибочном значении.
 
 public:
-    LCDataStrFormatIntBase() = delete;
-    explicit LCDataStrFormatIntBase( int     _fieldWidth,
+    LCStringDataFormatterIntBase() = delete;
+    explicit LCStringDataFormatterIntBase( int     _fieldWidth,
                                      QChar   _fillChar,
                                      int     _base,
                                      QChar   _fillCharUndef,
@@ -31,6 +28,5 @@ public:
     void setFillCharWrong(QChar _c){mFillCharWrong = _c;}
 };
 
-} //namespace
 
-#endif // LCDATASTRFORMATINTBASE_H
+#endif // LCSTRINGDATASTRFORMATTERBASEINT_H

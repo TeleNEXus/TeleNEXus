@@ -1,20 +1,18 @@
-﻿#ifndef LCQDATASTRINGFORMATTERINT32_H
-#define LCQDATASTRINGFORMATTERINT32_H
+﻿#ifndef LCSTRINGDATAFORMATTERUINT32_H
+#define LCSTRINGDATAFORMATTERUINT32_H
 
-#include "lcdatastrformatintbase.h"
-#include <QIntValidator>
+#include "lcstringdataformatterintbase.h"
+#include "lcqu32validator.h"
 
-namespace remgui
-{
 
-class LCDataStrFormatS32 : public LCDataStrFormatIntBase
+class LCStringDataFormatterU32 : public LCStringDataFormatterIntBase
 {
 private:
 
-    QIntValidator mValidator;   //Контроллер диапазона ввода.
+    LCQValidatorU32 mValidator;   //Контроллер диапазона ввода.
 
 public:
-    explicit LCDataStrFormatS32( int     _fieldWidth     = 0,
+    explicit LCStringDataFormatterU32( int     _fieldWidth     = 0,
                                           QChar   _fillChar       = QChar(' '),
                                           int     _base           = 10,
                                           QChar   _fillCharUndef  = QChar(),
@@ -24,9 +22,7 @@ public:
     virtual QByteArray  toBytes(const QString& _str) override;
     virtual QString     undefStateString() override;
     virtual QValidator* validator() override;
-
 };
 
-}
 
-#endif // LCQDATASTRINGFORMATTERINT32_H
+#endif // LCSTRINGDATAFORMATTERUINT32_H

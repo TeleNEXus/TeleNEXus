@@ -1,13 +1,11 @@
-﻿#ifndef LCQDATASTRINGFORMATTERFLOAT32_H
-#define LCQDATASTRINGFORMATTERFLOAT32_H
+﻿#ifndef LCSTRINGDATAFORMATTERFLOAT32_H
+#define LCSTRINGDATAFORMATTERFLOAT32_H
 
-#include "lcdatastrformatbase.h"
+#include "lcstringdataformatterbase.h"
 #include <QDoubleValidator>
 
-namespace remgui
-{
 
-class LCDataStrFormatF32 : public LCDataStrFormatBase
+class LCStringDataFormatterF32 : public LCStringDataFormatterBase
 {
 private:
     int     mFieldWidth;        //Ширина поля.
@@ -20,7 +18,7 @@ private:
     QDoubleValidator mValidator;   //Контроллер диапазона ввода.
 
 public:
-    explicit LCDataStrFormatF32( int     _fieldWidth     = 0,
+    explicit LCStringDataFormatterF32( int     _fieldWidth     = 0,
                                             char    _format         = 'g',
                                             int     _precision      = -1,
                                             int     _decimals       = 1000,
@@ -41,6 +39,5 @@ public:
     void setFillCharWrong(QChar _c){mFillCharWrong = _c;}
 };
 
-}
 
-#endif // LCQDATASTRINGFORMATTERFLOAT32_H
+#endif // LCSTRINGDATAFORMATTERFLOAT32_H

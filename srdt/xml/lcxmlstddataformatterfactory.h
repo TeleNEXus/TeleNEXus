@@ -1,10 +1,10 @@
 #ifndef LCXMLSTDDATAFORMATTERFACTORY_H
 #define LCXMLSTDDATAFORMATTERFACTORY_H
 
-#include "lcdatastrformatbase.h"
+#include "lcstringdataformatterbase.h"
 #include <QDomElement>
 
-using LCStringDataFormatter = remgui::LCDataStrFormatBase;
+using LCStringDataFormatter = LCStringDataFormatterBase;
 
 class LCXmlStdDataFormatterFactory final
 {
@@ -14,7 +14,7 @@ private:
     LCXmlStdDataFormatterFactory& operator=(const LCXmlStdDataFormatterFactory&) = delete;
 public:
     static LCXmlStdDataFormatterFactory& instance();
-    QSharedPointer<LCStringDataFormatter> create(const QDomNamedNodeMap& _attr);
+    QSharedPointer<LCStringDataFormatter> createStringFormatter(const QDomNamedNodeMap& _attr);
 };
 
 #endif // LCXMLSTDDATAFORMATTERFACTORY_H

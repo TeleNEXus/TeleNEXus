@@ -1,16 +1,13 @@
-﻿#include "lcdatastrformatu32.h"
+﻿#include "lcstringdataformatters32.h"
 
-namespace remgui
-{
-
-//==========================================================================================LCQDataStringFormatterUint32
-LCDataStrFormatU32::
-    LCDataStrFormatU32( int     _fieldWidth,
+//===========================================================================================LCQDataStringFormatterInt32
+LCStringDataFormatterS32::
+    LCStringDataFormatterS32( int     _fieldWidth,
                         QChar   _fillChar,
                         int     _base,
                         QChar   _fillCharUndef,
                         QChar   _fillCharWrong) :
-                            LCDataStrFormatIntBase( _fieldWidth,
+                            LCStringDataFormatterIntBase( _fieldWidth,
                                                     _fillChar,
                                                     _base,
                                                     _fillCharUndef,
@@ -19,7 +16,7 @@ LCDataStrFormatU32::
 }
 
 //--------------------------------------------------------------------------------------------------------------toString
-QString LCDataStrFormatU32::toString(const QByteArray& _data)
+QString LCStringDataFormatterS32::toString(const QByteArray& _data)
 {
     if(_data.size() < 4)
     {
@@ -27,28 +24,26 @@ QString LCDataStrFormatU32::toString(const QByteArray& _data)
         int length = (mFieldWidth == 0) ? (msFillCharWrongDefLength) : (abs(mFieldWidth));
         return QString(length, ch);
     }
-    return QString("%1").arg( ((quint32*)_data.constData())[0], mFieldWidth, mBase, mFillChar);
+    return QString("%1").arg( ((qint32*)_data.constData())[0], mFieldWidth, mBase, mFillChar);
 }
 
 //---------------------------------------------------------------------------------------------------------------toBytes
-QByteArray LCDataStrFormatU32::toBytes(const QString& _str)
+QByteArray LCStringDataFormatterS32::toBytes(const QString& _str)
 {
     bool ok = false;
-    quint32 r = ((quint32)_str.toUInt(&ok, mBase));
+    qint32 r = ((qint32)_str.toInt(&ok, mBase));
     if(!ok) return QByteArray();
     return QByteArray((char*)(&r), 4);
 }
 
 //------------------------------------------------------------------------------------------------------undefStateString
-QString LCDataStrFormatU32::undefStateString()
+QString LCStringDataFormatterS32::undefStateString()
 {
     return getUndefStateString(mFieldWidth, mFillCharUndef);
 }
 
 //-------------------------------------------------------------------------------------------------------------validator
-QValidator* LCDataStrFormatU32::validator()
+QValidator* LCStringDataFormatterS32::validator()
 {
     return &mValidator;
-}
-
 }

@@ -1,20 +1,16 @@
-﻿#ifndef LCQDATASTRINGFORMATTERUINT16_H
-#define LCQDATASTRINGFORMATTERUINT16_H
+﻿#ifndef LCSTRINGDATAFORMATTERUINT16_H
+#define LCSTRINGDATAFORMATTERUINT16_H
 
-#include "lcdatastrformatintbase.h"
+#include "lcstringdataformatterintbase.h"
 #include <QIntValidator>
 
-namespace remgui
-{
-
-class LCDataStrFormatU16 : public LCDataStrFormatIntBase
+class LCStringDataFormatterU16 : public LCStringDataFormatterIntBase
 {
 private:
-
     QIntValidator mValidator;   //Контроллер диапазона ввода.
 
 public:
-    explicit LCDataStrFormatU16(  int     _fieldWidth     = 0,
+    explicit LCStringDataFormatterU16(  int     _fieldWidth     = 0,
                                   QChar   _fillChar       = QChar(' '),
                                   int     _base           = 10,
                                   QChar   _fillCharUndef  = QChar(),
@@ -26,5 +22,4 @@ public:
     virtual QValidator* validator() override;
 };
 
-}
-#endif // LCQDATASTRINGFORMATTERUINT16_H
+#endif // LCSTRINGDATAFORMATTERUINT16_H

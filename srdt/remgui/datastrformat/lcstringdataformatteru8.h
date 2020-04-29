@@ -1,19 +1,16 @@
-﻿#ifndef LCDATASTRINGFORMATTERUINT8_H
-#define LCDATASTRINGFORMATTERUINT8_H
+﻿#ifndef LCSTRINGDATAFORMATTERUINT8_H
+#define LCSTRINGDATAFORMATTERUINT8_H
 
-#include "lcdatastrformatintbase.h"
+#include "lcstringdataformatterintbase.h"
 
-namespace remgui
-{
-
-class LCDataStrFormatU8 : public LCDataStrFormatIntBase
+class LCStringDataFormatterU8 : public LCStringDataFormatterIntBase
 {
 private:
 
     QIntValidator mValidator;   //Контроллер диапазона ввода.
 
 public:
-    explicit LCDataStrFormatU8(    int     _fieldWidth     = 0,
+    explicit LCStringDataFormatterU8(    int     _fieldWidth     = 0,
                                             QChar   _fillChar       = QChar(' '),
                                             int     _base           = 10,
                                             QChar   _fillCharUndef  = QChar(),
@@ -25,6 +22,4 @@ public:
     virtual QValidator* validator() override;
 };
 
-}
-
-#endif // LCDATASTRINGFORMATTERUINT8_H
+#endif // LCSTRINGDATAFORMATTERUINT8_H

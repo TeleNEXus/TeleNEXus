@@ -6,6 +6,11 @@ LCQValidatorU32::LCQValidatorU32(QObject *parent) : QValidator(parent)
     mMax = std::numeric_limits<MTUint32>::max();
 }
 
+LCQValidatorU32::~LCQValidatorU32()
+{
+
+}
+
 LCQValidatorU32::State LCQValidatorU32::validate(QString &input, int &pos) const
 {
     Q_UNUSED(pos);

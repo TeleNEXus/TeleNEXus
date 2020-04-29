@@ -37,7 +37,7 @@ void LCQRemLineEdit::CWriteListener::dataIsWrite(ERemoteDataStatus _status)
 //======================================================================================================================
 LCQRemLineEdit::LCQRemLineEdit(const QString& _dataName,
                                QSharedPointer<LCRemoteDataSourceInterface> _dataSource,
-                               QSharedPointer<LCDataStrFormatBase> _formatter,
+                               QSharedPointer<LCStringDataFormatterBase> _formatter,
                                QWidget* _parent) :  QLineEdit(_parent),
                                                     mFormatter(_formatter)
 {
@@ -62,7 +62,7 @@ LCQRemLineEdit::LCQRemLineEdit(const QString& _dataName,
 LCQRemLineEdit::LCQRemLineEdit(const QString& _dataNameRead,
                                const QString& _dataNameWrite,
                                QSharedPointer<LCRemoteDataSourceInterface> _dataSource,
-                               QSharedPointer<LCDataStrFormatBase> _formatter,
+                               QSharedPointer<LCStringDataFormatterBase> _formatter,
                                QWidget* _parent) :  QLineEdit(_parent),
                                                     mFormatter(_formatter)
 {

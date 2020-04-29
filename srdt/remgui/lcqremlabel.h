@@ -4,7 +4,7 @@
 #include <QLabel>
 #include "lremgui.h"
 #include "lqextendevent.h"
-#include "lcdatastrformatbase.h"
+#include "lcstringdataformatterbase.h"
 
 #include "LCRemoteDataReaderInterface.h"
 #include "LCRemoteDataReadListnerInterface.h"
@@ -30,7 +30,7 @@ private:
 
     QString mDataName;
     QSharedPointer<LCRemoteDataReaderInterface>  mDataReader;
-    QSharedPointer<LCDataStrFormatBase> mFormatter;
+    QSharedPointer<LCStringDataFormatterBase> mFormatter;
     QSharedPointer<CReadListener> mDataListener;
 
 public:
@@ -40,7 +40,7 @@ public:
 
     explicit LCQRemLabel(   const QString&                                  _dataName,
                             QSharedPointer<LCRemoteDataSourceInterface>     _dataSource,
-                            QSharedPointer<LCDataStrFormatBase>             _formatter,
+                            QSharedPointer<LCStringDataFormatterBase>             _formatter,
                             QWidget* _parent = nullptr);
     virtual ~LCQRemLabel();
 
@@ -48,7 +48,7 @@ public:
 
     void setSource( const QString& _dataName,
                     QWeakPointer<LCRemoteDataSourceInterface>   _dataSource,
-                    QSharedPointer<LCDataStrFormatBase>         _formatter);
+                    QSharedPointer<LCStringDataFormatterBase>         _formatter);
 
     virtual bool event(QEvent *e) override;
 
