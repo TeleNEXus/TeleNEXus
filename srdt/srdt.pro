@@ -40,14 +40,6 @@ SOURCES += \
         modbus/lcqmodbusmasterrtu.cpp \
         modbus/lcqmodbusmastertcp.cpp \
         lctestdllclass.cpp \
-        cqclientecho2.cpp \
-        cqclientechoblocking1.cpp \
-        cqclienttcpecho.cpp \
-        cqmythread.cpp \
-        cqsocketclient1.cpp \
-        cqtestimer.cpp \
-        lcxmltestwidgetcreators.cpp \
-        lqtestsaxhandler.cpp \
         remgui/datastrformat/lcdatastrformatbase.cpp \
         remgui/datastrformat/lcdatastrformatbool.cpp \
         remgui/datastrformat/lcdatastrformatf32.cpp \
@@ -87,15 +79,7 @@ HEADERS += \
     #common/lcqremotedatawriter.h \
     common/lcqu32validator.h \
     common/lqextendevent.h \
-    cqclientecho2.h \
-    cqclientechoblocking1.h \
-    cqclienttcpecho.h \
-    cqmythread.h \
-    cqsocketclient1.h \
-    cqtestimer.h \
     lctestdllclass.h \
-    lcxmltestwidgetcreators.h \
-    lqtestsaxhandler.h \
     modbus/lcmodbusmasterbase.h \
     modbus/lcqmodbusdatareader.h \
     modbus/lcqmodbusdatawriter.h \
@@ -123,6 +107,7 @@ HEADERS += \
     remotedatainterface/LCRemoteDataWriteListnerInterface.h \
     remotedatainterface/LCRemoteDataWriterInterface.h \
     testdllinterface.h \
+    xml/LCXmlWidgetCreatorsMapInterface.h \
     xml/lcxmlapplication.h \
     xml/lcxmllayoutsfactory.h \
     xml/lcxmlremotedatasourcemap.h \
