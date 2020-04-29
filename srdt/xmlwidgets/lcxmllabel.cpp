@@ -11,6 +11,7 @@ LCXmlLabel::LCXmlLabel()
 
 }
 
+//----------------------------------------------------------------------------------------------------------------------
 QWidget* LCXmlLabel::create(const QDomElement& _element)
 {
     QLabel* label = new QLabel();
@@ -34,5 +35,6 @@ QWidget* LCXmlLabel::create(const QDomElement& _element)
     }
     return label;
 }
+
 
 } //namespace

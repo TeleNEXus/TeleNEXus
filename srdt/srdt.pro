@@ -127,7 +127,7 @@ HEADERS += \
     xml/lcxmllayoutsfactory.h \
     xml/lcxmlremotedatasourcemap.h \
     xml/lcxmlstddataformatterfactory.h \
-    xml/lcxmlwidgetcreatorbase.h \
+    xml/lcxmlwidgetcreatorinterface.h \
     xml/lcxmlwidgetcreatorsmap.h \
     xmldatasources/lcxmlmodbussources.h \
     xmldatasources/lcxmlremotedatasourcecreatebase.h \

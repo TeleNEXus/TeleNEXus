@@ -7,7 +7,7 @@ namespace xmlwidgetcreators
 {
 
 //======================================================================================================================
-LCXmlWidget::LCXmlWidget()
+LCXmlWidget::LCXmlWidget() : mpOrderCtrl(nullptr)
 {
 
 }
@@ -34,7 +34,7 @@ QWidget* LCXmlWidget::create(const QDomElement& _element)
             if(layout)
             {
                 widget->setLayout(layout);
-                return widget;
+                break;
             }
         }
         node = node.nextSibling();

@@ -11,4 +11,8 @@
     <holdreg    name="hreg1"   addr="201" size="1"/>
     <holdreg    name="hflt"    addr="200" size="2"/>
     
+    <holdreg    name="hreg2"   addr="202" size="1"/>
+    <holdreg    name="hreg3"   addr="203" size="1"/>
+    <holdreg    name="hreg4"   addr="204" size="1"/>
+    
 </memorymap>

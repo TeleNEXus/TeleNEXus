@@ -1,5 +1,5 @@
 #include "lcxmllayoutsfactory.h"
-#include "lcxmlwidgetcreatorbase.h"
+#include "lcxmlwidgetcreatorinterface.h"
 #include "lcxmlwidgetcreatorsmap.h"
 
 #include <QDebug>
@@ -51,7 +51,7 @@ public:
                 }
                 else
                 {
-                    LCXmlWidgetCreatorBase* widgetCreator =
+                    LCXmlWidgetCreatorInterface* widgetCreator =
                                     LCXmlWidgetCreatorsMap::instace().getCreator(nodeElement.tagName());
                     if(widgetCreator)
                     {
@@ -134,7 +134,7 @@ private:
                 }
                 else
                 {
-                    LCXmlWidgetCreatorBase* wcr = LCXmlWidgetCreatorsMap::instace().getCreator(nodeElement.tagName());
+                    LCXmlWidgetCreatorInterface* wcr = LCXmlWidgetCreatorsMap::instace().getCreator(nodeElement.tagName());
                     if(wcr)
                     {
                         QWidget* widget = wcr->create(nodeElement);
@@ -146,6 +146,8 @@ private:
                         {
                             mpLayout->addItem(new QSpacerItem(0,0), mRow, col);
                         }
+
+
                     }
                 }
                 col++;
@@ -190,7 +192,7 @@ private:
                 }
                 else
                 {
-                    LCXmlWidgetCreatorBase* wcr = LCXmlWidgetCreatorsMap::instace().getCreator(nodeElement.tagName());
+                    LCXmlWidgetCreatorInterface* wcr = LCXmlWidgetCreatorsMap::instace().getCreator(nodeElement.tagName());
                     if(wcr)
                     {
                         QWidget* widget = wcr->create(nodeElement);
@@ -239,10 +241,10 @@ public:
                     createCol(element);
 
                 }
-                else
-                {
+//                else
+//                {
                     //TODO: сформировать сообщение отладки об недопустимом элементе.
-                }
+//                }
             }
             //--------------------------------
             childNode = childNode.nextSibling();

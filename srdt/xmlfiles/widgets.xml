@@ -28,9 +28,21 @@
         </col>
         
         <col>
+            <datalineedit  data="hreg2" source="bvitcp" format="uint16"/>
+            <datalineedit  data="hreg3" source="bvitcp" format="uint16"/>
+            <datalineedit  data="hreg4"  source="bvitcp" format="uint16"/>
+        </col>
+        
+        <col>
             <datalabel  data="hreg0" source="bvitcp" format="uint16"/>
             <datalabel  data="hreg1" source="bvitcp" format="uint16"/>
             <datalabel  data="hflt"  source="bvitcp" format="float32"/>
+        </col>
+        
+        <col>
+            <datalineedit  data="hreg0" source="bvirtu" format="uint16"/>
+            <datalineedit  data="hreg1" source="bvirtu" format="uint16"/>
+            <datalineedit  data="hflt"  source="bvirtu" format="float32"/>
         </col>
         
         <col>

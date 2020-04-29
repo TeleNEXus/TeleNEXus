@@ -212,14 +212,21 @@ int LCXmlApplication::exec(int argc, char *argv[])
     return app.exec();
 }
 
-
 //----------------------------------------------------------------------------------------------------------------------
 static void initWidgetCreatorsMap()
 {
-    LCXmlWidgetCreatorsMap::instace().addCreator("widget",       new xmlwidgetcreators::LCXmlWidget);
-    LCXmlWidgetCreatorsMap::instace().addCreator("label",        new xmlwidgetcreators::LCXmlLabel);
-    LCXmlWidgetCreatorsMap::instace().addCreator("datalabel",    new xmlwidgetcreators::LCXmlRemLabel);
-    LCXmlWidgetCreatorsMap::instace().addCreator("datalineedit", new xmlwidgetcreators::LCXmlRemLineEdit);
+    LCXmlWidgetCreatorInterface *wcr;
+    wcr = new xmlwidgetcreators::LCXmlWidget;
+    LCXmlWidgetCreatorsMap::instace().addCreator("widget",       wcr);
+
+    wcr = new xmlwidgetcreators::LCXmlLabel;
+    LCXmlWidgetCreatorsMap::instace().addCreator("label",        wcr);
+
+    wcr = new xmlwidgetcreators::LCXmlRemLabel;
+    LCXmlWidgetCreatorsMap::instace().addCreator("datalabel",    wcr);
+
+    wcr = new xmlwidgetcreators::LCXmlRemLineEdit;
+    LCXmlWidgetCreatorsMap::instace().addCreator("datalineedit", wcr);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -241,7 +248,7 @@ static bool buildWidgets(QString _fileName)
     {
         QDomElement rootElement = domDoc.documentElement();
 
-        LCXmlWidgetCreatorBase* cr = LCXmlWidgetCreatorsMap::instace().getCreator(rootElement.tagName());
+        LCXmlWidgetCreatorInterface* cr = LCXmlWidgetCreatorsMap::instace().getCreator(rootElement.tagName());
         if(cr)
         {
             QWidget* w = cr->create(rootElement);
