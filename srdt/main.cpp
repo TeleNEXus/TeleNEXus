@@ -1,4 +1,4 @@
-﻿#include <QCoreApplication>
+﻿
 #include <signal.h>
 #include <iostream>
 #include <QThread>
@@ -6,18 +6,8 @@
 #include <QTimer>
 #include <QHostAddress>
 
-#include "cqsocketclient1.h"
-#include "cqclienttcpecho.h"
-#include "cqtestimer.h"
-#include "cqmythread.h"
-#include "cqclientecho2.h"
-
-#include "cqclientechoblocking1.h"
-
-//#include "lmodbusregsarray.h"
 #include "lcqmodbusmastertcp.h"
 #include "lcqmodbusmasterrtu.h"
-//#include "lcqmodbusmastersimulator.h"
 #include "lcqmodbusdatasource.h"
 #include <QMap>
 #include <QEvent>
@@ -36,10 +26,6 @@
 //using namespace std;
 
 QThread* __gStopTh1 = nullptr;
-
-CQClientEchoProcess* __gCep1;
-CQClientEchoProcess* __gCep2;
-
 
 #include <QApplication>
 #include <QLabel>
@@ -78,74 +64,7 @@ CQClientEchoProcess* __gCep2;
 
 #include "lcqmodbusmastertcp.h"
 
-//using namespace remgui;
 
-void exitApp(int _sig)
-{
-    switch(_sig)
-    {
-    case SIGINT:
-        std::cout << "User exit request" << std::endl;
-        break;
-    case SIGTERM:
-        std::cout << "System terminate request" << std::endl;
-        break;
-    }
-    qDebug() << "Start termination application...";
-
-    qDebug() << "Exit application" << "SIG = " << _sig;
-    QCoreApplication::quit();
-}
-
-
-
-void calcDelay(quint64 pass)
-{
-    float __f1 = 0.0f;
-    for(quint64 i = 0; i < pass;i++)
-    {
-        __f1 =( float)i/10.1;
-        __f1 *= 10.1;
-        __f1 = ( float)i/11.1;
-        __f1 *= 11.1;
-        __f1 = ( float)i/12.1;
-        __f1 *= 12.1;
-        __f1 = ( float)i/13.1;
-        __f1 *= 13.1;
-    }
-}
-class C1
-{
-public:
-    C1(){qDebug() << "-------------------------------C1->Constructor";}
-    ~C1(){qDebug() << "-------------------------------C1->Destructor";}
-    virtual void dosm(){qDebug() << "C1->dosm()";}
-};
-
-class C2 : public C1
-{
-public:
-    C2(){qDebug() << "-------------------------------C2->Constructor";}
-    ~C2(){qDebug() << "-------------------------------C2->Destructor";}
-    virtual void dosm(){qDebug() << "C2->dosm()";}
-};
-
-class C3
-{
-public:
-    C3(){qDebug() << "-------------------------------C3->Constructor";}
-    ~C3(){qDebug() << "-------------------------------C3->Destructor";}
-    virtual void dosm(){qDebug() << "C3->dosm()";}
-};
-
-int testMasterTcp1(int argc, char *argv[]);
-int testGuiTab(int argc, char *argv[]);
-int testGui1Simulator(int argc, char *argv[]);
-int testModbusMasterSimulator(int argc, char *argv[]);
-int testGui1(int argc, char *argv[]);
-
-int testXml1();
-int testXmlDom1(int argc, char *argv[]);
 
 #include <memory>
 
@@ -162,6 +81,7 @@ int testXmlDom1(int argc, char *argv[]);
 #include "testdllinterface.h"
 #include "lctestdllclass.h"
 
+
 class CTestDllRecurse : public LCTestDllInterface
 {
 public:
@@ -170,22 +90,9 @@ public:
     virtual QString getString() override {return "LCTestDllInterface Test Dll String";}
 };
 
+//======================================================================================================================
 int main(int argc, char *argv[])
 {
-
-//    std::shared_ptr<C2> sp_c1(new C2);
-//    std::shared_ptr<C1> sp_c2 = sp_c1;
-
-//    qDebug() << "sp_c1.clear()";
-//    sp_c1.reset();
-//    qDebug() << "sp_c2.clear()";
-//    sp_c2.reset();
-//    qDebug() << "Exit Programm";
-//    return 0;
-//    return testGui1(argc, argv);
-//    return testXml1();
-
-//    return testXmlDom1(argc, argv);
 
     QLibrary lib("D:/Dokuments/Kuzmenko/Programs/PROGRAM_PROJECTS/srdtrep/build-extwidglib-Desktop-Debug/debug/extwidglib");
     typedef QSharedPointer<LCTestDllInterface> (*TFct)();
@@ -216,58 +123,5 @@ int main(int argc, char *argv[])
 //    return 0;
 
     return LCXmlApplication::instance().exec(argc, argv);
-
-
-    QApplication app(argc, argv);
-
-        // Grid layout with 3 buttons
-        QGridLayout *gridLayout = new QGridLayout;
-        QLineEdit *b1 = new QLineEdit("A");
-        QLineEdit *b2 = new QLineEdit("B");
-        QLineEdit *b3 = new QLineEdit("C");
-        QLineEdit *b4 = new QLineEdit("D");
-        QLineEdit *b5 = new QLineEdit("E");
-        QLineEdit *b6 = new QLineEdit("F");
-
-        // addWidget(*Widget, row, column, rowspan, colspan)
-        // 0th row
-//        gridLayout->addWidget(b1,0,0,1,1);
-//        gridLayout->addWidget(b2,0,1,1,1);
-//        gridLayout->addWidget(b3,0,2,1,1);
-
-        gridLayout->addWidget(b1,0,0);
-        gridLayout->addWidget(b2,1,0);
-        gridLayout->addWidget(b3,2,0);
-        gridLayout->addWidget(b4,0,1);
-        gridLayout->addWidget(b5,1,1);
-        gridLayout->addWidget(b6,2,1);
-//        gridLayout->addWidget(b1,0,0);
-//        gridLayout->addWidget(b2,0,1);
-//        gridLayout->addWidget(b3,0,2);
-
-        // 1st row
-//        gridLayout->addWidget(b4,1,0,1,1);
-
-        // 2nd row with 2-column span
-//        gridLayout->addWidget(b5,2,0,1,2);
-
-        // 3rd row with 3-column span
-//        gridLayout->addWidget(b6,3,0,1,3);
-
-        // Create a widget
-        QWidget *w = new QWidget();
-
-        // Set the grid layout as a main layout
-        w->setLayout(gridLayout);
-
-        // Window title
-        w->setWindowTitle("Grid Layouts (3x4)");
-
-        // Display
-        w->show();
-
-        // Event loop
-        return app.exec();
-
 }
 

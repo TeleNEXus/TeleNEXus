@@ -1,25 +1,29 @@
 #ifndef LCXMLWIDGETCREATORSMAP_H
 #define LCXMLWIDGETCREATORSMAP_H
 
-#include "lcxmlwidgetcreatorinterface.h"
+#include "LCXmlWidgetCreatorsMapInterface.h"
 
 #include <QMap>
 
-using LTXmlWidgetsCreators = QMap<QString, LCXmlWidgetCreatorInterface*>;
-
-class LCXmlWidgetCreatorsMap
+class LCXmlWidgetCreatorsMap : public LCXmlWidgetsCreatorsMapInterface
 {
 private:
-    LTXmlWidgetsCreators mMap;
+    QMap<QString, LCXmlWidgetCreatorInterface*> mMap;
+
 private:
     static LCXmlWidgetCreatorsMap mInstance;
+
     LCXmlWidgetCreatorsMap();
     LCXmlWidgetCreatorsMap(const LCXmlWidgetCreatorsMap&) = delete;
     LCXmlWidgetCreatorsMap& operator=(const LCXmlWidgetCreatorsMap&) = delete;
+
 public:
+    ~LCXmlWidgetCreatorsMap();
+
     static LCXmlWidgetCreatorsMap& instace();
-    bool addCreator(const QString& _name, LCXmlWidgetCreatorInterface* _p_creator);
-    LCXmlWidgetCreatorInterface* getCreator(const QString& _name);
+
+    bool addCreator(const QString& _name, LCXmlWidgetCreatorInterface* _p_creator) override;
+    LCXmlWidgetCreatorInterface* getCreator(const QString& _name) override;
 };
 
 #endif // LCXMLWIDGETCREATORSMAP_H

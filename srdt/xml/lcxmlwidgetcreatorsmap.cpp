@@ -7,8 +7,13 @@ LCXmlWidgetCreatorsMap& LCXmlWidgetCreatorsMap::instace()
 {
     return mInstance;
 }
-
+//----------------------------------------------------------------------------------------------------------------------
 LCXmlWidgetCreatorsMap::LCXmlWidgetCreatorsMap()
+{
+
+}
+//----------------------------------------------------------------------------------------------------------------------
+LCXmlWidgetCreatorsMap::~LCXmlWidgetCreatorsMap()
 {
 
 }
