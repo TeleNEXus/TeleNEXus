@@ -25,12 +25,12 @@ INCLUDEPATH +=                  \
         xml/                    \
         interfaces/remotedata   \
         interfaces/xmlcreators  \
-        common/                 \
+        ../common/                 \
         dataformatters/         \
 
 
 SOURCES += \
-        common/lcqu32validator.cpp \
+        ../common/lcqu32validator.cpp \
         modbus/lcqmodbusdatareader.cpp \
         modbus/lcqmodbusdatasource.cpp \
         modbus/lcmodbusmasterbase.cpp \
@@ -73,8 +73,8 @@ HEADERS += \
     interfaces/xmlcreators/LCXmlRemoteDataSourceCreatorInterface.h \
     lctestdllclass.h    \
     testdllinterface.h  \
-    common/lcqu32validator.h \
-    common/lqextendevent.h \
+    ../common/lcqu32validator.h \
+    ../common/lqextendevent.h \
     dataformatters/LCStringDataFormatterInterface.h \
     dataformatters/lcstringdataformatterbase.h \
     dataformatters/lcstringdataformatterbool.h \
