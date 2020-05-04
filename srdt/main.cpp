@@ -6,9 +6,9 @@
 #include <QTimer>
 #include <QHostAddress>
 
-#include "lcqmodbusmastertcp.h"
-#include "lcqmodbusmasterrtu.h"
-#include "lcqmodbusdatasource.h"
+#include "lqmodbusmastertcp.h"
+#include "lqmodbusmasterrtu.h"
+#include "lqmodbusdatasource.h"
 #include <QMap>
 #include <QEvent>
 #include <QMutex>
@@ -56,11 +56,11 @@ QThread* __gStopTh1 = nullptr;
 #include "lcstringdataformatters32.h"
 
 #include "lcstringdataformatterf32.h"
-#include "lcqu32validator.h"
+#include "lqvalidatoru32.h"
 
 #include "lcstringdataformatterhex.h"
 
-#include "lcqmodbusmastertcp.h"
+#include "lqmodbusmastertcp.h"
 
 
 

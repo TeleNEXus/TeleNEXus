@@ -4,18 +4,18 @@
 #include <QDebug>
 #include <QDomElement>
 
-#include "lcmodbusmasterbase.h"
+#include "lqmodbusmasterbase.h"
 
-#include "lcqmodbusmasterrtu.h"
-#include "lcqmodbusmastertcp.h"
+#include "lqmodbusmasterrtu.h"
+#include "lqmodbusmastertcp.h"
 
-#include "lcqmodbusdatasource.h"
+#include "lqmodbusdatasource.h"
 
 #include "lcxmlapplication.h"
 
 using namespace modbus;
 
-using LTMastersMap = QMap<QString, QSharedPointer<LCModbusMasterBase>>;
+using LTMastersMap = QMap<QString, QSharedPointer<LQModbusMasterBase>>;
 
 //======================================================================================================================
 LCXmlModbusSources::LCXmlModbusSources()
@@ -29,12 +29,12 @@ static LTMastersMap createMasters(const QDomNodeList& nodes);
 //----------------------------------------------------------------------------------------------------------------------
 static void createSources(const QDomNodeList& nodes,
                           LTMastersMap _masters,
-                          LTDataSources& _sourcesmap);
+                          LQDataSources& _sourcesmap);
 
 //----------------------------------------------------------------------------------------------------------------------
-LTDataSources LCXmlModbusSources::create(const QDomElement &_element)
+LQDataSources LCXmlModbusSources::create(const QDomElement &_element)
 {
-    LTDataSources map;
+    LQDataSources map;
     QFile file;
     QString xmlfilename = _element.attribute("file");
 
@@ -92,7 +92,7 @@ LTDataSources LCXmlModbusSources::create(const QDomElement &_element)
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-static int loadMemoryMap(LCQModbusDataSource* _p_source, const QString& _filename);
+static int loadMemoryMap(LQModbusDataSource* _p_source, const QString& _filename);
 
 //----------------------------------------------------------------------------------------------------------------------
 static const struct
@@ -107,7 +107,7 @@ static const struct
 //----------------------------------------------------------------------------------------------------------------------
 static void createSources(const QDomNodeList& nodes,
                           LTMastersMap _masters,
-                          LTDataSources& _sourcesmap)
+                          LQDataSources& _sourcesmap)
 {
     QString attr;
     QString attrName;
@@ -145,7 +145,7 @@ static void createSources(const QDomNodeList& nodes,
         attr = el.attribute(__sourceAttributes.memorymapfile);
         if(attr.isNull()) continue;
 
-        QSharedPointer<LCQModbusDataSource> source = LCQModbusDataSource::create(devid, itm.value());
+        QSharedPointer<LQModbusDataSource> source = LQModbusDataSource::create(devid, itm.value());
 
         if(loadMemoryMap(source.data(), LCXmlApplication::instance().getXmlMainFileWay() + attr) != 0)
         {
@@ -178,9 +178,9 @@ static const struct
 }__mastersCommonAttributes;
 
 //----------------------------------------------------------------------------------------------------------------------
-static QSharedPointer<LCModbusMasterBase> createMasterRtu(const QDomElement _element);
+static QSharedPointer<LQModbusMasterBase> createMasterRtu(const QDomElement _element);
 //----------------------------------------------------------------------------------------------------------------------
-static QSharedPointer<LCModbusMasterBase> createMasterTcp(const QDomElement _element);
+static QSharedPointer<LQModbusMasterBase> createMasterTcp(const QDomElement _element);
 
 //----------------------------------------------------------------------------------------------------------------------
 static LTMastersMap createMasters(const QDomNodeList& nodes)
@@ -200,7 +200,7 @@ static LTMastersMap createMasters(const QDomNodeList& nodes)
         attrType = el.attribute(__mastersCommonAttributes.type);
         if(attrType.isNull()) continue;
 
-        QSharedPointer<LCModbusMasterBase> master;
+        QSharedPointer<LQModbusMasterBase> master;
         if(attrType == "rtu")
         {
             master = createMasterRtu(el);
@@ -249,7 +249,7 @@ static const struct
 
 
 //----------------------------------------------------------------------------------------------------------------------
-static QSharedPointer<LCModbusMasterBase> createMasterRtu(const QDomElement _element)
+static QSharedPointer<LQModbusMasterBase> createMasterRtu(const QDomElement _element)
 {
     QString attr;
 
@@ -262,7 +262,7 @@ static QSharedPointer<LCModbusMasterBase> createMasterRtu(const QDomElement _ele
 
     bool boolBuff = false;
 
-    QSharedPointer<LCQModbusMasterRtu> master;
+    QSharedPointer<LQModbusMasterRtu> master;
 
     portName = _element.attribute(__mastersRtuAttributes.port);
     if(portName.isNull()) goto LABELRET;
@@ -286,7 +286,7 @@ static QSharedPointer<LCModbusMasterBase> createMasterRtu(const QDomElement _ele
     stopBits = attr.toInt(&boolBuff);
     if(!boolBuff || (stopBits < 0)) goto LABELRET;
 
-    master = LCQModbusMasterRtu::create();
+    master = LQModbusMasterRtu::create();
 
     attr = _element.attribute(__mastersRtuAttributes.timeout);
     timeout = attr.toInt(&boolBuff);
@@ -321,9 +321,9 @@ static const struct
 }__mastersTcpAttributes;
 
 //----------------------------------------------------------------------------------------------------------------------
-static QSharedPointer<LCModbusMasterBase> createMasterTcp(const QDomElement _element)
+static QSharedPointer<LQModbusMasterBase> createMasterTcp(const QDomElement _element)
 {
-    QSharedPointer<LCQModbusMasterTcp> master;
+    QSharedPointer<LQModbusMasterTcp> master;
     QString urlstr = _element.attribute(__mastersTcpAttributes.url);
 
     if(urlstr.isNull()) return master;
@@ -332,7 +332,7 @@ static QSharedPointer<LCModbusMasterBase> createMasterTcp(const QDomElement _ele
 
     if(url.isValid())
     {
-        master = LCQModbusMasterTcp::create();
+        master = LQModbusMasterTcp::create();
         master->connectToHost(url);
 
     }
@@ -349,7 +349,7 @@ enum class EItemType
 };
 
 //----------------------------------------------------------------------------------------------------------------------
-static int addSourceDataItems(LCQModbusDataSource* _p_source, const QDomNodeList& _nodes, EItemType _type);
+static int addSourceDataItems(LQModbusDataSource* _p_source, const QDomNodeList& _nodes, EItemType _type);
 
 //----------------------------------------------------------------------------------------------------------------------
 static const struct
@@ -361,7 +361,7 @@ static const struct
 }__memoryMapItemElementNames;
 
 //----------------------------------------------------------------------------------------------------------------------
-static int loadMemoryMap(LCQModbusDataSource* _p_source,  const QString& _filename)
+static int loadMemoryMap(LQModbusDataSource* _p_source,  const QString& _filename)
 {
     QFile file(_filename);
 
@@ -426,7 +426,7 @@ static const struct
 /*
  * Возвращает количество добавленных сущностей карты памяти.
  */
-static int addSourceDataItems(LCQModbusDataSource* _p_source, const QDomNodeList& _nodes, EItemType _type)
+static int addSourceDataItems(LQModbusDataSource* _p_source, const QDomNodeList& _nodes, EItemType _type)
 {
     QDomElement element;
     QString attr;

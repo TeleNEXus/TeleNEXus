@@ -168,7 +168,7 @@ int LCXmlApplication::exec(int argc, char *argv[])
         return -1;
     }
 
-    LTDataSources smap = LCXmlModbusSources().create(modbusSourcesNodes.at(0).toElement());
+    LQDataSources smap = LCXmlModbusSources().create(modbusSourcesNodes.at(0).toElement());
 
     if(smap.isEmpty())
     {

@@ -23,20 +23,14 @@ INCLUDEPATH +=                  \
         modbus/                 \
         remgui/                 \
         xml/                    \
-        interfaces/remotedata   \
-        interfaces/xmlcreators  \
+        ../common/interfaces/remotedata   \
+        ../common/interfaces/xmlcreators  \
         ../common/                 \
         dataformatters/         \
 
 
 SOURCES += \
-        ../common/lcqu32validator.cpp \
-        modbus/lcqmodbusdatareader.cpp \
-        modbus/lcqmodbusdatasource.cpp \
-        modbus/lcmodbusmasterbase.cpp \
-        modbus/lcqmodbusdatawriter.cpp \
-        modbus/lcqmodbusmasterrtu.cpp \
-        modbus/lcqmodbusmastertcp.cpp \
+        ../common/lqvalidatoru32.cpp \
         lctestdllclass.cpp \
         dataformatters/lcstringdataformatterbase.cpp \
         dataformatters/lcstringdataformatterbool.cpp \
@@ -49,6 +43,12 @@ SOURCES += \
         dataformatters/lcstringdataformatteru16.cpp \
         dataformatters/lcstringdataformatteru32.cpp \
         dataformatters/lcstringdataformatteru8.cpp \
+        modbus/lqmodbusdatareader.cpp \
+        modbus/lqmodbusdatasource.cpp \
+        modbus/lqmodbusdatawriter.cpp \
+        modbus/lqmodbusmasterbase.cpp \
+        modbus/lqmodbusmasterrtu.cpp \
+        modbus/lqmodbusmastertcp.cpp \
         remgui/lcqremlabel.cpp \
         remgui/lcqremlineedit.cpp\
         main.cpp \
@@ -69,11 +69,22 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 HEADERS += \
-    interfaces/LCApplicationInterface.h \
-    interfaces/xmlcreators/LCXmlRemoteDataSourceCreatorInterface.h \
+    ../common/interfaces/LIApplication.h \
+    ../common/interfaces/remotedata/LIRemoteDataReadListener.h \
+    ../common/interfaces/remotedata/LIRemoteDataReader.h \
+    ../common/interfaces/remotedata/LIRemoteDataSource.h \
+    ../common/interfaces/remotedata/LIRemoteDataWriteListner.h \
+    ../common/interfaces/remotedata/LIRemoteDataWriter.h \
+    ../common/interfaces/xmlcreators/LIXmlRemoteDataSourceCreator.h \
+    ../common/lqvalidatoru32.h \
     lctestdllclass.h    \
+    modbus/lqmodbusdatareader.h \
+    modbus/lqmodbusdatasource.h \
+    modbus/lqmodbusdatawriter.h \
+    modbus/lqmodbusmasterbase.h \
+    modbus/lqmodbusmasterrtu.h \
+    modbus/lqmodbusmastertcp.h \
     testdllinterface.h  \
-    ../common/lcqu32validator.h \
     ../common/lqextendevent.h \
     dataformatters/LCStringDataFormatterInterface.h \
     dataformatters/lcstringdataformatterbase.h \
@@ -87,21 +98,10 @@ HEADERS += \
     dataformatters/lcstringdataformatteru16.h \
     dataformatters/lcstringdataformatteru32.h \
     dataformatters/lcstringdataformatteru8.h \
-    modbus/lcmodbusmasterbase.h \
-    modbus/lcqmodbusdatareader.h \
-    modbus/lcqmodbusdatawriter.h \
-    modbus/lcqmodbusmasterrtu.h \
-    modbus/lcqmodbusmastertcp.h \
     modbus/lmodbusdefs.h \
-    modbus/lcqmodbusdatasource.h \
     remgui/lcqremlabel.h \
     remgui/lcqremlineedit.h \
     remgui/lremgui.h \
-    interfaces/remotedata/LCRemoteDataReaderInterface.h \
-    interfaces/remotedata/LCRemoteDataSourceInterface.h \
-    interfaces/remotedata/LCRemoteDataWriteListnerInterface.h \
-    interfaces/remotedata/LCRemoteDataWriterInterface.h \
-    interfaces/remotedata/LCRemoteDataReadListenerInterface.h \
     xml/LCXmlStdDataFormatterFactoryInterface.h \
     xml/LCXmlWidgetCreatorsMapInterface.h \
     xml/lcxmlapplication.h \

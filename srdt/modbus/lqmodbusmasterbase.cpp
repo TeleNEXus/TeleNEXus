@@ -1,4 +1,4 @@
-﻿#include "lcmodbusmasterbase.h"
+﻿#include "lqmodbusmasterbase.h"
 #include "lqextendevent.h"
 #include "lmodbusdefs.h"
 #include <QDebug>
@@ -33,11 +33,11 @@ namespace modbus {
     class CDataReqBase
     {
     protected:
-        using MTMaster  = LCModbusMasterBase;
+        using MTMaster  = LQModbusMasterBase;
         QWaitCondition* mpWaitCond;
         QModbusReply *mpModbusReply;
     public:
-        LCModbusMasterBase::SReply  mReply;
+        LQModbusMasterBase::SReply  mReply;
 
     private:
         CDataReqBase(){};
@@ -74,7 +74,7 @@ namespace modbus {
 
     protected:
         virtual QModbusReply* sendRequest(QModbusClient* _client) = 0;
-        virtual LCModbusMasterBase::SReply::EStatus  handleReply(QModbusReply* _reply) = 0;
+        virtual LQModbusMasterBase::SReply::EStatus  handleReply(QModbusReply* _reply) = 0;
 
 
     };
@@ -166,7 +166,7 @@ namespace modbus {
             return _client->sendReadRequest(QModbusDataUnit( mRegType, mStartAddr, mRegQuant), mDevId);
         }
 
-        virtual LCModbusMasterBase::SReply::EStatus  handleReply(QModbusReply* _reply) final
+        virtual LQModbusMasterBase::SReply::EStatus  handleReply(QModbusReply* _reply) final
         {
             const QModbusDataUnit result = _reply->result();
             if( (result.valueCount() != mRegQuant) ||
@@ -213,7 +213,7 @@ namespace modbus {
                                                      mAddr, mReg), mDevId);
         }
 
-        virtual LCModbusMasterBase::SReply::EStatus  handleReply(QModbusReply* _reply) final
+        virtual LQModbusMasterBase::SReply::EStatus  handleReply(QModbusReply* _reply) final
         {
                 if(_reply->rawResult().functionCode() != QModbusResponse::FunctionCode::WriteSingleRegister)
                 {
@@ -255,7 +255,7 @@ namespace modbus {
             return _client->sendWriteRequest(mDataUnit, mDevId);
         }
 
-        virtual LCModbusMasterBase::SReply::EStatus  handleReply(QModbusReply* _reply) final
+        virtual LQModbusMasterBase::SReply::EStatus  handleReply(QModbusReply* _reply) final
         {
             const QModbusDataUnit result = _reply->result();
             if( (result.valueCount() != mRegQuant) ||
@@ -306,7 +306,7 @@ namespace modbus {
             return _client->sendReadRequest(QModbusDataUnit(mRegType, mStartAddr, mBitsQuant), mDevId);
         }
 
-        virtual LCModbusMasterBase::SReply::EStatus  handleReply(QModbusReply* _reply) final
+        virtual LQModbusMasterBase::SReply::EStatus  handleReply(QModbusReply* _reply) final
         {
             const QModbusDataUnit result = _reply->result();
             if( (result.valueCount() != mBitsQuant) ||
@@ -356,7 +356,7 @@ namespace modbus {
                                            mDevId);
         }
 
-        virtual LCModbusMasterBase::SReply::EStatus  handleReply(QModbusReply* _reply) final
+        virtual LQModbusMasterBase::SReply::EStatus  handleReply(QModbusReply* _reply) final
         {
             if(_reply->rawResult().functionCode() != QModbusResponse::FunctionCode::WriteSingleCoil)
             {
@@ -376,7 +376,7 @@ namespace modbus {
         quint8                      mDevId;
         quint16                     mStartAddr;
         quint16                     mSize;
-        LCModbusMasterBase::SReply  mReply;
+        LQModbusMasterBase::SReply  mReply;
         QModbusDataUnit             mDataUnit;
 
         CDataRequestWriteMultipleBits(  quint8 _devId,
@@ -405,7 +405,7 @@ namespace modbus {
             return _client->sendWriteRequest(mDataUnit, mDevId);
         }
 
-        virtual LCModbusMasterBase::SReply::EStatus  handleReply(QModbusReply* _reply) final
+        virtual LQModbusMasterBase::SReply::EStatus  handleReply(QModbusReply* _reply) final
         {
             const QModbusDataUnit result = _reply->result();
             if( (result.valueCount() != mSize) ||
@@ -419,18 +419,18 @@ namespace modbus {
     };
 
 //====================================================================================================LCModbusMasterBase
-LCModbusMasterBase::LCModbusMasterBase(QObject* _parent) : QObject(_parent), mpTimer(nullptr)
+LQModbusMasterBase::LQModbusMasterBase(QObject* _parent) : QObject(_parent), mpTimer(nullptr)
 {
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-LCModbusMasterBase::~LCModbusMasterBase()
+LQModbusMasterBase::~LQModbusMasterBase()
 {
     if(mpTimer != nullptr) mpTimer->deleteLater();
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-LCModbusMasterBase::SReply LCModbusMasterBase::
+LQModbusMasterBase::SReply LQModbusMasterBase::
     readInputRegisters(quint8 _devId,quint16 _addr, quint16 _regQuant, quint16 _regs[])
 {
     if((_regQuant > MODBUS_MAX_READ_REGISTER_COUNT)||
@@ -453,8 +453,8 @@ LCModbusMasterBase::SReply LCModbusMasterBase::
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-LCModbusMasterBase::SReply
-        LCModbusMasterBase::readHoldingRegisters(quint8 _devId, quint16 _addr, quint16 _regQuant, quint16 _regs[])
+LQModbusMasterBase::SReply
+        LQModbusMasterBase::readHoldingRegisters(quint8 _devId, quint16 _addr, quint16 _regQuant, quint16 _regs[])
 {
     if((_regQuant > MODBUS_MAX_READ_REGISTER_COUNT)||
             (_regQuant == 0)||(_regs == nullptr))
@@ -475,8 +475,8 @@ LCModbusMasterBase::SReply
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-LCModbusMasterBase::SReply
-        LCModbusMasterBase::writeSingleRegister(quint8 _devId, quint16 _addr, quint16 _reg)
+LQModbusMasterBase::SReply
+        LQModbusMasterBase::writeSingleRegister(quint8 _devId, quint16 _addr, quint16 _reg)
 {
 
     CDataRequestWriteSingleReg req(_devId, _addr, _reg, &mWaitCond);
@@ -493,8 +493,8 @@ LCModbusMasterBase::SReply
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-LCModbusMasterBase::SReply
-        LCModbusMasterBase::writeMultipleRegisters(quint8 _devId, quint16 _addr,
+LQModbusMasterBase::SReply
+        LQModbusMasterBase::writeMultipleRegisters(quint8 _devId, quint16 _addr,
                                                         quint16 _regQuant, const quint16 _regs[])
 {
     if((_regQuant > MODBUS_MAX_READ_REGISTER_COUNT)||
@@ -518,7 +518,7 @@ LCModbusMasterBase::SReply
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-LCModbusMasterBase::SReply LCModbusMasterBase::readCoils(quint8 _devId, quint16 _startAddr,
+LQModbusMasterBase::SReply LQModbusMasterBase::readCoils(quint8 _devId, quint16 _startAddr,
                                                             quint16 _coilsQuant, quint8 _bits[])
 {
     if((_coilsQuant > MODBUS_MAX_READ_COIL_COUNT)||
@@ -543,8 +543,8 @@ LCModbusMasterBase::SReply LCModbusMasterBase::readCoils(quint8 _devId, quint16 
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-LCModbusMasterBase::SReply
-        LCModbusMasterBase::writeSingleCoils(quint8 _devId, quint16 _addr, quint8 _bit)
+LQModbusMasterBase::SReply
+        LQModbusMasterBase::writeSingleCoils(quint8 _devId, quint16 _addr, quint8 _bit)
 {
     CDataRequestWriteSingleBit req(_devId, _addr,
                                    _bit,
@@ -562,8 +562,8 @@ LCModbusMasterBase::SReply
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-LCModbusMasterBase::SReply
-        LCModbusMasterBase::writeMultipleCoils(quint8 _devId, quint16 _addr,
+LQModbusMasterBase::SReply
+        LQModbusMasterBase::writeMultipleCoils(quint8 _devId, quint16 _addr,
                                                         quint16 _size, const quint8 _bits[])
 {
     if((_size > MODBUS_MAX_READ_COIL_COUNT)||
@@ -586,7 +586,7 @@ LCModbusMasterBase::SReply
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-LCModbusMasterBase::SReply LCModbusMasterBase::readDiscreteInputs(quint8 _devId, quint16 _startAddr,
+LQModbusMasterBase::SReply LQModbusMasterBase::readDiscreteInputs(quint8 _devId, quint16 _startAddr,
                                                             quint16 _inputsQuant, quint8 _bits[])
 {
     if((_inputsQuant > MODBUS_MAX_READ_COIL_COUNT)||
@@ -610,14 +610,14 @@ LCModbusMasterBase::SReply LCModbusMasterBase::readDiscreteInputs(quint8 _devId,
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-void LCModbusMasterBase::connectRequest()
+void LQModbusMasterBase::connectRequest()
 {
     QCoreApplication::postEvent(this, new CQEventConnectRequest);
 }
 
 
 //-----------------------------------------------------------------------------------------------------------customEvent
-void LCModbusMasterBase::customEvent(QEvent* _event)
+void LQModbusMasterBase::customEvent(QEvent* _event)
 {
     //Внимание!!!
     //Необходимо для синхронизации с началом ожидания вызывающего потока.

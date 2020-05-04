@@ -6,9 +6,9 @@
 #include "lqextendevent.h"
 #include "lcstringdataformatterbase.h"
 
-#include "LCRemoteDataReaderInterface.h"
-#include "LCRemoteDataReadListenerInterface.h"
-#include "LCRemoteDataSourceInterface.h"
+#include "LIRemoteDataReader.h"
+#include "LIRemoteDataReadListener.h"
+#include "LIRemoteDataSource.h"
 
 
 namespace remgui
@@ -18,18 +18,18 @@ class LCQRemLabel : public QLabel
     Q_OBJECT
 private:
 
-    class CReadListener : public LCRemoteDataReadListenerInterface
+    class CReadListener : public LIRemoteDataReadListener
     {
     private:
         LCQRemLabel& mLabel;
     public:
         CReadListener(LCQRemLabel& _label);
         virtual ~CReadListener(){}
-        virtual void dataIsRead(QSharedPointer<QByteArray> _data, ERemoteDataStatus status) override;
+        virtual void dataIsRead(QSharedPointer<QByteArray> _data, LERemoteDataStatus status) override;
     };
 
     QString mDataName;
-    QSharedPointer<LCRemoteDataReaderInterface>  mDataReader;
+    QSharedPointer<LIRemoteDataReader>  mDataReader;
     QSharedPointer<LCStringDataFormatterBase> mFormatter;
     QSharedPointer<CReadListener> mDataListener;
 
@@ -39,7 +39,7 @@ public:
     explicit LCQRemLabel(QString _text, QWidget* _parent = nullptr);
 
     explicit LCQRemLabel(   const QString&                                  _dataName,
-                            QSharedPointer<LCRemoteDataSourceInterface>     _dataSource,
+                            QSharedPointer<LIRemoteDataSource>     _dataSource,
                             QSharedPointer<LCStringDataFormatterBase>             _formatter,
                             QWidget* _parent = nullptr);
     virtual ~LCQRemLabel();

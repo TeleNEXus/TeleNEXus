@@ -1,7 +1,8 @@
-#ifndef LCQMODBUSMASTERTCP2_H
-#define LCQMODBUSMASTERTCP2_H
+#ifndef LQMODBUSMASTERTCP_H
+#define LQMODBUSMASTERTCP_H
 
-#include "lcmodbusmasterbase.h"
+#include "lqmodbusmasterbase.h"
+
 #include <QModbusTcpClient>
 #include <QUrl>
 
@@ -9,7 +10,7 @@ class QThread;
 
 namespace modbus {
 
-class LCQModbusMasterTcp : public LCModbusMasterBase
+class LQModbusMasterTcp : public LQModbusMasterBase
 {
 private:
     quint16             mPort;
@@ -18,14 +19,14 @@ private:
     QThread*            mpThread;
 
 private:
-    LCQModbusMasterTcp() = delete;
-    LCQModbusMasterTcp(const LCQModbusMasterTcp&) = delete;
-    LCQModbusMasterTcp& operator=(const LCQModbusMasterTcp&) = delete;
-    explicit LCQModbusMasterTcp(QObject *_parent = nullptr);
-    virtual ~LCQModbusMasterTcp();
+    LQModbusMasterTcp() = delete;
+    LQModbusMasterTcp(const LQModbusMasterTcp&) = delete;
+    LQModbusMasterTcp& operator=(const LQModbusMasterTcp&) = delete;
+    explicit LQModbusMasterTcp(QObject *_parent = nullptr);
+    virtual ~LQModbusMasterTcp();
 
 public:
-    static QSharedPointer<LCQModbusMasterTcp> create();
+    static QSharedPointer<LQModbusMasterTcp> create();
 
 public slots:
     void connectToHost(const QUrl& _url);
@@ -39,4 +40,4 @@ private:
 
 }//namespace
 
-#endif // LCQMODBUSMASTERTCP2_H
+#endif // LQMODBUSMASTERTCP_H

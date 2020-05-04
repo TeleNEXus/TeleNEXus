@@ -9,11 +9,11 @@ LCQRemLineEdit::CReadListener::CReadListener(LCQRemLineEdit& _lineEdit) : mLineE
 
 }
 
-void LCQRemLineEdit::CReadListener::dataIsRead(QSharedPointer<QByteArray> _data, ERemoteDataStatus _status)
+void LCQRemLineEdit::CReadListener::dataIsRead(QSharedPointer<QByteArray> _data, LERemoteDataStatus _status)
 {
     if(mFlagActive)
     {
-        if(_status != ERemoteDataStatus::DS_OK)
+        if(_status != LERemoteDataStatus::DS_OK)
         {
             mLineEdit.setText(mLineEdit.mFormatter.data()->undefStateString());
             return;
@@ -29,14 +29,14 @@ LCQRemLineEdit::CWriteListener::CWriteListener(LCQRemLineEdit& _lineEdit) : mLin
 
 }
 
-void LCQRemLineEdit::CWriteListener::dataIsWrite(ERemoteDataStatus _status)
+void LCQRemLineEdit::CWriteListener::dataIsWrite(LERemoteDataStatus _status)
 {
     Q_UNUSED(_status);
 }
 
 //======================================================================================================================
 LCQRemLineEdit::LCQRemLineEdit(const QString& _dataName,
-                               QSharedPointer<LCRemoteDataSourceInterface> _dataSource,
+                               QSharedPointer<LIRemoteDataSource> _dataSource,
                                QSharedPointer<LCStringDataFormatterBase> _formatter,
                                QWidget* _parent) :  QLineEdit(_parent),
                                                     mFormatter(_formatter)
@@ -61,7 +61,7 @@ LCQRemLineEdit::LCQRemLineEdit(const QString& _dataName,
 //----------------------------------------------------------------------------------------------------------------------
 LCQRemLineEdit::LCQRemLineEdit(const QString& _dataNameRead,
                                const QString& _dataNameWrite,
-                               QSharedPointer<LCRemoteDataSourceInterface> _dataSource,
+                               QSharedPointer<LIRemoteDataSource> _dataSource,
                                QSharedPointer<LCStringDataFormatterBase> _formatter,
                                QWidget* _parent) :  QLineEdit(_parent),
                                                     mFormatter(_formatter)
