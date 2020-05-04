@@ -1,5 +1,5 @@
 #include "lcqmodbusdatareader.h"
-#include "LCRemoteDataReadListnerInterface.h"
+#include "LCRemoteDataReadListenerInterface.h"
 #include "lcqmodbusdatasource.h"
 
 #include <QDebug>
@@ -50,9 +50,9 @@ void LCQModbusDataReader::setDataName(const QString& _dataName)
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-void LCQModbusDataReader::setDataReadListener(QWeakPointer<LCRemoteDataReadListnerInterface> _listener)
+void LCQModbusDataReader::setDataReadListener(QWeakPointer<LCRemoteDataReadListenerInterface> _listener)
 {
-    QSharedPointer<LCRemoteDataReadListnerInterface> sp = _listener.lock();
+    QSharedPointer<LCRemoteDataReadListenerInterface> sp = _listener.lock();
     if(!sp.isNull()) mpReadListener = sp;
 }
 
@@ -104,7 +104,7 @@ void LCQModbusDataReader::customEvent(QEvent* _event)
 
     if(e == nullptr) return;
 
-    QSharedPointer<LCRemoteDataReadListnerInterface> listener = mpReadListener.lock();
+    QSharedPointer<LCRemoteDataReadListenerInterface> listener = mpReadListener.lock();
     if(!listener.isNull())
     {
         listener->dataIsRead(e->mData, e->mStatus);

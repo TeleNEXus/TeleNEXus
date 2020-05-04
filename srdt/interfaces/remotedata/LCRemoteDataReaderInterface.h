@@ -4,7 +4,7 @@
 #include <QWeakPointer>
 
 class LCRemoteDataSourceInterface;
-class LCRemoteDataReadListnerInterface;
+class LCRemoteDataReadListenerInterface;
 
 class LCRemoteDataReaderInterface
 {
@@ -13,7 +13,7 @@ public:
     ~LCRemoteDataReaderInterface(){}
     virtual void setDataName(const QString& _dataName) = 0;
     virtual void setDataSource(QWeakPointer<LCRemoteDataSourceInterface> _source) = 0;
-    virtual void setDataReadListener(QWeakPointer<LCRemoteDataReadListnerInterface> _listener) = 0;
+    virtual void setDataReadListener(QWeakPointer<LCRemoteDataReadListenerInterface> _listener) = 0;
     virtual void readRequest() = 0;
     virtual void connectToSource() = 0;
     virtual void disconnectFromSource() = 0;

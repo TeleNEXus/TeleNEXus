@@ -15,8 +15,6 @@
 #include <functional>
 #include <QMap>
 
-using namespace remgui;
-
 static QSharedPointer<LCStringDataFormatterBase> __formatterHex;
 static QSharedPointer<LCStringDataFormatterBase> __formatterBool;
 static QSharedPointer<LCStringDataFormatterBase> __formatterUint8;
@@ -74,6 +72,7 @@ LCXmlStdDataFormatterFactory& LCXmlStdDataFormatterFactory::instance()
     return ins;
 }
 
+//----------------------------------------------------------------------------------------------------------------------
 QSharedPointer<LCStringDataFormatter> LCXmlStdDataFormatterFactory::createStringFormatter(const QDomNamedNodeMap& _attr)
 {
     QDomNode node = _attr.namedItem("format");

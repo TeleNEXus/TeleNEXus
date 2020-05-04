@@ -7,7 +7,7 @@
 #include "lcstringdataformatterbase.h"
 #include "LCRemoteDataReaderInterface.h"
 #include "LCRemoteDataWriterInterface.h"
-#include "LCRemoteDataReadListnerInterface.h"
+#include "LCRemoteDataReadListenerInterface.h"
 #include "LCRemoteDataWriteListnerInterface.h"
 #include "LCRemoteDataSourceInterface.h"
 
@@ -20,7 +20,7 @@ class LCQRemLineEdit : public QLineEdit
 
 private:
 
-    class CReadListener : public LCRemoteDataReadListnerInterface
+    class CReadListener : public LCRemoteDataReadListenerInterface
     {
     private:
         LCQRemLineEdit& mLineEdit;

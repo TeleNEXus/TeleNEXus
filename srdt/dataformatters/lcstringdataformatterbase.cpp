@@ -25,10 +25,7 @@ void LCStringDataFormatterBase::setFillCharUndefDef(QChar _c, quint8 _length)
     msFillCharUndefDefLength = _length;
 }
 
-void LCStringDataFormatterBase::setFillCharUndefDef(QChar _c)
-{
-    msFillCharUndefDef = _c;
-}
+
 
 void LCStringDataFormatterBase::setFillCharWrongDef(QChar _c, quint8 _length)
 {
@@ -36,10 +33,7 @@ void LCStringDataFormatterBase::setFillCharWrongDef(QChar _c, quint8 _length)
     msFillCharUndefDefLength = _length;
 }
 
-void LCStringDataFormatterBase::setFillCharWrongDef(QChar _c)
-{
-    msFillCharWrongDef = _c;
-}
+
 
 LCStringDataFormatterBase::LCStringDataFormatterBase()
 {

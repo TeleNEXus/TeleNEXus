@@ -3,10 +3,10 @@
 
 #include "LCRemoteDataSourceInterface.h"
 
-class LCRemoteDataReadListnerInterface
+class LCRemoteDataReadListenerInterface
 {
 public:
-    LCRemoteDataReadListnerInterface(){}
+    LCRemoteDataReadListenerInterface(){}
     virtual void dataIsRead(QSharedPointer<QByteArray> _data, ERemoteDataStatus status) = 0;
 };
 
