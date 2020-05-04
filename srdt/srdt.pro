@@ -23,7 +23,8 @@ INCLUDEPATH +=                  \
         modbus/                 \
         remgui/                 \
         xml/                    \
-        remotedatainterface/    \
+        interfaces/remotedata   \
+        interfaces/xmlcreators  \
         common/                 \
         dataformatters/         \
 
@@ -68,6 +69,8 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 HEADERS += \
+    interfaces/LCApplicationInterface.h \
+    interfaces/xmlcreators/LCXmlRemoteDataSourceCreatorInterface.h \
     lctestdllclass.h    \
     testdllinterface.h  \
     common/lcqu32validator.h \
@@ -94,11 +97,11 @@ HEADERS += \
     remgui/lcqremlabel.h \
     remgui/lcqremlineedit.h \
     remgui/lremgui.h \
-    remotedatainterface/LCRemoteDataReadListnerInterface.h \
-    remotedatainterface/LCRemoteDataReaderInterface.h \
-    remotedatainterface/LCRemoteDataSourceInterface.h \
-    remotedatainterface/LCRemoteDataWriteListnerInterface.h \
-    remotedatainterface/LCRemoteDataWriterInterface.h \
+    interfaces/remotedata/LCRemoteDataReaderInterface.h \
+    interfaces/remotedata/LCRemoteDataSourceInterface.h \
+    interfaces/remotedata/LCRemoteDataWriteListnerInterface.h \
+    interfaces/remotedata/LCRemoteDataWriterInterface.h \
+    interfaces/remotedata/LCRemoteDataReadListenerInterface.h \
     xml/LCXmlStdDataFormatterFactoryInterface.h \
     xml/LCXmlWidgetCreatorsMapInterface.h \
     xml/lcxmlapplication.h \

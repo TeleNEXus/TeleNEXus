@@ -25,7 +25,7 @@ private:
 
     QString mDataName;
     QWeakPointer<LCRemoteDataSourceInterface> mDataSource;
-    QWeakPointer<LCRemoteDataReadListnerInterface> mpReadListener;
+    QWeakPointer<LCRemoteDataReadListenerInterface> mpReadListener;
 
 public:
 
@@ -33,7 +33,7 @@ public:
     virtual ~LCQModbusDataReader();
     virtual void setDataName(const QString& _dataName) override;
     virtual void setDataSource(QWeakPointer<LCRemoteDataSourceInterface> _source) override;
-    virtual void setDataReadListener(QWeakPointer<LCRemoteDataReadListnerInterface> _listener) override;
+    virtual void setDataReadListener(QWeakPointer<LCRemoteDataReadListenerInterface> _listener) override;
     virtual void readRequest() override;
     virtual void connectToSource() override;
     virtual void disconnectFromSource() override;

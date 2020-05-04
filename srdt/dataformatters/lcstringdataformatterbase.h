@@ -4,10 +4,11 @@
 #include <QString>
 #include <QByteArray>
 #include <QValidator>
-#include "lremgui.h"
+
+#include "LCStringDataFormatterInterface.h"
 
 
-class LCStringDataFormatterBase
+class LCStringDataFormatterBase : public LCStringDataFormatterInterface
 {
 protected:
     static QChar  msFillCharUndefDef;         //Символы заполнения при неопределенных данных.
@@ -17,23 +18,13 @@ protected:
 public:
     LCStringDataFormatterBase();
     virtual ~LCStringDataFormatterBase();
-    virtual QString toString(const QByteArray& _data) = 0;
-    virtual QByteArray toBytes(const QString& _str) = 0;
-    virtual QString undefStateString()=0;
-    virtual QValidator* validator() = 0;
 
-public:
-
-    static QString getUndefStateString(int _fieldWidth = msFillCharUndefDefLength,
-                                        QChar _charUndef = msFillCharUndefDef);
-
-    static QString getWrongStateString(int _fieldWidth = msFillCharWrongDefLength,
-                                        QChar _charWrong = msFillCharWrongDef);
-public:
-    static void setFillCharUndefDef(QChar _c, quint8 _length);
-    static void setFillCharUndefDef(QChar _c);
-    static void setFillCharWrongDef(QChar _c, quint8 _length);
-    static void setFillCharWrongDef(QChar _c);
+    virtual QString getUndefStateString(int _fieldWidth = msFillCharUndefDefLength,
+                                        QChar _charUndef = msFillCharUndefDef) override;
+    virtual QString getWrongStateString(int _fieldWidth = msFillCharWrongDefLength,
+                                        QChar _charWrong = msFillCharWrongDef) override;
+    virtual void setFillCharUndefDef(QChar _c, quint8 _length) override;
+    virtual void setFillCharWrongDef(QChar _c, quint8 _length) override;
 };
 
 
