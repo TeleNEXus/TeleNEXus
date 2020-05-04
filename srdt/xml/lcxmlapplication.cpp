@@ -161,16 +161,14 @@ int LCXmlApplication::exec(int argc, char *argv[])
         return -1;
     }
 
-    QString sourcesFile = modbusSourcesNodes.at(0).toElement().attribute(__appXmlCommotTagsAttr.file);
-
-    if(sourcesFile.isNull())
+    if(!modbusSourcesNodes.at(0).isElement())
     {
         qDebug() << "Application: no modbus sources file attribute";
         qDebug() << "Exit programm";
         return -1;
     }
 
-    LTDataSources smap = LCXmlModbusSources().create(sourcesFile);
+    LTDataSources smap = LCXmlModbusSources().create(modbusSourcesNodes.at(0).toElement());
 
     if(smap.isEmpty())
     {

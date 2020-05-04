@@ -5,7 +5,7 @@
 #include <QSharedPointer>
 #include "LCRemoteDataSourceInterface.h"
 
-#include "xmldatasources/lcxmlremotedatasourcecreatebase.h"
+#include "LCXmlRemoteDataSourceCreatorInterface.h"
 
 class LCXmlRemoteDataSourceMap
 {

@@ -32,11 +32,15 @@ static void createSources(const QDomNodeList& nodes,
                           LTDataSources& _sourcesmap);
 
 //----------------------------------------------------------------------------------------------------------------------
-LTDataSources LCXmlModbusSources::create(const QString& _xmlfilename)
+LTDataSources LCXmlModbusSources::create(const QDomElement &_element)
 {
     LTDataSources map;
+    QFile file;
+    QString xmlfilename = _element.attribute("file");
 
-    QFile file(LCXmlApplication::instance().getXmlMainFileWay() + _xmlfilename);
+    if(xmlfilename.isNull()) return map;
+
+    file.setFileName(LCXmlApplication::instance().getXmlMainFileWay() + xmlfilename);
 
     QDomDocument domDoc;
     QString errorStr;
