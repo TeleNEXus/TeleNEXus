@@ -20,17 +20,24 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 INCLUDEPATH +=                  \
-        modbus/                 \
+        ../common/interfaces/remotedata     \
+        ../common/interfaces/xmlcreators    \
+        ../common/                          \
+        ../modbussource/                    \
+                                            \
         remgui/                 \
         xml/                    \
-        ../common/interfaces/remotedata   \
-        ../common/interfaces/xmlcreators  \
-        ../common/                 \
         dataformatters/         \
 
 
 SOURCES += \
         ../common/lqvalidatoru32.cpp \
+        ../modbussource/lqmodbusdatareader.cpp \
+        ../modbussource/lqmodbusdatasource.cpp \
+        ../modbussource/lqmodbusdatawriter.cpp \
+        ../modbussource/lqmodbusmasterbase.cpp \
+        ../modbussource/lqmodbusmasterrtu.cpp \
+        ../modbussource/lqmodbusmastertcp.cpp \
         lctestdllclass.cpp \
         dataformatters/lcstringdataformatterbase.cpp \
         dataformatters/lcstringdataformatterbool.cpp \
@@ -43,12 +50,6 @@ SOURCES += \
         dataformatters/lcstringdataformatteru16.cpp \
         dataformatters/lcstringdataformatteru32.cpp \
         dataformatters/lcstringdataformatteru8.cpp \
-        modbus/lqmodbusdatareader.cpp \
-        modbus/lqmodbusdatasource.cpp \
-        modbus/lqmodbusdatawriter.cpp \
-        modbus/lqmodbusmasterbase.cpp \
-        modbus/lqmodbusmasterrtu.cpp \
-        modbus/lqmodbusmastertcp.cpp \
         remgui/lcqremlabel.cpp \
         remgui/lcqremlineedit.cpp\
         main.cpp \
@@ -77,13 +78,13 @@ HEADERS += \
     ../common/interfaces/remotedata/LIRemoteDataWriter.h \
     ../common/interfaces/xmlcreators/LIXmlRemoteDataSourceCreator.h \
     ../common/lqvalidatoru32.h \
+    ../modbussource/lqmodbusdatareader.h \
+    ../modbussource/lqmodbusdatasource.h \
+    ../modbussource/lqmodbusdatawriter.h \
+    ../modbussource/lqmodbusmasterbase.h \
+    ../modbussource/lqmodbusmasterrtu.h \
+    ../modbussource/lqmodbusmastertcp.h \
     lctestdllclass.h    \
-    modbus/lqmodbusdatareader.h \
-    modbus/lqmodbusdatasource.h \
-    modbus/lqmodbusdatawriter.h \
-    modbus/lqmodbusmasterbase.h \
-    modbus/lqmodbusmasterrtu.h \
-    modbus/lqmodbusmastertcp.h \
     testdllinterface.h  \
     ../common/lqextendevent.h \
     dataformatters/LCStringDataFormatterInterface.h \
@@ -98,7 +99,7 @@ HEADERS += \
     dataformatters/lcstringdataformatteru16.h \
     dataformatters/lcstringdataformatteru32.h \
     dataformatters/lcstringdataformatteru8.h \
-    modbus/lmodbusdefs.h \
+    ../modbussource/lmodbusdefs.h \
     remgui/lcqremlabel.h \
     remgui/lcqremlineedit.h \
     remgui/lremgui.h \
