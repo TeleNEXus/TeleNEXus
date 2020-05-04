@@ -1,13 +1,13 @@
 #ifndef LCXMLMODEBUSSOURCES_H
 #define LCXMLMODEBUSSOURCES_H
 
-#include "lcxmlremotedatasourcecreatebase.h"
+#include "LCXmlRemoteDataSourceCreatorInterface.h"
 
-class LCXmlModbusSources : public LCXmlRemoteDataSourceCreateBase
+class LCXmlModbusSources : public LCXmlRemoteDataSourceCreatorInterface
 {
 public:
     LCXmlModbusSources();
-    virtual LTDataSources create(const QString &_xmlfilename) override;
+    virtual LTDataSources create(const QDomElement &_element) override;
 private:
 };
 

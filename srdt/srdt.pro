@@ -111,7 +111,6 @@ HEADERS += \
     xml/lcxmlwidgetcreatorinterface.h \
     xml/lcxmlwidgetcreatorsmap.h \
     xmldatasources/lcxmlmodbussources.h \
-    xmldatasources/lcxmlremotedatasourcecreatebase.h \
     xmlwidgets/lcxmllabel.h \
     xmlwidgets/lcxmlremlabel.h \
     xmlwidgets/lcxmlremlineedit.h \
