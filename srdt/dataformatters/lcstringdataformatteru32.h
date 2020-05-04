@@ -2,14 +2,14 @@
 #define LCSTRINGDATAFORMATTERUINT32_H
 
 #include "lcstringdataformatterintbase.h"
-#include "lcqu32validator.h"
+#include "lqvalidatoru32.h"
 
 
 class LCStringDataFormatterU32 : public LCStringDataFormatterIntBase
 {
 private:
 
-    LCQValidatorU32 mValidator;   //Контроллер диапазона ввода.
+    LQValidatorU32 mValidator;   //Контроллер диапазона ввода.
 
 public:
     explicit LCStringDataFormatterU32( int     _fieldWidth     = 0,

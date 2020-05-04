@@ -1,17 +1,17 @@
-﻿#include "lcqu32validator.h"
+﻿#include "lqvalidatoru32.h"
 
-LCQValidatorU32::LCQValidatorU32(QObject *parent) : QValidator(parent)
+LQValidatorU32::LQValidatorU32(QObject *parent) : QValidator(parent)
 {
     mMin = 0;
     mMax = std::numeric_limits<MTUint32>::max();
 }
 
-LCQValidatorU32::~LCQValidatorU32()
+LQValidatorU32::~LQValidatorU32()
 {
 
 }
 
-LCQValidatorU32::State LCQValidatorU32::validate(QString &input, int &pos) const
+LQValidatorU32::State LQValidatorU32::validate(QString &input, int &pos) const
 {
     Q_UNUSED(pos);
     if(input.isEmpty()) return State::Intermediate;
@@ -21,7 +21,7 @@ LCQValidatorU32::State LCQValidatorU32::validate(QString &input, int &pos) const
     return ((res <= mMax) && (res >= mMin)) ? (State::Acceptable) : (State::Invalid);
 }
 
-void LCQValidatorU32::setRange(MTUint32 _min, MTUint32 _max)
+void LQValidatorU32::setRange(MTUint32 _min, MTUint32 _max)
 {
     mMin = _min;
     mMax = _max;

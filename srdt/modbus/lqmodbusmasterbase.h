@@ -1,5 +1,5 @@
-#ifndef LCMODBUSMASTERBASE_H
-#define LCMODBUSMASTERBASE_H
+#ifndef LQMODBUSMASTERBASE_H
+#define LQMODBUSMASTERBASE_H
 
 #include <QModbusClient>
 #include <QMutex>
@@ -9,7 +9,7 @@
 namespace modbus
 {
 
-class LCModbusMasterBase : public QObject
+class LQModbusMasterBase : public QObject
 {
     Q_OBJECT
 public:
@@ -42,8 +42,8 @@ private:
     QTimer          *mpTimer;
 
 public:
-    explicit LCModbusMasterBase(QObject* _parent = nullptr);
-    virtual ~LCModbusMasterBase();
+    explicit LQModbusMasterBase(QObject* _parent = nullptr);
+    virtual ~LQModbusMasterBase();
 
     virtual SReply readInputRegisters(quint8 _devId,
                                                   quint16 _addr, quint16 _regQuant, quint16 _regs[]) final;
@@ -75,4 +75,4 @@ private:
 
 }// namespace modbus
 
-#endif // LCMODBUSMASTERBASE_H
+#endif // LQMODBUSMASTERBASE_H

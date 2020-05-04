@@ -13,10 +13,10 @@ LCQRemLabel::CReadListener::CReadListener(LCQRemLabel& _label) : mLabel(_label)
 
 }
 
-void LCQRemLabel::CReadListener::dataIsRead(QSharedPointer<QByteArray> _data, ERemoteDataStatus _status)
+void LCQRemLabel::CReadListener::dataIsRead(QSharedPointer<QByteArray> _data, LERemoteDataStatus _status)
 {
     qDebug() << "Data is read";
-    if(_status != ERemoteDataStatus::DS_OK)
+    if(_status != LERemoteDataStatus::DS_OK)
     {
         mLabel.setText(mLabel.mFormatter.data()->undefStateString());
         return;
@@ -36,7 +36,7 @@ LCQRemLabel::LCQRemLabel(QString _text, QWidget* _parent) : QLabel(_text, _paren
 }
 
 LCQRemLabel::LCQRemLabel(const QString& _dataName,
-                         QSharedPointer<LCRemoteDataSourceInterface> _dataSource,
+                         QSharedPointer<LIRemoteDataSource> _dataSource,
                          QSharedPointer<LCStringDataFormatterBase> _formatter,
                          QWidget* _parent) :    QLabel(_parent),
                                                 mDataName(_dataName),

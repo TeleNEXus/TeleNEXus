@@ -1,9 +1,9 @@
-﻿#ifndef LCQUINT32VALIDATOR_H
-#define LCQUINT32VALIDATOR_H
+﻿#ifndef LQVALIDATORU32_H
+#define LQVALIDATORU32_H
 
 #include <QValidator>
 
-class LCQValidatorU32 : public QValidator
+class LQValidatorU32 : public QValidator
 {
     Q_OBJECT
 
@@ -11,11 +11,11 @@ class LCQValidatorU32 : public QValidator
     MTUint32 mMin;
     MTUint32 mMax;
 public:
-    explicit LCQValidatorU32(QObject *parent = nullptr);
-    virtual ~LCQValidatorU32();
+    explicit LQValidatorU32(QObject *parent = nullptr);
+    virtual ~LQValidatorU32();
     virtual QValidator::State validate(QString &input, int &pos) const override;
     void setRange(MTUint32 _min, MTUint32 _max);
 
 };
 
-#endif // LCQUINT32VALIDATOR_H
+#endif // LQVALIDATORU32_H

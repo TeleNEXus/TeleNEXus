@@ -1,7 +1,7 @@
-#ifndef LCQMODBUSMASTERRTU_H
-#define LCQMODBUSMASTERRTU_H
+#ifndef LQMODBUSMASTERRTU_H
+#define LQMODBUSMASTERRTU_H
 
-#include "lcmodbusmasterbase.h"
+#include "lqmodbusmasterbase.h"
 #include <QModbusRtuSerialMaster>
 #include <QSerialPort>
 
@@ -9,7 +9,7 @@ class QThread;
 
 namespace modbus {
 
-class LCQModbusMasterRtu : public LCModbusMasterBase
+class LQModbusMasterRtu : public LQModbusMasterBase
 {
     Q_OBJECT
 
@@ -24,14 +24,14 @@ private:
     QThread* mpThread;
 
 private:
-    LCQModbusMasterRtu() = delete;
-    LCQModbusMasterRtu(const LCQModbusMasterRtu&) = delete;
-    LCQModbusMasterRtu& operator=(const LCQModbusMasterRtu&) = delete;
-    explicit LCQModbusMasterRtu(QObject* _parent = nullptr);
-    virtual ~LCQModbusMasterRtu();
+    LQModbusMasterRtu() = delete;
+    LQModbusMasterRtu(const LQModbusMasterRtu&) = delete;
+    LQModbusMasterRtu& operator=(const LQModbusMasterRtu&) = delete;
+    explicit LQModbusMasterRtu(QObject* _parent = nullptr);
+    virtual ~LQModbusMasterRtu();
 
 public:
-    static QSharedPointer<LCQModbusMasterRtu> create();
+    static QSharedPointer<LQModbusMasterRtu> create();
 
 public slots:
     void connectToPort( QString                 _portName,
@@ -48,4 +48,4 @@ protected:
 };
 
 }//namespace
-#endif // LCQMODBUSMASTERRTU_H
+#endif // LQMODBUSMASTERRTU_H

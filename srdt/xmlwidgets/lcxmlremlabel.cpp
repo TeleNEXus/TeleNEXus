@@ -32,7 +32,7 @@ QWidget* LCXmlRemLabel::create(const QDomElement& _element)
 
     QString data;
     QString attr = _element.attribute(__attrNames.source);
-    QSharedPointer<LCRemoteDataSourceInterface> source;
+    QSharedPointer<LIRemoteDataSource> source;
     QSharedPointer<LCStringDataFormatterBase> format;
 
     if(attr.isNull())

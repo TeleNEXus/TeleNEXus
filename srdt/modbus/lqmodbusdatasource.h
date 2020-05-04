@@ -1,5 +1,5 @@
-﻿#ifndef LCQMODBUSDATASOURCE_H
-#define LCQMODBUSDATASOURCE_H
+﻿#ifndef LQMODBUSDATASOURCE_H
+#define LQMODBUSDATASOURCE_H
 
 #include <QThread>
 #include <QList>
@@ -8,14 +8,14 @@
 #include <QTimerEvent>
 
 #include "lqextendevent.h"
-#include "lcmodbusmasterbase.h"
-#include "LCRemoteDataSourceInterface.h"
+#include "lqmodbusmasterbase.h"
+#include "LIRemoteDataSource.h"
 
 namespace modbus
 {
 
 //===============================================================================================LCQModbusDataController
-class LCQModbusDataSource : public QObject, public LCRemoteDataSourceInterface
+class LQModbusDataSource : public QObject, public LIRemoteDataSource
 {
     Q_OBJECT
 
@@ -26,7 +26,7 @@ private:
         __LQ_EXTENDED_QEVENT_DECLARATION
     public:
         CQEventBase();
-        virtual void handle(LCQModbusDataSource* _base) = 0;
+        virtual void handle(LQModbusDataSource* _base) = 0;
     };
 
     //------------------------------------------------------------------------------------------------------CQEventStart
@@ -36,7 +36,7 @@ private:
         int mUpdateInterval;
     public:
         CQEventStart(int _updateInterval);
-        virtual void handle(LCQModbusDataSource* _base) override;
+        virtual void handle(LQModbusDataSource* _base) override;
     };
 
     //-------------------------------------------------------------------------------------------------------CQEventStop
@@ -44,7 +44,7 @@ private:
     {
     public:
         CQEventStop();
-        virtual void handle(LCQModbusDataSource* _base) override;
+        virtual void handle(LQModbusDataSource* _base) override;
     };
 
     //----------------------------------------------------------------------------------------------------CQEventReqRead
@@ -55,7 +55,7 @@ private:
         QObject*  mpReader;
     public:
         CQEventReqRead(const QString& _dataName, QObject* _reader);
-        virtual void handle(LCQModbusDataSource* _base) override;
+        virtual void handle(LQModbusDataSource* _base) override;
     };
 
     //---------------------------------------------------------------------------------------------------CQEventReqWrite
@@ -67,7 +67,7 @@ private:
         QObject*    mpWriter;
     public:
         CQEventReqWrite(const QString& _dataName, const QByteArray& _data, QObject* _writer);
-        virtual void handle(LCQModbusDataSource* _base) override;
+        virtual void handle(LQModbusDataSource* _base) override;
     };
 
     //-------------------------------------------------------------------------------------------CQEventReqConnectReader
@@ -78,7 +78,7 @@ private:
         QObject* mpReader;
     public:
         CQEventReqConnectReader(const QString& _dataName, QObject* _reader);
-        virtual void handle(LCQModbusDataSource* _base) override;
+        virtual void handle(LQModbusDataSource* _base) override;
     };
 
     //----------------------------------------------------------------------------------------CQEventReqDisconnectReader
@@ -88,7 +88,7 @@ private:
         QObject* mpReader;
     public:
         CQEventReqDisconnectReader(QObject* _reader);
-        virtual void handle(LCQModbusDataSource* _base) override;
+        virtual void handle(LQModbusDataSource* _base) override;
     };
 
     //------------------------------------------------------------------------------------------CControllerRegistersBase
@@ -100,7 +100,7 @@ private:
         public:
             quint16 mAddr;
             quint16 mSize;
-            ERemoteDataStatus mStatus;
+            LERemoteDataStatus mStatus;
             quint16 *mpData;
             QLinkedList<QObject*> mReadersList;
         public:
@@ -108,7 +108,7 @@ private:
 
             explicit CDataItem(quint16 _addr, quint16 _size) :  mAddr(_addr),
                                                                 mSize(_size),
-                                                                mStatus(ERemoteDataStatus::DS_UNDEF)
+                                                                mStatus(LERemoteDataStatus::DS_UNDEF)
             {
                 mpData = new quint16[_size];
             }
@@ -119,11 +119,11 @@ private:
         const quint8& mDevId;
     private:
         quint16* mRegBuff;
-        QSharedPointer<LCModbusMasterBase> mwpMaster;
+        QSharedPointer<LQModbusMasterBase> mwpMaster;
         QLinkedList<CDataItem*> mReadDataList;
 
     public:
-        CControllerRegistersBase(const quint8& _devId, QSharedPointer<LCModbusMasterBase> _master);
+        CControllerRegistersBase(const quint8& _devId, QSharedPointer<LQModbusMasterBase> _master);
         ~CControllerRegistersBase();
         void addReadDataItem(CDataItem* _dataItem);
         void deleteReadDataItem(CDataItem* _dataItem);
@@ -131,9 +131,9 @@ private:
         void write(quint16 _addr, quint16 _size, const QByteArray& _data, QObject* _writer);
         void update();
     protected:
-        virtual LCModbusMasterBase::SReply readRegs(LCModbusMasterBase* master,
+        virtual LQModbusMasterBase::SReply readRegs(LQModbusMasterBase* master,
                                                         quint16 _addr, quint16 _size, quint16 _regs[]) = 0;
-        virtual LCModbusMasterBase::SReply writeRegs(LCModbusMasterBase* master,
+        virtual LQModbusMasterBase::SReply writeRegs(LQModbusMasterBase* master,
                                                         quint16 _addr, quint16 _size, quint16 _regs[]) = 0;
     };
 
@@ -143,11 +143,11 @@ private:
     public:
 
     public:
-        CControllerHoldingRegisters(const quint8& _devId, QSharedPointer<LCModbusMasterBase> _master);
+        CControllerHoldingRegisters(const quint8& _devId, QSharedPointer<LQModbusMasterBase> _master);
         ~CControllerHoldingRegisters();
-        virtual LCModbusMasterBase::SReply readRegs(LCModbusMasterBase* master,
+        virtual LQModbusMasterBase::SReply readRegs(LQModbusMasterBase* master,
                                                         quint16 _addr, quint16 _size, quint16 _regs[]) override;
-        virtual LCModbusMasterBase::SReply writeRegs(LCModbusMasterBase* master,
+        virtual LQModbusMasterBase::SReply writeRegs(LQModbusMasterBase* master,
                                                         quint16 _addr, quint16 _size, quint16 _regs[]) override;
     };
 
@@ -157,11 +157,11 @@ private:
     public:
 
     public:
-        CControllerInputRegisters(const quint8& _devId, QWeakPointer<LCModbusMasterBase> _master);
+        CControllerInputRegisters(const quint8& _devId, QWeakPointer<LQModbusMasterBase> _master);
         ~CControllerInputRegisters();
-        virtual LCModbusMasterBase::SReply readRegs(LCModbusMasterBase* master,
+        virtual LQModbusMasterBase::SReply readRegs(LQModbusMasterBase* master,
                                                         quint16 _addr, quint16 _size, quint16 _regs[]) override;
-        virtual LCModbusMasterBase::SReply writeRegs(LCModbusMasterBase* master,
+        virtual LQModbusMasterBase::SReply writeRegs(LQModbusMasterBase* master,
                                                         quint16 _addr, quint16 _size, quint16 _regs[]) override;
     };
 
@@ -184,7 +184,7 @@ private:
         public:
             quint16 mAddr;
             quint16 mSize;
-            ERemoteDataStatus mStatus;
+            LERemoteDataStatus mStatus;
             quint8 *mpData;
             QLinkedList<QObject*> mReadersList;
         public:
@@ -192,7 +192,7 @@ private:
 
             explicit CDataItem(quint16 _addr, quint16 _size) :  mAddr(_addr),
                                                                 mSize(_size),
-                                                                mStatus(ERemoteDataStatus::DS_UNDEF)
+                                                                mStatus(LERemoteDataStatus::DS_UNDEF)
             {
                 mpData = new quint8[_size];
             }
@@ -203,11 +203,11 @@ private:
         const quint8& mDevId;
     private:
         quint8* mBitsBuff;
-        QWeakPointer<LCModbusMasterBase> mwpMaster;
+        QWeakPointer<LQModbusMasterBase> mwpMaster;
         QLinkedList<CDataItem*> mReadDataList;
 
     public:
-        CControllerBitsBase(const quint8& _devId, QWeakPointer<LCModbusMasterBase> _master);
+        CControllerBitsBase(const quint8& _devId, QWeakPointer<LQModbusMasterBase> _master);
         ~CControllerBitsBase();
         void addReadDataItem(CDataItem* _dataItem);
         void deleteReadDataItem(CDataItem* _dataItem);
@@ -215,9 +215,9 @@ private:
         void write(quint16 _addr, quint16 _size, const QByteArray& _data, QObject* _writer);
         void update();
     protected:
-        virtual LCModbusMasterBase::SReply readBits(LCModbusMasterBase* master,
+        virtual LQModbusMasterBase::SReply readBits(LQModbusMasterBase* master,
                                                         quint16 _addr, quint16 _size, quint8 _bits[]) = 0;
-        virtual LCModbusMasterBase::SReply writeBits(LCModbusMasterBase* master,
+        virtual LQModbusMasterBase::SReply writeBits(LQModbusMasterBase* master,
                                                         quint16 _addr, quint16 _size, quint8 _bits[]) = 0;
     };
 
@@ -228,11 +228,11 @@ private:
     public:
 
     public:
-        CControllerDiscreteInputs(const quint8& _devId, QWeakPointer<LCModbusMasterBase> _master);
+        CControllerDiscreteInputs(const quint8& _devId, QWeakPointer<LQModbusMasterBase> _master);
         ~CControllerDiscreteInputs();
-        virtual LCModbusMasterBase::SReply readBits(LCModbusMasterBase* master,
+        virtual LQModbusMasterBase::SReply readBits(LQModbusMasterBase* master,
                                                         quint16 _addr, quint16 _size, quint8 _bits[]) override;
-        virtual LCModbusMasterBase::SReply writeBits(LCModbusMasterBase* master,
+        virtual LQModbusMasterBase::SReply writeBits(LQModbusMasterBase* master,
                                                         quint16 _addr, quint16 _size, quint8 _bits[]) override;
     };
 
@@ -242,11 +242,11 @@ private:
     public:
 
     public:
-        CControllerCoils(const quint8& _devId, QWeakPointer<LCModbusMasterBase> _master);
+        CControllerCoils(const quint8& _devId, QWeakPointer<LQModbusMasterBase> _master);
         ~CControllerCoils();
-        virtual LCModbusMasterBase::SReply readBits(LCModbusMasterBase* master,
+        virtual LQModbusMasterBase::SReply readBits(LQModbusMasterBase* master,
                                                         quint16 _addr, quint16 _size, quint8 _bits[]) override;
-        virtual LCModbusMasterBase::SReply writeBits(LCModbusMasterBase* master,
+        virtual LQModbusMasterBase::SReply writeBits(LQModbusMasterBase* master,
                                                         quint16 _addr, quint16 _size, quint8 _bits[]) override;
     };
     //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -360,7 +360,7 @@ private:
         QMap<QObject*, CDataMapItemBase*> mMapReaders;
 
     public:
-        CDataMap(const quint8& _devId, QSharedPointer<LCModbusMasterBase> _master);
+        CDataMap(const quint8& _devId, QSharedPointer<LQModbusMasterBase> _master);
         ~CDataMap();
 
         void update();
@@ -377,22 +377,22 @@ private:
     };
 
     quint8 mDevId;
-    QSharedPointer<LCModbusMasterBase> mModbusMaster;
+    QSharedPointer<LQModbusMasterBase> mModbusMaster;
     int mUpdateInterval;
     QTimer mTimer;
 
     CDataMap mDataMap;
     QSharedPointer<QThread> mspThread;
 private:
-    explicit LCQModbusDataSource(quint8 _devId,
-                                 QSharedPointer<LCModbusMasterBase> _modbusMaster,
+    explicit LQModbusDataSource(quint8 _devId,
+                                 QSharedPointer<LQModbusMasterBase> _modbusMaster,
                                  QObject *_parent = nullptr);
-    LCQModbusDataSource(const LCQModbusDataSource&) = delete;
-    LCQModbusDataSource& operator=(const LCQModbusDataSource&) = delete;
+    LQModbusDataSource(const LQModbusDataSource&) = delete;
+    LQModbusDataSource& operator=(const LQModbusDataSource&) = delete;
 public:
-    virtual ~LCQModbusDataSource();
-    static QSharedPointer<LCQModbusDataSource> create(  quint8 _devId,
-                                                        QSharedPointer<LCModbusMasterBase> _modbusMaster,
+    virtual ~LQModbusDataSource();
+    static QSharedPointer<LQModbusDataSource> create(  quint8 _devId,
+                                                        QSharedPointer<LQModbusMasterBase> _modbusMaster,
                                                         QObject *_parent = nullptr);
     void addDataItemHoldingRegs(    const QString& _name, quint16 _addr, quint16 _size);
     void addDataItemInputRegs(      const QString& _name, quint16 _addr, quint16 _size);
@@ -412,12 +412,12 @@ private:
 
 public:
     //----------------------------------------------------------------------------------------------------------override
-    virtual QSharedPointer<LCRemoteDataReaderInterface> createReader() override;
-    virtual QSharedPointer<LCRemoteDataWriterInterface> createWriter() override;
+    virtual QSharedPointer<LIRemoteDataReader> createReader() override;
+    virtual QSharedPointer<LIRemoteDataWriter> createWriter() override;
 
-    friend class LCQModbusDataReader;
-    friend class LCQModbusDataWriter;
+    friend class LQModbusDataReader;
+    friend class LQModbusDataWriter;
 };
 
 }
-#endif // LCQMODBUSDATASOURCE_H
+#endif // LQMODBUSDATASOURCE_H

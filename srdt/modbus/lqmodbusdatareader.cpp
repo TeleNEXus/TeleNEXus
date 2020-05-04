@@ -1,68 +1,68 @@
-#include "lcqmodbusdatareader.h"
-#include "LCRemoteDataReadListenerInterface.h"
-#include "lcqmodbusdatasource.h"
+#include "lqmodbusdatareader.h"
+#include "LIRemoteDataReadListener.h"
+#include "lqmodbusdatasource.h"
 
 #include <QDebug>
 namespace modbus
 {
 //=======================================================================================================CQEventDataRead
-__LQ_EXTENDED_QEVENT_IMPLEMENTATION(LCQModbusDataReader::CQEventDataIsRead);
+__LQ_EXTENDED_QEVENT_IMPLEMENTATION(LQModbusDataReader::CQEventDataIsRead);
 
-LCQModbusDataReader::
+LQModbusDataReader::
         CQEventDataIsRead::
             CQEventDataIsRead(const QByteArray& _data,
-                              ERemoteDataStatus _status) : QEvent(__LQ_EXTENDED_QEVENT_REGISTERED),
+                              LERemoteDataStatus _status) : QEvent(__LQ_EXTENDED_QEVENT_REGISTERED),
                                                            mData(new QByteArray(_data)),
                                                            mStatus(_status)
 {
 }
 
-LCQModbusDataReader::
+LQModbusDataReader::
         CQEventDataIsRead::
-            CQEventDataIsRead(ERemoteDataStatus _status) :  QEvent(__LQ_EXTENDED_QEVENT_REGISTERED),
+            CQEventDataIsRead(LERemoteDataStatus _status) :  QEvent(__LQ_EXTENDED_QEVENT_REGISTERED),
                                                             mData(new QByteArray),
                                                             mStatus(_status)
 {
 }
 
 //=================================================================================================LCQRemoteDataListener
-LCQModbusDataReader::LCQModbusDataReader(QObject* _parent) :   QObject(_parent)
+LQModbusDataReader::LQModbusDataReader(QObject* _parent) :   QObject(_parent)
 {
 }
 
 
-LCQModbusDataReader::~LCQModbusDataReader()
+LQModbusDataReader::~LQModbusDataReader()
 {
-    QSharedPointer<LCRemoteDataSourceInterface> sp = mDataSource.lock();
+    QSharedPointer<LIRemoteDataSource> sp = mDataSource.lock();
     if(sp.isNull()) return;
-    ((LCQModbusDataSource*)sp.data())->disconnectReader(this);
+    ((LQModbusDataSource*)sp.data())->disconnectReader(this);
 }
 
 //-----------------------------------------------------------------------------------------------------------setDataName
-void LCQModbusDataReader::setDataName(const QString& _dataName)
+void LQModbusDataReader::setDataName(const QString& _dataName)
 {
-    QSharedPointer<LCRemoteDataSourceInterface> sp = mDataSource.lock();
+    QSharedPointer<LIRemoteDataSource> sp = mDataSource.lock();
     if(!sp.isNull())
     {
-        ((LCQModbusDataSource*)sp.data())->disconnectReader(this);
+        ((LQModbusDataSource*)sp.data())->disconnectReader(this);
     }
     mDataName = _dataName;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-void LCQModbusDataReader::setDataReadListener(QWeakPointer<LCRemoteDataReadListenerInterface> _listener)
+void LQModbusDataReader::setDataReadListener(QWeakPointer<LIRemoteDataReadListener> _listener)
 {
-    QSharedPointer<LCRemoteDataReadListenerInterface> sp = _listener.lock();
+    QSharedPointer<LIRemoteDataReadListener> sp = _listener.lock();
     if(!sp.isNull()) mpReadListener = sp;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-void LCQModbusDataReader::setDataSource(QWeakPointer<LCRemoteDataSourceInterface> _source)
+void LQModbusDataReader::setDataSource(QWeakPointer<LIRemoteDataSource> _source)
 {
-    QSharedPointer<LCRemoteDataSourceInterface> sp = _source.lock();
+    QSharedPointer<LIRemoteDataSource> sp = _source.lock();
     if(!sp.isNull())
     {
-        if(dynamic_cast<LCQModbusDataSource*>(sp.data()))
+        if(dynamic_cast<LQModbusDataSource*>(sp.data()))
         {
             mDataSource = sp;
         }
@@ -70,33 +70,33 @@ void LCQModbusDataReader::setDataSource(QWeakPointer<LCRemoteDataSourceInterface
 }
 
 //-----------------------------------------------------------------------------------------------------------readRequest
-void LCQModbusDataReader::readRequest()
+void LQModbusDataReader::readRequest()
 {
-    QSharedPointer<LCRemoteDataSourceInterface> sp = mDataSource.lock();
+    QSharedPointer<LIRemoteDataSource> sp = mDataSource.lock();
     if(sp.isNull()) return;
-    ((LCQModbusDataSource*)sp.data())->read(mDataName, this);
+    ((LQModbusDataSource*)sp.data())->read(mDataName, this);
 }
 
 //-------------------------------------------------------------------------------------------------------connectToSource
-void LCQModbusDataReader::connectToSource()
+void LQModbusDataReader::connectToSource()
 {
     qDebug() << "LCQModbusDataReader::connectToSource:" << mDataName;
-    QSharedPointer<LCRemoteDataSourceInterface> sp = mDataSource.lock();
+    QSharedPointer<LIRemoteDataSource> sp = mDataSource.lock();
     if(sp.isNull()) return;
-    ((LCQModbusDataSource*)sp.data())->connectReader(mDataName, this);
+    ((LQModbusDataSource*)sp.data())->connectReader(mDataName, this);
 }
 
 //--------------------------------------------------------------------------------------------------disconnectFromSource
-void LCQModbusDataReader::disconnectFromSource()
+void LQModbusDataReader::disconnectFromSource()
 {
     qDebug() << "disconnectFromSource:" << mDataName;
-    QSharedPointer<LCRemoteDataSourceInterface> sp = mDataSource.lock();
+    QSharedPointer<LIRemoteDataSource> sp = mDataSource.lock();
     if(sp.isNull()) return;
-    ((LCQModbusDataSource*)sp.data())->disconnectReader(this);
+    ((LQModbusDataSource*)sp.data())->disconnectReader(this);
 }
 
 //-----------------------------------------------------------------------------------------------------------customEvent
-void LCQModbusDataReader::customEvent(QEvent* _event)
+void LQModbusDataReader::customEvent(QEvent* _event)
 {
     if(_event->type() != CQEventDataIsRead::msExtendedEventType) return;
 
@@ -104,7 +104,7 @@ void LCQModbusDataReader::customEvent(QEvent* _event)
 
     if(e == nullptr) return;
 
-    QSharedPointer<LCRemoteDataReadListenerInterface> listener = mpReadListener.lock();
+    QSharedPointer<LIRemoteDataReadListener> listener = mpReadListener.lock();
     if(!listener.isNull())
     {
         listener->dataIsRead(e->mData, e->mStatus);

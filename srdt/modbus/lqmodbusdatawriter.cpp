@@ -1,74 +1,74 @@
-#include "lcqmodbusdatawriter.h"
-#include "lcqmodbusdatasource.h"
-#include "LCRemoteDataWriteListnerInterface.h"
+#include "lqmodbusdatawriter.h"
+#include "lqmodbusdatasource.h"
+#include "LIRemoteDataWriteListner.h"
 
 namespace modbus
 {
 
 //======================================================================================================================
-__LQ_EXTENDED_QEVENT_IMPLEMENTATION(LCQModbusDataWriter::CQEventDataIsWrite);
+__LQ_EXTENDED_QEVENT_IMPLEMENTATION(LQModbusDataWriter::CQEventDataIsWrite);
 
-LCQModbusDataWriter::
+LQModbusDataWriter::
         CQEventDataIsWrite::
-            CQEventDataIsWrite(ERemoteDataStatus _status) : QEvent(__LQ_EXTENDED_QEVENT_REGISTERED),
+            CQEventDataIsWrite(LERemoteDataStatus _status) : QEvent(__LQ_EXTENDED_QEVENT_REGISTERED),
                                                             mStatus(_status)
 {
 }
 
 //======================================================================================================================
-LCQModbusDataWriter::LCQModbusDataWriter(QObject *_parent) : QObject(_parent)
+LQModbusDataWriter::LQModbusDataWriter(QObject *_parent) : QObject(_parent)
 {
 
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-void LCQModbusDataWriter::setDataName(const QString& _dataName)
+void LQModbusDataWriter::setDataName(const QString& _dataName)
 {
     mDataName = _dataName;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-void LCQModbusDataWriter::setDataSource(QWeakPointer<LCRemoteDataSourceInterface> _source)
+void LQModbusDataWriter::setDataSource(QWeakPointer<LIRemoteDataSource> _source)
 {
-    QSharedPointer<LCRemoteDataSourceInterface> sp = _source.lock();
+    QSharedPointer<LIRemoteDataSource> sp = _source.lock();
     if(!sp.isNull())
     {
-        if(dynamic_cast<LCQModbusDataSource*>(sp.data())) mDataSource = sp;
+        if(dynamic_cast<LQModbusDataSource*>(sp.data())) mDataSource = sp;
     }
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-void LCQModbusDataWriter::setDataWriteListener(QWeakPointer<LCRemoteDataWriteListnerInterface> _listener)
+void LQModbusDataWriter::setDataWriteListener(QWeakPointer<LIRemoteDataWriteListner> _listener)
 {
-    QSharedPointer<LCRemoteDataWriteListnerInterface> sp = _listener.lock();
+    QSharedPointer<LIRemoteDataWriteListner> sp = _listener.lock();
     if(!sp.isNull()) mwpWriteListener = sp;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-void LCQModbusDataWriter::writeRequest(const QByteArray& _data)
+void LQModbusDataWriter::writeRequest(const QByteArray& _data)
 {
-    QSharedPointer<LCRemoteDataSourceInterface> sp = mDataSource.lock();
+    QSharedPointer<LIRemoteDataSource> sp = mDataSource.lock();
     if(sp.isNull())
     {
-        QSharedPointer<LCRemoteDataWriteListnerInterface> listener = mwpWriteListener.lock();
-        listener->dataIsWrite(ERemoteDataStatus::DS_WRONG);
+        QSharedPointer<LIRemoteDataWriteListner> listener = mwpWriteListener.lock();
+        listener->dataIsWrite(LERemoteDataStatus::DS_WRONG);
     }
     else
     {
-        ((LCQModbusDataSource*)sp.data())->write(mDataName, _data, this);
+        ((LQModbusDataSource*)sp.data())->write(mDataName, _data, this);
     }
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-void LCQModbusDataWriter::customEvent(QEvent *_event)
+void LQModbusDataWriter::customEvent(QEvent *_event)
 {
     if(_event->type() == CQEventDataIsWrite::msExtendedEventType)
     {
-        QSharedPointer<LCRemoteDataWriteListnerInterface> listener = mwpWriteListener.lock();
+        QSharedPointer<LIRemoteDataWriteListner> listener = mwpWriteListener.lock();
         CQEventDataIsWrite *e = dynamic_cast<CQEventDataIsWrite*>(_event);
         if(e != nullptr)
         {
-            listener->dataIsWrite(ERemoteDataStatus::DS_WRONG);
+            listener->dataIsWrite(LERemoteDataStatus::DS_WRONG);
         }
         else
         {

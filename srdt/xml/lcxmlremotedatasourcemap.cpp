@@ -15,16 +15,16 @@ LCXmlRemoteDataSourceMap::LCXmlRemoteDataSourceMap()
 
 //----------------------------------------------------------------------------------------------------------------------
 void LCXmlRemoteDataSourceMap::
-    addRemoteDataSorce(const QString& _name, QSharedPointer<LCRemoteDataSourceInterface> _source)
+    addRemoteDataSorce(const QString& _name, QSharedPointer<LIRemoteDataSource> _source)
 {
     if(mMap.contains(_name)) return;
     mMap.insertMulti(_name, _source);
 }
 
 void LCXmlRemoteDataSourceMap::
-    addRemoteDataSorce(const LTDataSources& sources)
+    addRemoteDataSorce(const LQDataSources& sources)
 {
-    LTDataSources::const_iterator it;
+    LQDataSources::const_iterator it;
     it = sources.begin();
     while(it != sources.end() )
     {
@@ -37,9 +37,9 @@ void LCXmlRemoteDataSourceMap::
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-QSharedPointer<LCRemoteDataSourceInterface> LCXmlRemoteDataSourceMap::getRemoteDataSorce(const QString& _name)
+QSharedPointer<LIRemoteDataSource> LCXmlRemoteDataSourceMap::getRemoteDataSorce(const QString& _name)
 {
-    LTDataSources::iterator it;
+    LQDataSources::iterator it;
     it = mMap.find(_name);
     if(it == mMap.end()) return nullptr;
     return it.value();

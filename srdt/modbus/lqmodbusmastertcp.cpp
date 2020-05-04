@@ -1,11 +1,11 @@
-﻿#include "lcqmodbusmastertcp.h"
+﻿#include "lqmodbusmastertcp.h"
 #include <QDebug>
 #include <QThread>
 
 namespace modbus {
 
 //----------------------------------------------------------------------------------------------------------------------
-LCQModbusMasterTcp::LCQModbusMasterTcp(QObject *_parent) :  LCModbusMasterBase(_parent),
+LQModbusMasterTcp::LQModbusMasterTcp(QObject *_parent) :  LQModbusMasterBase(_parent),
                                                             mPort(502),
                                                             mpMaster(nullptr),
                                                             mpThread(nullptr)
@@ -14,7 +14,7 @@ LCQModbusMasterTcp::LCQModbusMasterTcp(QObject *_parent) :  LCModbusMasterBase(_
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-LCQModbusMasterTcp::~LCQModbusMasterTcp()
+LQModbusMasterTcp::~LQModbusMasterTcp()
 {
     mpThread->quit();
     mpThread->deleteLater();
@@ -27,17 +27,17 @@ static void deleterLater(QObject* _obj)
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-QSharedPointer<LCQModbusMasterTcp> LCQModbusMasterTcp::create()
+QSharedPointer<LQModbusMasterTcp> LQModbusMasterTcp::create()
 {
-    LCQModbusMasterTcp* master = new LCQModbusMasterTcp(nullptr);
+    LQModbusMasterTcp* master = new LQModbusMasterTcp(nullptr);
     master->mpThread = new QThread;
     master->moveToThread(master->mpThread);
     master->mpThread->start();
-    return QSharedPointer<LCQModbusMasterTcp>(master, deleterLater);
+    return QSharedPointer<LQModbusMasterTcp>(master, deleterLater);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-void LCQModbusMasterTcp::connectToHost(const QUrl& _url)
+void LQModbusMasterTcp::connectToHost(const QUrl& _url)
 {
     mPort = _url.port();
     mHostName = _url.host();
@@ -45,12 +45,12 @@ void LCQModbusMasterTcp::connectToHost(const QUrl& _url)
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-void LCQModbusMasterTcp::disconnectFromHost()
+void LQModbusMasterTcp::disconnectFromHost()
 {
     //TODO: Add Code
 }
 
-QModbusClient* LCQModbusMasterTcp::createMaster()
+QModbusClient* LQModbusMasterTcp::createMaster()
 {
     if(mpMaster != nullptr)
     {
@@ -67,7 +67,7 @@ QModbusClient* LCQModbusMasterTcp::createMaster()
     return mpMaster;
 }
 
-QModbusClient* LCQModbusMasterTcp::getMaster()
+QModbusClient* LQModbusMasterTcp::getMaster()
 {
     return mpMaster;
 }

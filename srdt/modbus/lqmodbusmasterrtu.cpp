@@ -1,11 +1,11 @@
-#include "lcqmodbusmasterrtu.h"
+#include "lqmodbusmasterrtu.h"
 #include <QDebug>
 #include <QThread>
 
 namespace modbus {
 
-LCQModbusMasterRtu::LCQModbusMasterRtu(QObject* _parent) :
-            LCModbusMasterBase(_parent),
+LQModbusMasterRtu::LQModbusMasterRtu(QObject* _parent) :
+            LQModbusMasterBase(_parent),
             mBaudRate (QSerialPort::BaudRate::UnknownBaud),
             mParity (QSerialPort::Parity::UnknownParity),
             mDataBits (QSerialPort::DataBits::UnknownDataBits),
@@ -17,14 +17,14 @@ LCQModbusMasterRtu::LCQModbusMasterRtu(QObject* _parent) :
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-LCQModbusMasterRtu::~LCQModbusMasterRtu()
+LQModbusMasterRtu::~LQModbusMasterRtu()
 {
     mpThread->quit();
     mpThread->deleteLater();
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-void LCQModbusMasterRtu::connectToPort(QString                 _portName,
+void LQModbusMasterRtu::connectToPort(QString                 _portName,
                                        QSerialPort::BaudRate   _baudRate,
                                        QSerialPort::Parity     _parity,
                                        QSerialPort::DataBits   _dataBits,
@@ -41,7 +41,7 @@ void LCQModbusMasterRtu::connectToPort(QString                 _portName,
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-void LCQModbusMasterRtu::disconnectFromPort()
+void LQModbusMasterRtu::disconnectFromPort()
 {
     //TODO: add code.
 }
@@ -53,17 +53,17 @@ static void deleterLater(QObject* _obj)
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-QSharedPointer<LCQModbusMasterRtu> LCQModbusMasterRtu::create()
+QSharedPointer<LQModbusMasterRtu> LQModbusMasterRtu::create()
 {
-    LCQModbusMasterRtu* master = new LCQModbusMasterRtu(nullptr);
+    LQModbusMasterRtu* master = new LQModbusMasterRtu(nullptr);
     master->mpThread = new QThread;
     master->moveToThread(master->mpThread);
     master->mpThread->start();
-    return QSharedPointer<LCQModbusMasterRtu>(master, deleterLater);
+    return QSharedPointer<LQModbusMasterRtu>(master, deleterLater);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-QModbusClient* LCQModbusMasterRtu::createMaster()
+QModbusClient* LQModbusMasterRtu::createMaster()
 {
     if(mpMaster != nullptr)
     {
@@ -84,7 +84,7 @@ QModbusClient* LCQModbusMasterRtu::createMaster()
     return mpMaster;
 }
 
-QModbusClient* LCQModbusMasterRtu::getMaster()
+QModbusClient* LQModbusMasterRtu::getMaster()
 {
     return mpMaster;
 }
