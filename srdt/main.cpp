@@ -40,8 +40,6 @@ QThread* __gStopTh1 = nullptr;
 
 #include <functional>
 #include <limits>
-#include "lcqremotedatareader.h"
-
 
 #include "lcqremlabel.h"
 #include "lcqremlineedit.h"
