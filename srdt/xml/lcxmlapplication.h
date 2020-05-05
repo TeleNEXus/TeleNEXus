@@ -6,6 +6,21 @@
 
 class LCXmlApplication
 {
+public:
+    static const struct
+    {
+        QString builder         = "BUILDER";
+        QString sourceBuilders  = "SOURCEBUILDERS";
+    } mBaseTagNames;
+
+    static const struct
+    {
+        QString file        = "file";
+        QString lib         = "lib";
+        QString name        = "name";
+        QString libhandler  = "libhandler";
+    } mBaseAttributeNames;
+
 private:
     LCXmlApplication();
     LCXmlApplication(const LCXmlApplication&) = delete;
@@ -26,6 +41,10 @@ public:
      */
     const QDir&    getXmlMainFileDir();
 
+    /*
+     * Возвращает папку расположения исполняемого файла приложения.
+     */
+    const QString& getApplicationDirPath();
 
 private:
 

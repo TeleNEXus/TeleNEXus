@@ -29,7 +29,7 @@ static const struct
 
 static const struct
 {
-    QString root            = "application";
+    QString root            = "APPLICATION";
     QString modbussources   = "modbussources";
     QString widgets         = "widgets";
 } __appXmlTags;
@@ -37,7 +37,7 @@ static const struct
 static const struct
 {
     QString file            = "file";
-}__appXmlCommotTagsAttr;
+}__appXmlCommonTagsAttr;
 
 //----------------------------------------------------------------------------------------------------------------------
 static void initWidgetCreatorsMap();
@@ -48,12 +48,14 @@ LCXmlApplication::LCXmlApplication()
 {
 
 }
+
 //----------------------------------------------------------------------------------------------------------------------
 LCXmlApplication& LCXmlApplication::instance()
 {
     static LCXmlApplication inst;
     return inst;
 }
+
 //----------------------------------------------------------------------------------------------------------------------
 const QString& LCXmlApplication::getXmlMainFileName()
 {
@@ -72,7 +74,15 @@ const QDir& LCXmlApplication::getXmlMainFileDir()
     return __xmlMainFileDir;
 }
 
+//----------------------------------------------------------------------------------------------------------------------
+const QString& LCXmlApplication::getApplicationDirPath()
+{
+    static QString path = QCoreApplication::applicationDirPath();
+    return path;
+}
 
+
+//----------------------------------------------------------------------------------------------------------------------
 int LCXmlApplication::exec(int argc, char *argv[])
 {
     QApplication app(argc, argv);
@@ -186,7 +196,7 @@ int LCXmlApplication::exec(int argc, char *argv[])
         return -1;
     }
 
-    QString strBuff = widgetsNodes.at(0).toElement().attribute(__appXmlCommotTagsAttr.file);
+    QString strBuff = widgetsNodes.at(0).toElement().attribute(__appXmlCommonTagsAttr.file);
 
     if(strBuff.isNull())
     {
