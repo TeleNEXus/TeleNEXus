@@ -56,6 +56,7 @@ SOURCES += \
         xml/lcxmlapplication.cpp \
         xml/lcxmllayoutsfactory.cpp \
         xml/lcxmlremotedatasourcemap.cpp \
+        xml/lcxmlremotesourcebuilders.cpp \
         xml/lcxmlstddataformatterfactory.cpp \
         xml/lcxmlwidgetcreatorsmap.cpp \
         xmldatasources/lcxmlmodbussources.cpp \
@@ -108,6 +109,7 @@ HEADERS += \
     xml/lcxmlapplication.h \
     xml/lcxmllayoutsfactory.h \
     xml/lcxmlremotedatasourcemap.h \
+    xml/lcxmlremotesourcebuilders.h \
     xml/lcxmlstddataformatterfactory.h \
     xml/lcxmlwidgetcreatorinterface.h \
     xml/lcxmlwidgetcreatorsmap.h \

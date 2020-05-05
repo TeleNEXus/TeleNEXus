@@ -1,11 +1,51 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<application>
+<APPLICATION>
+
+    <SOURCEBUILDERS lib="libs/modbussources">
+        <BUILDER name="modbussources" libhandler="getModbusSourceCreator" />
+    </SOURCEBUILDERS>
+    
+    <WIDGETBUILDERS lib="libs/widgetsbase">
+        <BUILDER name="label"           libhandler="getTextLabelBuilder"    />
+        <BUILDER name="dataLabel"       libhandler="getDataLabelBuilder"    />
+        <BUILDER name="dataLineEdit"    libhandler="getDataLineEditBuilder" />
+    </WIDGETBUILDERS>
+    
+    <LAYOUTBUILDERS lib="libs/layoutsbase">
+        <BUILDER name="layoutGrid" libhandler="getGridLayoutBuilder" />
+        <BUILDER name="layoutVBox" libhandler="getVBoxLayoutBuilder" />
+    </LAYOUTBUILDERS>
+
+    <WINDOWS file="windows.xml"/>
+    
+    <WINDOWS>
+        <WINDOW name="dialog2" visible="false" file="dialog2.xml"/>
+        <WINDOW name="dialog3" visible="false" file="dialog3.xml"/>
+        <WINDOW name="dialog4" visible="false" file="dialog4.xml"/>
+    </WINDOWS>
+        
+    <WINDOW name="dialog" file="dialog1.xml"/>
+    
+    <WINDOW name="keyboard">
+        <widget>
+            <layoutGrid>
+                <widget>
+                </widget>
+            </layoutGrid>
+        </widget>
+    </WINDOW>
+    
+    <WINDOW name="main">
+        <widget>
+            <layoutVBox>
+                <widget>
+                </widget>
+            </layoutVBox>
+        </widget>
+    </WINDOW>
+    
     <widgets file="widgets.xml"/>
     <modbussources file="modbussources.xml"/>
     
-    <sourcecreators lib="libs/modbussources">
-        <creator name="modbussources" libhandler="getModbusSourceCreator" />
-    </sourcecreators>
-    
-</application>
+</APPLICATION>
