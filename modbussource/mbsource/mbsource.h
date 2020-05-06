@@ -3,6 +3,6 @@
 
 #include "mbsource_global.h"
 
-extern "C" void* MBSOURCE_EXPORT getModbusSourceCreator();
+extern "C" void* MBSOURCE_EXPORT getModbusSourceBuilder();
 
 #endif // MBSOURCE_H

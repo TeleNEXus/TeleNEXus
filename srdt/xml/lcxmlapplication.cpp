@@ -6,7 +6,8 @@
 #include "xmlwidgets/lcxmlremlabel.h"
 #include "xmlwidgets/lcxmlremlineedit.h"
 #include "lcxmlremotedatasourcemap.h"
-#include "xmldatasources/lcxmlmodbussources.h"
+#include "LIApplication.h"
+#include "lcxmlremotedatasourcebuilders.h"
 
 #include <QDebug>
 #include <QApplication>
@@ -29,7 +30,9 @@ static const struct
 
 static const struct
 {
-    QString root            = "APPLICATION";
+    QString application     = "APPLICATION";
+    QString sourcebuilders  = "SOURCEBUILDERS";
+    QString sources         = "SOURCES";
     QString modbussources   = "modbussources";
     QString widgets         = "widgets";
 } __appXmlTags;
@@ -39,11 +42,29 @@ static const struct
     QString file            = "file";
 }__appXmlCommonTagsAttr;
 
+//======================================================================================================================
+class CApplicationInterface : public LIApplication
+{
+public:
+    CApplicationInterface(){}
+    virtual QString getProjectPath() const override { return __xmlMainFileWay;}
+    virtual QDir getProjectDir() const override {return __xmlMainFileDir;}
+    virtual QSharedPointer<LIXmlRemoteDataSourceBuilder> getDataSourceBuilder(const QString _name) const override
+    {
+        return LCXmlRemoteDataSourceBuilders::instance().getBuilder(_name);
+    }
+};
+
+static CApplicationInterface __appInterface;
+
 //----------------------------------------------------------------------------------------------------------------------
 static void initWidgetCreatorsMap();
 static bool buildWidgets(QString _fileName);
 
 //======================================================================================================================
+const LCXmlApplication::SBaseTagsNames      LCXmlApplication::mBaseTagNames;
+const LCXmlApplication::SBaseAttributeNames LCXmlApplication::mBaseAttributeNames;
+
 LCXmlApplication::LCXmlApplication()
 {
 
@@ -147,7 +168,7 @@ int LCXmlApplication::exec(int argc, char *argv[])
 
     QDomElement rootElement = domDoc.documentElement();
 
-    if(rootElement.tagName() != __appXmlTags.root)
+    if(rootElement.tagName() != __appXmlTags.application)
     {
         qDebug() << "Application: wrong root element";
         qDebug() << "Exit programm";
@@ -163,29 +184,71 @@ int LCXmlApplication::exec(int argc, char *argv[])
         return -1;
     }
 
-    QDomNodeList modbusSourcesNodes = rootElement.elementsByTagName(__appXmlTags.modbussources);
-    if(modbusSourcesNodes.isEmpty())
+
+    QDomNodeList nodes = rootElement.elementsByTagName(__appXmlTags.sourcebuilders);
+    if(!nodes.isEmpty())
     {
-        qDebug() << "Application: no modbus sources element";
-        qDebug() << "Exit programm";
-        return -1;
+        LCXmlRemoteDataSourceBuilders::instance().load(nodes.at(0).toElement());
     }
 
-    if(!modbusSourcesNodes.at(0).isElement())
+    nodes = rootElement.elementsByTagName(__appXmlTags.sources);
+    QDomNode node = nodes.at(0).toElement().firstChild();
+
+    while(!node.isNull())
     {
-        qDebug() << "Application: no modbus sources file attribute";
-        qDebug() << "Exit programm";
-        return -1;
+        if(node.isElement())
+        {
+            QDomElement el = node.toElement();
+            QSharedPointer<LIXmlRemoteDataSourceBuilder> builder =
+                    LCXmlRemoteDataSourceBuilders::instance().getBuilder(el.tagName());
+            if(!builder.isNull())
+            {
+                LQDataSources sources = builder->create(el, __appInterface);
+                LCXmlRemoteDataSourceMap::instace().addRemoteDataSorce(sources);
+            }
+        }
+        node = node.nextSibling();
     }
 
-    LQDataSources smap = LCXmlModbusSources().create(modbusSourcesNodes.at(0).toElement());
+//    if(!node.isNull())
+//    {
 
-    if(smap.isEmpty())
-    {
-        qDebug() << "Application: no modbus sources";
-    }
+//        for(int i = 0; i < nodes.size(); i++)
+//        {
+//            QDomElement el = nodes.at(i).toElement();
+//            QSharedPointer<LIXmlRemoteDataSourceBuilder> builder =
+//                    LCXmlRemoteDataSourceBuilders::instance().getBuilder(el.tagName());
+//            if(!builder.isNull())
+//            {
+//                LQDataSources sources = builder->create(el, __appInterface);
+//                LCXmlRemoteDataSourceMap::instace().addRemoteDataSorce(sources);
+//            }
+//        }
+//    }
 
-    LCXmlRemoteDataSourceMap::instace().addRemoteDataSorce(smap);
+//    QDomNodeList modbusSourcesNodes = rootElement.elementsByTagName(__appXmlTags.modbussources);
+//    if(modbusSourcesNodes.isEmpty())
+//    {
+//        qDebug() << "Application: no modbus sources element";
+//        qDebug() << "Exit programm";
+//        return -1;
+//    }
+
+//    if(!modbusSourcesNodes.at(0).isElement())
+//    {
+//        qDebug() << "Application: no modbus sources file attribute";
+//        qDebug() << "Exit programm";
+//        return -1;
+//    }
+
+//    LQDataSources smap = LCXmlModbusSources().create(modbusSourcesNodes.at(0).toElement());
+
+//    if(smap.isEmpty())
+//    {
+//        qDebug() << "Application: no modbus sources";
+//    }
+
+//    LCXmlRemoteDataSourceMap::instace().addRemoteDataSorce(smap);
 
     QDomNodeList widgetsNodes = rootElement.elementsByTagName(__appXmlTags.widgets);
 

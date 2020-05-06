@@ -1,8 +1,4 @@
-#include "lcxmlmodbussources.h"
-
-#include <QFile>
-#include <QDebug>
-#include <QDomElement>
+#include "lcxmlmodbussourcebuilder.h"
 
 #include "lqmodbusmasterbase.h"
 
@@ -11,14 +7,18 @@
 
 #include "lqmodbusdatasource.h"
 
-#include "lcxmlapplication.h"
+#include "LIApplication.h"
+
+#include <QFile>
+#include <QDebug>
+#include <QDomElement>
 
 using namespace modbus;
 
 using LTMastersMap = QMap<QString, QSharedPointer<LQModbusMasterBase>>;
 
 //======================================================================================================================
-LCXmlModbusSources::LCXmlModbusSources()
+LCXmlModbusSourceBuilder::LCXmlModbusSourceBuilder()
 {
 
 }
@@ -29,10 +29,11 @@ static LTMastersMap createMasters(const QDomNodeList& nodes);
 //----------------------------------------------------------------------------------------------------------------------
 static void createSources(const QDomNodeList& nodes,
                           LTMastersMap _masters,
-                          LQDataSources& _sourcesmap);
+                          LQDataSources& _sourcesmap,
+                          const LIApplication& _app);
 
 //----------------------------------------------------------------------------------------------------------------------
-LQDataSources LCXmlModbusSources::create(const QDomElement &_element)
+LQDataSources LCXmlModbusSourceBuilder::create(const QDomElement &_element, const LIApplication& _app)
 {
     LQDataSources map;
     QFile file;
@@ -40,7 +41,7 @@ LQDataSources LCXmlModbusSources::create(const QDomElement &_element)
 
     if(xmlfilename.isNull()) return map;
 
-    file.setFileName(LCXmlApplication::instance().getXmlMainFileWay() + xmlfilename);
+    file.setFileName(_app.getProjectPath() + xmlfilename);
 
     QDomDocument domDoc;
     QString errorStr;
@@ -86,7 +87,7 @@ LQDataSources LCXmlModbusSources::create(const QDomElement &_element)
         return map;
     }
 
-    createSources(nodes, masters, map);
+    createSources(nodes, masters, map, _app);
 
     return map;
 }
@@ -107,7 +108,8 @@ static const struct
 //----------------------------------------------------------------------------------------------------------------------
 static void createSources(const QDomNodeList& nodes,
                           LTMastersMap _masters,
-                          LQDataSources& _sourcesmap)
+                          LQDataSources& _sourcesmap,
+                          const LIApplication& _app)
 {
     QString attr;
     QString attrName;
@@ -147,7 +149,7 @@ static void createSources(const QDomNodeList& nodes,
 
         QSharedPointer<LQModbusDataSource> source = LQModbusDataSource::create(devid, itm.value());
 
-        if(loadMemoryMap(source.data(), LCXmlApplication::instance().getXmlMainFileWay() + attr) != 0)
+        if(loadMemoryMap(source.data(), _app.getProjectPath() + attr) != 0)
         {
             int updatetime;
             bool flag;

@@ -20,8 +20,9 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 INCLUDEPATH +=                  \
+        ../common/interfaces                \
         ../common/interfaces/remotedata     \
-        ../common/interfaces/xmlcreators    \
+        ../common/interfaces/xmlbuilders    \
         ../common/                          \
         ../modbussource/                    \
                                             \
@@ -55,11 +56,10 @@ SOURCES += \
         main.cpp \
         xml/lcxmlapplication.cpp \
         xml/lcxmllayoutsfactory.cpp \
+        xml/lcxmlremotedatasourcebuilders.cpp \
         xml/lcxmlremotedatasourcemap.cpp \
-        xml/lcxmlremotesourcebuilders.cpp \
         xml/lcxmlstddataformatterfactory.cpp \
         xml/lcxmlwidgetcreatorsmap.cpp \
-        xmldatasources/lcxmlmodbussources.cpp \
         xmlwidgets/lcxmllabel.cpp \
         xmlwidgets/lcxmlremlabel.cpp \
         xmlwidgets/lcxmlremlineedit.cpp \
@@ -77,7 +77,7 @@ HEADERS += \
     ../common/interfaces/remotedata/LIRemoteDataSource.h \
     ../common/interfaces/remotedata/LIRemoteDataWriteListner.h \
     ../common/interfaces/remotedata/LIRemoteDataWriter.h \
-    ../common/interfaces/xmlcreators/LIXmlRemoteDataSourceCreator.h \
+    ../common/interfaces/xmlbuilders/LIXmlRemoteDataSourceBuilder.h \
     ../common/lqvalidatoru32.h \
     ../modbussource/lqmodbusdatareader.h \
     ../modbussource/lqmodbusdatasource.h \
@@ -108,12 +108,11 @@ HEADERS += \
     xml/LCXmlWidgetCreatorsMapInterface.h \
     xml/lcxmlapplication.h \
     xml/lcxmllayoutsfactory.h \
+    xml/lcxmlremotedatasourcebuilders.h \
     xml/lcxmlremotedatasourcemap.h \
-    xml/lcxmlremotesourcebuilders.h \
     xml/lcxmlstddataformatterfactory.h \
     xml/lcxmlwidgetcreatorinterface.h \
     xml/lcxmlwidgetcreatorsmap.h \
-    xmldatasources/lcxmlmodbussources.h \
     xmlwidgets/lcxmllabel.h \
     xmlwidgets/lcxmlremlabel.h \
     xmlwidgets/lcxmlremlineedit.h \
