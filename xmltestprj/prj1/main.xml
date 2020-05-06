@@ -1,22 +1,38 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <APPLICATION>
-
-    <SOURCEBUILDERS lib="libs/modbussources">
-        <BUILDER name="modbussources" libhandler="getModbusSourceCreator" />
-    </SOURCEBUILDERS>
     
-    <WIDGETBUILDERS lib="libs/widgetsbase">
-        <BUILDER name="label"           libhandler="getTextLabelBuilder"    />
-        <BUILDER name="dataLabel"       libhandler="getDataLabelBuilder"    />
-        <BUILDER name="dataLineEdit"    libhandler="getDataLineEditBuilder" />
+    <!--SOURCEBUILDERS>
+        <BUILDER name="modbussources" lib="libs/mbsource"       libhandler="getModbusSourceBuilder" />
+        <BUILDER name="modbussources" lib="libs/mbsource"       libhandler="getModbusSourceBuilder" />
+        <BUILDER name="modbussources" lib="libs/mbsource"       libhandler="getModbusSourceBuilder" />
+        <BUILDER name="mssqlsource"   lib="libs/sqlsources"     libhandler="getMsSqlSourcesBuilder" />
+        <BUILDER name="sqlsource"     lib="libs/sqlsources"     libhandler="getSqlSourcesBuilder"   />
+    </SOURCEBUILDERS-->
+    
+    <SOURCEBUILDERS file="sourcebuilders.xml"/>
+    
+    <SOURCES>
+        <modbussources file="modbussources.xml"/>
+    </SOURCES>
+    
+    
+    <WIDGETBUILDERS>
+        <BUILDER name="label"           lib="libs/widgetsbase" libhandler="getTextLabelBuilder"    />
+        <BUILDER name="dataLabel"       lib="libs/widgetsbase" libhandler="getDataLabelBuilder"    />
+        <BUILDER name="dataLineEdit"    lib="libs/widgetsbase" libhandler="getDataLineEditBuilder" />
     </WIDGETBUILDERS>
     
-    <LAYOUTBUILDERS lib="libs/layoutsbase">
-        <BUILDER name="layoutGrid" libhandler="getGridLayoutBuilder" />
-        <BUILDER name="layoutVBox" libhandler="getVBoxLayoutBuilder" />
+    <WIDGETBUILDERS file="widgetbuilders.xml"/>
+    
+    <LAYOUTBUILDERS>
+        <BUILDER name="layoutGrid" lib="libs/layoutsbase" libhandler="getGridLayoutBuilder" />
+        <BUILDER name="layoutVBox" lib="libs/layoutsbase" libhandler="getVBoxLayoutBuilder" />
     </LAYOUTBUILDERS>
 
+    <LAYOUTBUILDERS file="layoutbuilders.xml"/>
+    
+    
     <WINDOWS file="windows.xml"/>
     
     <WINDOWS>

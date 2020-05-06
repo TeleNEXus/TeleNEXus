@@ -1,7 +1,8 @@
 #include "mbsource.h"
 
-void* getModbusSourceCreator()
-{
-    return nullptr;
-}
+#include "lcxmlmodbussourcebuilder.h"
 
+void* getModbusSourceBuilder()
+{
+    return new LCXmlModbusSourceBuilder;
+}

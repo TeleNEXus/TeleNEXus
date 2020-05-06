@@ -24,7 +24,8 @@ INCLUDEPATH +=                              \
     ../../common                            \
     ../../common/interfaces                 \
     ../../common/interfaces/remotedata      \
-    ../../common/interfaces/xmlcreators
+    ../../common/interfaces/xmlbuilders     \
+    ../                                     \
 
 HEADERS += \
     ../../common/interfaces/LIApplication.h \
@@ -33,16 +34,16 @@ HEADERS += \
     ../../common/interfaces/remotedata/LIRemoteDataSource.h \
     ../../common/interfaces/remotedata/LIRemoteDataWriteListner.h \
     ../../common/interfaces/remotedata/LIRemoteDataWriter.h \
-    ../../common/interfaces/xmlcreators/LIXmlRemoteDataSourceCreator.h \
+    ../../common/interfaces/xmlbuilders/LIXmlRemoteDataSourceBuilder.h \
     ../../common/lqextendevent.h \
-    ../lmodbusdefs.h \
+    ../lmodbusdefs.h        \
     ../lqmodbusdatareader.h \
     ../lqmodbusdatasource.h \
     ../lqmodbusdatawriter.h \
     ../lqmodbusmasterbase.h \
-    ../lqmodbusmasterrtu.h \
-    ../lqmodbusmastertcp.h \
-    creator/lcxmlmodebussourcescreator.h \
+    ../lqmodbusmasterrtu.h  \
+    ../lqmodbusmastertcp.h  \
+    lcxmlmodbussourcebuilder.h \
     mbsource_global.h \
     mbsource.h
 
@@ -53,7 +54,7 @@ SOURCES += \
     ../lqmodbusmasterbase.cpp \
     ../lqmodbusmasterrtu.cpp \
     ../lqmodbusmastertcp.cpp \
-    creator/lcxmlmodebussourcescreator.cpp \
+    lcxmlmodbussourcebuilder.cpp \
     mbsource.cpp
 
 # Default rules for deployment.

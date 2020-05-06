@@ -7,19 +7,24 @@
 class LCXmlApplication
 {
 public:
-    static const struct
+
+    struct SBaseTagsNames
     {
         QString builder         = "BUILDER";
         QString sourceBuilders  = "SOURCEBUILDERS";
-    } mBaseTagNames;
+    };
 
-    static const struct
+    static const SBaseTagsNames mBaseTagNames;
+
+    struct SBaseAttributeNames
     {
         QString file        = "file";
         QString lib         = "lib";
         QString name        = "name";
         QString libhandler  = "libhandler";
-    } mBaseAttributeNames;
+    };
+
+    static const SBaseAttributeNames mBaseAttributeNames;
 
 private:
     LCXmlApplication();
