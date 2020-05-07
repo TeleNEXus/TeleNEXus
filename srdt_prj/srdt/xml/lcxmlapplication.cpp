@@ -188,7 +188,7 @@ int LCXmlApplication::exec(int argc, char *argv[])
     QDomNodeList nodes = rootElement.elementsByTagName(__appXmlTags.sourcebuilders);
     if(!nodes.isEmpty())
     {
-        LCXmlRemoteDataSourceBuilders::instance().load(nodes.at(0).toElement());
+        LCXmlRemoteDataSourceBuilders::instance().load(nodes.at(0).toElement(), __xmlMainFileWay, __xmlMainFileWay);
     }
 
     nodes = rootElement.elementsByTagName(__appXmlTags.sources);

@@ -3,6 +3,6 @@
 
 #include "basicwidgets_global.h"
 
-extern "C" void* BASICWIDGETS_EXPORT getTextLabel();
+extern "C" void* BASICWIDGETS_EXPORT getTextLabelBuilder();
 
 #endif // BASICWIDGETS_H

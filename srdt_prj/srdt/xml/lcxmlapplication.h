@@ -12,6 +12,8 @@ public:
     {
         QString builder         = "BUILDER";
         QString sourceBuilders  = "SOURCEBUILDERS";
+        QString widget          = "WIDGET";
+        QString layout          = "LAYOUT";
     };
 
     static const SBaseTagsNames mBaseTagNames;
@@ -22,6 +24,7 @@ public:
         QString lib         = "lib";
         QString name        = "name";
         QString libhandler  = "libhandler";
+        QString builder     = "builder";
     };
 
     static const SBaseAttributeNames mBaseAttributeNames;
