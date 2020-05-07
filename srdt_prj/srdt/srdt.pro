@@ -20,17 +20,16 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 INCLUDEPATH +=                  \
-        ../common/interfaces                \
-        ../common/interfaces/remotedata     \
-        ../common/interfaces/xmlbuilders    \
-        ../common/                          \
+        ../../common/interfaces                \
+        ../../common/interfaces/remotedata     \
+        ../../common/interfaces/xmlbuilders    \
+        ../../common/                          \
         remgui/                 \
         xml/                    \
         dataformatters/         \
 
-
 SOURCES += \
-        ../common/lqvalidatoru32.cpp \
+        ../../common/lqvalidatoru32.cpp \
         lctestdllclass.cpp \
         dataformatters/lcstringdataformatterbase.cpp \
         dataformatters/lcstringdataformatterbool.cpp \
@@ -63,17 +62,17 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 HEADERS += \
-    ../common/interfaces/LIApplication.h \
-    ../common/interfaces/remotedata/LIRemoteDataReadListener.h \
-    ../common/interfaces/remotedata/LIRemoteDataReader.h \
-    ../common/interfaces/remotedata/LIRemoteDataSource.h \
-    ../common/interfaces/remotedata/LIRemoteDataWriteListner.h \
-    ../common/interfaces/remotedata/LIRemoteDataWriter.h \
-    ../common/interfaces/xmlbuilders/LIXmlRemoteDataSourceBuilder.h \
-    ../common/lqvalidatoru32.h \
+    ../../common/interfaces/LIApplication.h \
+    ../../common/interfaces/remotedata/LIRemoteDataReadListener.h \
+    ../../common/interfaces/remotedata/LIRemoteDataReader.h \
+    ../../common/interfaces/remotedata/LIRemoteDataSource.h \
+    ../../common/interfaces/remotedata/LIRemoteDataWriteListner.h \
+    ../../common/interfaces/remotedata/LIRemoteDataWriter.h \
+    ../../common/interfaces/xmlbuilders/LIXmlRemoteDataSourceBuilder.h \
+    ../../common/lqvalidatoru32.h \
     lctestdllclass.h    \
     testdllinterface.h  \
-    ../common/lqextendevent.h \
+    ../../common/lqextendevent.h \
     dataformatters/LCStringDataFormatterInterface.h \
     dataformatters/lcstringdataformatterbase.h \
     dataformatters/lcstringdataformatterbool.h \

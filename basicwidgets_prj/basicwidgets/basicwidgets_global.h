@@ -1,0 +1,12 @@
+#ifndef BASICWIDGETS_GLOBAL_H
+#define BASICWIDGETS_GLOBAL_H
+
+#include <QtCore/qglobal.h>
+
+#if defined(BASICWIDGETS_LIBRARY)
+#  define BASICWIDGETS_EXPORT Q_DECL_EXPORT
+#else
+#  define BASICWIDGETS_EXPORT Q_DECL_IMPORT
+#endif
+
+#endif // BASICWIDGETS_GLOBAL_H

@@ -1,7 +1,7 @@
 #ifndef MBSOURCE_H
 #define MBSOURCE_H
 
-#include "mbsource_global.h"
+#include "modbussource_global.h"
 
 extern "C" void* MBSOURCE_EXPORT getModbusSourceBuilder();
 

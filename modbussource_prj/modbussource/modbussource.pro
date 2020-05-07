@@ -22,6 +22,8 @@ DEFINES += QT_DEPRECATED_WARNINGS
 # You can also select to disable deprecated APIs only up to a certain version of Qt.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
+RC_FILE     = modbussource_resource.rc
+
 INCLUDEPATH +=                              \
     ../../common                            \
     ../../common/interfaces                 \
@@ -46,8 +48,8 @@ HEADERS += \
     modbus/lqmodbusmasterrtu.h  \
     modbus/lqmodbusmastertcp.h  \
     lcxmlmodbussourcebuilder.h  \
-    mbsource_global.h \
-    mbsource.h
+    modbussource.h \
+    modbussource_global.h
 
 SOURCES += \
     modbus/lqmodbusdatareader.cpp \
@@ -56,8 +58,8 @@ SOURCES += \
     modbus/lqmodbusmasterbase.cpp \
     modbus/lqmodbusmasterrtu.cpp  \
     modbus/lqmodbusmastertcp.cpp  \
-    lcxmlmodbussourcebuilder.cpp  \
-    mbsource.cpp
+    lcxmlmodbussourcebuilder.cpp \
+    modbussource.cpp
 
 # Default rules for deployment.
 unix {
