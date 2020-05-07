@@ -7,6 +7,7 @@ class LIRemoteDataWriteListner
 {
 public:
     LIRemoteDataWriteListner(){}
+    virtual ~LIRemoteDataWriteListner(){}
     virtual void dataIsWrite(LERemoteDataStatus _status) = 0;
 };
 

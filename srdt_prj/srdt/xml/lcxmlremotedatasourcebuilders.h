@@ -4,7 +4,7 @@
 #include <QSharedPointer>
 #include <QDomElement>
 
-class LIXmlRemoteDataSourceBuilder;
+#include "LIXmlRemoteDataSourceBuilder.h"
 
 class LCXmlRemoteDataSourceBuilders
 {

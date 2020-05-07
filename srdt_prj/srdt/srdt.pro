@@ -24,8 +24,6 @@ INCLUDEPATH +=                  \
         ../common/interfaces/remotedata     \
         ../common/interfaces/xmlbuilders    \
         ../common/                          \
-        ../modbussource/                    \
-                                            \
         remgui/                 \
         xml/                    \
         dataformatters/         \
@@ -33,12 +31,6 @@ INCLUDEPATH +=                  \
 
 SOURCES += \
         ../common/lqvalidatoru32.cpp \
-        ../modbussource/lqmodbusdatareader.cpp \
-        ../modbussource/lqmodbusdatasource.cpp \
-        ../modbussource/lqmodbusdatawriter.cpp \
-        ../modbussource/lqmodbusmasterbase.cpp \
-        ../modbussource/lqmodbusmasterrtu.cpp \
-        ../modbussource/lqmodbusmastertcp.cpp \
         lctestdllclass.cpp \
         dataformatters/lcstringdataformatterbase.cpp \
         dataformatters/lcstringdataformatterbool.cpp \
@@ -79,12 +71,6 @@ HEADERS += \
     ../common/interfaces/remotedata/LIRemoteDataWriter.h \
     ../common/interfaces/xmlbuilders/LIXmlRemoteDataSourceBuilder.h \
     ../common/lqvalidatoru32.h \
-    ../modbussource/lqmodbusdatareader.h \
-    ../modbussource/lqmodbusdatasource.h \
-    ../modbussource/lqmodbusdatawriter.h \
-    ../modbussource/lqmodbusmasterbase.h \
-    ../modbussource/lqmodbusmasterrtu.h \
-    ../modbussource/lqmodbusmastertcp.h \
     lctestdllclass.h    \
     testdllinterface.h  \
     ../common/lqextendevent.h \
@@ -100,7 +86,6 @@ HEADERS += \
     dataformatters/lcstringdataformatteru16.h \
     dataformatters/lcstringdataformatteru32.h \
     dataformatters/lcstringdataformatteru8.h \
-    ../modbussource/lmodbusdefs.h \
     remgui/lcqremlabel.h \
     remgui/lcqremlineedit.h \
     remgui/lremgui.h \

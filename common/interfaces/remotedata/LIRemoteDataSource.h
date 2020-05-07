@@ -17,6 +17,7 @@ class LIRemoteDataSource
 {
 public:
     LIRemoteDataSource(){}
+    virtual ~LIRemoteDataSource(){}
     virtual QSharedPointer<LIRemoteDataReader> createReader() = 0;
     virtual QSharedPointer<LIRemoteDataWriter> createWriter() = 0;
 };

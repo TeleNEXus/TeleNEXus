@@ -9,6 +9,8 @@ DEFINES += MBSOURCE_LIBRARY
 
 CONFIG += c++11
 
+VERSION = 1.0.0
+
 # The following define makes your compiler emit warnings if you use
 # any Qt feature that has been marked deprecated (the exact warnings
 # depend on your compiler). Please consult the documentation of the
@@ -25,7 +27,7 @@ INCLUDEPATH +=                              \
     ../../common/interfaces                 \
     ../../common/interfaces/remotedata      \
     ../../common/interfaces/xmlbuilders     \
-    ../                                     \
+    modbus                                  \
 
 HEADERS += \
     ../../common/interfaces/LIApplication.h \
@@ -36,25 +38,25 @@ HEADERS += \
     ../../common/interfaces/remotedata/LIRemoteDataWriter.h \
     ../../common/interfaces/xmlbuilders/LIXmlRemoteDataSourceBuilder.h \
     ../../common/lqextendevent.h \
-    ../lmodbusdefs.h        \
-    ../lqmodbusdatareader.h \
-    ../lqmodbusdatasource.h \
-    ../lqmodbusdatawriter.h \
-    ../lqmodbusmasterbase.h \
-    ../lqmodbusmasterrtu.h  \
-    ../lqmodbusmastertcp.h  \
-    lcxmlmodbussourcebuilder.h \
+    modbus/lmodbusdefs.h \
+    modbus/lqmodbusdatareader.h \
+    modbus/lqmodbusdatasource.h \
+    modbus/lqmodbusdatawriter.h \
+    modbus/lqmodbusmasterbase.h \
+    modbus/lqmodbusmasterrtu.h  \
+    modbus/lqmodbusmastertcp.h  \
+    lcxmlmodbussourcebuilder.h  \
     mbsource_global.h \
     mbsource.h
 
 SOURCES += \
-    ../lqmodbusdatareader.cpp \
-    ../lqmodbusdatasource.cpp \
-    ../lqmodbusdatawriter.cpp \
-    ../lqmodbusmasterbase.cpp \
-    ../lqmodbusmasterrtu.cpp \
-    ../lqmodbusmastertcp.cpp \
-    lcxmlmodbussourcebuilder.cpp \
+    modbus/lqmodbusdatareader.cpp \
+    modbus/lqmodbusdatasource.cpp \
+    modbus/lqmodbusdatawriter.cpp \
+    modbus/lqmodbusmasterbase.cpp \
+    modbus/lqmodbusmasterrtu.cpp  \
+    modbus/lqmodbusmastertcp.cpp  \
+    lcxmlmodbussourcebuilder.cpp  \
     mbsource.cpp
 
 # Default rules for deployment.

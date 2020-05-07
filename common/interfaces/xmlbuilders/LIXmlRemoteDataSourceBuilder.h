@@ -14,6 +14,7 @@ class LIXmlRemoteDataSourceBuilder
 {
 public:
     LIXmlRemoteDataSourceBuilder(){}
+    virtual ~LIXmlRemoteDataSourceBuilder(){}
     virtual LQDataSources create(const QDomElement &_element, const LIApplication& _app) = 0;
 };
 
