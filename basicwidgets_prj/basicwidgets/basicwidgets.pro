@@ -1,4 +1,6 @@
-QT -= gui
+QT += gui
+QT += widgets
+QT += xml
 
 TEMPLATE = lib
 DEFINES += BASICWIDGETS_LIBRARY
@@ -19,12 +21,27 @@ DEFINES += QT_DEPRECATED_WARNINGS
 # You can also select to disable deprecated APIs only up to a certain version of Qt.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
+INCLUDEPATH +=                          \
+    ../../common/interfaces/xmlbuilders \
+    ../../common/interfaces/remotedata  \
+    ../../common/interfaces             \
+    builders                            \
+
 SOURCES += \
-    basicwidgets.cpp
+    basicwidgets.cpp \
+    builders/lcxmltextlabelbuilder.cpp
 
 HEADERS += \
+    ../../common/interfaces/LIApplication.h \
+    ../../common/interfaces/remotedata/LIRemoteDataReadListener.h \
+    ../../common/interfaces/remotedata/LIRemoteDataReader.h \
+    ../../common/interfaces/remotedata/LIRemoteDataSource.h \
+    ../../common/interfaces/remotedata/LIRemoteDataWriteListner.h \
+    ../../common/interfaces/remotedata/LIRemoteDataWriter.h \
+    ../../common/interfaces/xmlbuilders/LIXmlWidgetBuilder.h \
     basicwidgets_global.h \
-    basicwidgets.h
+    basicwidgets.h \
+    builders/lcxmltextlabelbuilder.h
 
 # Default rules for deployment.
 unix {

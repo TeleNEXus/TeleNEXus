@@ -1,6 +1,8 @@
 #include "basicwidgets.h"
 
-void* getTextLabel()
+#include "lcxmltextlabelbuilder.h"
+
+void* getTextLabelBuilder()
 {
-    return nullptr;
+    return new LCXmlTextLabelBuilder;
 }

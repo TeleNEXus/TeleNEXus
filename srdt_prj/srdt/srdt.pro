@@ -46,10 +46,12 @@ SOURCES += \
         remgui/lcqremlineedit.cpp\
         main.cpp \
         xml/lcxmlapplication.cpp \
+        xml/lcxmlbuildersloader.cpp \
         xml/lcxmllayoutsfactory.cpp \
         xml/lcxmlremotedatasourcebuilders.cpp \
         xml/lcxmlremotedatasourcemap.cpp \
         xml/lcxmlstddataformatterfactory.cpp \
+        xml/lcxmlwidgetbuilders.cpp \
         xml/lcxmlwidgetcreatorsmap.cpp \
         xmlwidgets/lcxmllabel.cpp \
         xmlwidgets/lcxmlremlabel.cpp \
@@ -69,6 +71,7 @@ HEADERS += \
     ../../common/interfaces/remotedata/LIRemoteDataWriteListner.h \
     ../../common/interfaces/remotedata/LIRemoteDataWriter.h \
     ../../common/interfaces/xmlbuilders/LIXmlRemoteDataSourceBuilder.h \
+    ../../common/interfaces/xmlbuilders/LIXmlWidgetBuilder.h \
     ../../common/lqvalidatoru32.h \
     lctestdllclass.h    \
     testdllinterface.h  \
@@ -91,10 +94,12 @@ HEADERS += \
     xml/LCXmlStdDataFormatterFactoryInterface.h \
     xml/LCXmlWidgetCreatorsMapInterface.h \
     xml/lcxmlapplication.h \
+    xml/lcxmlbuildersloader.h \
     xml/lcxmllayoutsfactory.h \
     xml/lcxmlremotedatasourcebuilders.h \
     xml/lcxmlremotedatasourcemap.h \
     xml/lcxmlstddataformatterfactory.h \
+    xml/lcxmlwidgetbuilders.h \
     xml/lcxmlwidgetcreatorinterface.h \
     xml/lcxmlwidgetcreatorsmap.h \
     xmlwidgets/lcxmllabel.h \
