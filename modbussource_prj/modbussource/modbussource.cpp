@@ -1,4 +1,4 @@
-#include "mbsource.h"
+#include "modbussource.h"
 
 #include "lcxmlmodbussourcebuilder.h"
 
