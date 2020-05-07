@@ -22,14 +22,36 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 INCLUDEPATH +=                          \
+    ../../common                        \
     ../../common/interfaces/xmlbuilders \
     ../../common/interfaces/remotedata  \
     ../../common/interfaces             \
     builders                            \
+    widgets                             \
+    widgets/dataformatters
+
 
 SOURCES += \
+    ../../common/lqvalidatoru32.cpp \
     basicwidgets.cpp \
-    builders/lcxmltextlabelbuilder.cpp
+    builders/lcxmllabel.cpp \
+    builders/lcxmlremlabel.cpp \
+    builders/lcxmlremlineedit.cpp \
+    builders/lcxmltextlabelbuilder.cpp \
+    builders/lcxmlwidget.cpp \
+    widgets/dataformatters/lcstringdataformatterbase.cpp \
+    widgets/dataformatters/lcstringdataformatterbool.cpp \
+    widgets/dataformatters/lcstringdataformatterf32.cpp \
+    widgets/dataformatters/lcstringdataformatterhex.cpp \
+    widgets/dataformatters/lcstringdataformatterintbase.cpp \
+    widgets/dataformatters/lcstringdataformatters16.cpp \
+    widgets/dataformatters/lcstringdataformatters32.cpp \
+    widgets/dataformatters/lcstringdataformatters8.cpp \
+    widgets/dataformatters/lcstringdataformatteru16.cpp \
+    widgets/dataformatters/lcstringdataformatteru32.cpp \
+    widgets/dataformatters/lcstringdataformatteru8.cpp \
+    widgets/lcqremlabel.cpp \
+    widgets/lcqremlineedit.cpp
 
 HEADERS += \
     ../../common/interfaces/LIApplication.h \
@@ -38,10 +60,32 @@ HEADERS += \
     ../../common/interfaces/remotedata/LIRemoteDataSource.h \
     ../../common/interfaces/remotedata/LIRemoteDataWriteListner.h \
     ../../common/interfaces/remotedata/LIRemoteDataWriter.h \
+    ../../common/interfaces/xmlbuilders/LIXmlLayoutBuilder.h \
     ../../common/interfaces/xmlbuilders/LIXmlWidgetBuilder.h \
+    ../../common/lqextendevent.h \
+    ../../common/lqvalidatoru32.h \
     basicwidgets_global.h \
     basicwidgets.h \
-    builders/lcxmltextlabelbuilder.h
+    builders/lcxmllabel.h \
+    builders/lcxmlremlabel.h \
+    builders/lcxmlremlineedit.h \
+    builders/lcxmltextlabelbuilder.h \
+    builders/lcxmlwidget.h \
+    widgets/dataformatters/LCStringDataFormatterInterface.h \
+    widgets/dataformatters/lcstringdataformatterbase.h \
+    widgets/dataformatters/lcstringdataformatterbool.h \
+    widgets/dataformatters/lcstringdataformatterf32.h \
+    widgets/dataformatters/lcstringdataformatterhex.h \
+    widgets/dataformatters/lcstringdataformatterintbase.h \
+    widgets/dataformatters/lcstringdataformatters16.h \
+    widgets/dataformatters/lcstringdataformatters32.h \
+    widgets/dataformatters/lcstringdataformatters8.h \
+    widgets/dataformatters/lcstringdataformatteru16.h \
+    widgets/dataformatters/lcstringdataformatteru32.h \
+    widgets/dataformatters/lcstringdataformatteru8.h \
+    widgets/lcqremlabel.h \
+    widgets/lcqremlineedit.h \
+    widgets/lremgui.h
 
 # Default rules for deployment.
 unix {

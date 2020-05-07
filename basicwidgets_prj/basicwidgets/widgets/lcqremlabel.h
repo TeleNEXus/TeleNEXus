@@ -38,9 +38,9 @@ public:
 
     explicit LCQRemLabel(QString _text, QWidget* _parent = nullptr);
 
-    explicit LCQRemLabel(   const QString&                                  _dataName,
-                            QSharedPointer<LIRemoteDataSource>     _dataSource,
-                            QSharedPointer<LCStringDataFormatterBase>             _formatter,
+    explicit LCQRemLabel(   const QString&                              _dataName,
+                            QSharedPointer<LIRemoteDataSource>          _dataSource,
+                            QSharedPointer<LCStringDataFormatterBase>   _formatter,
                             QWidget* _parent = nullptr);
     virtual ~LCQRemLabel();
 

@@ -4,13 +4,12 @@
 #include <QMap>
 #include <QLibrary>
 #include <QCoreApplication>
-#include <QDebug>
 
 //======================================================================================================================
-using LQSourceBuildersMap = QMap<QString, QSharedPointer<LIXmlRemoteDataSourceBuilder>>;
+using LQWidgetBuildersMap = QMap<QString, QSharedPointer<LIXmlRemoteDataSourceBuilder>>;
 
 //======================================================================================================================
-static LQSourceBuildersMap __buildersMap;
+static LQWidgetBuildersMap __buildersMap;
 
 //======================================================================================================================
 LCXmlRemoteDataSourceBuilders::LCXmlRemoteDataSourceBuilders() :
@@ -33,7 +32,7 @@ LCXmlRemoteDataSourceBuilders& LCXmlRemoteDataSourceBuilders::instance()
 //----------------------------------------------------------------------------------------------------------------------
 QSharedPointer<LIXmlRemoteDataSourceBuilder> LCXmlRemoteDataSourceBuilders::getBuilder(const QString _name)
 {
-    LQSourceBuildersMap::iterator it = __buildersMap.find(_name);
+    LQWidgetBuildersMap::iterator it = __buildersMap.find(_name);
     if(it != __buildersMap.end())
     {
         return it.value();
