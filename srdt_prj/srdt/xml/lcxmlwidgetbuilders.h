@@ -5,8 +5,9 @@
 #include <QDomElement>
 
 #include "LIXmlWidgetBuilder.h"
+#include "lcxmlbuildersloader.h"
 
-class LCXmlWidgetBuilders
+class LCXmlWidgetBuilders : public LCXmlBuildersLoader
 {
 private:
     LCXmlWidgetBuilders();
@@ -15,7 +16,7 @@ private:
 public:
     static LCXmlWidgetBuilders& instance();
     QSharedPointer<LIXmlWidgetBuilder> getBuilder(const QString _name);
-    int load(const QDomElement& _element);
+    virtual bool add(const QString &_name, void *_builder) override;
 };
 
 #endif // LCXMLWIDGETBUILDERS_H

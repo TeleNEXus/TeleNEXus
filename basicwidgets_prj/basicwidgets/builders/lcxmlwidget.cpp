@@ -1,19 +1,15 @@
 #include "lcxmlwidget.h"
-#include "lcxmllayoutsfactory.h"
-
+#include "LIApplication.h"
 #include <QWidget>
-
-namespace xmlwidgetcreators
-{
-
+#include <QDomElement>
 //======================================================================================================================
-LCXmlWidget::LCXmlWidget() : mpOrderCtrl(nullptr)
+LCXmlWidget::LCXmlWidget()
 {
 
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-QWidget* LCXmlWidget::create(const QDomElement& _element)
+QWidget* LCXmlWidget::build(const QDomElement& _element, const LIApplication& _app)
 {
     QWidget* widget = new QWidget;
 
@@ -30,16 +26,17 @@ QWidget* LCXmlWidget::create(const QDomElement& _element)
         QDomElement element = node.toElement();
         if(!element.isNull())
         {
-            QLayout* layout = LCXmlLayoutsFactory::create(element);
-            if(layout)
-            {
-                widget->setLayout(layout);
-                break;
-            }
+            _app.getLayoutBuilder(
+//            QLayout* layout = LCXmlLayoutsFactory::create(element);
+
+//            if(layout)
+//            {
+//                widget->setLayout(layout);
+//                break;
+//            }
         }
         node = node.nextSibling();
     }
     return widget;
 }
 
-} //namespace

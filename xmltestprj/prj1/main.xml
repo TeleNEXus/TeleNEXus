@@ -18,9 +18,9 @@
     
     
     <WIDGETBUILDERS>
-        <BUILDER name="label"           lib="libs/widgetsbase" libhandler="getTextLabelBuilder"    />
-        <BUILDER name="dataLabel"       lib="libs/widgetsbase" libhandler="getDataLabelBuilder"    />
-        <BUILDER name="dataLineEdit"    lib="libs/widgetsbase" libhandler="getDataLineEditBuilder" />
+        <BUILDER name="label"           lib="libs/widgetsbase" libhandler="getTextLabelBuilder"             />
+        <BUILDER name="dataLabel"       lib="libs/widgetsbase" libhandler="getRemoteDataLabelBuilder"       />
+        <BUILDER name="dataLineEdit"    lib="libs/widgetsbase" libhandler="getRemoteDataLineEditBuilder"    />
     </WIDGETBUILDERS>
     
     <WIDGETBUILDERS file="widgetbuilders.xml"/>
@@ -44,7 +44,7 @@
     <WINDOW name="dialog" file="dialog1.xml"/>
     
     <WINDOW name="keyboard">
-        <widget>
+        <widget builder="label">
             <layoutGrid>
                 <widget>
                 </widget>
