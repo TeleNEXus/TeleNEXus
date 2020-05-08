@@ -1,8 +1,7 @@
 ﻿#include "lcqremlineedit.h"
 #include <QDebug>
 #include <QKeyEvent>
-namespace remgui
-{
+
 //======================================================================================================================
 LCQRemLineEdit::CReadListener::CReadListener(LCQRemLineEdit& _lineEdit) : mLineEdit(_lineEdit), mFlagActive(false)
 {
@@ -148,4 +147,3 @@ bool LCQRemLineEdit::event(QEvent *_event)
     return ret;
 }
 
-}

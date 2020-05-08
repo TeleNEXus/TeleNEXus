@@ -1,21 +1,15 @@
 #ifndef LCXMLREMLINEEDIT_H
 #define LCXMLREMLINEEDIT_H
 
-#include "lcxmlwidgetcreatorinterface.h"
+#include "LIXmlWidgetBuilder.h"
 
-namespace xmlwidgetcreators
+class LCXmlRemLineEdit : public LIXmlWidgetBuilder
 {
-
-class LCXmlRemLineEdit : public LCXmlWidgetCreatorInterface
-{
-public:
-    LCXmlWidgetOrderControlInterface* mpOrderCtrl;
 public:
     LCXmlRemLineEdit();
     virtual ~LCXmlRemLineEdit();
-    virtual QWidget* create(const QDomElement& _element) override;
+    virtual QWidget* build(const QDomElement& _element, const LIApplication& _app) override;
 };
 
-}
 
 #endif // LCXMLREMLINEEDIT_H

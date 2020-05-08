@@ -19,44 +19,27 @@ DEFINES += QT_DEPRECATED_WARNINGS
 # You can also select to disable deprecated APIs only up to a certain version of Qt.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
-INCLUDEPATH +=                  \
-        ../../common/interfaces                \
-        ../../common/interfaces/remotedata     \
-        ../../common/interfaces/xmlbuilders    \
-        ../../common/                          \
-        remgui/                 \
-        xml/                    \
-        dataformatters/         \
+INCLUDEPATH +=                                  \
+        ../../common/interfaces                 \
+        ../../common/interfaces/remotedata      \
+        ../../common/interfaces/xmlbuilders     \
+        ../../common/                           \
+        remgui/                                 \
+        xml/                                    \
 
 SOURCES += \
         ../../common/lqvalidatoru32.cpp \
         lctestdllclass.cpp \
-        dataformatters/lcstringdataformatterbase.cpp \
-        dataformatters/lcstringdataformatterbool.cpp \
-        dataformatters/lcstringdataformatterf32.cpp \
-        dataformatters/lcstringdataformatterhex.cpp \
-        dataformatters/lcstringdataformatterintbase.cpp \
-        dataformatters/lcstringdataformatters16.cpp \
-        dataformatters/lcstringdataformatters32.cpp \
-        dataformatters/lcstringdataformatters8.cpp \
-        dataformatters/lcstringdataformatteru16.cpp \
-        dataformatters/lcstringdataformatteru32.cpp \
-        dataformatters/lcstringdataformatteru8.cpp \
         remgui/lcqremlabel.cpp \
         remgui/lcqremlineedit.cpp\
-        main.cpp \
         xml/lcxmlapplication.cpp \
         xml/lcxmlbuildersloader.cpp \
         xml/lcxmllayoutsfactory.cpp \
         xml/lcxmlremotedatasourcebuilders.cpp \
         xml/lcxmlremotedatasourcemap.cpp \
-        xml/lcxmlstddataformatterfactory.cpp \
         xml/lcxmlwidgetbuilders.cpp \
         xml/lcxmlwidgetcreatorsmap.cpp \
-        xmlwidgets/lcxmllabel.cpp \
-        xmlwidgets/lcxmlremlabel.cpp \
-        xmlwidgets/lcxmlremlineedit.cpp \
-        xmlwidgets/lcxmlwidget.cpp
+        main.cpp \
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
@@ -76,22 +59,9 @@ HEADERS += \
     lctestdllclass.h    \
     testdllinterface.h  \
     ../../common/lqextendevent.h \
-    dataformatters/LCStringDataFormatterInterface.h \
-    dataformatters/lcstringdataformatterbase.h \
-    dataformatters/lcstringdataformatterbool.h \
-    dataformatters/lcstringdataformatterf32.h \
-    dataformatters/lcstringdataformatterhex.h \
-    dataformatters/lcstringdataformatterintbase.h \
-    dataformatters/lcstringdataformatters16.h \
-    dataformatters/lcstringdataformatters32.h \
-    dataformatters/lcstringdataformatters8.h \
-    dataformatters/lcstringdataformatteru16.h \
-    dataformatters/lcstringdataformatteru32.h \
-    dataformatters/lcstringdataformatteru8.h \
     remgui/lcqremlabel.h \
     remgui/lcqremlineedit.h \
     remgui/lremgui.h \
-    xml/LCXmlStdDataFormatterFactoryInterface.h \
     xml/LCXmlWidgetCreatorsMapInterface.h \
     xml/lcxmlapplication.h \
     xml/lcxmlbuildersloader.h \
@@ -102,7 +72,4 @@ HEADERS += \
     xml/lcxmlwidgetbuilders.h \
     xml/lcxmlwidgetcreatorinterface.h \
     xml/lcxmlwidgetcreatorsmap.h \
-    xmlwidgets/lcxmllabel.h \
-    xmlwidgets/lcxmlremlabel.h \
-    xmlwidgets/lcxmlremlineedit.h \
-    xmlwidgets/lcxmlwidget.h
+

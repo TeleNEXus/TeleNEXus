@@ -1,6 +1,6 @@
 #include "lcxmltextlabelbuilder.h"
 #include <QLabel>
-
+#include <QDomElement>
 //======================================================================================================================
 LCXmlTextLabelBuilder::LCXmlTextLabelBuilder()
 {
@@ -14,7 +14,7 @@ LCXmlTextLabelBuilder::~LCXmlTextLabelBuilder()
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-QSharedPointer<QWidget> LCXmlTextLabelBuilder::build(const QDomElement& _element, const LIApplication& _app)
+QWidget* LCXmlTextLabelBuilder::build(const QDomElement& _element, const LIApplication& _app)
 {
     Q_UNUSED(_app);
 
@@ -24,7 +24,7 @@ QSharedPointer<QWidget> LCXmlTextLabelBuilder::build(const QDomElement& _element
     if(!_element.attribute("text").isNull())
     {
         label->setText(_element.attribute("text"));
-        return QSharedPointer<QWidget>(label);
+        return label;
     }
 
     //Задание текста в виде узла.
@@ -37,5 +37,5 @@ QSharedPointer<QWidget> LCXmlTextLabelBuilder::build(const QDomElement& _element
         }
         node = node.nextSibling();
     }
-    return QSharedPointer<QWidget>(label);
+    return label;
 }

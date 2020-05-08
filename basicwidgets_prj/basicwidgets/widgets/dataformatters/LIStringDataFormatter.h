@@ -8,15 +8,13 @@ class QString;
 class QValidator;
 class QChar;
 
-
-
-class LCStringDataFormatterInterface
+class LIStringDataFormatter
 {
 
 public:
 
-    LCStringDataFormatterInterface(){}
-    ~LCStringDataFormatterInterface(){}
+    LIStringDataFormatter(){}
+    ~LIStringDataFormatter(){}
 
     virtual QString toString(const QByteArray& _data) = 0;
     virtual QByteArray toBytes(const QString& _str) = 0;

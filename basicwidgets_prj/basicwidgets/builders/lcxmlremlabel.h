@@ -1,19 +1,15 @@
 #ifndef LCXMLREMLABEL_H
 #define LCXMLREMLABEL_H
 
-#include "lcxmlwidgetcreatorinterface.h"
+#include "LIXmlWidgetBuilder.h"
 
-namespace xmlwidgetcreators
-{
 
-class LCXmlRemLabel : public LCXmlWidgetCreatorInterface
+class LCXmlRemLabel : public LIXmlWidgetBuilder
 {
 public:
     LCXmlRemLabel();
     virtual ~LCXmlRemLabel();
-    virtual QWidget* create(const QDomElement& _element) override;
+    virtual QWidget* build(const QDomElement& _element, const LIApplication& _app) override;
 };
-
-} //namespace
 
 #endif // LCXMLREMLABEL_H

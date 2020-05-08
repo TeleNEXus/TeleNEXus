@@ -1,7 +1,9 @@
 #include "lcxmlwidget.h"
 #include "LIApplication.h"
+#include "LIXmlLayoutBuilder.h"
 #include <QWidget>
 #include <QDomElement>
+
 //======================================================================================================================
 LCXmlWidget::LCXmlWidget()
 {
@@ -26,14 +28,11 @@ QWidget* LCXmlWidget::build(const QDomElement& _element, const LIApplication& _a
         QDomElement element = node.toElement();
         if(!element.isNull())
         {
-            _app.getLayoutBuilder(
-//            QLayout* layout = LCXmlLayoutsFactory::create(element);
-
-//            if(layout)
-//            {
-//                widget->setLayout(layout);
-//                break;
-//            }
+            QSharedPointer<LIXmlLayoutBuilder> lb = _app.getLayoutBuilder(element.tagName());
+            if(!lb.isNull())
+            {
+                widget->setLayout(lb->build(element, _app));
+            }
         }
         node = node.nextSibling();
     }

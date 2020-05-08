@@ -1,24 +1,24 @@
 #include "lcxmlremlabel.h"
-
 #include "lcqremlabel.h"
-#include "lcxmlremotedatasourcemap.h"
+#include "LIApplication.h"
 #include "lcxmlstddataformatterfactory.h"
 
-using namespace remgui;
+#include <QDomElement>
 
-namespace xmlwidgetcreators
-{
 
+//======================================================================================================================
 LCXmlRemLabel::LCXmlRemLabel()
 {
 
 }
 
+//----------------------------------------------------------------------------------------------------------------------
 LCXmlRemLabel::~LCXmlRemLabel()
 {
 
 }
 
+//----------------------------------------------------------------------------------------------------------------------
 const struct
 {
     QString data    = "data";
@@ -27,7 +27,7 @@ const struct
 } __attrNames;
 
 //----------------------------------------------------------------------------------------------------------------------
-QWidget* LCXmlRemLabel::create(const QDomElement& _element)
+QWidget* LCXmlRemLabel::build(const QDomElement& _element, const LIApplication& _app)
 {
 
     QString data;
@@ -40,7 +40,7 @@ QWidget* LCXmlRemLabel::create(const QDomElement& _element)
         goto LABEL_WRONG_EXIT;
     }
 
-    source = LCXmlRemoteDataSourceMap::instace().getRemoteDataSorce(attr);
+    source = _app.getDataSource(attr);
 
     if(source.isNull())
     {
@@ -66,5 +66,3 @@ QWidget* LCXmlRemLabel::create(const QDomElement& _element)
 LABEL_WRONG_EXIT:
     return new QLabel(_element.tagName());
 }
-
-} //namespace

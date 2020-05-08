@@ -10,6 +10,8 @@ class LIXmlRemoteDataSourceBuilder;
 class LIXmlLayoutBuilder;
 class LIXmlWidgetBuilder;
 
+#include "LIRemoteDataSource.h"
+
 class LIApplication
 {
 public:
@@ -26,6 +28,8 @@ public:
      * Возвращает интеллектуальный указатель на источник данных
      */
     virtual QSharedPointer<LIXmlRemoteDataSourceBuilder> getDataSourceBuilder(const QString _name) const = 0;
+
+    virtual QSharedPointer<LIRemoteDataSource> getDataSource(const QString _name) const = 0;
     /*
      * Возвращает интеллектуальный указатель на построитель компоновцика объектов.
      */

@@ -5,10 +5,10 @@
 #include <QByteArray>
 #include <QValidator>
 
-#include "LCStringDataFormatterInterface.h"
+#include "LIStringDataFormatter.h"
 
 
-class LCStringDataFormatterBase : public LCStringDataFormatterInterface
+class LCStringDataFormatterBase : public LIStringDataFormatter
 {
 protected:
     static QChar  msFillCharUndefDef;         //Символы заполнения при неопределенных данных.
