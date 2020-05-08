@@ -24,16 +24,14 @@ INCLUDEPATH +=                                  \
         ../../common/interfaces/remotedata      \
         ../../common/interfaces/xmlbuilders     \
         ../../common/                           \
-        remgui/                                 \
         xml/                                    \
 
 SOURCES += \
         ../../common/lqvalidatoru32.cpp \
         lctestdllclass.cpp \
-        remgui/lcqremlabel.cpp \
-        remgui/lcqremlineedit.cpp\
         xml/lcxmlapplication.cpp \
         xml/lcxmlbuildersloader.cpp \
+    xml/lcxmllayoutbuilders.cpp \
         xml/lcxmllayoutsfactory.cpp \
         xml/lcxmlremotedatasourcebuilders.cpp \
         xml/lcxmlremotedatasourcemap.cpp \
@@ -65,6 +63,7 @@ HEADERS += \
     xml/LCXmlWidgetCreatorsMapInterface.h \
     xml/lcxmlapplication.h \
     xml/lcxmlbuildersloader.h \
+    xml/lcxmllayoutbuilders.h \
     xml/lcxmllayoutsfactory.h \
     xml/lcxmlremotedatasourcebuilders.h \
     xml/lcxmlremotedatasourcemap.h \

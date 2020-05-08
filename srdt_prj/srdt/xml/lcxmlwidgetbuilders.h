@@ -4,8 +4,9 @@
 #include <QSharedPointer>
 #include <QDomElement>
 
-#include "LIXmlWidgetBuilder.h"
 #include "lcxmlbuildersloader.h"
+#include "LIXmlWidgetBuilder.h"
+
 
 class LCXmlWidgetBuilders : public LCXmlBuildersLoader
 {

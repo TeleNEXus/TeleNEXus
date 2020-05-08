@@ -1,17 +1,23 @@
-#include "lcxmlwidget.h"
+#include "lcxmlwidgetbuilder.h"
 #include "LIApplication.h"
 #include "LIXmlLayoutBuilder.h"
 #include <QWidget>
 #include <QDomElement>
 
 //======================================================================================================================
-LCXmlWidget::LCXmlWidget()
+LCXmlWidgetBuilder::LCXmlWidgetBuilder()
 {
 
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-QWidget* LCXmlWidget::build(const QDomElement& _element, const LIApplication& _app)
+LCXmlWidgetBuilder::~LCXmlWidgetBuilder()
+{
+
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+QWidget* LCXmlWidgetBuilder::build(const QDomElement& _element, const LIApplication& _app)
 {
     QWidget* widget = new QWidget;
 
