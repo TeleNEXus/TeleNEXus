@@ -31,8 +31,7 @@ SOURCES += \
         lctestdllclass.cpp \
         xml/lcxmlapplication.cpp \
         xml/lcxmlbuildersloader.cpp \
-    xml/lcxmllayoutbuilders.cpp \
-        xml/lcxmllayoutsfactory.cpp \
+        xml/lcxmllayoutbuilders.cpp \
         xml/lcxmlremotedatasourcebuilders.cpp \
         xml/lcxmlremotedatasourcemap.cpp \
         xml/lcxmlwidgetbuilders.cpp \
@@ -45,6 +44,8 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 HEADERS += \
+    ../../common/lqextendevent.h \
+    ../../common/lqvalidatoru32.h \
     ../../common/interfaces/LIApplication.h \
     ../../common/interfaces/remotedata/LIRemoteDataReadListener.h \
     ../../common/interfaces/remotedata/LIRemoteDataReader.h \
@@ -53,22 +54,15 @@ HEADERS += \
     ../../common/interfaces/remotedata/LIRemoteDataWriter.h \
     ../../common/interfaces/xmlbuilders/LIXmlRemoteDataSourceBuilder.h \
     ../../common/interfaces/xmlbuilders/LIXmlWidgetBuilder.h \
-    ../../common/lqvalidatoru32.h \
-    lctestdllclass.h    \
-    testdllinterface.h  \
-    ../../common/lqextendevent.h \
-    remgui/lcqremlabel.h \
-    remgui/lcqremlineedit.h \
-    remgui/lremgui.h \
     xml/LCXmlWidgetCreatorsMapInterface.h \
     xml/lcxmlapplication.h \
     xml/lcxmlbuildersloader.h \
     xml/lcxmllayoutbuilders.h \
-    xml/lcxmllayoutsfactory.h \
     xml/lcxmlremotedatasourcebuilders.h \
     xml/lcxmlremotedatasourcemap.h \
-    xml/lcxmlstddataformatterfactory.h \
     xml/lcxmlwidgetbuilders.h \
     xml/lcxmlwidgetcreatorinterface.h \
     xml/lcxmlwidgetcreatorsmap.h \
+    lctestdllclass.h    \
+    testdllinterface.h  \
 
