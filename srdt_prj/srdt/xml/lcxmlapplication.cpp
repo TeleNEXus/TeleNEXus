@@ -1,13 +1,10 @@
 #include "lcxmlapplication.h"
 #include "lcxmlwidgetcreatorsmap.h"
-
-#include "xmlwidgets/lcxmlwidget.h"
-#include "xmlwidgets/lcxmllabel.h"
-#include "xmlwidgets/lcxmlremlabel.h"
-#include "xmlwidgets/lcxmlremlineedit.h"
 #include "lcxmlremotedatasourcemap.h"
 #include "LIApplication.h"
 #include "lcxmlremotedatasourcebuilders.h"
+#include "lcxmllayoutbuilders.h"
+#include "lcxmlwidgetbuilders.h"
 
 #include <QDebug>
 #include <QApplication>
@@ -50,35 +47,28 @@ public:
     virtual QString getProjectPath() const override { return __xmlMainFileWay;}
     virtual QDir getProjectDir() const override {return __xmlMainFileDir;}
 
-    virtual QSharedPointer<LIXmlRemoteDataSourceBuilder> getDataSourceBuilder(const QString _name) const override
+    virtual QSharedPointer<LIXmlRemoteDataSourceBuilder> getDataSourceBuilder(const QString& _name) const override
     {
         return LCXmlRemoteDataSourceBuilders::instance().getBuilder(_name);
     }
 
-    QSharedPointer<LIRemoteDataSource> getDataSource(const QString _name) const override
+    QSharedPointer<LIRemoteDataSource> getDataSource(const QString& _name) const override
     {
         return LCXmlRemoteDataSourceMap::instace().getRemoteDataSorce(_name);
     }
 
-    QSharedPointer<LIXmlLayoutBuilder> getLayoutBuilder(const QString _name) const override
+    QSharedPointer<LIXmlLayoutBuilder> getLayoutBuilder(const QString& _name) const override
     {
-        //TODO: Добавить возвращаемое значение.
-        return nullptr;
+        return LCXmlLayoutBuilders::instance().getBuilder(_name);
     }
 
-    QSharedPointer<LIXmlWidgetBuilder> getWidgetBuilder(const QString _name) const override
+    QSharedPointer<LIXmlWidgetBuilder> getWidgetBuilder(const QString& _name) const override
     {
-        //TODO: Добавить возвращаемое значение.
-        return nullptr;
+        return LCXmlWidgetBuilders::instance().getBuilder(_name);
     }
-
 };
 
 static CApplicationInterface __appInterface;
-
-//----------------------------------------------------------------------------------------------------------------------
-static void initWidgetCreatorsMap();
-static bool buildWidgets(QString _fileName);
 
 //======================================================================================================================
 const LCXmlApplication::SBaseTagsNames      LCXmlApplication::mBaseTagNames;
@@ -173,7 +163,6 @@ int LCXmlApplication::exec(int argc, char *argv[])
         }
     }
 
-    initWidgetCreatorsMap();
 
     QFile file(__xmlMainFileWay + __xmlMainFileName);
 
@@ -229,125 +218,10 @@ int LCXmlApplication::exec(int argc, char *argv[])
         node = node.nextSibling();
     }
 
-//    if(!node.isNull())
-//    {
-
-//        for(int i = 0; i < nodes.size(); i++)
-//        {
-//            QDomElement el = nodes.at(i).toElement();
-//            QSharedPointer<LIXmlRemoteDataSourceBuilder> builder =
-//                    LCXmlRemoteDataSourceBuilders::instance().getBuilder(el.tagName());
-//            if(!builder.isNull())
-//            {
-//                LQDataSources sources = builder->create(el, __appInterface);
-//                LCXmlRemoteDataSourceMap::instace().addRemoteDataSorce(sources);
-//            }
-//        }
-//    }
-
-//    QDomNodeList modbusSourcesNodes = rootElement.elementsByTagName(__appXmlTags.modbussources);
-//    if(modbusSourcesNodes.isEmpty())
-//    {
-//        qDebug() << "Application: no modbus sources element";
-//        qDebug() << "Exit programm";
-//        return -1;
-//    }
-
-//    if(!modbusSourcesNodes.at(0).isElement())
-//    {
-//        qDebug() << "Application: no modbus sources file attribute";
-//        qDebug() << "Exit programm";
-//        return -1;
-//    }
-
-//    LQDataSources smap = LCXmlModbusSources().create(modbusSourcesNodes.at(0).toElement());
-
-//    if(smap.isEmpty())
-//    {
-//        qDebug() << "Application: no modbus sources";
-//    }
-
-//    LCXmlRemoteDataSourceMap::instace().addRemoteDataSorce(smap);
-
-    QDomNodeList widgetsNodes = rootElement.elementsByTagName(__appXmlTags.widgets);
-
-    if(widgetsNodes.isEmpty())
-    {
-        qDebug() << "Application: no widgets file";
-        qDebug() << "Exit programm";
-        return -1;
-    }
-
-    QString strBuff = widgetsNodes.at(0).toElement().attribute(__appXmlCommonTagsAttr.file);
-
-    if(strBuff.isNull())
-    {
-        qDebug() << "Application: wrong widgets file";
-        qDebug() << "Exit programm";
-        return -1;
-    }
-
-    if(!buildWidgets(strBuff))
-    {
-        qDebug() << "Exit programm";
-        return -1;
-    }
-
-
     QObject::connect(&app, &QApplication::aboutToQuit,
                      [&](){
             qDebug() << "QApplication::aboutToQuit";
     });
 
     return app.exec();
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-static void initWidgetCreatorsMap()
-{
-    LCXmlWidgetCreatorInterface *wcr;
-    wcr = new xmlwidgetcreators::LCXmlWidget;
-    LCXmlWidgetCreatorsMap::instace().addCreator("widget",       wcr);
-
-    wcr = new xmlwidgetcreators::LCXmlLabel;
-    LCXmlWidgetCreatorsMap::instace().addCreator("label",        wcr);
-
-    wcr = new xmlwidgetcreators::LCXmlRemLabel;
-    LCXmlWidgetCreatorsMap::instace().addCreator("datalabel",    wcr);
-
-    wcr = new xmlwidgetcreators::LCXmlRemLineEdit;
-    LCXmlWidgetCreatorsMap::instace().addCreator("datalineedit", wcr);
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-static bool buildWidgets(QString _fileName)
-{
-    QFile file(__xmlMainFileWay + _fileName);
-    QDomDocument domDoc;
-    QString errorStr;
-    int errorLine;
-    int errorColumn;
-
-    if(!domDoc.setContent(&file, true, &errorStr, &errorLine, &errorColumn))
-    {
-        qDebug() << "Widgets: parse error at line:"
-                 << errorLine << " column:" << errorColumn << " msg: " << errorStr;
-        return false;
-    }
-    else
-    {
-        QDomElement rootElement = domDoc.documentElement();
-
-        LCXmlWidgetCreatorInterface* cr = LCXmlWidgetCreatorsMap::instace().getCreator(rootElement.tagName());
-        if(cr)
-        {
-            QWidget* w = cr->create(rootElement);
-            if(w)
-            {
-                w->show();
-            }
-        }
-    }
-
-    return true;
 }

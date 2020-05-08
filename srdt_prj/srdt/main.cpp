@@ -39,26 +39,6 @@ QThread* __gStopTh1 = nullptr;
 #include <functional>
 #include <limits>
 
-#include "lcqremlabel.h"
-#include "lcqremlineedit.h"
-
-#include "lcstringdataformatterbool.h"
-
-#include "lcstringdataformatteru8.h"
-#include "lcstringdataformatters8.h"
-
-#include "lcstringdataformatteru16.h"
-#include "lcstringdataformatters16.h"
-
-#include "lcstringdataformatteru32.h"
-#include "lcstringdataformatters32.h"
-
-#include "lcstringdataformatterf32.h"
-#include "lqvalidatoru32.h"
-
-#include "lcstringdataformatterhex.h"
-
-
 #include <memory>
 
 #include "lcxmlapplication.h"
@@ -66,8 +46,6 @@ QThread* __gStopTh1 = nullptr;
 #include <QDomElement>
 #include <QDomDocument>
 #include "lcxmlwidgetcreatorsmap.h"
-#include "xmlwidgets/lcxmlwidget.h"
-#include "xmlwidgets/lcxmllabel.h"
 
 #include <QLibrary>
 

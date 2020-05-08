@@ -27,17 +27,17 @@ public:
     /*
      * Возвращает интеллектуальный указатель на источник данных
      */
-    virtual QSharedPointer<LIXmlRemoteDataSourceBuilder> getDataSourceBuilder(const QString _name) const = 0;
+    virtual QSharedPointer<LIXmlRemoteDataSourceBuilder> getDataSourceBuilder(const QString& _name) const = 0;
 
-    virtual QSharedPointer<LIRemoteDataSource> getDataSource(const QString _name) const = 0;
+    virtual QSharedPointer<LIRemoteDataSource> getDataSource(const QString& _name) const = 0;
     /*
      * Возвращает интеллектуальный указатель на построитель компоновцика объектов.
      */
-    virtual QSharedPointer<LIXmlLayoutBuilder> getLayoutBuilder(const QString _name) const = 0;
+    virtual QSharedPointer<LIXmlLayoutBuilder> getLayoutBuilder(const QString& _name) const = 0;
     /*
      * Возвращает интеллектуальный указатель на построитель визуального объекта.
      */
-    virtual QSharedPointer<LIXmlWidgetBuilder> getWidgetBuilder(const QString _name) const = 0;
+    virtual QSharedPointer<LIXmlWidgetBuilder> getWidgetBuilder(const QString& _name) const = 0;
 };
 
 #endif // LIAPPLICATION_H
