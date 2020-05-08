@@ -4,8 +4,6 @@
 
 #define __WRONG_DATA_STRING "####"
 
-namespace remgui
-{
 
 //===========================================================================================================LCQRemLabel
 LCQRemLabel::CReadListener::CReadListener(LCQRemLabel& _label) : mLabel(_label)
@@ -89,5 +87,3 @@ bool LCQRemLabel::event(QEvent *_event)
     QLabel::event(_event);
     return ret;
 }
-
-}//namespcae remgui

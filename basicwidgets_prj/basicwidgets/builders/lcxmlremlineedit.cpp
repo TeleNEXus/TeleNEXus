@@ -1,23 +1,22 @@
 #include "lcxmlremlineedit.h"
 #include "lcqremlineedit.h"
-#include "lcxmlremotedatasourcemap.h"
+#include "LIApplication.h"
 #include "lcxmlstddataformatterfactory.h"
+#include <QDomElement>
 
-using namespace remgui;
-
-namespace xmlwidgetcreators
-{
-
-LCXmlRemLineEdit::LCXmlRemLineEdit() : mpOrderCtrl(nullptr)
+//======================================================================================================================
+LCXmlRemLineEdit::LCXmlRemLineEdit()
 {
 
 }
 
+//----------------------------------------------------------------------------------------------------------------------
 LCXmlRemLineEdit::~LCXmlRemLineEdit()
 {
 
 }
 
+//----------------------------------------------------------------------------------------------------------------------
 const struct
 {
     QString data    = "data";
@@ -25,7 +24,8 @@ const struct
     QString format  = "format";
 } __attrNames;
 
-QWidget* LCXmlRemLineEdit::create(const QDomElement& _element)
+//----------------------------------------------------------------------------------------------------------------------
+QWidget* build(const QDomElement& _element, const LIApplication& _app)
 {
     QWidget* ret = nullptr;
 
@@ -39,7 +39,7 @@ QWidget* LCXmlRemLineEdit::create(const QDomElement& _element)
         goto LABEL_WRONG_EXIT;
     }
 
-    source = LCXmlRemoteDataSourceMap::instace().getRemoteDataSorce(attr);
+    source = _app.getDataSource(attr);
 
     if(source.isNull())
     {
@@ -69,4 +69,3 @@ LABEL_WRONG_EXIT:
     return ret;
 }
 
-} //namespace

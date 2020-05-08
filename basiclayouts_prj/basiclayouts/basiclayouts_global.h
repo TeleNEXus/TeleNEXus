@@ -1,0 +1,12 @@
+#ifndef BASICLAYOUTS_GLOBAL_H
+#define BASICLAYOUTS_GLOBAL_H
+
+#include <QtCore/qglobal.h>
+
+#if defined(BASICLAYOUTS_LIBRARY)
+#  define BASICLAYOUTS_EXPORT Q_DECL_EXPORT
+#else
+#  define BASICLAYOUTS_EXPORT Q_DECL_IMPORT
+#endif
+
+#endif // BASICLAYOUTS_GLOBAL_H

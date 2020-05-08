@@ -11,8 +11,6 @@
 #include "LIRemoteDataSource.h"
 
 
-namespace remgui
-{
 class LCQRemLabel : public QLabel
 {
     Q_OBJECT
@@ -52,9 +50,6 @@ public:
 
     virtual bool event(QEvent *e) override;
 
-signals:
-
 };
 
-}//namespace remgui
 #endif // LCQEXTLABEL_H

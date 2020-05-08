@@ -34,7 +34,6 @@ INCLUDEPATH +=                          \
 SOURCES += \
     ../../common/lqvalidatoru32.cpp \
     basicwidgets.cpp \
-    builders/lcxmllabel.cpp \
     builders/lcxmlremlabel.cpp \
     builders/lcxmlremlineedit.cpp \
     builders/lcxmltextlabelbuilder.cpp \
@@ -50,6 +49,7 @@ SOURCES += \
     widgets/dataformatters/lcstringdataformatteru16.cpp \
     widgets/dataformatters/lcstringdataformatteru32.cpp \
     widgets/dataformatters/lcstringdataformatteru8.cpp \
+    widgets/dataformatters/lcxmlstddataformatterfactory.cpp \
     widgets/lcqremlabel.cpp \
     widgets/lcqremlineedit.cpp
 
@@ -66,12 +66,11 @@ HEADERS += \
     ../../common/lqvalidatoru32.h \
     basicwidgets_global.h \
     basicwidgets.h \
-    builders/lcxmllabel.h \
     builders/lcxmlremlabel.h \
     builders/lcxmlremlineedit.h \
     builders/lcxmltextlabelbuilder.h \
     builders/lcxmlwidget.h \
-    widgets/dataformatters/LCStringDataFormatterInterface.h \
+    widgets/dataformatters/LIStringDataFormatter.h \
     widgets/dataformatters/lcstringdataformatterbase.h \
     widgets/dataformatters/lcstringdataformatterbool.h \
     widgets/dataformatters/lcstringdataformatterf32.h \
@@ -83,6 +82,7 @@ HEADERS += \
     widgets/dataformatters/lcstringdataformatteru16.h \
     widgets/dataformatters/lcstringdataformatteru32.h \
     widgets/dataformatters/lcstringdataformatteru8.h \
+    widgets/dataformatters/lcxmlstddataformatterfactory.h \
     widgets/lcqremlabel.h \
     widgets/lcqremlineedit.h \
     widgets/lremgui.h

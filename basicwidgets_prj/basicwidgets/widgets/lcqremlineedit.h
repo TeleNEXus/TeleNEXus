@@ -11,9 +11,6 @@
 #include "LIRemoteDataWriteListner.h"
 #include "LIRemoteDataSource.h"
 
-namespace remgui
-{
-
 class LCQRemLineEdit : public QLineEdit
 {
     Q_OBJECT
@@ -72,6 +69,5 @@ protected:
     virtual void focusOutEvent(QFocusEvent *) override;
     virtual bool event(QEvent *e) override;
 };
-}
 
 #endif // LCQREMLINEEDIT_H

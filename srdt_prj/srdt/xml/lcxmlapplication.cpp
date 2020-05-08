@@ -49,10 +49,29 @@ public:
     CApplicationInterface(){}
     virtual QString getProjectPath() const override { return __xmlMainFileWay;}
     virtual QDir getProjectDir() const override {return __xmlMainFileDir;}
+
     virtual QSharedPointer<LIXmlRemoteDataSourceBuilder> getDataSourceBuilder(const QString _name) const override
     {
         return LCXmlRemoteDataSourceBuilders::instance().getBuilder(_name);
     }
+
+    QSharedPointer<LIRemoteDataSource> getDataSource(const QString _name) const override
+    {
+        return LCXmlRemoteDataSourceMap::instace().getRemoteDataSorce(_name);
+    }
+
+    QSharedPointer<LIXmlLayoutBuilder> getLayoutBuilder(const QString _name) const override
+    {
+        //TODO: Добавить возвращаемое значение.
+        return nullptr;
+    }
+
+    QSharedPointer<LIXmlWidgetBuilder> getWidgetBuilder(const QString _name) const override
+    {
+        //TODO: Добавить возвращаемое значение.
+        return nullptr;
+    }
+
 };
 
 static CApplicationInterface __appInterface;
