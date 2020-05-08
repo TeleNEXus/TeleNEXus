@@ -21,7 +21,7 @@ VS_VERSION_INFO VERSIONINFO
 				VALUE "FileDescription", "\0"
 				VALUE "FileVersion", "1.0.0.0\0"
 				VALUE "LegalCopyright", "\0"
-				VALUE "OriginalFilename", "basicwidgets1.dll\0"
+				VALUE "OriginalFilename", "basicwidgets.dll\0"
 				VALUE "ProductName", "basicwidgets\0"
 				VALUE "ProductVersion", "1.0.0.0\0"
 			END

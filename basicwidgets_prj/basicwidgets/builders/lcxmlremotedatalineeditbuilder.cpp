@@ -1,17 +1,17 @@
-#include "lcxmlremlineedit.h"
+#include "lcxmlremotedatalineeditbuilder.h"
 #include "lcqremlineedit.h"
 #include "LIApplication.h"
 #include "lcxmlstddataformatterfactory.h"
 #include <QDomElement>
 
 //======================================================================================================================
-LCXmlRemLineEdit::LCXmlRemLineEdit()
+LCXmlRemoteDataLineEditBuilder::LCXmlRemoteDataLineEditBuilder()
 {
 
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-LCXmlRemLineEdit::~LCXmlRemLineEdit()
+LCXmlRemoteDataLineEditBuilder::~LCXmlRemoteDataLineEditBuilder()
 {
 
 }
@@ -25,7 +25,7 @@ const struct
 } __attrNames;
 
 //----------------------------------------------------------------------------------------------------------------------
-QWidget* build(const QDomElement& _element, const LIApplication& _app)
+QWidget* LCXmlRemoteDataLineEditBuilder::build(const QDomElement& _element, const LIApplication& _app)
 {
     QWidget* ret = nullptr;
 

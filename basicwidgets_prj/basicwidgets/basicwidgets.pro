@@ -34,10 +34,10 @@ INCLUDEPATH +=                          \
 SOURCES += \
     ../../common/lqvalidatoru32.cpp \
     basicwidgets.cpp \
-    builders/lcxmlremlabel.cpp \
-    builders/lcxmlremlineedit.cpp \
+    builders/lcxmlremotedatalabelbuilder.cpp \
+    builders/lcxmlremotedatalineeditbuilder.cpp \
     builders/lcxmltextlabelbuilder.cpp \
-    builders/lcxmlwidget.cpp \
+    builders/lcxmlwidgetbuilder.cpp \
     widgets/dataformatters/lcstringdataformatterbase.cpp \
     widgets/dataformatters/lcstringdataformatterbool.cpp \
     widgets/dataformatters/lcstringdataformatterf32.cpp \
@@ -66,10 +66,10 @@ HEADERS += \
     ../../common/lqvalidatoru32.h \
     basicwidgets_global.h \
     basicwidgets.h \
-    builders/lcxmlremlabel.h \
-    builders/lcxmlremlineedit.h \
+    builders/lcxmlremotedatalabelbuilder.h \
+    builders/lcxmlremotedatalineeditbuilder.h \
     builders/lcxmltextlabelbuilder.h \
-    builders/lcxmlwidget.h \
+    builders/lcxmlwidgetbuilder.h \
     widgets/dataformatters/LIStringDataFormatter.h \
     widgets/dataformatters/lcstringdataformatterbase.h \
     widgets/dataformatters/lcstringdataformatterbool.h \
