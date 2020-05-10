@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <SOURCEBUILDERS>
-    <BUILDER name="modbussources" lib="libs/modbussource" libhandler="getModbusSourceBuilder" />
+    <modbussources lib="libs/modbussource" libhandler="getModbusSourceBuilder" />
 
     <!--
-    <BUILDER name="mssqlsource"   lib="libs/sqlsources"     libhandler="getMsSqlSourcesBuilder" />
-    <BUILDER name="sqlsource"     lib="libs/sqlsources"     libhandler="getSqlSourcesBuilder"   />
+    <mssqlsource   lib="libs/sqlsources"     libhandler="getMsSqlSourcesBuilder" />
+    <sqlsource     lib="libs/sqlsources"     libhandler="getSqlSourcesBuilder"   />
     -->
     
 </SOURCEBUILDERS>

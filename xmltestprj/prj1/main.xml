@@ -3,11 +3,11 @@
 <APPLICATION>
     
     <!--SOURCEBUILDERS>
-        <BUILDER name="modbussources" lib="libs/mbsource"       libhandler="getModbusSourceBuilder" />
-        <BUILDER name="modbussources" lib="libs/mbsource"       libhandler="getModbusSourceBuilder" />
-        <BUILDER name="modbussources" lib="libs/mbsource"       libhandler="getModbusSourceBuilder" />
-        <BUILDER name="mssqlsource"   lib="libs/sqlsources"     libhandler="getMsSqlSourcesBuilder" />
-        <BUILDER name="sqlsource"     lib="libs/sqlsources"     libhandler="getSqlSourcesBuilder"   />
+        <modbussources lib="libs/mbsource"       libhandler="getModbusSourceBuilder" />
+        <modbussources lib="libs/mbsource"       libhandler="getModbusSourceBuilder" />
+        <modbussources lib="libs/mbsource"       libhandler="getModbusSourceBuilder" />
+        <mssqlsource   lib="libs/sqlsources"     libhandler="getMsSqlSourcesBuilder" />
+        <sqlsource     lib="libs/sqlsources"     libhandler="getSqlSourcesBuilder"   />
     </SOURCEBUILDERS-->
     
     <SOURCEBUILDERS file="sourcebuilders.xml"/>
@@ -16,29 +16,30 @@
         <modbussources file="modbussources.xml"/>
     </SOURCES>
     
+    <LAYOUTBUILDERS>
+        <layoutGrid lib="libs/basiclayouts" libhandler="getGridLayoutBuilder" />
+        <layoutBox  lib="libs/basiclayouts" libhandler="getBoxLayoutBuilder" />
+    </LAYOUTBUILDERS>
+    
+    <!--LAYOUTBUILDERS file="layoutbuilders.xml"/-->
     
     <WIDGETBUILDERS>
-        <BUILDER name="label"           lib="libs/widgetsbase" libhandler="getTextLabelBuilder"             />
-        <BUILDER name="dataLabel"       lib="libs/widgetsbase" libhandler="getRemoteDataLabelBuilder"       />
-        <BUILDER name="dataLineEdit"    lib="libs/widgetsbase" libhandler="getRemoteDataLineEditBuilder"    />
+        <widget         lib="libs/basicwidgets" libhandler="getWidgetBuilder"               />
+        <label          lib="libs/basicwidgets" libhandler="getTextLabelBuilder"            />
+        <dataLabel      lib="libs/basicwidgets" libhandler="getRemoteDataLabelBuilder"      />
+        <dataLineEdit   lib="libs/basicwidgets" libhandler="getRemoteDataLineEditBuilder"   />
     </WIDGETBUILDERS>
     
     <WIDGETBUILDERS file="widgetbuilders.xml"/>
     
-    <LAYOUTBUILDERS>
-        <BUILDER name="layoutGrid" lib="libs/layoutsbase" libhandler="getGridLayoutBuilder" />
-        <BUILDER name="layoutVBox" lib="libs/layoutsbase" libhandler="getVBoxLayoutBuilder" />
-    </LAYOUTBUILDERS>
-
-    <LAYOUTBUILDERS file="layoutbuilders.xml"/>
     
     
     <WINDOWS file="windows.xml"/>
     
     <WINDOWS>
-        <WINDOW name="dialog2" visible="false" file="dialog2.xml"/>
-        <WINDOW name="dialog3" visible="false" file="dialog3.xml"/>
-        <WINDOW name="dialog4" visible="false" file="dialog4.xml"/>
+        <dialog2 visible="false" file="dialog2.xml"/>
+        <dialog3 visible="false" file="dialog3.xml"/>
+        <dialog4 visible="false" file="dialog4.xml"/>
     </WINDOWS>
         
     <WINDOW name="dialog" file="dialog1.xml"/>
@@ -61,7 +62,6 @@
         </widget>
     </WINDOW>
     
-    <widgets file="widgets.xml"/>
-    <modbussources file="modbussources.xml"/>
-    
+    <WIDGETS file="widgets.xml"/>
+        
 </APPLICATION>

@@ -33,7 +33,7 @@ static void createSources(const QDomNodeList& nodes,
                           const LIApplication& _app);
 
 //----------------------------------------------------------------------------------------------------------------------
-LQDataSources LCXmlModbusSourceBuilder::create(const QDomElement &_element, const LIApplication& _app)
+LQDataSources LCXmlModbusSourceBuilder::build(const QDomElement &_element, const LIApplication& _app)
 {
     LQDataSources map;
     QFile file;

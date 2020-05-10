@@ -8,14 +8,10 @@ using TLibAccessFunc = void* (*)();
 
 //======================================================================================================================
 LCXmlBuildersLoader::LCXmlBuildersLoader(const QString& _tagRoot,
-                                         const QString& _tagBuilder,
                                          const QString& _attrFile,
-                                         const QString& _attrName,
                                          const QString& _attrLib,
                                          const QString& _attrLibHandler) :  mTagRoot(_tagRoot),
-                                                                            mTagBuilder(_tagBuilder),
                                                                             mAttrFile(_attrFile),
-                                                                            mAttrName(_attrName),
                                                                             mAttrLib(_attrLib),
                                                                             mAttrLibHandler(_attrLibHandler)
 {
@@ -30,7 +26,7 @@ int LCXmlBuildersLoader::load(const QDomElement& _element, const QString& _pathP
 
     if(fileName.isNull())
     {
-        return loadBuilders(_element.elementsByTagName(mTagBuilder), _pathLib);
+        return loadBuilders(_element, _pathLib);
     }
 
     fileName = _pathPrj + "/" + fileName;
@@ -58,29 +54,34 @@ int LCXmlBuildersLoader::load(const QDomElement& _element, const QString& _pathP
         return 0;
     }
 
-    return loadBuilders(rootElement.elementsByTagName(mTagBuilder), _pathLib);
+    return loadBuilders(rootElement, _pathLib);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-int LCXmlBuildersLoader::loadBuilders(const QDomNodeList& _nodeList, const QString& _libPath)
+int LCXmlBuildersLoader::loadBuilders(const QDomElement& _element, const QString& _libPath)
 {
     int loadCounter = 0;
 
-    for(int i = 0; i < _nodeList.size(); i++)
+    QDomNode node = _element.firstChild();
+
+    while(!node.isNull())
     {
+        if(!node.isElement())
+        {
+            node = node.nextSibling();
+            continue;
+        }
 
-        QDomElement el = _nodeList.at(i).toElement();
-
-        QString name = el.attribute(mAttrName);
-        if(name.isNull()) continue;
+        QDomElement el = node.toElement();
 
         QString libhandler = el.attribute(mAttrLibHandler);
-        if(libhandler.isNull()) continue;
-
-
         QString libfilename  = el.attribute(mAttrLib);
-        if(libfilename.isNull()) continue;
 
+        if(libhandler.isNull() || libfilename.isNull())
+        {
+            node = node.nextSibling();
+            continue;
+        }
 
         QLibrary lib;
 
@@ -95,8 +96,9 @@ int LCXmlBuildersLoader::loadBuilders(const QDomNodeList& _nodeList, const QStri
                 {
                     if(!lib.load())
                     {
-                        qDebug() << "WARNING[builder loader]: tag=" << mTagRoot << " can't load library " << libfilename
-                        << " to load source builder " << name;
+                        qDebug() << "WARNING[builder loader]: tag=" << mTagRoot << " can't load library "
+                                 << libfilename << " to load source builder " << el.tagName();
+                        node = node.nextSibling();
                         continue;
                     }
                     else
@@ -129,16 +131,20 @@ int LCXmlBuildersLoader::loadBuilders(const QDomNodeList& _nodeList, const QStri
         {
             qDebug() << "WARNING[builder loader]: tag=" << mTagRoot << " can't resolve access func "
                      << libhandler << " in library "
-                     << lib.fileName() << " to load remote source builder" << name;
+                     << lib.fileName() << " to load remote source builder" << el.tagName();
+            node = node.nextSibling();
             continue;
         }
 
-        if(add(name, func()))
+        if(add(el.tagName(), func()))
         {
             loadCounter++;
             qDebug() << "MESSAGE[builder loader]: tag=" << mTagRoot << " load builder name: "
-                     << name << " access func: " << libhandler;
+                     << el.tagName() << " access func: " << libhandler;
         }
+
+        loadCounter++;
+        node = node.nextSibling();
     }
 
     return loadCounter;

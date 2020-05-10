@@ -18,82 +18,84 @@
     </layout>
 </widget-->
 
-<widget title="TITLE CHECK">
-    <layout type="grid">
-    
-        <col>
-            <datalineedit  data="hreg0" source="bvitcp" format="hex"/>
-            <datalineedit  data="hreg1" source="bvitcp" format="uint16"/>
-            <datalineedit  data="hflt"  source="bvitcp" format="float32"/>
-        </col>
+<WIDGETS>
+    <widget title="TITLE CHECK">
+        <layout type="grid">
         
-        <col>
-            <datalineedit  data="hreg2" source="bvitcp" format="uint16"/>
-            <datalineedit  data="hreg3" source="bvitcp" format="uint16"/>
-            <datalineedit  data="hreg4"  source="bvitcp" format="uint16"/>
-        </col>
-        
-        <col>
-            <datalabel  data="hreg0" source="bvitcp" format="uint16"/>
-            <datalabel  data="hreg1" source="bvitcp" format="uint16"/>
-            <datalabel  data="hflt"  source="bvitcp" format="float32"/>
-        </col>
-        
-        <col>
-            <datalineedit  data="hreg0" source="bvirtu" format="uint16"/>
-            <datalineedit  data="hreg1" source="bvirtu" format="uint16"/>
-            <datalineedit  data="hflt"  source="bvirtu" format="float32"/>
-        </col>
-        
-        <col>
-            <datalineedit  data="hreg0" source="bvirtu" format="uint16"/>
-            <datalineedit  data="hreg1" source="bvirtu" format="uint16"/>
-            <datalineedit  data="hflt"  source="bvirtu" format="float32"/>
-        </col>
-        
-        <col>
-            <datalabel  data="hreg0" source="bvirtu" format="uint16"/>
-            <datalabel  data="hreg1" source="bvirtu" format="uint16"/>
-            <datalabel  data="hflt"  source="bvirtu" format="float32"/>
-        </col>
-        
-        <col>
-            <datalabel  data="hreg0" source="qtslavetcp" format="uint16"/>
-            <datalabel  data="hreg1" source="qtslavetcp" format="uint16"/>
-            <datalabel  data="hflt"  source="qtslavetcp" format="float32"/>
-        </col>
-        
-        <col>
-            <datalabel  data="inreg0" source="qtslavetcp" format="uint16"/>
-            <datalabel  data="inreg1" source="qtslavetcp" format="uint16"/>
-            <datalabel  data="inflt"  source="qtslavetcp" format="float32"/>
-        </col>
-        
-        <col>
-            <datalabel  data="coil0" source="qtslavetcp"  format="bool"/>
-            <datalabel  data="coil1" source="qtslavetcp"  format="bool"/>
-            <datalabel  data="coil2" source="qtslavetcp"  format="bool"/>
-        </col>
-        
-        <col>
-            <datalabel  data="din0" source="qtslavetcp" format="bool"/>
-            <datalabel  data="din1" source="qtslavetcp" format="bool"/>
-            <datalabel  data="din2" source="qtslavetcp" format="bool"/>
-        </col>
-        
-        
-        <!--row>
-            <datalabel  data="hreg0" source="qtslavetcp" format="uint16"/>
-        </row>              
-        <row>
-            <datalabel  data="hreg1" source="qtslavetcp" format="uint16"/>
-        </row>
-        <col>
-            <datalabel  data="flt" source="qtslavetcp" format="float32"/>
-        </col-->
-        
-    </layout>
-</widget>
+            <col>
+                <datalineedit  data="hreg0" source="bvitcp" format="hex"/>
+                <datalineedit  data="hreg1" source="bvitcp" format="uint16"/>
+                <datalineedit  data="hflt"  source="bvitcp" format="float32"/>
+            </col>
+            
+            <col>
+                <datalineedit  data="hreg2" source="bvitcp" format="uint16"/>
+                <datalineedit  data="hreg3" source="bvitcp" format="uint16"/>
+                <datalineedit  data="hreg4"  source="bvitcp" format="uint16"/>
+            </col>
+            
+            <col>
+                <datalabel  data="hreg0" source="bvitcp" format="uint16"/>
+                <datalabel  data="hreg1" source="bvitcp" format="uint16"/>
+                <datalabel  data="hflt"  source="bvitcp" format="float32"/>
+            </col>
+            
+            <col>
+                <datalineedit  data="hreg0" source="bvirtu" format="uint16"/>
+                <datalineedit  data="hreg1" source="bvirtu" format="uint16"/>
+                <datalineedit  data="hflt"  source="bvirtu" format="float32"/>
+            </col>
+            
+            <col>
+                <datalineedit  data="hreg0" source="bvirtu" format="uint16"/>
+                <datalineedit  data="hreg1" source="bvirtu" format="uint16"/>
+                <datalineedit  data="hflt"  source="bvirtu" format="float32"/>
+            </col>
+            
+            <col>
+                <datalabel  data="hreg0" source="bvirtu" format="uint16"/>
+                <datalabel  data="hreg1" source="bvirtu" format="uint16"/>
+                <datalabel  data="hflt"  source="bvirtu" format="float32"/>
+            </col>
+            
+            <col>
+                <datalabel  data="hreg0" source="qtslavetcp" format="uint16"/>
+                <datalabel  data="hreg1" source="qtslavetcp" format="uint16"/>
+                <datalabel  data="hflt"  source="qtslavetcp" format="float32"/>
+            </col>
+            
+            <col>
+                <datalabel  data="inreg0" source="qtslavetcp" format="uint16"/>
+                <datalabel  data="inreg1" source="qtslavetcp" format="uint16"/>
+                <datalabel  data="inflt"  source="qtslavetcp" format="float32"/>
+            </col>
+            
+            <col>
+                <datalabel  data="coil0" source="qtslavetcp"  format="bool"/>
+                <datalabel  data="coil1" source="qtslavetcp"  format="bool"/>
+                <datalabel  data="coil2" source="qtslavetcp"  format="bool"/>
+            </col>
+            
+            <col>
+                <datalabel  data="din0" source="qtslavetcp" format="bool"/>
+                <datalabel  data="din1" source="qtslavetcp" format="bool"/>
+                <datalabel  data="din2" source="qtslavetcp" format="bool"/>
+            </col>
+            
+            
+            <!--row>
+                <datalabel  data="hreg0" source="qtslavetcp" format="uint16"/>
+            </row>              
+            <row>
+                <datalabel  data="hreg1" source="qtslavetcp" format="uint16"/>
+            </row>
+            <col>
+                <datalabel  data="flt" source="qtslavetcp" format="float32"/>
+            </col-->
+            
+        </layout>
+    </widget>
+</WIDGETS>
 
 <!--widget title="TITLE CHECK">
     <layout type="grid">

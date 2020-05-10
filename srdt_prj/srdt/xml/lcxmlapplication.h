@@ -10,10 +10,13 @@ public:
 
     struct SBaseTagsNames
     {
-        QString builder         = "BUILDER";
+        QString rootTag         = "APPLICATION";
         QString sourceBuilders  = "SOURCEBUILDERS";
-        QString widget          = "WIDGET";
-        QString layout          = "LAYOUT";
+        QString widgetBuilders  = "WIDGETBUILDERS";
+        QString layoutBuilders  = "LAYOUTBUILDERS";
+        QString builder         = "BUILDER";
+        QString sources         = "SOURCES";
+        QString widgets         = "WIDGETS";
     };
 
     static const SBaseTagsNames mBaseTagNames;

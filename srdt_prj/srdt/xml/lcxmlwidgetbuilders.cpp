@@ -13,10 +13,8 @@ static LQLayoutBuildersMap __buildersMap;
 
 //======================================================================================================================
 LCXmlWidgetBuilders::LCXmlWidgetBuilders() :
-        LCXmlBuildersLoader(    LCXmlApplication::mBaseTagNames.sourceBuilders,
-                                LCXmlApplication::mBaseTagNames.builder,
+        LCXmlBuildersLoader(    LCXmlApplication::mBaseTagNames.widgetBuilders,
                                 LCXmlApplication::mBaseAttributeNames.file,
-                                LCXmlApplication::mBaseAttributeNames.name,
                                 LCXmlApplication::mBaseAttributeNames.lib,
                                 LCXmlApplication::mBaseAttributeNames.libhandler)
 {
