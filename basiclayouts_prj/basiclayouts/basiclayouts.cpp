@@ -4,13 +4,13 @@
 
 
 //----------------------------------------------------------------------------------------------------------------------
-void* BASICLAYOUTS_EXPORT getGridLayoutBulder()
+void* BASICLAYOUTS_EXPORT getGridLayoutBuilder()
 {
     return new LCXmlGridLayoutBuilder;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-void* BASICLAYOUTS_EXPORT getBoxLayoutBulder()
+void* BASICLAYOUTS_EXPORT getBoxLayoutBuilder()
 {
     return new LCXmlBoxLayoutBuilder;
 }

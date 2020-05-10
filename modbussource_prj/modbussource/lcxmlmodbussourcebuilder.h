@@ -7,7 +7,7 @@ class LCXmlModbusSourceBuilder : public LIXmlRemoteDataSourceBuilder
 {
 public:
     LCXmlModbusSourceBuilder();
-    virtual LQDataSources create(const QDomElement &_element, const LIApplication& _app) override;
+    virtual LQDataSources build(const QDomElement &_element, const LIApplication& _app) override;
 };
 
 #endif // LCXMLMODBUSSOURCEBUILDER_H

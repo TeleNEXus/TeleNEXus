@@ -14,9 +14,7 @@ static LQWidgetBuildersMap __buildersMap;
 //======================================================================================================================
 LCXmlRemoteDataSourceBuilders::LCXmlRemoteDataSourceBuilders() :
         LCXmlBuildersLoader(    LCXmlApplication::mBaseTagNames.sourceBuilders,
-                                LCXmlApplication::mBaseTagNames.builder,
                                 LCXmlApplication::mBaseAttributeNames.file,
-                                LCXmlApplication::mBaseAttributeNames.name,
                                 LCXmlApplication::mBaseAttributeNames.lib,
                                 LCXmlApplication::mBaseAttributeNames.libhandler)
 {

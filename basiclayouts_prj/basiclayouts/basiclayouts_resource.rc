@@ -22,7 +22,7 @@ VS_VERSION_INFO VERSIONINFO
 				VALUE "FileVersion", "1.0.0.0\0"
 				VALUE "LegalCopyright", "\0"
 				VALUE "OriginalFilename", "basiclayouts.dll\0"
-				VALUE "ProductName", "basiclayouts122121\0"
+				VALUE "ProductName", "basiclayouts\0"
 				VALUE "ProductVersion", "1.0.0.0\0"
 			END
 		END
