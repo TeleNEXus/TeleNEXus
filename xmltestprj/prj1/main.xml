@@ -17,8 +17,8 @@
     </SOURCES>
     
     <LAYOUTBUILDERS>
-        <layoutGrid lib="libs/basiclayouts" libhandler="getGridLayoutBuilder" />
-        <layoutBox  lib="libs/basiclayouts" libhandler="getBoxLayoutBuilder" />
+        <grid lib="libs/basiclayouts" libhandler="getGridLayoutBuilder" />
+        <box  lib="libs/basiclayouts" libhandler="getBoxLayoutBuilder" />
     </LAYOUTBUILDERS>
     
     <!--LAYOUTBUILDERS file="layoutbuilders.xml"/-->
