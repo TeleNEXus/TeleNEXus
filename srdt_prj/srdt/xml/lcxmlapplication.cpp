@@ -276,7 +276,7 @@ static void addWidgetsBuilders(const QDomElement& _rootElement)
 //======================================================================================================================
 static void addWidgets(const QDomElement& _rootElement)
 {
-    //Загрузка построителей источников данных.
+
     QDomElement element = _rootElement.elementsByTagName(LCXmlApplication::mBaseTagNames.widgets).at(0).toElement();
 
     if(element.isNull()) return;

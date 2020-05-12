@@ -4,6 +4,19 @@
 #include <QWidget>
 #include <QDomElement>
 
+#include <QDebug>
+
+static const struct
+{
+    QString layout = "layout";
+} sl_Tags;
+
+static const struct
+{
+    QString title = "title";
+    QString type  = "type";
+} sl_Attr;
+
 //======================================================================================================================
 LCXmlWidgetBuilder::LCXmlWidgetBuilder()
 {
@@ -23,25 +36,25 @@ QWidget* LCXmlWidgetBuilder::build(const QDomElement& _element, const LIApplicat
 
     QString attr;
 
-    attr = _element.attribute("title");
+    attr = _element.attribute(sl_Attr.title);
 
     if(!attr.isNull()) widget->setWindowTitle(attr);
 
-    QDomNode node = _element.firstChild();
-    while(!node.isNull())
+    QDomElement layout = _element.elementsByTagName(sl_Tags.layout).at(0).toElement();
+
+    if(!layout.isNull())
     {
-        if(!node.isElement()) continue;
-        QDomElement element = node.toElement();
-        if(!element.isNull())
+        QString type = layout.attribute(sl_Attr.type);
+        if(!type.isNull())
         {
-            QSharedPointer<LIXmlLayoutBuilder> lb = _app.getLayoutBuilder(element.tagName());
-            if(!lb.isNull())
+            auto builder = _app.getLayoutBuilder(type);
+            if(!builder.isNull())
             {
-                widget->setLayout(lb->build(element, _app));
+                widget->setLayout(builder->build(layout, _app));
             }
         }
-        node = node.nextSibling();
     }
+
     return widget;
 }
 
