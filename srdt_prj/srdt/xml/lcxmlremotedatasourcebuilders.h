@@ -7,7 +7,6 @@
 #include "lcxmlbuildersloader.h"
 #include "LIXmlRemoteDataSourceBuilder.h"
 
-
 class LCXmlRemoteDataSourceBuilders : public LCXmlBuildersLoader
 {
 public:
@@ -21,6 +20,7 @@ public:
     static LCXmlRemoteDataSourceBuilders& instance();
     QSharedPointer<LIXmlRemoteDataSourceBuilder> getBuilder(const QString _name);
     virtual bool add(const QString &_name, void *_builder) override;
+    bool noItems();
 };
 
 #endif // LCXMLSOURCEBUILDERLOADER_H

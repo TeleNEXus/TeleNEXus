@@ -12,9 +12,11 @@
     
     <SOURCEBUILDERS file="sourcebuilders.xml"/>
     
-    <SOURCES>
+    <!--SOURCES>
         <modbussources file="modbussources.xml"/>
-    </SOURCES>
+    </SOURCES-->
+    
+    <SOURCES file="sources.xml"/>
     
     <LAYOUTBUILDERS>
         <grid lib="libs/basiclayouts" libhandler="getGridLayoutBuilder" />
