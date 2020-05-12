@@ -28,14 +28,11 @@ INCLUDEPATH +=                                  \
 
 SOURCES += \
         ../../common/lqvalidatoru32.cpp \
-        lctestdllclass.cpp \
         xml/lcxmlapplication.cpp \
         xml/lcxmlbuildersloader.cpp \
         xml/lcxmllayoutbuilders.cpp \
         xml/lcxmlremotedatasourcebuilders.cpp \
-        xml/lcxmlremotedatasourcemap.cpp \
         xml/lcxmlwidgetbuilders.cpp \
-        xml/lcxmlwidgetcreatorsmap.cpp \
         main.cpp \
 
 # Default rules for deployment.
@@ -54,15 +51,9 @@ HEADERS += \
     ../../common/interfaces/remotedata/LIRemoteDataWriter.h \
     ../../common/interfaces/xmlbuilders/LIXmlRemoteDataSourceBuilder.h \
     ../../common/interfaces/xmlbuilders/LIXmlWidgetBuilder.h \
-    xml/LCXmlWidgetCreatorsMapInterface.h \
     xml/lcxmlapplication.h \
     xml/lcxmlbuildersloader.h \
     xml/lcxmllayoutbuilders.h \
     xml/lcxmlremotedatasourcebuilders.h \
-    xml/lcxmlremotedatasourcemap.h \
     xml/lcxmlwidgetbuilders.h \
-    xml/lcxmlwidgetcreatorinterface.h \
-    xml/lcxmlwidgetcreatorsmap.h \
-    lctestdllclass.h    \
-    testdllinterface.h  \
 

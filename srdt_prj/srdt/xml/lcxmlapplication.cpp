@@ -1,6 +1,5 @@
 #include "lcxmlapplication.h"
-#include "lcxmlwidgetcreatorsmap.h"
-#include "lcxmlremotedatasourcemap.h"
+
 #include "LIApplication.h"
 #include "lcxmlremotedatasourcebuilders.h"
 #include "lcxmllayoutbuilders.h"
@@ -25,19 +24,8 @@ static const struct
     QString xmlMainFilePath = "xmlpath";
 } __appOptionsName;
 
-//static const struct
-//{
-//    QString application     = "APPLICATION";
-//    QString sourcebuilders  = "SOURCEBUILDERS";
-//    QString sources         = "SOURCES";
-//    QString modbussources   = "modbussources";
-//    QString widgets         = "widgets";
-//} __appXmlTags;
-
-//static const struct
-//{
-//    QString file            = "file";
-//}__appXmlCommonTagsAttr;
+using TQRemoteDataSourceMap = QMap<QString, QSharedPointer<LIRemoteDataSource>>;
+TQRemoteDataSourceMap sl_RemoteDataSourceMap;
 
 //======================================================================================================================
 class CApplicationInterface : public LIApplication
@@ -54,7 +42,9 @@ public:
 
     QSharedPointer<LIRemoteDataSource> getDataSource(const QString& _name) const override
     {
-        return LCXmlRemoteDataSourceMap::instace().getRemoteDataSorce(_name);
+        TQRemoteDataSourceMap::iterator it = sl_RemoteDataSourceMap.find(_name);
+        if(it == sl_RemoteDataSourceMap.end()) return nullptr;
+        return it.value();
     }
 
     QSharedPointer<LIXmlLayoutBuilder> getLayoutBuilder(const QString& _name) const override
@@ -237,12 +227,21 @@ static void addSources(const QDomElement& _rootElement)
         if(node.isElement())
         {
             QDomElement el = node.toElement();
-            QSharedPointer<LIXmlRemoteDataSourceBuilder> builder =
-                    LCXmlRemoteDataSourceBuilders::instance().getBuilder(el.tagName());
+
+            auto builder = LCXmlRemoteDataSourceBuilders::instance().getBuilder(el.tagName());
+
             if(!builder.isNull())
             {
-                LQDataSources sources = builder->build(el, sl_appInterface);
-                LCXmlRemoteDataSourceMap::instace().addRemoteDataSorce(sources);
+                auto sources = builder->build(el, sl_appInterface);
+                auto it = sources.begin();
+                while(it != sources.end())
+                {
+                    if(sl_RemoteDataSourceMap.find(it.key()) != sources.end())
+                    {
+                        sl_RemoteDataSourceMap.insert(it.key(), it.value());
+                    }
+                    it++;
+                }
             }
         }
         node = node.nextSibling();
