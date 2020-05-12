@@ -4,9 +4,21 @@
 #include "lcxmllayoutbuilderbase.h"
 #include <QBoxLayout>
 
-class LCXmlBoxLayoutBuilder : public LCXmlLayoutBuilderBase
+class LCXmlBoxLayoutBuilder final : public LCXmlLayoutBuilderBase
 {
 private:
+    struct SAttributes
+    {
+        QString direction = "direction";
+        struct
+        {
+           QString leftToRight = "LeftToRight";
+           QString rightToLeft = "RightToLeft";
+           QString topToBottom = "TopToBottom";
+           QString bottomToTop = "BottomToTop";
+        } directionVals;
+    };
+    static const SAttributes mAttributes;
     bool mFlagDirModeDef;
     QBoxLayout::Direction mDirectionDef;
 public:
