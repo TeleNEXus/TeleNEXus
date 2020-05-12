@@ -9,7 +9,7 @@
 using LQWidgetBuildersMap = QMap<QString, QSharedPointer<LIXmlRemoteDataSourceBuilder>>;
 
 //======================================================================================================================
-static LQWidgetBuildersMap __buildersMap;
+static LQWidgetBuildersMap sl_BuildersMap;
 
 //======================================================================================================================
 LCXmlRemoteDataSourceBuilders::LCXmlRemoteDataSourceBuilders() :
@@ -30,21 +30,27 @@ LCXmlRemoteDataSourceBuilders& LCXmlRemoteDataSourceBuilders::instance()
 //----------------------------------------------------------------------------------------------------------------------
 QSharedPointer<LIXmlRemoteDataSourceBuilder> LCXmlRemoteDataSourceBuilders::getBuilder(const QString _name)
 {
-    LQWidgetBuildersMap::iterator it = __buildersMap.find(_name);
-    if(it != __buildersMap.end())
+    auto it = sl_BuildersMap.find(_name);
+    if(it != sl_BuildersMap.end())
     {
         return it.value();
     }
-    return QSharedPointer<LIXmlRemoteDataSourceBuilder>();
+    return nullptr;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
 bool LCXmlRemoteDataSourceBuilders::add(const QString &_name, void *_builder)
 {
-    if(__buildersMap.find(_name) != __buildersMap.end()) return false;
+    if(sl_BuildersMap.find(_name) != sl_BuildersMap.end()) return false;
 
-    __buildersMap.insert(_name,
+    sl_BuildersMap.insert(_name,
                          QSharedPointer<LIXmlRemoteDataSourceBuilder>
                             (reinterpret_cast<LIXmlRemoteDataSourceBuilder*>(_builder)));
     return true;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+bool LCXmlRemoteDataSourceBuilders::noItems()
+{
+    return sl_BuildersMap.isEmpty();
 }

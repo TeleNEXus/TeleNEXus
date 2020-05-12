@@ -63,7 +63,7 @@ static CApplicationInterface sl_appInterface;
 //======================================================================================================================
 const LCXmlApplication::SBaseTagsNames      LCXmlApplication::mBaseTagNames;
 const LCXmlApplication::SBaseAttributeNames LCXmlApplication::mBaseAttributeNames;
-
+//----------------------------------------------------------------------------------------------------------------------
 LCXmlApplication::LCXmlApplication()
 {
 
@@ -103,6 +103,8 @@ const QString& LCXmlApplication::getApplicationDirPath()
 
 
 //----------------------------------------------------------------------------------------------------------------------
+static QDomElement loadDomElement(const QString& _fileName);
+static void addSourceBuilders(const QDomElement& _rootElement);
 static void addSources(const QDomElement& _element);
 static void addLayoutsBuilders(const QDomElement& _rootElement);
 static void addWidgetsBuilders(const QDomElement& _rootElement);
@@ -110,6 +112,8 @@ static void addWidgets(const QDomElement& _rootElement);
 int LCXmlApplication::exec(int argc, char *argv[])
 {
     QApplication app(argc, argv);
+
+
 
     QDomDocument domDoc;
     QString errorStr;
@@ -187,6 +191,8 @@ int LCXmlApplication::exec(int argc, char *argv[])
     }
 
     //----------------------------------------------------
+    addSourceBuilders(rootElement);
+    //----------------------------------------------------
     addSources(rootElement);
     //----------------------------------------------------
     addLayoutsBuilders(rootElement);
@@ -203,45 +209,56 @@ int LCXmlApplication::exec(int argc, char *argv[])
     return app.exec();
 }
 
-
 //======================================================================================================================
-static void addSources(const QDomElement& _rootElement)
+static void addSourceBuilders(const QDomElement& _rootElement)
 {
-    //Загрузка построителей источников данных.
     QDomNodeList nodes = _rootElement.elementsByTagName(LCXmlApplication::mBaseTagNames.sourceBuilders);
 
     if(!nodes.isEmpty())
     {
         LCXmlRemoteDataSourceBuilders::instance().load(nodes.at(0).toElement(), sl_xmlMainFileWay, sl_xmlMainFileWay);
     }
-    else
+}
+
+//======================================================================================================================
+static void addSources(const QDomElement& _rootElement)
+{
+    if(LCXmlRemoteDataSourceBuilders::instance().noItems()) return;
+
+    QDomElement element = _rootElement.elementsByTagName(LCXmlApplication::mBaseTagNames.sources).at(0).toElement();
+
+    if(element.isNull()) return;
+
+    QString attrFile = element.attribute(LCXmlApplication::mBaseAttributeNames.file);
+
+    if(!attrFile.isNull())
     {
-        return;
+        element = loadDomElement(sl_xmlMainFileWay + attrFile);
+
+        if(element.tagName() != LCXmlApplication::mBaseTagNames.sources)
+        {
+            return;
+        }
     }
 
     //Добавление источников данных.
-    QDomNode node = _rootElement.elementsByTagName(LCXmlApplication::mBaseTagNames.sources).at(0).firstChild();
+    QDomNode node = element.firstChild();
 
     while(!node.isNull())
     {
-        if(node.isElement())
+        QDomElement el = node.toElement();
+        auto builder = LCXmlRemoteDataSourceBuilders::instance().getBuilder(el.tagName());
+        if(!builder.isNull())
         {
-            QDomElement el = node.toElement();
-
-            auto builder = LCXmlRemoteDataSourceBuilders::instance().getBuilder(el.tagName());
-
-            if(!builder.isNull())
+            auto sources = builder->build(el, sl_appInterface);
+            auto it = sources.begin();
+            while(it != sources.end())
             {
-                auto sources = builder->build(el, sl_appInterface);
-                auto it = sources.begin();
-                while(it != sources.end())
+                if(sl_RemoteDataSourceMap.find(it.key()) != sources.end())
                 {
-                    if(sl_RemoteDataSourceMap.find(it.key()) != sources.end())
-                    {
-                        sl_RemoteDataSourceMap.insert(it.key(), it.value());
-                    }
-                    it++;
+                    sl_RemoteDataSourceMap.insert(it.key(), it.value());
                 }
+                it++;
             }
         }
         node = node.nextSibling();
@@ -284,21 +301,7 @@ static void addWidgets(const QDomElement& _rootElement)
 
     if(!attrFile.isNull())
     {
-        QFile file(sl_xmlMainFileWay + attrFile);
-
-        QDomDocument domDoc;
-        QString errorStr;
-        int errorLine;
-        int errorColumn;
-
-        if(!domDoc.setContent(&file, true, &errorStr, &errorLine, &errorColumn))
-        {
-            qDebug() << "Parse file "<< file.fileName() << " error at line:" << errorLine <<
-                            " column:" << errorColumn << " msg: " << errorStr;
-            return;
-        }
-
-        element = domDoc.documentElement();
+        element = loadDomElement(sl_xmlMainFileWay + attrFile);
 
         if(element.tagName() != LCXmlApplication::mBaseTagNames.widgets)
         {
@@ -327,3 +330,20 @@ static void addWidgets(const QDomElement& _rootElement)
     }
 }
 
+//======================================================================================================================
+static QDomElement loadDomElement(const QString& _fileName)
+{
+    QFile file(_fileName);
+
+    QDomDocument domDoc;
+    QString errorStr;
+    int errorLine;
+    int errorColumn;
+
+    if(!domDoc.setContent(&file, true, &errorStr, &errorLine, &errorColumn))
+    {
+        qDebug() << "Parse file "<< file.fileName() << " error at line:" << errorLine <<
+                        " column:" << errorColumn << " msg: " << errorStr;
+    }
+    return domDoc.documentElement();
+}
