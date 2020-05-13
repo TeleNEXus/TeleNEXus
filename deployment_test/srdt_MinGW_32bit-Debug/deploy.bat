@@ -5,7 +5,7 @@
 
 @xcopy /Y  %exepath%\srdt.exe
 ::@D:\Programs\Qt\5.9.9\mingw53_32\bin\windeployqt.exe --compiler-runtime --debug --force ./srdt.exe
-@D:\Programs\Qt\5.9.9\mingw53_32\bin\windeployqt.exe --compiler-runtime --debug  ./srdt.exe
+@D:\Programs\Qt\5.9.9\mingw53_32\bin\windeployqt.exe --compiler-runtime --no-translations --no-system-d3d-compiler --debug  --no-quick-import  ./srdt.exe
 @xcopy /Y  %envpath%\libgcc_s_dw2-1.dll     
 @xcopy /Y  %envpath%\libstdc++-6.dll        
 @xcopy /Y  %envpath%\libwinpthread-1.dll    
