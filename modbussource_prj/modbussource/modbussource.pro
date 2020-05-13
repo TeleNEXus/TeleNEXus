@@ -9,7 +9,7 @@ DEFINES += MBSOURCE_LIBRARY
 
 CONFIG += c++11
 
-RC_FILE     = modbussource_resource.rc
+#RC_FILE     = modbussource_resource.rc
 
 # The following define makes your compiler emit warnings if you use
 # any Qt feature that has been marked deprecated (the exact warnings

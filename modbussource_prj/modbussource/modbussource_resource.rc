@@ -21,7 +21,7 @@ VS_VERSION_INFO VERSIONINFO
 				VALUE "FileDescription", "modbus tools for srdt\0"
 				VALUE "FileVersion", "1.0.0.0\0"
 				VALUE "LegalCopyright", "\0"
-				VALUE "OriginalFilename", "modbussource1.dll\0"
+				VALUE "OriginalFilename", "modbussource.dll\0"
 				VALUE "ProductName", "modbussource\0"
 				VALUE "ProductVersion", "1.0.0.0\0"
 			END
