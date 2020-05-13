@@ -113,12 +113,11 @@ int LCXmlApplication::exec(int argc, char *argv[])
 {
     QApplication app(argc, argv);
 
-
     qDebug() << QCoreApplication::applicationFilePath();
     qDebug() << QCoreApplication::applicationDirPath();
 
-QCoreApplication::addLibraryPath("D:/Programs/Qt/5.9.9/mingw53_32/lib");
-QCoreApplication::addLibraryPath("D:/Programs/Qt/5.9.9/mingw53_32/bin");
+    qDebug() << "addLibraryPath " << QCoreApplication::applicationDirPath() + "/comlib";
+    QCoreApplication::addLibraryPath(QCoreApplication::applicationDirPath() + "/comlib");
 
     auto lp = QCoreApplication::libraryPaths();
     auto it = lp.begin();
