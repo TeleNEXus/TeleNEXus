@@ -1,11 +1,12 @@
 QT += gui
 QT += widgets
 QT += network
-QT += serialport
-QT += serialbus
+#QT += serialport
+#QT += serialbus
 QT += xml
 
-CONFIG += c++11 console
+CONFIG += console c++11
+#CONFIG += c++11
 CONFIG -= app_bundle
 
 # The following define makes your compiler emit warnings if you use

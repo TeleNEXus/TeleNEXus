@@ -97,7 +97,7 @@ int LCXmlBuildersLoader::loadBuilders(const QDomElement& _element, const QString
                     if(!lib.load())
                     {
                         qDebug() << "WARNING[builder loader]: tag=" << mTagRoot << " can't load library "
-                                 << libfilename << " to load source builder " << el.tagName();
+                                 << _libPath + libfilename << " to load source builder " << el.tagName();
                         node = node.nextSibling();
                         continue;
                     }
