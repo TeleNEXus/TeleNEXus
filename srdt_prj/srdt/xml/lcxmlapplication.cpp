@@ -111,8 +111,8 @@ static void addWidgetsBuilders(const QDomElement& _rootElement);
 static void addWidgets(const QDomElement& _rootElement);
 int LCXmlApplication::exec(int argc, char *argv[])
 {
-    QApplication app(argc, argv);
 
+    QApplication app(argc, argv);
     qDebug() << QCoreApplication::applicationFilePath();
     qDebug() << QCoreApplication::applicationDirPath();
 
