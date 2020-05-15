@@ -17,10 +17,10 @@ public:
                             const QString& _attrLib,
                             const QString& _attrLibHandler);
     virtual ~LCXmlBuildersLoader();
-    virtual int load(const QDomElement& _element, const QString& _pathPrj, const QString& _pathLib) final;
+    virtual int load(const QDomElement& _element, const QString& _pathPrj, const QStringList& _libPaths) final;
     virtual bool add(const QString& _name, void* _builder) = 0;
 private:
-    int loadBuilders(const QDomElement& _element, const QString& _libPath);
+    int loadBuilders(const QDomElement& _element, const QStringList& _libPaths);
 };
 
 #endif // LCXMLBUILDERSLOADER_H

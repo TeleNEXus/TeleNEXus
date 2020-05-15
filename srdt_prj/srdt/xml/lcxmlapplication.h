@@ -17,6 +17,9 @@ public:
         QString builder         = "BUILDER";
         QString sources         = "SOURCES";
         QString widgets         = "WIDGETS";
+        QString plaginPaths     = "PLAGINPATHS";
+        QString add             = "ADD";
+
     };
 
     static const SBaseTagsNames mBaseTagNames;
@@ -24,6 +27,7 @@ public:
     struct SBaseAttributeNames
     {
         QString file        = "file";
+        QString path        = "path";
         QString lib         = "lib";
         QString name        = "name";
         QString libhandler  = "libhandler";

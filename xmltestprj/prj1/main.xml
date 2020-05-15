@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <APPLICATION>
-    
+    <PLAGINPATHS>
+        <ADD path="./libs"/>
+        <ADD path="./libs1"/>
+        <ADD path="D:/plagins/libs"/>
+    </PLAGINPATHS>
     <!--SOURCEBUILDERS>
         <modbussources lib="libs/mbsource"       libhandler="getModbusSourceBuilder" />
         <modbussources lib="libs/mbsource"       libhandler="getModbusSourceBuilder" />
@@ -19,17 +23,17 @@
     <SOURCES file="sources.xml"/>
     
     <LAYOUTBUILDERS>
-        <grid lib="libs/basiclayouts" libhandler="getGridLayoutBuilder" />
-        <box  lib="libs/basiclayouts" libhandler="getBoxLayoutBuilder" />
+        <grid lib="basiclayouts" libhandler="getGridLayoutBuilder" />
+        <box  lib="basiclayouts" libhandler="getBoxLayoutBuilder" />
     </LAYOUTBUILDERS>
     
     <!--LAYOUTBUILDERS file="layoutbuilders.xml"/-->
     
     <WIDGETBUILDERS>
-        <widget         lib="libs/basicwidgets" libhandler="getWidgetBuilder"               />
-        <label          lib="libs/basicwidgets" libhandler="getTextLabelBuilder"            />
-        <dataLabel      lib="libs/basicwidgets" libhandler="getRemoteDataLabelBuilder"      />
-        <dataLineEdit   lib="libs/basicwidgets" libhandler="getRemoteDataLineEditBuilder"   />
+        <widget         lib="basicwidgets" libhandler="getWidgetBuilder"               />
+        <label          lib="basicwidgets" libhandler="getTextLabelBuilder"            />
+        <dataLabel      lib="basicwidgets" libhandler="getRemoteDataLabelBuilder"      />
+        <dataLineEdit   lib="basicwidgets" libhandler="getRemoteDataLineEditBuilder"   />
     </WIDGETBUILDERS>
     
     <WIDGETBUILDERS file="widgetbuilders.xml"/>

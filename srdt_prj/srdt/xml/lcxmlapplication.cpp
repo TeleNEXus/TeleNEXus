@@ -14,9 +14,13 @@
 #include <QDir>
 #include <QCommandLineParser>
 
+#include <QStringList>
+
 static QString  sl_xmlMainFileName;
-static QString  sl_xmlMainFileWay;
+static QString  sl_xmlMainFilePath;
 static QDir     sl_xmlMainFileDir;
+
+static QStringList sl_PlaginLibPaths;
 
 static const struct
 {
@@ -32,7 +36,7 @@ class CApplicationInterface : public LIApplication
 {
 public:
     CApplicationInterface(){}
-    virtual QString getProjectPath() const override { return sl_xmlMainFileWay;}
+    virtual QString getProjectPath() const override { return sl_xmlMainFilePath;}
     virtual QDir getProjectDir() const override {return sl_xmlMainFileDir;}
 
     virtual QSharedPointer<LIXmlRemoteDataSourceBuilder> getDataSourceBuilder(const QString& _name) const override
@@ -85,7 +89,7 @@ const QString& LCXmlApplication::getXmlMainFileName()
 //----------------------------------------------------------------------------------------------------------------------
 const QString& LCXmlApplication::getXmlMainFileWay()
 {
-    return sl_xmlMainFileWay;
+    return sl_xmlMainFilePath;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -104,6 +108,7 @@ const QString& LCXmlApplication::getApplicationDirPath()
 
 //----------------------------------------------------------------------------------------------------------------------
 static QDomElement loadDomElement(const QString& _fileName);
+static void addPlaginLibPathes(const QDomElement& _rootElement);
 static void addSourceBuilders(const QDomElement& _rootElement);
 static void addSources(const QDomElement& _element);
 static void addLayoutsBuilders(const QDomElement& _rootElement);
@@ -162,7 +167,7 @@ int LCXmlApplication::exec(int argc, char *argv[])
         if(dir.exists() && fi.exists())
         {
             sl_xmlMainFileName    = fi.fileName();
-            sl_xmlMainFileWay     = fi.absolutePath() + "/";
+            sl_xmlMainFilePath     = fi.absolutePath() + "/";
             sl_xmlMainFileDir     = fi.absoluteDir();
         }
         else
@@ -174,7 +179,7 @@ int LCXmlApplication::exec(int argc, char *argv[])
     }
 
 
-    QFile file(sl_xmlMainFileWay + sl_xmlMainFileName);
+    QFile file(sl_xmlMainFilePath + sl_xmlMainFileName);
 
     if(!domDoc.setContent(&file, true, &errorStr, &errorLine, &errorColumn))
     {
@@ -202,6 +207,7 @@ int LCXmlApplication::exec(int argc, char *argv[])
         return -1;
     }
 
+    addPlaginLibPathes(rootElement);
     //----------------------------------------------------
     addSourceBuilders(rootElement);
     //----------------------------------------------------
@@ -222,6 +228,47 @@ int LCXmlApplication::exec(int argc, char *argv[])
     return app.exec();
 }
 
+
+//======================================================================================================================
+static void addPlaginLibPathes(const QDomElement& _rootElement)
+{
+    QDomNodeList nodes = _rootElement.elementsByTagName(LCXmlApplication::mBaseTagNames.plaginPaths);
+
+    if(!nodes.isEmpty())
+    {
+        nodes = nodes.at(0).toElement().elementsByTagName(LCXmlApplication::mBaseTagNames.add);
+        if(!nodes.isEmpty())
+        {
+            for(int i = 0; i < nodes.size(); i++)
+            {
+
+                QString path = nodes.at(i).toElement().attribute(LCXmlApplication::mBaseAttributeNames.path);
+                if(path.isNull()) continue;
+                QDir dir(path);
+                if(dir.isAbsolute())
+                {
+                    sl_PlaginLibPaths << dir.path();
+                    continue;
+                }
+
+                path = QDir::currentPath();
+                QDir::setCurrent(sl_xmlMainFilePath);
+                sl_PlaginLibPaths << dir.absolutePath();
+                QDir::setCurrent(path);
+            }
+        }
+    }
+
+    sl_PlaginLibPaths << QCoreApplication::applicationDirPath() + QStringLiteral("/plaginlibs");
+
+    qDebug() << "PlaginLib paths:";
+    for(int i = 0; i < sl_PlaginLibPaths.size(); i++)
+    {
+        qDebug() << "\t\t" << sl_PlaginLibPaths.at(i);
+    }
+
+}
+
 //======================================================================================================================
 static void addSourceBuilders(const QDomElement& _rootElement)
 {
@@ -229,7 +276,7 @@ static void addSourceBuilders(const QDomElement& _rootElement)
 
     if(!nodes.isEmpty())
     {
-        LCXmlRemoteDataSourceBuilders::instance().load(nodes.at(0).toElement(), sl_xmlMainFileWay, sl_xmlMainFileWay);
+        LCXmlRemoteDataSourceBuilders::instance().load(nodes.at(0).toElement(), sl_xmlMainFilePath, sl_PlaginLibPaths);
     }
 }
 
@@ -246,7 +293,7 @@ static void addSources(const QDomElement& _rootElement)
 
     if(!attrFile.isNull())
     {
-        element = loadDomElement(sl_xmlMainFileWay + attrFile);
+        element = loadDomElement(sl_xmlMainFilePath + attrFile);
 
         if(element.tagName() != LCXmlApplication::mBaseTagNames.sources)
         {
@@ -286,7 +333,7 @@ static void addLayoutsBuilders(const QDomElement& _rootElement)
 
     if(!nodes.isEmpty())
     {
-        LCXmlLayoutBuilders::instance().load(nodes.at(0).toElement(), sl_xmlMainFileWay, sl_xmlMainFileWay);
+        LCXmlLayoutBuilders::instance().load(nodes.at(0).toElement(), sl_xmlMainFilePath, sl_PlaginLibPaths);
     }
 }
 
@@ -298,7 +345,7 @@ static void addWidgetsBuilders(const QDomElement& _rootElement)
 
     if(!nodes.isEmpty())
     {
-        LCXmlWidgetBuilders::instance().load(nodes.at(0).toElement(), sl_xmlMainFileWay, sl_xmlMainFileWay);
+        LCXmlWidgetBuilders::instance().load(nodes.at(0).toElement(), sl_xmlMainFilePath, sl_PlaginLibPaths);
     }
 }
 
@@ -314,7 +361,7 @@ static void addWidgets(const QDomElement& _rootElement)
 
     if(!attrFile.isNull())
     {
-        element = loadDomElement(sl_xmlMainFileWay + attrFile);
+        element = loadDomElement(sl_xmlMainFilePath + attrFile);
 
         if(element.tagName() != LCXmlApplication::mBaseTagNames.widgets)
         {
