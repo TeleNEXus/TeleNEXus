@@ -17,16 +17,18 @@ LCXmlBuildersLoader::LCXmlBuildersLoader(const QString& _tagRoot,
 {
 
 }
+
 //----------------------------------------------------------------------------------------------------------------------
 LCXmlBuildersLoader::~LCXmlBuildersLoader(){}
+
 //----------------------------------------------------------------------------------------------------------------------
-int LCXmlBuildersLoader::load(const QDomElement& _element, const QString& _pathPrj, const QString& _pathLib)
+int LCXmlBuildersLoader::load(const QDomElement& _element, const QString& _pathPrj, const QStringList& _libPaths)
 {
     QString fileName = _element.attribute(mAttrFile);
 
     if(fileName.isNull())
     {
-        return loadBuilders(_element, _pathLib);
+        return loadBuilders(_element, _libPaths);
     }
 
     fileName = _pathPrj + "/" + fileName;
@@ -54,11 +56,11 @@ int LCXmlBuildersLoader::load(const QDomElement& _element, const QString& _pathP
         return 0;
     }
 
-    return loadBuilders(rootElement, _pathLib);
+    return loadBuilders(rootElement, _libPaths);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-int LCXmlBuildersLoader::loadBuilders(const QDomElement& _element, const QString& _libPath)
+int LCXmlBuildersLoader::loadBuilders(const QDomElement& _element, const QStringList& _libPaths)
 {
     int loadCounter = 0;
 
@@ -83,48 +85,39 @@ int LCXmlBuildersLoader::loadBuilders(const QDomElement& _element, const QString
             continue;
         }
 
+
         QLibrary lib;
 
-        lib.setFileName(libfilename);
-
-        if(!lib.isLoaded())
+        //Поиск библиотеки по списку путей.
+        for(int i = 0; i < _libPaths.size(); i++)
         {
-            if(!lib.load())
+            qDebug() << "lib file: " + _libPaths[i] + "/" + libfilename;
+            lib.setFileName(_libPaths[i] + "/" + libfilename);
+
+            if(lib.isLoaded())
             {
-                lib.setFileName(_libPath + libfilename);
-                if(!lib.isLoaded())
-                {
-                    if(!lib.load())
-                    {
-                        qDebug() << "WARNING[builder loader]: tag=" << mTagRoot << " can't load library "
-                                 << _libPath + libfilename << " to load source builder " << el.tagName();
-                        node = node.nextSibling();
-                        continue;
-                    }
-                    else
-                    {
-                        qDebug() << "MESSAGE[builder loader]: tag=" << mTagRoot << " library "
-                                 << lib.fileName() << " is loaded";
-                    }
-                 }
-                 else
-                 {
-                     qDebug() << "MESSAGE[builder loader]:library "
-                              << lib.fileName() << " is already loaded";
-                 }
+                qDebug() << "MESSAGE[builder loader]: tag=" << mTagRoot << " library "
+                         << lib.fileName() << " is already loaded";
+                break;
             }
-            else
+
+            if(lib.load())
             {
                 qDebug() << "MESSAGE[builder loader]: tag=" << mTagRoot << " library "
                          << lib.fileName() << " is loaded";
+                break;
             }
         }
-        else
+
+        if(!lib.isLoaded())
         {
-            qDebug() << "MESSAGE[builder loader]: tag=" << mTagRoot << " library "
-                     << lib.fileName() << " is already loaded";
+            qDebug() << "WARNING[builder loader]: tag=" << mTagRoot << " can't load library "
+                 << lib.fileName() << " to load source builder " << el.tagName();
+            node = node.nextSibling();
+            continue;
         }
 
+        //Загрузка построителей объектов.
         TLibAccessFunc func = (TLibAccessFunc)lib.resolve(libhandler.toStdString().c_str());
 
         if(!func)
