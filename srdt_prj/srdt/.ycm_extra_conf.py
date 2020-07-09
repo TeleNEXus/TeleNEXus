@@ -160,7 +160,6 @@ def PathToPythonUsedDuringBuild():
   except OSError:
     return None
 
-
 def Settings( **kwargs ):
   # Do NOT import ycm_core at module scope.
   import ycm_core
