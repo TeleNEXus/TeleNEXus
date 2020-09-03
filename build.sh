@@ -1,14 +1,15 @@
 #!/bin/bash
-echo "test build"
-v_basiclayouts=../../basiclayouts
-v_basicwidgets=../../basicwidgets
-v_modbussource=../../modbussource
-v_srdt=../../srdt
+
+v_basiclayouts="`pwd`/basiclayouts"
+v_basicwidgets="`pwd`/basicwidgets"
+v_modbussource="`pwd`/modbussource"
+v_srdt="`pwd`/srdt"
 
 v_build_dir_name=__builds
 
 v_offset_line="================================================"
 
+echo "$v_offset_line test build `pwd`"
 
 # Создание рабочих папок.
 createDir ()
@@ -19,6 +20,7 @@ createDir ()
         echo "Create dir $1/$v_build_dir_name"
     fi
 }
+
 # Удаление рабочих папок.
 deleteDir ()
 {
@@ -28,9 +30,11 @@ deleteDir ()
         echo "Delete dir $1/$v_build_dir_name"
     fi
 }
+
 # Сборка
 makePrg ()
 {
+
     cd "$1/$v_build_dir_name"
     if [ "$2" == "qmake" ]
     then
@@ -70,5 +74,5 @@ echo "$v_offset_line make $1"
 makePrg "$v_basiclayouts" "make" "$1"
 makePrg "$v_basicwidgets" "make" "$1"
 makePrg "$v_modbussource" "make" "$1"
-makePrg "$v_srdt" "make"
+makePrg "$v_srdt" "make" "$1"
 
