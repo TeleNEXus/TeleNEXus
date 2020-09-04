@@ -6,7 +6,7 @@
 #include "lcxmlremotedatalineeditbuilder.h"
 
 //----------------------------------------------------------------------------------------------------------------------
-void* BASICWIDGETS_EXPORT getWidgetBuilder()
+void*  getWidgetBuilder()
 {
     return new LCXmlWidgetBuilder;
 }
@@ -18,13 +18,13 @@ void* getTextLabelBuilder()
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-void* BASICWIDGETS_EXPORT getRemoteDataLabelBuilder()
+void* getRemoteDataLabelBuilder()
 {
     return new LCXmlRemoteDataLabelBuilder;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-void* BASICWIDGETS_EXPORT getRemoteDataLineEditBuilder()
+void*  getRemoteDataLineEditBuilder()
 {
     return new LCXmlRemoteDataLineEditBuilder;
 }

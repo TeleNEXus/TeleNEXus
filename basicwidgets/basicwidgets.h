@@ -3,9 +3,9 @@
 
 #include "basicwidgets_global.h"
 
-extern "C" void* BASICWIDGETS_EXPORT getWidgetBuilder();
-extern "C" void* BASICWIDGETS_EXPORT getTextLabelBuilder();
-extern "C" void* BASICWIDGETS_EXPORT getRemoteDataLabelBuilder();
-extern "C" void* BASICWIDGETS_EXPORT getRemoteDataLineEditBuilder();
+extern "C" void* getWidgetBuilder();
+extern "C" void* getTextLabelBuilder();
+extern "C" void* getRemoteDataLabelBuilder();
+extern "C" void* getRemoteDataLineEditBuilder();
 
 #endif // BASICWIDGETS_H
