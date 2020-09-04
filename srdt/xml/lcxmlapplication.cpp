@@ -121,9 +121,6 @@ int LCXmlApplication::exec(int argc, char *argv[])
     qDebug() << QCoreApplication::applicationFilePath();
     qDebug() << QCoreApplication::applicationDirPath();
 
-    qDebug() << "addLibraryPath " << QCoreApplication::applicationDirPath() + "/comlib";
-    QCoreApplication::addLibraryPath(QCoreApplication::applicationDirPath() + "/comlib");
-
     auto lp = QCoreApplication::libraryPaths();
     auto it = lp.begin();
     while(it != lp.end())
@@ -167,7 +164,7 @@ int LCXmlApplication::exec(int argc, char *argv[])
         if(dir.exists() && fi.exists())
         {
             sl_xmlMainFileName    = fi.fileName();
-            sl_xmlMainFilePath     = fi.absolutePath() + "/";
+            sl_xmlMainFilePath    = fi.absolutePath() + "/";
             sl_xmlMainFileDir     = fi.absoluteDir();
         }
         else
