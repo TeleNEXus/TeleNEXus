@@ -3,6 +3,8 @@
 
 #include "LIRemoteDataSource.h"
 
+class QByteArray;
+
 class LIRemoteDataReadListener
 {
 public:
