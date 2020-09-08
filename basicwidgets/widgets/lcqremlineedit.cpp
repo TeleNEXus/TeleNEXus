@@ -15,6 +15,7 @@ void LCQRemLineEdit::CReadListener::dataIsRead(QSharedPointer<QByteArray> _data,
         if(_status != LERemoteDataStatus::DS_OK)
         {
             mLineEdit.setText(mLineEdit.mFormatter.data()->undefStateString());
+            mLineEdit.setEnabled(true);
             return;
         }
         mLineEdit.setEnabled(true);

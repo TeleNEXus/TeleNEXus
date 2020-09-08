@@ -5,9 +5,8 @@
 #include "lqextendevent.h"
 #include "lcstringdataformatterbase.h"
 
-#include "LIRemoteDataReader.h"
 #include "LIRemoteDataReadListener.h"
-#include "LIRemoteDataSource.h"
+#include "LIRemoteDataWriteListner.h"
 
 
 class LCQRemComboBox : public QComboBox
@@ -20,9 +19,17 @@ private:
     private:
         LCQRemComboBox& mComboBox;
     public:
-        CReadListener(LCQRemComboBox& _label);
+        CReadListener(LCQRemComboBox& _combobox);
         virtual ~CReadListener(){}
         virtual void dataIsRead(QSharedPointer<QByteArray> _data, LERemoteDataStatus status) override;
+    };
+
+    class CWriteListener : public LIRemoteDataWriteListner
+    {
+    public:
+        CWriteListener(){}
+        virtual ~CWriteListener(){}
+        virtual void dataIsWrite(LERemoteDataStatus _status) = 0;
     };
 
     QString mDataName;

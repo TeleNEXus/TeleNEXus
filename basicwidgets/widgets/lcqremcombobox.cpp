@@ -1,46 +1,33 @@
 ﻿#include "lcqremcombobox.h"
 #include <QCoreApplication>
 #include <QDebug>
+#include <qcombobox.h>
 
-#define __WRONG_DATA_STRING "####"
-
-
-//===========================================================================================================CReadListener
-LCQRemComboBox::CReadListener::CReadListener(LCQRemComboBox& _label) : mLabel(_label)
+//=========================================================================================================CReadListener
+LCQRemComboBox::CReadListener::CReadListener(LCQRemComboBox& _label) : mComboBox(_label)
 {
 
 }
-
+//------------------------------------------------------------------------------------------------------------dataIsRead
 void LCQRemComboBox::CReadListener::dataIsRead(QSharedPointer<QByteArray> _data, LERemoteDataStatus _status)
 {
-    qDebug() << "Data is read";
-    if(_status != LERemoteDataStatus::DS_OK)
-    {
-        mLabel.setText(mLabel.mFormatter.data()->undefStateString());
-        return;
-    }
-    mLabel.setText(mLabel.mFormatter.data()->toString(*_data));
+    qDebug() << "LCQRemComboBox " << mComboBox.mDataName << ": data is read";
 }
 
 
-//===========================================================================================================LCQRemComboBox
-LCQRemComboBox::LCQRemComboBox(QWidget* _parent) : QLabel(_parent)
-{
-    setText("LCQRemComboBox");
-}
-
-LCQRemComboBox::LCQRemComboBox(QString _text, QWidget* _parent) : QLabel(_text, _parent)
+//========================================================================================================LCQRemComboBox
+LCQRemComboBox::LCQRemComboBox(QWidget* _parent) : QComboBox(_parent)
 {
 }
 
 LCQRemComboBox::LCQRemComboBox(const QString& _dataName,
                          QSharedPointer<LIRemoteDataSource> _dataSource,
                          QSharedPointer<LCStringDataFormatterBase> _formatter,
-                         QWidget* _parent) :    QLabel(_parent),
+                         QWidget* _parent) :    QComboBox(_parent),
                                                 mDataName(_dataName),
                                                 mFormatter(_formatter)
 {
-    setText(mFormatter.data()->undefStateString());
+    this->insertItem(0, mFormatter.data()->undefStateString());
     mDataListener = QSharedPointer<CReadListener>(new CReadListener(*this));
     mDataReader = _dataSource->createReader();
     mDataReader->setDataName(_dataName);
@@ -84,6 +71,6 @@ bool LCQRemComboBox::event(QEvent *_event)
     default:
         break;
     }
-    QLabel::event(_event);
+    QComboBox::event(_event);
     return ret;
 }
