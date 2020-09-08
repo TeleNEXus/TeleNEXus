@@ -88,7 +88,6 @@ flags = [
              '-I', '/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++',
              '-isystem',
              '/usr/include/c++/7'
-
 ]
 
 # Clang automatically sets the '-std=' flag to 'c++14' for MSVC 2015 or later,
