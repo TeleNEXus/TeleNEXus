@@ -20,8 +20,11 @@ int main(int argc, char** argv)
     QComboBox *cb2 = new QComboBox();
     cb2->insertItem(0, "item_10", QVariant(10));
     cb2->insertItem(1, "item_20", QVariant(20));
+    cb2->insertSeparator(1);
     cb2->insertItem(2, "item_30", QVariant(30));
     cb2->insertItem(3, "item_40", QVariant(40));
+
+    QComboBox *cb3 = new QComboBox();
 
     QPushButton *button1 = new QPushButton("IndexUp");
     QPushButton *button2 = new QPushButton("IndexDown");
@@ -31,6 +34,7 @@ int main(int argc, char** argv)
 
     hlayout->addWidget(cb1);
     hlayout->addWidget(cb2);
+    hlayout->addWidget(cb3);
     hlayout->addWidget(button1);
     hlayout->addWidget(button2);
     hlayout->addWidget(lineEdit1);
