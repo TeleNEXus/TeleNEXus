@@ -10,7 +10,7 @@ private:
     QChar   mFillCharUndef;     //Заполнение при отсутствии значения.
     QChar   mFillCharWrong;     //Заполнение при ошибочном значении.
 public:
-    explicit LCStringDataFormatterHex(    QChar   _separator      = QChar(' '),
+    explicit LCStringDataFormatterHex(    QChar   _separator      = QChar(''),
                                     QChar   _fillCharUndef  = msFillCharUndefDef,
                                     QChar   _fillCharWrong  = msFillCharWrongDef);
     virtual ~LCStringDataFormatterHex(){}
