@@ -5,68 +5,84 @@
 #include <QDebug>
 #include <qcombobox.h>
 #include <qglobal.h>
+#include <qnamespace.h>
 
-//=========================================================================================================CReadListener
-LCQRemComboBox::CReadListener::CReadListener(LCQRemComboBox& _label) : mComboBox(_label)
+//==============================================================================CReadListener
+LCQRemComboBox::CReadListener::CReadListener(LCQRemComboBox& _label) : mOwner(_label)
 {
 
 }
 
-//---------------------------------------------------------------------------------------------------------------------
-void LCQRemComboBox::CReadListener::dataIsRead(QSharedPointer<QByteArray> _data, LERemoteDataStatus _status)
+//------------------------------------------------------------------------------
+void LCQRemComboBox::
+        CReadListener::
+            dataIsRead( QSharedPointer<QByteArray>  _data, 
+                        LERemoteDataStatus          _status)
 {
-    Q_UNUSED(_data);
-    Q_UNUSED(_status);
-    qDebug() << "LCQRemComboBox " << mComboBox.mDataName << ": data is read";
+    switch(_status)
+    {
+    case LERemoteDataStatus::DS_OK:
+//        index = mOwner.findData( mOwner.mFormatter->toString( *_data.data() ), Qt::UserRole, static_cast<Qt::MatchFlag> (Qt::MatchExactly)) ;
+        mOwner.setCurrentIndex(
+                mOwner.findData( 
+                    mOwner.mFormatter->toString( *_data.data() ) ) );
+        break;
+
+    case LERemoteDataStatus::DS_WRONG:
+    case LERemoteDataStatus::DS_UNDEF:
+    default:
+        mOwner.setCurrentIndex(-1);
+        break;
+    }
 }
 
 
-//========================================================================================================LCQRemComboBox
+//==============================================================================LCQRemComboBox
 LCQRemComboBox::LCQRemComboBox(QWidget* _parent) : QComboBox(_parent)
 {
 }
 
-LCQRemComboBox::LCQRemComboBox(  const QString&                               _dataName,
-                                 QSharedPointer<LIRemoteDataSource>           _dataSource,
-                                 QSharedPointer<LCStringDataFormatterBase>    _formatter,
-                                 QWidget* _parent) :    QComboBox(_parent),
-                                                        mFormatter(_formatter)
+//------------------------------------------------------------------------------
+LCQRemComboBox::LCQRemComboBox( 
+        const QString&                              _dataNameRead,
+        const QString&                              _dataNameWrite,
+        QSharedPointer<LIRemoteDataSource>          _dataSource,
+        QSharedPointer<LCStringDataFormatterBase>   _formatter,
+        QWidget* _parent):  QComboBox(_parent),
+                            mFormatter(_formatter)
 {
-    this->insertItem(0, mFormatter.data()->undefStateString());
-    mDataListener = QSharedPointer<CReadListener>(new CReadListener(*this));
-    mDataReader = _dataSource->createReader();
-    mDataReader->setDataName(_dataName);
-    mDataReader->setDataSource(_dataSource);
-    mDataReader->setDataReadListener(mDataListener);
-    mDataWriter->setDataName(_dataName);
-    mDataWriter->setDataSource(_dataSource);
-}
 
-LCQRemComboBox::LCQRemComboBox( const QString&                              _dataNameRead,
-                                const QString&                              _dataNameWrite,
-                                QSharedPointer<LIRemoteDataSource>          _dataSource,
-                                QSharedPointer<LCStringDataFormatterBase>   _formatter,
-                                QWidget* _parent)
-{
-    this->insertItem(0, mFormatter.data()->undefStateString());
-    mDataListener = QSharedPointer<CReadListener>(new CReadListener(*this));
+    mDataReadListener = QSharedPointer<CReadListener>(new CReadListener(*this));
 
     mDataReader = _dataSource->createReader();
     mDataReader->setDataName(_dataNameRead);
     mDataReader->setDataSource(_dataSource);
+    mDataReader->setDataReadListener(mDataReadListener);
 
-    mDataReader->setDataReadListener(mDataListener);
+    mDataWriter = _dataSource->createWriter();
     mDataWriter->setDataName(_dataNameWrite);
     mDataWriter->setDataSource(_dataSource);
+
+    connect(this, 
+            static_cast 
+                <void(LCQRemComboBox::*)(int)> 
+                    (&LCQRemComboBox::currentIndexChanged),
+            [&](int index)
+            {
+                Q_UNUSED(index);
+                mDataWriter->writeRequest(
+                        mFormatter->toBytes(
+                            this->currentData().toString())); 
+            });
 }
 
-//---------------------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 LCQRemComboBox::~LCQRemComboBox()
 {
     qDebug() << "LCQRemComboBox::~LCQRemComboBox()";
 }
 
-//---------------------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 bool LCQRemComboBox::event(QEvent *_event)
 {
     bool ret = false;
@@ -74,6 +90,7 @@ bool LCQRemComboBox::event(QEvent *_event)
     {
     case QEvent::Type::Show:
         mDataReader->connectToSource();
+        setCurrentIndex(-1);
         ret = true;
         break;
     case QEvent::Type::Hide:
