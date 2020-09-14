@@ -8,7 +8,9 @@
 #include <qnamespace.h>
 
 //==============================================================================CReadListener
-LCQRemComboBox::CReadListener::CReadListener(LCQRemComboBox& _label) : mOwner(_label)
+LCQRemComboBox::
+    CReadListener::
+        CReadListener(LCQRemComboBox& _label) : mOwner(_label)
 {
 
 }
@@ -26,12 +28,18 @@ void LCQRemComboBox::
         mOwner.setCurrentIndex(
                 mOwner.findData( 
                     mOwner.mFormatter->toString( *_data.data() ) ) );
+        mOwner.setEnabled(true);
         break;
 
     case LERemoteDataStatus::DS_WRONG:
-    case LERemoteDataStatus::DS_UNDEF:
-    default:
         mOwner.setCurrentIndex(-1);
+        mOwner.setEnabled(true);
+        break;
+
+    case LERemoteDataStatus::DS_UNDEF:
+        mOwner.setCurrentIndex(-1);
+        mOwner.setEnabled(false);
+    default:
         break;
     }
 }
@@ -63,6 +71,8 @@ LCQRemComboBox::LCQRemComboBox(
     mDataWriter->setDataName(_dataNameWrite);
     mDataWriter->setDataSource(_dataSource);
 
+    this->setEnabled(false);
+    
     connect(this, 
             static_cast 
                 <void(LCQRemComboBox::*)(int)> 
@@ -71,8 +81,7 @@ LCQRemComboBox::LCQRemComboBox(
             {
                 Q_UNUSED(index);
                 mDataWriter->writeRequest(
-                        mFormatter->toBytes(
-                            this->currentData().toString())); 
+                        mFormatter->toBytes(currentData().toString())); 
             });
 }
 

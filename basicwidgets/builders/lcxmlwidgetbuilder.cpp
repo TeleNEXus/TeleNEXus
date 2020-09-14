@@ -17,20 +17,21 @@ static const struct
     QString type  = "type";
 } sl_Attr;
 
-//======================================================================================================================
+//==============================================================================
 LCXmlWidgetBuilder::LCXmlWidgetBuilder()
 {
 
 }
 
-//----------------------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 LCXmlWidgetBuilder::~LCXmlWidgetBuilder()
 {
 
 }
 
-//----------------------------------------------------------------------------------------------------------------------
-QWidget* LCXmlWidgetBuilder::build(const QDomElement& _element, const LIApplication& _app)
+//------------------------------------------------------------------------------
+QWidget* LCXmlWidgetBuilder::build( const QDomElement& _element, 
+                                    const LIApplication& _app)
 {
     QWidget* widget = new QWidget;
 
@@ -40,7 +41,8 @@ QWidget* LCXmlWidgetBuilder::build(const QDomElement& _element, const LIApplicat
 
     if(!attr.isNull()) widget->setWindowTitle(attr);
 
-    QDomElement layout = _element.elementsByTagName(sl_Tags.layout).at(0).toElement();
+    QDomElement layout = _element.elementsByTagName(
+                                            sl_Tags.layout).at(0).toElement();
 
     if(!layout.isNull())
     {

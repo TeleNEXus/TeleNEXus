@@ -1,22 +1,22 @@
-#include "lcxmlremotecomboboxbuilder.h"
+#include "lcxmlremcomboboxbuilder.h"
 #include "lcqremcombobox.h"
-#include "LIApplication.h"
 #include "lcxmlstddataformatterfactory.h"
+#include "LIApplication.h"
 
 #include <QDomElement>
 #include <qcombobox.h>
 #include <qdom.h>
 #include <qwidget.h>
 
-
+#include <QDebug>
 //==============================================================================
-LCXmlRemoteComboBoxBuilder::LCXmlRemoteComboBoxBuilder()
+LCXmlRemComboBoxBuilder::LCXmlRemComboBoxBuilder()
 {
 
 }
 
 //------------------------------------------------------------------------------
-LCXmlRemoteComboBoxBuilder::~LCXmlRemoteComboBoxBuilder()
+LCXmlRemComboBoxBuilder::~LCXmlRemComboBoxBuilder()
 {
 
 }
@@ -28,7 +28,7 @@ const struct
     QString datawrite   = "write";
     QString source      = "source";
     QString format      = "format";
-    QString note        = "note";
+    QString name        = "name";
     QString value       = "value";
 } __attrNames;
 
@@ -39,9 +39,10 @@ const struct
 
 static void buildBox(const QDomElement& _element, LCQRemComboBox* _box);
 //------------------------------------------------------------------------------
-QWidget* LCXmlRemoteComboBoxBuilder::build(const QDomElement& _element, 
+QWidget* LCXmlRemComboBoxBuilder::build(const QDomElement& _element, 
                                             const LIApplication& _app)
 {
+    QWidget *ret;
     QString dataread;
     QString datawrite;
     QString attr = _element.attribute(__attrNames.source);
@@ -57,6 +58,7 @@ QWidget* LCXmlRemoteComboBoxBuilder::build(const QDomElement& _element,
 
     if(source.isNull())
     {
+        qDebug() << "COMBOBOX WRONG 1------------------------------------";
         goto LABEL_WRONG_EXIT;
     }
 
@@ -64,6 +66,7 @@ QWidget* LCXmlRemoteComboBoxBuilder::build(const QDomElement& _element,
 
     if(dataread.isNull())
     {
+        qDebug() << "COMBOBOX WRONG 2------------------------------------";
         goto LABEL_WRONG_EXIT;
     }
 
@@ -77,21 +80,21 @@ QWidget* LCXmlRemoteComboBoxBuilder::build(const QDomElement& _element,
     format = LCXmlStdDataFormatterFactory::instance().
                                 createStringFormatter(_element.attributes());
 
-    LCQRemComboBox* rbox;
-
     if(format.isNull())
     {
+        qDebug() << "COMBOBOX WRONG 3------------------------------------";
         goto LABEL_WRONG_EXIT;
     }
     
-    rbox = new LCQRemComboBox(dataread, datawrite, source, format);
-    buildBox(_element, rbox);
+    ret = new LCQRemComboBox(dataread, datawrite, source, format);
+    /* buildBox(_element, static_cast<LCQRemComboBox*>(ret)); */
 
-    return rbox;
+    return ret;
 
 LABEL_WRONG_EXIT:
-    QComboBox* ret = new QComboBox();
-    ret->addItem(_element.tagName());
+    ret = new QComboBox();
+    static_cast<QComboBox*>(ret)->setEnabled(false);
+    static_cast<QComboBox*>(ret)->addItem(_element.tagName());
     return ret;
 }
 
@@ -100,9 +103,10 @@ static void buildBox(const QDomElement& _element, LCQRemComboBox* _box)
     QDomNodeList elements = _element.elementsByTagName(__elementNames.item);
     for(int i = 0; i < elements.length(); i++)
     {
-        QString note = elements.at(i).toElement().attribute(__attrNames.note);
-        QString val = elements.at(i).toElement().attribute(__attrNames.value);
-        if((note == "") || (val == "")) continue;
-        _box->addItem(note, val);
+      QString name = elements.at(i).toElement().attribute(__attrNames.name);
+      QString val = elements.at(i).toElement().attribute(__attrNames.value);
+      if ((name == "") || (val == ""))
+        continue;
+      _box->addItem(name, val);
     }
 }

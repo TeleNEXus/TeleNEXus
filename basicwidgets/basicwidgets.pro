@@ -32,10 +32,14 @@ INCLUDEPATH +=                          \
 
 
 SOURCES += \
-    ../../common/lqvalidatoru32.cpp \
     basicwidgets.cpp \
-    builders/lcxmlremotedatalabelbuilder.cpp \
-    builders/lcxmlremotedatalineeditbuilder.cpp \
+    ../../common/lqvalidatoru32.cpp \
+    widgets/lcqremlabel.cpp \
+    widgets/lcqremlineedit.cpp \
+    widgets/lcqremcombobox.cpp \
+    builders/lcxmlremcomboboxbuilder.cpp \
+    builders/lcxmlremlabelbuilder.cpp \
+    builders/lcxmlremlineeditbuilder.cpp \
     builders/lcxmltextlabelbuilder.cpp \
     builders/lcxmlwidgetbuilder.cpp \
     widgets/dataformatters/lcstringdataformatterbase.cpp \
@@ -49,9 +53,8 @@ SOURCES += \
     widgets/dataformatters/lcstringdataformatteru16.cpp \
     widgets/dataformatters/lcstringdataformatteru32.cpp \
     widgets/dataformatters/lcstringdataformatteru8.cpp \
-    widgets/dataformatters/lcxmlstddataformatterfactory.cpp \
-    widgets/lcqremlabel.cpp \
-    widgets/lcqremlineedit.cpp
+    widgets/dataformatters/lcxmlstddataformatterfactory.cpp
+
 
 HEADERS += \
     ../../common/interfaces/LIApplication.h \
@@ -66,10 +69,16 @@ HEADERS += \
     ../../common/lqvalidatoru32.h \
     basicwidgets_global.h \
     basicwidgets.h \
-    builders/lcxmlremotedatalabelbuilder.h \
-    builders/lcxmlremotedatalineeditbuilder.h \
+    widgets/lcqremlabel.h \
+    widgets/lcqremlineedit.h \
+    widgets/lremgui.h \
+    widgets/lcqremcombobox.h \
+    builders/lcxmlremlineeditbuilder.h \
+    builders/lcxmlremlabelbuilder.h \
+    builders/lcxmlremlineeditbuilder.h \
     builders/lcxmltextlabelbuilder.h \
     builders/lcxmlwidgetbuilder.h \
+    builders/lcxmlremcomboboxbuilder.h \
     widgets/dataformatters/LIStringDataFormatter.h \
     widgets/dataformatters/lcstringdataformatterbase.h \
     widgets/dataformatters/lcstringdataformatterbool.h \
@@ -82,10 +91,7 @@ HEADERS += \
     widgets/dataformatters/lcstringdataformatteru16.h \
     widgets/dataformatters/lcstringdataformatteru32.h \
     widgets/dataformatters/lcstringdataformatteru8.h \
-    widgets/dataformatters/lcxmlstddataformatterfactory.h \
-    widgets/lcqremlabel.h \
-    widgets/lcqremlineedit.h \
-    widgets/lremgui.h
+    widgets/dataformatters/lcxmlstddataformatterfactory.h
 
 # Default rules for deployment.
 unix {

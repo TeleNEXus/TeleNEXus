@@ -1,22 +1,22 @@
-#include "lcxmlremotedatalineeditbuilder.h"
+#include "lcxmlremlineeditbuilder.h"
 #include "lcqremlineedit.h"
 #include "LIApplication.h"
 #include "lcxmlstddataformatterfactory.h"
 #include <QDomElement>
 
-//======================================================================================================================
-LCXmlRemoteDataLineEditBuilder::LCXmlRemoteDataLineEditBuilder()
+//==============================================================================
+LCXmlRemLineEditBuilder::LCXmlRemLineEditBuilder()
 {
 
 }
 
-//----------------------------------------------------------------------------------------------------------------------
-LCXmlRemoteDataLineEditBuilder::~LCXmlRemoteDataLineEditBuilder()
+//------------------------------------------------------------------------------
+LCXmlRemLineEditBuilder::~LCXmlRemLineEditBuilder()
 {
 
 }
 
-//----------------------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 const struct
 {
     QString data    = "data";
@@ -24,8 +24,8 @@ const struct
     QString format  = "format";
 } __attrNames;
 
-//----------------------------------------------------------------------------------------------------------------------
-QWidget* LCXmlRemoteDataLineEditBuilder::build(const QDomElement& _element, const LIApplication& _app)
+//------------------------------------------------------------------------------
+QWidget* LCXmlRemLineEditBuilder::build(const QDomElement& _element, const LIApplication& _app)
 {
     QWidget* ret = nullptr;
 

@@ -5,7 +5,9 @@
 
 extern "C" void* getWidgetBuilder();
 extern "C" void* getTextLabelBuilder();
-extern "C" void* getRemoteDataLabelBuilder();
-extern "C" void* getRemoteDataLineEditBuilder();
+
+extern "C" void* getRemLabelBuilder();
+extern "C" void* getRemLineEditBuilder();
+extern "C" void* getRemComboBoxBuilder();
 
 #endif // BASICWIDGETS_H

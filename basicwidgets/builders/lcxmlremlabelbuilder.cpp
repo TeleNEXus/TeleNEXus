@@ -1,4 +1,4 @@
-#include "lcxmlremotedatalabelbuilder.h"
+#include "lcxmlremlabelbuilder.h"
 #include "lcqremlabel.h"
 #include "LIApplication.h"
 #include "lcxmlstddataformatterfactory.h"
@@ -6,19 +6,19 @@
 #include <QDomElement>
 
 
-//======================================================================================================================
-LCXmlRemoteDataLabelBuilder::LCXmlRemoteDataLabelBuilder()
+//==============================================================================
+LCXmlRemLabelBuilder::LCXmlRemLabelBuilder()
 {
 
 }
 
-//----------------------------------------------------------------------------------------------------------------------
-LCXmlRemoteDataLabelBuilder::~LCXmlRemoteDataLabelBuilder()
+//------------------------------------------------------------------------------
+LCXmlRemLabelBuilder::~LCXmlRemLabelBuilder()
 {
 
 }
 
-//----------------------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 const struct
 {
     QString data    = "data";
@@ -26,8 +26,8 @@ const struct
     QString format  = "format";
 } __attrNames;
 
-//----------------------------------------------------------------------------------------------------------------------
-QWidget* LCXmlRemoteDataLabelBuilder::build(const QDomElement& _element, const LIApplication& _app)
+//------------------------------------------------------------------------------
+QWidget* LCXmlRemLabelBuilder::build(const QDomElement& _element, const LIApplication& _app)
 {
 
     QString data;
