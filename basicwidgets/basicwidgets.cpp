@@ -2,29 +2,36 @@
 
 #include "lcxmlwidgetbuilder.h"
 #include "lcxmltextlabelbuilder.h"
-#include "lcxmlremotedatalabelbuilder.h"
-#include "lcxmlremotedatalineeditbuilder.h"
+#include "lcxmlremlabelbuilder.h"
+#include "lcxmlremlineeditbuilder.h"
+#include "lcxmlremcomboboxbuilder.h"
 
-//----------------------------------------------------------------------------------------------------------------------
-void*  getWidgetBuilder()
+//------------------------------------------------------------------------------
+void* getWidgetBuilder()
 {
     return new LCXmlWidgetBuilder;
 }
 
-//----------------------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 void* getTextLabelBuilder()
 {
     return new LCXmlTextLabelBuilder;
 }
 
-//----------------------------------------------------------------------------------------------------------------------
-void* getRemoteDataLabelBuilder()
+//------------------------------------------------------------------------------
+void* getRemLabelBuilder()
 {
-    return new LCXmlRemoteDataLabelBuilder;
+    return new LCXmlRemLabelBuilder;
 }
 
-//----------------------------------------------------------------------------------------------------------------------
-void*  getRemoteDataLineEditBuilder()
+//------------------------------------------------------------------------------
+void*  getRemLineEditBuilder()
 {
-    return new LCXmlRemoteDataLineEditBuilder;
+    return new LCXmlRemLineEditBuilder;
+}
+
+//------------------------------------------------------------------------------
+void*  getRemComboBoxBuilder()
+{
+    return new LCXmlRemComboBoxBuilder;
 }

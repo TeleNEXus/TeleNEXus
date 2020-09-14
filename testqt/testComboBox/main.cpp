@@ -69,7 +69,7 @@ int main(int argc, char** argv)
             });
 
 /*     lineEdit1->setEnabled(false); */
-    /* cb1->setEnabled(false); */
+    cb1->setEnabled(false);
     mw->setLayout( hlayout );    
 
     mw->show();
