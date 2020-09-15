@@ -1,5 +1,6 @@
 #include "lcstringdataformatterhex.h"
-
+#include <QDebug>
+#include <functional>
 
 LCStringDataFormatterHex::LCStringDataFormatterHex(QChar   _separator,
                                        QChar _fillCharUndef,
@@ -7,7 +8,6 @@ LCStringDataFormatterHex::LCStringDataFormatterHex(QChar   _separator,
                                                                 mFillCharUndef(_fillCharUndef),
                                                                 mFillCharWrong(_fillCharWrong)
 {
-
 }
 
 QString LCStringDataFormatterHex::toString(const QByteArray& _data)
@@ -17,7 +17,8 @@ QString LCStringDataFormatterHex::toString(const QByteArray& _data)
     {
         return QString(msFillCharWrongDefLength, mFillCharWrong);
     }
-    for(int i = 0; i < _data.size(); i++)
+
+    for(int i = (_data.size() - 1); i >= 0; i--)
     {
         if(mSeparator.isNull())
         {
@@ -28,6 +29,11 @@ QString LCStringDataFormatterHex::toString(const QByteArray& _data)
             str = str + QString("%1%2").arg(((quint8*)_data.constData())[i], 2, 16, QChar('0')).arg(mSeparator);
         }
     }
+
+    if(!mSeparator.isNull())
+    {
+        str.resize(str.length() -1);
+    }
     return str;
 }
 
@@ -35,20 +41,19 @@ QString LCStringDataFormatterHex::toString(const QByteArray& _data)
 QByteArray LCStringDataFormatterHex::toBytes(const QString& _str)
 {
     QByteArray arr;
-    bool conv_flag = false;
-    int i = 0;
     int step = (mSeparator.isNull()) ? (2):(3);
 
     if(_str.length() < 2) return arr;
-    do
+
+    for(int i = (_str.length() - 2); i >= 0; i -= step)
     {
+        bool conv_flag = false;
         char data = _str.mid(i,2).toShort(&conv_flag, 16);
         if(conv_flag)
         {
             arr.append(1,data);
         }
-        i += step;
-    }while(i < _str.length());
+    }
     return arr;
 }
 
