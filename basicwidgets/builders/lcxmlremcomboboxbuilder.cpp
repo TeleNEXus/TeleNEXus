@@ -87,7 +87,7 @@ QWidget* LCXmlRemComboBoxBuilder::build(const QDomElement& _element,
     }
     
     ret = new LCQRemComboBox(dataread, datawrite, source, format);
-    /* buildBox(_element, static_cast<LCQRemComboBox*>(ret)); */
+    buildBox(_element, static_cast<LCQRemComboBox*>(ret));
 
     return ret;
 
@@ -105,8 +105,19 @@ static void buildBox(const QDomElement& _element, LCQRemComboBox* _box)
     {
       QString name = elements.at(i).toElement().attribute(__attrNames.name);
       QString val = elements.at(i).toElement().attribute(__attrNames.value);
-      if ((name == "") || (val == ""))
-        continue;
-      _box->addItem(name, val);
+      if (val == "") 
+      {
+          continue;
+      }
+
+      if (name == "")
+      {
+          _box->addItem(val, val);          
+      }
+      else
+      {
+          _box->addItem(name, val);
+      }
+
     }
 }

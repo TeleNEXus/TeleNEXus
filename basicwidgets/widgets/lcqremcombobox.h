@@ -2,6 +2,7 @@
 #define LCQEXTLABEL_H
 
 #include <QComboBox>
+#include <functional>
 #include "LIRemoteDataReader.h"
 #include "LIRemoteDataWriter.h"
 #include "lqextendevent.h"
@@ -27,6 +28,7 @@ private:
         virtual void dataIsRead(QSharedPointer<QByteArray> _data, 
                 LERemoteDataStatus status) override;
     };
+
     //--------------------------------------------------------------------------
     class CWriteListener : public LIRemoteDataWriteListner
     {
@@ -40,7 +42,7 @@ private:
     QSharedPointer<LIRemoteDataReader>          mDataReader;
     QSharedPointer<LIRemoteDataWriter>          mDataWriter;
     QSharedPointer<LCStringDataFormatterBase>   mFormatter;
-
+    QMetaObject::Connection                     mIndexChangeConnection;
 public:
     explicit LCQRemComboBox(QWidget* _parent = nullptr);
 
@@ -53,7 +55,6 @@ public:
             QSharedPointer<LCStringDataFormatterBase>   _formatter,
             QWidget* _parent = nullptr);
     virtual ~LCQRemComboBox();
-
     virtual bool event(QEvent *e) override;
 
 };
