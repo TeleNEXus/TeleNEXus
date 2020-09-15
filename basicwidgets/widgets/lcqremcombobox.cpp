@@ -10,9 +10,8 @@
 //==============================================================================CReadListener
 LCQRemComboBox::
     CReadListener::
-        CReadListener(LCQRemComboBox& _label) : mOwner(_label)
+        CReadListener(LCQRemComboBox& _combobox) :  mOwner(_combobox)
 {
-
 }
 
 //------------------------------------------------------------------------------
@@ -24,10 +23,10 @@ void LCQRemComboBox::
     switch(_status)
     {
     case LERemoteDataStatus::DS_OK:
-//        index = mOwner.findData( mOwner.mFormatter->toString( *_data.data() ), Qt::UserRole, static_cast<Qt::MatchFlag> (Qt::MatchExactly)) ;
         mOwner.setCurrentIndex(
                 mOwner.findData( 
-                    mOwner.mFormatter->toString( *_data.data() ) ) );
+                    mOwner.mFormatter->
+                                toString( *_data.data())) ); 
         mOwner.setEnabled(true);
         break;
 
@@ -72,23 +71,21 @@ LCQRemComboBox::LCQRemComboBox(
     mDataWriter->setDataSource(_dataSource);
 
     this->setEnabled(false);
-    
+
     connect(this, 
-            static_cast 
-                <void(LCQRemComboBox::*)(int)> 
-                    (&LCQRemComboBox::currentIndexChanged),
+            static_cast <void(LCQRemComboBox::*)(int)> 
+                    (&LCQRemComboBox::activated),
             [&](int index)
             {
                 Q_UNUSED(index);
                 mDataWriter->writeRequest(
-                        mFormatter->toBytes(currentData().toString())); 
+                        mFormatter->toBytes(currentData().toString()));
             });
 }
 
 //------------------------------------------------------------------------------
 LCQRemComboBox::~LCQRemComboBox()
 {
-    qDebug() << "LCQRemComboBox::~LCQRemComboBox()";
 }
 
 //------------------------------------------------------------------------------
@@ -112,3 +109,4 @@ bool LCQRemComboBox::event(QEvent *_event)
     QComboBox::event(_event);
     return ret;
 }
+
