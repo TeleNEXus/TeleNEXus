@@ -8,7 +8,6 @@
 #include <qdom.h>
 #include <qwidget.h>
 
-#include <QDebug>
 //==============================================================================
 LCXmlRemComboBoxBuilder::LCXmlRemComboBoxBuilder()
 {
@@ -32,13 +31,16 @@ const struct
     QString value       = "value";
 } __attrNames;
 
+//------------------------------------------------------------------------------
 const struct
 {
     QString item    = "item";
 } __elementNames;
 
+//------------------------------------------------------------------------------buildBox
 static void buildBox(const QDomElement& _element, LCQRemComboBox* _box);
-//------------------------------------------------------------------------------
+
+//------------------------------------------------------------------------------build
 QWidget* LCXmlRemComboBoxBuilder::build(const QDomElement& _element, 
                                             const LIApplication& _app)
 {
@@ -58,7 +60,6 @@ QWidget* LCXmlRemComboBoxBuilder::build(const QDomElement& _element,
 
     if(source.isNull())
     {
-        qDebug() << "COMBOBOX WRONG 1------------------------------------";
         goto LABEL_WRONG_EXIT;
     }
 
@@ -66,7 +67,6 @@ QWidget* LCXmlRemComboBoxBuilder::build(const QDomElement& _element,
 
     if(dataread.isNull())
     {
-        qDebug() << "COMBOBOX WRONG 2------------------------------------";
         goto LABEL_WRONG_EXIT;
     }
 
@@ -82,7 +82,6 @@ QWidget* LCXmlRemComboBoxBuilder::build(const QDomElement& _element,
 
     if(format.isNull())
     {
-        qDebug() << "COMBOBOX WRONG 3------------------------------------";
         goto LABEL_WRONG_EXIT;
     }
     
@@ -98,6 +97,7 @@ LABEL_WRONG_EXIT:
     return ret;
 }
 
+//------------------------------------------------------------------------------buildBox
 static void buildBox(const QDomElement& _element, LCQRemComboBox* _box)
 {
     QDomNodeList elements = _element.elementsByTagName(__elementNames.item);
