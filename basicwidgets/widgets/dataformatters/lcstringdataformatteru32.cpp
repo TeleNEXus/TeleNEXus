@@ -1,6 +1,6 @@
 ﻿#include "lcstringdataformatteru32.h"
 
-//==========================================================================================LCQDataStringFormatterUint32
+//==============================================================================LCQDataStringFormatterUint32
 LCStringDataFormatterU32::
     LCStringDataFormatterU32( int     _fieldWidth,
                         QChar   _fillChar,
@@ -15,19 +15,31 @@ LCStringDataFormatterU32::
 {
 }
 
-//--------------------------------------------------------------------------------------------------------------toString
+//------------------------------------------------------------------------------toString
 QString LCStringDataFormatterU32::toString(const QByteArray& _data)
 {
     if(_data.size() < 4)
     {
-        QChar ch = (mFillCharWrong.isNull()) ? (msFillCharWrongDef):(mFillCharWrong);
-        int length = (mFieldWidth == 0) ? (msFillCharWrongDefLength) : (abs(mFieldWidth));
+        QChar ch = (mFillCharWrong.isNull()) ? 
+                            (msFillCharWrongDef):(mFillCharWrong);
+        int length = (mFieldWidth == 0) ? 
+                            (msFillCharWrongDefLength) : (abs(mFieldWidth));
         return QString(length, ch);
     }
-    return QString("%1").arg( ((quint32*)_data.constData())[0], mFieldWidth, mBase, mFillChar);
+    return QString("%1").arg( ((quint32*)_data.constData())[0], 
+                                            mFieldWidth, mBase, mFillChar);
 }
 
-//---------------------------------------------------------------------------------------------------------------toBytes
+//------------------------------------------------------------------------------normalizeString
+QString LCStringDataFormatterU32::normalizeString(const QString& _str)
+{
+    bool    ok  = false;
+    qint16  val = _str.toUShort(&ok);
+    if(!ok) return QString();
+    return QString("%1").arg( val, mFieldWidth, mBase, mFillChar);
+}
+
+//------------------------------------------------------------------------------toBytes
 QByteArray LCStringDataFormatterU32::toBytes(const QString& _str)
 {
     bool ok = false;
@@ -36,13 +48,13 @@ QByteArray LCStringDataFormatterU32::toBytes(const QString& _str)
     return QByteArray((char*)(&r), 4);
 }
 
-//------------------------------------------------------------------------------------------------------undefStateString
+//------------------------------------------------------------------------------undefStateString
 QString LCStringDataFormatterU32::undefStateString()
 {
     return getUndefStateString(mFieldWidth, mFillCharUndef);
 }
 
-//-------------------------------------------------------------------------------------------------------------validator
+//------------------------------------------------------------------------------validator
 QValidator* LCStringDataFormatterU32::validator()
 {
     return &mValidator;

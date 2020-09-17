@@ -14,7 +14,6 @@ LCQRemLabel::CReadListener::CReadListener(LCQRemLabel& _label) : mLabel(_label)
 void LCQRemLabel::CReadListener::dataIsRead(QSharedPointer<QByteArray>  _data, 
                                             LERemoteDataStatus          _status)
 {
-    qDebug() << "Data is read";
     if(_status != LERemoteDataStatus::DS_OK)
     {
         mLabel.setText(mLabel.mFormatter.data()->undefStateString());

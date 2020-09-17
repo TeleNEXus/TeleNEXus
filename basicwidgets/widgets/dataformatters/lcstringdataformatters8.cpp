@@ -3,7 +3,7 @@
 #include <limits>
 #include <math.h>
 
-//==================================================================================================LCQDataFormatterInt8
+//==============================================================================LCQDataFormatterInt8
 LCStringDataFormatterS8::
     LCStringDataFormatterS8(  int     _fieldWidth,
                         QChar   _fillChar,
@@ -16,23 +16,35 @@ LCStringDataFormatterS8::
                                                     _fillCharUndef,
                                                     _fillCharWrong)
 {
-    mValidator.setRange(std::numeric_limits<qint8>::min(), std::numeric_limits<qint8>::max());
+    mValidator.setRange(    std::numeric_limits<qint8>::min(), 
+                            std::numeric_limits<qint8>::max());
 }
 
-//--------------------------------------------------------------------------------------------------------------toString
+//------------------------------------------------------------------------------toString
 QString LCStringDataFormatterS8::toString(const QByteArray& _data)
 {
     if(_data.size() < 1)
     {
-        QChar ch = (mFillCharWrong.isNull()) ? (msFillCharWrongDef):(mFillCharWrong);
-        int length = (mFieldWidth == 0) ? (msFillCharWrongDefLength) : (abs(mFieldWidth));
+        QChar ch = (mFillCharWrong.isNull()) ? 
+                         (msFillCharWrongDef):(mFillCharWrong);
+        int length = (mFieldWidth == 0) ? 
+                         (msFillCharWrongDefLength) : (abs(mFieldWidth));
         return QString(length, ch);
     }
     qint8 r = ((qint8*)_data.constData())[0];
     return QString("%1").arg( r, mFieldWidth, mBase, mFillChar);
 }
 
-//---------------------------------------------------------------------------------------------------------------toBytes
+//------------------------------------------------------------------------------normalizeString
+QString LCStringDataFormatterS8::normalizeString(const QString& _str)
+{
+    bool    ok  = false;
+    qint8   val = _str.toShort(&ok);
+    if(!ok) return QString();
+    return QString("%1").arg( val, mFieldWidth, mBase, mFillChar);
+}
+
+//------------------------------------------------------------------------------toBytes
 QByteArray LCStringDataFormatterS8::toBytes(const QString& _str)
 {
     bool ok = false;
@@ -41,13 +53,13 @@ QByteArray LCStringDataFormatterS8::toBytes(const QString& _str)
     return QByteArray((char*)(&r), 1);
 }
 
-//------------------------------------------------------------------------------------------------------undefStateString
+//------------------------------------------------------------------------------undefStateString
 QString LCStringDataFormatterS8::undefStateString()
 {
     return getUndefStateString(mFieldWidth, mFillCharUndef);
 }
 
-//-------------------------------------------------------------------------------------------------------------validator
+//------------------------------------------------------------------------------validator
 QValidator* LCStringDataFormatterS8::validator()
 {
     return &mValidator;

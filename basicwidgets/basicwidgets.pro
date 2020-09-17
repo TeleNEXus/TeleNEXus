@@ -37,11 +37,13 @@ SOURCES += \
     widgets/lcqremlabel.cpp \
     widgets/lcqremlineedit.cpp \
     widgets/lcqremcombobox.cpp \
-    builders/lcxmlremcomboboxbuilder.cpp \
+    widgets/lcqremcombolabel.cpp \
     builders/lcxmlremlabelbuilder.cpp \
     builders/lcxmlremlineeditbuilder.cpp \
     builders/lcxmltextlabelbuilder.cpp \
     builders/lcxmlwidgetbuilder.cpp \
+    builders/lcxmlremcomboboxbuilder.cpp \
+    builders/lcxmlremcombolabelbuilder.cpp \
     widgets/dataformatters/lcstringdataformatterbase.cpp \
     widgets/dataformatters/lcstringdataformatterbool.cpp \
     widgets/dataformatters/lcstringdataformatterf32.cpp \
@@ -73,12 +75,14 @@ HEADERS += \
     widgets/lcqremlineedit.h \
     widgets/lremgui.h \
     widgets/lcqremcombobox.h \
+    widgets/lcqremcombolabel.h \
     builders/lcxmlremlineeditbuilder.h \
     builders/lcxmlremlabelbuilder.h \
     builders/lcxmlremlineeditbuilder.h \
     builders/lcxmltextlabelbuilder.h \
     builders/lcxmlwidgetbuilder.h \
     builders/lcxmlremcomboboxbuilder.h \
+    builders/lcxmlremcombolabelbuilder.h \
     widgets/dataformatters/LIStringDataFormatter.h \
     widgets/dataformatters/lcstringdataformatterbase.h \
     widgets/dataformatters/lcstringdataformatterbool.h \

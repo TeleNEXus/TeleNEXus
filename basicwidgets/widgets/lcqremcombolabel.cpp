@@ -3,49 +3,50 @@
 #include <QDebug>
 #include <QMap>
 
-#define __WRONG_DATA_STRING "####"
-
 //==============================================================================SOwnData
+//Собственные данные класса.
 struct SOwnData
 {
+    //Карта соответствий прочитанных данных и выводимых строк.
     QMap<QString, QString> mDataMap;
     SOwnData(){}
 };
-#define __L_OWNDATA static_cast<SOwnData*>(mpOwnData)
+
+//------------------------------------------------------------------------------
+#define L_OWNDATA(_data) static_cast<SOwnData*>(_data)
 
 //==============================================================================LCQRemComboLabel
-LCQRemComboLabel::CReadListener::CReadListener(LCQRemComboLabel& _label) : mLabel(_label)
+LCQRemComboLabel::
+    CReadListener::
+        CReadListener(LCQRemComboLabel& _label) : mLabel(_label)
 {
 
 }
 
+//------------------------------------------------------------------------------dataIsRead
 void LCQRemComboLabel::
         CReadListener::
             dataIsRead( QSharedPointer<QByteArray> _data, 
                         LERemoteDataStatus _status)
 {
-
-    //TODO: Добавить логику отображения.
     if(_status != LERemoteDataStatus::DS_OK)
     {
         mLabel.setText(mLabel.mFormatter.data()->undefStateString());
         return;
     }
-    mLabel.setText(mLabel.mFormatter.data()->toString(*_data));
+    QMap<QString, QString>::iterator it = 
+        L_OWNDATA(mLabel.mpOwnData)->mDataMap.find(
+                                    mLabel.mFormatter.data()->toString(*_data));
+    if (it == L_OWNDATA(mLabel.mpOwnData)->mDataMap.end())
+    {
+        mLabel.setText(mLabel.mFormatter->getWrongStateString());
+        return;
+    }
+    mLabel.setText(*it);
 }
 
 
 //==============================================================================LCQRemComboLabel
-LCQRemComboLabel::LCQRemComboLabel(QWidget* _parent) : QLabel(_parent)
-{
-    mpOwnData = new SOwnData();
-    setText("LCQRemComboLabel");
-}
-
-LCQRemComboLabel::LCQRemComboLabel(QString _text, QWidget* _parent) : QLabel(_text, _parent)
-{
-}
-
 LCQRemComboLabel::LCQRemComboLabel(const QString& _dataName,
                          QSharedPointer<LIRemoteDataSource> _dataSource,
                          QSharedPointer<LCStringDataFormatterBase> _formatter,
@@ -53,6 +54,7 @@ LCQRemComboLabel::LCQRemComboLabel(const QString& _dataName,
                                                 mDataName(_dataName),
                                                 mFormatter(_formatter)
 {
+    mpOwnData = new SOwnData();
     setText(mFormatter.data()->undefStateString());
     mDataListener = QSharedPointer<CReadListener>(new CReadListener(*this));
     mDataReader = _dataSource->createReader();
@@ -62,9 +64,10 @@ LCQRemComboLabel::LCQRemComboLabel(const QString& _dataName,
 
 }
 
+//------------------------------------------------------------------------------~LCQRemComboLabel
 LCQRemComboLabel::~LCQRemComboLabel()
 {
-    delete __L_OWNDATA;
+    delete L_OWNDATA(mpOwnData);
 }
 
 //------------------------------------------------------------------------------setActive
@@ -80,13 +83,13 @@ void LCQRemComboLabel::setActive(bool _flag)
     }
 }
 
-//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------addItem
 void LCQRemComboLabel::addItem(const QString& _name, const QString& _val)
 {
-    __L_OWNDATA->mDataMap.insert(_name, _val);
+    L_OWNDATA(mpOwnData)->mDataMap.insert(_val, _name);
 }
 
-//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------event
 bool LCQRemComboLabel::event(QEvent *_event)
 {
     bool ret = false;

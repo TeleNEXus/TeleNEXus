@@ -1,7 +1,7 @@
 ﻿#include "lcstringdataformatterf32.h"
 
 
-//=========================================================================================LCQDataStringFormatterFloat32
+//==============================================================================LCQDataStringFormatterFloat32
 LCStringDataFormatterF32::LCStringDataFormatterF32(
         int     _fieldWidth,
         char    _format,
@@ -20,19 +20,35 @@ LCStringDataFormatterF32::LCStringDataFormatterF32(
     mValidator.setLocale(QLocale::c());
 }
 
-//--------------------------------------------------------------------------------------------------------------toString
+//------------------------------------------------------------------------------toString
 QString LCStringDataFormatterF32::toString(const QByteArray& _data)
 {
     if(_data.size() < 4)
     {
-        QChar ch = (mFillCharWrong.isNull()) ? (msFillCharWrongDef):(mFillCharWrong);
-        int length = (mFieldWidth == 0) ? (msFillCharWrongDefLength) : (abs(mFieldWidth));
+        QChar ch = (mFillCharWrong.isNull()) ? (msFillCharWrongDef):
+                                                            (mFillCharWrong);
+        int length = (mFieldWidth == 0) ? (msFillCharWrongDefLength) : 
+                                                            (abs(mFieldWidth));
         return QString(length, ch);
     }
-    return QString("%1").arg(((float*)_data.constData())[0], mFieldWidth, mFormat, mPrecision, mFillChar);
+    return QString("%1").arg(
+            ((float*)_data.constData())[0], 
+                    mFieldWidth, mFormat, mPrecision, mFillChar);
 }
 
-//---------------------------------------------------------------------------------------------------------------toBytes
+//------------------------------------------------------------------------------
+QString LCStringDataFormatterF32::normalizeString(const QString& _str)
+{
+    bool ok = false;
+    float valf = ((float)_str.toFloat(&ok));
+
+    if(!ok) return QString();
+
+    return QString("%1").arg( valf, 
+                                mFieldWidth, mFormat, mPrecision, mFillChar);
+}
+
+//------------------------------------------------------------------------------toBytes
 QByteArray LCStringDataFormatterF32::toBytes(const QString& _str)
 {
     bool ok = false;
@@ -41,13 +57,13 @@ QByteArray LCStringDataFormatterF32::toBytes(const QString& _str)
     return QByteArray((char*)(&r), 4);
 }
 
-//------------------------------------------------------------------------------------------------------undefStateString
+//------------------------------------------------------------------------------undefStateString
 QString LCStringDataFormatterF32::undefStateString()
 {
     return getUndefStateString(mFieldWidth, mFillCharUndef);
 }
 
-//-------------------------------------------------------------------------------------------------------------validator
+//------------------------------------------------------------------------------validator
 QValidator* LCStringDataFormatterF32::validator()
 {
     return &mValidator;

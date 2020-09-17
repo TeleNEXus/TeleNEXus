@@ -17,6 +17,7 @@ public:
                                     QChar   _fillCharUndef  = QChar(),
                                     QChar   _fillCharWrong  = QChar());
     virtual QString     toString(const QByteArray& _data) override;
+    QString normalizeString(const QString& _str) override;
     virtual QByteArray  toBytes(const QString& _str) override;
     virtual QString     undefStateString() override;
     virtual QValidator* validator() override;

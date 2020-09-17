@@ -45,9 +45,9 @@ void LCQRemComboBox::
 
 
 //==============================================================================LCQRemComboBox
-LCQRemComboBox::LCQRemComboBox(QWidget* _parent) : QComboBox(_parent)
-{
-}
+//LCQRemComboBox::LCQRemComboBox(QWidget* _parent) : QComboBox(_parent)
+//{
+//}
 
 //------------------------------------------------------------------------------
 LCQRemComboBox::LCQRemComboBox( 

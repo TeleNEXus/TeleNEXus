@@ -63,7 +63,6 @@ QModbusClient* LQModbusMasterTcp::createMaster()
     mpMaster->setConnectionParameter(QModbusDevice::NetworkPortParameter, mPort);
     mpMaster->setConnectionParameter(QModbusDevice::NetworkAddressParameter, mHostName);
     mpMaster->setTimeout(500);
-    qDebug() << "LCQModbusMasterTcp::createMaster()";
     return mpMaster;
 }
 

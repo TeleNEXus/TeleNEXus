@@ -1,5 +1,6 @@
 ﻿#include "lcstringdataformatterbase.h"
 
+
 QChar     LCStringDataFormatterBase::msFillCharUndefDef('#');
 quint8    LCStringDataFormatterBase::msFillCharUndefDefLength(4);
 QChar     LCStringDataFormatterBase::msFillCharWrongDef('?');

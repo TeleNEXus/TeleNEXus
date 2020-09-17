@@ -43,10 +43,12 @@ private:
     QSharedPointer<LIRemoteDataWriter>          mDataWriter;
     QSharedPointer<LCStringDataFormatterBase>   mFormatter;
     QMetaObject::Connection                     mIndexChangeConnection;
-public:
-    explicit LCQRemComboBox(QWidget* _parent = nullptr);
 
+private:
+    explicit LCQRemComboBox(QWidget* _parent = nullptr);
     explicit LCQRemComboBox(QString _text, QWidget* _parent = nullptr);
+public:
+
 
     explicit LCQRemComboBox(    
             const QString&                              _dataNameRead,

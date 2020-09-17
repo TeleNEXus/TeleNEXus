@@ -645,16 +645,11 @@ void LQModbusMasterBase::customEvent(QEvent* _event)
                     QModbusClient* master = getMaster();
                     if(master != nullptr)
                     {
-                        qDebug() << "ModbusClient state =" << master->state();
                         if(master->state() == QModbusDevice::State::UnconnectedState)
                         {
                             master = createMaster();
                             master->connectDevice();
                         }
-                    }
-                    else
-                    {
-                        qDebug() << "ModbusClient state =" << QModbusDevice::State::UnconnectedState;
                     }
                 });
             mpTimer->start(1000);
