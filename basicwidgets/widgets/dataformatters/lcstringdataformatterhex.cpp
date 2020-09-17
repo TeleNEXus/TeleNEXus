@@ -4,12 +4,14 @@
 
 LCStringDataFormatterHex::LCStringDataFormatterHex(QChar   _separator,
                                        QChar _fillCharUndef,
-                                       QChar _fillCharWrong) :  mSeparator(_separator),
-                                                                mFillCharUndef(_fillCharUndef),
-                                                                mFillCharWrong(_fillCharWrong)
+                                       QChar _fillCharWrong) :  
+                                            mSeparator(_separator),
+                                            mFillCharUndef(_fillCharUndef),
+                                            mFillCharWrong(_fillCharWrong)
 {
 }
 
+//------------------------------------------------------------------------------toString
 QString LCStringDataFormatterHex::toString(const QByteArray& _data)
 {
     QString str;
@@ -22,11 +24,14 @@ QString LCStringDataFormatterHex::toString(const QByteArray& _data)
     {
         if(mSeparator.isNull())
         {
-            str = str + QString("%1").arg(((quint8*)_data.constData())[i], 2, 16, QChar('0'));
+            str = str + QString("%1").arg(
+                            ((quint8*)_data.constData())[i], 2, 16, QChar('0'));
         }
         else
         {
-            str = str + QString("%1%2").arg(((quint8*)_data.constData())[i], 2, 16, QChar('0')).arg(mSeparator);
+            str = str + QString("%1%2").arg(
+                            ((quint8*)_data.constData())[i], 2, 16, QChar('0')).
+                                arg(mSeparator);
         }
     }
 
@@ -37,7 +42,15 @@ QString LCStringDataFormatterHex::toString(const QByteArray& _data)
     return str;
 }
 
+//------------------------------------------------------------------------------normalizeString
+QString LCStringDataFormatterHex::normalizeString(const QString& _str)
+{
+    //Удаление незначащих нулей.
+    //Удаление сепараторов.
+    return _str;
+}
 
+//------------------------------------------------------------------------------toBytes
 QByteArray LCStringDataFormatterHex::toBytes(const QString& _str)
 {
     QByteArray arr;
@@ -57,6 +70,7 @@ QByteArray LCStringDataFormatterHex::toBytes(const QString& _str)
     return arr;
 }
 
+//------------------------------------------------------------------------------undefStateString
 QString     LCStringDataFormatterHex::undefStateString()
 {
     return QString(msFillCharUndefDefLength, mFillCharUndef);

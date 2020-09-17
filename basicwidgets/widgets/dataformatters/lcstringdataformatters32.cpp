@@ -1,6 +1,6 @@
 ﻿#include "lcstringdataformatters32.h"
 
-//===========================================================================================LCQDataStringFormatterInt32
+//==============================================================================LCQDataStringFormatterInt32
 LCStringDataFormatterS32::
     LCStringDataFormatterS32( int     _fieldWidth,
                         QChar   _fillChar,
@@ -15,7 +15,7 @@ LCStringDataFormatterS32::
 {
 }
 
-//--------------------------------------------------------------------------------------------------------------toString
+//------------------------------------------------------------------------------toString
 QString LCStringDataFormatterS32::toString(const QByteArray& _data)
 {
     if(_data.size() < 4)
@@ -27,7 +27,16 @@ QString LCStringDataFormatterS32::toString(const QByteArray& _data)
     return QString("%1").arg( ((qint32*)_data.constData())[0], mFieldWidth, mBase, mFillChar);
 }
 
-//---------------------------------------------------------------------------------------------------------------toBytes
+//------------------------------------------------------------------------------normalizeString
+QString LCStringDataFormatterS32::normalizeString(const QString& _str)
+{
+    bool    ok = false;
+    qint32  val = _str.toInt(&ok);
+    if(!ok) return QString();
+    return QString("%1").arg( val, mFieldWidth, mBase, mFillChar);
+}
+
+//------------------------------------------------------------------------------toBytes
 QByteArray LCStringDataFormatterS32::toBytes(const QString& _str)
 {
     bool ok = false;
@@ -36,13 +45,13 @@ QByteArray LCStringDataFormatterS32::toBytes(const QString& _str)
     return QByteArray((char*)(&r), 4);
 }
 
-//------------------------------------------------------------------------------------------------------undefStateString
+//------------------------------------------------------------------------------undefStateString
 QString LCStringDataFormatterS32::undefStateString()
 {
     return getUndefStateString(mFieldWidth, mFillCharUndef);
 }
 
-//-------------------------------------------------------------------------------------------------------------validator
+//------------------------------------------------------------------------------validator
 QValidator* LCStringDataFormatterS32::validator()
 {
     return &mValidator;

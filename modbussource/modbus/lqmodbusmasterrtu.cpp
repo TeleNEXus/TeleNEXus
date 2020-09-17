@@ -80,7 +80,6 @@ QModbusClient* LQModbusMasterRtu::createMaster()
     mpMaster->setConnectionParameter(QModbusDevice::SerialStopBitsParameter, mStopBits);
     mpMaster->setTimeout(mTimeout);
 
-    qDebug() << "LCQModbusMasterRtu::createMaster()";
     return mpMaster;
 }
 

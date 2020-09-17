@@ -11,6 +11,7 @@ LCStringDataFormatterBool::LCStringDataFormatterBool(const QString& _strFalse,
 
 }
 
+//------------------------------------------------------------------------------
 QString LCStringDataFormatterBool::toString(const QByteArray& _data)
 {
     if(_data.size() == 0)
@@ -29,6 +30,15 @@ QString LCStringDataFormatterBool::toString(const QByteArray& _data)
     return mStrFalse;
 }
 
+//------------------------------------------------------------------------------normalizeString
+QString LCStringDataFormatterBool::normalizeString(const QString& _str)
+{
+    //Удаление незначащих нулей.
+    //Удаление сепараторов.
+    return _str;
+}
+
+//------------------------------------------------------------------------------
 QByteArray LCStringDataFormatterBool::toBytes(const QString& _str)
 {
     if(_str == mStrTrue) return QByteArray(1,1);
@@ -36,6 +46,7 @@ QByteArray LCStringDataFormatterBool::toBytes(const QString& _str)
     return QByteArray();
 }
 
+//------------------------------------------------------------------------------
 QString     LCStringDataFormatterBool::undefStateString()
 {
     return getUndefStateString((mStrTrue.size() > mStrFalse.size()) ?

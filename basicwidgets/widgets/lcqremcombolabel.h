@@ -25,17 +25,15 @@ private:
         virtual void dataIsRead(QSharedPointer<QByteArray>  _data, 
                                 LERemoteDataStatus          _status) override;
     };
-    void* mpOwnData;
+    void* mpOwnData;    //Собственные данные.
     QString mDataName;
     QSharedPointer<LIRemoteDataReader>  mDataReader;
     QSharedPointer<LCStringDataFormatterBase> mFormatter;
     QSharedPointer<CReadListener> mDataListener;
-
-public:
+private:
     explicit LCQRemComboLabel(QWidget* _parent = nullptr);
-
     explicit LCQRemComboLabel(QString _text, QWidget* _parent = nullptr);
-
+public:
     explicit LCQRemComboLabel(   
                     const QString&                              _dataName,
                     QSharedPointer<LIRemoteDataSource>          _dataSource,
