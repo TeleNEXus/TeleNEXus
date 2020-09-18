@@ -37,7 +37,9 @@ const struct
 } __elementNames;
 
 //------------------------------------------------------------------------------
-static void buildLabel(const QDomElement& _element, LCQRemComboLabel* _label);
+static void buildLabel( const QDomElement& _element, 
+                        LCQRemComboLabel* _label,
+                        QSharedPointer<LCStringDataFormatterBase> _format);
 
 //------------------------------------------------------------------------------
 QWidget* LCXmlRemComboLabelBuilder::build(const QDomElement& _element, 
@@ -72,12 +74,13 @@ QWidget* LCXmlRemComboLabelBuilder::build(const QDomElement& _element,
                                 createStringFormatter(_element.attributes());
     if(format.isNull())
     {
+        qDebug() << "LCQRemComboLabel-------------------------no format";
         goto LABEL_WRONG_EXIT;
     }
 
     ret = new LCQRemComboLabel(dataread, source, format);
 
-    buildLabel(_element, static_cast<LCQRemComboLabel*>(ret));
+    buildLabel(_element, static_cast<LCQRemComboLabel*>(ret), format);
     return ret;
 
 LABEL_WRONG_EXIT:
@@ -87,25 +90,34 @@ LABEL_WRONG_EXIT:
 }
 
 //------------------------------------------------------------------------------
-static void buildLabel(const QDomElement& _element, LCQRemComboLabel* _label)
+static void buildLabel( const QDomElement& _element, 
+                        LCQRemComboLabel* _label,
+                        QSharedPointer<LCStringDataFormatterBase> _format)
 {
     QDomNodeList elements = _element.elementsByTagName(__elementNames.item);
     for(int i = 0; i < elements.length(); i++)
     {
-      QString name = elements.at(i).toElement().attribute(__attrNames.name);
-      QString val = elements.at(i).toElement().attribute(__attrNames.value);
-      if (val == "") 
-      {
+        QString name = elements.at(i).toElement().attribute(__attrNames.name);
+        QString val = elements.at(i).toElement().attribute(__attrNames.value);
+        if (val.isNull()) 
+        {
           continue;
-      }
+        }
 
-      if (name == "")
-      {
+        val = _format->normalizeString(val);
+
+        if(val.isNull())
+        {
+            continue;
+        }
+
+        if (name == "")
+        {
           _label->addItem(val, val);          
-      }
-      else
-      {
+        }
+        else
+        {
           _label->addItem(name, val);
-      }
+        }
     }
 }

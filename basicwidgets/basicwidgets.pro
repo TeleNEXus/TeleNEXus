@@ -45,6 +45,7 @@ SOURCES += \
     builders/lcxmlremcomboboxbuilder.cpp \
     builders/lcxmlremcombolabelbuilder.cpp \
     widgets/dataformatters/lcstringdataformatterbase.cpp \
+    widgets/dataformatters/lcstringdataformatterbits.cpp \
     widgets/dataformatters/lcstringdataformatterbool.cpp \
     widgets/dataformatters/lcstringdataformatterf32.cpp \
     widgets/dataformatters/lcstringdataformatterhex.cpp \
@@ -85,6 +86,7 @@ HEADERS += \
     builders/lcxmlremcombolabelbuilder.h \
     widgets/dataformatters/LIStringDataFormatter.h \
     widgets/dataformatters/lcstringdataformatterbase.h \
+    widgets/dataformatters/lcstringdataformatterbits.h \
     widgets/dataformatters/lcstringdataformatterbool.h \
     widgets/dataformatters/lcstringdataformatterf32.h \
     widgets/dataformatters/lcstringdataformatterhex.h \

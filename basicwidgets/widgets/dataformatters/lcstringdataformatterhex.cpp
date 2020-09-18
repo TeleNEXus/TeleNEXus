@@ -2,9 +2,12 @@
 #include <QDebug>
 #include <functional>
 
-LCStringDataFormatterHex::LCStringDataFormatterHex(QChar   _separator,
-                                       QChar _fillCharUndef,
-                                       QChar _fillCharWrong) :  
+LCStringDataFormatterHex::LCStringDataFormatterHex( 
+                                        int   _size,
+                                        QChar _separator,
+                                        QChar _fillCharUndef,
+                                        QChar _fillCharWrong) :  
+                                            mSize(_size),
                                             mSeparator(_separator),
                                             mFillCharUndef(_fillCharUndef),
                                             mFillCharWrong(_fillCharWrong)
@@ -45,9 +48,49 @@ QString LCStringDataFormatterHex::toString(const QByteArray& _data)
 //------------------------------------------------------------------------------normalizeString
 QString LCStringDataFormatterHex::normalizeString(const QString& _str)
 {
-    //Удаление незначащих нулей.
-    //Удаление сепараторов.
-    return _str;
+    QString so = _str;
+
+    //Удаляем пробелы.
+    so.remove(QRegExp("[ ]{1,}"));
+
+    //Переводим строку в нижний регистр.
+    so  = so.toLower(); 
+ 
+    if(mSize < 0)
+    {
+        //Если размер не задан, то производим нормализацию до четного количества
+        //символов и проверку значений.
+        if( (_str.size() % 2 ) != 0)
+        {
+            //Добавляем незначащий ноль.
+            so.insert(0, '0');
+        }
+        if(so.contains(QRegExp("[^0-9,a-f]{1,}")) != 0)
+        {
+            //Если присутствуют посторонние символы, 
+            //возвращаем пустую строку.
+            return QString();
+        }
+        return so;
+    }
+
+    so.remove(QRegExp("^[0]{1,}"));
+    if( (_str.size() % 2 ) != 0)
+    {
+        //Добавляем незначащий ноль.
+        so.insert(0, '0');
+    }
+
+    if((mSize * 2) < so.size())
+    {
+        return QString();
+    }
+
+    if ((mSize * 2) == so.size()) return so;
+
+    so.insert(0, QString( (mSize * 2) - so.size(), '0'));
+
+    return so;
 }
 
 //------------------------------------------------------------------------------toBytes
