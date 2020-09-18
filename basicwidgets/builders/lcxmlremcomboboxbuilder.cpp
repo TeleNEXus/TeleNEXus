@@ -38,7 +38,9 @@ const struct
 } __elementNames;
 
 //------------------------------------------------------------------------------buildBox
-static void buildBox(const QDomElement& _element, LCQRemComboBox* _box);
+static void buildBox(   const QDomElement& _element, 
+                        LCQRemComboBox* _box, 
+                        QSharedPointer<LCStringDataFormatterBase> __format);
 
 //------------------------------------------------------------------------------build
 QWidget* LCXmlRemComboBoxBuilder::build(const QDomElement& _element, 
@@ -86,7 +88,7 @@ QWidget* LCXmlRemComboBoxBuilder::build(const QDomElement& _element,
     }
     
     ret = new LCQRemComboBox(dataread, datawrite, source, format);
-    buildBox(_element, static_cast<LCQRemComboBox*>(ret));
+    buildBox(_element, static_cast<LCQRemComboBox*>(ret), format);
 
     return ret;
 
@@ -98,26 +100,35 @@ LABEL_WRONG_EXIT:
 }
 
 //------------------------------------------------------------------------------buildBox
-static void buildBox(const QDomElement& _element, LCQRemComboBox* _box)
+static void buildBox(   const QDomElement& _element, 
+                        LCQRemComboBox* _box,
+                        QSharedPointer<LCStringDataFormatterBase> _format)
 {
     QDomNodeList elements = _element.elementsByTagName(__elementNames.item);
     for(int i = 0; i < elements.length(); i++)
     {
-      QString name = elements.at(i).toElement().attribute(__attrNames.name);
-      QString val = elements.at(i).toElement().attribute(__attrNames.value);
-      if (val == "") 
-      {
+        QString name = elements.at(i).toElement().attribute(__attrNames.name);
+        QString val = elements.at(i).toElement().attribute(__attrNames.value);
+        if (val.isNull()) 
+        {
           continue;
-      }
+        }
 
-      if (name == "")
-      {
+        val = _format->normalizeString(val);
+
+        if(val.isNull())
+        {
+            continue;
+        }
+
+        if (name == "")
+        {
           _box->addItem(val, val);          
-      }
-      else
-      {
+        }
+        else
+        {
           _box->addItem(name, val);
-      }
+        }
 
     }
 }

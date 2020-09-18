@@ -1,22 +1,20 @@
-#ifndef LCSTRINGDATAFORMATTERHEX_H
-#define LCSTRINGDATAFORMATTERHEX_H
+#ifndef LCSTRINGDATAFORMATTERBITS_H
+#define LCSTRINGDATAFORMATTERBITS_H
 
 #include "lcstringdataformatterbase.h"
 
-class LCStringDataFormatterHex : public LCStringDataFormatterBase
+class LCStringDataFormatterBits : public LCStringDataFormatterBase
 {
 private:
-    int     mSize;              //Заданный размер последовательности в байтах.
-    QChar   mSeparator;         //Разделитель между отображаемыми числами.
+    int     mSize;              //Заданный размер последовательности в битах.
     QChar   mFillCharUndef;     //Заполнение при отсутствии значения.
     QChar   mFillCharWrong;     //Заполнение при ошибочном значении.
 public:
-    explicit LCStringDataFormatterHex(    
+    explicit LCStringDataFormatterBits(    
                         int     _size           = -1, 
-                        QChar   _separator      = QChar(),
                         QChar   _fillCharUndef  = msFillCharUndefDef,
                         QChar   _fillCharWrong  = msFillCharWrongDef);
-    virtual ~LCStringDataFormatterHex(){}
+    virtual ~LCStringDataFormatterBits(){}
     virtual QString     toString(const QByteArray& _data) override;
     virtual QString     normalizeString(const QString& _str) override;
     virtual QByteArray  toBytes(const QString& _str) override;
@@ -29,4 +27,6 @@ public:
 };
 
 
-#endif // LCSTRINGDATAFORMATTERHEX_H
+#endif // LCSTRINGDATAFORMATTERBITS_H
+
+
