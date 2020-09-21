@@ -1,17 +1,69 @@
 #include "lcstringdataformatterhex.h"
 #include <QDebug>
 #include <functional>
-
-LCStringDataFormatterHex::LCStringDataFormatterHex( 
-                                        int     _size,
-                                        QChar   _separator,
-                                        QChar   _fillCharUndef,
-                                        QChar   _fillCharWrong) :  
-                                            mSize(_size),
-                                            mSeparator(_separator),
-                                            mFillCharUndef(_fillCharUndef),
-                                            mFillCharWrong(_fillCharWrong)
+//==============================================================================
+LCStringDataFormatterHex::
+    CValidator::CValidator(int& _size, QChar& _separator, QObject *_parent) : 
+    QValidator(_parent),
+    mSize(_size),
+    mSeparator(_separator)
 {
+}
+
+//-----------------------------------------------------------------------------
+QValidator::State 
+LCStringDataFormatterHex::
+CValidator::validate(QString &_input, int& _pos) const
+{
+    Q_UNUSED(_pos);
+    if(_input.isNull())
+    {
+        qDebug() << "CValidator::validate State::Intermediate";
+        return State::Intermediate;
+    }
+
+    if( _input.contains(
+                QRegExp( QString("[^0-9a-fA-F _%1]{1,}").arg(mSeparator))))
+    {
+        qDebug() << "CValidator::validate State::Invalid";
+        return State::Invalid;
+    }
+
+    qDebug() << "CValidator::validate input size = " << _input.size();
+    qDebug() << "CValidator::validate mFormatter size = " << mSize; 
+    if( ( mSize > 0) && (_input.size() > mSize))
+    {
+        qDebug() << "CValidator::validate State::Invalid";
+        return State::Invalid;
+    }
+
+    qDebug() << "CValidator::validate State::Acceptable";
+    return State::Acceptable;
+}
+
+//==============================================================================
+LCStringDataFormatterHex::LCStringDataFormatterHex( 
+        int     _size,
+        QChar   _separator,
+        QChar   _fillCharUndef,
+        QChar   _fillCharWrong) :  
+    mSize(_size),
+    mSeparator(_separator),
+    mFillCharUndef(_fillCharUndef),
+    mFillCharWrong(_fillCharWrong)
+//    mValidator(mSeparator)
+{
+    mpValidator = new CValidator(mSize, mSeparator);
+    qDebug() << "CValidator mSize           " << mpValidator->mSize;
+    qDebug() << "CValidator mSeparator      " << mpValidator->mSeparator;
+    qDebug() << "CValidator mSize++++       " << mSize;
+    qDebug() << "CValidator mSeparator++++  " << mSeparator;
+}
+
+//------------------------------------------------------------------------------
+LCStringDataFormatterHex::~LCStringDataFormatterHex()
+{
+    mpValidator->deleteLater();
 }
 
 //------------------------------------------------------------------------------toString
@@ -28,13 +80,13 @@ QString LCStringDataFormatterHex::toString(const QByteArray& _data)
         if(mSeparator.isNull())
         {
             str = str + QString("%1").arg(
-                            ((quint8*)_data.constData())[i], 2, 16, QChar('0'));
+                    ((quint8*)_data.constData())[i], 2, 16, QChar('0'));
         }
         else
         {
             str = str + QString("%1%2").arg(
-                            ((quint8*)_data.constData())[i], 2, 16, QChar('0')).
-                                arg(mSeparator);
+                    ((quint8*)_data.constData())[i], 2, 16, QChar('0')).
+                arg(mSeparator);
         }
     }
 
@@ -52,7 +104,7 @@ QString LCStringDataFormatterHex::normalizeString(const QString& _instr)
 
     //Удаляем разделительные символы.
     out_string.remove(QRegExp(  QString("[ ]{1,}|[_]{1,}|[%1]{1,}")
-                                    .arg(mSeparator) ));
+                .arg(mSeparator) ));
 
     //Проверяем на строку нулевой длины.
     if( out_string.size() <= 0)
@@ -61,7 +113,7 @@ QString LCStringDataFormatterHex::normalizeString(const QString& _instr)
     }
 
     //Проверяем на наличие нецифровых значений.
-    if( out_string.contains(QRegExp("[^0-9,a-f]{1,}")))
+    if( out_string.contains(QRegExp("[^0-9a-f]{1,}")))
     {
         //Если присутствуют посторонние символы, 
         //возвращаем пустую строку.
@@ -70,7 +122,7 @@ QString LCStringDataFormatterHex::normalizeString(const QString& _instr)
 
     //Переводим строку в нижний регистр.
     out_string  = out_string.toLower(); 
- 
+
     if(mSize <= 0)
     {
         //Если размер не задан, то производим нормализацию до четного количества
@@ -112,8 +164,8 @@ QByteArray LCStringDataFormatterHex::toBytes(const QString& _str)
 
     //Удаление всех незначащих символов.
     instr.remove(   QRegExp(
-                        QString(
-                            "[ ]{1,}|[_]{1,}|[%1]{1,}").arg(mSeparator) ));
+                QString(
+                    "[ ]{1,}|[_]{1,}|[%1]{1,}").arg(mSeparator) ));
 
     // Проверка на нулевую строку.
     if(instr.length() == 0) return out_array;
@@ -122,7 +174,7 @@ QByteArray LCStringDataFormatterHex::toBytes(const QString& _str)
     instr  = instr.toLower(); 
 
     // Проверка на нечисловые значения.
-    if(instr.contains(QRegExp("[^0-9,a-f]{1,}")))
+    if(instr.contains(QRegExp("[^0-9a-f]{1,}")))
     {
         return out_array;
     }
@@ -132,7 +184,7 @@ QByteArray LCStringDataFormatterHex::toBytes(const QString& _str)
         //Добавляем незначащий ноль.
         instr.insert(0, '0');
     }
-
+    qDebug() << "LCStringDataFormatterHex::toBytes mSize" << mSize;
     if(mSize > 0)
     {
         int str_byte_size = instr.length() / 2;
@@ -160,3 +212,8 @@ QString     LCStringDataFormatterHex::undefStateString()
     return QString(msFillCharUndefDefLength, mFillCharUndef);
 }
 
+//------------------------------------------------------------------------------undefStateString
+void LCStringDataFormatterHex::setSize(int _size)
+{
+    mSize = _size;
+}

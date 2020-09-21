@@ -97,6 +97,7 @@ LCXmlStdDataFormatterFactory::LCXmlStdDataFormatterFactory()
     __formatterCreators.insert("hex",
             [](const QDomNamedNodeMap& _attr)
             {
+                qDebug() << "formatterCreators 0";
                 if(_attr.contains(__attributes.size)){} 
 
                 QDomNode node = _attr.namedItem(__attributes.size);
@@ -104,22 +105,23 @@ LCXmlStdDataFormatterFactory::LCXmlStdDataFormatterFactory()
                 if(node.isNull()) return __formatterHex;
 
                 bool ok;
-
+                                qDebug() << "formatterCreators 2";
                 int size = node.toAttr().value().toInt(&ok);
-
+                qDebug() << "formatterCreators 3 size" << size;
                 if(!ok)
                 {
                    return __formatterHex;
                 }
-
+                qDebug() << "formatterCreators 4";
                 if(size > __L_MAX_HEX_SIZE) size = __L_MAX_HEX_SIZE;
 
                 LCStringDataFormatterHex *formatter = 
                                             new LCStringDataFormatterHex();
 
-                *formatter = *(static_cast<LCStringDataFormatterHex*>
-                                                    (__formatterHex.data()));
+                /* (*formatter) = *(static_cast<LCStringDataFormatterHex*> */
+                /*                                     (__formatterHex.data())); */
                 formatter->setSize(size);
+                qDebug() << "formatterCreators 5";
                 return QSharedPointer<LCStringDataFormatterBase>(formatter); 
             });
 
