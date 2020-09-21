@@ -30,10 +30,10 @@
     <!--LAYOUTBUILDERS file="layoutbuilders.xml"/-->
     
     <WIDGETBUILDERS>
-        <widget         lib="basicwidgets" libhandler="getWidgetBuilder"               />
-        <label          lib="basicwidgets" libhandler="getTextLabelBuilder"            />
-        <dataLabel      lib="basicwidgets" libhandler="getRemoteDataLabelBuilder"      />
-        <dataLineEdit   lib="basicwidgets" libhandler="getRemoteDataLineEditBuilder"   />
+        <widget         lib="basicwidgets" libhandler="getWidgetBuilder"            />
+        <label          lib="basicwidgets" libhandler="getTextLabelBuilder"         />
+        <dataLabel      lib="basicwidgets" libhandler="getRemLabelBuilder"      />
+        <dataLineEdit   lib="basicwidgets" libhandler="getRemLineEditBuilder"   />
     </WIDGETBUILDERS>
     
     <WIDGETBUILDERS file="widgetbuilders.xml"/>

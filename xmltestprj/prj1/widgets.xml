@@ -22,74 +22,75 @@
     <widget title="TITLE CHECK">
         <layout type="grid">
         
-            <col>
-                <dataLineEdit  data="hreg0" source="bvitcp" format="hex"/>
-                <dataLineEdit  data="hreg1" source="bvitcp" format="uint16"/>
-                <dataLineEdit  data="hflt"  source="bvitcp" format="float32"/>
-            </col>
+            <!-- <col> -->
+            <!--     <dataLineEdit  data="hreg0" source="bvitcp" format="hex"/> -->
+            <!--     <dataLineEdit  data="hreg1" source="bvitcp" format="uint16"/> -->
+            <!--     <dataLineEdit  data="hflt"  source="bvitcp" format="float32"/> -->
+            <!-- </col> -->
+            
+            <!-- <col> -->
+            <!--     <dataLineEdit  data="hreg2" source="bvitcp" format="uint16"/> -->
+            <!--     <dataLineEdit  data="hreg3" source="bvitcp" format="uint16"/> -->
+            <!--     <dataLineEdit  data="hreg4"  source="bvitcp" format="uint16"/> -->
+            <!-- </col> -->
+            
+            <!-- <col> -->
+            <!--     <dataLabel  data="hreg0" source="bvitcp" format="uint16"/> -->
+            <!--     <dataLabel  data="hreg1" source="bvitcp" format="uint16"/> -->
+            <!--     <dataLabel  data="hflt"  source="bvitcp" format="float32"/> -->
+            <!-- </col> -->
+            
+            <!-- <col> -->
+            <!--     <dataLineEdit  data="hreg0" source="bvirtu" format="uint16"/> -->
+            <!--     <dataLineEdit  data="hreg1" source="bvirtu" format="uint16"/> -->
+            <!--     <dataLineEdit  data="hflt"  source="bvirtu" format="float32"/> -->
+            <!-- </col> -->
+            
+            <!-- <col> -->
+            <!--     <dataLineEdit  data="hreg0" source="bvirtu" format="uint16"/> -->
+            <!--     <dataLineEdit  data="hreg1" source="bvirtu" format="uint16"/> -->
+            <!--     <dataLineEdit  data="hflt"  source="bvirtu" format="float32"/> -->
+            <!-- </col> -->
+            
+            <!-- <col> -->
+            <!--     <dataLabel  data="hreg0" source="bvirtu" format="uint16"/> -->
+            <!--     <dataLabel  data="hreg1" source="bvirtu" format="uint16"/> -->
+            <!--     <dataLabel  data="hflt"  source="bvirtu" format="float32"/> -->
+            <!-- </col> -->
             
             <col>
-                <dataLineEdit  data="hreg2" source="bvitcp" format="uint16"/>
-                <dataLineEdit  data="hreg3" source="bvitcp" format="uint16"/>
-                <dataLineEdit  data="hreg4"  source="bvitcp" format="uint16"/>
-            </col>
-            
-            <col>
-                <dataLabel  data="hreg0" source="bvitcp" format="uint16"/>
-                <dataLabel  data="hreg1" source="bvitcp" format="uint16"/>
-                <dataLabel  data="hflt"  source="bvitcp" format="float32"/>
-            </col>
-            
-            <col>
-                <dataLineEdit  data="hreg0" source="bvirtu" format="uint16"/>
-                <dataLineEdit  data="hreg1" source="bvirtu" format="uint16"/>
-                <dataLineEdit  data="hflt"  source="bvirtu" format="float32"/>
-            </col>
-            
-            <col>
-                <dataLineEdit  data="hreg0" source="bvirtu" format="uint16"/>
-                <dataLineEdit  data="hreg1" source="bvirtu" format="uint16"/>
-                <dataLineEdit  data="hflt"  source="bvirtu" format="float32"/>
-            </col>
-            
-            <col>
-                <dataLabel  data="hreg0" source="bvirtu" format="uint16"/>
-                <dataLabel  data="hreg1" source="bvirtu" format="uint16"/>
-                <dataLabel  data="hflt"  source="bvirtu" format="float32"/>
-            </col>
-            
-            <col>
+                <dataLineEdit  data="hreg[0-1]" source="qtslavetcp" format="hex" size="4"/>
                 <dataLabel  data="hreg0" source="qtslavetcp" format="uint16"/>
                 <dataLabel  data="hreg1" source="qtslavetcp" format="uint16"/>
                 <dataLabel  data="hflt"  source="qtslavetcp" format="float32"/>
             </col>
             
-            <col>
-                <dataLabel  data="inreg0" source="qtslavetcp" format="uint16"/>
-                <dataLabel  data="inreg1" source="qtslavetcp" format="uint16"/>
-                <dataLabel  data="inflt"  source="qtslavetcp" format="float32"/>
-            </col>
+            <!-- <col> -->
+            <!--     <dataLabel  data="inreg0" source="qtslavetcp" format="uint16"/> -->
+            <!--     <dataLabel  data="inreg1" source="qtslavetcp" format="uint16"/> -->
+            <!--     <dataLabel  data="inflt"  source="qtslavetcp" format="float32"/> -->
+            <!-- </col> -->
             
-            <col>
-                <dataLabel  data="coil0" source="qtslavetcp"  format="bool"/>
-                <dataLabel  data="coil1" source="qtslavetcp"  format="bool"/>
-                <dataLabel  data="coil2" source="qtslavetcp"  format="bool"/>
-            </col>
+            <!-- <col> -->
+            <!--     <dataLabel  data="coil0" source="qtslavetcp"  format="bool"/> -->
+            <!--     <dataLabel  data="coil1" source="qtslavetcp"  format="bool"/> -->
+            <!--     <dataLabel  data="coil2" source="qtslavetcp"  format="bool"/> -->
+            <!-- </col> -->
             
-            <col>
-            <layout type="box" direction="BottomToTop">
+            <!-- <col> -->
+            <!-- <layout type="box" direction="BottomToTop"> -->
                 
-                    <label>Проверка лабела1</label>
-                    <label>Проверка лабела2</label>
+            <!--         <label>Проверка лабела1</label> -->
+            <!--         <label>Проверка лабела2</label> -->
                 
-                    <label>Проверка лабела3</label>
-                    <label>Проверка лабела4</label>    
+            <!--         <label>Проверка лабела3</label> -->
+            <!--         <label>Проверка лабела4</label> -->    
                 
-            </layout>             
-                <dataLabel  data="din0" source="qtslavetcp" format="bool"/>
-                <dataLabel  data="din1" source="qtslavetcp" format="bool"/>
-                <dataLabel  data="din2" source="qtslavetcp" format="bool"/>
-            </col>
+            <!-- </layout> -->             
+            <!--     <dataLabel  data="din0" source="qtslavetcp" format="bool"/> -->
+            <!--     <dataLabel  data="din1" source="qtslavetcp" format="bool"/> -->
+            <!--     <dataLabel  data="din2" source="qtslavetcp" format="bool"/> -->
+            <!-- </col> -->
             
             
             <!--row>

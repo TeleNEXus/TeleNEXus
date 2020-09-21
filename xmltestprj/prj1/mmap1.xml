@@ -18,6 +18,7 @@
     <holdreg    name="hreg0"   addr="0" size="1"/>
     <holdreg    name="hreg1"   addr="1" size="1"/>
     <holdreg    name="hflt"    addr="0" size="2"/>
+    <holdreg    name="hreg[0-1]"   addr="0" size="2"/>
     
     <inreg    name="inreg0"   addr="0" size="1"/>
     <inreg    name="inreg1"   addr="1" size="1"/>

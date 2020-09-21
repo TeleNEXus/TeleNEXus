@@ -3,7 +3,7 @@
 #include <functional>
 //==============================================================================
 LCStringDataFormatterHex::
-    CValidator::CValidator(int& _size, QChar& _separator, QObject *_parent) : 
+    CValidator::CValidator(const int& _size, const QChar& _separator, QObject *_parent) : 
     QValidator(_parent),
     mSize(_size),
     mSeparator(_separator)
@@ -16,28 +16,23 @@ LCStringDataFormatterHex::
 CValidator::validate(QString &_input, int& _pos) const
 {
     Q_UNUSED(_pos);
-    if(_input.isNull())
+    QString str = _input;
+    str.remove(QRegExp(QString("[ _%1]").arg(mSeparator)));
+    if(str.isNull())
     {
-        qDebug() << "CValidator::validate State::Intermediate";
         return State::Intermediate;
     }
 
-    if( _input.contains(
-                QRegExp( QString("[^0-9a-fA-F _%1]{1,}").arg(mSeparator))))
+    if( str.contains( QRegExp( QString("[^0-9a-fA-F]{1,}"))) )
     {
-        qDebug() << "CValidator::validate State::Invalid";
         return State::Invalid;
     }
 
-    qDebug() << "CValidator::validate input size = " << _input.size();
-    qDebug() << "CValidator::validate mFormatter size = " << mSize; 
-    if( ( mSize > 0) && (_input.size() > mSize))
+    if( ( mSize > 0) && (str.size() > (2 * mSize) ))
     {
-        qDebug() << "CValidator::validate State::Invalid";
         return State::Invalid;
     }
 
-    qDebug() << "CValidator::validate State::Acceptable";
     return State::Acceptable;
 }
 
@@ -51,19 +46,33 @@ LCStringDataFormatterHex::LCStringDataFormatterHex(
     mSeparator(_separator),
     mFillCharUndef(_fillCharUndef),
     mFillCharWrong(_fillCharWrong)
-//    mValidator(mSeparator)
 {
     mpValidator = new CValidator(mSize, mSeparator);
-    qDebug() << "CValidator mSize           " << mpValidator->mSize;
-    qDebug() << "CValidator mSeparator      " << mpValidator->mSeparator;
-    qDebug() << "CValidator mSize++++       " << mSize;
-    qDebug() << "CValidator mSeparator++++  " << mSeparator;
 }
 
+//------------------------------------------------------------------------------
+LCStringDataFormatterHex::
+LCStringDataFormatterHex( const LCStringDataFormatterHex& _formatter)
+{
+    this->mSize          = _formatter.mSize;         
+    this->mSeparator     = _formatter.mSeparator;    
+    this->mFillCharUndef = _formatter.mFillCharUndef;
+    this->mFillCharWrong = _formatter.mFillCharWrong;
+}
 //------------------------------------------------------------------------------
 LCStringDataFormatterHex::~LCStringDataFormatterHex()
 {
     mpValidator->deleteLater();
+}
+
+LCStringDataFormatterHex& 
+LCStringDataFormatterHex::operator=(const LCStringDataFormatterHex& _formatter)
+{
+    this->mSize          = _formatter.mSize;         
+    this->mSeparator     = _formatter.mSeparator;    
+    this->mFillCharUndef = _formatter.mFillCharUndef;
+    this->mFillCharWrong = _formatter.mFillCharWrong;
+    return *this;
 }
 
 //------------------------------------------------------------------------------toString
@@ -147,10 +156,12 @@ QString LCStringDataFormatterHex::normalizeString(const QString& _instr)
 
     if( str_byte_size > mSize )
     {
+        //Удаляем лишние цифры.
         out_string.remove(0, (str_byte_size - mSize) * 2);
     }
     else if( mSize > str_byte_size )
     {
+        //Добавляем незначащий ноль.
         out_string.insert(0, QString((mSize - str_byte_size) * 2, '0'));
     }
     return out_string;
@@ -184,7 +195,6 @@ QByteArray LCStringDataFormatterHex::toBytes(const QString& _str)
         //Добавляем незначащий ноль.
         instr.insert(0, '0');
     }
-    qDebug() << "LCStringDataFormatterHex::toBytes mSize" << mSize;
     if(mSize > 0)
     {
         int str_byte_size = instr.length() / 2;
@@ -212,8 +222,14 @@ QString     LCStringDataFormatterHex::undefStateString()
     return QString(msFillCharUndefDefLength, mFillCharUndef);
 }
 
-//------------------------------------------------------------------------------undefStateString
+//------------------------------------------------------------------------------setSize
 void LCStringDataFormatterHex::setSize(int _size)
 {
     mSize = _size;
+}
+
+//------------------------------------------------------------------------------setSeparator
+void LCStringDataFormatterHex::setSeparator(QChar _separator)
+{
+    this->mSeparator = _separator;
 }
