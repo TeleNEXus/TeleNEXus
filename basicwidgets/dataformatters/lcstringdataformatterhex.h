@@ -12,7 +12,7 @@ private:
     QChar   mFillCharWrong;     //Заполнение при ошибочном значении.
 public:
     explicit LCStringDataFormatterHex(    
-                        int     _size           = -1, 
+                        int     _size           = 0, 
                         QChar   _separator      = QChar(),
                         QChar   _fillCharUndef  = msFillCharUndefDef,
                         QChar   _fillCharWrong  = msFillCharWrongDef);

@@ -28,7 +28,7 @@ INCLUDEPATH +=                          \
     ../../common/interfaces             \
     builders                            \
     widgets                             \
-    widgets/dataformatters
+    dataformatters
 
 
 SOURCES += \
@@ -44,19 +44,19 @@ SOURCES += \
     builders/lcxmlwidgetbuilder.cpp \
     builders/lcxmlremcomboboxbuilder.cpp \
     builders/lcxmlremcombolabelbuilder.cpp \
-    widgets/dataformatters/lcstringdataformatterbase.cpp \
-    widgets/dataformatters/lcstringdataformatterbits.cpp \
-    widgets/dataformatters/lcstringdataformatterbool.cpp \
-    widgets/dataformatters/lcstringdataformatterf32.cpp \
-    widgets/dataformatters/lcstringdataformatterhex.cpp \
-    widgets/dataformatters/lcstringdataformatterintbase.cpp \
-    widgets/dataformatters/lcstringdataformatters16.cpp \
-    widgets/dataformatters/lcstringdataformatters32.cpp \
-    widgets/dataformatters/lcstringdataformatters8.cpp \
-    widgets/dataformatters/lcstringdataformatteru16.cpp \
-    widgets/dataformatters/lcstringdataformatteru32.cpp \
-    widgets/dataformatters/lcstringdataformatteru8.cpp \
-    widgets/dataformatters/lcxmlstddataformatterfactory.cpp
+    dataformatters/lcstringdataformatterbase.cpp \
+    dataformatters/lcstringdataformatterbits.cpp \
+    dataformatters/lcstringdataformatterbool.cpp \
+    dataformatters/lcstringdataformatterf32.cpp \
+    dataformatters/lcstringdataformatterhex.cpp \
+    dataformatters/lcstringdataformatterintbase.cpp \
+    dataformatters/lcstringdataformatters16.cpp \
+    dataformatters/lcstringdataformatters32.cpp \
+    dataformatters/lcstringdataformatters8.cpp \
+    dataformatters/lcstringdataformatteru16.cpp \
+    dataformatters/lcstringdataformatteru32.cpp \
+    dataformatters/lcstringdataformatteru8.cpp \
+    dataformatters/lcxmlstddataformatterfactory.cpp
 
 
 HEADERS += \
@@ -84,20 +84,20 @@ HEADERS += \
     builders/lcxmlwidgetbuilder.h \
     builders/lcxmlremcomboboxbuilder.h \
     builders/lcxmlremcombolabelbuilder.h \
-    widgets/dataformatters/LIStringDataFormatter.h \
-    widgets/dataformatters/lcstringdataformatterbase.h \
-    widgets/dataformatters/lcstringdataformatterbits.h \
-    widgets/dataformatters/lcstringdataformatterbool.h \
-    widgets/dataformatters/lcstringdataformatterf32.h \
-    widgets/dataformatters/lcstringdataformatterhex.h \
-    widgets/dataformatters/lcstringdataformatterintbase.h \
-    widgets/dataformatters/lcstringdataformatters16.h \
-    widgets/dataformatters/lcstringdataformatters32.h \
-    widgets/dataformatters/lcstringdataformatters8.h \
-    widgets/dataformatters/lcstringdataformatteru16.h \
-    widgets/dataformatters/lcstringdataformatteru32.h \
-    widgets/dataformatters/lcstringdataformatteru8.h \
-    widgets/dataformatters/lcxmlstddataformatterfactory.h
+    dataformatters/LIStringDataFormatter.h \
+    dataformatters/lcstringdataformatterbase.h \
+    dataformatters/lcstringdataformatterbits.h \
+    dataformatters/lcstringdataformatterbool.h \
+    dataformatters/lcstringdataformatterf32.h \
+    dataformatters/lcstringdataformatterhex.h \
+    dataformatters/lcstringdataformatterintbase.h \
+    dataformatters/lcstringdataformatters16.h \
+    dataformatters/lcstringdataformatters32.h \
+    dataformatters/lcstringdataformatters8.h \
+    dataformatters/lcstringdataformatteru16.h \
+    dataformatters/lcstringdataformatteru32.h \
+    dataformatters/lcstringdataformatteru8.h \
+    dataformatters/lcxmlstddataformatterfactory.h
 
 # Default rules for deployment.
 unix {
