@@ -65,7 +65,7 @@ flags = [
              '-I', '../basicwidgets',
              '-I', '../basicwidgets/builders',
              '-I', '../basicwidgets/widgets',
-             '-I', '../basicwidgets/widgets/dataformatters',
+             '-I', '../basicwidgets/dataformatters',
              '-I', '../common/interfaces',
              '-I', '../common/interfaces/remotedata',
              '-I', '../common/interfaces/xmlbuilders',
