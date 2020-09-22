@@ -28,11 +28,6 @@ static const struct
 }__attributes;
 
 //-------------------------------------------------------------------------------------------------------------------
-//TODO: Добавить новый объект форматирования bitfield
-//длиной поля в байтах.
-//Для работы с регистрами ка с битовым полем.
-//
-//-------------------------------------------------------------------------------------------------------------------
 
 static QSharedPointer<LCStringDataFormatterBase> __formatterBitfield;
 static QSharedPointer<LCStringDataFormatterBase> __formatterBits;
@@ -67,19 +62,17 @@ LCXmlStdDataFormatterFactory::LCXmlStdDataFormatterFactory()
     __formatterInt32.reset(       new LCStringDataFormatterS32());
     __formatterFloat32.reset(     new LCStringDataFormatterF32());
 
+//TODO: Добавить подключение сепаратора для форматтеров.
+//------------------------------------------------------------------------------bitfield
     __formatterCreators.insert("bitfield",
             [](const QDomNamedNodeMap& _attr)
             {
-                qDebug() << " __formatterCreators.insert 1";
                 if(_attr.contains(__attributes.size)){} 
 
-                qDebug() << " __formatterCreators.insert 2";
                 QDomNode node = _attr.namedItem(__attributes.size);
 
-                qDebug() << " __formatterCreators.insert 3";
                 if(node.isNull()) return __formatterBitfield;
 
-                qDebug() << " __formatterCreators.insert 4";
                 bool ok;
 
                 int size = node.toAttr().value().toInt(&ok);
@@ -89,7 +82,6 @@ LCXmlStdDataFormatterFactory::LCXmlStdDataFormatterFactory()
                    return __formatterBitfield;
                 }
 
-                qDebug() << " __formatterCreators.insert 5";
                 if(size > __L_MAX_BITS_SIZE) size = __L_MAX_BITS_SIZE;
 
                 LCStringDataFormatterBitfield *formatter = 
@@ -101,6 +93,7 @@ LCXmlStdDataFormatterFactory::LCXmlStdDataFormatterFactory()
                 return QSharedPointer<LCStringDataFormatterBase>(formatter); 
             });
 
+//------------------------------------------------------------------------------bits
     __formatterCreators.insert("bits",
             [](const QDomNamedNodeMap& _attr)
             {
@@ -130,6 +123,7 @@ LCXmlStdDataFormatterFactory::LCXmlStdDataFormatterFactory()
                 return QSharedPointer<LCStringDataFormatterBase>(formatter); 
             });
 
+//------------------------------------------------------------------------------hex
     __formatterCreators.insert("hex",
             [](const QDomNamedNodeMap& _attr)
             {

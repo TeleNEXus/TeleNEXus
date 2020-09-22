@@ -111,7 +111,11 @@ static void buildBox(   const QDomElement& _element,
         QString val = elements.at(i).toElement().attribute(__attrNames.value);
         if (val.isNull()) 
         {
-          continue;
+            continue;
+        }
+        if (name == "")
+        {
+            name = val;
         }
 
         val = _format->normalizeString(val);
@@ -121,14 +125,6 @@ static void buildBox(   const QDomElement& _element,
             continue;
         }
 
-        if (name == "")
-        {
-          _box->addItem(val, val);          
-        }
-        else
-        {
-          _box->addItem(name, val);
-        }
-
+        _box->addItem(name, val);
     }
 }
