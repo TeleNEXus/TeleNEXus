@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<APPLICATION>
+    <PLAGINPATHS>
+        <ADD path="./libs"/>
+    </PLAGINPATHS>
+    <!--SOURCEBUILDERS>
+        <modbussources lib="libs/mbsource"       libhandler="getModbusSourceBuilder" />
+        <modbussources lib="libs/mbsource"       libhandler="getModbusSourceBuilder" />
+        <modbussources lib="libs/mbsource"       libhandler="getModbusSourceBuilder" />
+        <mssqlsource   lib="libs/sqlsources"     libhandler="getMsSqlSourcesBuilder" />
+        <sqlsource     lib="libs/sqlsources"     libhandler="getSqlSourcesBuilder"   />
+    </SOURCEBUILDERS-->
+    
+    <SOURCEBUILDERS file="sourcebuilders.xml"/>
+    
+    <!--SOURCES>
+        <modbussources file="modbussources.xml"/>
+    </SOURCES-->
+    
+    <SOURCES file="sources.xml"/>
+    
+    <LAYOUTBUILDERS>
+        <grid lib="basiclayouts" libhandler="getGridLayoutBuilder" />
+        <box  lib="basiclayouts" libhandler="getBoxLayoutBuilder" />
+    </LAYOUTBUILDERS>
+    
+    <!--LAYOUTBUILDERS file="layoutbuilders.xml"/-->
+    
+    <WIDGETBUILDERS>
+        <widget         lib="basicwidgets" libhandler="getWidgetBuilder"        />
+        <label          lib="basicwidgets" libhandler="getTextLabelBuilder"     />
+        <dataLabel      lib="basicwidgets" libhandler="getRemLabelBuilder"      />
+        <dataLineEdit   lib="basicwidgets" libhandler="getRemLineEditBuilder"   />
+        <dataComboBox   lib="basicwidgets" libhandler="getRemComboBoxBuilder"   />
+        <dataComboLabel lib="basicwidgets" libhandler="getRemComboLabelBuilder" />
+    </WIDGETBUILDERS>
+    
+    <!-- <WIDGETBUILDERS file="widgetbuilders.xml"/> -->
+    
+    <WINDOWS file="windows.xml"/>
+    
+    <WINDOWS>
+        <dialog2 visible="false" file="dialog2.xml"/>
+        <dialog3 visible="false" file="dialog3.xml"/>
+        <dialog4 visible="false" file="dialog4.xml"/>
+    </WINDOWS>
+        
+    <WINDOW name="dialog" file="dialog1.xml"/>
+    
+    <WINDOW name="keyboard">
+        <widget builder="label">
+            <layoutGrid>
+                <widget>
+                </widget>
+            </layoutGrid>
+        </widget>
+    </WINDOW>
+    
+    <WINDOW name="main">
+        <widget>
+            <layoutVBox>
+                <widget>
+                </widget>
+            </layoutVBox>
+        </widget>
+    </WINDOW>
+    
+    <WIDGETS file="widgets.xml"/>
+        
+</APPLICATION>
