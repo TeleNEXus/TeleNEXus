@@ -104,6 +104,11 @@ static void buildLabel( const QDomElement& _element,
           continue;
         }
 
+        if (name == "")
+        {
+            name = val;
+        }
+
         val = _format->normalizeString(val);
 
         if(val.isNull())
@@ -111,13 +116,6 @@ static void buildLabel( const QDomElement& _element,
             continue;
         }
 
-        if (name == "")
-        {
-          _label->addItem(val, val);          
-        }
-        else
-        {
-          _label->addItem(name, val);
-        }
+        _label->addItem(name, val);
     }
 }

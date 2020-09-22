@@ -49,17 +49,24 @@
                     <item name="Test"      value="d"/>
                 </dataComboLabel>
 
-                <dataComboBox  read="coil[0-2]" source="qtslavetcp" format="bits" size="3">
-                    <item value="000 001"/>
-                    <item value="000 011"/>
-                    <item value="000 111"/>
+                <dataComboBox  read="coil[0-3]" source="qtslavetcp" format="bits" size="4">
+                    <item value="1 1_001"/>
+                    <item value="1 1_011"/>
+                    <item value="1 1_111"/>
                 </dataComboBox>
 
-                <dataComboLabel  read="coil[0-2]" source="qtslavetcp" format="bits" size="3">
-                    <item name="On"        value="  1"/>
-                    <item name="Off"       value=" 11"/>
-                    <item name="Reset"     value="111"/>
+                <dataComboLabel  read="coil[0-3]" source="qtslavetcp" format="bits" size="4">
+                    <item value="1 1_001"/>
+                    <item value="1 1_011"/>
+                    <item value="1 1_111"/>
                 </dataComboLabel>
+                <!-- <dataComboLabel  read="coil[0-3]" source="qtslavetcp" format="bits" size="4"> -->
+                <!--     <item name="On"        value="1 1_001"/> -->
+                <!--     <item name="Off"       value="1 1_011"/> -->
+                <!--     <item name="Reset"     value="1 1_111"/> -->
+                <!-- </dataComboLabel> -->
+                <dataLabel      source="qtslavetcp"  data="coil[0-2]" format="bits"/>
+                <dataLineEdit   source="qtslavetcp"  data="coil[0-2]" format="bits" size="4"/>
             </col>
 
             <col>
@@ -79,6 +86,7 @@
 
                 <dataLabel      source="qtslavetcp"  data="hreg0" format="bitfield"/>
                 <dataLineEdit   source="qtslavetcp"  data="hreg0" format="bitfield" size="2"/>
+
 
                 <dataLabel      source="qtslavetcp"  data="inreg1" format="uint16"/>
                 <dataLabel      source="qtslavetcp"  data="inflt"  format="float32"/>
