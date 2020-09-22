@@ -11,9 +11,9 @@ private:
     QChar   mFillCharWrong;     //Заполнение при ошибочном значении.
 public:
     explicit LCStringDataFormatterBits(    
-                        int     _size           = -1, 
-                        QChar   _fillCharUndef  = msFillCharUndefDef,
-                        QChar   _fillCharWrong  = msFillCharWrongDef);
+            int     _size           = -1, 
+            QChar   _fillCharUndef  = msFillCharUndefDef,
+            QChar   _fillCharWrong  = msFillCharWrongDef);
     virtual ~LCStringDataFormatterBits(){}
     virtual QString     toString(const QByteArray& _data) override;
     virtual QString     normalizeString(const QString& _str) override;
@@ -25,7 +25,6 @@ public:
     void setFillCharWrong(QChar _c){mFillCharWrong = _c;}
     void setSize(int _size){mSize = _size;}
 };
-
 
 #endif // LCSTRINGDATAFORMATTERBITS_H
 

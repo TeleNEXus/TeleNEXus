@@ -1,9 +1,9 @@
-#ifndef LCSTRINGDATAFORMATTERHEX_H
-#define LCSTRINGDATAFORMATTERHEX_H
+#ifndef LCSTRINGDATAFORMATTERBITFIELD_H 
+#define LCSTRINGDATAFORMATTERBITFIELD_H 
 
 #include "lcstringdataformatterbase.h"
 
-class LCStringDataFormatterHex : public LCStringDataFormatterBase
+class LCStringDataFormatterBitfield : public LCStringDataFormatterBase
 {
 private:
     //Валидатор вводимых данных.
@@ -32,18 +32,18 @@ private:
     CValidator* mpValidator;      //Валидатор.
 public:
 
-    explicit LCStringDataFormatterHex(    
+    explicit LCStringDataFormatterBitfield(    
                         int     _size           = 0, 
                         QChar   _separator      = QChar(),
                         QChar   _fillCharUndef  = msFillCharUndefDef,
                         QChar   _fillCharWrong  = msFillCharWrongDef);
 
-    explicit LCStringDataFormatterHex( 
-            const LCStringDataFormatterHex& _formatter);
-    virtual ~LCStringDataFormatterHex();
+    explicit LCStringDataFormatterBitfield( 
+            const LCStringDataFormatterBitfield& _formatter);
+    virtual ~LCStringDataFormatterBitfield();
 
-    LCStringDataFormatterHex& operator=(
-            const LCStringDataFormatterHex& _formatter);
+    LCStringDataFormatterBitfield& operator=(
+            const LCStringDataFormatterBitfield& _formatter);
 
     virtual QString     toString(const QByteArray& _data) override;
     virtual QString     normalizeString(const QString& _str) override;
@@ -58,4 +58,4 @@ public:
 };
 
 
-#endif // LCSTRINGDATAFORMATTERHEX_H
+#endif // LCSTRINGDATAFORMATTERBITFIELD_H

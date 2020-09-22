@@ -1,5 +1,6 @@
 #include "lcxmlstddataformatterfactory.h"
 
+#include "lcstringdataformatterbitfield.h"
 #include "lcstringdataformatterbits.h"
 #include "lcstringdataformatterhex.h"
 #include "lcstringdataformatterbool.h"
@@ -19,7 +20,7 @@
 #include <QDebug>
 
 #define __L_MAX_HEX_SIZE    256
-#define __L_MAX_BITS_SIZE   256
+#define __L_MAX_BITS_SIZE   64
 
 static const struct
 {
@@ -33,6 +34,7 @@ static const struct
 //
 //-------------------------------------------------------------------------------------------------------------------
 
+static QSharedPointer<LCStringDataFormatterBase> __formatterBitfield;
 static QSharedPointer<LCStringDataFormatterBase> __formatterBits;
 static QSharedPointer<LCStringDataFormatterBase> __formatterHex;
 static QSharedPointer<LCStringDataFormatterBase> __formatterBool;
@@ -53,16 +55,51 @@ TFormatterCreators __formatterCreators;
 
 LCXmlStdDataFormatterFactory::LCXmlStdDataFormatterFactory()
 {
-    __formatterBits.reset(    new LCStringDataFormatterBits());
-    __formatterHex.reset(     new LCStringDataFormatterHex());
-    __formatterBool.reset(    new LCStringDataFormatterBool());
-    __formatterUint8.reset(   new LCStringDataFormatterU8());
-    __formatterInt8.reset(    new LCStringDataFormatterS8());
-    __formatterUint16.reset(  new LCStringDataFormatterU16());
-    __formatterInt16.reset(   new LCStringDataFormatterS16());
-    __formatterUint32.reset(  new LCStringDataFormatterU32());
-    __formatterInt32.reset(   new LCStringDataFormatterS32());
-    __formatterFloat32.reset( new LCStringDataFormatterF32());
+    __formatterBitfield.reset(    new LCStringDataFormatterBitfield());
+    __formatterBits.reset(        new LCStringDataFormatterBits());
+    __formatterHex.reset(         new LCStringDataFormatterHex());
+    __formatterBool.reset(        new LCStringDataFormatterBool());
+    __formatterUint8.reset(       new LCStringDataFormatterU8());
+    __formatterInt8.reset(        new LCStringDataFormatterS8());
+    __formatterUint16.reset(      new LCStringDataFormatterU16());
+    __formatterInt16.reset(       new LCStringDataFormatterS16());
+    __formatterUint32.reset(      new LCStringDataFormatterU32());
+    __formatterInt32.reset(       new LCStringDataFormatterS32());
+    __formatterFloat32.reset(     new LCStringDataFormatterF32());
+
+    __formatterCreators.insert("bitfield",
+            [](const QDomNamedNodeMap& _attr)
+            {
+                qDebug() << " __formatterCreators.insert 1";
+                if(_attr.contains(__attributes.size)){} 
+
+                qDebug() << " __formatterCreators.insert 2";
+                QDomNode node = _attr.namedItem(__attributes.size);
+
+                qDebug() << " __formatterCreators.insert 3";
+                if(node.isNull()) return __formatterBitfield;
+
+                qDebug() << " __formatterCreators.insert 4";
+                bool ok;
+
+                int size = node.toAttr().value().toInt(&ok);
+
+                if(!ok)
+                {
+                   return __formatterBitfield;
+                }
+
+                qDebug() << " __formatterCreators.insert 5";
+                if(size > __L_MAX_BITS_SIZE) size = __L_MAX_BITS_SIZE;
+
+                LCStringDataFormatterBitfield *formatter = 
+                                            new LCStringDataFormatterBitfield();
+
+                *formatter = *(static_cast<LCStringDataFormatterBitfield*>
+                                                    (__formatterBitfield.data()));
+                formatter->setSize(size);
+                return QSharedPointer<LCStringDataFormatterBase>(formatter); 
+            });
 
     __formatterCreators.insert("bits",
             [](const QDomNamedNodeMap& _attr)
