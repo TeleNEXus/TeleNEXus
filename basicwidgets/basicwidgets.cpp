@@ -8,6 +8,7 @@
 #include "lcxmlremcombolabelbuilder.h"
 
 //------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 void* getWidgetBuilder()
 {
     return new LCXmlWidgetBuilder;
