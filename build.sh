@@ -3,7 +3,7 @@
 v_basiclayouts="`pwd`/basiclayouts"
 v_basicwidgets="`pwd`/basicwidgets"
 v_modbussource="`pwd`/modbussource"
-v_srdt="`pwd`/srdt"
+v_tnexcore="`pwd`/tnexcore"
 
 v_build_dir_name=__builds
 
@@ -54,25 +54,25 @@ then
     deleteDir "$v_basiclayouts"
     deleteDir "$v_basicwidgets"
     deleteDir "$v_modbussource"
-    deleteDir "$v_srdt"
+    deleteDir "$v_tnexcore"
     exit 0
 fi
 
 createDir "$v_basiclayouts"
 createDir "$v_basicwidgets"
 createDir "$v_modbussource"
-createDir "$v_srdt"
+createDir "$v_tnexcore"
 
 # Запус сборщика Qt обязателен для любого варианта.
 echo "$v_offset_line qmake"
 makePrg "$v_basiclayouts" "qmake"
 makePrg "$v_basicwidgets" "qmake"
 makePrg "$v_modbussource" "qmake"
-makePrg "$v_srdt" "qmake"
+makePrg "$v_tnexcore" "qmake"
 
 echo "$v_offset_line make $1"
 makePrg "$v_basiclayouts" "make" "$1"
 makePrg "$v_basicwidgets" "make" "$1"
 makePrg "$v_modbussource" "make" "$1"
-makePrg "$v_srdt" "make" "$1"
+makePrg "$v_tnexcore" "make" "$1"
 

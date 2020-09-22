@@ -1,2 +1,2 @@
-cd ../../srdt/__builds/
-./srdt  --xmlpath=../../xmltestprj/prj1
+cd ../../tnexcore/__builds/
+./tnexcore --xmlpath=../../xmltestprj/prj1
