@@ -1,7 +1,8 @@
 ﻿#include "lcqremlineedit.h"
 #include <QDebug>
 #include <QKeyEvent>
-
+#include <qnamespace.h>
+#include <QKeyEvent>
 //======================================================================================================================
 LCQRemLineEdit::CReadListener::CReadListener(LCQRemLineEdit& _lineEdit) : mLineEdit(_lineEdit), mFlagActive(false)
 {
@@ -126,7 +127,6 @@ void LCQRemLineEdit::focusOutEvent(QFocusEvent *_event)
     mReadListener->setActive(true);
     QLineEdit::focusOutEvent(_event);
 }
-
 //-----------------------------------------------------------------------------------------------------------------event
 bool LCQRemLineEdit::event(QEvent *_event)
 {
@@ -137,14 +137,23 @@ bool LCQRemLineEdit::event(QEvent *_event)
         setActive(true);
         ret = false;
         break;
+
     case QEvent::Type::Hide:
         setActive(false);
         ret = false;
         break;
+    case QEvent::KeyRelease:
+        //Очиска фокуса видета при нажатии клавиши Escape.
+        if( static_cast<QKeyEvent*>(_event)->key() == Qt::Key_Escape)
+        {
+            this->clearFocus();
+            ret = false;
+        }
+        break;
     default:
-        QLineEdit::event(_event);
         break;
     }
+    if(ret)QLineEdit::event(_event);
     return ret;
 }
 

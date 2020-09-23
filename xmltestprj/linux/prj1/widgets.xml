@@ -66,7 +66,7 @@
                 <!--     <item name="Reset"     value="1 1_111"/> -->
                 <!-- </dataComboLabel> -->
                 <dataLabel      source="qtslavetcp"  data="coil[0-2]" format="bits"/>
-                <dataLineEdit   source="qtslavetcp"  data="coil[0-2]" format="bits" size="4"/>
+                <dataLineEdit   source="qtslavetcp"  data="coil[0-2]" format="bits" size="3" separator=" " />
             </col>
 
             <col>
@@ -76,7 +76,7 @@
             </col>
             
             <col>
-                <dataLineEdit   source="qtslavetcp" data="hreg[0-1]" format="hex" size="4"/>
+                <dataLineEdit   source="qtslavetcp" data="hreg[0-1]" format="hex" size="4" separator=" "/>
                 <dataComboLabel  read="hreg0" source="qtslavetcp" format="hex" size="2">
                     <item name="On"        value="a"/>
                     <item name="Off"       value="b"/>
@@ -85,7 +85,7 @@
                 </dataComboLabel>
 
                 <dataLabel      source="qtslavetcp"  data="hreg0" format="bitfield"/>
-                <dataLineEdit   source="qtslavetcp"  data="hreg0" format="bitfield" size="2"/>
+                <dataLineEdit   source="qtslavetcp"  data="hreg0" format="bitfield" size="2" separator=" "/>
 
 
                 <dataLabel      source="qtslavetcp"  data="inreg1" format="uint16"/>
