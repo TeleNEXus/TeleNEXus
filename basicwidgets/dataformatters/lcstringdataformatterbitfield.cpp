@@ -18,22 +18,22 @@ CValidator::validate(QString &_input, int& _pos) const
 {
     Q_UNUSED(_pos);
     QString instr = _input;
+
     instr.remove(QRegExp(QString("[ _%1]").arg(mSeparator)));
+    
+    // Определить наличие нечисловых значений после удаления 
+    // сепараторов и длины строки при явном указании длины
+    // данных в байтах.    
+    if( ( instr.contains( QRegExp( QString("[^0-1]{1,}"))) ) || 
+            ( ( mSize > 0) && (instr.size() > (8 * mSize) )) )
+    {
+        return State::Invalid;
+    }
+
+    //Проверка на ненулевую строку.
     if(instr.isNull())
     {
         return State::Intermediate;
-    }
-    //Определить наличие нечисловых значений после удаления 
-    //сепараторов.
-    if( instr.contains( QRegExp( QString("[^0-1]{1,}"))) )
-    {
-        return State::Invalid;
-    }
-    //Проверка длины строки при явном указании длины
-    //данных в байтах.
-    if( ( mSize > 0) && (instr.size() > (8 * mSize) ))
-    {
-        return State::Invalid;
     }
 
     return State::Acceptable;

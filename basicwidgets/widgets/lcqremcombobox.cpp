@@ -6,7 +6,7 @@
 #include <qcombobox.h>
 #include <qglobal.h>
 #include <qnamespace.h>
-
+#include <QKeyEvent>
 //==============================================================================CReadListener
 LCQRemComboBox::
     CReadListener::
@@ -91,22 +91,32 @@ LCQRemComboBox::~LCQRemComboBox()
 //------------------------------------------------------------------------------
 bool LCQRemComboBox::event(QEvent *_event)
 {
-    bool ret = false;
+    bool ret = true;
     switch(_event->type())
     {
     case QEvent::Type::Show:
         mDataReader->connectToSource();
         setCurrentIndex(-1);
-        ret = true;
+        ret = false;
         break;
+
     case QEvent::Type::Hide:
         mDataReader->disconnectFromSource();
-        ret = true;
+        ret = false;
+        break;
+
+    case QEvent::Type::KeyRelease:
+        //Очиска фокуса видета при нажатии клавиши Escape.
+        if( static_cast<QKeyEvent*>(_event)->key() == Qt::Key_Escape)
+        {
+            this->clearFocus();
+            ret = false;
+        }
         break;
     default:
         break;
     }
-    QComboBox::event(_event);
+    if(ret) QComboBox::event(_event);
     return ret;
 }
 
