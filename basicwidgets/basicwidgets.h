@@ -10,5 +10,5 @@ extern "C" void* getRemLabelBuilder();
 extern "C" void* getRemLineEditBuilder();
 extern "C" void* getRemComboBoxBuilder();
 extern "C" void* getRemComboLabelBuilder();
-
+extern "C" void* getTableWidgetBuilder();
 #endif // BASICWIDGETS_H
