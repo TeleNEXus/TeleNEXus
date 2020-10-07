@@ -44,6 +44,7 @@ SOURCES += \
     builders/lcxmlwidgetbuilder.cpp \
     builders/lcxmlremcomboboxbuilder.cpp \
     builders/lcxmlremcombolabelbuilder.cpp \
+    builders/lcxmltablewidgetbuilder.cpp \
     dataformatters/lcstringdataformatterbase.cpp \
     dataformatters/lcstringdataformatterbitfield.cpp \
     dataformatters/lcstringdataformatterbits.cpp \
@@ -85,6 +86,7 @@ HEADERS += \
     builders/lcxmlwidgetbuilder.h \
     builders/lcxmlremcomboboxbuilder.h \
     builders/lcxmlremcombolabelbuilder.h \
+    builders/lcxmltablewidgetbuilder.h \
     dataformatters/LIStringDataFormatter.h \
     dataformatters/lcstringdataformatterbase.h \
     dataformatters/lcstringdataformatterbitfield.h \

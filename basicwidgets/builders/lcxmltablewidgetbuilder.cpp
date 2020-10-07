@@ -1,6 +1,9 @@
 #include "lcxmltablewidgetbuilder.h"
 #include <QTableWidget>
 #include <QDomElement>
+#include <qtablewidget.h>
+#include <QDebug>
+
 //==============================================================================
 LCXmlTableWidgetBuilder::LCXmlTableWidgetBuilder()
 {
@@ -14,41 +17,50 @@ LCXmlTableWidgetBuilder::~LCXmlTableWidgetBuilder()
 }
 
 //------------------------------------------------------------------------------
-const struct
+static const struct
 {
 //    QString value       = "value";
 } __attrNames;
 
 //------------------------------------------------------------------------------
-const struct
+static const struct
 {
-//    QString item    = "item";
+    QString row = "row";
+    QString column = "col";
 } __elementNames;
 
 //------------------------------------------------------------------------------
-QWidget* LCXmlTableWidgetBuilder::build(const QDomElement& _element, const LIApplication& _app)
+struct SBuildData
+{
+    quint32 mRow = 0;
+    quint32 mColumn = 0;
+    QTableWidget* mpTable= nullptr;
+    SBuildData() : mpTable(new QTableWidget){}
+};
+
+//------------------------------------------------------------------------------
+static void createRow(
+        const QDomElement &_element,
+        const LIApplication& _app,
+        SBuildData& _buildData);
+
+static void createCol(
+        const QDomElement &_element,
+        const LIApplication& _app,
+        SBuildData& _buildData);
+
+//------------------------------------------------------------------------------
+QWidget* LCXmlTableWidgetBuilder::build(const QDomElement& _element,
+        const LIApplication& _app)
 {
     Q_UNUSED(_element);
     Q_UNUSED(_app);
 
-//    QLabel* label = new QLabel();
-//
-//    //Задание текста в виде атрибута.
-//    if(!_element.attribute("text").isNull())
-//    {
-//        label->setText(_element.attribute("text"));
-//        return label;
-//    }
-//
-//    //Задание текста в виде узла.
-//    QDomNode node = _element.firstChild();
-//    while(!node.isNull())
-//    {
-//        if(node.isText())
-//        {
-//            label->setText(node.nodeValue());
-//        }
-//        node = node.nextSibling();
-//    }
-    return new QTableWidget();
+    QTableWidget* table = new QTableWidget();
+    qDebug() << "------------------------------------Create QTableWidget Start";
+    table->setRowCount(5);
+    table->setColumnCount(5);
+    qDebug() << "Table widget row count     =" << table->rowCount();
+    qDebug() << "Table widget column count  =" << table->columnCount();
+    return table;
 }
