@@ -94,6 +94,10 @@
                 <dataLabel source="qtslavetcp"  data="hreg1"  format="hex"/>
             </col>
             
+            <col>
+                <table>
+                </table>
+            </col>
             <!-- <col> -->
             <!--     <dataLabel  data="coil0" source="qtslavetcp"  format="bool"/> -->
             <!--     <dataLabel  data="coil1" source="qtslavetcp"  format="bool"/> -->
