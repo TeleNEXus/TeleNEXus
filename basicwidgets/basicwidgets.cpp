@@ -6,8 +6,7 @@
 #include "lcxmlremlineeditbuilder.h"
 #include "lcxmlremcomboboxbuilder.h"
 #include "lcxmlremcombolabelbuilder.h"
-
-//------------------------------------------------------------------------------
+#include "lcxmltablewidgetbuilder.h"
 //------------------------------------------------------------------------------
 void* getWidgetBuilder()
 {
@@ -42,4 +41,10 @@ void*  getRemComboBoxBuilder()
 void*  getRemComboLabelBuilder()
 {
     return new LCXmlRemComboLabelBuilder;
+}
+
+//------------------------------------------------------------------------------
+void* getTableWidgetBuilder()
+{
+    return new LCXmlTableWidgetBuilder;
 }
