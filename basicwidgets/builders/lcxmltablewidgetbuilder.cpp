@@ -20,7 +20,7 @@ LCXmlTableWidgetBuilder::~LCXmlTableWidgetBuilder()
 //------------------------------------------------------------------------------
 static const struct
 {
-//    QString value       = "value";
+    QString name = "name";
 } __attrNames;
 
 //------------------------------------------------------------------------------
@@ -98,6 +98,14 @@ static void createRow(
 
     _buildData.mpTable->setRowCount(++_buildData.mRow);
 
+    QString row_name = _element.attribute(__attrNames.name);
+
+    if(!row_name.isNull())
+    {
+        _buildData.mpTable->setVerticalHeaderItem(_buildData.mRow - 1, 
+                new QTableWidgetItem(row_name));
+    }
+
     if(childNode.isNull())
     {
         return;
@@ -114,8 +122,9 @@ static void createRow(
         QDomElement nodeElement = childNode.toElement();
 
         QWidget* widget = nullptr;
+
         //Попытка получения построителя виджета.
-        QSharedPointer<LIXmlWidgetBuilder> wb = 
+        QSharedPointer<LIXmlWidgetBuilder> widget_builder = 
             _app.getWidgetBuilder(nodeElement.tagName());
 
         col++;
@@ -125,9 +134,9 @@ static void createRow(
             _buildData.mColumn = col;
         }
 
-        if(!wb.isNull())
+        if(!widget_builder.isNull())
         {
-            widget = wb->build(nodeElement, _app);
+            widget = widget_builder->build(nodeElement, _app);
         }
 
         if(widget)
@@ -154,6 +163,14 @@ static void createCol(
 
     _buildData.mpTable->setColumnCount(++_buildData.mColumn);
 
+    QString col_name = _element.attribute( __attrNames.name);
+
+    if(!col_name.isNull())
+    {
+        _buildData.mpTable->setHorizontalHeaderItem(_buildData.mColumn -1, 
+            new QTableWidgetItem(col_name));
+    }
+
     if(childNode.isNull())
     {
         return;
@@ -171,9 +188,10 @@ static void createCol(
 
         QWidget* widget = nullptr;
         //Попытка получения построителя виджета.
-        QSharedPointer<LIXmlWidgetBuilder> wb = 
+        QSharedPointer<LIXmlWidgetBuilder> widget_builder = 
             _app.getWidgetBuilder(nodeElement.tagName());
 
+        //Добавление новой строки.
         row++;
         if(row > _buildData.mRow)  
         {
@@ -181,9 +199,9 @@ static void createCol(
             _buildData.mRow = row;
         }
 
-        if(!wb.isNull())
+        if(!widget_builder.isNull())
         {
-            widget = wb->build(nodeElement, _app);
+            widget = widget_builder->build(nodeElement, _app);
         }
 
         if(widget)
