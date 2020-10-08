@@ -35,12 +35,14 @@ void LCQRemLineEdit::CWriteListener::dataIsWrite(LERemoteDataStatus _status)
     Q_UNUSED(_status);
 }
 
-//======================================================================================================================
-LCQRemLineEdit::LCQRemLineEdit(const QString& _dataName,
-                               QSharedPointer<LIRemoteDataSource> _dataSource,
-                               QSharedPointer<LCStringDataFormatterBase> _formatter,
-                               QWidget* _parent) :  QLineEdit(_parent),
-                                                    mFormatter(_formatter)
+//==============================================================================
+LCQRemLineEdit::LCQRemLineEdit(
+        const QString& _dataName,
+        QSharedPointer<LIRemoteDataSource> _dataSource,
+        QSharedPointer<LCStringDataFormatterBase> _formatter,
+        QWidget* _parent) :  
+    QLineEdit(_parent),
+    mFormatter(_formatter)
 {
     setText(mFormatter.data()->undefStateString());
     setValidator(_formatter->validator());
@@ -59,13 +61,15 @@ LCQRemLineEdit::LCQRemLineEdit(const QString& _dataName,
     mDataWriter->setDataSource(_dataSource);
 }
 
-//----------------------------------------------------------------------------------------------------------------------
-LCQRemLineEdit::LCQRemLineEdit(const QString& _dataNameRead,
-                               const QString& _dataNameWrite,
-                               QSharedPointer<LIRemoteDataSource> _dataSource,
-                               QSharedPointer<LCStringDataFormatterBase> _formatter,
-                               QWidget* _parent) :  QLineEdit(_parent),
-                                                    mFormatter(_formatter)
+//------------------------------------------------------------------------------
+LCQRemLineEdit::LCQRemLineEdit(
+        const QString& _dataNameRead,
+        const QString& _dataNameWrite,
+        QSharedPointer<LIRemoteDataSource> _dataSource,
+        QSharedPointer<LCStringDataFormatterBase> _formatter,
+        QWidget* _parent) :  
+    QLineEdit(_parent),
+    mFormatter(_formatter)
 {
     setText(mFormatter.data()->undefStateString());
     setValidator(_formatter->validator());
@@ -82,7 +86,7 @@ LCQRemLineEdit::LCQRemLineEdit(const QString& _dataNameRead,
     mDataWriter->setDataWriteListener(mWriteListener);
 }
 
-//----------------------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 LCQRemLineEdit::~LCQRemLineEdit()
 {
 
@@ -127,33 +131,30 @@ void LCQRemLineEdit::focusOutEvent(QFocusEvent *_event)
     mReadListener->setActive(true);
     QLineEdit::focusOutEvent(_event);
 }
-//-----------------------------------------------------------------------------------------------------------------event
+//------------------------------------------------------------------------------event
 bool LCQRemLineEdit::event(QEvent *_event)
 {
-    bool ret = true;
     switch(_event->type())
     {
     case QEvent::Type::Show:
         setActive(true);
-        ret = false;
-        break;
+        return false;
 
     case QEvent::Type::Hide:
         setActive(false);
-        ret = false;
-        break;
-    case QEvent::KeyRelease:
+        return false;
+
+    case QEvent::KeyPress:
         //Очиска фокуса видета при нажатии клавиши Escape.
         if( static_cast<QKeyEvent*>(_event)->key() == Qt::Key_Escape)
         {
-            this->clearFocus();
-            ret = false;
+            clearFocus();
+            return false;
         }
-        break;
+
     default:
         break;
     }
-    if(ret)QLineEdit::event(_event);
-    return ret;
+    return QLineEdit::event(_event);
 }
 

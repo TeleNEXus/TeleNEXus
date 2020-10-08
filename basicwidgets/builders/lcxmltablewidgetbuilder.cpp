@@ -1,6 +1,7 @@
 #include "lcxmltablewidgetbuilder.h"
 #include <QTableWidget>
 #include <QDomElement>
+#include <qnamespace.h>
 #include <qtablewidget.h>
 #include <QDebug>
 #include "LIApplication.h"
@@ -29,14 +30,41 @@ static const struct
     QString row = "row";
     QString column = "col";
 } __elementNames;
-
+#include <QEvent>
+#include <QtWidgets>
 //------------------------------------------------------------------------------
 struct SBuildData
 {
+    /*
+     * Фильтр обработки события нажатия клавиши Esc.
+     */
+    class CQEventFilter : public QObject
+    {
+    public:
+        explicit CQEventFilter(QObject* _parent = nullptr) : QObject(_parent){}
+        virtual bool eventFilter(QObject* _p_obj, QEvent* _p_event) override
+        {
+            if(_p_event->type() == QEvent::KeyRelease)
+            {
+                //Очиска фокуса видета при нажатии клавиши Escape.
+                if( static_cast<QKeyEvent*>(_p_event)->key() == Qt::Key_Escape)
+                {
+                    static_cast<QTableWidget*>(_p_obj)->clearFocus();
+                    static_cast<QTableWidget*>(_p_obj)->clearSelection();
+                    return true;
+                }
+            }
+            return false;
+        }
+    };
     quint32 mRow = 0;
     quint32 mColumn = 0;
     QTableWidget* mpTable= nullptr;
-    SBuildData() : mpTable(new QTableWidget){}
+    SBuildData() : mpTable(new QTableWidget)
+    {
+        mpTable->installEventFilter(new CQEventFilter);
+        mpTable->setEditTriggers(QTableWidget::EditTrigger::NoEditTriggers);
+    }
 };
 
 //------------------------------------------------------------------------------
@@ -78,13 +106,6 @@ QWidget* LCXmlTableWidgetBuilder::build(const QDomElement& _element,
     }
     return buildData.mpTable;
 
-//    QTableWidget* table = new QTableWidget();
-//    qDebug() << "------------------------------------Create QTableWidget Start";
-//    table->setRowCount(5);
-//    table->setColumnCount(5);
-//    qDebug() << "Table widget row count     =" << table->rowCount();
-//    qDebug() << "Table widget column count  =" << table->columnCount();
-//    return table;
 }
 
 //------------------------------------------------------------------------------

@@ -43,6 +43,7 @@ private:
     QSharedPointer<LIRemoteDataWriter>          mDataWriter;
     QSharedPointer<LCStringDataFormatterBase>   mFormatter;
     QMetaObject::Connection                     mIndexChangeConnection;
+    bool mFlagPopupOn; //Флаг состояния всплывающего меню.
 
 private:
     explicit LCQRemComboBox(QWidget* _parent = nullptr);
@@ -58,7 +59,9 @@ public:
             QWidget* _parent = nullptr);
     virtual ~LCQRemComboBox();
     virtual bool event(QEvent *e) override;
-
+private:
+    virtual void showPopup(void) override;
+    virtual void hidePopup(void) override;
 };
 
 #endif // LCQEXTLABEL_H
