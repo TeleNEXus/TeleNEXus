@@ -56,7 +56,8 @@ LCQRemComboBox::LCQRemComboBox(
         QSharedPointer<LIRemoteDataSource>          _dataSource,
         QSharedPointer<LCStringDataFormatterBase>   _formatter,
         QWidget* _parent):  QComboBox(_parent),
-                            mFormatter(_formatter)
+                            mFormatter(_formatter),
+                            mFlagPopupOn(false)
 {
 
     mDataReadListener = QSharedPointer<CReadListener>(new CReadListener(*this));
@@ -91,32 +92,55 @@ LCQRemComboBox::~LCQRemComboBox()
 //------------------------------------------------------------------------------
 bool LCQRemComboBox::event(QEvent *_event)
 {
-    bool ret = true;
+    int key;
     switch(_event->type())
     {
     case QEvent::Type::Show:
         mDataReader->connectToSource();
         setCurrentIndex(-1);
-        ret = false;
-        break;
+        return false;
 
     case QEvent::Type::Hide:
         mDataReader->disconnectFromSource();
-        ret = false;
-        break;
+        return false;
 
-    case QEvent::Type::KeyRelease:
+    case QEvent::Type::KeyPress:
         //Очиска фокуса видета при нажатии клавиши Escape.
-        if( static_cast<QKeyEvent*>(_event)->key() == Qt::Key_Escape)
+        key = static_cast<QKeyEvent*>(_event)->key();
+        if(( key == Qt::Key_Enter) || ( key == Qt::Key_Return))
         {
-            this->clearFocus();
-            ret = false;
+            showPopup();
+        } else if( static_cast<QKeyEvent*>(_event)->key() == Qt::Key_Escape)
+        {
+            if ( mFlagPopupOn )
+            {
+                hidePopup();
+            }
+            else
+            {
+                clearFocus();
+            }
         }
-        break;
+        return false;
+
     default:
         break;
     }
-    if(ret) QComboBox::event(_event);
-    return ret;
+    return QComboBox::event(_event);
 }
 
+//------------------------------------------------------------------------------
+void LCQRemComboBox::showPopup(void)
+{
+    qDebug() << "LCQRemComboBox::showPopup";
+    mFlagPopupOn = true;
+    QComboBox::showPopup();
+}
+
+//------------------------------------------------------------------------------
+void LCQRemComboBox::hidePopup(void)
+{
+    qDebug() << "LCQRemComboBox::hidePopup";
+    mFlagPopupOn = false;
+    QComboBox::hidePopup();
+}
