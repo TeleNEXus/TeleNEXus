@@ -9,6 +9,7 @@ class QDir;
 class LIXmlRemoteDataSourceBuilder;
 class LIXmlLayoutBuilder;
 class LIXmlWidgetBuilder;
+class QDomElement;
 
 #include "LIRemoteDataSource.h"
 
@@ -38,6 +39,11 @@ public:
      * Возвращает интеллектуальный указатель на построитель визуального объекта.
      */
     virtual QSharedPointer<LIXmlWidgetBuilder> getWidgetBuilder(const QString& _name) const = 0;
+    /*
+     * Производит поиск и загрузку xml файла в элемент dom используя
+     * относительный путь к файлу.
+     */
+    virtual QDomElement loadDomElement(const QString& _fileName) = 0;
 };
 
 #endif // LIAPPLICATION_H

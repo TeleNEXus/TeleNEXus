@@ -1,26 +1,27 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<!--widget title="TITLE CHECK">
-    <layout type="box" direction="LeftToRight">
-        <label text="Label0" />
-        <label text="Label1" />
-        <label text="Label2" />
-        <layout type="box" direction="BottomToTop">
-            <label text="Label0" />
-            <layout type="box" direction="LeftToRight">
-                <label text="Label0" />
-                <label text="Label1" />
-                <label text="Label2" />
-            </layout>
-            <label text="Label1" />
-            <label text="Label2" />
-        </layout>
-    </layout>
-</widget-->
-
 <WIDGETS>
     <widget file="tabtestwidget.xml"/>
 </WIDGETS>
+
+<!--<!-1-widget title="TITLE CHECK">-->
+<!--    <layout type="box" direction="LeftToRight">-->
+<!--        <label text="Label0" />-->
+<!--        <label text="Label1" />-->
+<!--        <label text="Label2" />-->
+<!--        <layout type="box" direction="BottomToTop">-->
+<!--            <label text="Label0" />-->
+<!--            <layout type="box" direction="LeftToRight">-->
+<!--                <label text="Label0" />-->
+<!--                <label text="Label1" />-->
+<!--                <label text="Label2" />-->
+<!--            </layout>-->
+<!--            <label text="Label1" />-->
+<!--            <label text="Label2" />-->
+<!--        </layout>-->
+<!--    </layout>-->
+<!--</widget-1->-->
+
 
 <!--     <!-1- <widget title="TITLE CHECK"> -1-> -->
 <!--     <!-1-     <layout type="grid"> -1-> -->
