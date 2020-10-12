@@ -35,6 +35,7 @@
         <dataLineEdit   lib="basicwidgets" libhandler="getRemLineEditBuilder"   />
         <dataComboBox   lib="basicwidgets" libhandler="getRemComboBoxBuilder"   />
         <dataComboLabel lib="basicwidgets" libhandler="getRemComboLabelBuilder" />
+        <tabs           lib="basicwidgets" libhandler="getTabWidgetBuilder"     />
     </WIDGETBUILDERS>
     
     <!-- <WIDGETBUILDERS file="widgetbuilders.xml"/> -->
