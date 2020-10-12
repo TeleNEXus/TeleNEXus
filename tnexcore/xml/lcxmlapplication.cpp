@@ -31,6 +31,15 @@ static const struct
 using TQRemoteDataSourceMap = QMap<QString, QSharedPointer<LIRemoteDataSource>>;
 TQRemoteDataSourceMap sl_RemoteDataSourceMap;
 
+//------------------------------------------------------------------------------
+static QDomElement staticLoadDomElement(const QString& _fileName);
+static void addPlaginLibPathes(const QDomElement& _rootElement);
+static void addSourceBuilders(const QDomElement& _rootElement);
+static void addSources(const QDomElement& _element);
+static void addLayoutsBuilders(const QDomElement& _rootElement);
+static void addWidgetsBuilders(const QDomElement& _rootElement);
+static void addWidgets(const QDomElement& _rootElement);
+
 //==============================================================================
 class CApplicationInterface : public LIApplication
 {
@@ -65,6 +74,11 @@ public:
         getWidgetBuilder(const QString& _name) const override
     {
         return LCXmlWidgetBuilders::instance().getBuilder(_name);
+    }
+
+    virtual QDomElement loadDomElement(const QString& _fileName) override
+    {
+        return staticLoadDomElement( _fileName);
     }
 };
 
@@ -112,14 +126,6 @@ const QString& LCXmlApplication::getApplicationDirPath()
 }
 
 
-//------------------------------------------------------------------------------
-static QDomElement loadDomElement(const QString& _fileName);
-static void addPlaginLibPathes(const QDomElement& _rootElement);
-static void addSourceBuilders(const QDomElement& _rootElement);
-static void addSources(const QDomElement& _element);
-static void addLayoutsBuilders(const QDomElement& _rootElement);
-static void addWidgetsBuilders(const QDomElement& _rootElement);
-static void addWidgets(const QDomElement& _rootElement);
 int LCXmlApplication::exec(int argc, char *argv[])
 {
 
@@ -305,7 +311,7 @@ static void addSources(const QDomElement& _rootElement)
 
     if(!attrFile.isNull())
     {
-        element = loadDomElement(sl_xmlMainFilePath + attrFile);
+        element = staticLoadDomElement(attrFile);
 
         if(element.tagName() != LCXmlApplication::mBaseTagNames.sources)
         {
@@ -381,7 +387,7 @@ static void addWidgets(const QDomElement& _rootElement)
 
     if(!attrFile.isNull())
     {
-        element = loadDomElement(sl_xmlMainFilePath + attrFile);
+        element = staticLoadDomElement(attrFile);
 
         if(element.tagName() != LCXmlApplication::mBaseTagNames.widgets)
         {
@@ -412,9 +418,9 @@ static void addWidgets(const QDomElement& _rootElement)
 }
 
 //==============================================================================
-static QDomElement loadDomElement(const QString& _fileName)
+static QDomElement staticLoadDomElement(const QString& _fileName)
 {
-    QFile file(_fileName);
+    QFile file(sl_xmlMainFilePath + _fileName);
 
     QDomDocument domDoc;
     QString errorStr;
