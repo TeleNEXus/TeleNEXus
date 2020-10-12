@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<widget title="TITLE CHECK">
+    <layout type="grid">
+        <col>
+            <tabs title="TABS">
+                <item label="Таб №1" >
+
+                    <col>
+                        <table>
+                            <col name="Столбец 1">
+                                <dataComboBox  read="hreg0" source="qtslavetcp" format="uint16">
+                                    <item name="On"     value="010"/>
+                                    <item name="Off"    value="011"/>
+                                    <item name="Reset"  value="012"/>
+                                    <item name="Test"   value="013"/>
+                                </dataComboBox>
+
+                                <dataComboBox  read="hreg0" source="qtslavetcp" format="hex" size="2">
+                                    <item name="On"        value="00_0 a"/>
+                                    <item name="Off"       value="00_0 b"/>
+                                    <item name="Reset"     value="00_0 c"/>
+                                    <item name="Test"      value="00_0 d"/>
+                                </dataComboBox>
+
+                                <dataComboLabel  read="coil0" source="qtslavetcp" format="bool">
+                                    <item name="Включен"        value="true"/>
+                                    <item name="Выключен"       value="false"/>
+                                </dataComboLabel>
+
+                                <dataComboLabel  read="hreg0" source="qtslavetcp" format="hex" size="2">
+                                    <item name="On"        value="a"/>
+                                    <item name="Off"       value="b"/>
+                                    <item name="Reset"     value="c"/>
+                                    <item name="Test"      value="d"/>
+                                </dataComboLabel>
+
+                                <dataComboBox  read="coil[0-3]" source="qtslavetcp" format="bits" size="4">
+                                    <item value="1 1_001"/>
+                                    <item value="1 1_011"/>
+                                    <item value="1 1_111"/>
+                                </dataComboBox>
+
+                                <dataComboLabel  read="coil[0-3]" source="qtslavetcp" format="bits" size="4">
+                                    <item value="1 1_001"/>
+                                    <item value="1 1_011"/>
+                                    <item value="1 1_111"/>
+                                </dataComboLabel>
+                                <!-- <dataComboLabel  read="coil[0-3]" source="qtslavetcp" format="bits" size="4"> -->
+                                    <!--     <item name="On"        value="1 1_001"/> -->
+                                    <!--     <item name="Off"       value="1 1_011"/> -->
+                                    <!--     <item name="Reset"     value="1 1_111"/> -->
+                                    <!-- </dataComboLabel> -->
+                                <dataLabel      source="qtslavetcp"  data="coil[0-2]" format="bits"/>
+                                <dataLineEdit   source="qtslavetcp"  data="coil[0-2]" format="bits" size="3" separator=" " />
+                            </col>
+
+                            <col name="Столбец 2">
+                                <dataLabel source="qtslavetcp"  data="coil[0-2]" format="hex"/>
+                                <dataLabel source="qtslavetcp"  data="hreg1" format="uint16"/>
+                                <dataLabel source="qtslavetcp"  data="hflt"  format="float32"/>
+                            </col>
+
+                            <col name="Столбец 3">
+                                <dataLineEdit   source="qtslavetcp" data="hreg[0-1]" format="hex" size="4" separator=" "/>
+                                <dataComboLabel  read="hreg0" source="qtslavetcp" format="hex" size="2">
+                                    <item name="On"        value="a"/>
+                                    <item name="Off"       value="b"/>
+                                    <item name="Reset"     value="c"/>
+                                    <item name="Test"      value="d"/>
+                                </dataComboLabel>
+
+                                <dataLabel      source="qtslavetcp"  data="hreg0" format="bitfield"/>
+                                <dataLineEdit   source="qtslavetcp"  data="hreg0" format="bitfield" size="2" separator=" "/>
+
+
+                                <dataLabel      source="qtslavetcp"  data="inreg1" format="uint16"/>
+                                <dataLabel      source="qtslavetcp"  data="inflt"  format="float32"/>
+
+                                <dataLabel source="qtslavetcp"  data="hreg1"  format="hex"/>
+                            </col>
+
+                    </col>
+                </item>
+
+                <item label="Таб №2">
+                    <widget> 
+                        <layout type="grid">
+                            <col>
+                                <label>Cell 05</label>
+                                <label>Cell 15</label>
+                                <label>Cell 25</label>
+                            </col> 
+                        </layout>
+                    </widget>
+                </item>
+            </tabs>
+        </col>
+    </layout>
+</widget>

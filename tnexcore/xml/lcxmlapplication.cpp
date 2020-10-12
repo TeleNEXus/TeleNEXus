@@ -31,32 +31,38 @@ static const struct
 using TQRemoteDataSourceMap = QMap<QString, QSharedPointer<LIRemoteDataSource>>;
 TQRemoteDataSourceMap sl_RemoteDataSourceMap;
 
-//======================================================================================================================
+//==============================================================================
 class CApplicationInterface : public LIApplication
 {
 public:
     CApplicationInterface(){}
-    virtual QString getProjectPath() const override { return sl_xmlMainFilePath;}
+    virtual QString getProjectPath() const override { 
+        return sl_xmlMainFilePath;}
     virtual QDir getProjectDir() const override {return sl_xmlMainFileDir;}
 
-    virtual QSharedPointer<LIXmlRemoteDataSourceBuilder> getDataSourceBuilder(const QString& _name) const override
+    virtual QSharedPointer<LIXmlRemoteDataSourceBuilder> 
+        getDataSourceBuilder(
+            const QString& _name) const override
     {
         return LCXmlRemoteDataSourceBuilders::instance().getBuilder(_name);
     }
 
-    QSharedPointer<LIRemoteDataSource> getDataSource(const QString& _name) const override
+    QSharedPointer<LIRemoteDataSource> 
+        getDataSource(const QString& _name) const override
     {
         TQRemoteDataSourceMap::iterator it = sl_RemoteDataSourceMap.find(_name);
         if(it == sl_RemoteDataSourceMap.end()) return nullptr;
         return it.value();
     }
 
-    QSharedPointer<LIXmlLayoutBuilder> getLayoutBuilder(const QString& _name) const override
+    QSharedPointer<LIXmlLayoutBuilder> 
+        getLayoutBuilder(const QString& _name) const override
     {
         return LCXmlLayoutBuilders::instance().getBuilder(_name);
     }
 
-    QSharedPointer<LIXmlWidgetBuilder> getWidgetBuilder(const QString& _name) const override
+    QSharedPointer<LIXmlWidgetBuilder> 
+        getWidgetBuilder(const QString& _name) const override
     {
         return LCXmlWidgetBuilders::instance().getBuilder(_name);
     }
@@ -64,41 +70,41 @@ public:
 
 static CApplicationInterface sl_appInterface;
 
-//======================================================================================================================
+//==============================================================================
 const LCXmlApplication::SBaseTagsNames      LCXmlApplication::mBaseTagNames;
 const LCXmlApplication::SBaseAttributeNames LCXmlApplication::mBaseAttributeNames;
-//----------------------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 LCXmlApplication::LCXmlApplication()
 {
 
 }
 
-//----------------------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 LCXmlApplication& LCXmlApplication::instance()
 {
     static LCXmlApplication inst;
     return inst;
 }
 
-//----------------------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 const QString& LCXmlApplication::getXmlMainFileName()
 {
     return sl_xmlMainFileName;
 }
 
-//----------------------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 const QString& LCXmlApplication::getXmlMainFileWay()
 {
     return sl_xmlMainFilePath;
 }
 
-//----------------------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 const QDir& LCXmlApplication::getXmlMainFileDir()
 {
     return sl_xmlMainFileDir;
 }
 
-//----------------------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 const QString& LCXmlApplication::getApplicationDirPath()
 {
     static QString path = QCoreApplication::applicationDirPath();
@@ -106,7 +112,7 @@ const QString& LCXmlApplication::getApplicationDirPath()
 }
 
 
-//----------------------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 static QDomElement loadDomElement(const QString& _fileName);
 static void addPlaginLibPathes(const QDomElement& _rootElement);
 static void addSourceBuilders(const QDomElement& _rootElement);
@@ -226,20 +232,23 @@ int LCXmlApplication::exec(int argc, char *argv[])
 }
 
 
-//======================================================================================================================
+//==============================================================================
 static void addPlaginLibPathes(const QDomElement& _rootElement)
 {
-    QDomNodeList nodes = _rootElement.elementsByTagName(LCXmlApplication::mBaseTagNames.plaginPaths);
+    QDomNodeList nodes = _rootElement.elementsByTagName(
+            LCXmlApplication::mBaseTagNames.plaginPaths);
 
     if(!nodes.isEmpty())
     {
-        nodes = nodes.at(0).toElement().elementsByTagName(LCXmlApplication::mBaseTagNames.add);
+        nodes = nodes.at(0).toElement().elementsByTagName(
+                LCXmlApplication::mBaseTagNames.add);
         if(!nodes.isEmpty())
         {
             for(int i = 0; i < nodes.size(); i++)
             {
 
-                QString path = nodes.at(i).toElement().attribute(LCXmlApplication::mBaseAttributeNames.path);
+                QString path = nodes.at(i).toElement().attribute(
+                        LCXmlApplication::mBaseAttributeNames.path);
                 if(path.isNull()) continue;
                 QDir dir(path);
                 if(dir.isAbsolute())
@@ -256,7 +265,9 @@ static void addPlaginLibPathes(const QDomElement& _rootElement)
         }
     }
 
-    sl_PlaginLibPaths << QCoreApplication::applicationDirPath() + QStringLiteral("/plaginlibs");
+    sl_PlaginLibPaths << 
+        QCoreApplication::applicationDirPath() + 
+        QStringLiteral("/plaginlibs");
 
     qDebug() << "PlaginLib paths:";
     for(int i = 0; i < sl_PlaginLibPaths.size(); i++)
@@ -266,27 +277,31 @@ static void addPlaginLibPathes(const QDomElement& _rootElement)
 
 }
 
-//======================================================================================================================
+//==============================================================================
 static void addSourceBuilders(const QDomElement& _rootElement)
 {
-    QDomNodeList nodes = _rootElement.elementsByTagName(LCXmlApplication::mBaseTagNames.sourceBuilders);
+    QDomNodeList nodes = _rootElement.elementsByTagName(
+            LCXmlApplication::mBaseTagNames.sourceBuilders);
 
     if(!nodes.isEmpty())
     {
-        LCXmlRemoteDataSourceBuilders::instance().load(nodes.at(0).toElement(), sl_xmlMainFilePath, sl_PlaginLibPaths);
+        LCXmlRemoteDataSourceBuilders::instance().load(
+                nodes.at(0).toElement(), sl_xmlMainFilePath, sl_PlaginLibPaths);
     }
 }
 
-//======================================================================================================================
+//==============================================================================
 static void addSources(const QDomElement& _rootElement)
 {
     if(LCXmlRemoteDataSourceBuilders::instance().noItems()) return;
 
-    QDomElement element = _rootElement.elementsByTagName(LCXmlApplication::mBaseTagNames.sources).at(0).toElement();
+    QDomElement element = _rootElement.elementsByTagName(
+            LCXmlApplication::mBaseTagNames.sources).at(0).toElement();
 
     if(element.isNull()) return;
 
-    QString attrFile = element.attribute(LCXmlApplication::mBaseAttributeNames.file);
+    QString attrFile = element.attribute(
+            LCXmlApplication::mBaseAttributeNames.file);
 
     if(!attrFile.isNull())
     {
@@ -304,7 +319,9 @@ static void addSources(const QDomElement& _rootElement)
     while(!node.isNull())
     {
         QDomElement el = node.toElement();
-        auto builder = LCXmlRemoteDataSourceBuilders::instance().getBuilder(el.tagName());
+        auto builder = LCXmlRemoteDataSourceBuilders::instance().getBuilder(
+                el.tagName());
+
         if(!builder.isNull())
         {
             auto sources = builder->build(el, sl_appInterface);
@@ -322,39 +339,45 @@ static void addSources(const QDomElement& _rootElement)
     }
 }
 
-//======================================================================================================================
+//==============================================================================
 static void addLayoutsBuilders(const QDomElement& _rootElement)
 {
     //Загрузка построителей источников данных.
-    QDomNodeList nodes = _rootElement.elementsByTagName(LCXmlApplication::mBaseTagNames.layoutBuilders);
+    QDomNodeList nodes = _rootElement.elementsByTagName(
+            LCXmlApplication::mBaseTagNames.layoutBuilders);
 
     if(!nodes.isEmpty())
     {
-        LCXmlLayoutBuilders::instance().load(nodes.at(0).toElement(), sl_xmlMainFilePath, sl_PlaginLibPaths);
+        LCXmlLayoutBuilders::instance().load(nodes.at(0).toElement(), 
+                sl_xmlMainFilePath, sl_PlaginLibPaths);
     }
 }
 
-//======================================================================================================================
+//==============================================================================
 static void addWidgetsBuilders(const QDomElement& _rootElement)
 {
     //Загрузка построителей источников данных.
-    QDomNodeList nodes = _rootElement.elementsByTagName(LCXmlApplication::mBaseTagNames.widgetBuilders);
+    QDomNodeList nodes = _rootElement.elementsByTagName(
+            LCXmlApplication::mBaseTagNames.widgetBuilders);
 
     if(!nodes.isEmpty())
     {
-        LCXmlWidgetBuilders::instance().load(nodes.at(0).toElement(), sl_xmlMainFilePath, sl_PlaginLibPaths);
+        LCXmlWidgetBuilders::instance().load(nodes.at(0).toElement(), 
+                sl_xmlMainFilePath, sl_PlaginLibPaths);
     }
 }
 
-//======================================================================================================================
+//==============================================================================
 static void addWidgets(const QDomElement& _rootElement)
 {
 
-    QDomElement element = _rootElement.elementsByTagName(LCXmlApplication::mBaseTagNames.widgets).at(0).toElement();
+    QDomElement element = _rootElement.elementsByTagName(
+            LCXmlApplication::mBaseTagNames.widgets).at(0).toElement();
 
     if(element.isNull()) return;
 
-    QString attrFile = element.attribute(LCXmlApplication::mBaseAttributeNames.file);
+    QString attrFile = element.attribute(
+            LCXmlApplication::mBaseAttributeNames.file);
 
     if(!attrFile.isNull())
     {
@@ -372,7 +395,8 @@ static void addWidgets(const QDomElement& _rootElement)
         if(node.isElement())
         {
             auto element = node.toElement();
-            auto builder = LCXmlWidgetBuilders::instance().getBuilder(element.tagName());
+            auto builder = 
+                LCXmlWidgetBuilders::instance().getBuilder(element.tagName());
             if(!builder.isNull())
             {
                 auto widget = builder->build(element, sl_appInterface);
@@ -387,7 +411,7 @@ static void addWidgets(const QDomElement& _rootElement)
     }
 }
 
-//======================================================================================================================
+//==============================================================================
 static QDomElement loadDomElement(const QString& _fileName)
 {
     QFile file(_fileName);
@@ -399,8 +423,11 @@ static QDomElement loadDomElement(const QString& _fileName)
 
     if(!domDoc.setContent(&file, true, &errorStr, &errorLine, &errorColumn))
     {
-        qDebug() << "Parse file "<< file.fileName() << " error at line:" << errorLine <<
-                        " column:" << errorColumn << " msg: " << errorStr;
+        qDebug() << 
+            "Parse file "       << file.fileName() << 
+            " error at line:"   << errorLine <<
+            " column:"          << errorColumn << 
+            " msg: "            << errorStr;
     }
     return domDoc.documentElement();
 }
