@@ -37,7 +37,7 @@ const struct
 } __elementNames;
 
 //------------------------------------------------------------------------------
-static void buildLabel( const QDomElement& _element, 
+static void buildComboLabel( const QDomElement& _element, 
                         LCQRemComboLabel* _label,
                         QSharedPointer<LCStringDataFormatterBase> _format);
 
@@ -80,7 +80,7 @@ QWidget* LCXmlRemComboLabelBuilder::build(const QDomElement& _element,
 
     ret = new LCQRemComboLabel(dataread, source, format);
 
-    buildLabel(_element, static_cast<LCQRemComboLabel*>(ret), format);
+    buildComboLabel(_element, static_cast<LCQRemComboLabel*>(ret), format);
     return ret;
 
 LABEL_WRONG_EXIT:
@@ -90,18 +90,26 @@ LABEL_WRONG_EXIT:
 }
 
 //------------------------------------------------------------------------------
-static void buildLabel( const QDomElement& _element, 
+static void buildComboLabel( const QDomElement& _element, 
                         LCQRemComboLabel* _label,
                         QSharedPointer<LCStringDataFormatterBase> _format)
 {
-    QDomNodeList elements = _element.elementsByTagName(__elementNames.item);
-    for(int i = 0; i < elements.length(); i++)
+    QDomNodeList nodes = _element.childNodes();
+
+    for(int i = 0; i < nodes.size(); i++)
     {
-        QString name = elements.at(i).toElement().attribute(__attrNames.name);
-        QString val = elements.at(i).toElement().attribute(__attrNames.value);
+        QDomElement el;
+        el = nodes.at(i).toElement();
+
+        if(el.isNull()) continue;
+        if(el.tagName() != __elementNames.item) continue; 
+
+        QString name = el.attribute(__attrNames.name);
+        QString val = el.attribute(__attrNames.value);
+
         if (val.isNull()) 
         {
-          continue;
+            continue;
         }
 
         if (name == "")
