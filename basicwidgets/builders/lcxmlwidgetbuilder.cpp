@@ -72,23 +72,43 @@ static QWidget* buildWidget(
 
     if(!attr.isNull()) widget->setWindowTitle(attr);
 
-    QDomElement layout = 
-        _element.elementsByTagName(
-                __tagsName.layout).at(0).toElement();
-
-    if(!layout.isNull())
+    QDomNodeList nodes = _element.childNodes();
+    for(int i = 0; i < nodes.size(); i++)
     {
-        QString type = layout.attribute(__attrName.type);
-        if(!type.isNull())
-        {
-            auto builder = _app.getLayoutBuilder(type);
-            if(!builder.isNull())
-            {
-                widget->setLayout(builder->build(layout, _app));
-            }
-        }
+         QDomElement el = nodes.at(i).toElement();
+         if(!el.isNull())
+         {
+             auto builder = _app.getLayoutBuilder(el.tagName());
+             if(!builder.isNull())
+             {
+                QLayout* layout = (*builder).build(el, _app);
+                if(layout)
+                {
+                    widget->setLayout(layout);
+                    break;
+                }
+             }                 
+         }
+        
     }
     return widget;
+    /* QDomElement layout = */ 
+    /*     _element.elementsByTagName( */
+    /*             __tagsName.layout).at(0).toElement(); */
+
+    /* if(!layout.isNull()) */
+    /* { */
+    /*     QString type = layout.attribute(__attrName.type); */
+    /*     if(!type.isNull()) */
+    /*     { */
+    /*         auto builder = _app.getLayoutBuilder(type); */
+    /*         if(!builder.isNull()) */
+    /*         { */
+    /*             widget->setLayout(builder->build(layout, _app)); */
+    /*         } */
+    /*     } */
+    /* } */
+    /* return widget; */
 }
 
 //==============================================================================

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <widget title="TITLE CHECK">
-    <layout type="grid">
+    <layoutGrid>
         <col>
             <tabs>
                 <item label="Tab xxx">
@@ -12,14 +12,12 @@
                                 <item name="Reset"  value="012"/>
                                 <item name="Test"   value="013"/>
                             </dataComboBox>
-
                         </col>
-
-                </table>
-            </item>
-        </tabs>
-    </col>
-</layout>
+                    </table>
+                </item>
+            </tabs>
+        </col>
+    </layoutGrid>
 </widget>
 <!-- <widget title="TITLE CHECK"> -->
 <!--     <layout type="grid"> -->
