@@ -25,17 +25,15 @@
             <label text="Label32" />
             <label text="Label33" />
         </col>
-
         <col>
             <widget>
-                <layoutBox direction="RightToLeft">
-                    <label text="Label1" />
+                <layoutBox direction="LeftToRight">
+                    <item> <label text="Label1" /> </item>
                     <label text="Label2" />
                     <label text="Label3" />
                 </layoutBox>
             </widget>
         </col>
-
         <col>
             <widget>
                 <layoutBox direction="BottomToTop">
