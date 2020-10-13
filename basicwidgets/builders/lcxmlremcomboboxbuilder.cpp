@@ -37,8 +37,8 @@ const struct
     QString item    = "item";
 } __elementNames;
 
-//------------------------------------------------------------------------------buildBox
-static void buildBox(   const QDomElement& _element, 
+//------------------------------------------------------------------------------buildCombobox
+static void buildCombobox(   const QDomElement& _element, 
                         LCQRemComboBox* _box, 
                         QSharedPointer<LCStringDataFormatterBase> __format);
 
@@ -88,7 +88,7 @@ QWidget* LCXmlRemComboBoxBuilder::build(const QDomElement& _element,
     }
     
     ret = new LCQRemComboBox(dataread, datawrite, source, format);
-    buildBox(_element, static_cast<LCQRemComboBox*>(ret), format);
+    buildCombobox(_element, static_cast<LCQRemComboBox*>(ret), format);
 
     return ret;
 
@@ -99,16 +99,20 @@ LABEL_WRONG_EXIT:
     return ret;
 }
 
-//------------------------------------------------------------------------------buildBox
-static void buildBox(   const QDomElement& _element, 
+//------------------------------------------------------------------------------buildCombobox
+static void buildCombobox(   const QDomElement& _element, 
                         LCQRemComboBox* _box,
                         QSharedPointer<LCStringDataFormatterBase> _format)
 {
-    QDomNodeList elements = _element.elementsByTagName(__elementNames.item);
-    for(int i = 0; i < elements.length(); i++)
+    QDomNodeList nodes = _element.childNodes();
+    for(int i = 0; i < nodes.length(); i++)
     {
-        QString name = elements.at(i).toElement().attribute(__attrNames.name);
-        QString val = elements.at(i).toElement().attribute(__attrNames.value);
+        QDomElement el = nodes.at(i).toElement();
+        if(el.isNull()) continue;
+        if(el.tagName() != __elementNames.item) continue;
+
+        QString name = el.attribute(__attrNames.name);
+        QString val = el.attribute(__attrNames.value);
         if (val.isNull()) 
         {
             continue;
