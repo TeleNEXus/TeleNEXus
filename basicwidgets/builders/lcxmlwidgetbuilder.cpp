@@ -70,19 +70,24 @@ static QWidget* buildWidget(
 
     if(!attr.isNull()) widget->setWindowTitle(attr);
 
+                    qDebug() << "Widget set Layout 1";
     QDomNodeList nodes = _element.childNodes();
     for(int i = 0; i < nodes.size(); i++)
     {
+                    qDebug() << "Widget set Layout 2";
          QDomElement el = nodes.at(i).toElement();
          if(!el.isNull())
          {
+                    qDebug() << "Widget set Layout 3 " << el.tagName();
              auto builder = _app.getLayoutBuilder(el.tagName());
              if(!builder.isNull())
              {
+                    qDebug() << "Widget set Layout 4 " << el.tagName();
                 QLayout* layout = (*builder).build(el, _app);
                 if(layout)
                 {
                     widget->setLayout(layout);
+                    qDebug() << "Widget set Layout 5 " << el.tagName();
                     break;
                 }
              }                 

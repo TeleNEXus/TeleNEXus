@@ -10,7 +10,7 @@ void* BASICLAYOUTS_EXPORT getGridLayoutBuilder()
 }
 
 //----------------------------------------------------------------------------
-void* BASICLAYOUTS_EXPORT getBoxLayoutBulder()
+void* BASICLAYOUTS_EXPORT getBoxLayoutBuilder()
 {
     return new LCXmlBoxLayoutBuilder();
 }

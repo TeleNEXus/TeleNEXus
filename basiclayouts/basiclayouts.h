@@ -4,6 +4,6 @@
 #include "basiclayouts_global.h"
 
 extern "C" void* BASICLAYOUTS_EXPORT getGridLayoutBuilder();
-extern "C" void* BASICLAYOUTS_EXPORT getBoxLayoutBulder();
+extern "C" void* BASICLAYOUTS_EXPORT getBoxLayoutBuilder();
 
 #endif // BASICLAYOUTS_H
