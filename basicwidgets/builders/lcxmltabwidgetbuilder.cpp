@@ -56,7 +56,6 @@ QWidget* LCXmlTabWidgetBuilder::build(
         if(!el.isNull()) 
             createTab(tabs.item(i).toElement(), tabwidget, i, _app); 
     }
-
     return tabwidget;
 }
 

@@ -19,11 +19,9 @@ private:
         } directionVals;
     };
     static const SAttributes mAttributes;
-    /* bool mFlagDirModeDef; */
     QBoxLayout::Direction mDirectionDef;
 public:
     LCXmlBoxLayoutBuilder();
-    /* LCXmlBoxLayoutBuilder(QBoxLayout::Direction _direction); */
     virtual ~LCXmlBoxLayoutBuilder();
     virtual QLayout* build(const QDomElement& _element, const LIApplication& _app) override;
 

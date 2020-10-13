@@ -9,7 +9,7 @@ class QDir;
 class LIXmlRemoteDataSourceBuilder;
 class LIXmlLayoutBuilder;
 class LIXmlWidgetBuilder;
-class QDomElement;
+class QDomDocument;
 
 #include "LIRemoteDataSource.h"
 
@@ -43,7 +43,7 @@ public:
      * Производит поиск и загрузку xml файла в элемент dom используя
      * относительный путь к файлу.
      */
-    virtual QDomElement loadDomElement(const QString& _fileName) = 0;
+    virtual QDomDocument getDomDocument(const QString& _fileName) const = 0; 
 };
 
 #endif // LIAPPLICATION_H

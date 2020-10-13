@@ -61,7 +61,7 @@
                         <col name="Столбец 3">
                             <dataLineEdit   source="qtslavetcp" data="hreg[0-1]" format="hex" size="4" separator=" "/>
                             <dataComboLabel  read="hreg0" source="qtslavetcp" format="hex" size="2">
-                                <item name="On"        value="a"/>
+                                <item name="On"        value="a" style="color:#102235;  background:black;}>"/>
                                 <item name="Off"       value="b"/>
                                 <item name="Reset"     value="c"/>
                                 <item name="Test"      value="d"/>
