@@ -33,18 +33,18 @@ int main(int argc, char** argv)
     hlayout1->addWidget(buttonh1);
     hlayout1->addStretch(0);
     hlayout1->addWidget(buttonh2);
-    /* hlayout1->addWidget(buttonh3); */
-    /* hlayout1->addWidget(buttonh4); */
-    /* hlayout1->addWidget(buttonh5); */
+    hlayout1->addWidget(buttonh3);
+    hlayout1->addWidget(buttonh4);
+    hlayout1->addWidget(buttonh5);
 
-    /* vlayout1->addLayout(hlayout1); */
+    vlayout1->addLayout(hlayout1);
 
-    /* vlayout1->addWidget(buttonv1); */
-    /* vlayout1->addStretch(0); */
-    /* vlayout1->addWidget(buttonv2); */
-    /* vlayout1->addWidget(buttonv3); */
-    /* vlayout1->addWidget(buttonv4); */
-    /* vlayout1->addWidget(buttonv5); */
+    vlayout1->addWidget(buttonv1);
+    vlayout1->addStretch(0);
+    vlayout1->addWidget(buttonv2);
+    vlayout1->addWidget(buttonv3);
+    vlayout1->addWidget(buttonv4);
+    vlayout1->addWidget(buttonv5);
 
     QPixmap pix;
     if(!pix.load("/home/serg/pprj/tnex/xmltestprj/linux/prj1/pict/pict1.jpg"))
