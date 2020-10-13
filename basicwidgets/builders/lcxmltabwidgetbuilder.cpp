@@ -48,7 +48,6 @@ QWidget* LCXmlTabWidgetBuilder::build(
     tabwidget->setWindowTitle(
             _element.attribute(__attrNames.title, "TabWidget"));
 
-    /* QDomNodeList tabs = _element.elementsByTagName(__elementNames.item); */
     QDomNodeList tabs = _element.childNodes();
 
     for(int i = 0; i < tabs.size(); i++)
