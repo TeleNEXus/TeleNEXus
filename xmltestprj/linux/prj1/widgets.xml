@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <WIDGETS>
-    <widget file="tabtestwidget.xml"/>
+    <!-- <widget file="tabtestwidget.xml"/> -->
+    <widget file="layouttest.xml"/>
 </WIDGETS>
 
 <!--<!-1-widget title="TITLE CHECK">-->
