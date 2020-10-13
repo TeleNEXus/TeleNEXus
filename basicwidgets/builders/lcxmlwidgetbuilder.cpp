@@ -35,7 +35,6 @@ LCXmlWidgetBuilder::~LCXmlWidgetBuilder()
 static QWidget* buildWidget(
         const QDomElement& _element, 
         const LIApplication& _app);
-static QDomElement loadDomElement(const QString& _fileName);
 
 //------------------------------------------------------------------------------
 QWidget* LCXmlWidgetBuilder::build( const QDomElement& _element, 
@@ -48,8 +47,7 @@ QWidget* LCXmlWidgetBuilder::build( const QDomElement& _element,
 
     if(!attr.isNull())
     {
-        QString file = _app.getProjectPath() + attr;
-        QDomElement el = loadDomElement(file);
+        QDomElement el = _app.getDomDocument(attr).documentElement();
         if(!el.isNull())
         {
             if(el.tagName() == _element.tagName()) return buildWidget(el, _app);
@@ -94,23 +92,3 @@ static QWidget* buildWidget(
     return widget;
 }
 
-//==============================================================================
-static QDomElement loadDomElement(const QString& _fileName)
-{
-    QFile file(_fileName);
-
-    QDomDocument domDoc;
-    QString errorStr;
-    int errorLine;
-    int errorColumn;
-
-    if(!domDoc.setContent(&file, true, &errorStr, &errorLine, &errorColumn))
-    {
-        qDebug() << 
-            "Parse file "       << file.fileName() << 
-            " error at line:"   << errorLine <<
-            " column:"          << errorColumn << 
-            " msg: "            << errorStr;
-    }
-    return domDoc.documentElement();
-}

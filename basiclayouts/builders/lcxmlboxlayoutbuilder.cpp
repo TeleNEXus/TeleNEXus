@@ -9,19 +9,10 @@
 const LCXmlBoxLayoutBuilder::SAttributes LCXmlBoxLayoutBuilder::mAttributes;
 
 LCXmlBoxLayoutBuilder::LCXmlBoxLayoutBuilder() : 
-    /* mFlagDirModeDef(false), */
     mDirectionDef(QBoxLayout::Direction::TopToBottom)
 {
 
 }
-
-/* //------------------------------------------------------------------------------ */
-/* LCXmlBoxLayoutBuilder::LCXmlBoxLayoutBuilder(QBoxLayout::Direction _direction) : */
-/*         /1* mFlagDirModeDef(false), *1/ */
-/*         mDirectionDef(_direction) */
-/* { */
-
-/* } */
 
 //------------------------------------------------------------------------------
 LCXmlBoxLayoutBuilder::~LCXmlBoxLayoutBuilder()
@@ -39,10 +30,6 @@ QLayout* LCXmlBoxLayoutBuilder::build(
         const QDomElement& _element, 
         const LIApplication& _app)
 {
-    /* if(mFlagDirModeDef) */
-    /* { */
-    /*     return buildLayout(_element, mDirectionDef, _app); */
-    /* } */
 
     QString attrDir = _element.attribute("direction");
 

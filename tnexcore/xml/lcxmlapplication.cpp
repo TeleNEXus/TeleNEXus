@@ -32,7 +32,7 @@ using TQRemoteDataSourceMap = QMap<QString, QSharedPointer<LIRemoteDataSource>>;
 TQRemoteDataSourceMap sl_RemoteDataSourceMap;
 
 //------------------------------------------------------------------------------
-static QDomElement staticLoadDomElement(const QString& _fileName);
+static QDomDocument staticLoadDomElement(const QString& _fileName);
 static void addPlaginLibPathes(const QDomElement& _rootElement);
 static void addSourceBuilders(const QDomElement& _rootElement);
 static void addSources(const QDomElement& _element);
@@ -76,7 +76,7 @@ public:
         return LCXmlWidgetBuilders::instance().getBuilder(_name);
     }
 
-    virtual QDomElement loadDomElement(const QString& _fileName) override
+    virtual QDomDocument getDomDocument(const QString& _fileName) const override
     {
         return staticLoadDomElement( _fileName);
     }
@@ -125,7 +125,7 @@ const QString& LCXmlApplication::getApplicationDirPath()
     return path;
 }
 
-
+//------------------------------------------------------------------------------
 int LCXmlApplication::exec(int argc, char *argv[])
 {
 
@@ -311,7 +311,7 @@ static void addSources(const QDomElement& _rootElement)
 
     if(!attrFile.isNull())
     {
-        element = staticLoadDomElement(attrFile);
+        element = staticLoadDomElement(attrFile).documentElement();
 
         if(element.tagName() != LCXmlApplication::mBaseTagNames.sources)
         {
@@ -387,7 +387,7 @@ static void addWidgets(const QDomElement& _rootElement)
 
     if(!attrFile.isNull())
     {
-        element = staticLoadDomElement(attrFile);
+        element = staticLoadDomElement(attrFile).documentElement();
 
         if(element.tagName() != LCXmlApplication::mBaseTagNames.widgets)
         {
@@ -418,7 +418,7 @@ static void addWidgets(const QDomElement& _rootElement)
 }
 
 //==============================================================================
-static QDomElement staticLoadDomElement(const QString& _fileName)
+static QDomDocument staticLoadDomElement(const QString& _fileName)
 {
     QFile file(sl_xmlMainFilePath + _fileName);
 
@@ -435,5 +435,5 @@ static QDomElement staticLoadDomElement(const QString& _fileName)
             " column:"          << errorColumn << 
             " msg: "            << errorStr;
     }
-    return domDoc.documentElement();
+    return domDoc;
 }
