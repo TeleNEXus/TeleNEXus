@@ -3,15 +3,20 @@
 #include "lcxmlboxlayoutbuilder.h"
 
 
-//------------------------------------------------------------------------------
-void* BASICLAYOUTS_EXPORT getGridLayoutBuilder()
+/* //------------------------------------------------------------------------------ */
+/* void* BASICLAYOUTS_EXPORT getGridLayoutBuilder() */
+/* { */
+/*     return new LCXmlGridLayoutBuilder; */
+/* } */
+
+//----------------------------------------------------------------------------
+void* BASICLAYOUTS_EXPORT getVBoxLayoutBuilder()
 {
-    return new LCXmlGridLayoutBuilder;
+    return new LCXmlBoxLayoutBuilder(LCXmlBoxLayoutBuilder::EOrientation::VERTICAL);
 }
 
 //----------------------------------------------------------------------------
-void* BASICLAYOUTS_EXPORT getBoxLayoutBuilder()
+void* BASICLAYOUTS_EXPORT getHBoxLayoutBuilder()
 {
-    return new LCXmlBoxLayoutBuilder();
+    return new LCXmlBoxLayoutBuilder(LCXmlBoxLayoutBuilder::EOrientation::HORIZONTAL);
 }
-

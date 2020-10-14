@@ -4,12 +4,39 @@
 
 #include <QDomNode>
 #include <QBoxLayout>
+#include <QDebug>
+
 
 //==============================================================================
-const LCXmlBoxLayoutBuilder::SAttributes LCXmlBoxLayoutBuilder::mAttributes;
+static const struct
+{
+    struct
+    {
+        QString name = "dir";
+        struct 
+        {
+            QString reverse = "reverse";
+            QString forward = "forward";
+        }vals;
+    }dir;
 
-LCXmlBoxLayoutBuilder::LCXmlBoxLayoutBuilder() : 
-    mDirectionDef(QBoxLayout::Direction::TopToBottom)
+    QString spacing = "spacing";
+    QString value = "value";
+
+}__sAttributes;
+
+//------------------------------------------------------------------------------
+static const struct
+{
+    QString widgets     = "widgets";
+    QString layout      = "layout";
+    QString spacing     = "spacing"; //Отступ между двумя элементами.
+    QString stretch     = "stretch"; //Растяжка.
+}__sTags;
+
+//==============================================================================
+LCXmlBoxLayoutBuilder::LCXmlBoxLayoutBuilder(EOrientation _orient) : 
+    mOrientation(_orient)
 {
 
 }
@@ -17,97 +44,181 @@ LCXmlBoxLayoutBuilder::LCXmlBoxLayoutBuilder() :
 //------------------------------------------------------------------------------
 LCXmlBoxLayoutBuilder::~LCXmlBoxLayoutBuilder()
 {
-
 }
 
 //------------------------------------------------------------------------------
-static QLayout* buildLayout(
+static void buildLayout(
+        QBoxLayout* _layout, 
         const QDomElement &_element,
-        QBoxLayout::Direction _direction, 
         const LIApplication& _app);
 
+//------------------------------------------------------------------------------
 QLayout* LCXmlBoxLayoutBuilder::build(
         const QDomElement& _element, 
         const LIApplication& _app)
 {
 
-    QString attrDir = _element.attribute("direction");
+    QBoxLayout* layout;
+    QString dir = _element.attribute(__sAttributes.dir.name);
 
-    if(attrDir.isNull())            
-        return  buildLayout(_element, QBoxLayout::Direction::TopToBottom, _app);
-    if(attrDir == mAttributes.directionVals.leftToRight)
-        return  buildLayout(_element, QBoxLayout::Direction::LeftToRight, _app);
-    if(attrDir == mAttributes.directionVals.topToBottom)
-        return  buildLayout(_element, QBoxLayout::Direction::TopToBottom, _app);
-    if(attrDir == mAttributes.directionVals.rightToLeft)
-        return  buildLayout(_element, QBoxLayout::Direction::RightToLeft, _app);
-    if(attrDir == mAttributes.directionVals.bottomToTop)
-        return  buildLayout(_element, QBoxLayout::Direction::BottomToTop, _app);
+    switch(mOrientation)
+    {
+    case EOrientation::HORIZONTAL:
+        if(dir == __sAttributes.dir.vals.reverse)
+        {
+            layout = new QBoxLayout(QBoxLayout::Direction::RightToLeft);
+            buildLayout( layout, _element, _app); 
+        }
+        else 
+        {
+            layout = new QBoxLayout(QBoxLayout::Direction::LeftToRight);
+            buildLayout( layout, _element, _app); 
+        }
+        break;
 
-    return buildLayout(_element, mDirectionDef, _app);
+    case EOrientation::VERTICAL:
+        if(dir == __sAttributes.dir.vals.reverse)
+        {
+            layout = new QBoxLayout(QBoxLayout::Direction::BottomToTop);
+            buildLayout( layout, _element, _app); 
+        }
+        else 
+        {
+            layout = new QBoxLayout(QBoxLayout::Direction::TopToBottom);
+            buildLayout( layout, _element, _app); 
+        }
+        break;
+
+    default:
+        layout = new QVBoxLayout;
+        break;
+    }
+    return layout; 
 }
 
 //------------------------------------------------------------------------------
-static QLayout* buildLayout(
-        const QDomElement &_element, 
-        QBoxLayout::Direction _direction, 
+static void addLayout(
+        QBoxLayout* _layout, 
+        const QDomElement& _element, 
+        const LIApplication& _app);
+
+//------------------------------------------------------------------------------
+static void addWidgets(
+        QBoxLayout* _layout, 
+        const QDomElement& _element, 
+        const LIApplication& _app);
+
+//------------------------------------------------------------------------------
+static void addSpacing(
+        QBoxLayout* _layout, 
+        const QDomElement& _element); 
+
+//------------------------------------------------------------------------------
+static void buildLayout(
+        QBoxLayout* _layout, 
+        const QDomElement &_element,
+        const LIApplication& _app)
+{
+    int spacing = 0;
+    QString attr = _element.attribute(__sAttributes.spacing);
+
+    if(!attr.isNull())
+    {
+        spacing = attr.toInt();
+        _layout->setSpacing(spacing);
+    }
+
+    int index = 0;
+    for(    QDomNode childNode = _element.firstChild(); 
+            !childNode.isNull(); 
+            childNode = childNode.nextSiblingElement())
+    {
+        qDebug() << "QBoxLayout build layout pass = " << index;
+        index++;
+        if(!childNode.isElement()) continue;
+
+        QDomElement el = childNode.toElement();
+
+        if(el.tagName() == __sTags.layout)
+        {
+            addLayout(_layout, el, _app);
+        }
+        else if(el.tagName() == __sTags.widgets)
+        {
+            addWidgets(_layout, el, _app);
+        }
+        else if(el.tagName() == __sTags.spacing)
+        {
+            qDebug() << "QBoxLayout add spacing";
+            addSpacing(_layout, el);
+        }
+        else if(el.tagName() == __sTags.stretch)
+        {
+            qDebug() << "QBoxLayout add stretch";
+            _layout->addStretch();
+        } 
+    }
+}
+
+//==============================================================================
+static void addLayout(
+        QBoxLayout* _layout, 
+        const QDomElement& _element, 
+        const LIApplication& _app)
+{
+    for(    QDomNode childNode = _element.firstChild(); 
+            !childNode.isNull(); 
+            childNode = childNode.nextSiblingElement())
+    {
+        if(!childNode.isElement()) continue;
+        auto el  = childNode.toElement();
+        auto builder = _app.getLayoutBuilder(el.tagName());
+
+        if(builder.isNull()) continue;
+
+        auto newlayout = builder->build(el, _app);
+
+        if(newlayout)
+        {
+            _layout->addLayout(newlayout);
+        }
+    }
+}
+
+//==============================================================================
+static void addWidgets(
+        QBoxLayout* _layout, 
+        const QDomElement& _element, 
         const LIApplication& _app)
 {
     QDomNode childNode = _element.firstChild();
 
-    QBoxLayout* layout = new QBoxLayout(_direction);
-
-    while(!childNode.isNull())
+    for(    QDomNode childNode = _element.firstChild(); 
+            !childNode.isNull(); 
+            childNode = childNode.nextSiblingElement())
     {
-        if(childNode.isElement())
+        if(!childNode.isElement()) continue;
+        auto el  = childNode.toElement();
+        auto builder = _app.getWidgetBuilder(el.tagName());
+        if(builder.isNull()) continue;
+        auto widget = builder->build(el, _app);
+        if(widget)
         {
-            QDomElement nodeElement = childNode.toElement();
-            if(nodeElement.tagName() == 
-                    LCXmlLayoutBuilderBase::mCommonTags.layout)
-            {
-                QDomElement nodeElement = childNode.toElement();
-                QLayout* childLayout = nullptr;
-                auto builder = _app.getLayoutBuilder(
-                        nodeElement.attribute(
-                            LCXmlLayoutBuilderBase::
-                            mCommonLayoutsAttributes.layoutType));
-                if(!builder.isNull())
-                {
-                    childLayout = builder->build(nodeElement, _app);
-                }
-
-                if(childLayout)
-                {
-                    layout->addLayout(childLayout);
-                }
-                else
-                {
-                    layout->addItem(new QSpacerItem(0,0));
-                }
-            }
-            else
-            {
-                QWidget* widget = nullptr;
-                auto widgetBuilder = 
-                    _app.getWidgetBuilder(nodeElement.tagName());
-
-                if(!widgetBuilder.isNull())
-                {
-                    widget = widgetBuilder->build(nodeElement, _app);
-                }
-
-                if(widget)
-                {
-                    layout->addWidget(widget);
-                }
-                else
-                {
-                    layout->addItem(new QSpacerItem(0,0));
-                }
-            }
+            _layout->addWidget(widget);
         }
-        //--------------------------------
-        childNode = childNode.nextSibling();
     }
-    return layout;
+}
+
+//==============================================================================
+static void addSpacing(
+        QBoxLayout* _layout, 
+        const QDomElement& _element)
+{
+    QString attr = _element.attribute(__sAttributes.value);
+    if(attr.isNull()) return;
+    int value = 0;
+    bool flag_convert = false;
+    value = attr.toInt(&flag_convert);
+    if(!flag_convert) return;
+    _layout->addSpacing(value);
 }

@@ -21,8 +21,9 @@
     <SOURCES file="sources.xml"/>
     
     <LAYOUTBUILDERS>
-        <layoutGrid lib="basiclayouts" libhandler="getGridLayoutBuilder" />
-        <layoutBox  lib="basiclayouts" libhandler="getBoxLayoutBuilder" />
+        <!-- <layoutGrid     lib="basiclayouts" libhandler="getGridLayoutBuilder" /> -->
+        <layoutVBox     lib="basiclayouts" libhandler="getVBoxLayoutBuilder" />
+        <layoutHBox     lib="basiclayouts" libhandler="getHBoxLayoutBuilder" />
     </LAYOUTBUILDERS>
     
     <!--LAYOUTBUILDERS file="layoutbuilders.xml"/-->
