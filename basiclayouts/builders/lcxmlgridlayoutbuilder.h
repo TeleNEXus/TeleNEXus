@@ -9,12 +9,7 @@ class LCXmlGridLayoutBuilder : public LIXmlLayoutBuilder
 public:
     LCXmlGridLayoutBuilder();
     virtual ~LCXmlGridLayoutBuilder();
-    virtual QLayout* build(const QDomElement& _element, const LIApplication& _app) override
-    {
-        Q_UNUSED(_element);
-        Q_UNUSED(_app);
-        return nullptr;
-    };
+    virtual QLayout* build(const QDomElement& _element, const LIApplication& _app) override;
 };
 
 #endif // LCXMLGRIDLAYOUTBUILDER_H

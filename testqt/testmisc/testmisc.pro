@@ -21,7 +21,8 @@ DEFINES += QT_DEPRECATED_WARNINGS
 # SOURCES +=  ./regexpr.cpp \
 # SOURCES +=  ./bitfield.cpp \
 # SOURCES +=  ./tab.cpp \
-SOURCES +=  ./testlayout.cpp \
+# SOURCES +=  ./testlayout.cpp \
+SOURCES +=  ./testgridlayout.cpp \
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
