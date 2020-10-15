@@ -22,11 +22,12 @@ static const struct
         QString attrName = "align";
         struct
         {
-            QString Left;
-            QString Right;
-            QString Center;
+            QString Left    = "Left";
+            QString Right   = "Right";
+            QString Center  = "Center";
         }vals;
     }align;
+
 }__sAttributes;
 
 //------------------------------------------------------------------------------
@@ -174,18 +175,32 @@ static int addRowWidgets(
 {
     int col = _startCol;
     QString attr_align = _element.attribute(__sAttributes.align.attrName);
-    Qt::AlignmentFlag align = Qt::AlignmentFlag::AlignRight;
-    /* if(!attr_align.isNull()) */
-    /* { */
-    /*     if(attr_align == __sAttributes.align.vals.Center) */
-    /*     { */
-    /*         align = Qt::AlignmentFlag::AlignCenter; */
-    /*     } */
-    /*     else if(attr_align == __sAttributes.align.vals.Right) */
-    /*     { */
-    /*         align = Qt::AlignmentFlag::AlignRight; */
-    /*     } */
-    /* } */
+
+    quint16 align = 0;
+
+
+    if(attr_align.isNull())
+    {
+        align = Qt::AlignLeft;
+    }
+    else
+    {
+        if(attr_align.contains(__sAttributes.align.vals.Left))
+        {
+            align |= Qt::AlignLeft;
+        }
+
+        if(attr_align.contains(__sAttributes.align.vals.Right))
+        {
+            align |= Qt::AlignRight;
+        }
+
+        if(attr_align.contains(__sAttributes.align.vals.Center))
+        {
+            align |= Qt::AlignCenter;
+        }
+    }
+
     for(QDomNode node = _element.firstChild(); !node.isNull(); node = node.nextSibling())
     {
         QDomElement el = node.toElement();
@@ -194,7 +209,19 @@ static int addRowWidgets(
         if(builder.isNull()) continue;
         auto widget = builder->build(el, _app);
         if(widget == nullptr) continue;
-        _buildData.mpLayout->addWidget(widget, _buildData.mRow, col, align);
+
+        if(align != 0)
+        {
+            _buildData.mpLayout->addWidget(widget, _buildData.mRow, col, (Qt::AlignmentFlag)align); 
+        }
+        else
+        {
+            _buildData.mpLayout->addWidget(widget, _buildData.mRow, col); 
+        }
+
+        /* _buildData.mpLayout->addWidget(widget, _buildData.mRow, col, Qt::AlignmentFlag::AlignRight); */
+        /* _buildData.mpLayout->addWidget(widget, _buildData.mRow, col, Qt::AlignmentFlag::AlignRight); */
+        qDebug() << "Alignment = " << align << " Align right = " << Qt::AlignmentFlag::AlignRight;
         col++;
     }
     return col;

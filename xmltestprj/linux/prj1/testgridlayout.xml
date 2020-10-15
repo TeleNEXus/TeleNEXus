@@ -10,7 +10,7 @@
                 <label text="Label_0_1" /> 
             </widgets>
             <!-- <stretch/> -->
-            <widgets>
+            <widgets align="Right">
                 <label text="Label_0_2" /> 
                 <label text="Label_0_3" /> 
             </widgets>
