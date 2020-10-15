@@ -2,7 +2,8 @@
 
 <WIDGETS>
     <!-- <widget file="tabtestwidget.xml"/> -->
-    <widget file="layouttest.xml"/>
+    <!-- <widget file="testboxlayout.xml"/> -->
+    <widget file="testgridlayout.xml"/>
 </WIDGETS>
 
 <!--<!-1-widget title="TITLE CHECK">-->
