@@ -6,7 +6,7 @@
 #include <QString>
 #include <qnamespace.h>
 
-struct CCommonAttributes
+class CCommonAttributes
 {
 public:
     struct SAligns{
@@ -22,6 +22,7 @@ public:
             QString VCenter = "VCenter";
         }vals;
         Qt::AlignmentFlag toFlags(const QString& _attributes);
+        SAligns(){}
     };
     SAligns mAligns;
 private:

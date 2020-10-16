@@ -27,7 +27,8 @@ INCLUDEPATH +=                              \
     ../../common/interfaces                 \
     ../../common/interfaces/remotedata      \
     ../../common/interfaces/xmlbuilders     \
-    modbus                                  \
+    builders                                \
+    modbus
 
 HEADERS += \
     ../../common/interfaces/LIApplication.h \
@@ -45,10 +46,9 @@ HEADERS += \
     modbus/lqmodbusmasterbase.h \
     modbus/lqmodbusmasterrtu.h  \
     modbus/lqmodbusmastertcp.h  \
-    lcxmlmodbussourcebuilder.h  \
+    builders/lcxmlmodbussourcebuilder.h  \
     modbussource.h \
     modbussource_global.h
-
 SOURCES += \
     modbus/lqmodbusdatareader.cpp \
     modbus/lqmodbusdatasource.cpp \
@@ -56,7 +56,7 @@ SOURCES += \
     modbus/lqmodbusmasterbase.cpp \
     modbus/lqmodbusmasterrtu.cpp  \
     modbus/lqmodbusmastertcp.cpp  \
-    lcxmlmodbussourcebuilder.cpp \
+    builders/lcxmlmodbussourcebuilder.cpp \
     modbussource.cpp
 
 # Default rules for deployment.

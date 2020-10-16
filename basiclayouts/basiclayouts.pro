@@ -28,6 +28,7 @@ INCLUDEPATH +=                          \
 
 SOURCES += \
     basiclayouts.cpp \
+    builders/common.cpp \
     builders/lcxmlboxlayoutbuilder.cpp \
     builders/lcxmlgridlayoutbuilder.cpp \
     builders/lcxmllayoutbuilderbase.cpp
@@ -40,6 +41,7 @@ HEADERS += \
     ../../common/interfaces/xmlbuilders/LIXmlWidgetBuilder.h \
     basiclayouts_global.h \
     basiclayouts.h \
+    builders/common.h \
     builders/lcxmlboxlayoutbuilder.h \
     builders/lcxmlgridlayoutbuilder.h \
     builders/lcxmllayoutbuilderbase.h
