@@ -1,12 +1,14 @@
 #include "lcxmlgridlayoutbuilder.h"
 #include "LIApplication.h"
 #include "LIXmlWidgetBuilder.h"
+#include "common.h"
 
 #include <QGridLayout>
 #include <QSharedPointer>
 #include <QDomNode>
 #include <QDebug>
 #include <qnamespace.h>
+#include <QMap>
 
 //==============================================================================
 static const struct
@@ -16,18 +18,6 @@ static const struct
     QString vspacing    = "vspacing";
     QString value       = "value";
     QString minwidth    = "minwidth";
-
-    struct 
-    {
-        QString attrName = "align";
-        struct
-        {
-            QString Left    = "Left";
-            QString Right   = "Right";
-            QString Center  = "Center";
-        }vals;
-    }align;
-
 }__sAttributes;
 
 //------------------------------------------------------------------------------
@@ -48,6 +38,10 @@ public:
     int mRow = 0;
     int mColumn = 0;
     QGridLayout* mpLayout = nullptr;
+    //Карта глобального выравнивания элементов столбцов.
+    QMap<int, Qt::AlignmentFlag> mColumnAlign; 
+    //Карта глобального выравнивания элементов строк.
+    QMap<int, Qt::AlignmentFlag> mRowAlign;
 private:
 public:
     CBuildData() = delete;
@@ -140,6 +134,17 @@ static void buildRow(
 {
     int curr_col = 0;
 
+    //Анализ глобального выравнивания для элементов строки.
+    QString attr_align = 
+        _element.attribute(CCommonAttributes::instance().mAligns.attrName);
+
+    if(!attr_align.isNull())
+    {
+        _buildData.mRowAlign[_buildData.mRow] = 
+            CCommonAttributes::instance().mAligns.toFlags(attr_align);
+    }
+
+    //Создание элементов строки.
     for( QDomNode node = _element.firstChild(); 
             !node.isNull(); node = node.nextSibling())
     {
@@ -163,7 +168,6 @@ static void buildRow(
 
     if(curr_col > _buildData.mColumn) _buildData.mColumn = curr_col;
     _buildData.mRow++;
-    qDebug() << "QGridLayout build row rows = " << _buildData.mRow << ", columns = " << _buildData.mColumn;
 }
 
 //==============================================================================
@@ -174,34 +178,27 @@ static int addRowWidgets(
         const LIApplication& _app)
 {
     int col = _startCol;
-    QString attr_align = _element.attribute(__sAttributes.align.attrName);
 
-    quint16 align = 0;
-
-
-    if(attr_align.isNull())
+    quint16 align_flags = 0; 
+    //Анализ атрибута выравнивания элемента.
+    QString attr = _element.attribute(
+                    CCommonAttributes::instance().mAligns.attrName);
+    if(!attr.isNull())
     {
-        align = Qt::AlignLeft;
+        //Если для элемента установлен атрибут выравнивания,
+        //производим его расшифровку.
+        align_flags = CCommonAttributes::instance().mAligns.toFlags(attr);
     }
-    else
+    else if(_buildData.mRowAlign.contains(_buildData.mRow))
     {
-        if(attr_align.contains(__sAttributes.align.vals.Left))
-        {
-            align |= Qt::AlignLeft;
-        }
-
-        if(attr_align.contains(__sAttributes.align.vals.Right))
-        {
-            align |= Qt::AlignRight;
-        }
-
-        if(attr_align.contains(__sAttributes.align.vals.Center))
-        {
-            align |= Qt::AlignCenter;
-        }
+        //Если для стобца установлено глобальное выравнивание,
+        //используем его.
+       align_flags = _buildData.mRowAlign[_buildData.mRow]; 
     }
 
-    for(QDomNode node = _element.firstChild(); !node.isNull(); node = node.nextSibling())
+    for( QDomNode node = _element.firstChild(); 
+            !node.isNull(); 
+            node = node.nextSibling() )
     {
         QDomElement el = node.toElement();
         if(el.isNull()) continue;
@@ -210,18 +207,24 @@ static int addRowWidgets(
         auto widget = builder->build(el, _app);
         if(widget == nullptr) continue;
 
-        if(align != 0)
+        //Анализ параметров выравнивания для текущего стролбца.
+        if(align_flags == 0)
         {
-            _buildData.mpLayout->addWidget(widget, _buildData.mRow, col, (Qt::AlignmentFlag)align); 
-        }
-        else
-        {
-            _buildData.mpLayout->addWidget(widget, _buildData.mRow, col); 
+            if(_buildData.mColumnAlign.contains(col))
+            {
+                align_flags = _buildData.mColumnAlign[col];
+            }
+            else
+            {
+                align_flags = Qt::AlignmentFlag::AlignLeft;
+            }
         }
 
-        /* _buildData.mpLayout->addWidget(widget, _buildData.mRow, col, Qt::AlignmentFlag::AlignRight); */
-        /* _buildData.mpLayout->addWidget(widget, _buildData.mRow, col, Qt::AlignmentFlag::AlignRight); */
-        qDebug() << "Alignment = " << align << " Align right = " << Qt::AlignmentFlag::AlignRight;
+        _buildData.mpLayout->addWidget( 
+                widget, 
+                _buildData.mRow, 
+                col, 
+                static_cast<Qt::AlignmentFlag>(align_flags)); 
         col++;
     }
     return col;
@@ -234,7 +237,9 @@ static int addRowLayout(
         int _startCol, 
         const LIApplication& _app)
 {
-    for(QDomNode node = _element.firstChild(); !node.isNull(); node = node.nextSibling())
+    for(    QDomNode node = _element.firstChild(); 
+            !node.isNull(); 
+            node = node.nextSibling())
     {
         if(!node.isElement()) continue;
         QDomElement el = node.toElement();

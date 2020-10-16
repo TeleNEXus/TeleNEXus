@@ -3,17 +3,26 @@
 <widget title="TITLE CHECK">
     <layoutGrid>
 
-        <row minwidth="100">
+        <row minwidth="100" align="Right Top">
             <stretch/>
-            <widgets align="Right">
+            <widgets align="Right Top">
+            <!-- <widgets> -->
+                <dataComboBox  read="hreg0" source="qtslavetcp" format="hex" size="2">
+                    <item name="On"        value="00_0 a"/>
+                    <item name="Off"       value="00_0 b"/>
+                    <item name="Reset"     value="00_0 c"/>
+                    <item name="Test"      value="00_0 d"/>
+                </dataComboBox>
                 <label text="Label_0_0" /> 
-                <label text="Label_0_1" /> 
+                <!-- <label text="Label_0_1" /> --> 
             </widgets>
-            <!-- <stretch/> -->
-            <widgets align="Right">
+            <stretch/>
+            <!-- <widgets align="Right"> -->
+            <widgets>
                 <label text="Label_0_2" /> 
                 <label text="Label_0_3" /> 
             </widgets>
+            <stretch/>
         </row>
 
         <row minwidth="100">
