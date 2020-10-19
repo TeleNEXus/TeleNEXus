@@ -6,35 +6,10 @@
 #include <QBoxLayout>
 #include <QDebug>
 
-
 //==============================================================================
-static const struct
-{
-    struct
-    {
-        QString name = "dir";
-        struct 
-        {
-            QString reverse = "reverse";
-            QString forward = "forward";
-        }vals;
-    }dir;
+const LCXmlBoxLayoutBuilder::SAttributes LCXmlBoxLayoutBuilder::mAttributes;
+const LCXmlBoxLayoutBuilder::STags LCXmlBoxLayoutBuilder::mTags;
 
-    QString spacing = "spacing";
-    QString value = "value";
-
-}__sAttributes;
-
-//------------------------------------------------------------------------------
-static const struct
-{
-    QString widgets     = "widgets";
-    QString layout      = "layout";
-    QString spacing     = "spacing"; //Отступ между двумя элементами.
-    QString stretch     = "stretch"; //Растяжка.
-}__sTags;
-
-//==============================================================================
 LCXmlBoxLayoutBuilder::LCXmlBoxLayoutBuilder(EOrientation _orient) : 
     mOrientation(_orient)
 {
@@ -59,12 +34,12 @@ QLayout* LCXmlBoxLayoutBuilder::build(
 {
 
     QBoxLayout* layout;
-    QString dir = _element.attribute(__sAttributes.dir.name);
+    QString dir = _element.attribute(mAttributes.dir.name);
 
     switch(mOrientation)
     {
     case EOrientation::HORIZONTAL:
-        if(dir == __sAttributes.dir.vals.reverse)
+        if(dir == mAttributes.dir.vals.reverse)
         {
             layout = new QBoxLayout(QBoxLayout::Direction::RightToLeft);
             buildLayout( layout, _element, _app); 
@@ -77,7 +52,7 @@ QLayout* LCXmlBoxLayoutBuilder::build(
         break;
 
     case EOrientation::VERTICAL:
-        if(dir == __sAttributes.dir.vals.reverse)
+        if(dir == mAttributes.dir.vals.reverse)
         {
             layout = new QBoxLayout(QBoxLayout::Direction::BottomToTop);
             buildLayout( layout, _element, _app); 
@@ -120,7 +95,7 @@ static void buildLayout(
         const LIApplication& _app)
 {
     int spacing = 0;
-    QString attr = _element.attribute(__sAttributes.spacing);
+    QString attr = _element.attribute(LCXmlBoxLayoutBuilder::mAttributes.spacing);
 
     if(!attr.isNull())
     {
@@ -139,20 +114,20 @@ static void buildLayout(
 
         QDomElement el = childNode.toElement();
 
-        if(el.tagName() == __sTags.layout)
+        if(el.tagName() == LCXmlBoxLayoutBuilder::mTags.layout)
         {
             addLayout(_layout, el, _app);
         }
-        else if(el.tagName() == __sTags.widgets)
+        else if(el.tagName() == LCXmlBoxLayoutBuilder::mTags.widgets)
         {
             addWidgets(_layout, el, _app);
         }
-        else if(el.tagName() == __sTags.spacing)
+        else if(el.tagName() == LCXmlBoxLayoutBuilder::mTags.spacing)
         {
             qDebug() << "QBoxLayout add spacing";
             addSpacing(_layout, el);
         }
-        else if(el.tagName() == __sTags.stretch)
+        else if(el.tagName() == LCXmlBoxLayoutBuilder::mTags.stretch)
         {
             qDebug() << "QBoxLayout add stretch";
             _layout->addStretch();
@@ -214,7 +189,7 @@ static void addSpacing(
         QBoxLayout* _layout, 
         const QDomElement& _element)
 {
-    QString attr = _element.attribute(__sAttributes.value);
+    QString attr = _element.attribute(LCXmlBoxLayoutBuilder::mAttributes.value);
     if(attr.isNull()) return;
     int value = 0;
     bool flag_convert = false;

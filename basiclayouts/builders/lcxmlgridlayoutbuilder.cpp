@@ -10,27 +10,27 @@
 #include <qnamespace.h>
 #include <QMap>
 
-//==============================================================================
-static const struct
-{
-    QString spacing     = "spacing";
-    QString hspacing    = "hspacing";
-    QString vspacing    = "vspacing";
-    QString value       = "value";
-    QString minheight   = "minheight";
-    QString minwidth    = "minwidth";
-}__sAttributes;
+/* //============================================================================== */
+/* static const struct */
+/* { */
+/*     QString spacing     = "spacing"; */
+/*     QString hspacing    = "hspacing"; */
+/*     QString vspacing    = "vspacing"; */
+/*     QString value       = "value"; */
+/*     QString minheight   = "minheight"; */
+/*     QString minwidth    = "minwidth"; */
+/* }mAttributes; */
 
-//------------------------------------------------------------------------------
-static const struct
-{
-    QString row         = "row";
-    QString column      = "col";
-    QString widgets     = "widgets";
-    QString layout      = "layout";
-    /* QString spacing     = "spacing"; //Отступ между двумя элементами. */
-    QString stretch     = "stretch"; //Растяжка.
-}__sTags;
+/* //------------------------------------------------------------------------------ */
+/* static const struct */
+/* { */
+/*     QString row         = "row"; */
+/*     QString column      = "col"; */
+/*     QString widgets     = "widgets"; */
+/*     QString layout      = "layout"; */
+/*     /1* QString spacing     = "spacing"; //Отступ между двумя элементами. *1/ */
+/*     QString stretch     = "stretch"; //Растяжка. */
+/* }mTags; */
 
 //------------------------------------------------------------------------------
 class CBuildData
@@ -52,6 +52,9 @@ public:
 };
 
 //==============================================================================
+const LCXmlGridLayoutBuilder::STags LCXmlGridLayoutBuilder::mTags;
+const LCXmlGridLayoutBuilder::SAttributes LCXmlGridLayoutBuilder::mAttributes;
+
 LCXmlGridLayoutBuilder::LCXmlGridLayoutBuilder()
 {
 
@@ -83,7 +86,7 @@ QLayout* LCXmlGridLayoutBuilder::build(
     CBuildData buildData(layout);
 
     //Глобальная инициализация компоновщика.
-    QString attr = _element.attribute(__sAttributes.spacing);
+    QString attr = _element.attribute(mAttributes.spacing);
     if(!attr.isNull())
     {
         bool flag = false;
@@ -100,11 +103,11 @@ QLayout* LCXmlGridLayoutBuilder::build(
     {
         if(!node.isElement()) continue;
         QDomElement el = node.toElement();
-        if(el.tagName() == __sTags.row)
+        if(el.tagName() == mTags.row)
         {
             buildRow(el, _app, buildData);
         }
-        else if (el.tagName() == __sTags.column)
+        else if (el.tagName() == mTags.column)
         {
             buildCol(el, _app, buildData);
         }
@@ -141,7 +144,7 @@ static void buildRow(
 
     //Определение минимально заданной высоны строки.
     QString attr_minheight =
-        _element.attribute(__sAttributes.minheight);
+        _element.attribute(LCXmlGridLayoutBuilder::mAttributes.minheight);
 
     if(!attr_minheight.isNull())
     {
@@ -155,12 +158,12 @@ static void buildRow(
     }
     //Анализ глобального выравнивания для элементов строки.
     QString attr_align = 
-        _element.attribute(CCommonAttributes::instance().mAligns.attrName);
+        _element.attribute(CCommonAttributes::mAligns.attrName);
 
     if(!attr_align.isNull())
     {
         _buildData.mRowAlign[_buildData.mRow] = 
-            CCommonAttributes::instance().mAligns.toFlags(attr_align);
+            CCommonAttributes::mAligns.toFlags(attr_align);
     }
 
     //Создание элементов строки.
@@ -171,15 +174,15 @@ static void buildRow(
 
         QDomElement el =  node.toElement();
 
-        if(el.tagName() == __sTags.widgets)
+        if(el.tagName() == LCXmlGridLayoutBuilder::mTags.widgets)
         {
             curr_col += addRowWidgets(el, _buildData, curr_col, _app);
         }
-        else if(el.tagName() == __sTags.layout)
+        else if(el.tagName() == LCXmlGridLayoutBuilder::mTags.layout)
         {
             curr_col += addRowLayout(el, _buildData, curr_col, _app);
         }
-        else if(el.tagName() == __sTags.stretch)
+        else if(el.tagName() == LCXmlGridLayoutBuilder::mTags.stretch)
         {
             curr_col += addRowStretch(el, _buildData, curr_col);
         }
@@ -199,20 +202,23 @@ static int addRowWidgets(
     int col = 0;
 
     quint16 align_flags = 0; 
+        qDebug() << " add row   --------------------0";
     //Анализ атрибута выравнивания элемента.
     QString attr = _element.attribute(
-                    CCommonAttributes::instance().mAligns.attrName);
+                    CCommonAttributes::mAligns.attrName);
     if(!attr.isNull())
     {
         //Если для элемента установлен атрибут выравнивания,
         //производим его расшифровку.
-        align_flags = CCommonAttributes::instance().mAligns.toFlags(attr);
+        align_flags = CCommonAttributes::mAligns.toFlags(attr);
+        qDebug() << " add row   --------------------1";
     }
     else if(_buildData.mRowAlign.contains(_buildData.mRow))
     {
         //Если для стобца установлено глобальное выравнивание,
         //используем его.
-       align_flags = _buildData.mRowAlign[_buildData.mRow]; 
+        align_flags = _buildData.mRowAlign[_buildData.mRow]; 
+        qDebug() << " add row   --------------------2";
     }
 
     for( QDomNode node = _element.firstChild(); 
@@ -227,25 +233,32 @@ static int addRowWidgets(
         if(widget == nullptr) continue;
 
         //Анализ параметров выравнивания для текущего стролбца.
-        if(align_flags == 0)
+        int curr_col = col + _startCol;
+        if(align_flags != 0)
         {
-            if(_buildData.mColumnAlign.contains(col))
-            {
-                align_flags = _buildData.mColumnAlign[col];
-            }
-            else
-            {
-                align_flags = Qt::AlignmentFlag::AlignLeft;
-            }
+            _buildData.mpLayout->addWidget( 
+                    widget, 
+                    _buildData.mRow, 
+                    curr_col,
+                    static_cast<Qt::AlignmentFlag>(align_flags));
         }
-
-        _buildData.mpLayout->addWidget( 
-                widget, 
-                _buildData.mRow, 
-                col + _startCol, 
-                static_cast<Qt::AlignmentFlag>(align_flags)); 
+        else if(_buildData.mColumnAlign.contains(curr_col))
+        {
+            _buildData.mpLayout->addWidget( 
+                    widget, 
+                    _buildData.mRow, 
+                    curr_col,
+                    static_cast<Qt::AlignmentFlag>(
+                        _buildData.mColumnAlign[curr_col]));
+        }
+        else
+        {
+            _buildData.mpLayout->addWidget( widget, _buildData.mRow, 
+                    curr_col);
+        }
         col++;
     }
+
     return col;
 }
 
@@ -278,7 +291,7 @@ static int addRowStretch(
         CBuildData &_buildData, 
         int _startCol)
 {
-    QString attr_val = _element.attribute(__sAttributes.value);
+    QString attr_val = _element.attribute(LCXmlGridLayoutBuilder::mAttributes.value);
     bool flag = false;
     int val = attr_val.toInt(&flag);
 
@@ -322,7 +335,7 @@ static void buildCol(
 
     //Определение минимально заданной высоны строки.
     QString attr_minwidth =
-        _element.attribute(__sAttributes.minwidth);
+        _element.attribute(LCXmlGridLayoutBuilder::mAttributes.minwidth);
 
     if(!attr_minwidth.isNull())
     {
@@ -337,12 +350,14 @@ static void buildCol(
 
     //Анализ глобального выравнивания для элементов строки.
     QString attr_align = 
-        _element.attribute(CCommonAttributes::instance().mAligns.attrName);
+        _element.attribute(CCommonAttributes::mAligns.attrName);
 
     if(!attr_align.isNull())
     {
-        _buildData.mColumnAlign[_buildData.mRow] = 
-            CCommonAttributes::instance().mAligns.toFlags(attr_align);
+        _buildData.mColumnAlign[_buildData.mColumn] = 
+            CCommonAttributes::mAligns.toFlags(attr_align);
+        qDebug() << " add column aligns col = " << _buildData.mColumn;
+
     }
 
     //Создание элементов строки.
@@ -353,15 +368,15 @@ static void buildCol(
 
         QDomElement el =  node.toElement();
 
-        if(el.tagName() == __sTags.widgets)
+        if(el.tagName() == LCXmlGridLayoutBuilder::mTags.widgets)
         {
             curr_row += addColWidgets(el, _buildData, curr_row, _app);
         }
-        else if(el.tagName() == __sTags.layout)
+        else if(el.tagName() == LCXmlGridLayoutBuilder::mTags.layout)
         {
             curr_row += addColLayout(el, _buildData, curr_row, _app);
         }
-        else if(el.tagName() == __sTags.stretch)
+        else if(el.tagName() == LCXmlGridLayoutBuilder::mTags.stretch)
         {
             curr_row += addColStretch(el, _buildData, curr_row);
         }
@@ -384,12 +399,12 @@ static int addColWidgets(
 
     //Анализ атрибута выравнивания элемента.
     QString attr = _element.attribute(
-                    CCommonAttributes::instance().mAligns.attrName);
+                    CCommonAttributes::mAligns.attrName);
     if(!attr.isNull())
     {
         //Если для элемента установлен атрибут выравнивания,
         //производим его расшифровку.
-        align_flags = CCommonAttributes::instance().mAligns.toFlags(attr);
+        align_flags = CCommonAttributes::mAligns.toFlags(attr);
     }
     else if(_buildData.mColumnAlign.contains(_buildData.mColumn))
     {
@@ -410,23 +425,28 @@ static int addColWidgets(
         if(widget == nullptr) continue;
 
         //Анализ параметров выравнивания для текущего стролбца.
-        if(align_flags == 0)
+        int curr_row = row + _startRow;
+        if(align_flags != 0)
         {
-            if(_buildData.mRowAlign.contains(row))
-            {
-                align_flags = _buildData.mRowAlign[row];
-            }
-            else
-            {
-                align_flags = Qt::AlignmentFlag::AlignLeft;
-            }
+            _buildData.mpLayout->addWidget( 
+                    widget, 
+                    curr_row,
+                    _buildData.mColumn, 
+                    static_cast<Qt::AlignmentFlag>(align_flags));
         }
-
-        _buildData.mpLayout->addWidget( 
-                widget, 
-                row + _startRow,
-                _buildData.mColumn, 
-                static_cast<Qt::AlignmentFlag>(align_flags)); 
+        else if(_buildData.mRowAlign.contains(curr_row))
+        {
+            _buildData.mpLayout->addWidget( 
+                    widget, 
+                    curr_row,
+                    _buildData.mColumn,
+                    static_cast<Qt::AlignmentFlag>(
+                        _buildData.mRowAlign[curr_row]));
+        }
+        else
+        {
+            _buildData.mpLayout->addWidget( widget, curr_row, _buildData.mColumn); 
+        }
         row++;
     }
     return row;
@@ -461,7 +481,7 @@ static int addColStretch(
         CBuildData &_buildData, 
         int _startRow)
 {
-    QString attr_val = _element.attribute(__sAttributes.value);
+    QString attr_val = _element.attribute(LCXmlGridLayoutBuilder::mAttributes.value);
     bool flag = false;
     int val = attr_val.toInt(&flag);
 

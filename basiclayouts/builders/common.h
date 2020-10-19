@@ -21,13 +21,11 @@ public:
             QString Bottom  = "Bottom";
             QString VCenter = "VCenter";
         }vals;
-        Qt::AlignmentFlag toFlags(const QString& _attributes);
+        Qt::AlignmentFlag toFlags(const QString& _attributes) const;
         SAligns(){}
     };
-    SAligns mAligns;
+    static const SAligns mAligns;
 private:
     CCommonAttributes();
-public:
-    static CCommonAttributes& instance();
 };
 #endif
