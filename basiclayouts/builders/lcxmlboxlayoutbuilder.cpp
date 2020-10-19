@@ -5,7 +5,7 @@
 #include <QDomNode>
 #include <QBoxLayout>
 #include <QDebug>
-
+#include "common.h"
 //==============================================================================
 const LCXmlBoxLayoutBuilder::SAttributes LCXmlBoxLayoutBuilder::mAttributes;
 const LCXmlBoxLayoutBuilder::STags LCXmlBoxLayoutBuilder::mTags;
@@ -108,7 +108,6 @@ static void buildLayout(
             !childNode.isNull(); 
             childNode = childNode.nextSiblingElement())
     {
-        qDebug() << "QBoxLayout build layout pass = " << index;
         index++;
         if(!childNode.isElement()) continue;
 
@@ -124,12 +123,10 @@ static void buildLayout(
         }
         else if(el.tagName() == LCXmlBoxLayoutBuilder::mTags.spacing)
         {
-            qDebug() << "QBoxLayout add spacing";
             addSpacing(_layout, el);
         }
         else if(el.tagName() == LCXmlBoxLayoutBuilder::mTags.stretch)
         {
-            qDebug() << "QBoxLayout add stretch";
             _layout->addStretch();
         } 
     }
@@ -168,6 +165,13 @@ static void addWidgets(
 {
     QDomNode childNode = _element.firstChild();
 
+    QString attr_align = _element.attribute(CCommonAttributes::mAligns.attrName);
+    quint16 align = 0;
+    if(!attr_align.isNull())
+    {
+        align = CCommonAttributes::mAligns.toFlags(attr_align);
+    }
+
     for(    QDomNode childNode = _element.firstChild(); 
             !childNode.isNull(); 
             childNode = childNode.nextSiblingElement())
@@ -179,7 +183,14 @@ static void addWidgets(
         auto widget = builder->build(el, _app);
         if(widget)
         {
-            _layout->addWidget(widget);
+            if(align == 0)
+            {
+                _layout->addWidget(widget);
+            }
+            else
+            {
+                _layout->addWidget(widget, 0, static_cast<Qt::AlignmentFlag>(align));
+            }
         }
     }
 }
