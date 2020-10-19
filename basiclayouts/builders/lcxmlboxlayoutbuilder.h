@@ -2,6 +2,7 @@
 #define LCXMLBOXLAYOUTBUILDER_H
 
 #include "LIXmlLayoutBuilder.h"
+#include <QString>
 
 class LCXmlBoxLayoutBuilder final : public LIXmlLayoutBuilder
 {
@@ -11,6 +12,35 @@ public:
         VERTICAL, 
         HORIZONTAL
     };
+
+    struct SAttributes
+    {
+        struct
+        {
+            QString name = "dir";
+            struct 
+            {
+                QString reverse = "reverse";
+                QString forward = "forward";
+            }vals;
+        }dir;
+
+        QString spacing = "spacing";
+        QString value = "value";
+
+    };
+
+    struct STags
+    {
+        QString widgets     = "widgets";
+        QString layout      = "layout";
+        QString spacing     = "spacing"; 
+        QString stretch     = "stretch";
+    };
+
+    static const SAttributes mAttributes;
+    static const STags mTags;
+
 private:
     EOrientation mOrientation;
     LCXmlBoxLayoutBuilder();

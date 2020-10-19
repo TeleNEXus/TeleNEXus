@@ -2,18 +2,15 @@
 #include <qnamespace.h>
 
 //==============================================================================
-CCommonAttributes& CCommonAttributes::instance()
-{
-    static CCommonAttributes instance;
-    return instance;
-}
+const CCommonAttributes::SAligns CCommonAttributes::mAligns;
 
 CCommonAttributes::CCommonAttributes()
 {
 }
+
 //------------------------------------------------------------------------------
 Qt::AlignmentFlag 
-CCommonAttributes::SAligns::toFlags(const QString& _attributes)
+CCommonAttributes::SAligns::toFlags(const QString& _attributes) const
 {
     quint16 flags = 0;
 
