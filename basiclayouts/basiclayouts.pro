@@ -31,7 +31,6 @@ SOURCES += \
     builders/common.cpp \
     builders/lcxmlboxlayoutbuilder.cpp \
     builders/lcxmlgridlayoutbuilder.cpp \
-    builders/lcxmllayoutbuilderbase.cpp
 
 HEADERS += \
     ../../common/interfaces/LIApplication.h \
@@ -44,7 +43,6 @@ HEADERS += \
     builders/common.h \
     builders/lcxmlboxlayoutbuilder.h \
     builders/lcxmlgridlayoutbuilder.h \
-    builders/lcxmllayoutbuilderbase.h
 
 # Default rules for deployment.
 unix {
