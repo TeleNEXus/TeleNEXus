@@ -10,28 +10,6 @@
 #include <qnamespace.h>
 #include <QMap>
 
-/* //============================================================================== */
-/* static const struct */
-/* { */
-/*     QString spacing     = "spacing"; */
-/*     QString hspacing    = "hspacing"; */
-/*     QString vspacing    = "vspacing"; */
-/*     QString value       = "value"; */
-/*     QString minheight   = "minheight"; */
-/*     QString minwidth    = "minwidth"; */
-/* }mAttributes; */
-
-/* //------------------------------------------------------------------------------ */
-/* static const struct */
-/* { */
-/*     QString row         = "row"; */
-/*     QString column      = "col"; */
-/*     QString widgets     = "widgets"; */
-/*     QString layout      = "layout"; */
-/*     /1* QString spacing     = "spacing"; //Отступ между двумя элементами. *1/ */
-/*     QString stretch     = "stretch"; //Растяжка. */
-/* }mTags; */
-
 //------------------------------------------------------------------------------
 class CBuildData
 {
