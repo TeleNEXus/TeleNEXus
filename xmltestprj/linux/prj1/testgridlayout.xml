@@ -56,110 +56,27 @@
                 <label text="Label_5_2" /> 
                 <label text="Label_5_3" /> 
             </widgets>
+            <layout>
+                <layoutGrid>
+                    <col>
+                        <widgets>
+                            <label text="Label_1_5_0" /> 
+                            <label text="Label_1_5_1" /> 
+                            <label text="Label_1_5_2" /> 
+                            <label text="Label_1_5_3" /> 
+                        </widgets>
+                    </col>
+                    <row>
+                        <widgets>
+                            <label text="Label_1_5_0" /> 
+                            <label text="Label_1_5_1" /> 
+                            <label text="Label_1_5_2" /> 
+                            <label text="Label_1_5_3" /> 
+                        </widgets>
+                    </row>
+                </layoutGrid>
+            </layout>
         </row>
     </layoutGrid>
 </widget>
-
-<!-- <!-1- Минимальная ширина столбца, минимальная высота строки. -1-> -->
-<!-- <widget title="TITLE CHECK"> -->
-<!--     <layoutGrid> -->
-
-<!--         <col minwidth="200"> -->
-<!--             <widgets> -->
-<!--                 <label text="Label_0_0" /> --> 
-<!--                 <label text="Label_1_0" /> --> 
-<!--                 <label text="Label_2_0" /> --> 
-<!--                 <label text="Label_3_0" /> --> 
-<!--             </widgets> -->
-<!--         </col> -->
-
-<!--         <col> -->
-<!--             <widgets> -->
-<!--                 <label text="Label_0_1" /> --> 
-<!--                 <label text="Label_1_1" /> --> 
-<!--                 <label text="Label_2_1" /> --> 
-<!--                 <label text="Label_3_1" /> --> 
-<!--             </widgets> -->
-<!--         </col> -->
-
-<!--         <row minheight="100"> -->
-<!--             <widgets> -->
-<!--                 <label text="Label_4_0" /> --> 
-<!--                 <label text="Label_4_1" /> --> 
-<!--                 <label text="Label_4_2" /> --> 
-<!--                 <label text="Label_4_3" /> --> 
-<!--             </widgets> -->
-<!--         </row> -->
-<!--         <row> -->
-<!--             <widgets> -->
-<!--                 <label text="Label_5_0" /> --> 
-<!--                 <label text="Label_5_1" /> --> 
-<!--                 <label text="Label_5_2" /> --> 
-<!--                 <label text="Label_5_3" /> --> 
-<!--             </widgets> -->
-<!--         </row> -->
-<!--     </layoutGrid> -->
-<!-- </widget> -->
-
-<!-- <widget title="TITLE CHECK"> -->
-<!--     <layoutGrid> -->
-<!--     <!-1- <layoutGrid spacing="100"> -1-> -->
-<!--         <row minheght="100"> -->
-<!--             <!-1- <widgets> -1-> -->
-<!--             <!-1-     <label text="Label_0_0" /> -1-> --> 
-<!--             <!-1- </widgets> -1-> -->
-<!--         </row> -->
-<!--         <row> -->
-<!--         <!-1- <row align="Right"> -1-> -->
-<!--             <stretch/> -->
-<!--             <!-1- <widgets> -1-> -->
-<!--             <!-1-     <label text="Label_0_0" /> -1-> --> 
-<!--             <!-1- </widgets> -1-> -->
-<!--         </row> -->
-<!--         <col align="Right"> -->
-<!--             <widgets> -->
-<!--                 <label text="Label_0_0" /> --> 
-<!--                 <label text="Label_1_0" /> --> 
-<!--             </widgets> -->
-<!--             <!-1- <stretch/> -1-> -->
-<!--             <widgets> -->
-<!--                 <label text="Label_2_0" /> --> 
-<!--                 <label text="Label_3_0" /> --> 
-<!--             </widgets> -->
-<!--         </col> -->
-
-<!--         <col> -->
-<!--         <!-1- <col minwidth="200"> -1-> -->
-<!--             <widgets> -->
-<!--                 <label text="Label_0_1" /> --> 
-<!--                 <label text="Label_1_1" /> --> 
-<!--                 <label text="Label_2_1" /> --> 
-<!--                 <label text="Label_3_1" /> --> 
-<!--             </widgets> -->
-<!--         </col> -->
-
-<!--         <!-1- <row> -1-> -->
-<!--         <row minheight="100"> -->
-<!--             <widgets> -->
-<!--                 <label text="Label_0_0" /> --> 
-<!--                 <label text="Label_0_1" /> --> 
-<!--             </widgets> -->
-<!--             <!-1- <stretch value="1"/> -1-> -->
-<!--             <widgets> -->
-<!--                 <label text="Label_0_2" /> --> 
-<!--                 <label text="Label_0_3" /> --> 
-<!--             </widgets> -->
-<!--         </row> -->
-<!--         <row> -->
-<!--             <!-1- <stretch value="1"/> -1-> -->
-<!--             <widgets> -->
-<!--                 <label text="Label_1_0" /> --> 
-<!--                 <label text="Label_1_1" /> --> 
-<!--                 <label text="Label_1_2" /> --> 
-<!--                 <label text="Label_1_3" /> --> 
-<!--             </widgets> -->
-<!--         </row> -->
-
-<!--     </layoutGrid> -->
-<!-- </widget> -->
 
