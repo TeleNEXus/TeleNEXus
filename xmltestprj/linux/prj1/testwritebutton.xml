@@ -24,6 +24,7 @@
 
             <!-- <dataWriteButton text="write 1"> -->
             <!--     <write targetSource="qtslavetcp" targetData="hreg0" targetValue="0" format="uint16" /> -->
+            <!--     <write reciveSource="qtslavetcp" resiveData="hreg0" value="0" format="uint16" /> -->
             <!-- </dataWriteButton> -->
             
         </widgets>
