@@ -1,21 +1,15 @@
-#include <QString>
 #include "LIXmlWidgetBuilder.h"
+#include "builderscommon.h"
+
 class LCXmlRemWriteButtonBuilder : public LIXmlWidgetBuilder
 {
-public:
-
+private:
     struct SAttributes
     {
-        QString dataName    = "dataName";
-        QString data        = "data";
-        QString format      = "format";
+        QString label = "label";
     };
-
-    /* struct STags */
-    /* { */
-    /* }; */
+    static const SAttributes mAttributes;
     
-    SAttributes mAttributes;
 public:
     LCXmlRemWriteButtonBuilder();
     ~LCXmlRemWriteButtonBuilder();
