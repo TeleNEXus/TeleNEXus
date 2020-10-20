@@ -8,14 +8,24 @@
             <label text="label_1_01" />
             <label text="label_1_02" />
             <label text="label_1_03" />
-            <dataWriteButton text="write 10">
-                    <data sourceName="qtslavetcp" dataName="hreg0" format="uint16" value="10"/>
-                </dataWriteButton>
+            <dataWriteButton text="write 1">
+                <data sourceName="qtslavetcp" dataName="hreg0" format="uint16" value="0"/>
+                <data sourceName="qtslavetcp" dataName="hreg1" format="uint16" value="1"/>
+                <data sourceName="qtslavetcp" dataName="hreg2" format="uint16" value="2"/>
+                <data sourceName="qtslavetcp" dataName="hreg3" format="uint16" value="3"/>
+            </dataWriteButton>
 
-            <dataWriteButton text="write 20">
-                    <data sourceName="qtslavetcp" dataName="hreg0" format="uint16" value="20"/>
-                </dataWriteButton>
+            <dataWriteButton text="write 2">
+                <data sourceName="qtslavetcp" dataName="hreg0" format="uint16" value="4"/>
+                <data sourceName="qtslavetcp" dataName="hreg1" format="uint16" value="5"/>
+                <data sourceName="qtslavetcp" dataName="hreg2" format="uint16" value="6"/>
+                <data sourceName="qtslavetcp" dataName="hreg3" format="uint16" value="7"/>
+            </dataWriteButton>
 
+            <!-- <dataWriteButton text="write 1"> -->
+            <!--     <write targetSource="qtslavetcp" targetData="hreg0" targetValue="0" format="uint16" /> -->
+            <!-- </dataWriteButton> -->
+            
         </widgets>
     </layoutVBox>
 </widget>
