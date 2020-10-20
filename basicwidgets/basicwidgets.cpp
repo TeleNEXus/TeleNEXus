@@ -55,3 +55,10 @@ void* getTabWidgetBuilder()
 {
     return new LCXmlTabWidgetBuilder;
 }
+
+#include "lcxmlremwritebuttonbuilder.h"
+//------------------------------------------------------------------------------
+void* getRemWriteButtonBuilder()
+{
+    return new LCXmlRemWriteButtonBuilder;
+}

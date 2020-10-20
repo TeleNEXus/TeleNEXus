@@ -29,14 +29,15 @@
     <!--LAYOUTBUILDERS file="layoutbuilders.xml"/-->
     
     <WIDGETBUILDERS>
-        <widget         lib="basicwidgets" libhandler="getWidgetBuilder"        />
-        <label          lib="basicwidgets" libhandler="getTextLabelBuilder"     />
-        <table          lib="basicwidgets" libhandler="getTableWidgetBuilder"   />
-        <dataLabel      lib="basicwidgets" libhandler="getRemLabelBuilder"      />
-        <dataLineEdit   lib="basicwidgets" libhandler="getRemLineEditBuilder"   />
-        <dataComboBox   lib="basicwidgets" libhandler="getRemComboBoxBuilder"   />
-        <dataComboLabel lib="basicwidgets" libhandler="getRemComboLabelBuilder" />
-        <tabs           lib="basicwidgets" libhandler="getTabWidgetBuilder"     />
+        <widget             lib="basicwidgets" libhandler="getWidgetBuilder"            />
+        <label              lib="basicwidgets" libhandler="getTextLabelBuilder"         />
+        <table              lib="basicwidgets" libhandler="getTableWidgetBuilder"       />
+        <dataLabel          lib="basicwidgets" libhandler="getRemLabelBuilder"          />
+        <dataLineEdit       lib="basicwidgets" libhandler="getRemLineEditBuilder"       />
+        <dataComboBox       lib="basicwidgets" libhandler="getRemComboBoxBuilder"       />
+        <dataComboLabel     lib="basicwidgets" libhandler="getRemComboLabelBuilder"     />
+        <tabs               lib="basicwidgets" libhandler="getTabWidgetBuilder"         />
+        <dataWriteButton    lib="basicwidgets" libhandler="getRemWriteButtonBuilder"    />
     </WIDGETBUILDERS>
     
     <!-- <WIDGETBUILDERS file="widgetbuilders.xml"/> -->

@@ -12,4 +12,6 @@ extern "C" void* getRemComboBoxBuilder();
 extern "C" void* getRemComboLabelBuilder();
 extern "C" void* getTableWidgetBuilder();
 extern "C" void* getTabWidgetBuilder();
+extern "C" void* getRemWriteButtonBuilder();
+
 #endif // BASICWIDGETS_H

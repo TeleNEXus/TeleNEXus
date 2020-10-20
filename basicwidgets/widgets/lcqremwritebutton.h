@@ -25,7 +25,7 @@ private:
         QByteArray mData;
         QString mDataName;
         QSharedPointer<LIRemoteDataWriter> mWriter;
-        QSharedPointer<CWriteListener> mListener;
+        QSharedPointer<LIRemoteDataWriteListner> mListener;
         void write();
     };
 
@@ -36,9 +36,9 @@ public:
     explicit LCQRemWriteButton(const QString& _text, QPushButton* _parent = nullptr);
 
     void addDataWrite(
-            QSharedPointer<LIRemoteDataSource> _source, 
-            const QString _dataName, 
-            const QByteArray _data);
+            QSharedPointer<LIRemoteDataSource>  _source, 
+            const QString&                      _dataName, 
+            const QByteArray&                   _data);
 };
 
 #endif /* LCQREMWRITEBUTTON_H_ */

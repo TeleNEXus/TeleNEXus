@@ -106,6 +106,7 @@ void LCQRemLineEdit::setActive(bool _flag)
     }
 }
 
+//------------------------------------------------------------------------------keyPressEvent
 void LCQRemLineEdit::keyPressEvent(QKeyEvent *_ev)
 {
     if((_ev->key() == Qt::Key_Enter) ||(_ev->key() == Qt::Key_Return))
@@ -131,6 +132,7 @@ void LCQRemLineEdit::focusOutEvent(QFocusEvent *_event)
     mReadListener->setActive(true);
     QLineEdit::focusOutEvent(_event);
 }
+
 //------------------------------------------------------------------------------event
 bool LCQRemLineEdit::event(QEvent *_event)
 {
