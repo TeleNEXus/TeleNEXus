@@ -44,18 +44,17 @@ static QSharedPointer<LCStringDataFormatterBase> __formatterFloat32;
 
 //==============================================================================
 
-using TFormatterCreators = QMap< 
+QMap <
 QString, 
-    std::function<
-    QSharedPointer<
-    LCStringDataFormatterBase>(const QDomNamedNodeMap& _attr)>>;
-
-TFormatterCreators __formatterCreators;
+    std::function< QSharedPointer< LCStringDataFormatterBase>(
+            const QDomNamedNodeMap& _attr)>>
+    __formatterCreators;
 
 struct SFormatterCreator1
 {
     SFormatterCreator1(){}
-    QSharedPointer<LCStringDataFormatterBase> operator()(const QDomNamedNodeMap& _attr)
+    QSharedPointer<LCStringDataFormatterBase> 
+        operator()(const QDomNamedNodeMap& _attr)
     {
         QDomNode node;
 
@@ -214,7 +213,7 @@ LCXmlStdDataFormatterFactory::LCXmlStdDataFormatterFactory()
             return QSharedPointer<LCStringDataFormatterBase>(formatter); 
             });
 
-    //------------------------------------------------------------------------------hex
+    //--------------------------------------------------------------------------hex
     __formatterCreators.insert("hex",
             [](const QDomNamedNodeMap& _attr)
             {
@@ -261,7 +260,7 @@ LCXmlStdDataFormatterFactory::LCXmlStdDataFormatterFactory()
             return QSharedPointer<LCStringDataFormatterBase>(formatter); 
             });
      
-    //------------------------------------------------------------------------------bool
+    //--------------------------------------------------------------------------bool
     __formatterCreators.insert("bool",
             [](const QDomNamedNodeMap& _attr){
             Q_UNUSED(_attr); return __formatterBool;});
@@ -305,7 +304,7 @@ QSharedPointer<LCStringDataFormatter>
 
     QString format = node.toAttr().value();
 
-    TFormatterCreators::const_iterator it = __formatterCreators.find(format);
+    auto it = __formatterCreators.find(format);
     if(it == __formatterCreators.end())
     {
         return __formatterHex;
