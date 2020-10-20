@@ -1,53 +1,104 @@
-#include "lcxmlremwritebuttonbuilder.h"
-#include "lcqremwritebutton.h"
 #include <QDomElement>
+#include <QWidget>
+
 #include "LIApplication.h"
 #include "lcxmlstddataformatterfactory.h"
-#include "builderscommon.h"
-#include <QWidget>
+#include "lcxmlremwritebuttonbuilder.h"
+#include "lcqremwritebutton.h"
 
 //==============================================================================
 const LCXmlRemWriteButtonBuilder::SAttributes 
 LCXmlRemWriteButtonBuilder::mAttributes;
 
+const LCXmlRemWriteButtonBuilder::STags
+LCXmlRemWriteButtonBuilder::mTags;
+
+//------------------------------------------------------------------------------
 LCXmlRemWriteButtonBuilder::LCXmlRemWriteButtonBuilder()
 {
 }
 
+//------------------------------------------------------------------------------
 LCXmlRemWriteButtonBuilder::~LCXmlRemWriteButtonBuilder()
 {
 }
+    /* static const struct */
+    /* { */
+    /*     QString text = "text"; */
+    /* }mAttributes; */
 
+    /* static const struct */ 
+    /* { */
+    /*     struct */
+    /*     { */
+    /*         QString tagsName = "data"; */
+    /*         struct */
+    /*         { */
+    /*             QString source = "sourceName"; */
+    /*             QString dataName = "dataName"; */
+    /*             QString value   = "value"; */
+    /*         }attributes; */
+    /*     }data; */
+    /* }mTags; */
 //------------------------------------------------------------------------------
 QWidget* LCXmlRemWriteButtonBuilder::build(
         const QDomElement& _element, const LIApplication& _app)
 {
-    QString data_name = _element.attribute(
-            CBuildersCommonAttributes::mSourceAttr.dataReadWriteName);
-    if(dataName.isNull()) return nullptr;
-   
-   QString source_name = _element.attribute(
-           CBuildersCommonAttributes::mSourceAttr.dataSourceName); 
+    /* LCQRemWriteButton* button = */ 
+    /*     new LCQRemWriteButton(_element.attribute(mAttributes.text)); */
 
-   auto source = _app.getDataSource(_element.attribute(
-               CBuildersCommonAttributes::mSourceAttr.dataSourceName));
-   
-   if(source.isNull()) return nullptr;
+    /* for(    QDomNode node = _element.firstChild(); */ 
+    /*         !node.isNull(); */ 
+    /*         node = node.nextSibling()) */
+    /* { */
+    /*     QDomElement el = node.toElement(); */
+    /*     if(el.isNull()) continue; */
+    /*     if(el.tagName() != mTags.data.tagsName) continue; */
+    /*     auto format = LCXmlStdDataFormatterFactory:: */
+    /*         instance().createStringFormatter(el.attributes()); */
+    /*     if(format.isNull()) continue; */
+    /*     auto source = _app.getDataSource( */
+    /*             el.attribute(mTags.data.attributes.source)); */
+    /*     if(source.isNull()) continue; */
+    /*     auto data_name = el.attribute(mTags.data.attributes.dataName); */
+    /*     if(data_name.isNull()) continue; */
+    /*     auto value = el.attribute(mTags.data.attributes.value); */
+    /*     if(value.isNull()) continue; */
+    /*     auto data = format->toBytes(value); */
+    /*     if(data.isNull()) continue; */
+    /*     button->addDataWrite(source, data_name, data); */
+    /* } */ 
+    /* return button; */
 
-   auto format = LCXmlStdDataFormatterFactory::instance().
-       createStringFormatter(_element.attributes());
+    LCQRemWriteButton* button = 
+        new LCQRemWriteButton(_element.attribute(mAttributes.text));
 
-   if(format.isNull()) return nullptr;
+    for(    QDomNode node = _element.firstChild(); 
+            !node.isNull(); 
+            node = node.nextSibling())
+    {
+        QDomElement el = node.toElement();
+        if(el.isNull()) continue;
+        if(el.tagName() != mTags.data.tagsName) continue;
+        auto format = LCXmlStdDataFormatterFactory::
+            instance().createStringFormatter(el.attributes());
+        if(format.isNull()) continue;
+        auto source = _app.getDataSource(
+                el.attribute(mTags.data.attributes.source));
+        if(source.isNull()) continue;
+        auto data_name = el.attribute(mTags.data.attributes.dataName);
+        if(data_name.isNull()) continue;
+        auto value = el.attribute(mTags.data.attributes.value);
+        if(value.isNull()) continue;
+        auto data = format->toBytes(value);
+        if(data.isNull()) continue;
+        button->addDataWrite(source, data_name, data);
+    } 
+    return button;
 
-   QString label = _element.attribute(mAttributes.label);
 
-   if(label.isNull())
-   {
-       label = "WriteButton";
-   } 
-   
-   QByteArray data;
-   
-   /* return new LCQRemWriteButton(source, data_name, */ 
+    /* LCQRemWriteButton* button = */ 
+    /*     new LCQRemWriteButton("write button"); */
+    /* return button; */
 }
 

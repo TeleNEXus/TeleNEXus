@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<widget title="TITLE CHECK">
+    <layoutVBox>
+        <widgets>
+
+            <label text="label_1_00" />
+            <label text="label_1_01" />
+            <label text="label_1_02" />
+            <label text="label_1_03" />
+            <dataWriteButton text="write 10">
+                    <data sourceName="qtslavetcp" dataName="hreg0" format="uint16" value="10"/>
+                </dataWriteButton>
+
+            <dataWriteButton text="write 20">
+                    <data sourceName="qtslavetcp" dataName="hreg0" format="uint16" value="20"/>
+                </dataWriteButton>
+
+        </widgets>
+    </layoutVBox>
+</widget>

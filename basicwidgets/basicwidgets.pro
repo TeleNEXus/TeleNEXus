@@ -38,7 +38,7 @@ SOURCES += \
     widgets/lcqremlineedit.cpp \
     widgets/lcqremcombobox.cpp \
     widgets/lcqremcombolabel.cpp \
-    widgets/lcqremwritebutton.cpp\
+    widgets/lcqremwritebutton.cpp \
     builders/lcxmlremlabelbuilder.cpp \
     builders/lcxmlremlineeditbuilder.cpp \
     builders/lcxmltextlabelbuilder.cpp \
@@ -47,6 +47,7 @@ SOURCES += \
     builders/lcxmlremcombolabelbuilder.cpp \
     builders/lcxmltablewidgetbuilder.cpp \
     builders/lcxmltabwidgetbuilder.cpp \
+    builders/lcxmlremwritebuttonbuilder.cpp \
     dataformatters/lcstringdataformatterbase.cpp \
     dataformatters/lcstringdataformatterbitfield.cpp \
     dataformatters/lcstringdataformatterbits.cpp \
@@ -81,7 +82,7 @@ HEADERS += \
     widgets/lremgui.h \
     widgets/lcqremcombobox.h \
     widgets/lcqremcombolabel.h \
-    widgets/lcqremwritebutton.h\
+    widgets/lcqremwritebutton.h \
     builders/lcxmlremlineeditbuilder.h \
     builders/lcxmlremlabelbuilder.h \
     builders/lcxmlremlineeditbuilder.h \
@@ -91,6 +92,7 @@ HEADERS += \
     builders/lcxmlremcombolabelbuilder.h \
     builders/lcxmltablewidgetbuilder.h \
     builders/lcxmltabwidgetbuilder.h \
+    builders/lcxmlremwritebuttonbuilder.h \
     dataformatters/LIStringDataFormatter.h \
     dataformatters/lcstringdataformatterbase.h \
     dataformatters/lcstringdataformatterbitfield.h \
