@@ -42,34 +42,37 @@
     
     <!-- <WIDGETBUILDERS file="widgetbuilders.xml"/> -->
     
-    <WINDOWS file="windows.xml"/>
+    <!-- <WINDOWS file="windows.xml"/> -->
     
-    <WINDOWS>
-        <dialog2 visible="false" file="dialog2.xml"/>
-        <dialog3 visible="false" file="dialog3.xml"/>
-        <dialog4 visible="false" file="dialog4.xml"/>
-    </WINDOWS>
+    <!-- <WINDOWS> -->
+    <!--     <dialog2 visible="false" file="dialog2.xml"/> -->
+    <!--     <dialog3 visible="false" file="dialog3.xml"/> -->
+    <!--     <dialog4 visible="false" file="dialog4.xml"/> -->
+    <!-- </WINDOWS> -->
         
-    <WINDOW name="dialog" file="dialog1.xml"/>
+    <!-- <WINDOW name="dialog" file="dialog1.xml"/> -->
     
-    <WINDOW name="keyboard">
-        <widget builder="label">
-            <layoutGrid>
-                <widget>
-                </widget>
-            </layoutGrid>
-        </widget>
-    </WINDOW>
+    <!-- <WINDOW name="keyboard"> -->
+    <!--     <widget builder="label"> -->
+    <!--         <layoutGrid> -->
+    <!--             <widget> -->
+    <!--             </widget> -->
+    <!--         </layoutGrid> -->
+    <!--     </widget> -->
+    <!-- </WINDOW> -->
     
-    <WINDOW name="main">
-        <widget>
-            <layoutVBox>
-                <widget>
-                </widget>
-            </layoutVBox>
-        </widget>
-    </WINDOW>
+    <!-- <WINDOW id="main"> -->
+    <!--     <widget> -->
+    <!--         <layoutVBox> -->
+    <!--             <widget> -->
+    <!--             </widget> -->
+    <!--         </layoutVBox> -->
+    <!--     </widget> -->
+    <!-- </WINDOW> -->
     
-    <WIDGETS file="widgets.xml"/>
+    <!-- <WINDOW id="main window 1" title="MAIN WINDOW 1" file="widgets.xml"/> -->
+    <!-- <WINDOW id="main window 2" title="MAIN WINDOW 2" file="widgets.xml"/> -->
+    <WINDOW id="main window 1" file="widgets.xml" show="no"/>
+    <WINDOW id="main window 2" file="widgets.xml" show="yes"/>
         
 </APPLICATION>

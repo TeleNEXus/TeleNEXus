@@ -14,10 +14,7 @@ static LQLayoutBuildersMap __buildersMap;
 
 //======================================================================================================================
 LCXmlLayoutBuilders::LCXmlLayoutBuilders() :
-        LCXmlBuildersLoader(    LCXmlApplication::mBaseTagNames.layoutBuilders,
-                                LCXmlApplication::mBaseAttributeNames.file,
-                                LCXmlApplication::mBaseAttributeNames.lib,
-                                LCXmlApplication::mBaseAttributeNames.libhandler)
+        LCXmlBuildersLoader(    LCXmlApplication::mBaseTags.layoutBuilders)
 {
 }
 

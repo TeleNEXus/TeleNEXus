@@ -7,13 +7,7 @@
 using TLibAccessFunc = void* (*)();
 
 //======================================================================================================================
-LCXmlBuildersLoader::LCXmlBuildersLoader(const QString& _tagRoot,
-                                         const QString& _attrFile,
-                                         const QString& _attrLib,
-                                         const QString& _attrLibHandler) :  mTagRoot(_tagRoot),
-                                                                            mAttrFile(_attrFile),
-                                                                            mAttrLib(_attrLib),
-                                                                            mAttrLibHandler(_attrLibHandler)
+LCXmlBuildersLoader::LCXmlBuildersLoader(const QString& _tagRoot) :  mTagRoot(_tagRoot)
 {
 
 }

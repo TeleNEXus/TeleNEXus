@@ -38,7 +38,7 @@ static void addSourceBuilders(const QDomElement& _rootElement);
 static void addSources(const QDomElement& _element);
 static void addLayoutsBuilders(const QDomElement& _rootElement);
 static void addWidgetsBuilders(const QDomElement& _rootElement);
-static void addWidgets(const QDomElement& _rootElement);
+static void addWindows(const QDomElement& _rootElement);
 
 //==============================================================================
 class CApplicationInterface : public LIApplication
@@ -85,8 +85,7 @@ public:
 static CApplicationInterface sl_appInterface;
 
 //==============================================================================
-const LCXmlApplication::SBaseTagsNames      LCXmlApplication::mBaseTagNames;
-const LCXmlApplication::SBaseAttributeNames LCXmlApplication::mBaseAttributeNames;
+const LCXmlApplication::SBaseTags LCXmlApplication::mBaseTags;
 //------------------------------------------------------------------------------
 LCXmlApplication::LCXmlApplication()
 {
@@ -200,7 +199,7 @@ int LCXmlApplication::exec(int argc, char *argv[])
 
     QDomElement rootElement = domDoc.documentElement();
 
-    if(rootElement.tagName() != mBaseTagNames.rootTag)
+    if(rootElement.tagName() != mBaseTags.rootTag)
     {
         qDebug() << "Application: wrong root element";
         qDebug() << "Exit programm";
@@ -226,7 +225,7 @@ int LCXmlApplication::exec(int argc, char *argv[])
     //----------------------------------------------------
     addWidgetsBuilders(rootElement);
     //----------------------------------------------------
-    addWidgets(rootElement);
+    addWindows(rootElement);
 
 
     QObject::connect(&app, &QApplication::aboutToQuit,
@@ -242,19 +241,19 @@ int LCXmlApplication::exec(int argc, char *argv[])
 static void addPlaginLibPathes(const QDomElement& _rootElement)
 {
     QDomNodeList nodes = _rootElement.elementsByTagName(
-            LCXmlApplication::mBaseTagNames.plaginPaths);
+            LCXmlApplication::mBaseTags.plaginPaths.name);
 
     if(!nodes.isEmpty())
     {
         nodes = nodes.at(0).toElement().elementsByTagName(
-                LCXmlApplication::mBaseTagNames.add);
+                LCXmlApplication::mBaseTags.add);
         if(!nodes.isEmpty())
         {
             for(int i = 0; i < nodes.size(); i++)
             {
 
                 QString path = nodes.at(i).toElement().attribute(
-                        LCXmlApplication::mBaseAttributeNames.path);
+                        LCXmlApplication::mBaseTags.plaginPaths.attrs.path);
                 if(path.isNull()) continue;
                 QDir dir(path);
                 if(dir.isAbsolute())
@@ -287,7 +286,7 @@ static void addPlaginLibPathes(const QDomElement& _rootElement)
 static void addSourceBuilders(const QDomElement& _rootElement)
 {
     QDomNodeList nodes = _rootElement.elementsByTagName(
-            LCXmlApplication::mBaseTagNames.sourceBuilders);
+            LCXmlApplication::mBaseTags.sourceBuilders);
 
     if(!nodes.isEmpty())
     {
@@ -302,18 +301,18 @@ static void addSources(const QDomElement& _rootElement)
     if(LCXmlRemoteDataSourceBuilders::instance().noItems()) return;
 
     QDomElement element = _rootElement.elementsByTagName(
-            LCXmlApplication::mBaseTagNames.sources).at(0).toElement();
+            LCXmlApplication::mBaseTags.sources.name).at(0).toElement();
 
     if(element.isNull()) return;
 
     QString attrFile = element.attribute(
-            LCXmlApplication::mBaseAttributeNames.file);
+            LCXmlApplication::mBaseTags.sources.attrs.file);
 
     if(!attrFile.isNull())
     {
         element = staticLoadDomElement(attrFile).documentElement();
 
-        if(element.tagName() != LCXmlApplication::mBaseTagNames.sources)
+        if(element.tagName() != LCXmlApplication::mBaseTags.sources.name)
         {
             return;
         }
@@ -350,7 +349,7 @@ static void addLayoutsBuilders(const QDomElement& _rootElement)
 {
     //Загрузка построителей источников данных.
     QDomNodeList nodes = _rootElement.elementsByTagName(
-            LCXmlApplication::mBaseTagNames.layoutBuilders);
+            LCXmlApplication::mBaseTags.layoutBuilders);
 
     if(!nodes.isEmpty())
     {
@@ -364,7 +363,7 @@ static void addWidgetsBuilders(const QDomElement& _rootElement)
 {
     //Загрузка построителей источников данных.
     QDomNodeList nodes = _rootElement.elementsByTagName(
-            LCXmlApplication::mBaseTagNames.widgetBuilders);
+            LCXmlApplication::mBaseTags.widgetBuilders);
 
     if(!nodes.isEmpty())
     {
@@ -374,46 +373,90 @@ static void addWidgetsBuilders(const QDomElement& _rootElement)
 }
 
 //==============================================================================
-static void addWidgets(const QDomElement& _rootElement)
+static void createWindow(const QDomElement &_element, 
+        const QString& _title, const QString& _id,
+        const QString& _show);
+
+static void addWindows(const QDomElement& _rootElement)
 {
+    
+    for(auto node = 
+            _rootElement.firstChildElement(
+                LCXmlApplication::mBaseTags.window.name); 
 
-    QDomElement element = _rootElement.elementsByTagName(
-            LCXmlApplication::mBaseTagNames.widgets).at(0).toElement();
+            !node.isNull(); 
 
-    if(element.isNull()) return;
-
-    QString attrFile = element.attribute(
-            LCXmlApplication::mBaseAttributeNames.file);
-
-    if(!attrFile.isNull())
+            node = node.nextSiblingElement(
+                LCXmlApplication::mBaseTags.window.name))
     {
-        element = staticLoadDomElement(attrFile).documentElement();
-
-        if(element.tagName() != LCXmlApplication::mBaseTagNames.widgets)
+        QDomElement el = node.toElement();
+        QString attr_title = 
+            el.attribute(LCXmlApplication::mBaseTags.window.attrs.title);
+        QString attr_id = 
+            el.attribute(LCXmlApplication::mBaseTags.window.attrs.id);
+        QString attr_file = 
+            el.attribute(LCXmlApplication::mBaseTags.window.attrs.file);
+        QString attr_show = 
+            el.attribute(LCXmlApplication::mBaseTags.window.attrs.show.name);
+        
+        if(!attr_file.isNull())
         {
-            return;
-        }
-    }
+            el = staticLoadDomElement(attr_file).documentElement();
 
-    QDomNode node = element.firstChild();
-    while(!node.isNull())
+            if(el.tagName() != LCXmlApplication::mBaseTags.window.name)
+            {
+                return;
+            }
+        }
+        createWindow(el, attr_title, attr_id, attr_show);
+    }
+}
+
+//==============================================================================
+static void createWindow(const QDomElement &_element, 
+        const QString& _title, const QString& _id, 
+        const QString& _show)
+{
+    for(auto node = _element.firstChild(); 
+            !node.isNull(); 
+            node = node.nextSibling())
     {
         if(node.isElement())
         {
-            auto element = node.toElement();
+            auto el = node.toElement();
             auto builder = 
-                LCXmlWidgetBuilders::instance().getBuilder(element.tagName());
+                LCXmlWidgetBuilders::instance().getBuilder(el.tagName());
             if(!builder.isNull())
             {
-                auto widget = builder->build(element, sl_appInterface);
+                auto widget = builder->build(el, sl_appInterface);
                 if(widget)
                 {
-                    widget->show();
+                    QString title;
+                    if(!_title.isNull())
+                    {
+                        title = _title;
+                    }
+                    else if(!_id.isNull())
+                    {
+                        title = _id;
+                    }
+                    else
+                    {
+                        title = el.tagName();
+                    }
+
+                    widget->setWindowTitle(title);
+
+                    if(_show == 
+                            LCXmlApplication::
+                            mBaseTags.window.attrs.show.vals.yes)
+                    {
+                        widget->show();
+                    }
                 }
                 break;
             }
         }
-        node = node.nextSibling();
     }
 }
 

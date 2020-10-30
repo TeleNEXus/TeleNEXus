@@ -8,33 +8,61 @@ class LCXmlApplication
 {
 public:
 
-    struct SBaseTagsNames
+    struct SBaseTags
     {
         QString rootTag         = "APPLICATION";
         QString sourceBuilders  = "SOURCEBUILDERS";
         QString widgetBuilders  = "WIDGETBUILDERS";
         QString layoutBuilders  = "LAYOUTBUILDERS";
         QString builder         = "BUILDER";
-        QString sources         = "SOURCES";
-        QString widgets         = "WIDGETS";
-        QString plaginPaths     = "PLAGINPATHS";
         QString add             = "ADD";
 
+        /* QString sources         = "SOURCES"; */
+        struct
+        {
+            QString name = "SOURCES";
+            struct
+            {
+                QString file = "file";
+            }attrs;
+        }sources;
+
+        struct 
+        {
+            QString name = "PLAGINPATHS";
+
+            struct
+            {
+                QString path = "path";
+            }attrs;
+
+        }plaginPaths;
+
+        struct 
+        {
+            QString name = "WINDOW";
+
+            struct
+            {
+                QString file    = "file";
+                QString id      = "id";
+                QString title   = "title";
+
+                struct
+                {
+                    QString name = "show";
+                    struct
+                    {
+                        QString yes = "yes";
+                        QString no  = "no";
+                    }vals;
+                }show;
+            }attrs;
+        } window;
+
     };
 
-    static const SBaseTagsNames mBaseTagNames;
-
-    struct SBaseAttributeNames
-    {
-        QString file        = "file";
-        QString path        = "path";
-        QString lib         = "lib";
-        QString name        = "name";
-        QString libhandler  = "libhandler";
-        QString builder     = "builder";
-    };
-
-    static const SBaseAttributeNames mBaseAttributeNames;
+    static const SBaseTags mBaseTags;
 
 private:
     LCXmlApplication();
@@ -55,7 +83,6 @@ public:
      * Возвращает папку главного файла Xml.
      */
     const QDir&    getXmlMainFileDir();
-
     /*
      * Возвращает папку расположения исполняемого файла приложения.
      */

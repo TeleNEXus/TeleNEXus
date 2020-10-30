@@ -8,14 +8,11 @@ class LCXmlBuildersLoader
 {
 private:
     const QString mTagRoot;
-    const QString mAttrFile;
-    const QString mAttrLib;
-    const QString mAttrLibHandler;
+    const QString mAttrFile         = "file";
+    const QString mAttrLib          = "lib";
+    const QString mAttrLibHandler   = "libhandler";
 public:
-    LCXmlBuildersLoader(    const QString& _tagRoot,
-                            const QString& _attrFile,
-                            const QString& _attrLib,
-                            const QString& _attrLibHandler);
+    LCXmlBuildersLoader(const QString& _tagRoot);
     virtual ~LCXmlBuildersLoader();
     virtual int load(const QDomElement& _element, const QString& _pathPrj, const QStringList& _libPaths) final;
     virtual bool add(const QString& _name, void* _builder) = 0;
