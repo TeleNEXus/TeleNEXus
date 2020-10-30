@@ -16,7 +16,6 @@ static const struct
 static const struct
 {
     QString file = "file";
-    QString title = "title";
     QString type  = "type";
 } __attrName;
 
@@ -64,17 +63,9 @@ static QWidget* buildWidget(
 {
     QWidget* widget = new QWidget;
 
-    QString attr;
-
-    attr = _element.attribute(__attrName.title);
-
-    if(!attr.isNull()) widget->setWindowTitle(attr);
-
-                    qDebug() << "Widget set Layout 1";
     QDomNodeList nodes = _element.childNodes();
     for(int i = 0; i < nodes.size(); i++)
     {
-                    qDebug() << "Widget set Layout 2";
          QDomElement el = nodes.at(i).toElement();
          if(!el.isNull())
          {

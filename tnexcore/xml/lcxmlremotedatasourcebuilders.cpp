@@ -13,10 +13,7 @@ static LQWidgetBuildersMap sl_BuildersMap;
 
 //======================================================================================================================
 LCXmlRemoteDataSourceBuilders::LCXmlRemoteDataSourceBuilders() :
-        LCXmlBuildersLoader(    LCXmlApplication::mBaseTagNames.sourceBuilders,
-                                LCXmlApplication::mBaseAttributeNames.file,
-                                LCXmlApplication::mBaseAttributeNames.lib,
-                                LCXmlApplication::mBaseAttributeNames.libhandler)
+        LCXmlBuildersLoader(    LCXmlApplication::mBaseTags.sourceBuilders)
 {
 }
 

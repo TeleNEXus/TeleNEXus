@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<WIDGETS>
+<WINDOW>
     <!-- <widget file="tabtestwidget.xml"/> -->
     <!-- <widget file="testboxlayout.xml"/> -->
     <!-- <widget file="testgridlayout.xml"/> -->
     <widget file="testwritebutton.xml"/>
-</WIDGETS>
+</WINDOW>
 
 <!--<!-1-widget title="TITLE CHECK">-->
 <!--    <layout type="box" direction="LeftToRight">-->
