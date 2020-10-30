@@ -48,6 +48,7 @@ SOURCES += \
     builders/lcxmltablewidgetbuilder.cpp \
     builders/lcxmltabwidgetbuilder.cpp \
     builders/lcxmlremwritebuttonbuilder.cpp \
+    builders/lcxmlswitchwidgetslist.cpp \
     dataformatters/lcstringdataformatterbase.cpp \
     dataformatters/lcstringdataformatterbitfield.cpp \
     dataformatters/lcstringdataformatterbits.cpp \
@@ -93,6 +94,7 @@ HEADERS += \
     builders/lcxmltablewidgetbuilder.h \
     builders/lcxmltabwidgetbuilder.h \
     builders/lcxmlremwritebuttonbuilder.h \
+    builders/lcxmlswitchwidgetslist.h \
     dataformatters/LIStringDataFormatter.h \
     dataformatters/lcstringdataformatterbase.h \
     dataformatters/lcstringdataformatterbitfield.h \

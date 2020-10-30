@@ -62,3 +62,12 @@ void* getRemWriteButtonBuilder()
 {
     return new LCXmlRemWriteButtonBuilder;
 }
+
+//------------------------------------------------------------------------------
+#include "lcxmlswitchwidgetslist.h"
+void* getSwitchWidgetsListBuilder()
+{
+    return new LCXmlSwitchWidgetsListBuilder;
+}
+
+

@@ -38,6 +38,7 @@
         <dataComboLabel     lib="basicwidgets" libhandler="getRemComboLabelBuilder"     />
         <tabs               lib="basicwidgets" libhandler="getTabWidgetBuilder"         />
         <dataWriteButton    lib="basicwidgets" libhandler="getRemWriteButtonBuilder"    />
+        <switchWidgetsList  lib="basicwidgets" libhandler="getSwitchWidgetsListBuilder"/>
     </WIDGETBUILDERS>
     
     <!-- <WIDGETBUILDERS file="widgetbuilders.xml"/> -->
@@ -72,7 +73,7 @@
     
     <!-- <WINDOW id="main window 1" title="MAIN WINDOW 1" file="widgets.xml"/> -->
     <!-- <WINDOW id="main window 2" title="MAIN WINDOW 2" file="widgets.xml"/> -->
-    <WINDOW id="main window 1" file="widgets.xml" show="no"/>
+    <!-- <WINDOW id="main window 1" file="widgets.xml" show="no"/> -->
     <WINDOW id="main window 2" file="widgets.xml" show="yes"/>
         
 </APPLICATION>
