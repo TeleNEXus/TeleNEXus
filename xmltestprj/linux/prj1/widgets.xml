@@ -4,7 +4,8 @@
     <!-- <widget file="tabtestwidget.xml"/> -->
     <!-- <widget file="testboxlayout.xml"/> -->
     <!-- <widget file="testgridlayout.xml"/> -->
-    <widget file="testwritebutton.xml"/>
+    <!-- <widget file="testwritebutton.xml"/> -->
+    <switchWidgetsList file="testswitchwidgetlist.xml"/>
 </WINDOW>
 
 <!--<!-1-widget title="TITLE CHECK">-->
