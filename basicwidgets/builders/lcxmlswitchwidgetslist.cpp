@@ -48,6 +48,7 @@ QWidget* LCXmlSwitchWidgetsListBuilder::build(
 {
 
     QString file = _element.attribute(__sAttrs.file);
+
     //Рекурсивная загрузка виджета из файлов.
     if(!file.isNull()) 
     {
@@ -62,35 +63,43 @@ QWidget* LCXmlSwitchWidgetsListBuilder::build(
         }
     }
 
-    QSplitter* splitter = new QSplitter(Qt::Orientation::Horizontal);
-    QListWidget* listWidget = new QListWidget;
-    QStackedWidget* stacked_widget = new QStackedWidget;
+    QSplitter*      splitter        = new QSplitter(Qt::Orientation::Horizontal);
+    QListWidget*    listWidget      = new QListWidget;
+    QStackedWidget* stacked_widget  = new QStackedWidget;
 
-    qDebug() << "switch widgets list 0";
+    QFontMetrics font_metrics(listWidget->font());
+
+    int font_max_width = 0;
+
     for( QDomNode node = _element.firstChildElement(__sTags.item.name);
             !node.isNull();
             node = node.nextSiblingElement(__sTags.item.name))
     {
-        qDebug() << "switch widgets list 1";
         QDomElement el = node.toElement();
         QString attr_item_name = el.attribute(__sTags.item.attr.name);
         if(attr_item_name.isNull()) continue;
 
-        qDebug() << "switch widgets list 2";
         QWidget* widget = createWidget(el, _app);
 
         if(widget)
         {
-            qDebug() << "switch widgets list 3 item name = "<<attr_item_name;
             listWidget->addItem(attr_item_name);
             stacked_widget->addWidget(widget);
+            /* int text_width = font_metrics.boundingRect(attr_item_name).size().width(); */
+            int text_width = font_metrics.width(attr_item_name);
+            font_max_width = (font_max_width < text_width) ? (text_width):(font_max_width);
         }
+    }
+
+    if(font_max_width > 0)
+    {
+        listWidget->setMaximumWidth(font_max_width + font_metrics.width("    "));
     }
 
     splitter->addWidget(listWidget);
     splitter->addWidget(stacked_widget);
 
-    QObject::connect(listWidget, &QListWidget::currentRowChanged, [=](int i){
+    QObject::connect(listWidget, &QListWidget::currentRowChanged, [stacked_widget](int i){
             stacked_widget->setCurrentIndex(i);
             });
     return splitter;
