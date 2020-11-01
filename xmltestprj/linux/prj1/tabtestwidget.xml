@@ -59,7 +59,7 @@
                 <dataLabel source="qtslavetcp"  data="hflt"  format="float32"/>
             </col>
 
-            <col name="Столбец 3">
+            <col name="Столбец 3" width="200">
                 <dataLineEdit   source="qtslavetcp" data="hreg[0-1]" format="hex" size="4" separator=" "/>
                 <dataComboLabel  read="hreg0" source="qtslavetcp" format="hex" size="2">
                     <item name="On"        value="a" style="color:#102235;  background:black;}>"/>
@@ -73,6 +73,12 @@
                 <dataLabel      source="qtslavetcp"  data="inflt"  format="float32"/>
                 <dataLabel      source="qtslavetcp"  data="hreg1"  format="hex"/>
             </col>
+            <row height="90">
+
+                <dataLabel      source="qtslavetcp"  data="coil[0-2]" format="bits"/>
+                <dataLabel      source="qtslavetcp"  data="coil[0-2]" format="bits"/>
+                <dataLabel      source="qtslavetcp"  data="coil[0-2]" format="bits"/>
+            </row>
         </table>
     </item>
     <item />

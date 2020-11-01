@@ -151,7 +151,6 @@ static LCXmlWindow* createLocal(const QDomElement& _element,
     }
 
     window->mpWidget->resize(s);
-    qDebug() << "window size = " << window->mpWidget->size();
 
     return window;
 }

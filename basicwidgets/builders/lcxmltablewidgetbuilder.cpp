@@ -23,6 +23,8 @@ LCXmlTableWidgetBuilder::~LCXmlTableWidgetBuilder()
 static const struct
 {
     QString name = "name";
+    QString width = "width";
+    QString height = "height";
 } __attrNames;
 
 //------------------------------------------------------------------------------
@@ -126,10 +128,21 @@ static void createRow(
 
     QString row_name = _element.attribute(__attrNames.name);
 
+    int curr_row = _buildData.mRow - 1;
+
     if(!row_name.isNull())
     {
-        _buildData.mpTable->setVerticalHeaderItem(_buildData.mRow - 1, 
+        _buildData.mpTable->setVerticalHeaderItem(curr_row, 
                 new QTableWidgetItem(row_name));
+    }
+
+    QString attr_height = _element.attribute(__attrNames.height);
+    if(!attr_height.isNull())
+    {
+        bool flag = false;
+        int height = attr_height.toInt(&flag);
+        if(flag)
+            _buildData.mpTable->setRowHeight(curr_row, height);
     }
 
     if(childNode.isNull())
@@ -196,6 +209,15 @@ static void createCol(
     {
         _buildData.mpTable->setHorizontalHeaderItem(_buildData.mColumn -1, 
             new QTableWidgetItem(col_name));
+    }
+
+    QString attr_width = _element.attribute(__attrNames.width);
+    if(!attr_width.isNull())
+    {
+        bool flag = false;
+        int width = attr_width.toInt(&flag);
+        if(flag)
+            _buildData.mpTable->setColumnWidth(_buildData.mColumn -1, width);
     }
 
     if(childNode.isNull())

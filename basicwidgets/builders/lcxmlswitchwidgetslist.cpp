@@ -87,7 +87,6 @@ QWidget* LCXmlSwitchWidgetsListBuilder::build(
         {
             listWidget->addItem(attr_item_name);
             stacked_widget->addWidget(widget);
-            /* int text_width = font_metrics.boundingRect(attr_item_name).size().width(); */
             int text_width = font_metrics.width(attr_item_name);
             font_max_width = (font_max_width < text_width) ? (text_width):(font_max_width);
         }
@@ -101,7 +100,11 @@ QWidget* LCXmlSwitchWidgetsListBuilder::build(
     splitter->addWidget(listWidget);
     splitter->addWidget(stacked_widget);
 
-    QObject::connect(listWidget, &QListWidget::currentRowChanged, [stacked_widget](int i){
+    QObject::connect(
+            listWidget, 
+            &QListWidget::currentRowChanged, 
+            [stacked_widget](int i)
+            {
             stacked_widget->setCurrentIndex(i);
             });
     return splitter;
