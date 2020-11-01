@@ -34,6 +34,7 @@ SOURCES += \
         xml/lcxmllayoutbuilders.cpp \
         xml/lcxmlremotedatasourcebuilders.cpp \
         xml/lcxmlwidgetbuilders.cpp \
+        xml/lcxmlwindows.cpp \
         main.cpp \
 
 # Default rules for deployment.
@@ -52,9 +53,11 @@ HEADERS += \
     ../common/interfaces/remotedata/LIRemoteDataWriter.h \
     ../common/interfaces/xmlbuilders/LIXmlRemoteDataSourceBuilder.h \
     ../common/interfaces/xmlbuilders/LIXmlWidgetBuilder.h \
+    ../common/interfaces/LIWindow.h \
     xml/lcxmlapplication.h \
     xml/lcxmlbuildersloader.h \
     xml/lcxmllayoutbuilders.h \
     xml/lcxmlremotedatasourcebuilders.h \
     xml/lcxmlwidgetbuilders.h \
+    xml/lcxmlwindows.h \
 

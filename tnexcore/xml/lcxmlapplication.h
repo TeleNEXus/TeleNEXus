@@ -7,20 +7,17 @@
 class LCXmlApplication
 {
 public:
-
+    //Базовые метки приложения.
     struct SBaseTags
     {
         QString rootTag         = "APPLICATION";
         QString sourceBuilders  = "SOURCEBUILDERS";
         QString widgetBuilders  = "WIDGETBUILDERS";
         QString layoutBuilders  = "LAYOUTBUILDERS";
-        QString builder         = "BUILDER";
-        QString add             = "ADD";
 
-        /* QString sources         = "SOURCES"; */
         struct
         {
-            QString name = "SOURCES";
+            QString tag = "SOURCES";
             struct
             {
                 QString file = "file";
@@ -29,18 +26,24 @@ public:
 
         struct 
         {
-            QString name = "PLAGINPATHS";
+            QString tag = "PLAGINPATHS";
 
             struct
             {
-                QString path = "path";
-            }attrs;
-
+                struct
+                {
+                    QString tag = "item";
+                    struct
+                    {
+                        QString path = "path";
+                    }attrs;
+                }item;
+            }tags;
         }plaginPaths;
 
         struct 
         {
-            QString name = "WINDOW";
+            QString tag = "WINDOW";
 
             struct
             {
@@ -50,7 +53,7 @@ public:
 
                 struct
                 {
-                    QString name = "show";
+                    QString tag = "show";
                     struct
                     {
                         QString yes = "yes";
@@ -59,7 +62,6 @@ public:
                 }show;
             }attrs;
         } window;
-
     };
 
     static const SBaseTags mBaseTags;
@@ -71,25 +73,6 @@ private:
 public:
     static LCXmlApplication& instance();
     int exec(int argc, char *argv[]);
-    /*
-     * Возвращает наименование главного файла Xml.
-     */
-    const QString& getXmlMainFileName();
-    /*
-     * Возвращает путь к главному файлу Xml.
-     */
-    const QString& getXmlMainFileWay();
-    /*
-     * Возвращает папку главного файла Xml.
-     */
-    const QDir&    getXmlMainFileDir();
-    /*
-     * Возвращает папку расположения исполняемого файла приложения.
-     */
-    const QString& getApplicationDirPath();
-
-private:
-
 };
 
 #endif // LCXMLAPPLICATION_H

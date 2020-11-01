@@ -1,6 +1,8 @@
 #ifndef LIWINDOW_H_ 
 #define LIWINDOW_H_
 
+class LIApplication;
+
 class LIWindow
 {
 public:
