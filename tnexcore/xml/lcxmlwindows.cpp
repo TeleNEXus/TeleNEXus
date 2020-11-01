@@ -4,6 +4,7 @@
 #include <QDomElement>
 #include <QMap>
 #include <QWidget>
+#include <QDebug>
 
 //==============================================================================LCXmlWindow
 class LCXmlWindow : public LIWindow
@@ -74,6 +75,7 @@ void LCXmlWindows::create(
     QString attr_show = _element.attribute(
             LCXmlApplication::mBaseTags.window.attrs.show.tag);
 
+
     if(!attr_id.isNull()) 
     {
         LCXmlWindow::smWindowsMap.insert(attr_id, 
@@ -85,6 +87,7 @@ void LCXmlWindows::create(
     {
         window->mpWidget->setWindowTitle(attr_title);
     }
+
 
     if(!attr_show.isNull())
         window->mpWidget->show();
@@ -115,6 +118,40 @@ static LCXmlWindow* createLocal(const QDomElement& _element,
     }
 
     window->mpWidget = widget;
+
+    //Получение атрибутов.
+    QString attr_width = _element.attribute(
+            LCXmlApplication::mBaseTags.window.attrs.widht);
+
+    QString attr_height = _element.attribute(
+            LCXmlApplication::mBaseTags.window.attrs.height);
+
+    //Переопределение размеров окна.
+    QSize s = window->mpWidget->sizeHint();
+
+    if(!attr_width.isNull())
+    {
+        bool flag = false;
+        int width = attr_width.toInt(&flag);
+
+        if(flag) 
+        {
+            s.setWidth(width);
+        }
+    }
+
+    if(!attr_height.isNull())
+    {
+        bool flag = false;
+        int height = attr_height.toInt(&flag);
+        if(flag) 
+        {
+            s.setHeight(height);
+        }
+    }
+
+    window->mpWidget->resize(s);
+    qDebug() << "window size = " << window->mpWidget->size();
 
     return window;
 }

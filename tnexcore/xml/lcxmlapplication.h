@@ -50,6 +50,8 @@ public:
                 QString file    = "file";
                 QString id      = "id";
                 QString title   = "title";
+                QString widht   = "width";
+                QString height  = "height";
 
                 struct
                 {
