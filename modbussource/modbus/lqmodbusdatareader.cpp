@@ -60,19 +60,6 @@ void LQModbusDataReader::setDataReadListener(
     if(!sp.isNull()) mpReadListener = sp;
 }
 
-//------------------------------------------------------------------------------
-/* void LQModbusDataReader::setDataSource(QWeakPointer<LIRemoteDataSource> _source) */
-/* { */
-/*     QSharedPointer<LIRemoteDataSource> sp = _source.lock(); */
-/*     if(!sp.isNull()) */
-/*     { */
-/*         if(dynamic_cast<LQModbusDataSource*>(sp.data())) */
-/*         { */
-/*             mDataSource = sp; */
-/*         } */
-/*     } */
-/* } */
-
 //------------------------------------------------------------------------------readRequest
 void LQModbusDataReader::readRequest()
 {
