@@ -2,6 +2,7 @@
 #include <QWidget>
 
 #include "LIApplication.h"
+#include "LIWindow.h"
 #include "lcxmlstddataformatterfactory.h"
 #include "lcxmlremwritebuttonbuilder.h"
 #include "lcqremwritebutton.h"
@@ -25,8 +26,11 @@ LCXmlRemWriteButtonBuilder::~LCXmlRemWriteButtonBuilder()
 
 //------------------------------------------------------------------------------
 QWidget* LCXmlRemWriteButtonBuilder::build(
-        const QDomElement& _element, const LIApplication& _app)
+        const QDomElement& _element, 
+        const LIApplication& _app,
+        LIWindow& _window)
 {
+    Q_UNUSED(_window);
     LCQRemWriteButton* button = 
         new LCQRemWriteButton(_element.attribute(mAttributes.text));
 

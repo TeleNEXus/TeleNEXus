@@ -8,7 +8,9 @@ class LCXmlTextLabelBuilder : public LIXmlWidgetBuilder
 public:
     LCXmlTextLabelBuilder();
     virtual ~LCXmlTextLabelBuilder();
-    virtual QWidget* build(const QDomElement& _element, const LIApplication& _app) override;
+    virtual QWidget* build( const QDomElement& _element, 
+                            const LIApplication& _app,
+                            LIWindow& _window) override;
 };
 
 #endif // LCXMLTEXTLABELBUILDER_H

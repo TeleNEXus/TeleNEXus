@@ -14,9 +14,13 @@ LCXmlTextLabelBuilder::~LCXmlTextLabelBuilder()
 }
 
 //------------------------------------------------------------------------------
-QWidget* LCXmlTextLabelBuilder::build(const QDomElement& _element, const LIApplication& _app)
+QWidget* LCXmlTextLabelBuilder::build(
+        const QDomElement& _element, 
+        const LIApplication& _app,
+        LIWindow& _window)
 {
     Q_UNUSED(_app);
+    Q_UNUSED(_window);
 
     QLabel* label = new QLabel();
 

@@ -31,7 +31,8 @@ private:
 public:
     LCXmlRemWriteButtonBuilder();
     ~LCXmlRemWriteButtonBuilder();
-    virtual QWidget* build(
-            const QDomElement& _element, const LIApplication& _app) override;
+    virtual QWidget* build( const QDomElement& _element, 
+                            const LIApplication& _app,
+                            LIWindow& _window) override;
 
 };

@@ -8,7 +8,9 @@ class LCXmlTableWidgetBuilder : public LIXmlWidgetBuilder
 public:
     LCXmlTableWidgetBuilder();
     virtual ~LCXmlTableWidgetBuilder();
-    virtual QWidget* build(const QDomElement& _element, const LIApplication& _app) override;
+    virtual QWidget* build( const QDomElement& _element, 
+                            const LIApplication& _app,
+                            LIWindow& _window) override;
 };
 
 #endif /* LCQTABLEWIDGETBUILDER_H */

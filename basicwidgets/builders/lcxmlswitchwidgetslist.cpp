@@ -1,6 +1,7 @@
 
 #include "lcxmlswitchwidgetslist.h"
 #include "LIApplication.h"
+#include "LIWindow.h"
 #include <QDomElement>
 #include <QDebug>
 #include <QListWidget>
@@ -40,13 +41,14 @@ LCXmlSwitchWidgetsListBuilder::~LCXmlSwitchWidgetsListBuilder()
 //------------------------------------------------------------------------------
 static QWidget* createWidget(
         const QDomElement& _element, 
-        const LIApplication& _app);
+        const LIApplication& _app,
+        LIWindow& _window);
 
 QWidget* LCXmlSwitchWidgetsListBuilder::build(
         const QDomElement& _element, 
-        const LIApplication& _app)
+        const LIApplication& _app,
+        LIWindow& _window)
 {
-
     QString file = _element.attribute(__sAttrs.file);
 
     //Рекурсивная загрузка виджета из файлов.
@@ -58,7 +60,7 @@ QWidget* LCXmlSwitchWidgetsListBuilder::build(
             QDomElement el = doc.documentElement();
             if(!el.isNull())
             {
-                if(el.tagName() == _element.tagName()) return this->build(el, _app);
+                if(el.tagName() == _element.tagName()) return this->build(el, _app, _window);
             }
         }
     }
@@ -79,7 +81,7 @@ QWidget* LCXmlSwitchWidgetsListBuilder::build(
         QString attr_item_name = el.attribute(__sTags.item.attr.name);
         if(attr_item_name.isNull()) continue;
 
-        QWidget* widget = createWidget(el, _app);
+        QWidget* widget = createWidget(el, _app, _window);
 
         if(widget)
         {
@@ -108,7 +110,8 @@ QWidget* LCXmlSwitchWidgetsListBuilder::build(
 //------------------------------------------------------------------------------
 static QWidget* createWidget(
         const QDomElement& _element, 
-        const LIApplication& _app)
+        const LIApplication& _app,
+        LIWindow& _window)
 {
     QWidget* widget = nullptr;
     for(QDomNode node = _element.firstChild();
@@ -121,7 +124,7 @@ static QWidget* createWidget(
         auto builder = _app.getWidgetBuilder(el.tagName());
         if(builder.isNull()) continue;
 
-        widget = builder->build(el, _app);
+        widget = builder->build(el, _app, _window);
     }
 
     return widget;

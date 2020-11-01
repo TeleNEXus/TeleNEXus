@@ -29,8 +29,10 @@ public:
     }
 };
 
+//------------------------------------------------------------------------------
 QMap<QString, QSharedPointer<LIWindow>> LCXmlWindow::smWindowsMap;
-//==============================================================================
+
+//==============================================================================LCXmlWindows
 LCXmlWindows::LCXmlWindows()
 {
 }
@@ -52,7 +54,9 @@ LCXmlWindows& LCXmlWindows::instance()
 #include "LIXmlWidgetBuilder.h"
 
 static QWidget* buildWidget(const QDomElement& _element, 
-        const LIApplication& _app);
+        const LIApplication& _app,
+        LIWindow& _window);
+
 static LCXmlWindow* createLocal(const QDomElement& _element, 
         const LIApplication& _app);
 
@@ -66,7 +70,7 @@ void LCXmlWindows::create(
     QString attr_id = _element.attribute(
             LCXmlApplication::mBaseTags.window.attrs.id);
     QString attr_title = _element.attribute(
-            LCXmlApplication::mBaseTags.window.attrs.id);
+            LCXmlApplication::mBaseTags.window.attrs.title);
     QString attr_show = _element.attribute(
             LCXmlApplication::mBaseTags.window.attrs.show.tag);
 
@@ -102,10 +106,14 @@ static LCXmlWindow* createLocal(const QDomElement& _element,
         return nullptr;
     }
 
-    QWidget* widget = buildWidget(_element, _app);
-    if(widget == nullptr) return nullptr;
-
     LCXmlWindow* window = new LCXmlWindow();
+    QWidget* widget = buildWidget(_element, _app, *window);
+    if(widget == nullptr) 
+    {
+        delete window;
+        return nullptr;
+    }
+
     window->mpWidget = widget;
 
     return window;
@@ -113,7 +121,8 @@ static LCXmlWindow* createLocal(const QDomElement& _element,
 
 //------------------------------------------------------------------------------
 static QWidget* buildWidget(const QDomElement& _element, 
-        const LIApplication& _app)
+        const LIApplication& _app,
+        LIWindow& _window)
 {
     for(auto node = _element.firstChild(); 
             !node.isNull(); 
@@ -125,7 +134,7 @@ static QWidget* buildWidget(const QDomElement& _element,
             auto builder = _app.getWidgetBuilder(el.tagName());
             if(!builder.isNull())
             {
-                auto widget = builder->build(el, _app);
+                auto widget = builder->build(el, _app, _window);
                 if(widget) return widget;
             }
         }

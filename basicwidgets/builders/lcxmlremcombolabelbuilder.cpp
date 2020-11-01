@@ -2,6 +2,7 @@
 #include "lcqremcombolabel.h"
 #include "lcxmlstddataformatterfactory.h"
 #include "LIApplication.h"
+#include "LIWindow.h"
 
 #include <QDomElement>
 #include <qdom.h>
@@ -43,8 +44,10 @@ static void buildComboLabel( const QDomElement& _element,
 
 //------------------------------------------------------------------------------
 QWidget* LCXmlRemComboLabelBuilder::build(const QDomElement& _element, 
-                                            const LIApplication& _app)
+                                            const LIApplication& _app,
+                                            LIWindow& _window)
 {
+    Q_UNUSED(_window);
     QWidget *ret;
     QString dataread;
     QString attr = _element.attribute(__attrNames.source);

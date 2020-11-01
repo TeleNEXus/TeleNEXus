@@ -1,6 +1,7 @@
 #include "lcxmlgridlayoutbuilder.h"
 #include "LIApplication.h"
 #include "LIXmlWidgetBuilder.h"
+#include "LIWindow.h"
 #include "common.h"
 
 #include <QGridLayout>
@@ -48,17 +49,20 @@ LCXmlGridLayoutBuilder::~LCXmlGridLayoutBuilder()
 static void buildRow(
         const QDomElement &_element, 
         const LIApplication& _app, 
+        LIWindow& _window,
         CBuildData& _buildData);
 
 static void buildCol(
         const QDomElement &_element, 
         const LIApplication& _app, 
+        LIWindow& _window,
         CBuildData& _buildData);
 
 //------------------------------------------------------------------------------build
 QLayout* LCXmlGridLayoutBuilder::build(
         const QDomElement& _element, 
-        const LIApplication& _app)
+        const LIApplication& _app,
+        LIWindow& _window)
 {
     QGridLayout* layout = new QGridLayout;
     CBuildData buildData(layout);
@@ -83,11 +87,11 @@ QLayout* LCXmlGridLayoutBuilder::build(
         QDomElement el = node.toElement();
         if(el.tagName() == mTags.row)
         {
-            buildRow(el, _app, buildData);
+            buildRow(el, _app, _window, buildData);
         }
         else if (el.tagName() == mTags.column)
         {
-            buildCol(el, _app, buildData);
+            buildCol(el, _app, _window, buildData);
         }
     }
     
@@ -99,13 +103,15 @@ static int addRowWidgets(
         const QDomElement &_element,
         CBuildData& _buildData, 
         int _startCol, 
-        const LIApplication& _app);
+        const LIApplication& _app,
+        LIWindow& _window);
 
 static int addRowLayout(
         const QDomElement &_element,
         CBuildData& _buildData, 
         int _startCol, 
-        const LIApplication& _app);
+        const LIApplication& _app,
+        LIWindow& _window);
 
 static int addRowStretch(
         const QDomElement &_element,
@@ -116,6 +122,7 @@ static int addRowStretch(
 static void buildRow(
         const QDomElement &_element, 
         const LIApplication& _app, 
+        LIWindow& _window,
         CBuildData& _buildData)
 {
     int curr_col = 0;
@@ -154,11 +161,11 @@ static void buildRow(
 
         if(el.tagName() == LCXmlGridLayoutBuilder::mTags.widgets)
         {
-            curr_col += addRowWidgets(el, _buildData, curr_col, _app);
+            curr_col += addRowWidgets(el, _buildData, curr_col, _app, _window);
         }
         else if(el.tagName() == LCXmlGridLayoutBuilder::mTags.layout)
         {
-            curr_col += addRowLayout(el, _buildData, curr_col, _app);
+            curr_col += addRowLayout(el, _buildData, curr_col, _app, _window);
         }
         else if(el.tagName() == LCXmlGridLayoutBuilder::mTags.stretch)
         {
@@ -175,7 +182,8 @@ static int addRowWidgets(
         const QDomElement &_element,
         CBuildData &_buildData, 
         int _startCol, 
-        const LIApplication& _app)
+        const LIApplication& _app,
+        LIWindow& _window)
 {
     int col = 0;
 
@@ -207,7 +215,7 @@ static int addRowWidgets(
         if(el.isNull()) continue;
         auto builder = _app.getWidgetBuilder(el.tagName());
         if(builder.isNull()) continue;
-        auto widget = builder->build(el, _app);
+        auto widget = builder->build(el, _app, _window);
         if(widget == nullptr) continue;
 
         //Анализ параметров выравнивания для текущего стролбца.
@@ -245,7 +253,8 @@ static int addRowLayout(
         const QDomElement &_element,
         CBuildData &_buildData, 
         int _startCol, 
-        const LIApplication& _app)
+        const LIApplication& _app,
+        LIWindow& _window)
 {
     for(    QDomNode node = _element.firstChild(); 
             !node.isNull(); 
@@ -255,7 +264,7 @@ static int addRowLayout(
         QDomElement el = node.toElement();
         auto builder = _app.getLayoutBuilder(el.tagName());
         if(builder.isNull()) continue;
-        auto layout = builder->build(el, _app);
+        auto layout = builder->build(el, _app, _window);
         if(layout == nullptr) continue;
         _buildData.mpLayout->addLayout(layout, _buildData.mRow, _startCol);
         return 1;
@@ -290,13 +299,15 @@ static int addColWidgets(
         const QDomElement &_element,
         CBuildData& _buildData, 
         int _startRow, 
-        const LIApplication& _app);
+        const LIApplication& _app,
+        LIWindow& _window);
 
 static int addColLayout(
         const QDomElement &_element,
         CBuildData& _buildData, 
         int _startRow, 
-        const LIApplication& _app);
+        const LIApplication& _app,
+        LIWindow& _window);
 
 static int addColStretch(
         const QDomElement &_element,
@@ -307,6 +318,7 @@ static int addColStretch(
 static void buildCol(
         const QDomElement &_element, 
         const LIApplication& _app, 
+        LIWindow& _window,
         CBuildData& _buildData)
 {
     int curr_row = 0;
@@ -348,11 +360,11 @@ static void buildCol(
 
         if(el.tagName() == LCXmlGridLayoutBuilder::mTags.widgets)
         {
-            curr_row += addColWidgets(el, _buildData, curr_row, _app);
+            curr_row += addColWidgets(el, _buildData, curr_row, _app, _window);
         }
         else if(el.tagName() == LCXmlGridLayoutBuilder::mTags.layout)
         {
-            curr_row += addColLayout(el, _buildData, curr_row, _app);
+            curr_row += addColLayout(el, _buildData, curr_row, _app, _window);
         }
         else if(el.tagName() == LCXmlGridLayoutBuilder::mTags.stretch)
         {
@@ -369,7 +381,8 @@ static int addColWidgets(
         const QDomElement &_element,
         CBuildData &_buildData, 
         int _startRow, 
-        const LIApplication& _app)
+        const LIApplication& _app,
+        LIWindow& _window)
 {
     int row = 0;
 
@@ -399,7 +412,7 @@ static int addColWidgets(
         if(el.isNull()) continue;
         auto builder = _app.getWidgetBuilder(el.tagName());
         if(builder.isNull()) continue;
-        auto widget = builder->build(el, _app);
+        auto widget = builder->build(el, _app, _window);
         if(widget == nullptr) continue;
 
         //Анализ параметров выравнивания для текущего стролбца.
@@ -435,7 +448,8 @@ static int addColLayout(
         const QDomElement &_element,
         CBuildData &_buildData, 
         int _startRow, 
-        const LIApplication& _app)
+        const LIApplication& _app,
+        LIWindow& _window)
 {
     for(    QDomNode node = _element.firstChild(); 
             !node.isNull(); 
@@ -445,7 +459,7 @@ static int addColLayout(
         QDomElement el = node.toElement();
         auto builder = _app.getLayoutBuilder(el.tagName());
         if(builder.isNull()) continue;
-        auto layout = builder->build(el, _app);
+        auto layout = builder->build(el, _app, _window);
         if(layout == nullptr) continue;
         _buildData.mpLayout->addLayout(layout, _startRow, _buildData.mColumn);
         return 1;
