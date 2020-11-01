@@ -33,7 +33,6 @@ public:
 
     virtual ~LQModbusDataReader();
     virtual void setDataName(const QString& _dataName) override;
-    /* virtual void setDataSource(QWeakPointer<LIRemoteDataSource> _source) override; */
     virtual void setDataReadListener(QWeakPointer<LIRemoteDataReadListener> _listener) override;
     virtual void readRequest() override;
     virtual void connectToSource() override;

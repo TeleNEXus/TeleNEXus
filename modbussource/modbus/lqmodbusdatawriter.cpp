@@ -33,16 +33,6 @@ void LQModbusDataWriter::setDataName(const QString& _dataName)
 }
 
 //------------------------------------------------------------------------------
-/* void LQModbusDataWriter::setDataSource(QWeakPointer<LIRemoteDataSource> _source) */
-/* { */
-/*     QSharedPointer<LIRemoteDataSource> sp = _source.lock(); */
-/*     if(!sp.isNull()) */
-/*     { */
-/*         if(dynamic_cast<LQModbusDataSource*>(sp.data())) mDataSource = sp; */
-/*     } */
-/* } */
-
-//------------------------------------------------------------------------------
 void LQModbusDataWriter::
         setDataWriteListener(QWeakPointer<LIRemoteDataWriteListner> _listener)
 {
