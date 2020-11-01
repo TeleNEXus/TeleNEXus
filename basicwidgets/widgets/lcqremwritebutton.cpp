@@ -67,7 +67,6 @@ void LCQRemWriteButton::addDataWrite(
     write_set.mData = _data;
     write_set.mWriter = _source->createWriter();
     write_set.mWriter->setDataName(_dataName);
-    write_set.mWriter->setDataSource(_source);
     write_set.mWriter->setDataWriteListener(write_set.mListener);
     write_set.mDataName = _dataName;
     mListWriteSets << write_set;

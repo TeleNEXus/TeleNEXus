@@ -817,11 +817,18 @@ static void doDeleteLater(LQModbusDataSource* _obj)
 }
 
 //------------------------------------------------------------------------------create
-QSharedPointer<LQModbusDataSource> LQModbusDataSource::create(quint8 _devId,
-                                                                QSharedPointer<LQModbusMasterBase> _modbusMaster,
-                                                                QObject *_parent)
+QSharedPointer<LQModbusDataSource> 
+LQModbusDataSource::create(quint8 _devId,
+        QSharedPointer<LQModbusMasterBase> _modbusMaster,
+        QObject *_parent)
 {
-    return QSharedPointer<LQModbusDataSource>(new LQModbusDataSource(_devId, _modbusMaster, _parent), doDeleteLater);
+    QSharedPointer<LQModbusDataSource> source(
+            new LQModbusDataSource(
+                _devId, _modbusMaster, _parent), doDeleteLater);
+
+    source->mwpThis = source;
+
+    return source;
 }
 
 
@@ -895,9 +902,11 @@ void LQModbusDataSource::read(const QString& _dataName, QObject* _reader)
 }
 
 //------------------------------------------------------------------------------write
-void LQModbusDataSource::write(const QString& _dataName, const QByteArray& _data, QObject* _writer)
+void LQModbusDataSource::write(const QString& _dataName, 
+        const QByteArray& _data, QObject* _writer)
 {
-    QCoreApplication::postEvent(this, new CQEventReqWrite(_dataName, _data, _writer));
+    QCoreApplication::postEvent(
+            this, new CQEventReqWrite(_dataName, _data, _writer));
 }
 
 //------------------------------------------------------------------------------customEvent
@@ -912,13 +921,13 @@ void LQModbusDataSource::customEvent(QEvent* _event)
 //------------------------------------------------------------------------------
 QSharedPointer<LIRemoteDataReader> LQModbusDataSource::createReader()
 {
-    return QSharedPointer<LIRemoteDataReader>(new LQModbusDataReader());
+    return QSharedPointer<LIRemoteDataReader>(new LQModbusDataReader(mwpThis));
 }
 
 //------------------------------------------------------------------------------
 QSharedPointer<LIRemoteDataWriter> LQModbusDataSource::createWriter()
 {
-    return QSharedPointer<LIRemoteDataWriter>(new LQModbusDataWriter());
+    return QSharedPointer<LIRemoteDataWriter>(new LQModbusDataWriter(mwpThis));
 }
 
 } /* namespace modbus */
