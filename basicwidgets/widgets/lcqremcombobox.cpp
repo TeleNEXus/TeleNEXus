@@ -64,12 +64,10 @@ LCQRemComboBox::LCQRemComboBox(
 
     mDataReader = _dataSource->createReader();
     mDataReader->setDataName(_dataNameRead);
-    mDataReader->setDataSource(_dataSource);
     mDataReader->setDataReadListener(mDataReadListener);
 
     mDataWriter = _dataSource->createWriter();
     mDataWriter->setDataName(_dataNameWrite);
-    mDataWriter->setDataSource(_dataSource);
 
     this->setEnabled(false);
 

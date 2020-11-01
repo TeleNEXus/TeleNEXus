@@ -52,13 +52,11 @@ LCQRemLineEdit::LCQRemLineEdit(
     mDataReader->setDataName(_dataName);
     mReadListener = QSharedPointer<CReadListener>(new CReadListener(*this));
     mDataReader->setDataReadListener(mReadListener);
-    mDataReader->setDataSource(_dataSource);
 
     mDataWriter = _dataSource->createWriter();
     mDataWriter->setDataName(_dataName);
     mWriteListener = QSharedPointer<CWriteListener>(new CWriteListener(*this));
     mDataWriter->setDataWriteListener(mWriteListener);
-    mDataWriter->setDataSource(_dataSource);
 }
 
 //------------------------------------------------------------------------------

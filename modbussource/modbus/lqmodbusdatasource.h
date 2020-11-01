@@ -383,6 +383,7 @@ private:
 
     CDataMap mDataMap;
     QSharedPointer<QThread> mspThread;
+    QWeakPointer<LQModbusDataSource> mwpThis;
 private:
     explicit LQModbusDataSource(quint8 _devId,
                                  QSharedPointer<LQModbusMasterBase> _modbusMaster,

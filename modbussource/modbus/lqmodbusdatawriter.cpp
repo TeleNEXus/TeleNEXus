@@ -17,7 +17,11 @@ LQModbusDataWriter::
 }
 
 //==============================================================================
-LQModbusDataWriter::LQModbusDataWriter(QObject *_parent) : QObject(_parent)
+LQModbusDataWriter::LQModbusDataWriter(
+        QWeakPointer<LQModbusDataSource> _dataSource,
+        QObject *_parent) : 
+    QObject(_parent),
+    mDataSource(_dataSource)
 {
 
 }
@@ -29,14 +33,14 @@ void LQModbusDataWriter::setDataName(const QString& _dataName)
 }
 
 //------------------------------------------------------------------------------
-void LQModbusDataWriter::setDataSource(QWeakPointer<LIRemoteDataSource> _source)
-{
-    QSharedPointer<LIRemoteDataSource> sp = _source.lock();
-    if(!sp.isNull())
-    {
-        if(dynamic_cast<LQModbusDataSource*>(sp.data())) mDataSource = sp;
-    }
-}
+/* void LQModbusDataWriter::setDataSource(QWeakPointer<LIRemoteDataSource> _source) */
+/* { */
+/*     QSharedPointer<LIRemoteDataSource> sp = _source.lock(); */
+/*     if(!sp.isNull()) */
+/*     { */
+/*         if(dynamic_cast<LQModbusDataSource*>(sp.data())) mDataSource = sp; */
+/*     } */
+/* } */
 
 //------------------------------------------------------------------------------
 void LQModbusDataWriter::

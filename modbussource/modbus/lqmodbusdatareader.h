@@ -7,6 +7,8 @@
 
 namespace modbus {
 
+class LQModbusDataSource;
+
 class LQModbusDataReader : public QObject, public LIRemoteDataReader
 {
     Q_OBJECT
@@ -29,17 +31,19 @@ private:
 
 public:
 
-    LQModbusDataReader(  QObject* _parent = nullptr);
     virtual ~LQModbusDataReader();
     virtual void setDataName(const QString& _dataName) override;
-    virtual void setDataSource(QWeakPointer<LIRemoteDataSource> _source) override;
+    /* virtual void setDataSource(QWeakPointer<LIRemoteDataSource> _source) override; */
     virtual void setDataReadListener(QWeakPointer<LIRemoteDataReadListener> _listener) override;
     virtual void readRequest() override;
     virtual void connectToSource() override;
     virtual void disconnectFromSource() override;
 private:
+    explicit LQModbusDataReader(  QObject* _parent = nullptr) = delete;
+    explicit LQModbusDataReader(  QWeakPointer<LQModbusDataSource> _dataSource, 
+            QObject* _parent = nullptr);
+ 
     virtual void customEvent(QEvent* _event) override;
-
     friend class LQModbusDataSource;
 };
 
