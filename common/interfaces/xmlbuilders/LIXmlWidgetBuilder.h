@@ -4,15 +4,17 @@
 class QWidget;
 class QDomElement;
 class LIApplication;
+class LIWindow;
 
 class LIXmlWidgetBuilder
 {
 public:
     LIXmlWidgetBuilder(){}
     virtual ~LIXmlWidgetBuilder(){}
-    virtual QWidget* 
-        build( const QDomElement& _element, 
-                const LIApplication& _app) = 0;
+    virtual QWidget* build( 
+            const QDomElement&      _element, 
+            const LIApplication&    _app,
+            LIWindow&               _window) = 0;
 };
 
 #endif // LIXMLWIDGETBUILDER_H

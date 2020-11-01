@@ -1,6 +1,7 @@
 #include "lcxmlboxlayoutbuilder.h"
 #include "LIApplication.h"
 #include "LIXmlWidgetBuilder.h"
+#include "LIWindow.h"
 
 #include <QDomNode>
 #include <QBoxLayout>
@@ -25,12 +26,14 @@ LCXmlBoxLayoutBuilder::~LCXmlBoxLayoutBuilder()
 static void buildLayout(
         QBoxLayout* _layout, 
         const QDomElement &_element,
-        const LIApplication& _app);
+        const LIApplication& _app,
+        LIWindow& _window);
 
 //------------------------------------------------------------------------------
 QLayout* LCXmlBoxLayoutBuilder::build(
-        const QDomElement& _element, 
-        const LIApplication& _app)
+        const QDomElement&      _element, 
+        const LIApplication&    _app,
+        LIWindow&               _window)
 {
 
     QBoxLayout* layout;
@@ -42,12 +45,12 @@ QLayout* LCXmlBoxLayoutBuilder::build(
         if(dir == mAttributes.dir.vals.reverse)
         {
             layout = new QBoxLayout(QBoxLayout::Direction::RightToLeft);
-            buildLayout( layout, _element, _app); 
+            buildLayout( layout, _element, _app, _window); 
         }
         else 
         {
             layout = new QBoxLayout(QBoxLayout::Direction::LeftToRight);
-            buildLayout( layout, _element, _app); 
+            buildLayout( layout, _element, _app, _window); 
         }
         break;
 
@@ -55,12 +58,12 @@ QLayout* LCXmlBoxLayoutBuilder::build(
         if(dir == mAttributes.dir.vals.reverse)
         {
             layout = new QBoxLayout(QBoxLayout::Direction::BottomToTop);
-            buildLayout( layout, _element, _app); 
+            buildLayout( layout, _element, _app, _window); 
         }
         else 
         {
             layout = new QBoxLayout(QBoxLayout::Direction::TopToBottom);
-            buildLayout( layout, _element, _app); 
+            buildLayout( layout, _element, _app, _window); 
         }
         break;
 
@@ -75,13 +78,16 @@ QLayout* LCXmlBoxLayoutBuilder::build(
 static void addLayout(
         QBoxLayout* _layout, 
         const QDomElement& _element, 
-        const LIApplication& _app);
+        const LIApplication& _app,
+        LIWindow& _window);
 
 //------------------------------------------------------------------------------
 static void addWidgets(
         QBoxLayout* _layout, 
         const QDomElement& _element, 
-        const LIApplication& _app);
+        const LIApplication& _app,
+        LIWindow& _window);
+
 
 //------------------------------------------------------------------------------
 static void addSpacing(
@@ -92,7 +98,8 @@ static void addSpacing(
 static void buildLayout(
         QBoxLayout* _layout, 
         const QDomElement &_element,
-        const LIApplication& _app)
+        const LIApplication& _app,
+        LIWindow& _window)
 {
     int spacing = 0;
     QString attr = _element.attribute(LCXmlBoxLayoutBuilder::mAttributes.spacing);
@@ -115,11 +122,11 @@ static void buildLayout(
 
         if(el.tagName() == LCXmlBoxLayoutBuilder::mTags.layout)
         {
-            addLayout(_layout, el, _app);
+            addLayout(_layout, el, _app, _window);
         }
         else if(el.tagName() == LCXmlBoxLayoutBuilder::mTags.widgets)
         {
-            addWidgets(_layout, el, _app);
+            addWidgets(_layout, el, _app, _window);
         }
         else if(el.tagName() == LCXmlBoxLayoutBuilder::mTags.spacing)
         {
@@ -136,7 +143,8 @@ static void buildLayout(
 static void addLayout(
         QBoxLayout* _layout, 
         const QDomElement& _element, 
-        const LIApplication& _app)
+        const LIApplication& _app,
+        LIWindow& _window)
 {
     for(    QDomNode childNode = _element.firstChild(); 
             !childNode.isNull(); 
@@ -148,7 +156,7 @@ static void addLayout(
 
         if(builder.isNull()) continue;
 
-        auto newlayout = builder->build(el, _app);
+        auto newlayout = builder->build(el, _app, _window);
 
         if(newlayout)
         {
@@ -161,7 +169,8 @@ static void addLayout(
 static void addWidgets(
         QBoxLayout* _layout, 
         const QDomElement& _element, 
-        const LIApplication& _app)
+        const LIApplication& _app,
+        LIWindow& _window)
 {
     QDomNode childNode = _element.firstChild();
 
@@ -180,7 +189,7 @@ static void addWidgets(
         auto el  = childNode.toElement();
         auto builder = _app.getWidgetBuilder(el.tagName());
         if(builder.isNull()) continue;
-        auto widget = builder->build(el, _app);
+        auto widget = builder->build(el, _app, _window);
         if(widget)
         {
             if(align == 0)

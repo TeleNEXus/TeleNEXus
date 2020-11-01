@@ -2,6 +2,7 @@
 #include "lcqremcombobox.h"
 #include "lcxmlstddataformatterfactory.h"
 #include "LIApplication.h"
+#include "LIWindow.h"
 
 #include <QDomElement>
 #include <qcombobox.h>
@@ -44,8 +45,10 @@ static void buildCombobox(   const QDomElement& _element,
 
 //------------------------------------------------------------------------------build
 QWidget* LCXmlRemComboBoxBuilder::build(const QDomElement& _element, 
-                                            const LIApplication& _app)
+                                            const LIApplication& _app,
+                                            LIWindow& _window)
 {
+    Q_UNUSED(_window);
     QWidget *ret;
     QString dataread;
     QString datawrite;

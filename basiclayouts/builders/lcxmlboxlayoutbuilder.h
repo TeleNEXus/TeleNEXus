@@ -48,8 +48,9 @@ public:
     LCXmlBoxLayoutBuilder(EOrientation _orient);
     virtual ~LCXmlBoxLayoutBuilder();
     virtual QLayout* build(
-            const QDomElement& _element, 
-            const LIApplication& _app) override;
+            const QDomElement&      _element, 
+            const LIApplication&    _app,
+            LIWindow&               _window) override;
 
 };
 #endif // LCXMLBOXLAYOUTBUILDER_H

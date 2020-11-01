@@ -1,5 +1,6 @@
 #include "lcxmltabwidgetbuilder.h"
 #include "LIApplication.h"
+#include "LIWindow.h"
 #include <QTabWidget>
 #include <QDomElement>
 #include <QDebug>
@@ -36,11 +37,13 @@ static void createTab(
         const QDomElement& _element, 
         QTabWidget* tabwidget, 
         int _tabindex, 
-        const LIApplication& _app);
+        const LIApplication& _app,
+        LIWindow& _window);
 
 QWidget* LCXmlTabWidgetBuilder::build(
         const QDomElement& _element, 
-        const LIApplication& _app)
+        const LIApplication& _app,
+        LIWindow& _window)
 {
     //TODO: Добавить распознавание стилей.
     QTabWidget* tabwidget = new QTabWidget;
@@ -54,7 +57,7 @@ QWidget* LCXmlTabWidgetBuilder::build(
     {
         QDomElement el = tabs.item(i).toElement();
         if(!el.isNull()) 
-            createTab(tabs.item(i).toElement(), tabwidget, i, _app); 
+            createTab(tabs.item(i).toElement(), tabwidget, i, _app, _window); 
     }
     return tabwidget;
 }
@@ -64,7 +67,8 @@ static void createTab(
         const QDomElement& _element, 
         QTabWidget* _tabwidget, 
         int _tabindex, 
-        const LIApplication& _app)
+        const LIApplication& _app,
+        LIWindow& _window)
 {
     //TODO: Добавить иконки.
     QString attr_label = _element.attribute(__attrNames.label);
@@ -85,7 +89,7 @@ static void createTab(
             if(!builder.isNull())
             {
                 QWidget* widget = (*builder).build(
-                        childs.at(i).toElement(), _app);
+                        childs.at(i).toElement(), _app, _window);
                 if (widget)
                 {
                     _tabwidget->addTab( widget, attr_label);

@@ -4,19 +4,37 @@
 
 
 //------------------------------------------------------------------------------
-void* BASICLAYOUTS_EXPORT getGridLayoutBuilder()
+void* getGridLayoutBuilder()
 {
     return new LCXmlGridLayoutBuilder;
 }
 
 //----------------------------------------------------------------------------
-void* BASICLAYOUTS_EXPORT getVBoxLayoutBuilder()
+void* getVBoxLayoutBuilder()
 {
     return new LCXmlBoxLayoutBuilder(LCXmlBoxLayoutBuilder::EOrientation::VERTICAL);
 }
 
 //----------------------------------------------------------------------------
-void* BASICLAYOUTS_EXPORT getHBoxLayoutBuilder()
+void* getHBoxLayoutBuilder()
 {
     return new LCXmlBoxLayoutBuilder(LCXmlBoxLayoutBuilder::EOrientation::HORIZONTAL);
 }
+
+/* //------------------------------------------------------------------------------ */
+/* void* BASICLAYOUTS_EXPORT getGridLayoutBuilder() */
+/* { */
+/*     return new LCXmlGridLayoutBuilder; */
+/* } */
+
+/* //---------------------------------------------------------------------------- */
+/* void* BASICLAYOUTS_EXPORT getVBoxLayoutBuilder() */
+/* { */
+/*     return new LCXmlBoxLayoutBuilder(LCXmlBoxLayoutBuilder::EOrientation::VERTICAL); */
+/* } */
+
+/* //---------------------------------------------------------------------------- */
+/* void* BASICLAYOUTS_EXPORT getHBoxLayoutBuilder() */
+/* { */
+/*     return new LCXmlBoxLayoutBuilder(LCXmlBoxLayoutBuilder::EOrientation::HORIZONTAL); */
+/* } */
