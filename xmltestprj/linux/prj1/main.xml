@@ -2,7 +2,7 @@
 
 <APPLICATION>
     <PLAGINPATHS>
-        <ADD path="./libs"/>
+        <item path="./libs"/>
     </PLAGINPATHS>
     <!--SOURCEBUILDERS>
         <modbussources lib="libs/mbsource"       libhandler="getModbusSourceBuilder" />
@@ -73,7 +73,7 @@
     
     <!-- <WINDOW id="main window 1" title="MAIN WINDOW 1" file="widgets.xml"/> -->
     <!-- <WINDOW id="main window 2" title="MAIN WINDOW 2" file="widgets.xml"/> -->
-    <!-- <WINDOW id="main window 1" file="widgets.xml" show="no"/> -->
-    <WINDOW id="main window 2" file="widgets.xml" show="yes"/>
+    <WINDOW id="main window 1" title="TITLE MAIN WINDOW 1" file="window.xml" show="yes"/>
+    <WINDOW id="main window 2" title="TITLE MAIN WINDOW 2" file="window.xml" show="yes"/>
         
 </APPLICATION>

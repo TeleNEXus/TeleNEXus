@@ -6,42 +6,40 @@
 #include <QLibrary>
 #include <QCoreApplication>
 
-//======================================================================================================================
-using LQLayoutBuildersMap = QMap<QString, QSharedPointer<LIXmlLayoutBuilder>>;
+//==============================================================================
+static QMap<QString, QSharedPointer<LIXmlLayoutBuilder>> __slBuildersMap;
 
-//======================================================================================================================
-static LQLayoutBuildersMap __buildersMap;
-
-//======================================================================================================================
+//==============================================================================
 LCXmlLayoutBuilders::LCXmlLayoutBuilders() :
-        LCXmlBuildersLoader(    LCXmlApplication::mBaseTags.layoutBuilders)
+        LCXmlBuildersLoader( LCXmlApplication::mBaseTags.layoutBuilders )
 {
 }
 
-//----------------------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 LCXmlLayoutBuilders& LCXmlLayoutBuilders::instance()
 {
     static LCXmlLayoutBuilders inst;
     return inst;
 }
 
-//----------------------------------------------------------------------------------------------------------------------
-QSharedPointer<LIXmlLayoutBuilder> LCXmlLayoutBuilders::getBuilder(const QString _name)
+//------------------------------------------------------------------------------
+QSharedPointer<LIXmlLayoutBuilder> 
+LCXmlLayoutBuilders::getBuilder(const QString _name)
 {
-    LQLayoutBuildersMap::iterator it = __buildersMap.find(_name);
-    if(it != __buildersMap.end())
+    auto it = __slBuildersMap.find(_name);
+    if(it != __slBuildersMap.end())
     {
         return it.value();
     }
     return QSharedPointer<LIXmlLayoutBuilder>();
 }
 
-//----------------------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 bool LCXmlLayoutBuilders::add(const QString &_name, void *_builder)
 {
-    if(__buildersMap.find(_name) != __buildersMap.end()) return false;
+    if(__slBuildersMap.find(_name) != __slBuildersMap.end()) return false;
 
-    __buildersMap.insert(_name,
+    __slBuildersMap.insert(_name,
                          QSharedPointer<LIXmlLayoutBuilder>
                             (reinterpret_cast<LIXmlLayoutBuilder*>(_builder)));
     return true;

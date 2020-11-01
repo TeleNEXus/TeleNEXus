@@ -16,20 +16,19 @@
 
 #include <QStringList>
 
-static QString  sl_xmlMainFileName;
-static QString  sl_xmlMainFilePath;
-static QDir     sl_xmlMainFileDir;
+static QString      __slXmlMainFileName;
+static QString      __slXmlMainFilePath;
+static QDir         __slXmlMainFileDir;
 
-static QStringList sl_PlaginLibPaths;
+static QStringList  __slPlaginLibPaths;
 
 static const struct
 {
     QString xmlMainFileName = "xmlfile";
     QString xmlMainFilePath = "xmlpath";
-} __appOptionsName;
+} __slAppOptionsName;
 
-using TQRemoteDataSourceMap = QMap<QString, QSharedPointer<LIRemoteDataSource>>;
-TQRemoteDataSourceMap sl_RemoteDataSourceMap;
+QMap<QString, QSharedPointer<LIRemoteDataSource>> __slRemoteDataSourceMap;
 
 //------------------------------------------------------------------------------
 static QDomDocument staticLoadDomElement(const QString& _fileName);
@@ -46,8 +45,8 @@ class CApplicationInterface : public LIApplication
 public:
     CApplicationInterface(){}
     virtual QString getProjectPath() const override { 
-        return sl_xmlMainFilePath;}
-    virtual QDir getProjectDir() const override {return sl_xmlMainFileDir;}
+        return __slXmlMainFilePath;}
+    virtual QDir getProjectDir() const override {return __slXmlMainFileDir;}
 
     virtual QSharedPointer<LIXmlRemoteDataSourceBuilder> 
         getDataSourceBuilder(
@@ -59,8 +58,8 @@ public:
     QSharedPointer<LIRemoteDataSource> 
         getDataSource(const QString& _name) const override
     {
-        TQRemoteDataSourceMap::iterator it = sl_RemoteDataSourceMap.find(_name);
-        if(it == sl_RemoteDataSourceMap.end()) return nullptr;
+        auto it = __slRemoteDataSourceMap.find(_name);
+        if(it == __slRemoteDataSourceMap.end()) return nullptr;
         return it.value();
     }
 
@@ -82,7 +81,7 @@ public:
     }
 };
 
-static CApplicationInterface sl_appInterface;
+static CApplicationInterface __slAppInterface;
 
 //==============================================================================
 const LCXmlApplication::SBaseTags LCXmlApplication::mBaseTags;
@@ -97,31 +96,6 @@ LCXmlApplication& LCXmlApplication::instance()
 {
     static LCXmlApplication inst;
     return inst;
-}
-
-//------------------------------------------------------------------------------
-const QString& LCXmlApplication::getXmlMainFileName()
-{
-    return sl_xmlMainFileName;
-}
-
-//------------------------------------------------------------------------------
-const QString& LCXmlApplication::getXmlMainFileWay()
-{
-    return sl_xmlMainFilePath;
-}
-
-//------------------------------------------------------------------------------
-const QDir& LCXmlApplication::getXmlMainFileDir()
-{
-    return sl_xmlMainFileDir;
-}
-
-//------------------------------------------------------------------------------
-const QString& LCXmlApplication::getApplicationDirPath()
-{
-    static QString path = QCoreApplication::applicationDirPath();
-    return path;
 }
 
 //------------------------------------------------------------------------------
@@ -149,14 +123,14 @@ int LCXmlApplication::exec(int argc, char *argv[])
 
     QCommandLineParser parser;
 
-    QCommandLineOption fileName(__appOptionsName.xmlMainFileName,
+    QCommandLineOption fileName(__slAppOptionsName.xmlMainFileName,
                                 QStringLiteral("Main XML filename."),
-                                __appOptionsName.xmlMainFileName,
+                                __slAppOptionsName.xmlMainFileName,
                                 QStringLiteral("main.xml"));
 
-    QCommandLineOption pathName(__appOptionsName.xmlMainFilePath,
+    QCommandLineOption pathName(__slAppOptionsName.xmlMainFilePath,
                                 QStringLiteral("Root path XML files"),
-                                __appOptionsName.xmlMainFilePath,
+                                __slAppOptionsName.xmlMainFilePath,
                                 fi.absolutePath());
 
     parser.addOption(fileName);
@@ -166,17 +140,17 @@ int LCXmlApplication::exec(int argc, char *argv[])
 
 
     {
-        QString file = parser.value(__appOptionsName.xmlMainFileName);
-        QString path = parser.value(__appOptionsName.xmlMainFilePath);
+        QString file = parser.value(__slAppOptionsName.xmlMainFileName);
+        QString path = parser.value(__slAppOptionsName.xmlMainFilePath);
 
         QDir dir(path);
 
         fi.setFile(path + "/" + file);
         if(dir.exists() && fi.exists())
         {
-            sl_xmlMainFileName    = fi.fileName();
-            sl_xmlMainFilePath    = fi.absolutePath() + "/";
-            sl_xmlMainFileDir     = fi.absoluteDir();
+            __slXmlMainFileName    = fi.fileName();
+            __slXmlMainFilePath    = fi.absolutePath() + "/";
+            __slXmlMainFileDir     = fi.absoluteDir();
         }
         else
         {
@@ -187,7 +161,7 @@ int LCXmlApplication::exec(int argc, char *argv[])
     }
 
 
-    QFile file(sl_xmlMainFilePath + sl_xmlMainFileName);
+    QFile file(__slXmlMainFilePath + __slXmlMainFileName);
 
     if(!domDoc.setContent(&file, true, &errorStr, &errorLine, &errorColumn))
     {
@@ -241,43 +215,43 @@ int LCXmlApplication::exec(int argc, char *argv[])
 static void addPlaginLibPathes(const QDomElement& _rootElement)
 {
     QDomNodeList nodes = _rootElement.elementsByTagName(
-            LCXmlApplication::mBaseTags.plaginPaths.name);
+            LCXmlApplication::mBaseTags.plaginPaths.tag);
 
     if(!nodes.isEmpty())
     {
         nodes = nodes.at(0).toElement().elementsByTagName(
-                LCXmlApplication::mBaseTags.add);
+                LCXmlApplication::mBaseTags.plaginPaths.tags.item.tag);
         if(!nodes.isEmpty())
         {
             for(int i = 0; i < nodes.size(); i++)
             {
 
                 QString path = nodes.at(i).toElement().attribute(
-                        LCXmlApplication::mBaseTags.plaginPaths.attrs.path);
+                        LCXmlApplication::mBaseTags.plaginPaths.tags.item.attrs.path);
                 if(path.isNull()) continue;
                 QDir dir(path);
                 if(dir.isAbsolute())
                 {
-                    sl_PlaginLibPaths << dir.path();
+                    __slPlaginLibPaths << dir.path();
                     continue;
                 }
 
                 path = QDir::currentPath();
-                QDir::setCurrent(sl_xmlMainFilePath);
-                sl_PlaginLibPaths << dir.absolutePath();
+                QDir::setCurrent(__slXmlMainFilePath);
+                __slPlaginLibPaths << dir.absolutePath();
                 QDir::setCurrent(path);
             }
         }
     }
 
-    sl_PlaginLibPaths << 
+    __slPlaginLibPaths << 
         QCoreApplication::applicationDirPath() + 
         QStringLiteral("/plaginlibs");
 
     qDebug() << "PlaginLib paths:";
-    for(int i = 0; i < sl_PlaginLibPaths.size(); i++)
+    for(int i = 0; i < __slPlaginLibPaths.size(); i++)
     {
-        qDebug() << "\t\t" << sl_PlaginLibPaths.at(i);
+        qDebug() << "\t\t" << __slPlaginLibPaths.at(i);
     }
 
 }
@@ -291,7 +265,7 @@ static void addSourceBuilders(const QDomElement& _rootElement)
     if(!nodes.isEmpty())
     {
         LCXmlRemoteDataSourceBuilders::instance().load(
-                nodes.at(0).toElement(), sl_xmlMainFilePath, sl_PlaginLibPaths);
+                nodes.at(0).toElement(), __slXmlMainFilePath, __slPlaginLibPaths);
     }
 }
 
@@ -301,7 +275,7 @@ static void addSources(const QDomElement& _rootElement)
     if(LCXmlRemoteDataSourceBuilders::instance().noItems()) return;
 
     QDomElement element = _rootElement.elementsByTagName(
-            LCXmlApplication::mBaseTags.sources.name).at(0).toElement();
+            LCXmlApplication::mBaseTags.sources.tag).at(0).toElement();
 
     if(element.isNull()) return;
 
@@ -312,7 +286,7 @@ static void addSources(const QDomElement& _rootElement)
     {
         element = staticLoadDomElement(attrFile).documentElement();
 
-        if(element.tagName() != LCXmlApplication::mBaseTags.sources.name)
+        if(element.tagName() != LCXmlApplication::mBaseTags.sources.tag)
         {
             return;
         }
@@ -329,13 +303,13 @@ static void addSources(const QDomElement& _rootElement)
 
         if(!builder.isNull())
         {
-            auto sources = builder->build(el, sl_appInterface);
+            auto sources = builder->build(el, __slAppInterface);
             auto it = sources.begin();
             while(it != sources.end())
             {
-                if(sl_RemoteDataSourceMap.find(it.key()) != sources.end())
+                if(__slRemoteDataSourceMap.find(it.key()) != sources.end())
                 {
-                    sl_RemoteDataSourceMap.insert(it.key(), it.value());
+                    __slRemoteDataSourceMap.insert(it.key(), it.value());
                 }
                 it++;
             }
@@ -354,7 +328,7 @@ static void addLayoutsBuilders(const QDomElement& _rootElement)
     if(!nodes.isEmpty())
     {
         LCXmlLayoutBuilders::instance().load(nodes.at(0).toElement(), 
-                sl_xmlMainFilePath, sl_PlaginLibPaths);
+                __slXmlMainFilePath, __slPlaginLibPaths);
     }
 }
 
@@ -368,102 +342,34 @@ static void addWidgetsBuilders(const QDomElement& _rootElement)
     if(!nodes.isEmpty())
     {
         LCXmlWidgetBuilders::instance().load(nodes.at(0).toElement(), 
-                sl_xmlMainFilePath, sl_PlaginLibPaths);
+                __slXmlMainFilePath, __slPlaginLibPaths);
     }
 }
 
 //==============================================================================
-static void createWindow(const QDomElement &_element, 
-        const QString& _title, const QString& _id,
-        const QString& _show);
-
+#include "lcxmlwindows.h"
 static void addWindows(const QDomElement& _rootElement)
 {
-    
     for(auto node = 
             _rootElement.firstChildElement(
-                LCXmlApplication::mBaseTags.window.name); 
+                LCXmlApplication::mBaseTags.window.tag); 
 
             !node.isNull(); 
 
             node = node.nextSiblingElement(
-                LCXmlApplication::mBaseTags.window.name))
+                LCXmlApplication::mBaseTags.window.tag))
     {
         QDomElement el = node.toElement();
-        QString attr_title = 
-            el.attribute(LCXmlApplication::mBaseTags.window.attrs.title);
-        QString attr_id = 
-            el.attribute(LCXmlApplication::mBaseTags.window.attrs.id);
-        QString attr_file = 
-            el.attribute(LCXmlApplication::mBaseTags.window.attrs.file);
-        QString attr_show = 
-            el.attribute(LCXmlApplication::mBaseTags.window.attrs.show.name);
-        
-        if(!attr_file.isNull())
-        {
-            el = staticLoadDomElement(attr_file).documentElement();
 
-            if(el.tagName() != LCXmlApplication::mBaseTags.window.name)
-            {
-                return;
-            }
-        }
-        createWindow(el, attr_title, attr_id, attr_show);
-    }
-}
-
-//==============================================================================
-static void createWindow(const QDomElement &_element, 
-        const QString& _title, const QString& _id, 
-        const QString& _show)
-{
-    for(auto node = _element.firstChild(); 
-            !node.isNull(); 
-            node = node.nextSibling())
-    {
-        if(node.isElement())
-        {
-            auto el = node.toElement();
-            auto builder = 
-                LCXmlWidgetBuilders::instance().getBuilder(el.tagName());
-            if(!builder.isNull())
-            {
-                auto widget = builder->build(el, sl_appInterface);
-                if(widget)
-                {
-                    QString title;
-                    if(!_title.isNull())
-                    {
-                        title = _title;
-                    }
-                    else if(!_id.isNull())
-                    {
-                        title = _id;
-                    }
-                    else
-                    {
-                        title = el.tagName();
-                    }
-
-                    widget->setWindowTitle(title);
-
-                    if(_show == 
-                            LCXmlApplication::
-                            mBaseTags.window.attrs.show.vals.yes)
-                    {
-                        widget->show();
-                    }
-                }
-                break;
-            }
-        }
+        if(el.isNull()) continue;
+        LCXmlWindows::instance().create(el, __slAppInterface);
     }
 }
 
 //==============================================================================
 static QDomDocument staticLoadDomElement(const QString& _fileName)
 {
-    QFile file(sl_xmlMainFilePath + _fileName);
+    QFile file(__slXmlMainFilePath + _fileName);
 
     QDomDocument domDoc;
     QString errorStr;

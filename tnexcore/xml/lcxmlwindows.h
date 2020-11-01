@@ -6,6 +6,7 @@
 class QDomElement;
 class LIApplication;
 class LIWindow;
+
 class LCXmlWindows
 {
 private:
@@ -15,7 +16,8 @@ private:
     LCXmlWindows& operator=(const LCXmlWindows&) = delete;
 public:
     static LCXmlWindows& instance();
-    void create(const QDomElement& _element);
-    QSharedPointer<LIWindow> getWindow();
+    void create(
+        const QDomElement &_element, 
+        const LIApplication& _app);
 };
 #endif /* LCXMLWINDOWS_H_ */
