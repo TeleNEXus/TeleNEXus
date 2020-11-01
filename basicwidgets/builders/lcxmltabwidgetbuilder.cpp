@@ -10,17 +10,36 @@
 //------------------------------------------------------------------------------
 static const struct
 {
-    QString label = "label";
-    QString icon = "icon";
-    QString style = "style"; 
-    QString title = "title";
-} __attrNames;
+    struct
+    {
+        QString attr = "pos";
+        struct
+        {
+            QString top     = "Top";
+            QString bottom  = "Bottom";
+            QString left    = "Left";
+            QString right   = "Right";
+        }vals;
+    }position;
+
+    QString file = "file";
+
+} __slAttrs;
 
 //------------------------------------------------------------------------------
 static const struct
 {
-    QString item = "item";
-} __elementNames;
+    struct
+    {
+        QString tag = "item";
+        struct
+        {
+            QString label   = "label";
+            QString icon    = "icon";
+        }attrs;
+    }item;
+
+} __slTags;
 
 //==============================================================================
 LCXmlTabWidgetBuilder::LCXmlTabWidgetBuilder()
@@ -45,20 +64,51 @@ QWidget* LCXmlTabWidgetBuilder::build(
         const LIApplication& _app,
         LIWindow& _window)
 {
-    //TODO: Добавить распознавание стилей.
+    QString attr_file = _element.attribute(__slAttrs.file);
+    if(!attr_file.isNull())
+    {
+        QDomElement el = _app.getDomDocument(attr_file).documentElement();
+        if(!el.isNull())
+        {
+            return build(el, _app, _window);
+        }
+        return new QTabWidget;
+    }
+
     QTabWidget* tabwidget = new QTabWidget;
 
-    tabwidget->setWindowTitle(
-            _element.attribute(__attrNames.title, "TabWidget"));
+    QString attr_pos = _element.attribute(__slAttrs.position.attr);
 
-    QDomNodeList tabs = _element.childNodes();
-
-    for(int i = 0; i < tabs.size(); i++)
+    if(!attr_pos.isNull())
     {
-        QDomElement el = tabs.item(i).toElement();
-        if(!el.isNull()) 
-            createTab(tabs.item(i).toElement(), tabwidget, i, _app, _window); 
+        if(attr_pos == __slAttrs.position.vals.top)
+        {
+            tabwidget->setTabPosition(QTabWidget::TabPosition::North);
+        }
+        else if(attr_pos == __slAttrs.position.vals.bottom)
+        {
+            tabwidget->setTabPosition(QTabWidget::TabPosition::South);
+        }
+        else if(attr_pos == __slAttrs.position.vals.left)
+        {
+            tabwidget->setTabPosition(QTabWidget::TabPosition::West);
+        }
+        else if(attr_pos == __slAttrs.position.vals.right)
+        {
+            tabwidget->setTabPosition(QTabWidget::TabPosition::East);
+        }
     }
+
+    int index = 0;
+
+    for( QDomNode node = _element.firstChildElement(__slTags.item.tag);
+            !node.isNull();
+            node = node.nextSiblingElement(__slTags.item.tag))
+    {
+        createTab(node.toElement(), tabwidget, index, _app, _window); 
+        index++;
+    }
+
     return tabwidget;
 }
 
@@ -71,7 +121,7 @@ static void createTab(
         LIWindow& _window)
 {
     //TODO: Добавить иконки.
-    QString attr_label = _element.attribute(__attrNames.label);
+    QString attr_label = _element.attribute(__slTags.item.attrs.label);
 
     if(attr_label.isNull())
     {
