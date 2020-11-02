@@ -1,4 +1,4 @@
-#include "lcxmlcontrolwindowsbutton.h"
+#include "lcxmlcontrolwindowbuttonbuilder.h"
 #include <QEvent>
 #include <QPushButton>
 #include <qevent.h>
@@ -6,6 +6,7 @@
 #include <QDomElement>
 #include <LIWindow.h>
 
+#include <QDebug>
 //------------------------------------------------------------------------------
 static const struct
 {
@@ -61,22 +62,22 @@ struct SAction
 };
 
 //==============================================================================
-LCXmlControlWindowsButton::LCXmlControlWindowsButton()
+LCXmlControlWindowButtonBuilder::LCXmlControlWindowButtonBuilder()
 {
 }
 
 //------------------------------------------------------------------------------
-LCXmlControlWindowsButton::~LCXmlControlWindowsButton()
+LCXmlControlWindowButtonBuilder::~LCXmlControlWindowButtonBuilder()
 {
 }
 
 //------------------------------------------------------------------------------
 static void addAction(
-        QList<SAction> _actionList, 
+        QList<SAction>& _actionList, 
         QString _action,    
         QString _windowId);
 
-QWidget* LCXmlControlWindowsButton::build(
+QWidget* LCXmlControlWindowButtonBuilder::build(
         const QDomElement& _element, 
         const LIApplication& _app,
         LIWindow& _window)
@@ -95,6 +96,7 @@ QWidget* LCXmlControlWindowsButton::build(
     }
     else
     {
+        
         button->setText(_element.tagName());
     }
 
@@ -106,7 +108,7 @@ QWidget* LCXmlControlWindowsButton::build(
 
         QString attr_id     = el.attribute(__slTags.window.attrs.id);
         QString attr_action = el.attribute(__slTags.window.attrs.action.attr);
-        QString attr_event  = el.attribute(__slTags.window.attrs.action.attr);
+        QString attr_event  = el.attribute(__slTags.window.attrs.event.attr);
 
         if(attr_action.isNull() || attr_event.isNull()) continue;
 
@@ -119,20 +121,23 @@ QWidget* LCXmlControlWindowsButton::build(
             addAction(releaseActions, attr_action, attr_id);
         }
     }
+    QSharedPointer<LIWindow> pwin = QSharedPointer<LIWindow>(&_window);
 
     QObject::connect(button, &QPushButton::pressed, 
-            [pressActions, &_window]()
+            [pressActions, pwin]()
             {
+
             for(auto it = pressActions.begin(); it != pressActions.end(); it++)
             {
                 QSharedPointer<LIWindow> window;
                 if(it->window.isNull())
                 {
-                    window = QSharedPointer<LIWindow>(&_window); 
+                    /* window = QSharedPointer<LIWindow>(&_window); */ 
+                    window = pwin; 
                 }
                 else
                 {
-                    window = _window.getOtherWindow(it->window);
+                    window = pwin->getOtherWindow(it->window);
                 }
 
                 if(window.isNull()) return;
@@ -185,7 +190,7 @@ QWidget* LCXmlControlWindowsButton::build(
 
 //------------------------------------------------------------------------------
 static void addAction(
-        QList<SAction> _actionList, 
+        QList<SAction>& _actionList, 
         QString _action,    
         QString _windowId)
 {

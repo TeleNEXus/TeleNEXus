@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<WINDOW width="550" height="400">
-    <tabs file="tabtestwidget.xml"/>
+<WINDOW width="450" height="300">
+<!-- <WINDOW> -->
+    <!-- <tabs file="tabtestwidget.xml"/> -->
     <!-- <widget file="testboxlayout.xml"/> -->
     <!-- <widget file="testgridlayout.xml"/> -->
     <!-- <widget file="testwritebutton.xml"/> -->
     <!-- <switchWidgetsList file="testswitchwidgetlist.xml"/> -->
+    <widget file="testcontrolbutton.xml"/>
 </WINDOW>
 
 <!--<!-1-widget title="TITLE CHECK">-->
