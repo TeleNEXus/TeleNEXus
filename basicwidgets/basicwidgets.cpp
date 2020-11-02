@@ -71,3 +71,10 @@ void* getSwitchWidgetsListBuilder()
 }
 
 
+//------------------------------------------------------------------------------
+#include "lcxmlcontrolwindowsbutton.h"
+void* getControlWindowButton()
+{
+    return new LCXmlControlWindowsButton;
+}
+
