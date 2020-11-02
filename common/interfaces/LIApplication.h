@@ -9,6 +9,7 @@ class QDir;
 class LIXmlRemoteDataSourceBuilder;
 class LIXmlLayoutBuilder;
 class LIXmlWidgetBuilder;
+class LIWindow;
 class QDomDocument;
 
 #include "LIRemoteDataSource.h"
@@ -50,6 +51,7 @@ public:
      */
     virtual QDomDocument 
         getDomDocument(const QString& _fileName) const = 0; 
+
 };
 
 #endif // LIAPPLICATION_H

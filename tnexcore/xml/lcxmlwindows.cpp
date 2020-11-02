@@ -28,6 +28,12 @@ public:
     {
         mpWidget->hide();
     }
+
+    //--------------------------------------------------------------------------
+    virtual QSharedPointer<LIWindow> getOtherWindow(const QString& _windowId)
+    {
+        return smWindowsMap.find(_windowId).value(); 
+    }
 };
 
 //------------------------------------------------------------------------------

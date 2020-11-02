@@ -79,6 +79,7 @@ public:
     {
         return staticLoadDomElement( _fileName);
     }
+
 };
 
 static CApplicationInterface __slAppInterface;
