@@ -3,11 +3,11 @@
 
 #include "LIXmlWidgetBuilder.h"
 
-class LCXmlControlWindowsButton: public LIXmlWidgetBuilder
+class LCXmlControlWindowButtonBuilder: public LIXmlWidgetBuilder
 {
 public:
-    LCXmlControlWindowsButton();
-    virtual ~LCXmlControlWindowsButton();
+    LCXmlControlWindowButtonBuilder();
+    virtual ~LCXmlControlWindowButtonBuilder();
     virtual QWidget* build( const QDomElement& _element, 
                             const LIApplication& _app,
                             LIWindow& _window) override;
