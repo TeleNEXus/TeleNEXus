@@ -26,11 +26,12 @@ public:
     //--------------------------------------------------------------------------
     virtual void hide() override
     {
-        mpWidget->hide();
+        /* mpWidget->hide(); */
+        mpWidget->close();
     }
 
     //--------------------------------------------------------------------------
-    virtual QSharedPointer<LIWindow> getOtherWindow(const QString& _windowId)
+    virtual QSharedPointer<LIWindow> getOtherWindow(const QString& _windowId) override
     {
         return smWindowsMap.find(_windowId).value(); 
     }
