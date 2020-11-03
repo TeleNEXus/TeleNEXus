@@ -13,8 +13,7 @@ public:
     virtual ~LIXmlLayoutBuilder(){}
     virtual QLayout* build(
             const QDomElement&      _element, 
-            const LIApplication&    _app,
-            LIWindow&               _window) = 0;
+            const LIApplication&    _app) = 0;
 };
 
 #endif // LIXMLLAYOUTBUILDER_H

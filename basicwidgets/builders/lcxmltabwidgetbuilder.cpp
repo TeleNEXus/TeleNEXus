@@ -1,6 +1,5 @@
 #include "lcxmltabwidgetbuilder.h"
 #include "LIApplication.h"
-#include "LIWindow.h"
 #include <QTabWidget>
 #include <QDomElement>
 #include <QDebug>
@@ -56,13 +55,11 @@ static void createTab(
         const QDomElement& _element, 
         QTabWidget* tabwidget, 
         int _tabindex, 
-        const LIApplication& _app,
-        LIWindow& _window);
+        const LIApplication& _app);
 
 QWidget* LCXmlTabWidgetBuilder::build(
         const QDomElement& _element, 
-        const LIApplication& _app,
-        LIWindow& _window)
+        const LIApplication& _app)
 {
     QString attr_file = _element.attribute(__slAttrs.file);
     if(!attr_file.isNull())
@@ -70,7 +67,7 @@ QWidget* LCXmlTabWidgetBuilder::build(
         QDomElement el = _app.getDomDocument(attr_file).documentElement();
         if(!el.isNull())
         {
-            return build(el, _app, _window);
+            return build(el, _app);
         }
         return new QTabWidget;
     }
@@ -105,7 +102,7 @@ QWidget* LCXmlTabWidgetBuilder::build(
             !node.isNull();
             node = node.nextSiblingElement(__slTags.item.tag))
     {
-        createTab(node.toElement(), tabwidget, index, _app, _window); 
+        createTab(node.toElement(), tabwidget, index, _app); 
         index++;
     }
 
@@ -117,8 +114,7 @@ static void createTab(
         const QDomElement& _element, 
         QTabWidget* _tabwidget, 
         int _tabindex, 
-        const LIApplication& _app,
-        LIWindow& _window)
+        const LIApplication& _app)
 {
     //TODO: Добавить иконки.
     QString attr_label = _element.attribute(__slTags.item.attrs.label);
@@ -139,7 +135,7 @@ static void createTab(
             if(!builder.isNull())
             {
                 QWidget* widget = (*builder).build(
-                        childs.at(i).toElement(), _app, _window);
+                        childs.at(i).toElement(), _app);
                 if (widget)
                 {
                     _tabwidget->addTab( widget, attr_label);

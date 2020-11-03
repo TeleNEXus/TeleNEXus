@@ -20,11 +20,6 @@ public:
      * Скрывает окно.
      */
     virtual void hide() = 0;
-
-    /*
-     * Возвращает указатель на другое окно с заданным идентификатором.
-     */
-    virtual QSharedPointer<LIWindow> getOtherWindow(const QString& _windowId) = 0;
 };
 
 #endif // LIWINDOW_H_

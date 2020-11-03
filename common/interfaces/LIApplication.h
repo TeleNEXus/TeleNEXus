@@ -52,6 +52,12 @@ public:
     virtual QDomDocument 
         getDomDocument(const QString& _fileName) const = 0; 
 
+    /*
+     * Возвращает указатель на окно с заданным именем. 
+     */
+    virtual QSharedPointer<LIWindow> 
+        getWindow(const QString& _windowId) const = 0;
+
 };
 
 #endif // LIAPPLICATION_H

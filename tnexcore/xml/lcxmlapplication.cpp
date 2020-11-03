@@ -4,6 +4,7 @@
 #include "lcxmlremotedatasourcebuilders.h"
 #include "lcxmllayoutbuilders.h"
 #include "lcxmlwidgetbuilders.h"
+#include "lcxmlwindows.h"
 
 #include <QDebug>
 #include <QApplication>
@@ -75,11 +76,17 @@ public:
         return LCXmlWidgetBuilders::instance().getBuilder(_name);
     }
 
-    virtual QDomDocument getDomDocument(const QString& _fileName) const override
+    virtual QDomDocument getDomDocument(
+            const QString& _fileName) const override
     {
         return staticLoadDomElement( _fileName);
     }
 
+    virtual QSharedPointer<LIWindow> getWindow(
+            const QString& _windowId) const override
+    {
+        return LCXmlWindows::instance().getWindow(_windowId);
+    }
 };
 
 static CApplicationInterface __slAppInterface;
@@ -348,7 +355,6 @@ static void addWidgetsBuilders(const QDomElement& _rootElement)
 }
 
 //==============================================================================
-#include "lcxmlwindows.h"
 static void addWindows(const QDomElement& _rootElement)
 {
     for(auto node = 

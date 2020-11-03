@@ -19,5 +19,7 @@ public:
     void create(
         const QDomElement &_element, 
         const LIApplication& _app);
+
+    QSharedPointer<LIWindow> getWindow(const QString& _windowId);
 };
 #endif /* LCXMLWINDOWS_H_ */

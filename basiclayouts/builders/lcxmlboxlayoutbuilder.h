@@ -49,8 +49,8 @@ public:
     virtual ~LCXmlBoxLayoutBuilder();
     virtual QLayout* build(
             const QDomElement&      _element, 
-            const LIApplication&    _app,
-            LIWindow&               _window) override;
+            const LIApplication&    _app) override;
 
 };
+
 #endif // LCXMLBOXLAYOUTBUILDER_H

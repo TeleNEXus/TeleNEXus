@@ -1,7 +1,6 @@
 
 #include "lcxmlswitchwidgetslist.h"
 #include "LIApplication.h"
-#include "LIWindow.h"
 #include <QDomElement>
 #include <QDebug>
 #include <QListWidget>
@@ -41,13 +40,11 @@ LCXmlSwitchWidgetsListBuilder::~LCXmlSwitchWidgetsListBuilder()
 //------------------------------------------------------------------------------
 static QWidget* createWidget(
         const QDomElement& _element, 
-        const LIApplication& _app,
-        LIWindow& _window);
+        const LIApplication& _app);
 
 QWidget* LCXmlSwitchWidgetsListBuilder::build(
         const QDomElement& _element, 
-        const LIApplication& _app,
-        LIWindow& _window)
+        const LIApplication& _app)
 {
     QString file = _element.attribute(__sAttrs.file);
 
@@ -60,13 +57,14 @@ QWidget* LCXmlSwitchWidgetsListBuilder::build(
             QDomElement el = doc.documentElement();
             if(!el.isNull())
             {
-                if(el.tagName() == _element.tagName()) return this->build(el, _app, _window);
+                if(el.tagName() == _element.tagName()) 
+                    return this->build(el, _app);
             }
         }
     }
 
-    QSplitter*      splitter        = new QSplitter(Qt::Orientation::Horizontal);
-    QListWidget*    listWidget      = new QListWidget;
+    QSplitter* splitter = new QSplitter(Qt::Orientation::Horizontal);
+    QListWidget* listWidget = new QListWidget;
     QStackedWidget* stacked_widget  = new QStackedWidget;
 
     QFontMetrics font_metrics(listWidget->font());
@@ -81,20 +79,22 @@ QWidget* LCXmlSwitchWidgetsListBuilder::build(
         QString attr_item_name = el.attribute(__sTags.item.attr.name);
         if(attr_item_name.isNull()) continue;
 
-        QWidget* widget = createWidget(el, _app, _window);
+        QWidget* widget = createWidget(el, _app);
 
         if(widget)
         {
             listWidget->addItem(attr_item_name);
             stacked_widget->addWidget(widget);
             int text_width = font_metrics.width(attr_item_name);
-            font_max_width = (font_max_width < text_width) ? (text_width):(font_max_width);
+            font_max_width = (font_max_width < text_width) ? 
+                (text_width):(font_max_width);
         }
     }
 
     if(font_max_width > 0)
     {
-        listWidget->setMaximumWidth(font_max_width + font_metrics.width("    "));
+        listWidget->setMaximumWidth(
+                font_max_width + font_metrics.width("    "));
     }
 
     splitter->addWidget(listWidget);
@@ -113,8 +113,7 @@ QWidget* LCXmlSwitchWidgetsListBuilder::build(
 //------------------------------------------------------------------------------
 static QWidget* createWidget(
         const QDomElement& _element, 
-        const LIApplication& _app,
-        LIWindow& _window)
+        const LIApplication& _app)
 {
     QWidget* widget = nullptr;
     for(QDomNode node = _element.firstChild();
@@ -127,7 +126,7 @@ static QWidget* createWidget(
         auto builder = _app.getWidgetBuilder(el.tagName());
         if(builder.isNull()) continue;
 
-        widget = builder->build(el, _app, _window);
+        widget = builder->build(el, _app);
     }
 
     return widget;

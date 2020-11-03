@@ -26,14 +26,7 @@ public:
     //--------------------------------------------------------------------------
     virtual void hide() override
     {
-        /* mpWidget->hide(); */
         mpWidget->close();
-    }
-
-    //--------------------------------------------------------------------------
-    virtual QSharedPointer<LIWindow> getOtherWindow(const QString& _windowId) override
-    {
-        return smWindowsMap.find(_windowId).value(); 
     }
 };
 
@@ -58,12 +51,17 @@ LCXmlWindows& LCXmlWindows::instance()
 }
 
 //------------------------------------------------------------------------------
+QSharedPointer<LIWindow> LCXmlWindows::getWindow(const QString& _windowId)
+{
+    return LCXmlWindow::smWindowsMap.find(_windowId).value();
+}
+
+//------------------------------------------------------------------------------
 #include "lcxmlapplication.h"
 #include "LIXmlWidgetBuilder.h"
 
 static QWidget* buildWidget(const QDomElement& _element, 
-        const LIApplication& _app,
-        LIWindow& _window);
+        const LIApplication& _app);
 
 static LCXmlWindow* createLocal(const QDomElement& _element, 
         const LIApplication& _app);
@@ -117,7 +115,7 @@ static LCXmlWindow* createLocal(const QDomElement& _element,
     }
 
     LCXmlWindow* window = new LCXmlWindow();
-    QWidget* widget = buildWidget(_element, _app, *window);
+    QWidget* widget = buildWidget(_element, _app);
     if(widget == nullptr) 
     {
         delete window;
@@ -164,8 +162,7 @@ static LCXmlWindow* createLocal(const QDomElement& _element,
 
 //------------------------------------------------------------------------------
 static QWidget* buildWidget(const QDomElement& _element, 
-        const LIApplication& _app,
-        LIWindow& _window)
+        const LIApplication& _app)
 {
     for(auto node = _element.firstChild(); 
             !node.isNull(); 
@@ -177,7 +174,7 @@ static QWidget* buildWidget(const QDomElement& _element,
             auto builder = _app.getWidgetBuilder(el.tagName());
             if(!builder.isNull())
             {
-                auto widget = builder->build(el, _app, _window);
+                auto widget = builder->build(el, _app);
                 if(widget) return widget;
             }
         }

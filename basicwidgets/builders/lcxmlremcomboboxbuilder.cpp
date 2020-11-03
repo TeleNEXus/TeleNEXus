@@ -45,10 +45,8 @@ static void buildCombobox(   const QDomElement& _element,
 
 //------------------------------------------------------------------------------build
 QWidget* LCXmlRemComboBoxBuilder::build(const QDomElement& _element, 
-                                            const LIApplication& _app,
-                                            LIWindow& _window)
+                                            const LIApplication& _app)
 {
-    Q_UNUSED(_window);
     QWidget *ret;
     QString dataread;
     QString datawrite;

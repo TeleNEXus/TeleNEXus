@@ -10,8 +10,7 @@ public:
     LCXmlRemComboBoxBuilder();
     virtual ~LCXmlRemComboBoxBuilder();
     virtual QWidget* build( const QDomElement& _element, 
-                            const LIApplication& _app,
-                            LIWindow& _window) override;
+                            const LIApplication& _app) override;
 };
 
 #endif // LCXMLREMCOMBOBOXBUILDER_H
