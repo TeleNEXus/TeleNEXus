@@ -2,81 +2,80 @@
 
 <!-- Заданик растояния мезду элементами -->
 <widget title="TITLE CHECK">
-
-    <layoutGrid>
-    <!-- <layoutGrid spacing="100"> <!-1- Растояния между элементами -1-> -->
-
-
-        <col>
-        <!--Минимальная ширина стролбца -->
-        <!-- <col minwidth="100"> --> 
-            <widgets align="Right">
-                <label text="Label_0_0" /> 
-            </widgets>
-            <widgets>
-                <label text="Label_1_0" /> 
-                <label text="Label_2_0" /> 
-                <label text="Label_3_0" /> 
-            </widgets>
-        </col>
-
-        <col align="Right">
-        <!-- <col> -->
-            <widgets>
-                <label text="Label_0_1" /> 
-                <label text="Label_1_1" /> 
-            </widgets>
-
-            <!-- <stretch value="2"/> <!-1- Растяжка -1-> -->
-
-            <widgets>
-                <label text="Label_2_1" /> 
-                <label text="Label_3_1" /> 
-            </widgets>
-        </col>
-
-        <row>
-        <!-- <row align="Right"> -->
-        <!-- <row minheight="100"> <!-1- Минимальная высота строки -1-> -->
-            <!-- <stretch value="1"/> -->
-            <widgets align="Right">
-                <label text="Label_4_0" /> 
-            </widgets>
-            <widgets>
-                <label text="Label_4_1" /> 
-                <label text="Label_4_2" /> 
-                <label text="Label_4_3" /> 
-            </widgets>
-        </row>
-        <row align="Left">
-        <!-- <row align="Right"> -->
-            <widgets>
-                <label text="Label_5_0" /> 
-                <label text="Label_5_1" /> 
-                <label text="Label_5_2" /> 
-                <label text="Label_5_3" /> 
-            </widgets>
-            <layout>
-                <layoutGrid>
-                    <col>
+    <layout>
+        <layoutGrid>
+            <!-- <layoutGrid spacing="100"> <!-1- Растояния между элементами -1-> -->
+                <col>
+                    <!--Минимальная ширина стролбца -->
+                    <!-- <col minwidth="100"> --> 
+                        <widgets align="Right">
+                            <label text="Label_0_0" /> 
+                        </widgets>
                         <widgets>
-                            <label text="Label_1_5_0" /> 
-                            <label text="Label_1_5_1" /> 
-                            <label text="Label_1_5_2" /> 
-                            <label text="Label_1_5_3" /> 
+                            <label text="Label_1_0" /> 
+                            <label text="Label_2_0" /> 
+                            <label text="Label_3_0" /> 
                         </widgets>
                     </col>
-                    <row>
-                        <widgets>
-                            <label text="Label_1_5_0" /> 
-                            <label text="Label_1_5_1" /> 
-                            <label text="Label_1_5_2" /> 
-                            <label text="Label_1_5_3" /> 
-                        </widgets>
-                    </row>
-                </layoutGrid>
-            </layout>
-        </row>
-    </layoutGrid>
-</widget>
+
+                    <col align="Right">
+                        <!-- <col> -->
+                            <widgets>
+                                <label text="Label_0_1" /> 
+                                <label text="Label_1_1" /> 
+                            </widgets>
+
+                            <!-- <stretch value="2"/> <!-1- Растяжка -1-> -->
+
+                            <widgets>
+                                <label text="Label_2_1" /> 
+                                <label text="Label_3_1" /> 
+                            </widgets>
+                        </col>
+
+                        <row>
+                            <!-- <row align="Right"> -->
+                                <!-- <row minheight="100"> <!-1- Минимальная высота строки -1-> -->
+                                    <!-- <stretch value="1"/> -->
+                                    <widgets align="Right">
+                                        <label text="Label_4_0" /> 
+                                    </widgets>
+                                    <widgets>
+                                        <label text="Label_4_1" /> 
+                                        <label text="Label_4_2" /> 
+                                        <label text="Label_4_3" /> 
+                                    </widgets>
+                                </row>
+                                <row align="Left">
+                                    <!-- <row align="Right"> -->
+                                        <widgets>
+                                            <label text="Label_5_0" /> 
+                                            <label text="Label_5_1" /> 
+                                            <label text="Label_5_2" /> 
+                                            <label text="Label_5_3" /> 
+                                        </widgets>
+                                        <layout>
+                                            <layoutGrid>
+                                                <col>
+                                                    <widgets>
+                                                        <label text="Label_1_5_0" /> 
+                                                        <label text="Label_1_5_1" /> 
+                                                        <label text="Label_1_5_2" /> 
+                                                        <label text="Label_1_5_3" /> 
+                                                    </widgets>
+                                                </col>
+                                                <row>
+                                                    <widgets>
+                                                        <label text="Label_1_5_0" /> 
+                                                        <label text="Label_1_5_1" /> 
+                                                        <label text="Label_1_5_2" /> 
+                                                        <label text="Label_1_5_3" /> 
+                                                    </widgets>
+                                                </row>
+                                            </layoutGrid>
+                                        </layout>
+                                    </row>
+                                </layoutGrid>
+                            </layout>
+                        </widget>
 

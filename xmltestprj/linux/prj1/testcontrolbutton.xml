@@ -1,27 +1,29 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <widget>
-    <layoutVBox>
-        <widgets>
+    <layout>
+        <layoutVBox>
+            <widgets>
 
-            <controlWindowButton label="hide win0">
-                <window id="win0" event="pressed" action="hide"/>
-            </controlWindowButton>
+                <controlWindowButton label="hide win0">
+                    <window id="win0" event="pressed" action="hide"/>
+                </controlWindowButton>
 
-            <controlWindowButton label="hide win1 win2">
-                <window id="win1" event="pressed" action="hide"/>
-                <window id="win2" event="released" action="hide"/>
-            </controlWindowButton>
+                <controlWindowButton label="hide win1 win2">
+                    <window id="win1" event="pressed" action="hide"/>
+                    <window id="win2" event="released" action="hide"/>
+                </controlWindowButton>
 
-            <controlWindowButton label="show win1 win2">
-                <window id="win1" event="pressed" action="show"/>
-                <window id="win2" event="released" action="show"/>
-            </controlWindowButton>
+                <controlWindowButton label="show win1 win2">
+                    <window id="win1" event="pressed" action="show"/>
+                    <window id="win2" event="released" action="show"/>
+                </controlWindowButton>
 
-            <label text="Label01" /> 
-            <label text="Label02" /> 
-            <label text="Label03" /> 
-            <label text="Label04" /> 
+                <label text="Label01" /> 
+                <label text="Label02" /> 
+                <label text="Label03" /> 
+                <label text="Label04" /> 
 
-        </widgets>
-    </layoutVBox> 
+            </widgets>
+        </layoutVBox> 
+    </layout>
 </widget>

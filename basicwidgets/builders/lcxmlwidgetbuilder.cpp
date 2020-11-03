@@ -10,13 +10,13 @@
 static const struct
 {
     QString layout = "layout";
-} __tagsName;
+    QString widgets = "widgets";
+} __slTags;
 
 //------------------------------------------------------------------------------
 static const struct
 {
     QString file = "file";
-    QString type  = "type";
 } __attrName;
 
 //==============================================================================
@@ -32,7 +32,7 @@ LCXmlWidgetBuilder::~LCXmlWidgetBuilder()
 }
 
 //------------------------------------------------------------------------------
-static QWidget* buildWidget(
+static QWidget* buildLocal(
         const QDomElement& _element, 
         const LIApplication& _app);
 
@@ -50,24 +50,47 @@ QWidget* LCXmlWidgetBuilder::build( const QDomElement& _element,
         QDomElement el = _app.getDomDocument(attr).documentElement();
         if(!el.isNull())
         {
-            if(el.tagName() == _element.tagName()) return buildWidget(el, _app);
+            if(el.tagName() == _element.tagName()) return build(el, _app);
         } 
     }
 
-    return buildWidget(_element, _app);
+    return buildLocal(_element, _app);
 }
 
 //------------------------------------------------------------------------------
-static QWidget* buildWidget(
+static QWidget* buildFromLayout(const QDomElement& _element, 
+        const LIApplication& _app);
+//------------------------------------------------------------------------------
+static QWidget* buildFromWidgets(const QDomElement& _element, 
+        const LIApplication& _app);
+//------------------------------------------------------------------------------
+static QWidget* buildLocal(
         const QDomElement& _element, 
+        const LIApplication& _app)
+{
+
+    QDomNode  node = _element.firstChildElement(__slTags.layout);
+
+    if(!node.isNull()) return buildFromLayout(node.toElement(), _app);
+
+    node = _element.firstChildElement(__slTags.widgets);
+
+    if(!node.isNull()) return buildFromWidgets(node.toElement(), _app);
+
+    return new QWidget;
+}
+
+//------------------------------------------------------------------------------
+static QWidget* buildFromLayout(const QDomElement& _element, 
         const LIApplication& _app)
 {
     QWidget* widget = new QWidget;
 
-    QDomNodeList nodes = _element.childNodes();
-    for(int i = 0; i < nodes.size(); i++)
+    for(QDomNode node = _element.firstChild();
+            !node.isNull();
+            node = node.nextSibling())
     {
-         QDomElement el = nodes.at(i).toElement();
+         QDomElement el = node.toElement();
          if(!el.isNull())
          {
                     qDebug() << "Widget set Layout 3 " << el.tagName();
@@ -84,8 +107,26 @@ static QWidget* buildWidget(
                 }
              }                 
          }
-        
     }
     return widget;
 }
 
+//------------------------------------------------------------------------------
+static QWidget* buildFromWidgets(const QDomElement& _element, 
+        const LIApplication& _app)
+{
+    QWidget* widget = new QWidget;
+    for(QDomNode node = _element.firstChild();
+            !node.isNull();
+            node = node.nextSibling())
+    {
+         QDomElement el = node.toElement();
+         auto builder = _app.getWidgetBuilder(el.tagName());
+         QWidget* addwidget = builder->build(el, _app);
+         if(addwidget)
+         {
+             addwidget->setParent(widget);
+         }
+    }
+    return widget;
+}
