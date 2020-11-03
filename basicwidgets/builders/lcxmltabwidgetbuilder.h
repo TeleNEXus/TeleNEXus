@@ -9,7 +9,6 @@ public:
     LCXmlTabWidgetBuilder();
     virtual ~LCXmlTabWidgetBuilder();
     virtual QWidget* build( const QDomElement& _element, 
-                            const LIApplication& _app,
-                            LIWindow& _window) override;
+                            const LIApplication& _app) override;
 };
 #endif /* LCXMLTABBUILDER_H_ */

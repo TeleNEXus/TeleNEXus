@@ -1,7 +1,6 @@
 #include "lcxmlremlabelbuilder.h"
 #include "lcqremlabel.h"
 #include "LIApplication.h"
-#include "LIWindow.h"
 #include "lcxmlstddataformatterfactory.h"
 
 #include <QDomElement>
@@ -29,10 +28,8 @@ const struct
 
 //------------------------------------------------------------------------------
 QWidget* LCXmlRemLabelBuilder::build(const QDomElement& _element, 
-        const LIApplication& _app,
-        LIWindow& _window)
+        const LIApplication& _app)
 {
-    Q_UNUSED(_window);
     QString data;
     QString attr = _element.attribute(__attrNames.source);
     QSharedPointer<LIRemoteDataSource> source;

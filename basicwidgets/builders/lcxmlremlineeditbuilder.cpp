@@ -1,7 +1,6 @@
 #include "lcxmlremlineeditbuilder.h"
 #include "lcqremlineedit.h"
 #include "LIApplication.h"
-#include "LIWindow.h"
 #include "lcxmlstddataformatterfactory.h"
 #include <QDomElement>
 
@@ -27,10 +26,8 @@ const struct
 
 //------------------------------------------------------------------------------
 QWidget* LCXmlRemLineEditBuilder::build(const QDomElement& _element, 
-        const LIApplication& _app,
-        LIWindow& _window)
+        const LIApplication& _app)
 {
-    Q_UNUSED(_window);
     QWidget* ret = nullptr;
 
     QString data;

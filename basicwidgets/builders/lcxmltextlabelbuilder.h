@@ -9,8 +9,7 @@ public:
     LCXmlTextLabelBuilder();
     virtual ~LCXmlTextLabelBuilder();
     virtual QWidget* build( const QDomElement& _element, 
-                            const LIApplication& _app,
-                            LIWindow& _window) override;
+                            const LIApplication& _app) override;
 };
 
 #endif // LCXMLTEXTLABELBUILDER_H

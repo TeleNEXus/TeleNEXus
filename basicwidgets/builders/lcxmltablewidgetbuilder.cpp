@@ -5,7 +5,6 @@
 #include <qtablewidget.h>
 #include <QDebug>
 #include "LIApplication.h"
-#include "LIWindow.h"
 
 //==============================================================================
 LCXmlTableWidgetBuilder::LCXmlTableWidgetBuilder()
@@ -74,19 +73,16 @@ struct SBuildData
 static void createRow(
         const QDomElement &_element,
         const LIApplication& _app,
-        LIWindow& _window,
         SBuildData& _buildData);
 
 static void createCol(
         const QDomElement &_element,
         const LIApplication& _app,
-        LIWindow& _window,
         SBuildData& _buildData);
 
 //------------------------------------------------------------------------------
 QWidget* LCXmlTableWidgetBuilder::build(const QDomElement& _element,
-        const LIApplication& _app,
-        LIWindow& _window)
+        const LIApplication& _app)
 {
     SBuildData buildData;
 
@@ -99,11 +95,11 @@ QWidget* LCXmlTableWidgetBuilder::build(const QDomElement& _element,
             QDomElement element = childNode.toElement();
             if(element.tagName() == __elementNames.row)
             {
-                createRow(element, _app, _window, buildData);
+                createRow(element, _app, buildData);
             }
             else if(element.tagName() == __elementNames.column)
             {
-                createCol(element, _app, _window, buildData);
+                createCol(element, _app, buildData);
 
             }
         }
@@ -118,7 +114,6 @@ QWidget* LCXmlTableWidgetBuilder::build(const QDomElement& _element,
 static void createRow(
         const QDomElement &_element, 
         const LIApplication& _app, 
-        LIWindow& _window,
         SBuildData& _buildData)
 {
     quint32 col = 0;
@@ -175,7 +170,7 @@ static void createRow(
 
         if(!widget_builder.isNull())
         {
-            widget = widget_builder->build(nodeElement, _app, _window);
+            widget = widget_builder->build(nodeElement, _app);
         }
 
         if(widget)
@@ -195,7 +190,6 @@ static void createRow(
 static void createCol(
         const QDomElement &_element, 
         const LIApplication& _app, 
-        LIWindow& _window,
         SBuildData& _buildData)
 {
     quint32 row = 0;
@@ -250,7 +244,7 @@ static void createCol(
 
         if(!widget_builder.isNull())
         {
-            widget = widget_builder->build(nodeElement, _app, _window);
+            widget = widget_builder->build(nodeElement, _app);
         }
 
         if(widget)

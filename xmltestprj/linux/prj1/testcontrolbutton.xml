@@ -3,9 +3,8 @@
     <layoutVBox>
         <widgets>
 
-            <controlWindowButton label="hide own">
-                <!-- <window event="relesed" action="hide"/> -->
-                <window event="pressed" action="hide"/>
+            <controlWindowButton label="hide win0">
+                <window id="win0" event="pressed" action="hide"/>
             </controlWindowButton>
 
             <controlWindowButton label="hide win1 win2">

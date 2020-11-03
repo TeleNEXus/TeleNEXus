@@ -12,7 +12,8 @@ public:
     LIRemoteDataWriter(){}
     virtual ~LIRemoteDataWriter(){}
     virtual void setDataName( const QString& _dataName) = 0;
-    virtual void setDataWriteListener( QWeakPointer<LIRemoteDataWriteListner> _listener) = 0;
+    virtual void setDataWriteListener( 
+            QWeakPointer<LIRemoteDataWriteListner> _listener) = 0;
     virtual void writeRequest( const QByteArray& _data) = 0;
 };
 

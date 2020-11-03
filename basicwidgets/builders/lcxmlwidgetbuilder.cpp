@@ -1,6 +1,5 @@
 #include "lcxmlwidgetbuilder.h"
 #include "LIApplication.h"
-#include "LIWindow.h"
 #include "LIXmlLayoutBuilder.h"
 #include <QWidget>
 #include <QDomElement>
@@ -35,13 +34,11 @@ LCXmlWidgetBuilder::~LCXmlWidgetBuilder()
 //------------------------------------------------------------------------------
 static QWidget* buildWidget(
         const QDomElement& _element, 
-        const LIApplication& _app,
-        LIWindow& _window);
+        const LIApplication& _app);
 
 //------------------------------------------------------------------------------
 QWidget* LCXmlWidgetBuilder::build( const QDomElement& _element, 
-                                    const LIApplication& _app,
-                                    LIWindow& _window)
+                                    const LIApplication& _app)
 {
 
     QString attr;
@@ -53,18 +50,17 @@ QWidget* LCXmlWidgetBuilder::build( const QDomElement& _element,
         QDomElement el = _app.getDomDocument(attr).documentElement();
         if(!el.isNull())
         {
-            if(el.tagName() == _element.tagName()) return buildWidget(el, _app, _window);
+            if(el.tagName() == _element.tagName()) return buildWidget(el, _app);
         } 
     }
 
-    return buildWidget(_element, _app, _window);
+    return buildWidget(_element, _app);
 }
 
 //------------------------------------------------------------------------------
 static QWidget* buildWidget(
         const QDomElement& _element, 
-        const LIApplication& _app,
-        LIWindow& _window)
+        const LIApplication& _app)
 {
     QWidget* widget = new QWidget;
 
@@ -79,7 +75,7 @@ static QWidget* buildWidget(
              if(!builder.isNull())
              {
                     qDebug() << "Widget set Layout 4 " << el.tagName();
-                QLayout* layout = (*builder).build(el, _app, _window);
+                QLayout* layout = (*builder).build(el, _app);
                 if(layout)
                 {
                     widget->setLayout(layout);

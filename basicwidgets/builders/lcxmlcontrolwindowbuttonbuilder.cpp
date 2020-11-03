@@ -5,6 +5,7 @@
 #include <qnamespace.h>
 #include <QDomElement>
 #include <LIWindow.h>
+#include <LIApplication.h>
 
 #include <QDebug>
 //------------------------------------------------------------------------------
@@ -74,13 +75,12 @@ LCXmlControlWindowButtonBuilder::~LCXmlControlWindowButtonBuilder()
 //------------------------------------------------------------------------------
 static void addAction(
         QList<SAction>& _actionList, 
-        QString _action,    
+        QString _action,
         QString _windowId);
 
 QWidget* LCXmlControlWindowButtonBuilder::build(
         const QDomElement& _element, 
-        const LIApplication& _app,
-        LIWindow& _window)
+        const LIApplication& _app)
 {
     Q_UNUSED(_app);
 
@@ -110,7 +110,7 @@ QWidget* LCXmlControlWindowButtonBuilder::build(
         QString attr_action = el.attribute(__slTags.window.attrs.action.attr);
         QString attr_event  = el.attribute(__slTags.window.attrs.event.attr);
 
-        if(attr_action.isNull() || attr_event.isNull()) continue;
+        if(attr_id.isNull() || attr_action.isNull() || attr_event.isNull()) continue;
 
         if(attr_event == __slTags.window.attrs.event.vals.pressed)
         {
@@ -121,25 +121,16 @@ QWidget* LCXmlControlWindowButtonBuilder::build(
             addAction(releaseActions, attr_action, attr_id);
         }
     }
-    QSharedPointer<LIWindow> pwin = QSharedPointer<LIWindow>(&_window);
-
+    
+    //Подключение обработчика сигнала нажатия.
     QObject::connect(button, &QPushButton::pressed, 
-            [pressActions, pwin]()
+            [pressActions, &_app]()
             {
 
             for(auto it = pressActions.begin(); it != pressActions.end(); it++)
             {
-                QSharedPointer<LIWindow> window;
-                if(it->window.isNull())
-                {
-                    /* window = QSharedPointer<LIWindow>(&_window); */ 
-                    window = pwin; 
-                }
-                else
-                {
-                    window = pwin->getOtherWindow(it->window);
-                }
-
+                QSharedPointer<LIWindow> window = _app.getWindow(it->window);
+                 
                 if(window.isNull()) return;
 
                 switch(it->type)
@@ -155,21 +146,14 @@ QWidget* LCXmlControlWindowButtonBuilder::build(
             }
             });
 
+    //Подключение обработчика сигнала отжатия.
     QObject::connect(button, &QPushButton::released, 
-            [releaseActions, &_window]()
+            [releaseActions, &_app]()
             {
             for(auto it = releaseActions.begin(); it != releaseActions.end(); it++)
             {
-                QSharedPointer<LIWindow> window;
-                if(it->window.isNull())
-                {
-                    window = QSharedPointer<LIWindow>(&_window); 
-                }
-                else
-                {
-                    window = _window.getOtherWindow(it->window);
-                }
-
+                QSharedPointer<LIWindow> window = _app.getWindow(it->window);
+                 
                 if(window.isNull()) return;
 
                 switch(it->type)
@@ -191,7 +175,7 @@ QWidget* LCXmlControlWindowButtonBuilder::build(
 //------------------------------------------------------------------------------
 static void addAction(
         QList<SAction>& _actionList, 
-        QString _action,    
+        QString _action,
         QString _windowId)
 {
     if(_action == __slTags.window.attrs.action.vals.show)
