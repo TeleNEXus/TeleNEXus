@@ -26,7 +26,7 @@ const struct
     QString dataread    = "read";
     QString source      = "source";
     QString format      = "format";
-    QString name        = "name";
+    QString text        = "text";
     QString value       = "value";
 } __attrNames;
 
@@ -104,7 +104,7 @@ static void buildComboLabel( const QDomElement& _element,
         if(el.isNull()) continue;
         if(el.tagName() != __elementNames.item) continue; 
 
-        QString name = el.attribute(__attrNames.name);
+        QString name = el.attribute(__attrNames.text);
         QString val = el.attribute(__attrNames.value);
 
         if (val.isNull()) 

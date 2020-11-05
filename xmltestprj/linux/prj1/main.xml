@@ -74,7 +74,7 @@
     <!-- <WINDOW id="main window 1" title="MAIN WINDOW 1" file="widgets.xml"/> -->
     <!-- <WINDOW id="main window 2" title="MAIN WINDOW 2" file="widgets.xml"/> -->
     <WINDOW id="win0" title="WINDOW 0" file="window.xml" show="yes"/>
-    <WINDOW id="win1" title="WINDOW 1" file="window.xml" show="yes"/>
-    <WINDOW id="win2" title="WINDOW 2" file="window.xml" show="yes"/>
+    <!-- <WINDOW id="win1" title="WINDOW 1" file="window.xml" show="yes"/> -->
+    <!-- <WINDOW id="win2" title="WINDOW 2" file="window.xml" show="yes"/> -->
         
 </APPLICATION>

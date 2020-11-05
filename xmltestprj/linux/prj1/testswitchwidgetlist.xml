@@ -36,29 +36,29 @@
                         <label text="Label 1 widget 3" /> 
                         <label text="Label 2 widget 3" /> 
                         <dataComboBox  read="hreg0" source="qtslavetcp" format="uint16">
-                            <item name="On"     value="010"/>
-                            <item name="Off"    value="011"/>
-                            <item name="Reset"  value="012"/>
-                            <item name="Test"   value="013"/>
+                            <item text="On"     value="010"/>
+                            <item text="Off"    value="011"/>
+                            <item text="Reset"  value="012"/>
+                            <item text="Test"   value="013"/>
                         </dataComboBox>
 
                         <dataComboBox  read="hreg0" source="qtslavetcp" format="hex" size="2">
-                            <item name="On"        value="00_0 a"/>
-                            <item name="Off"       value="00_0 b"/>
-                            <item name="Reset"     value="00_0 c"/>
-                            <item name="Test"      value="00_0 d"/>
+                            <item text="On"        value="00_0 a"/>
+                            <item text="Off"       value="00_0 b"/>
+                            <item text="Reset"     value="00_0 c"/>
+                            <item text="Test"      value="00_0 d"/>
                         </dataComboBox>
 
                         <dataComboLabel  read="coil0" source="qtslavetcp" format="bool">
-                            <item name="Включен"        value="true"/>
-                            <item name="Выключен"       value="false"/>
+                            <item text="Включен"        value="true"/>
+                            <item text="Выключен"       value="false"/>
                         </dataComboLabel>
 
                         <dataComboLabel  read="hreg0" source="qtslavetcp" format="hex" size="2">
-                            <item name="On"        value="a"/>
-                            <item name="Off"       value="b"/>
-                            <item name="Reset"     value="c"/>
-                            <item name="Test"      value="d"/>
+                            <item text="On"        value="a"/>
+                            <item text="Off"       value="b"/>
+                            <item text="Reset"     value="c"/>
+                            <item text="Test"      value="d"/>
                         </dataComboLabel>
                     </widgets>
                 </layoutVBox>

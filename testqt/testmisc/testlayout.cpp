@@ -3,6 +3,7 @@
 #include <QtWidgets>
 #include <qglobal.h>
 #include <qnamespace.h>
+#include <qpicture.h>
 
 int main(int argc, char** argv)
 {
@@ -49,11 +50,31 @@ int main(int argc, char** argv)
     vlayout1->addWidget(buttonv5);
      
 
-    QPixmap pix;
-    if(!pix.load("/home/serg/pprj/tnex/xmltestprj/linux/prj1/pict/pict1.jpg"))
-        qDebug() << "Can't load Pix map";
-    label2->setPixmap(pix);
+    /* QPixmap pix; */
+    /* if(!pix.load("/home/serg/pprj/tnex/testqt/testmisc/pict/clock.gif")) */
+    /*     qDebug() << "Can't load Pix map"; */
+    /* qDebug() << "pict alpha = " << pix.hasAlpha(); */
+
+    /* pix.setMask(pix.createMaskFromColor(Qt::GlobalColor::white, Qt::MaskMode::MaskInColor)); */ 
+
+    /* label2->setPixmap(pix); */
+
+    QMovie *mv = new QMovie(label2);
+    /* mv.setFileName("/home/serg/pprj/tnex/testqt/testmisc/pict/clock.gif"); */
+    /* mv.setFileName("/home/serg/pprj/tnex/testqt/testmisc/pict/box1.bmp"); */
+    /* mv.setFileName("/home/serg/pprj/tnex/testqt/testmisc/pict/clocl_1.gif"); */
+    mv->setFileName("/home/serg/pprj/tnex/testqt/testmisc/pict/clocl_1.gif");
+    mv->setBackgroundColor(QColor(Qt::GlobalColor::transparent));
+    qDebug() << "backgroundColor = " << mv->backgroundColor();
+
+    label2->setMovie(mv);
+    label3->setMovie(mv);
+    label4->setMovie(mv);
+
+    mv->start();
+
     label2->setAlignment(Qt::AlignmentFlag::AlignCenter);
+
     label1->setWordWrap(true);
     label1->setAlignment(Qt::AlignmentFlag::AlignCenter);
     vlayout1->addWidget(label1);
