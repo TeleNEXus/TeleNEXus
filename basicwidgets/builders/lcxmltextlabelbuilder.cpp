@@ -1,6 +1,7 @@
 #include "lcxmltextlabelbuilder.h"
 #include <QLabel>
 #include <QDomElement>
+#include "builderscommon.h"
 //==============================================================================
 LCXmlTextLabelBuilder::LCXmlTextLabelBuilder()
 {
@@ -26,18 +27,22 @@ QWidget* LCXmlTextLabelBuilder::build(
     if(!_element.attribute("text").isNull())
     {
         label->setText(_element.attribute("text"));
-        return label;
+    }
+    else
+    {
+        //Задание текста в виде узла.
+        QDomNode node = _element.firstChild();
+        while(!node.isNull())
+        {
+            if(node.isText())
+            {
+                label->setText(node.nodeValue());
+            }
+            node = node.nextSibling();
+        }
     }
 
-    //Задание текста в виде узла.
-    QDomNode node = _element.firstChild();
-    while(!node.isNull())
-    {
-        if(node.isText())
-        {
-            label->setText(node.nodeValue());
-        }
-        node = node.nextSibling();
-    }
+    LCWidgetBuildersCommon::initPosition(_element, label);
+
     return label;
 }

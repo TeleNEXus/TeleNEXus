@@ -50,6 +50,7 @@ SOURCES += \
     builders/lcxmlremwritebuttonbuilder.cpp \
     builders/lcxmlswitchwidgetslist.cpp \
     builders/lcxmlcontrolwindowbuttonbuilder.cpp \
+    builders/builderscommon.cpp \
     dataformatters/lcstringdataformatterbase.cpp \
     dataformatters/lcstringdataformatterbitfield.cpp \
     dataformatters/lcstringdataformatterbits.cpp \
@@ -97,6 +98,7 @@ HEADERS += \
     builders/lcxmlremwritebuttonbuilder.h \
     builders/lcxmlswitchwidgetslist.h \
     builders/lcxmlcontrolwindowbuttonbuilder.h \
+    builders/builderscommon.h \
     dataformatters/LIStringDataFormatter.h \
     dataformatters/lcstringdataformatterbase.h \
     dataformatters/lcstringdataformatterbitfield.h \
