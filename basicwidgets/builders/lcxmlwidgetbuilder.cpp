@@ -5,6 +5,7 @@
 #include <QDomElement>
 #include <QFile>
 #include <QDebug>
+#include "builderscommon.h"
 
 //------------------------------------------------------------------------------
 static const struct
@@ -70,14 +71,31 @@ static QWidget* buildLocal(
 {
 
     QDomNode  node = _element.firstChildElement(__slTags.layout);
+    QWidget* widget = nullptr;
 
-    if(!node.isNull()) return buildFromLayout(node.toElement(), _app);
+    if(!node.isNull()) 
+    {
+        widget = buildFromLayout(node.toElement(), _app);
+    }
+    else
+    {
+        node = _element.firstChildElement(__slTags.widgets);
 
-    node = _element.firstChildElement(__slTags.widgets);
+        if(!node.isNull()) 
+        {
+            widget = buildFromWidgets(node.toElement(), _app);
+        }
+        else
+        {
+            widget = new QWidget;
+        }
+    }
 
-    if(!node.isNull()) return buildFromWidgets(node.toElement(), _app);
+    LCWidgetBuildersCommon::initPosition(_element, *widget);
+    LCWidgetBuildersCommon::initSize(_element, *widget);
+    LCWidgetBuildersCommon::initFixedSize(_element, *widget);
 
-    return new QWidget;
+    return widget;
 }
 
 //------------------------------------------------------------------------------
