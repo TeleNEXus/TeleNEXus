@@ -42,7 +42,7 @@ QWidget* LCXmlTextLabelBuilder::build(
         }
     }
 
-    LCWidgetBuildersCommon::initPosition(_element, label);
+    LCWidgetBuildersCommon::initPosition(_element, *label);
 
     return label;
 }

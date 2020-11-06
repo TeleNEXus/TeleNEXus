@@ -132,7 +132,7 @@ static LCXmlWindow* createLocal(const QDomElement& _element,
             LCXmlApplication::mBaseTags.window.attrs.height);
 
     //Переопределение размеров окна.
-    QSize s = window->mpWidget->sizeHint();
+    QSize s = window->mpWidget->geometry().size();
 
     if(!attr_width.isNull())
     {

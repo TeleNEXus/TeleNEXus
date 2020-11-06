@@ -14,6 +14,10 @@ public:
     {
         QString posx = "posx";
         QString posy = "posy";
+        QString width = "width";
+        QString height = "height";
+        QString fixwidth = "fixwidth";
+        QString fixheght = "fixheight";
     };
     static const SAttributes mAttributes;
 
@@ -21,8 +25,11 @@ private:
     explicit LCWidgetBuildersCommon() = delete;
     explicit LCWidgetBuildersCommon(const LCWidgetBuildersCommon&) = delete;
     LCWidgetBuildersCommon& operator=(const LCWidgetBuildersCommon&) = delete;
+
 public:
-   static void initPosition(const QDomElement& _element, QWidget* _widget);
+   static void initPosition(const QDomElement& _element, QWidget& _widget);
+   static void initSize(const QDomElement& _element, QWidget& _widget);
+   static void initFixedSize(const QDomElement& _element, QWidget& _widget);
 };
 
 #endif /* BUILDERSCOMMON_H_ */

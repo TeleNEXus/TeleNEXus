@@ -1,10 +1,24 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<widget>
+<!-- <widget fixwidth="300" fixheight="100"> -->
+<widget width="500" height="100" posx="100" posy="100">
+<!-- <widget > -->
+    <!-- <layout> -->
+    <!--     <layoutHBox> -->
+    <!--         <widgets> -->
+    <!--             <label text="Layout Label0"/> -->
+    <!--             <label text="Layout Label1"/> -->
+    <!--             <label text="Layout Label2"/> -->
+    <!--             <label text="Layout Label3"/> -->
+    <!--         </widgets> -->
+    <!--     </layoutHBox> -->
+    <!-- </layout> -->
     <widgets> 
        <label text="Label0" posx="20" posy="20"/>
        <label text="Label1" posx="40" posy="40"/>
        <label text="Label2" posx="60" posy="60"/>
        <label text="Label3" posx="80" posy="80"/>
+       <label text="Label4" posx="100" posy="100"/>
+       <label text="Label5" posx="120" posy="120"/>
     </widgets>
 </widget>
