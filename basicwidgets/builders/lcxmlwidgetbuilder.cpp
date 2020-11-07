@@ -111,16 +111,13 @@ static QWidget* buildFromLayout(const QDomElement& _element,
          QDomElement el = node.toElement();
          if(!el.isNull())
          {
-                    qDebug() << "Widget set Layout 3 " << el.tagName();
              auto builder = _app.getLayoutBuilder(el.tagName());
              if(!builder.isNull())
              {
-                    qDebug() << "Widget set Layout 4 " << el.tagName();
                 QLayout* layout = (*builder).build(el, _app);
                 if(layout)
                 {
                     widget->setLayout(layout);
-                    qDebug() << "Widget set Layout 5 " << el.tagName();
                     break;
                 }
              }                 
@@ -134,6 +131,10 @@ static QWidget* buildFromWidgets(const QDomElement& _element,
         const LIApplication& _app)
 {
     QWidget* widget = new QWidget;
+
+    int width = 0;
+    int height = 0;
+
     for(QDomNode node = _element.firstChild();
             !node.isNull();
             node = node.nextSibling())
@@ -144,7 +145,26 @@ static QWidget* buildFromWidgets(const QDomElement& _element,
          if(addwidget)
          {
              addwidget->setParent(widget);
+
+             addwidget->show();
+
+             int wh = addwidget->geometry().bottomRight().x();
+
+             width = (wh > width) ? 
+                 (wh) : (width);
+
+             wh = addwidget->geometry().bottomRight().y();
+
+             height = (wh > height) ? 
+                 (wh) : (height);
          }
     }
+
+    if((width != 0) && (height != 0))
+    {
+        widget->resize(width, height);
+    }
+
     return widget;
 }
+

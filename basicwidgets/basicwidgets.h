@@ -15,5 +15,6 @@ extern "C" void* getTabWidgetBuilder();
 extern "C" void* getRemWriteButtonBuilder();
 extern "C" void* getSwitchWidgetsListBuilder();
 extern "C" void* getControlWindowButtonBuilder();
+extern "C" void* getScrollAreaBuilder();
 
 #endif // BASICWIDGETS_H

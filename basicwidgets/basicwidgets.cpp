@@ -78,3 +78,9 @@ void* getControlWindowButtonBuilder()
     return new LCXmlControlWindowButtonBuilder;
 }
 
+//------------------------------------------------------------------------------
+#include "lcxmlscrollareabuilder.h"
+void* getScrollAreaBuilder()
+{
+    return new LCXmlScrollAreaBuilder;
+}
