@@ -52,6 +52,8 @@ public:
                 QString title   = "title";
                 QString widht   = "width";
                 QString height  = "height";
+                QString posx    = "posx";
+                QString posy    = "posy";
 
                 struct
                 {
