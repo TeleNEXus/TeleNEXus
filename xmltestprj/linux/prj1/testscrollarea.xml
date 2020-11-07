@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!-- <scrollArea fixwidth="500" fixheight="100" posx="100" posy="100"> -->
+<scrollArea width="500" height="100" posx="100" posy="100">
+    <!-- <widget width="300" height="400"> --> 
+    <widget> 
+        <widgets>
+            <label text="Label0" posx="20"  posy="20"  />
+            <label text="Label1" posx="40"  posy="40"  />
+            <label text="Label2" posx="60"  posy="60"  />
+            <label text="Label3" posx="80"  posy="80"  />
+            <label text="Label4" posx="100" posy="100" />
+            <label text="Label5" posx="120" posy="120" />
+        </widgets>
+    </widget>
+</scrollArea>

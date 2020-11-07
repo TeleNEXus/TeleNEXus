@@ -8,7 +8,8 @@
     <!-- <widget file="testwritebutton.xml"/> -->
     <!-- <switchWidgetsList file="testswitchwidgetlist.xml"/> -->
     <!-- <widget file="testcontrolbutton.xml"/> -->
-    <widget file="testwidget.xml"/>
+    <!-- <widget file="testwidget.xml"/> -->
+    <scrollArea file="testscrollarea.xml"/>
 </WINDOW>
 
 <!--<!-1-widget title="TITLE CHECK">-->

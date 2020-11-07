@@ -44,7 +44,6 @@ void LCWidgetBuildersCommon::initSize(const QDomElement& _element,
     QString attr_width = _element.attribute(mAttributes.width);
     QString attr_height = _element.attribute(mAttributes.height);
     
-
     int width;
     int height;
 
@@ -60,7 +59,6 @@ void LCWidgetBuildersCommon::initSize(const QDomElement& _element,
     {
         return;
     }
-
     _widget.resize(width, height);
 }
 
@@ -88,6 +86,5 @@ void LCWidgetBuildersCommon::initFixedSize(const QDomElement& _element,
     {
         return;
     }
-
     _widget.setFixedSize(width, height);
 }

@@ -39,6 +39,7 @@
         <tabs                   lib="basicwidgets" libhandler="getTabWidgetBuilder"             />
         <switchWidgetsList      lib="basicwidgets" libhandler="getSwitchWidgetsListBuilder"     />
         <controlWindowButton    lib="basicwidgets" libhandler="getControlWindowButtonBuilder"   />
+        <scrollArea             lib="basicwidgets" libhandler="getScrollAreaBuilder"            />
     </WIDGETBUILDERS>
     
     <!-- <WIDGETBUILDERS file="widgetbuilders.xml"/> -->
