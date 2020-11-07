@@ -155,8 +155,24 @@ static LCXmlWindow* createLocal(const QDomElement& _element,
         }
     }
 
-    window->mpWidget->resize(s);
+    bool flag_posx = false;
+    bool flag_posy = false;
+    int posx;
+    int posy;
 
+    QString attr = _element.attribute(
+            LCXmlApplication::mBaseTags.window.attrs.posx);
+    posx = attr.toInt(&flag_posx);
+
+    attr = _element.attribute(
+            LCXmlApplication::mBaseTags.window.attrs.posy);
+    posy = attr.toInt(&flag_posy);
+
+    if(flag_posx && flag_posy)
+    {
+        window->mpWidget->move(posx, posy);
+    }
+    window->mpWidget->resize(s);
     return window;
 }
 
