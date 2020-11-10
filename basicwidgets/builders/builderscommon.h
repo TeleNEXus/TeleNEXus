@@ -2,13 +2,19 @@
 #define BUILDERSCOMMON_H_
 
 #include <QString>
+#include <QSharedPointer>
 
 class QDomElement;
 class QWidget;
+class QMovie;
+class LIApplication;
+class LIMovieAccess;
+
 
 class LCWidgetBuildersCommon
 {
 public:
+
 
     struct SAttributes
     {
@@ -30,6 +36,9 @@ public:
    static void initPosition(const QDomElement& _element, QWidget& _widget);
    static void initSize(const QDomElement& _element, QWidget& _widget);
    static void initFixedSize(const QDomElement& _element, QWidget& _widget);
+
+   static QSharedPointer<LIMovieAccess> getMovie(const QString& _movie, const LIApplication& _app);
+   static QPixmap getPixmap(const QString& _pixmap, const LIApplication& _app);
 };
 
 #endif /* BUILDERSCOMMON_H_ */

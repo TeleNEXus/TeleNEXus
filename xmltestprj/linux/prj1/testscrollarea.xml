@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <!-- <scrollArea fixwidth="500" fixheight="100" posx="100" posy="100"> -->
-<scrollArea width="500" height="100" posx="100" posy="100">
+<!-- <scrollArea width="500" height="100" posx="100" posy="100"> -->
+<scrollArea>
     <!-- <widget width="300" height="400"> --> 
     <widget> 
         <widgets>

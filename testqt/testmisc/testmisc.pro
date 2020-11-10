@@ -24,7 +24,8 @@ DEFINES += QT_DEPRECATED_WARNINGS
 # SOURCES +=  ./testlayout.cpp \
 # SOURCES +=  ./testgridlayout.cpp \
 # SOURCES +=  ./listwidget.cpp \
-SOURCES +=  ./testwidget.cpp \
+# SOURCES +=  ./testwidget.cpp \
+SOURCES +=  ./testwidget1.cpp \
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

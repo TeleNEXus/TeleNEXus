@@ -63,6 +63,7 @@ flags = [
              '-DQT_CORE_LIB',
              '-I', '.',
              '-I', '../basicwidgets',
+             '-I', '../basicwidgets/common',
              '-I', '../basicwidgets/builders',
              '-I', '../basicwidgets/widgets',
              '-I', '../basicwidgets/dataformatters',

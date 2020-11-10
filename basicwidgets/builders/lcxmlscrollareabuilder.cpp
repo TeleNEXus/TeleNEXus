@@ -44,16 +44,20 @@ QWidget* LCXmlScrollAreaBuilder::build( const QDomElement& _element,
     QString attr;
 
     attr = _element.attribute(__attrName.file);
+    qDebug() << "scrollarea build 0";
 
     if(!attr.isNull())
     {
+        qDebug() << "scrollarea build 2";
         QDomElement el = _app.getDomDocument(attr).documentElement();
         if(!el.isNull())
         {
+            qDebug() << "scrollarea build 3";
             if(el.tagName() == _element.tagName()) return build(el, _app);
         } 
     }
 
+    qDebug() << "scrollarea build 4";
     return buildLocal(_element, _app);
 }
 
@@ -63,35 +67,35 @@ static QWidget* buildLocal(
         const LIApplication& _app)
 {
     QWidget* widget = nullptr;
-    qDebug() << "Scroll area build 0";
+    qDebug() << "scrollarea build local 0";
 
     for(QDomNode node = _element.firstChild();
             !node.isNull();
             node = node.nextSibling())
     {
+        qDebug() << "scrollarea build local 1";
         QDomElement el = node.toElement();
         if(el.isNull()) continue;
         auto builder = _app.getWidgetBuilder(el.tagName());
         if(builder.isNull()) continue;
-        auto w = builder->build(el, _app);
+        QWidget* w = builder->build(el, _app);
+
         if(w)
         {
             widget = w;
             break;
-        }
-        else
-        {
-            continue;
         }
     }
 
     QScrollArea *scrollarea = new QScrollArea;
     if(widget)
     {
+        qDebug() << "scrollarea build local 2";
         scrollarea->setWidget(widget);
     }
     else
     {
+        qDebug() << "scrollarea build local 3";
         scrollarea->setWidget(new QWidget);
     }
 

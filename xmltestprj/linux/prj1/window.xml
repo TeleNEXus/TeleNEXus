@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<WINDOW width="450" height="300" posx="600" posy="600">
-<!-- <WINDOW> -->
+<!-- <WINDOW width="450" height="300" posx="600" posy="600"> -->
+<WINDOW>
     <!-- <tabs file="tabtestwidget.xml"/> -->
     <!-- <widget file="testboxlayout.xml"/> -->
     <!-- <widget file="testgridlayout.xml"/> -->
     <!-- <widget file="testwritebutton.xml"/> -->
     <!-- <switchWidgetsList file="testswitchwidgetlist.xml"/> -->
-    <widget file="testcontrolbutton.xml"/>
+    <!-- <widget file="testcontrolbutton.xml"/> -->
     <!-- <widget file="testwidget.xml"/> -->
     <!-- <scrollArea file="testscrollarea.xml"/> -->
+    <!-- <scrollArea file="testcombolabel.xml"/> -->
+    <widget file="testcombolabel.xml"/>
 </WINDOW>
 
 <!--<!-1-widget title="TITLE CHECK">-->
