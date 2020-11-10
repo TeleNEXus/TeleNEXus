@@ -8,6 +8,7 @@
 #include <qwidget.h>
 
 #include <QDebug>
+#include "builderscommon.h"
 //==============================================================================
 LCXmlRemComboLabelBuilder::LCXmlRemComboLabelBuilder()
 {
@@ -28,6 +29,8 @@ const struct
     QString format      = "format";
     QString text        = "text";
     QString value       = "value";
+    QString movie       = "movie";
+    QString picture     = "picture";
 } __attrNames;
 
 //------------------------------------------------------------------------------
@@ -39,13 +42,14 @@ const struct
 //------------------------------------------------------------------------------
 static void buildComboLabel( const QDomElement& _element, 
                         LCQRemComboLabel* _label,
-                        QSharedPointer<LCStringDataFormatterBase> _format);
+                        QSharedPointer<LCStringDataFormatterBase> _format,
+                        const LIApplication& _app);
 
 //------------------------------------------------------------------------------
 QWidget* LCXmlRemComboLabelBuilder::build(const QDomElement& _element, 
                                             const LIApplication& _app)
 {
-    QWidget *ret;
+    LCQRemComboLabel *remlabel= nullptr;
     QString dataread;
     QString attr = _element.attribute(__attrNames.source);
     QSharedPointer<LIRemoteDataSource> source;
@@ -74,56 +78,69 @@ QWidget* LCXmlRemComboLabelBuilder::build(const QDomElement& _element,
                                 createStringFormatter(_element.attributes());
     if(format.isNull())
     {
-        qDebug() << "LCQRemComboLabel-------------------------no format";
         goto LABEL_WRONG_EXIT;
     }
 
-    ret = new LCQRemComboLabel(dataread, source, format);
+    remlabel = new LCQRemComboLabel(dataread, source, format);
 
-    buildComboLabel(_element, static_cast<LCQRemComboLabel*>(ret), format);
-    return ret;
+    buildComboLabel(_element, remlabel, format, _app);
 
 LABEL_WRONG_EXIT:
-    ret = new QLabel(_element.tagName());
-    static_cast<QLabel*>(ret)->setEnabled(false);
+    QLabel* ret = remlabel;
+    if(ret == nullptr) ret = new QLabel(_element.tagName());
+
+    LCWidgetBuildersCommon::initSize(_element, *ret);
+    LCWidgetBuildersCommon::initFixedSize(_element, *ret);
+    LCWidgetBuildersCommon::initPosition(_element, *ret);
+
     return ret;
 }
 
 //------------------------------------------------------------------------------
 static void buildComboLabel( const QDomElement& _element, 
                         LCQRemComboLabel* _label,
-                        QSharedPointer<LCStringDataFormatterBase> _format)
+                        QSharedPointer<LCStringDataFormatterBase> _format,
+                        const LIApplication& _app)
 {
-    QDomNodeList nodes = _element.childNodes();
-
-    for(int i = 0; i < nodes.size(); i++)
+    for( QDomNode node = _element.firstChildElement(__elementNames.item);
+            !node.isNull();
+            node = node.nextSiblingElement(__elementNames.item))
     {
-        QDomElement el;
-        el = nodes.at(i).toElement();
+        QDomElement el = node.toElement();
+        QString attr_value = el.attribute(__attrNames.value);
 
-        if(el.isNull()) continue;
-        if(el.tagName() != __elementNames.item) continue; 
-
-        QString name = el.attribute(__attrNames.text);
-        QString val = el.attribute(__attrNames.value);
-
-        if (val.isNull()) 
+        if(!attr_value.isNull())
         {
+            attr_value = _format->normalizeString(attr_value);
+            if(attr_value.isNull()) continue;
+        }
+
+        QString attr_item = el.attribute(__attrNames.text);
+
+        if(!attr_item.isNull())
+        {
+            _label->addItem(attr_item, attr_value);
             continue;
         }
 
-        if (name == "")
-        {
-            name = val;
-        }
+        attr_item = el.attribute(__attrNames.movie);
 
-        val = _format->normalizeString(val);
-
-        if(val.isNull())
+        if(!attr_item.isNull())
         {
+            _label->addItem(
+                    LCWidgetBuildersCommon::getMovie(attr_item, _app), 
+                    attr_value);
             continue;
         }
 
-        _label->addItem(name, val);
+        attr_item = el.attribute(__attrNames.picture);
+
+        if(!attr_item.isNull())
+        {
+            _label->addItem(
+                    LCWidgetBuildersCommon::getPixmap(attr_item, _app), 
+                    attr_value);
+            continue;
+        }
     }
 }

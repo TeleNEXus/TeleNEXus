@@ -9,6 +9,7 @@
 #include "LIRemoteDataReader.h"
 #include "LIRemoteDataReadListener.h"
 #include "LIRemoteDataSource.h"
+class LIMovieAccess;
 
 class LCQRemComboLabel : public QLabel
 {
@@ -43,7 +44,9 @@ public:
     virtual ~LCQRemComboLabel();
     void setActive(bool _flag);
     virtual bool event(QEvent *e) override;
-    void addItem(const QString& _name, const QString& _val);
+    void addItem(const QString& _text, const QString& _val);
+    void addItem(QSharedPointer<LIMovieAccess> _movieAccess, const QString& _val);
+    void addItem(const QPixmap& _pixmap, const QString& _val);
 };
 
 #endif // LCQREMCOMBOLABEL_H

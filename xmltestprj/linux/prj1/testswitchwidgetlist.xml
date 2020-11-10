@@ -54,12 +54,45 @@
                             <item text="Выключен"       value="false"/>
                         </dataComboLabel>
 
-                        <dataComboLabel  read="hreg0" source="qtslavetcp" format="hex" size="2">
-                            <item text="On"        value="a"/>
-                            <item text="Off"       value="b"/>
-                            <item text="Reset"     value="c"/>
-                            <item text="Test"      value="d"/>
-                        </dataComboLabel>
+
+                        <!-- <widget fixwidth="100" fixheight="100"> -->
+                        <!--     <widgets> -->
+                                <dataComboLabel  read="hreg0" source="qtslavetcp" format="hex" size="2">
+                                    <!-- <item text="On"        value="a"/> -->
+                                    <!-- <item text="Off"       value="b"/> -->
+                                    <!-- <item text="Reset"     value="c"/> -->
+                                    <item text="Test"      value="d"/>
+                                    <!-- <item picture="Test"      value="d"/> -->
+                                    <item movie="/movies/10_11_12_13.gif"      value="a"/>
+                                    <item picture="/picture/picture_2.png"     value="b"/>
+                                    <!-- <item movie="/movies/20_21_22_23.gif"      value="b"/> -->
+                                    <item movie="/movies/30_31_32_33.gif"      value="c"/>
+
+                                </dataComboLabel>
+                                <dataComboLabel  read="hreg0" source="qtslavetcp" format="hex" size="2">
+                                    <!-- <item text="On"        value="a"/> -->
+                                    <!-- <item text="Off"       value="b"/> -->
+                                    <!-- <item text="Reset"     value="c"/> -->
+                                    <item text="Test"      value="d"/>
+                                    <!-- <item picture="Test"      value="d"/> -->
+                                    <item movie="/movies/10_11_12_13.gif"      value="a"/>
+                                    <item movie="/movies/20_21_22_23.gif"      value="b"/>
+                                    <item movie="/movies/30_31_32_33.gif"      value="c"/>
+
+                                </dataComboLabel>
+                                <dataComboLabel  read="hreg0" source="qtslavetcp" format="hex" size="2">
+                                    <!-- <item text="On"        value="a"/> -->
+                                    <!-- <item text="Off"       value="b"/> -->
+                                    <!-- <item text="Reset"     value="c"/> -->
+                                    <item text="Test"      value="d"/>
+                                    <!-- <item picture="Test"      value="d"/> -->
+                                    <item movie="/movies/10_11_12_13.gif"      value="a"/>
+                                    <item movie="/movies/20_21_22_23.gif"      value="b"/>
+                                    <item movie="/movies/30_31_32_33.gif"      value="c"/>
+
+                                </dataComboLabel>
+                            <!-- </widgets> -->
+                        <!-- </widget> -->
                     </widgets>
                 </layoutVBox>
             </layout>

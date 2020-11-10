@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+    <!-- <widget fixwidth="100" fixheight="100"> -->
+        <widget>
+            <layout>
+                <layoutVBox>
+                    <widgets>
+                        <scrollArea>
+                            <widget>
+                                <widgets>
+                                    <dataComboLabel  read="hreg0" source="qtslavetcp" format="hex" size="2" >
+                                        <item text="On"        value="a"/>
+                                        <item text="Off"       value="b"/>
+                                        <item text="Reset"     value="c"/>
+                                        <item text="Test"      value="d"/>
+                                        <!-- <item picture="Test"      value="d"/> -->
+                                        <!-- <item movie="Test"      value="d"/> -->
+                                        <item movie="movies/20_21_22_23.gif" value="a"/>
+                                    </dataComboLabel>
+                                    <label text="Label0" posx="20"  posy="20"  />
+                                    <label text="Label1" posx="40"  posy="40"  />
+                                    <label text="Label2" posx="60"  posy="60"  />
+                                    <label text="Label3" posx="80"  posy="80"  />
+                                    <label text="Label4" posx="100" posy="100" />
+                                    <label text="Label5" posx="120" posy="120" />
+                                </widgets>
+                            </widget>
+                </scrollArea>
+                    <dataComboLabel  read="hreg0" source="qtslavetcp" format="hex" size="2" >
+                        <item text="On"        value="a"/>
+                        <item text="Off"       value="b"/>
+                        <item text="Reset"     value="c"/>
+                        <item text="Test"      value="d"/>
+                        <!-- <item picture="Test"      value="d"/> -->
+                        <!-- <item movie="Test"      value="d"/> -->
+                        <item movie="movies/20_21_22_23.gif" value="a"/>
+                    </dataComboLabel>
+                    <!-- <label text="Label0" posx="20"  posy="20"  /> -->
+                    <!-- <label text="Label1" posx="40"  posy="40"  /> -->
+                    <!-- <label text="Label2" posx="60"  posy="60"  /> -->
+                    <!-- <label text="Label3" posx="80"  posy="80"  /> -->
+                    <!-- <label text="Label4" posx="100" posy="100" /> -->
+                    <!-- <label text="Label5" posx="120" posy="120" /> -->
+                    <label text="Label0"/>
+                    <label text="Label1"/>
+                    <label text="Label2"/>
+                    <label text="Label3"/>
+                    <label text="Label4"/>
+                    <label text="Label5"/>
+                </widgets>
+            </layoutVBox>
+        </layout>
+    </widget>
+
+<!-- <scrollArea> -->
+<!-- <!-1- <scrollArea fixwidth="500" fixheight="100" posx="100" posy="100"> -1-> -->
+<!-- <!-1- <scrollArea width="500" height="100" posx="100" posy="100"> -1-> -->
+<!--     <!-1- <widget width="300" height="400"> -1-> --> 
+<!--     <widget> --> 
+<!--         <widgets> -->
+<!--             <!-1- <dataComboLabel  read="hreg0" source="qtslavetcp" format="hex" size="2" posx="100"  posy="100"> -1-> -->
+<!--                 <!-1- <dataComboLabel  read="hreg0" source="qtslavetcp" format="hex" size="2" > -1-> -->
+<!--                 <!-1-     <item text="On"        value="a"/> -1-> -->
+<!--                 <!-1-     <item text="Off"       value="b"/> -1-> -->
+<!--                 <!-1-     <item text="Reset"     value="c"/> -1-> -->
+<!--                 <!-1-     <item text="Test"      value="d"/> -1-> -->
+<!--                 <!-1-     <item picture="Test"      value="d"/> -1-> -->
+<!--                 <!-1-     <item movie="Test"      value="d"/> -1-> -->
+<!--                 <!-1-     <!-2- <item movie="movies/20_21_22_23.gif" value="a"/> -2-> -1-> -->
+
+<!--                 <!-1- </dataComboLabel> -1-> -->
+<!--             <label text="Label0" posx="20"  posy="20"  /> -->
+<!--             <label text="Label1" posx="40"  posy="40"  /> -->
+<!--             <label text="Label2" posx="60"  posy="60"  /> -->
+<!--             <label text="Label3" posx="80"  posy="80"  /> -->
+<!--             <label text="Label4" posx="100" posy="100" /> -->
+<!--             <label text="Label5" posx="120" posy="120" /> -->
+<!--         </widgets> -->
+<!--     </widget> -->
+<!-- </scrollArea> -->

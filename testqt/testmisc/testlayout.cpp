@@ -5,11 +5,14 @@
 #include <qnamespace.h>
 #include <qpicture.h>
 
+volatile float c;
+
 int main(int argc, char** argv)
 {
     QApplication app(argc, argv);
     QWidget* widget = new QWidget;
-    QPushButton* buttonh1 = new QPushButton("Buttonh ___________________1");
+
+    QPushButton* buttonh1 = new QPushButton("Buttonh 1");
     QPushButton* buttonh2 = new QPushButton("Buttonh 2");
     QPushButton* buttonh3 = new QPushButton("Buttonh 3");
     QPushButton* buttonh4 = new QPushButton("Buttonh 4");
@@ -60,18 +63,28 @@ int main(int argc, char** argv)
     /* label2->setPixmap(pix); */
 
     QMovie *mv = new QMovie(label2);
+    QMovie *mv1 = new QMovie(label3);
+    QMovie *mv2 = new QMovie(label4);
     /* mv.setFileName("/home/serg/pprj/tnex/testqt/testmisc/pict/clock.gif"); */
     /* mv.setFileName("/home/serg/pprj/tnex/testqt/testmisc/pict/box1.bmp"); */
     /* mv.setFileName("/home/serg/pprj/tnex/testqt/testmisc/pict/clocl_1.gif"); */
     mv->setFileName("/home/serg/pprj/tnex/testqt/testmisc/pict/clocl_1.gif");
     mv->setBackgroundColor(QColor(Qt::GlobalColor::transparent));
     qDebug() << "backgroundColor = " << mv->backgroundColor();
+    mv1->setFileName("/home/serg/pprj/tnex/testqt/testmisc/pict/clocl_1.gif");
+    mv1->setBackgroundColor(QColor(Qt::GlobalColor::transparent));
+    qDebug() << "backgroundColor = " << mv1->backgroundColor();
+    mv2->setFileName("/home/serg/pprj/tnex/testqt/testmisc/pict/clocl_1.gif");
+    mv2->setBackgroundColor(QColor(Qt::GlobalColor::transparent));
+    qDebug() << "backgroundColor = " << mv2->backgroundColor();
 
-    label2->setMovie(mv);
-    label3->setMovie(mv);
-    label4->setMovie(mv);
+    /* label2->setMovie(mv); */
+    label3->setMovie(mv1);
+    label4->setMovie(mv2);
+    /* label2->setSizePolicy(QSizePolicy::Policy::MinimumExpanding, QSizePolicy::Policy::MinimumExpanding); */
 
-    mv->start();
+    mv1->start();
+    mv2->start();
 
     label2->setAlignment(Qt::AlignmentFlag::AlignCenter);
 
@@ -85,6 +98,38 @@ int main(int argc, char** argv)
 
     widget->setWindowTitle("Test layouts");
     widget->setLayout(vlayout1);
+
+    QObject::connect(buttonh1, &QPushButton::pressed, 
+            [=]()
+            {
+                label2->clear();
+                label2->setMovie(mv);
+                mv->start();
+
+                /* label2->resize(100, 100); */
+                /* label2->adjustSize(); */
+                /* label2->show(); */
+                /* label2->resize(label2->sizeHint()); */
+                /* label2->updateGeometry(); */
+                qDebug() << "label 2 size hint " << label2->sizeHint();
+                qDebug() << "label 2 size  " << label2->size();
+                qDebug() << "label 2 base size  " << label2->baseSize();
+                /* label2->resize(50, 50); */
+                /* label2->update(); */
+                /* label2->repaint(); */
+
+                /* static_cast<QLayout*>(label2->parent())->update(); */
+            });
+
+    QObject::connect(buttonh2, &QPushButton::pressed, 
+            [=]()
+            {
+                label2->clear();
+                label2->setText("new text");
+                mv->stop();
+            });
+
+
     widget->show();
     return app.exec();
 }

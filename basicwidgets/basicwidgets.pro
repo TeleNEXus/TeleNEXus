@@ -26,6 +26,7 @@ INCLUDEPATH +=                          \
     ../../common/interfaces/xmlbuilders \
     ../../common/interfaces/remotedata  \
     ../../common/interfaces             \
+    ./common                            \
     builders                            \
     widgets                             \
     dataformatters
@@ -81,6 +82,7 @@ HEADERS += \
     ../../common/lqvalidatoru32.h \
     basicwidgets_global.h \
     basicwidgets.h \
+    common/LIMovieAccess.h \
     widgets/lcqremlabel.h \
     widgets/lcqremlineedit.h \
     widgets/lremgui.h \
