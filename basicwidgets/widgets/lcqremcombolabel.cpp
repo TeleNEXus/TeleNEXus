@@ -3,7 +3,7 @@
 #include <QDebug>
 #include <QMap>
 #include "LIMovieAccess.h"
-
+#include <QMovie>
 
 //==============================================================================IItem
 class IItem
@@ -114,11 +114,9 @@ void LCQRemComboLabel::
             dataIsRead( QSharedPointer<QByteArray> _data, 
                         LERemoteDataStatus _status)
 {
-    qDebug() << "LCQRemComboLabel data is read 0";
     if(_status != LERemoteDataStatus::DS_OK)
     {
         mLabel.setText(mLabel.mFormatter.data()->undefStateString());
-        qDebug() << "LCQRemComboLabel data is read 1";
         return;
     }
     auto it = L_OWNDATA(mLabel.mpOwnData)->
@@ -128,25 +126,21 @@ void LCQRemComboLabel::
     {
         if(L_OWNDATA(mLabel.mpOwnData)->undefItem.isNull())
         {
-            qDebug() << "LCQRemComboLabel data is read 3";
             mLabel.setText(mLabel.mFormatter->getWrongStateString());
         }
         else
         {
-            qDebug() << "LCQRemComboLabel data is read 4";
             L_OWNDATA(mLabel.mpOwnData)->undefItem->install();
         }
         return;
     }
     if((L_OWNDATA(mLabel.mpOwnData)->currentItem != it.value()))
     {
-        qDebug() << "LCQRemComboLabel data is read 5";
         if(!L_OWNDATA(mLabel.mpOwnData)->currentItem.isNull())
             L_OWNDATA(mLabel.mpOwnData)->currentItem->uninstall();
         L_OWNDATA(mLabel.mpOwnData)->currentItem = it.value();
         it.value()->install();
     }
-    qDebug() << "LCQRemComboLabel data is read 6";
 }
 
 //==============================================================================LCQRemComboLabel
@@ -163,6 +157,7 @@ LCQRemComboLabel::LCQRemComboLabel(const QString& _dataName,
     mDataReader = _dataSource->createReader();
     mDataReader->setDataName(_dataName);
     mDataReader->setDataReadListener(mDataListener);
+    mSizeHint = QLabel::sizeHint();
 }
 
 //------------------------------------------------------------------------------~LCQRemComboLabel
@@ -187,47 +182,59 @@ void LCQRemComboLabel::setActive(bool _flag)
 //------------------------------------------------------------------------------addItem
 void LCQRemComboLabel::addItem(const QString& _text, const QString& _val)
 {
+    auto pl = QSharedPointer<QLabel>(new QLabel(_text));
+    auto item = new CItemText(this, _text);
+
     if(_val.isNull())
     {
         L_OWNDATA(mpOwnData)->undefItem =  
-            QSharedPointer<IItem>(new CItemText(this, _text));
+            QSharedPointer<IItem>(item);
     }
     else
     {
         L_OWNDATA(mpOwnData)->mItemMap.insert(_val, 
-                QSharedPointer<IItem>(new CItemText(this, _text)));
+                QSharedPointer<IItem>(item));
     }
+    setSizeHint(pl->sizeHint());
+    resize(mSizeHint);
 }
 
 //------------------------------------------------------------------------------addItem
 void LCQRemComboLabel::addItem(QSharedPointer<LIMovieAccess> _movieAccess, 
     const QString& _val)
 {
+    auto item = new CItemMovie(this, _movieAccess);
     if(_val.isNull())
     {
         L_OWNDATA(mpOwnData)->undefItem =  
-            QSharedPointer<IItem>(new CItemMovie(this, _movieAccess));
+            QSharedPointer<IItem>(item);
+
     }
     else
     {
         L_OWNDATA(mpOwnData)->mItemMap.insert(_val, 
-                QSharedPointer<IItem>(new CItemMovie(this, _movieAccess)));
+                QSharedPointer<IItem>(item));
     }
+    setSizeHint(item->mspMovieAccess->getSize());
+    resize(mSizeHint);
 }
 
 //------------------------------------------------------------------------------addItem
 void LCQRemComboLabel::addItem(const QPixmap& _pixmap, const QString& _val)
 {
+    auto item = new CItemPixmap(this, _pixmap);
     if(_val.isNull())
     {
         L_OWNDATA(mpOwnData)->undefItem =  
-            QSharedPointer<IItem>(new CItemPixmap(this, _pixmap));
+            QSharedPointer<IItem>(item);
     }
     else
     {
         L_OWNDATA(mpOwnData)->mItemMap.insert(_val, 
-                QSharedPointer<IItem>(new CItemPixmap(this, _pixmap)));
+                QSharedPointer<IItem>(item));
     }
+    setSizeHint(_pixmap.size());
+    resize(mSizeHint);
 }
 
 //------------------------------------------------------------------------------event
@@ -251,3 +258,21 @@ bool LCQRemComboLabel::event(QEvent *_event)
     return ret;
 }
 
+//------------------------------------------------------------------------------
+void LCQRemComboLabel::setSizeHint(const QSize& _size)
+{
+    int width = mSizeHint.width();
+    int height = mSizeHint.height();
+
+    if(_size.width() > width)
+    {
+        width = _size.width();
+    }
+
+    if(_size.height() > height)
+    {
+        height = _size.height();
+    }
+
+    mSizeHint = QSize(width, height);
+}

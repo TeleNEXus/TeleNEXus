@@ -13,6 +13,7 @@ class CMovieAccess : public LIMovieAccess
 {
 private:
     QMovie* mpMovie;
+    QSize mSize;
     int mStartCounter;
 public:
     CMovieAccess() = delete;
@@ -21,6 +22,7 @@ public:
     virtual QMovie* getMovie() override;
     virtual void start() override;
     virtual void stop() override;
+    virtual QSize getSize() override;
 };
 
 //------------------------------------------------------------------------------
@@ -28,6 +30,18 @@ CMovieAccess::CMovieAccess(QMovie* _movie) :
     mpMovie(_movie),
     mStartCounter(0)
 {
+    int width  = 0;
+    int height = 0;
+
+    mpMovie->jumpToFrame(0);
+
+    QSize s = mpMovie->currentPixmap().size();
+    qDebug() << "CMovieAccess constructor current frame size = " << s;
+
+    width = (s.width() > width) ? (s.width()) : (width);
+    height = (s.height() > height) ? (s.height()) : (height);
+
+    mSize = QSize(width, height);
 }
 
 //------------------------------------------------------------------------------
@@ -45,13 +59,10 @@ QMovie* CMovieAccess::getMovie()
 //------------------------------------------------------------------------------
 void CMovieAccess::start()
 {
-    qDebug() << "CMovieAccess::start 0";
     if(mStartCounter == 0) 
     {
         mpMovie->start();
-        qDebug() << "CMovieAccess::start 1";
     }
-    qDebug() << "CMovieAccess::start 2";
     mStartCounter++;
 }
 
@@ -66,6 +77,11 @@ void CMovieAccess::stop()
     }
 }
 
+//------------------------------------------------------------------------------
+QSize CMovieAccess::getSize()
+{
+    return mSize;
+}
 //==============================================================================
 const LCWidgetBuildersCommon::SAttributes LCWidgetBuildersCommon::mAttributes;
 
