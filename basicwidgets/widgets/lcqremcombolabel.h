@@ -26,6 +26,7 @@ private:
         virtual void dataIsRead(QSharedPointer<QByteArray>  _data, 
                                 LERemoteDataStatus          _status) override;
     };
+    QSize mSizeHint;
     void* mpOwnData;    //Собственные данные.
     QString mDataName;
     QSharedPointer<LIRemoteDataReader>  mDataReader;
@@ -47,6 +48,9 @@ public:
     void addItem(const QString& _text, const QString& _val);
     void addItem(QSharedPointer<LIMovieAccess> _movieAccess, const QString& _val);
     void addItem(const QPixmap& _pixmap, const QString& _val);
+    virtual QSize sizeHint() const override{return mSizeHint;}
+private:
+    void setSizeHint(const QSize& _size);
 };
 
 #endif // LCQREMCOMBOLABEL_H

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<!-- <WINDOW width="450" height="300" posx="600" posy="600"> -->
+<!-- <WINDOW width="50" height="50" posx="50" posy="50"> -->
 <WINDOW>
     <!-- <tabs file="tabtestwidget.xml"/> -->
     <!-- <widget file="testboxlayout.xml"/> -->

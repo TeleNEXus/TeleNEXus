@@ -22,6 +22,12 @@ public:
         int width   = mSizeHint.width();
         int height  = mSizeHint.height();
 
+        _widget->setParent(this);
+        _widget->show();
+        
+        qDebug() << "mSizeHint 0 = " << mSizeHint;
+
+
         if( _widget->geometry().bottomRight().x() > width)
         {
             width = _widget->geometry().bottomRight().x();
@@ -31,10 +37,10 @@ public:
         {
             height = _widget->geometry().bottomRight().y();
         }
-        _widget->setParent(this);
 
         mSizeHint = QSize(width, height);
-        qDebug() << "mSizeHint = " << mSizeHint;
+        qDebug() << "mSizeHint 1 = " << mSizeHint;
+        /* this->setGeometry(0,0,mSizeHint.width(),mSizeHint.height()); */
     }
 
 };
@@ -112,68 +118,101 @@ int main(int argc, char** argv)
 
     widget->setWindowTitle("Test layouts");
 
+                /* label0->clear(); */
+                label0->clear();
+                label0->setMovie(mv0);
+                widget->setFixedSize(100,100);
     QObject::connect(button0, &QPushButton::pressed, 
             [=]()
             {
-                label0->clear();
-                label0->setMovie(mv0);
-                mv0->start();
+            static int frame = 0;
+                
+                qDebug() << "Move size = "    << mv0->currentPixmap().size();
+                /* mv0->start(); */
+                /* qDebug() << "Move loop count = "    << mv0->loopCount(); */
+                qDebug() << "Move next frame = "    << mv0->jumpToFrame(frame);
+                qDebug() << "Move frame = "    << frame;
 
-                /* label0->resize(100, 100); */
-                label0->adjustSize();
-                /* label0->show(); */
-                /* label0->resize(label0->sizeHint()); */
-                /* label0->updateGeometry(); */
-                qDebug() << "label 0 size hint "    << label0->sizeHint();
-                qDebug() << "label 0 size  "        << label0->size();
-                qDebug() << "label 0 base size  "   << label0->baseSize();
-                /* label0->resize(50, 50); */
-                /* label0->update(); */
-                /* label0->repaint(); */
+                frame++;
 
-                /* static_cast<QLayout*>(label0->parent())->update(); */
+                
+                /* mv0->start(); */
+                /* label0->clear(); */
+                /* label0->setMovie(mv0); */
+
+
+                /* /1* label0->resize(100, 100); *1/ */
+                /* label0->adjustSize(); */
+                /* /1* widget->adjustSize(); *1/ */
+                /* /1* widget->setMinimumSize(200,200); *1/ */
+            
+                /* /1* widget->setFixedSize(200,200); *1/ */
+                /* /1* label0->show(); *1/ */
+                /* /1* label0->resize(label0->sizeHint()); *1/ */
+                /* /1* label0->updateGeometry(); *1/ */
+                /* qDebug() << "label 0 size hint "    << label0->sizeHint(); */
+                /* qDebug() << "label 0 size  "        << label0->size(); */
+                /* qDebug() << "label 0 base size  "   << label0->baseSize(); */
+                /* /1* label0->resize(50, 50); *1/ */
+                /* /1* label0->update(); *1/ */
+                /* /1* label0->repaint(); *1/ */
+
+                /* /1* static_cast<QLayout*>(label0->parent())->update(); *1/ */
+                /* qDebug() << "widget size hint "    << widget->sizeHint(); */
+                /* qDebug() << "widget size  "        << widget->size(); */
+                /* qDebug() << "widget base size  "   << widget->baseSize(); */
             });
 
     QObject::connect(button1, &QPushButton::pressed, 
             [=]()
             {
-                label0->clear();
-                label0->setText("new text");
-                mv0->stop();
+                /* label0->clear(); */
+                /* label0->setText("new text"); */
+                /* mv0->stop(); */
+                /* widget->adjustSize(); */
+                /* qDebug() << "widget size hint "    << widget->sizeHint(); */
+                /* qDebug() << "widget size  "        << widget->size(); */
+                /* qDebug() << "widget base size  "   << widget->baseSize(); */
             });
 
-    QObject::connect(button2, &QPushButton::pressed, 
-            [=]()
-            {
-                label3->clear();
-                label3->setMovie(mv3);
-                mv3->start();
+    /* QObject::connect(button2, &QPushButton::pressed, */ 
+    /*         [=]() */
+    /*         { */
+    /*             label3->clear(); */
+    /*             label3->setMovie(mv3); */
+    /*             mv3->start(); */
 
-                /* label0->resize(100, 100); */
-                label3->adjustSize();
-                /* label0->show(); */
-                /* label0->resize(label0->sizeHint()); */
-                /* label3->updateGeometry(); */
-                qDebug() << "label 3 size hint "    << label3->sizeHint();
-                qDebug() << "label 3 size  "        << label3->size();
-                qDebug() << "label 3 base size  "   << label3->baseSize();
-                /* label0->resize(50, 50); */
-                /* label0->update(); */
-                /* label0->repaint(); */
+    /*             /1* label0->resize(100, 100); *1/ */
+    /*             label3->adjustSize(); */
+    /*             /1* label0->show(); *1/ */
+    /*             /1* label0->resize(label0->sizeHint()); *1/ */
+    /*             /1* label3->updateGeometry(); *1/ */
+    /*             qDebug() << "label 3 size hint "    << label3->sizeHint(); */
+    /*             qDebug() << "label 3 size  "        << label3->size(); */
+    /*             qDebug() << "label 3 base size  "   << label3->baseSize(); */
+    /*             qDebug() << "widget size hint "    << widget->sizeHint(); */
+    /*             qDebug() << "widget size  "        << widget->size(); */
+    /*             qDebug() << "widget base size  "   << widget->baseSize(); */
+    /*             /1* label0->resize(50, 50); *1/ */
+    /*             /1* label0->update(); *1/ */
+    /*             /1* label0->repaint(); *1/ */
 
-                /* static_cast<QLayout*>(label0->parent())->update(); */
-            });
+    /*             /1* static_cast<QLayout*>(label0->parent())->update(); *1/ */
+    /*         }); */
 
-    QObject::connect(button3, &QPushButton::pressed, 
-            [=]()
-            {
-                label3->clear();
-                label3->setText("new text");
-                mv3->stop();
-                qDebug() << "label 3 size hint "    << label3->sizeHint();
-                qDebug() << "label 3 size  "        << label3->size();
-                qDebug() << "label 3 base size  "   << label3->baseSize();
-            });
+    /* QObject::connect(button3, &QPushButton::pressed, */ 
+    /*         [=]() */
+    /*         { */
+    /*             label3->clear(); */
+    /*             label3->setText("new text"); */
+    /*             mv3->stop(); */
+    /*             qDebug() << "label 3 size hint "    << label3->sizeHint(); */
+    /*             qDebug() << "label 3 size  "        << label3->size(); */
+    /*             qDebug() << "label 3 base size  "   << label3->baseSize(); */
+    /*             qDebug() << "widget size hint "    << widget->sizeHint(); */
+    /*             qDebug() << "widget size  "        << widget->size(); */
+    /*             qDebug() << "widget base size  "   << widget->baseSize(); */
+    /*         }); */
     /* widget->setMinimumSize(300, 300); */
 
     /* widget->resize(300, 300); */
@@ -181,20 +220,20 @@ int main(int argc, char** argv)
     button0->show();
     button1->show();
 
-    label0->show();
-    label1->show();
-    label2->show();
+    /* label0->show(); */
+    /* label1->show(); */
+    /* label2->show(); */
 
-    widget->addWidget(button0);
-    widget->addWidget(button1);
+    /* widget->addWidget(button0); */
+    /* widget->addWidget(button1); */
 
     widget->addWidget(label0);
-    widget->addWidget(label1);
-    widget->addWidget(label2);
+    /* widget->addWidget(label1); */
+    /* widget->addWidget(label2); */
 
 
     widget->adjustSize();
-    layout->addWidget(widget);
+    /* layout->addWidget(widget); */
 
     layout->addWidget(button2);
     layout->addWidget(button3);
@@ -203,10 +242,15 @@ int main(int argc, char** argv)
     layout->addWidget(label5);
 
     widget1->setLayout(layout);
-    widget1->show();
+    /* widget1->show(); */
+    /* widget->show(); */
     /* widget->resize(300, 300); */
     /* widget->adjustSize(); */
     /* widget->setGeometry(0,0,100,100); */
+    QScrollArea* scrollarea = new QScrollArea;
+    scrollarea->setWidget(widget);
+    scrollarea->show();
+
 
     return app.exec();
 }
