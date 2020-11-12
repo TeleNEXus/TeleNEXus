@@ -180,7 +180,6 @@ static int addRowWidgets(
     int col = 0;
 
     quint16 align_flags = 0; 
-        qDebug() << " add row   --------------------0";
     //Анализ атрибута выравнивания элемента.
     QString attr = _element.attribute(
                     CCommonAttributes::mAligns.attrName);
@@ -189,14 +188,12 @@ static int addRowWidgets(
         //Если для элемента установлен атрибут выравнивания,
         //производим его расшифровку.
         align_flags = CCommonAttributes::mAligns.toFlags(attr);
-        qDebug() << " add row   --------------------1";
     }
     else if(_buildData.mRowAlign.contains(_buildData.mRow))
     {
         //Если для стобца установлено глобальное выравнивание,
         //используем его.
         align_flags = _buildData.mRowAlign[_buildData.mRow]; 
-        qDebug() << " add row   --------------------2";
     }
 
     for( QDomNode node = _element.firstChild(); 
@@ -334,8 +331,6 @@ static void buildCol(
     {
         _buildData.mColumnAlign[_buildData.mColumn] = 
             CCommonAttributes::mAligns.toFlags(attr_align);
-        qDebug() << " add column aligns col = " << _buildData.mColumn;
-
     }
 
     //Создание элементов строки.

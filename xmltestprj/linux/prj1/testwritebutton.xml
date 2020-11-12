@@ -5,10 +5,11 @@
         <layoutVBox>
             <widgets>
 
-                <label text="label_1_00" />
-                <label text="label_1_01" />
-                <label text="label_1_02" />
-                <label text="label_1_03" />
+                <label text="label_1_00000" />
+                <label text="label_1_00001" />
+                <label text="label_1_00002" />
+                <label text="label_1_00003" />
+
                 <dataWriteButton text="write 1">
                     <data sourceName="qtslavetcp" dataName="hreg0" format="uint16" value="0"/>
                     <data sourceName="qtslavetcp" dataName="hreg1" format="uint16" value="1"/>

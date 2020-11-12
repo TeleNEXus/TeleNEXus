@@ -5,6 +5,8 @@
 #include "lcxmlstddataformatterfactory.h"
 #include "lcxmlremwritebuttonbuilder.h"
 #include "lcqremwritebutton.h"
+#include "builderscommon.h"
+#include <QDebug>
 
 //==============================================================================
 const LCXmlRemWriteButtonBuilder::SAttributes 
@@ -52,6 +54,10 @@ QWidget* LCXmlRemWriteButtonBuilder::build(
         if(data.isNull()) continue;
         button->addDataWrite(source, data_name, data);
     } 
+
+    LCWidgetBuildersCommon::initSize(       _element, *button);
+    LCWidgetBuildersCommon::initFixedSize(  _element, *button);
+    LCWidgetBuildersCommon::initPosition(   _element, *button);
     return button;
 }
 

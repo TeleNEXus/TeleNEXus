@@ -4,6 +4,7 @@
 #include "lcxmlstddataformatterfactory.h"
 
 #include <QDomElement>
+#include "builderscommon.h"
 
 
 //==============================================================================
@@ -30,6 +31,7 @@ const struct
 QWidget* LCXmlRemLabelBuilder::build(const QDomElement& _element, 
         const LIApplication& _app)
 {
+    QWidget* ret = nullptr;
     QString data;
     QString attr = _element.attribute(__attrNames.source);
     QSharedPointer<LIRemoteDataSource> source;
@@ -61,8 +63,14 @@ QWidget* LCXmlRemLabelBuilder::build(const QDomElement& _element,
         goto LABEL_WRONG_EXIT;
     }
 
-    return new LCQRemLabel(data, source, format);
+    ret = new LCQRemLabel(data, source, format);
 
 LABEL_WRONG_EXIT:
-    return new QLabel(_element.tagName());
+
+    if(ret == nullptr) ret = new QLabel(_element.tagName());
+
+    LCWidgetBuildersCommon::initSize(_element, *ret);
+    LCWidgetBuildersCommon::initFixedSize(_element, *ret);
+    LCWidgetBuildersCommon::initPosition(_element, *ret);
+    return ret;
 }

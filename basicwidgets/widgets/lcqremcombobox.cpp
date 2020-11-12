@@ -130,7 +130,6 @@ bool LCQRemComboBox::event(QEvent *_event)
 //------------------------------------------------------------------------------
 void LCQRemComboBox::showPopup(void)
 {
-    qDebug() << "LCQRemComboBox::showPopup";
     mFlagPopupOn = true;
     QComboBox::showPopup();
 }
@@ -138,7 +137,6 @@ void LCQRemComboBox::showPopup(void)
 //------------------------------------------------------------------------------
 void LCQRemComboBox::hidePopup(void)
 {
-    qDebug() << "LCQRemComboBox::hidePopup";
     mFlagPopupOn = false;
     QComboBox::hidePopup();
 }

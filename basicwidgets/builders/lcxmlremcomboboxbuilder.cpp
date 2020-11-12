@@ -8,6 +8,7 @@
 #include <qcombobox.h>
 #include <qdom.h>
 #include <qwidget.h>
+#include "builderscommon.h"
 
 //==============================================================================
 LCXmlRemComboBoxBuilder::LCXmlRemComboBoxBuilder()
@@ -47,7 +48,7 @@ static void buildCombobox(   const QDomElement& _element,
 QWidget* LCXmlRemComboBoxBuilder::build(const QDomElement& _element, 
                                             const LIApplication& _app)
 {
-    QWidget *ret;
+    QWidget *ret = nullptr;
     QString dataread;
     QString datawrite;
     QString attr = _element.attribute(__attrNames.source);
@@ -91,12 +92,17 @@ QWidget* LCXmlRemComboBoxBuilder::build(const QDomElement& _element,
     ret = new LCQRemComboBox(dataread, datawrite, source, format);
     buildCombobox(_element, static_cast<LCQRemComboBox*>(ret), format);
 
-    return ret;
-
 LABEL_WRONG_EXIT:
-    ret = new QComboBox();
-    static_cast<QComboBox*>(ret)->setEnabled(false);
-    static_cast<QComboBox*>(ret)->addItem(_element.tagName());
+    if(ret == nullptr) 
+    {
+        ret = new QComboBox(); 
+        static_cast<QComboBox*>(ret)->setEnabled(false);
+        static_cast<QComboBox*>(ret)->addItem(_element.tagName());
+    }
+
+    LCWidgetBuildersCommon::initSize(_element, *ret);
+    LCWidgetBuildersCommon::initFixedSize(_element, *ret);
+    LCWidgetBuildersCommon::initPosition(_element, *ret);
     return ret;
 }
 
