@@ -34,9 +34,7 @@ public:
         {
             height = _widget->geometry().bottomRight().y();
         }
-
         mSizeHint = QSize(width, height);
-        qDebug() << "mSizeHint = " << mSizeHint;
     }
 
 };
@@ -163,11 +161,7 @@ static QWidget* buildFromLayout(const QDomElement& _element,
 static QWidget* buildFromWidgets(const QDomElement& _element, 
         const LIApplication& _app)
 {
-    /* QWidget* widget = new QWidget; */
     CWidget* widget = new CWidget;
-
-    int width = 0;
-    int height = 0;
 
     for(QDomNode node = _element.firstChild();
             !node.isNull();
@@ -180,29 +174,8 @@ static QWidget* buildFromWidgets(const QDomElement& _element,
          if(addWidget)
          {
              widget->addWidget(addWidget);
-             /* addwidget->setParent(widget); */
-             /* addwidget->show(); */
-
-             /* int wh = addwidget->geometry().bottomRight().x(); */
-
-             /* width = (wh > width) ? */ 
-             /*     (wh) : (width); */
-
-             /* wh = addwidget->geometry().bottomRight().y(); */
-
-             /* height = (wh > height) ? */ 
-             /*     (wh) : (height); */
          }
     }
-
-    /* if((width != 0) && (height != 0)) */
-    /* { */
-    /*     widget->resize(width, height); */
-        /* widget->resize(widget->sizeHint().width(), widget->sizeHint().height()); */
-    /* } */
-    /* widget->adjustSize(); */
-    qDebug() << "widget size =" << widget->size();
-    
     return widget;
 }
 

@@ -3,6 +3,7 @@
 #include "LIApplication.h"
 #include "lcxmlstddataformatterfactory.h"
 #include <QDomElement>
+#include "builderscommon.h"
 
 //==============================================================================
 LCXmlRemLineEditBuilder::LCXmlRemLineEditBuilder()
@@ -62,11 +63,13 @@ QWidget* LCXmlRemLineEditBuilder::build(const QDomElement& _element,
     }
 
     ret= new LCQRemLineEdit(data, source, format);
-    return ret;
 
 LABEL_WRONG_EXIT:
 
-    ret= new QLineEdit(_element.tagName());
+    if(ret == nullptr) ret= new QLineEdit(_element.tagName());
+    LCWidgetBuildersCommon::initSize(_element, *ret);
+    LCWidgetBuildersCommon::initFixedSize(_element, *ret);
+    LCWidgetBuildersCommon::initPosition(_element, *ret);
     return ret;
 }
 

@@ -36,7 +36,6 @@ CMovieAccess::CMovieAccess(QMovie* _movie) :
     mpMovie->jumpToFrame(0);
 
     QSize s = mpMovie->currentPixmap().size();
-    qDebug() << "CMovieAccess constructor current frame size = " << s;
 
     width = (s.width() > width) ? (s.width()) : (width);
     height = (s.height() > height) ? (s.height()) : (height);

@@ -113,7 +113,8 @@ int LCXmlApplication::exec(int argc, char *argv[])
     QApplication app(argc, argv);
     qDebug() << QCoreApplication::applicationFilePath();
     qDebug() << QCoreApplication::applicationDirPath();
-
+    
+    
     auto lp = QCoreApplication::libraryPaths();
     auto it = lp.begin();
     while(it != lp.end())

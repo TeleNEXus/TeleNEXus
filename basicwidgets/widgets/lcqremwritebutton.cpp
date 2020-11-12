@@ -13,7 +13,6 @@ LCQRemWriteButton::CWriteListener::CWriteListener(
 void LCQRemWriteButton::CWriteListener::dataIsWrite(LERemoteDataStatus _status)
 {
     Q_UNUSED(_status); 
-    qDebug() << "LCQRemWriteDataButton::dataIsWrite data name = " << mDataName;
 }
 
 //==============================================================================SWriteSet
@@ -39,13 +38,10 @@ LCQRemWriteButton::LCQRemWriteButton(
     connect(this, &LCQRemWriteButton::pressed, 
             [&]()
             {
-            qDebug() << "LCQRemWriteButton pressed";
             for(    auto it = mListWriteSets.begin(); 
                     it != mListWriteSets.end(); 
                     it++)
             {
-            qDebug() <<  
-            "LCQRemWriteButton write request data name = " << it->mDataName;
             it->write();
             }
             });

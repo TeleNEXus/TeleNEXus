@@ -8,6 +8,7 @@
 #include <LIApplication.h>
 
 #include <QDebug>
+#include "builderscommon.h"
 //------------------------------------------------------------------------------
 static const struct
 {
@@ -168,6 +169,10 @@ QWidget* LCXmlControlWindowButtonBuilder::build(
                 }
             }
             });
+
+    LCWidgetBuildersCommon::initSize(_element, *button);
+    LCWidgetBuildersCommon::initFixedSize(_element, *button);
+    LCWidgetBuildersCommon::initPosition(_element, *button);
 
     return button; 
 }

@@ -50,7 +50,6 @@ LCQRemLabel::LCQRemLabel(const QString& _dataName,
 
 LCQRemLabel::~LCQRemLabel()
 {
-    qDebug() << "LCQRemLabel::~LCQRemLabel()";
 }
 
 //------------------------------------------------------------------------------setActive

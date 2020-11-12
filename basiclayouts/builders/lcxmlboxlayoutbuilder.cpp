@@ -105,15 +105,12 @@ static void buildLayout(
         _layout->setSpacing(spacing);
     }
 
-    int index = 0;
     for(    QDomNode childNode = _element.firstChild(); 
             !childNode.isNull(); 
-            childNode = childNode.nextSiblingElement())
+            childNode = childNode.nextSibling())
     {
-        index++;
-        if(!childNode.isElement()) continue;
-
         QDomElement el = childNode.toElement();
+        if(el.isNull()) continue;
 
         if(el.tagName() == LCXmlBoxLayoutBuilder::mTags.layout)
         {
@@ -142,10 +139,11 @@ static void addLayout(
 {
     for(    QDomNode childNode = _element.firstChild(); 
             !childNode.isNull(); 
-            childNode = childNode.nextSiblingElement())
+            childNode = childNode.nextSibling())
     {
-        if(!childNode.isElement()) continue;
         auto el  = childNode.toElement();
+        if(el.isNull()) continue;
+
         auto builder = _app.getLayoutBuilder(el.tagName());
 
         if(builder.isNull()) continue;
@@ -177,13 +175,17 @@ static void addWidgets(
 
     for(    QDomNode childNode = _element.firstChild(); 
             !childNode.isNull(); 
-            childNode = childNode.nextSiblingElement())
+            childNode = childNode.nextSibling())
     {
-        if(!childNode.isElement()) continue;
         auto el  = childNode.toElement();
+        if(el.isNull()) continue;
+
         auto builder = _app.getWidgetBuilder(el.tagName());
+
         if(builder.isNull()) continue;
+
         auto widget = builder->build(el, _app);
+
         if(widget)
         {
             if(align == 0)
