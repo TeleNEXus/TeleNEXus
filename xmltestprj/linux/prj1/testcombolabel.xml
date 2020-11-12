@@ -23,10 +23,10 @@
                                             <item text="Test"      value="d"/>
                                             <!-- <item picture="Test"      value="d"/> -->
                                             <!-- <item movie="Test"      value="d"/> -->
-                                            <item movie="movies/20_21_22_23.gif" value="a"/>
+                                            <item picture="movies/20_21_22_23.gif" value="a"/>
                                             <!-- <item picture="picture/picture_150_100.png" value="b"/> -->
-                                            <item movie="picture/picture_150_100.png" value="b"/>
-                                            <item movie="movies/10_11_12_13.gif"/>
+                                            <item picture="picture/picture_150_100.png" value="b"/>
+                                            <item picture="movies/10_11_12_13.gif"/>
                                         </dataComboLabel>
                                         <label text="Label0" posx="20"  posy="20"  />
                                         <label text="Label1" posx="40"  posy="40"  />
