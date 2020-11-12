@@ -64,27 +64,27 @@ public:
     }
 };
 
-//==============================================================================CItemPixmap
-#include <QPixmap>
-class CItemPixmap: public IItem
-{
-public:
-    QPixmap mPixmap;
-public:
-    CItemPixmap() = delete;
-    CItemPixmap(QLabel* _label, const QPixmap& _pixmap) : IItem(_label), mPixmap(_pixmap){}
+/* //==============================================================================CItemPixmap */
+/* #include <QPixmap> */
+/* class CItemPixmap: public IItem */
+/* { */
+/* public: */
+/*     QPixmap mPixmap; */
+/* public: */
+/*     CItemPixmap() = delete; */
+/*     CItemPixmap(QLabel* _label, const QPixmap& _pixmap) : IItem(_label), mPixmap(_pixmap){} */
 
-    virtual void install() override
-    {
-        mpLabel->setPixmap(mPixmap);
-        mpLabel->adjustSize();
-    }
+/*     virtual void install() override */
+/*     { */
+/*         mpLabel->setPixmap(mPixmap); */
+/*         mpLabel->adjustSize(); */
+/*     } */
 
-    virtual void uninstall() override
-    {
-        mpLabel->clear();
-    }
-};
+/*     virtual void uninstall() override */
+/*     { */
+/*         mpLabel->clear(); */
+/*     } */
+/* }; */
 
 //==============================================================================SOwnData
 //Собственные данные класса.
@@ -114,33 +114,71 @@ void LCQRemComboLabel::
             dataIsRead( QSharedPointer<QByteArray> _data, 
                         LERemoteDataStatus _status)
 {
+    QSharedPointer<IItem> item;
+
     if(_status != LERemoteDataStatus::DS_OK)
     {
-        mLabel.setText(mLabel.mFormatter.data()->undefStateString());
-        return;
+        item = L_OWNDATA(mLabel.mpOwnData)->undefItem;
+        /* mLabel.setEnabled(false); */
     }
-    auto it = L_OWNDATA(mLabel.mpOwnData)->
-        mItemMap.find(
-                mLabel.mFormatter.data()->toString(*_data));
-    if (it == L_OWNDATA(mLabel.mpOwnData)->mItemMap.end())
+    else
     {
-        if(L_OWNDATA(mLabel.mpOwnData)->undefItem.isNull())
+        /* mLabel.setEnabled(true); */
+        auto it = L_OWNDATA(mLabel.mpOwnData)->
+            mItemMap.find(mLabel.mspFormatter->toString(*_data));
+
+        if(it == L_OWNDATA(mLabel.mpOwnData)->
+                mItemMap.end())
         {
-            mLabel.setText(mLabel.mFormatter->getWrongStateString());
+            item = L_OWNDATA(mLabel.mpOwnData)->undefItem;
         }
         else
         {
-            L_OWNDATA(mLabel.mpOwnData)->undefItem->install();
+            item = it.value();
         }
-        return;
     }
-    if((L_OWNDATA(mLabel.mpOwnData)->currentItem != it.value()))
+
+    if((L_OWNDATA(mLabel.mpOwnData)->currentItem != item))
     {
         if(!L_OWNDATA(mLabel.mpOwnData)->currentItem.isNull())
             L_OWNDATA(mLabel.mpOwnData)->currentItem->uninstall();
-        L_OWNDATA(mLabel.mpOwnData)->currentItem = it.value();
-        it.value()->install();
+        L_OWNDATA(mLabel.mpOwnData)->currentItem = item;
+        item->install();
     }
+
+
+
+    /* if(_status != LERemoteDataStatus::DS_OK) */
+    /* { */
+    /*     mLabel.setText(mLabel.mspFormatter->undefStateString()); */
+    /*     return; */
+    /* } */
+
+    
+    /* auto it = L_OWNDATA(mLabel.mpOwnData)-> */
+    /*     mItemMap.find(mLabel.mspFormatter->toString(*_data)); */
+
+
+    /* if (it == L_OWNDATA(mLabel.mpOwnData)->mItemMap.end()) */
+    /* { */
+    /*     if(L_OWNDATA(mLabel.mpOwnData)->undefItem.isNull()) */
+    /*     { */
+    /*         mLabel.setText(mLabel.mspFormatter->getWrongStateString()); */
+    /*     } */
+    /*     else */
+    /*     { */
+    /*         L_OWNDATA(mLabel.mpOwnData)->undefItem->install(); */
+    /*     } */
+    /*     return; */
+    /* } */
+
+    /* if((L_OWNDATA(mLabel.mpOwnData)->currentItem != it.value())) */
+    /* { */
+    /*     if(!L_OWNDATA(mLabel.mpOwnData)->currentItem.isNull()) */
+    /*         L_OWNDATA(mLabel.mpOwnData)->currentItem->uninstall(); */
+    /*     L_OWNDATA(mLabel.mpOwnData)->currentItem = it.value(); */
+    /*     it.value()->install(); */
+    /* } */
 }
 
 //==============================================================================LCQRemComboLabel
@@ -149,10 +187,11 @@ LCQRemComboLabel::LCQRemComboLabel(const QString& _dataName,
                          QSharedPointer<LCStringDataFormatterBase> _formatter,
                          QWidget* _parent) :    QLabel(_parent),
                                                 mDataName(_dataName),
-                                                mFormatter(_formatter)
+                                                mspFormatter(_formatter)
 {
     mpOwnData = new SOwnData();
-    setText(mFormatter.data()->undefStateString());
+    setText(mspFormatter->undefStateString());
+    addItem(mspFormatter->undefStateString(), QString());
     mDataListener = QSharedPointer<CReadListener>(new CReadListener(*this));
     mDataReader = _dataSource->createReader();
     mDataReader->setDataName(_dataName);
@@ -208,7 +247,6 @@ void LCQRemComboLabel::addItem(QSharedPointer<LIMovieAccess> _movieAccess,
     {
         L_OWNDATA(mpOwnData)->undefItem =  
             QSharedPointer<IItem>(item);
-
     }
     else
     {
@@ -219,23 +257,23 @@ void LCQRemComboLabel::addItem(QSharedPointer<LIMovieAccess> _movieAccess,
     resize(mSizeHint);
 }
 
-//------------------------------------------------------------------------------addItem
-void LCQRemComboLabel::addItem(const QPixmap& _pixmap, const QString& _val)
-{
-    auto item = new CItemPixmap(this, _pixmap);
-    if(_val.isNull())
-    {
-        L_OWNDATA(mpOwnData)->undefItem =  
-            QSharedPointer<IItem>(item);
-    }
-    else
-    {
-        L_OWNDATA(mpOwnData)->mItemMap.insert(_val, 
-                QSharedPointer<IItem>(item));
-    }
-    setSizeHint(_pixmap.size());
-    resize(mSizeHint);
-}
+/* //------------------------------------------------------------------------------addItem */
+/* void LCQRemComboLabel::addItem(const QPixmap& _pixmap, const QString& _val) */
+/* { */
+/*     auto item = new CItemPixmap(this, _pixmap); */
+/*     if(_val.isNull()) */
+/*     { */
+/*         L_OWNDATA(mpOwnData)->undefItem = */  
+/*             QSharedPointer<IItem>(item); */
+/*     } */
+/*     else */
+/*     { */
+/*         L_OWNDATA(mpOwnData)->mItemMap.insert(_val, */ 
+/*                 QSharedPointer<IItem>(item)); */
+/*     } */
+/*     setSizeHint(_pixmap.size()); */
+/*     resize(mSizeHint); */
+/* } */
 
 //------------------------------------------------------------------------------event
 bool LCQRemComboLabel::event(QEvent *_event)
@@ -276,3 +314,4 @@ void LCQRemComboLabel::setSizeHint(const QSize& _size)
 
     mSizeHint = QSize(width, height);
 }
+

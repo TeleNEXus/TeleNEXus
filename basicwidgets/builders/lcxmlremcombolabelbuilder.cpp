@@ -9,6 +9,7 @@
 
 #include <QDebug>
 #include "builderscommon.h"
+
 //==============================================================================
 LCXmlRemComboLabelBuilder::LCXmlRemComboLabelBuilder()
 {
@@ -29,7 +30,7 @@ const struct
     QString format      = "format";
     QString text        = "text";
     QString value       = "value";
-    QString movie       = "movie";
+    /* QString movie       = "movie"; */
     QString picture     = "picture";
 } __attrNames;
 
@@ -123,7 +124,7 @@ static void buildComboLabel( const QDomElement& _element,
             continue;
         }
 
-        attr_item = el.attribute(__attrNames.movie);
+        attr_item = el.attribute(__attrNames.picture);
 
         if(!attr_item.isNull())
         {
@@ -133,14 +134,14 @@ static void buildComboLabel( const QDomElement& _element,
             continue;
         }
 
-        attr_item = el.attribute(__attrNames.picture);
+        /* attr_item = el.attribute(__attrNames.picture); */
 
-        if(!attr_item.isNull())
-        {
-            _label->addItem(
-                    LCWidgetBuildersCommon::getPixmap(attr_item, _app), 
-                    attr_value);
-            continue;
-        }
+        /* if(!attr_item.isNull()) */
+        /* { */
+        /*     _label->addItem( */
+        /*             LCWidgetBuildersCommon::getPixmap(attr_item, _app), */ 
+        /*             attr_value); */
+        /*     continue; */
+        /* } */
     }
 }
