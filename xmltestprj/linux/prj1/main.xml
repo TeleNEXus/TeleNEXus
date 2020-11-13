@@ -43,6 +43,8 @@
         <dataWriteButton        lib="basicwidgets" libhandler="getRemWriteButtonBuilder"        />
     </WIDGETBUILDERS>
 
+    <FONTS file="fonts.xml"/>
+
     
     <!-- <WIDGETBUILDERS file="widgetbuilders.xml"/> -->
     

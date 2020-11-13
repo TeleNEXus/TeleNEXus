@@ -5,6 +5,7 @@
 #include <QDomElement>
 #include <QFile>
 #include <QDebug>
+#include <qnamespace.h>
 #include "builderscommon.h"
 
 class CWidget : public QWidget
@@ -96,6 +97,9 @@ static QWidget* buildFromLayout(const QDomElement& _element,
 static QWidget* buildFromWidgets(const QDomElement& _element, 
         const LIApplication& _app);
 //------------------------------------------------------------------------------
+static void setColor(const QDomElement& _element, 
+        QWidget* _widget);
+//------------------------------------------------------------------------------
 static QWidget* buildLocal(
         const QDomElement& _element, 
         const LIApplication& _app)
@@ -125,6 +129,7 @@ static QWidget* buildLocal(
     LCWidgetBuildersCommon::initPosition(_element, *widget);
     LCWidgetBuildersCommon::initSize(_element, *widget);
     LCWidgetBuildersCommon::initFixedSize(_element, *widget);
+    setColor(_element, widget);
 
     return widget;
 }
@@ -178,4 +183,25 @@ static QWidget* buildFromWidgets(const QDomElement& _element,
     }
     return widget;
 }
+
+//------------------------------------------------------------------------------
+static void setColor(const QDomElement& _element, 
+        QWidget* _widget)
+{
+    QString attr_color = _element.attribute(
+            LCWidgetBuildersCommon::mAttributes.colorbg);
+
+    if(attr_color.isNull()) return;
+
+    QColor color = LCWidgetBuildersCommon::attributeToColor(attr_color);
+
+    if(color.isValid())
+    {
+        QPalette pal = _widget->palette();
+        pal.setColor(QPalette::ColorRole::Background, color);
+        _widget->setAutoFillBackground(true);
+        _widget->setPalette(pal);
+    }
+}
+
 
