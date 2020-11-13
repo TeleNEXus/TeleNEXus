@@ -35,6 +35,7 @@ SOURCES += \
         xml/lcxmlremotedatasourcebuilders.cpp \
         xml/lcxmlwidgetbuilders.cpp \
         xml/lcxmlwindows.cpp \
+        xml/lcxmlfonts.cpp \
         main.cpp \
 
 # Default rules for deployment.
@@ -60,4 +61,5 @@ HEADERS += \
     xml/lcxmlremotedatasourcebuilders.h \
     xml/lcxmlwidgetbuilders.h \
     xml/lcxmlwindows.h \
+    xml/lcxmlfonts.h \
 

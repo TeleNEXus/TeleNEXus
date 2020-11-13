@@ -7,91 +7,96 @@
         <!--         <layoutVBox> -->
         <!--             <widgets> -->
         <!--                 <!-1- <widget fixwidth="350" fixheight="350"> -1-> -->
-            <widget>
-                <layout>
-                    <layoutVBox>
-                        <widgets>
-                            <!-- <scrollArea width="200" height="200"> -->
-                            <scrollArea align="Center">
-                                <widget>
-                                    <widgets>
-                                        <dataComboLabel  read="hreg0" source="qtslavetcp" format="hex" 
-                                            size="2" 
-                                            posx="150" posy="150">
-                                            <!-- <item text="On"        value="a"/> -->
-                                            <item text="Off"       value="b"/>
-                                            <item text="Reset"     value="c"/>
-                                            <item text="Test"      value="d"/>
-                                            <!-- <item picture="Test"      value="d"/> -->
-                                            <!-- <item movie="Test"      value="d"/> -->
-                                            <item picture="movies/20_21_22_23.gif" value="a"/>
-                                            <!-- <item picture="picture/picture_150_100.png" value="b"/> -->
-                                            <item picture="picture/picture_150_100.png" value="b"/>
-                                            <item picture="movies/10_11_12_13.gif"/>
-                                        </dataComboLabel>
+                
+          <widget>
+            <layout>
+              <layoutVBox>
+                <widgets>
+                  <!-- <scrollArea width="200" height="200"> -->
+                    <scrollArea align="Center">
+                      <!-- <widget bgcolor="00ff0000"> -->
+                        <!-- <widget bgcolor="00 aa aa ff"> -->
+                          <widget bgcolor="white">
+                            <widgets>
+                              <dataComboLabel  read="hreg0" source="qtslavetcp" format="hex" 
+                                size="2" 
+                                posx="150" posy="150">
+                                <!-- <item text="On"        value="a"/> -->
+                                <item text="Off"    value="b" textcolor="red" fontname="DejaVu Sans Mono" fontsize="18"/>
+                                <item text="Reset"  value="c"/>
+                                <item text="Test"   value="d"/>
+                                <!-- <item picture="Test"      value="d"/> -->
+                                <!-- <item movie="Test"      value="d"/> -->
+                                <item picture="movies/20_21_22_23.gif" value="a"/>
+                                <!-- <item picture="picture/picture_150_100.png" value="b"/> -->
+                                <item picture="picture/picture_150_100.png" value="b"/>
+                                <item picture="movies/10_11_12_13.gif"/>
+                              </dataComboLabel>
 
-                                        <dataComboBox  read="hreg0" source="qtslavetcp" format="uint16" posx="0" posy="250">
-                                            <item text="On"     value="010"/>
-                                            <item text="Off"    value="011"/>
-                                            <item text="Reset"  value="012"/>
-                                            <item text="Test"   value="013"/>
-                                        </dataComboBox>
-
-                                        <controlWindowButton label="hide win0" posx="0" posy="275">
-                                            <window id="win0" event="pressed" action="hide"/>
-                                        </controlWindowButton>
-
-                                        <label text="Label0" posx="20"  posy="20"  />
-                                        <label text="Label1" posx="40"  posy="40"  />
-                                        <label text="Label2" posx="60"  posy="60"  />
-                                        <label text="Label3" posx="80"  posy="80"  />
-                                        <label text="Label4" posx="100" posy="100" />
-                                        <label text="Label5" posx="120" posy="120" />
-
-                                        <dataLabel data="hreg0" source="qtslavetcp" format="hex" posx="20" posy="120"/>
-
-                                        <dataLineEdit   
-                                            source="qtslavetcp" 
-                                            data="hreg[0-1]" 
-                                            format="hex" size="4" separator=" " posx="20" posy="135" />
-                                        
-                                        <dataWriteButton text="write 1" posx="20" posy="165" >
-                                            <data sourceName="qtslavetcp" dataName="hreg0" format="uint16" value="0"/>
-                                            <data sourceName="qtslavetcp" dataName="hreg1" format="uint16" value="1"/>
-                                            <data sourceName="qtslavetcp" dataName="hreg2" format="uint16" value="2"/>
-                                            <data sourceName="qtslavetcp" dataName="hreg3" format="uint16" value="3"/>
-                                        </dataWriteButton>
-
-                                        <dataWriteButton text="write 2" posx="20" posy="190" >
-                                            <data sourceName="qtslavetcp" dataName="hreg0" format="uint16" value="4"/>
-                                            <data sourceName="qtslavetcp" dataName="hreg1" format="uint16" value="5"/>
-                                            <data sourceName="qtslavetcp" dataName="hreg2" format="uint16" value="6"/>
-                                            <data sourceName="qtslavetcp" dataName="hreg3" format="uint16" value="7"/>
-                                        </dataWriteButton>
-
-                                    </widgets>
-                                </widget>
-                            </scrollArea>
-                        </widgets>
-
-                        <stretch/>
-
-                        <widgets align="Center">
-
-                            <label text="Label0"/>
-                            <label text="Label1"/>
-                            <label text="Label2"/>
-
-                            <dataComboBox  read="hreg0" source="qtslavetcp" format="uint16">
+                              <dataComboBox  read="hreg0" source="qtslavetcp" format="uint16" posx="0" posy="250">
                                 <item text="On"     value="010"/>
                                 <item text="Off"    value="011"/>
                                 <item text="Reset"  value="012"/>
                                 <item text="Test"   value="013"/>
-                            </dataComboBox>
-                        </widgets>
-                </layoutVBox>
-            </layout>
-        </widget>
+                              </dataComboBox>
+
+                              <controlWindowButton label="hide win0" posx="0" posy="275">
+                                <window id="win0" event="pressed" action="hide"/>
+                              </controlWindowButton>
+
+                              <!-- <label text="Label0" bgcolor="cyan" textcolor="red" fontname="DejaVu Sans Mono" fontsize="18" posx="20" posy="20" /> -->
+                              <!-- <label text="Label0" textcolor="red" fontname="DejaVu Sans Mono" fontsize="18" posx="20" posy="20" /> -->
+                              <label text="Label0" textcolor="red" fontId="mnemo18" posx="20" posy="20" />
+                              <label text="Label1" posx="40"  posy="40"  fontId="mnemo10"/>
+                              <label text="Label2" posx="60"  posy="60"  fontId="mnemo11"/>
+                              <label text="Label3" posx="80"  posy="80"  fontId="mnemo12"/>
+                              <label text="Label4" posx="100" posy="100" fontId="mnemo13"/>
+                              <label text="Label5" posx="120" posy="120" fontId="mnemo14"/>
+
+                              <dataLabel data="hreg0" source="qtslavetcp" format="hex" posx="20" posy="120"/>
+
+                              <dataLineEdit   
+                                source="qtslavetcp" 
+                                data="hreg[0-1]" 
+                                format="hex" size="4" separator=" " posx="20" posy="135" />
+
+                              <dataWriteButton text="write 1" posx="20" posy="165" >
+                                <data sourceName="qtslavetcp" dataName="hreg0" format="uint16" value="0"/>
+                                <data sourceName="qtslavetcp" dataName="hreg1" format="uint16" value="1"/>
+                                <data sourceName="qtslavetcp" dataName="hreg2" format="uint16" value="2"/>
+                                <data sourceName="qtslavetcp" dataName="hreg3" format="uint16" value="3"/>
+                              </dataWriteButton>
+
+                              <dataWriteButton text="write 2" posx="20" posy="190" >
+                                <data sourceName="qtslavetcp" dataName="hreg0" format="uint16" value="4"/>
+                                <data sourceName="qtslavetcp" dataName="hreg1" format="uint16" value="5"/>
+                                <data sourceName="qtslavetcp" dataName="hreg2" format="uint16" value="6"/>
+                                <data sourceName="qtslavetcp" dataName="hreg3" format="uint16" value="7"/>
+                              </dataWriteButton>
+
+                            </widgets>
+                          </widget>
+                        </scrollArea>
+                      </widgets>
+
+                      <stretch/>
+
+                      <widgets align="Center">
+
+                        <label text="Label0"/>
+                        <label text="Label1"/>
+                        <label text="Label2"/>
+
+                        <dataComboBox  read="hreg0" source="qtslavetcp" format="uint16">
+                          <item text="On"     value="010"/>
+                          <item text="Off"    value="011"/>
+                          <item text="Reset"  value="012"/>
+                          <item text="Test"   value="013"/>
+                        </dataComboBox>
+                      </widgets>
+                    </layoutVBox>
+                  </layout>
+                </widget>
 
 
 

@@ -25,11 +25,19 @@ int main(int argc, char** argv)
     for(int i = 0; i < 5; i++)
     {
 
-        /* QLabel* label = new QLabel(QString("Label %1").arg(i)); */
-        QPushButton* label = new QPushButton(QString("Label %1").arg(i));
+        QLabel* label = new QLabel(QString("Label00 %1").arg(i));
+        /* QPushButton* label = new QPushButton(QString("Label %1").arg(i)); */
+        /* QLineEdit* label = new QLineEdit(QString("Label %1").arg(i)); */
         label->move(10 + 20 * i, 10 + 25 * i);
         label->setParent(widget);
         label->show();
+        QFont font = label->font();
+        font.setFamily("DejaVu Sans Mono");
+        /* font.setPixelSize(50); */
+        font.setPointSize(18);
+        label->setFont(font);
+        label->adjustSize();
+        
 
         qDebug() << "labe " << i << " geometry = " << label->geometry();
         qDebug() << "labe " << i << " bottomRight = " << label->geometry().bottomRight();
@@ -45,8 +53,24 @@ int main(int argc, char** argv)
         }
         /* QPalette pal(label->palette()); */
         /* pal.setColor(QPalette::ColorRole::Background, Qt::GlobalColor::magenta); */
-        /* label->setAutoFillBackground(true); */
+        label->setAutoFillBackground(true);
         /* label->setPalette(pal); */
+        QPalette pal = label->palette();
+        /* pal.setColor(QPalette::ColorRole::Background, Qt::GlobalColor::red); */
+        
+        //Label
+        pal.setColor(QPalette::ColorRole::Background, QColor(QRgb(0x000000ff)));
+        pal.setColor(QPalette::ColorRole::Foreground, QColor(QRgb(0x00ff0000)));
+
+        //LineEdit
+        /* pal.setColor(QPalette::ColorRole::Base, QColor(QRgb(0x000000ff))); */
+        /* pal.setColor(QPalette::ColorRole::Text, QColor(QRgb(0x00ff0000))); */
+
+        //Button
+        /* pal.setColor(QPalette::ColorRole::Button, QColor(QRgb(0x000000ff))); */
+        /* pal.setColor(QPalette::ColorRole::ButtonText, QColor(QRgb(0x00ff0000))); */
+
+        label->setPalette(pal);
     }
 
     qDebug() << "width = " << width;
@@ -61,12 +85,16 @@ int main(int argc, char** argv)
 
     sa->setWidget(widget);
     qDebug() << "widget geometry = " << wr;
-
     
     /* widget->setFrameStyle(QFrame::Shadow::Plain | QFrame::Shape::HLine); */
     widget->setFrameStyle(QFrame::Shadow::Raised | QFrame::Shape::WinPanel);
     widget->setLineWidth(5);
     widget->resize(width + 100, height + 100);
+    QPalette pal = widget->palette();
+    /* pal.setColor(QPalette::ColorRole::Background, Qt::GlobalColor::red); */
+    pal.setColor(QPalette::ColorRole::Background, QColor(QRgb(0x00ff00ff)));
+    widget->setAutoFillBackground(true);
+    widget->setPalette(pal);
     /* widget->setFixedSize(width, height); */
     /* sa->setFixedSize(width, height); */
     sa->resize(width +150, height +150);

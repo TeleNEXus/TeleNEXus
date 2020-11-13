@@ -6,6 +6,7 @@
 #include <QMap>
 #include "LIApplication.h"
 #include <QFileInfo>
+#include <qnamespace.h>
 #include "LIMovieAccess.h"
 
 //==============================================================================
@@ -82,8 +83,36 @@ QSize CMovieAccess::getSize()
     return mSize;
 }
 //==============================================================================
+QMap<QString, Qt::GlobalColor> __slStdColors;
+//==============================================================================
 const LCWidgetBuildersCommon::SAttributes LCWidgetBuildersCommon::mAttributes;
+//------------------------------------------------------------------------------
+LCWidgetBuildersCommon LCWidgetBuildersCommon::instance; 
 
+//------------------------------------------------------------------------------
+LCWidgetBuildersCommon::LCWidgetBuildersCommon()
+{
+    __slStdColors.insert( "white"      , Qt::GlobalColor::white);
+    __slStdColors.insert( "black"      , Qt::GlobalColor::black);
+    __slStdColors.insert( "red"        , Qt::GlobalColor::red);
+    __slStdColors.insert( "darkred"    , Qt::GlobalColor::darkRed);
+    __slStdColors.insert( "green"      , Qt::GlobalColor::green);
+    __slStdColors.insert( "darkgreen"  , Qt::GlobalColor::darkGreen);
+    __slStdColors.insert( "blue"       , Qt::GlobalColor::blue);
+    __slStdColors.insert( "darkblue"   , Qt::GlobalColor::darkBlue);
+    __slStdColors.insert( "cyan"       , Qt::GlobalColor::cyan);
+    __slStdColors.insert( "darkcyan"   , Qt::GlobalColor::darkCyan);
+    __slStdColors.insert( "magenta"    , Qt::GlobalColor::magenta);
+    __slStdColors.insert( "darkmagenta", Qt::GlobalColor::darkMagenta);
+    __slStdColors.insert( "yellow"     , Qt::GlobalColor::yellow);
+    __slStdColors.insert( "darkyellow" , Qt::GlobalColor::darkYellow);
+    __slStdColors.insert( "gray"       , Qt::GlobalColor::gray);
+    __slStdColors.insert( "darkgray"   , Qt::GlobalColor::darkGray);
+    __slStdColors.insert( "lightgray"  , Qt::GlobalColor::lightGray);
+    __slStdColors.insert( "transparent", Qt::GlobalColor::transparent);
+    __slStdColors.insert( "color0"     , Qt::GlobalColor::color0);
+    __slStdColors.insert( "color1"     , Qt::GlobalColor::color1);
+}
 //------------------------------------------------------------------------------
 void LCWidgetBuildersCommon::initPosition(const QDomElement& _element, 
         QWidget& _widget)
@@ -264,3 +293,29 @@ LCWidgetBuildersCommon::toAlignFlags(const QDomElement& _element)
 {
     return toAlignFlags(_element.attribute(mAttributes.aligns.attrName));
 }
+
+//------------------------------------------------------------------------------
+QColor LCWidgetBuildersCommon::attributeToColor(const QString& _color)
+{
+
+    QString color_name = _color.toLower();
+
+    if(__slStdColors.contains(color_name))
+    {
+        return QColor(__slStdColors[color_name]);
+    }
+
+    color_name.remove(QRegExp( QString("[ ]{1,}|[_]{1,}") ));
+    bool flag = false;
+    QRgb rgb;
+
+    rgb = color_name.toUInt(&flag, 16);
+
+    if(flag)
+    {
+        return QColor(rgb);
+    }
+
+    return QColor();
+}
+

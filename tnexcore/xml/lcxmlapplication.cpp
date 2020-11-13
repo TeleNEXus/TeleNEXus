@@ -5,6 +5,7 @@
 #include "lcxmllayoutbuilders.h"
 #include "lcxmlwidgetbuilders.h"
 #include "lcxmlwindows.h"
+#include "lcxmlfonts.h"
 
 #include <QDebug>
 #include <QApplication>
@@ -36,6 +37,7 @@ static QDomDocument staticLoadDomElement(const QString& _fileName);
 static void addPlaginLibPathes(const QDomElement& _rootElement);
 static void addSourceBuilders(const QDomElement& _rootElement);
 static void addSources(const QDomElement& _element);
+static void addFonts(const QDomElement& _rootElement);
 static void addLayoutsBuilders(const QDomElement& _rootElement);
 static void addWidgetsBuilders(const QDomElement& _rootElement);
 static void addWindows(const QDomElement& _rootElement);
@@ -44,49 +46,54 @@ static void addWindows(const QDomElement& _rootElement);
 class CApplicationInterface : public LIApplication
 {
 public:
-    CApplicationInterface(){}
-    virtual QString getProjectPath() const override { 
-        return __slXmlMainFilePath;}
-    virtual QDir getProjectDir() const override {return __slXmlMainFileDir;}
+  CApplicationInterface(){}
+  virtual QString getProjectPath() const override { 
+    return __slXmlMainFilePath;}
+  virtual QDir getProjectDir() const override {return __slXmlMainFileDir;}
 
-    virtual QSharedPointer<LIXmlRemoteDataSourceBuilder> 
-        getDataSourceBuilder(
-            const QString& _name) const override
+  virtual QSharedPointer<LIXmlRemoteDataSourceBuilder> 
+    getDataSourceBuilder(
+        const QString& _name) const override
     {
-        return LCXmlRemoteDataSourceBuilders::instance().getBuilder(_name);
+      return LCXmlRemoteDataSourceBuilders::instance().getBuilder(_name);
     }
 
-    QSharedPointer<LIRemoteDataSource> 
-        getDataSource(const QString& _name) const override
+  QSharedPointer<LIRemoteDataSource> 
+    getDataSource(const QString& _name) const override
     {
-        auto it = __slRemoteDataSourceMap.find(_name);
-        if(it == __slRemoteDataSourceMap.end()) return nullptr;
-        return it.value();
+      auto it = __slRemoteDataSourceMap.find(_name);
+      if(it == __slRemoteDataSourceMap.end()) return nullptr;
+      return it.value();
     }
 
-    QSharedPointer<LIXmlLayoutBuilder> 
-        getLayoutBuilder(const QString& _name) const override
+  QSharedPointer<LIXmlLayoutBuilder> 
+    getLayoutBuilder(const QString& _name) const override
     {
-        return LCXmlLayoutBuilders::instance().getBuilder(_name);
+      return LCXmlLayoutBuilders::instance().getBuilder(_name);
     }
 
-    QSharedPointer<LIXmlWidgetBuilder> 
-        getWidgetBuilder(const QString& _name) const override
+  QSharedPointer<LIXmlWidgetBuilder> 
+    getWidgetBuilder(const QString& _name) const override
     {
-        return LCXmlWidgetBuilders::instance().getBuilder(_name);
+      return LCXmlWidgetBuilders::instance().getBuilder(_name);
     }
 
-    virtual QDomDocument getDomDocument(
-            const QString& _fileName) const override
-    {
-        return staticLoadDomElement( _fileName);
-    }
+  virtual QDomDocument getDomDocument(
+      const QString& _fileName) const override
+  {
+    return staticLoadDomElement( _fileName);
+  }
 
-    virtual QSharedPointer<LIWindow> getWindow(
-            const QString& _windowId) const override
-    {
-        return LCXmlWindows::instance().getWindow(_windowId);
-    }
+  virtual QSharedPointer<LIWindow> getWindow(
+      const QString& _windowId) const override
+  {
+    return LCXmlWindows::instance().getWindow(_windowId);
+  }
+
+  virtual const QFont& getFont(const QString& _fontId, bool* _flag = nullptr) const override
+  {
+    return LCXmlFonts::instance().getFont(_fontId, _flag);
+  }
 };
 
 static CApplicationInterface __slAppInterface;
@@ -203,6 +210,8 @@ int LCXmlApplication::exec(int argc, char *argv[])
     addSourceBuilders(rootElement);
     //----------------------------------------------------
     addSources(rootElement);
+    //----------------------------------------------------
+    addFonts(rootElement);
     //----------------------------------------------------
     addLayoutsBuilders(rootElement);
     //----------------------------------------------------
@@ -325,6 +334,14 @@ static void addSources(const QDomElement& _rootElement)
         }
         node = node.nextSibling();
     }
+}
+
+//==============================================================================
+static void addFonts(const QDomElement& _rootElement)
+{
+  QDomElement el = _rootElement.firstChildElement(
+      LCXmlApplication::mBaseTags.fonts);
+  LCXmlFonts::instance().create(el, __slAppInterface);
 }
 
 //==============================================================================

@@ -57,6 +57,11 @@ public:
      */
     virtual QSharedPointer<LIWindow> 
         getWindow(const QString& _windowId) const = 0;
+    
+    /*
+     * Возвращает указатель на шрифт описанный в приложении. 
+     */
+    virtual const QFont& getFont(const QString& _fontId, bool* _flag = nullptr) const = 0;
 
 };
 
