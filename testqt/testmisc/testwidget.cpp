@@ -22,12 +22,12 @@ int main(int argc, char** argv)
     qDebug() << "widget geometry = " << wr;
         int width = 0;
         int height = 0;
-    for(int i = 0; i < 15; i++)
+    for(int i = 0; i < 5; i++)
     {
 
         /* QLabel* label = new QLabel(QString("Label %1").arg(i)); */
         QPushButton* label = new QPushButton(QString("Label %1").arg(i));
-        label->move(20 * i, 20 * i);
+        label->move(10 + 20 * i, 10 + 25 * i);
         label->setParent(widget);
         label->show();
 
@@ -66,10 +66,10 @@ int main(int argc, char** argv)
     /* widget->setFrameStyle(QFrame::Shadow::Plain | QFrame::Shape::HLine); */
     widget->setFrameStyle(QFrame::Shadow::Raised | QFrame::Shape::WinPanel);
     widget->setLineWidth(5);
-    widget->resize(width, height);
+    widget->resize(width + 100, height + 100);
     /* widget->setFixedSize(width, height); */
     /* sa->setFixedSize(width, height); */
-    sa->resize(width +10, height +10);
+    sa->resize(width +150, height +150);
     sa->setAlignment(Qt::AlignmentFlag::AlignCenter);
     /* sa->setFrameStyle(QFrame::NoFrame); */
 

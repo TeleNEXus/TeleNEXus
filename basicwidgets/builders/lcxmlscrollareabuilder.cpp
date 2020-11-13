@@ -91,6 +91,9 @@ static QWidget* buildLocal(
         scrollarea->setWidget(new QWidget);
     }
 
+    scrollarea->setAlignment(LCWidgetBuildersCommon::toAlignFlags(_element));
+
+
     LCWidgetBuildersCommon::initPosition(_element, *scrollarea);
     LCWidgetBuildersCommon::initSize(_element, *scrollarea);
     LCWidgetBuildersCommon::initFixedSize(_element, *scrollarea);

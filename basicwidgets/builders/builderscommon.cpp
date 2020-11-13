@@ -207,3 +207,60 @@ QPixmap LCWidgetBuildersCommon::getPixmap(
     return pixmap;
 }
 
+//------------------------------------------------------------------------------
+Qt::AlignmentFlag 
+LCWidgetBuildersCommon::toAlignFlags(const QString& _attributes)
+{
+    quint16 flags = 0;
+
+    if(_attributes.isNull())
+    {
+        return Qt::AlignLeft;
+    }
+
+    if(_attributes.contains(mAttributes.aligns.vals.Left))
+    {
+        flags |= Qt::AlignLeft;
+    }
+
+    if(_attributes.contains(mAttributes.aligns.vals.Right))
+    {
+        flags |= Qt::AlignRight;
+    }
+
+    if(_attributes.contains(mAttributes.aligns.vals.Center))
+    {
+        flags |= Qt::AlignCenter;
+    }
+    
+    if(_attributes.contains(mAttributes.aligns.vals.HCenter))
+    {
+        flags |= Qt::AlignHCenter;
+    }
+
+    if(_attributes.contains(mAttributes.aligns.vals.Top))
+    {
+        flags |= Qt::AlignTop;
+    }
+
+    if(_attributes.contains(mAttributes.aligns.vals.Bottom))
+    {
+        flags |= Qt::AlignBottom;
+    }
+
+    if(_attributes.contains(mAttributes.aligns.vals.VCenter))
+    {
+        flags |= Qt::AlignVCenter;
+    }
+
+    if(flags == 0) return Qt::AlignLeft;
+
+    return static_cast<Qt::AlignmentFlag>(flags);
+}
+
+//------------------------------------------------------------------------------
+Qt::AlignmentFlag 
+LCWidgetBuildersCommon::toAlignFlags(const QDomElement& _element)
+{
+    return toAlignFlags(_element.attribute(mAttributes.aligns.attrName));
+}

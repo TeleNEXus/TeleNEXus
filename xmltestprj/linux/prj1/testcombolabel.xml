@@ -12,7 +12,7 @@
                     <layoutVBox>
                         <widgets>
                             <!-- <scrollArea width="200" height="200"> -->
-                            <scrollArea>
+                            <scrollArea align="Center">
                                 <widget>
                                     <widgets>
                                         <dataComboLabel  read="hreg0" source="qtslavetcp" format="hex" 
@@ -72,6 +72,11 @@
                                     </widgets>
                                 </widget>
                             </scrollArea>
+                        </widgets>
+
+                        <stretch/>
+
+                        <widgets align="Center">
 
                             <label text="Label0"/>
                             <label text="Label1"/>

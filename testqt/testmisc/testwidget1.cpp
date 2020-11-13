@@ -249,6 +249,7 @@ int main(int argc, char** argv)
     /* widget->setGeometry(0,0,100,100); */
     QScrollArea* scrollarea = new QScrollArea;
     scrollarea->setWidget(widget);
+    scrollarea->setAlignment(Qt::AlignmentFlag::AlignCenter);
     scrollarea->show();
 
 
