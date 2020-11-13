@@ -24,6 +24,20 @@ public:
         QString height = "height";
         QString fixwidth = "fixwidth";
         QString fixheght = "fixheight";
+        struct 
+        {
+            const QString attrName = "align";
+            struct
+            {
+                QString Left    = "Left";
+                QString Right   = "Right";
+                QString Center  = "Center";
+                QString HCenter = "HCenter";
+                QString Top     = "Top";
+                QString Bottom  = "Bottom";
+                QString VCenter = "VCenter";
+            }vals;
+        }aligns;
     };
     static const SAttributes mAttributes;
 
@@ -39,6 +53,8 @@ public:
 
    static QSharedPointer<LIMovieAccess> getMovie(const QString& _movie, const LIApplication& _app);
    static QPixmap getPixmap(const QString& _pixmap, const LIApplication& _app);
+   static Qt::AlignmentFlag toAlignFlags(const QString& _attributes);
+   static Qt::AlignmentFlag toAlignFlags(const QDomElement& _element);
 };
 
 #endif /* BUILDERSCOMMON_H_ */
