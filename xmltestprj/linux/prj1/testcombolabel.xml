@@ -13,7 +13,8 @@
               <layoutVBox>
                 <widgets>
                   <!-- <scrollArea width="200" height="200"> -->
-                    <scrollArea align="Center">
+                    <scrollArea align="Left VCenter">
+                    <!-- <scrollArea > -->
                       <!-- <widget bgcolor="00ff0000"> -->
                         <widget bgcolor="00 88 88 ee">
                           <!-- <widget bgcolor="black"> -->
@@ -21,7 +22,8 @@
                               <dataComboLabel  
                                 read="hreg0" source="qtslavetcp" format="hex" size="2" 
                                 posx="150" posy="150" 
-                                bgcolor="red" textcolor="blue" fontname="DejaVu Sans Mono" fontsize="18"
+                                textcolor="blue" fontname="DejaVu Sans Mono" fontsize="18"
+                                align="Right VCenter"
                                 >
                                 <item text="On"     value="a" />
                                 <item text="Off"    value="b" />
@@ -30,7 +32,7 @@
 
                                 <!-- <item picture="Test"      value="d"/> -->
                                 <!-- <item movie="Test"      value="d"/> -->
-                                <item picture="movies/20_21_22_23.gif" value="a"/>
+                                <item picture="movies/20_21_22_23.gif" value="a" align="Left VCenter"/>
                                 <!-- <item picture="picture/picture_150_100.png" value="b"/> -->
                                 <item picture="picture/picture_150_100.png" value="b"/>
                                 <item picture="movies/10_11_12_13.gif"/>
@@ -42,8 +44,9 @@
                                 bgcolor="red" textcolor="blue" fontname="DejaVu Sans Mono" fontsize="18"
                                 >
                                 <item text="On"     value="a"/>
-                                <!-- <item text="Off"    value="b" bgcolor="blue" textcolor="red" fontname="DejaVu Sans Mono" fontsize="35"/> -->
-                                <item text="Off"    value="b" bgcolor="blue" textcolor="red" fontId="mnemo20"/>
+                                <!-- <item text="Off"    value="b" bgcolor="blue" textcolor="red" fontname="DejaVu Sans Mono" fontsize="35"/> --> 
+                                <item text="Off"    value="b" bgcolor="blue" textcolor="red" fontId="mnemo10" align="VCenter Left"/>
+                                <!-- <item text="Off"    value="b" bgcolor="blue" textcolor="red" fontId="mnemo10"/> -->
                                 <item text="Reset"  value="c"/>
                                 <item text="Test"   value="d"/>
                                 <item text="UNDEFINED"/>

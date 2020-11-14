@@ -26,14 +26,14 @@ int main(int argc, char** argv)
     for(int i = 0; i < 5; i++)
     {
 
-        /* QLabel* label = new QLabel(QString("Label00 %1").arg(i)); */
+        QLabel* label = new QLabel(QString("Label00 %1").arg(i));
         /* QPushButton* label = new QPushButton(QString("Label %1").arg(i)); */
         /* QLineEdit* label = new QLineEdit(QString("Label %1").arg(i)); */
-        QComboBox* label = new QComboBox;
-        label->addItem("text item 0");
-        label->addItem("text item 1");
-        label->addItem("text item 2");
-        label->addItem("text item 3");
+        /* QComboBox* label = new QComboBox; */
+        /* label->addItem("text item 0"); */
+        /* label->addItem("text item 1"); */
+        /* label->addItem("text item 2"); */
+        /* label->addItem("text item 3"); */
 
 
         label->move(10 + 20 * i, 10 + 45 * i);
@@ -45,6 +45,8 @@ int main(int argc, char** argv)
         font.setPointSize(18);
         label->setFont(font);
         label->adjustSize();
+        label->resize(label->sizeHint().width() + 50, label->sizeHint().height() + 15);
+        label->setAlignment(Qt::AlignmentFlag::AlignHCenter);
         
 
         qDebug() << "labe " << i << " geometry = " << label->geometry();
@@ -67,16 +69,16 @@ int main(int argc, char** argv)
         /* pal.setColor(QPalette::ColorRole::Background, Qt::GlobalColor::red); */
         
         //Label
-        /* pal.setColor(QPalette::ColorRole::Background, QColor(QRgb(0x000000ff))); */
-        /* pal.setColor(QPalette::ColorRole::Foreground, QColor(QRgb(0x00ff0000))); */
+        pal.setColor(QPalette::ColorRole::Background, QColor(QRgb(0x000000ff)));
+        pal.setColor(QPalette::ColorRole::Foreground, QColor(QRgb(0x00ff0000)));
 
         //LineEdit
         /* pal.setColor(QPalette::ColorRole::Base, QColor(QRgb(0x000000ff))); */
         /* pal.setColor(QPalette::ColorRole::Text, QColor(QRgb(0x00ff0000))); */
 
         //Button ComboBox
-        pal.setColor(QPalette::ColorRole::Button, QColor(QRgb(0x000000ff)));
-        pal.setColor(QPalette::ColorRole::ButtonText, QColor(QRgb(0x00ff0000)));
+        /* pal.setColor(QPalette::ColorRole::Button, QColor(QRgb(0x000000ff))); */
+        /* pal.setColor(QPalette::ColorRole::ButtonText, QColor(QRgb(0x00ff0000))); */
 
         label->setPalette(pal);
     }

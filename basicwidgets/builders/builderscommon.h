@@ -61,8 +61,8 @@ public:
    static QSharedPointer<LIMovieAccess> getMovie(const QString& _movie, 
            const LIApplication& _app);
    static QPixmap getPixmap(const QString& _pixmap, const LIApplication& _app);
-   static Qt::AlignmentFlag toAlignFlags(const QString& _attributes);
-   static Qt::AlignmentFlag toAlignFlags(const QDomElement& _element);
+   static Qt::Alignment toAlignFlags(const QString& _attributes, bool* _flag);
+   static Qt::Alignment toAlignFlags(const QDomElement& _element, bool* _flag);
    static QColor attributeToColor(const QString& _attr_color);
 };
 
