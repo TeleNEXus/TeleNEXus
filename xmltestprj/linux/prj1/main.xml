@@ -1,22 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <APPLICATION>
+
     <PLAGINPATHS>
         <item path="./libs"/>
     </PLAGINPATHS>
-    <!--SOURCEBUILDERS>
-        <modbussources lib="libs/mbsource"       libhandler="getModbusSourceBuilder" />
-        <modbussources lib="libs/mbsource"       libhandler="getModbusSourceBuilder" />
-        <modbussources lib="libs/mbsource"       libhandler="getModbusSourceBuilder" />
-        <mssqlsource   lib="libs/sqlsources"     libhandler="getMsSqlSourcesBuilder" />
-        <sqlsource     lib="libs/sqlsources"     libhandler="getSqlSourcesBuilder"   />
-    </SOURCEBUILDERS-->
     
     <SOURCEBUILDERS file="sourcebuilders.xml"/>
-    
-    <!--SOURCES>
-        <modbussources file="modbussources.xml"/>
-    </SOURCES-->
     
     <SOURCES file="sources.xml"/>
     
@@ -26,7 +16,6 @@
         <layoutHBox     lib="basiclayouts" libhandler="getHBoxLayoutBuilder" />
     </LAYOUTBUILDERS>
     
-    <!--LAYOUTBUILDERS file="layoutbuilders.xml"/-->
     
     <WIDGETBUILDERS>
         <widget                 lib="basicwidgets" libhandler="getWidgetBuilder"                />
@@ -44,37 +33,6 @@
     </WIDGETBUILDERS>
 
     <FONTS file="fonts.xml"/>
-
-    
-    <!-- <WIDGETBUILDERS file="widgetbuilders.xml"/> -->
-    
-    <!-- <WINDOWS file="windows.xml"/> -->
-    
-    <!-- <WINDOWS> -->
-    <!--     <dialog2 visible="false" file="dialog2.xml"/> -->
-    <!--     <dialog3 visible="false" file="dialog3.xml"/> -->
-    <!--     <dialog4 visible="false" file="dialog4.xml"/> -->
-    <!-- </WINDOWS> -->
-        
-    <!-- <WINDOW name="dialog" file="dialog1.xml"/> -->
-    
-    <!-- <WINDOW name="keyboard"> -->
-    <!--     <widget builder="label"> -->
-    <!--         <layoutGrid> -->
-    <!--             <widget> -->
-    <!--             </widget> -->
-    <!--         </layoutGrid> -->
-    <!--     </widget> -->
-    <!-- </WINDOW> -->
-    
-    <!-- <WINDOW id="main"> -->
-    <!--     <widget> -->
-    <!--         <layoutVBox> -->
-    <!--             <widget> -->
-    <!--             </widget> -->
-    <!--         </layoutVBox> -->
-    <!--     </widget> -->
-    <!-- </WINDOW> -->
     
     <!-- <WINDOW id="main window 1" title="MAIN WINDOW 1" file="widgets.xml"/> -->
     <!-- <WINDOW id="main window 2" title="MAIN WINDOW 2" file="widgets.xml"/> -->

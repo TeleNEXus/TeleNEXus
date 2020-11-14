@@ -21,21 +21,40 @@ public:
 class CItemText : public IItem
 {
 public:
-    QString mText;
+  QString mText;
+  QFont mFont;
+  QPalette mPalette;
+  QFont mFontPr;
+  QPalette mPalettePr;
 public:
-    CItemText() = delete;
-    CItemText(QLabel* _label, const QString& _text): IItem(_label), mText(_text){}
+  CItemText() = delete;
+  explicit CItemText(
+      QLabel* _label, 
+      const QString& _text, 
+      QFont _font,
+      QPalette _palette): 
+    IItem(_label), 
+    mText(_text),
+    mFont(_font),
+    mPalette(_palette)
+  {}
 
-    virtual void install() override
-    {
-        mpLabel->setText(mText);
-        mpLabel->adjustSize();
-    }
+  virtual void install() override
+  {
+    mPalettePr = mpLabel->palette();
+    mFontPr = mpLabel->font();
+    mpLabel->setText(mText);
+    mpLabel->setPalette(mPalette);
+    mpLabel->setFont(mFont);
+    mpLabel->adjustSize();
+  }
 
-    virtual void uninstall() override
-    {
-        mpLabel->clear();
-    }
+  virtual void uninstall() override
+  {
+    mpLabel->clear();
+    mpLabel->setPalette(mPalettePr);
+    mpLabel->setFont(mFontPr);
+  }
 };
 
 //==============================================================================CItemMovie
@@ -145,40 +164,6 @@ void LCQRemComboLabel::
         L_OWNDATA(mLabel.mpOwnData)->currentItem = item;
         item->install();
     }
-
-
-
-    /* if(_status != LERemoteDataStatus::DS_OK) */
-    /* { */
-    /*     mLabel.setText(mLabel.mspFormatter->undefStateString()); */
-    /*     return; */
-    /* } */
-
-    
-    /* auto it = L_OWNDATA(mLabel.mpOwnData)-> */
-    /*     mItemMap.find(mLabel.mspFormatter->toString(*_data)); */
-
-
-    /* if (it == L_OWNDATA(mLabel.mpOwnData)->mItemMap.end()) */
-    /* { */
-    /*     if(L_OWNDATA(mLabel.mpOwnData)->undefItem.isNull()) */
-    /*     { */
-    /*         mLabel.setText(mLabel.mspFormatter->getWrongStateString()); */
-    /*     } */
-    /*     else */
-    /*     { */
-    /*         L_OWNDATA(mLabel.mpOwnData)->undefItem->install(); */
-    /*     } */
-    /*     return; */
-    /* } */
-
-    /* if((L_OWNDATA(mLabel.mpOwnData)->currentItem != it.value())) */
-    /* { */
-    /*     if(!L_OWNDATA(mLabel.mpOwnData)->currentItem.isNull()) */
-    /*         L_OWNDATA(mLabel.mpOwnData)->currentItem->uninstall(); */
-    /*     L_OWNDATA(mLabel.mpOwnData)->currentItem = it.value(); */
-    /*     it.value()->install(); */
-    /* } */
 }
 
 //==============================================================================LCQRemComboLabel
@@ -191,7 +176,7 @@ LCQRemComboLabel::LCQRemComboLabel(const QString& _dataName,
 {
     mpOwnData = new SOwnData();
     setText(mspFormatter->undefStateString());
-    addItem(mspFormatter->undefStateString(), QString());
+    addItem(mspFormatter->undefStateString(), QString(), font(), palette());
     mDataListener = QSharedPointer<CReadListener>(new CReadListener(*this));
     mDataReader = _dataSource->createReader();
     mDataReader->setDataName(_dataName);
@@ -219,10 +204,15 @@ void LCQRemComboLabel::setActive(bool _flag)
 }
 
 //------------------------------------------------------------------------------addItem
-void LCQRemComboLabel::addItem(const QString& _text, const QString& _val)
+void LCQRemComboLabel::addItem(
+    const QString&  _text, 
+    const QString&  _val, 
+    const QFont&    _font,
+    const QPalette& _palette)
 {
     auto pl = QSharedPointer<QLabel>(new QLabel(_text));
-    auto item = new CItemText(this, _text);
+    pl->setFont(_font);
+    auto item = new CItemText(this, _text, _font, _palette);
 
     if(_val.isNull())
     {

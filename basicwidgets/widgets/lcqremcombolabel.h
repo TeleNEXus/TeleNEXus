@@ -46,7 +46,13 @@ public:
     virtual ~LCQRemComboLabel();
     void setActive(bool _flag);
     virtual bool event(QEvent *e) override;
-    void addItem(const QString& _text, const QString& _val);
+
+    void addItem(
+        const QString&  _text, 
+        const QString&  _val, 
+        const QFont&    _font,
+        const QPalette& _palette);
+
     void addItem(QSharedPointer<LIMovieAccess> _movieAccess, const QString& _val);
     /* void addItem(const QPixmap& _pixmap, const QString& _val); */
     virtual QSize sizeHint() const override{return mSizeHint;}
