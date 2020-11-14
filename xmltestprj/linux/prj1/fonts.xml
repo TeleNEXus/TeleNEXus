@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <FONTS>
   <font id="mnemo18" family="DejaVu Sans Mono" size="18"/>
+  <font id="mnemo20" family="DejaVu Sans Mono" size="20"/>
   <font id="mnemo10" family="FreeMono" size="10"/>
   <font id="mnemo11" family="FreeMono" size="11"/>
   <font id="mnemo12" family="FreeMono" size="12"/>

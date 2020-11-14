@@ -45,7 +45,9 @@ static void buildComboLabel( const QDomElement& _element,
                         LCQRemComboLabel* _label,
                         QSharedPointer<LCStringDataFormatterBase> _format,
                         const LIApplication& _app);
-
+static void setPalete(QPalette& _palette, const QDomElement& _element);
+static void setFont(QFont& _font, const QDomElement& _element, 
+    const LIApplication& _app);
 //------------------------------------------------------------------------------
 QWidget* LCXmlRemComboLabelBuilder::build(const QDomElement& _element, 
                                             const LIApplication& _app)
@@ -84,6 +86,18 @@ QWidget* LCXmlRemComboLabelBuilder::build(const QDomElement& _element,
 
     remlabel = new LCQRemComboLabel(dataread, source, format);
 
+    //Параметры текста для всех текстовых сущностей.
+    {
+      QFont font = remlabel->font();
+      QPalette pal = remlabel->palette();
+      remlabel->setAutoFillBackground(true);
+      setPalete(pal, _element);
+      setFont(font, _element, _app);
+      remlabel->setPalette(pal);
+      remlabel->setFont(font);
+      remlabel->adjustSize();
+    }
+
     buildComboLabel(_element, remlabel, format, _app);
 
 LABEL_WRONG_EXIT:
@@ -98,50 +112,137 @@ LABEL_WRONG_EXIT:
 }
 
 //------------------------------------------------------------------------------
+static bool addTextItem(
+    LCQRemComboLabel*     _label,
+    const QString&        _value,
+    const QDomElement&    _element, 
+    const LIApplication&  _app);
+
 static void buildComboLabel( const QDomElement& _element, 
-                        LCQRemComboLabel* _label,
-                        QSharedPointer<LCStringDataFormatterBase> _format,
-                        const LIApplication& _app)
+    LCQRemComboLabel* _label,
+    QSharedPointer<LCStringDataFormatterBase> _format,
+    const LIApplication& _app)
 {
-    for( QDomNode node = _element.firstChildElement(__elementNames.item);
-            !node.isNull();
-            node = node.nextSiblingElement(__elementNames.item))
+  for( QDomNode node = _element.firstChildElement(__elementNames.item);
+      !node.isNull();
+      node = node.nextSiblingElement(__elementNames.item))
+  {
+    QDomElement el = node.toElement();
+    QString attr_value = el.attribute(__attrNames.value);
+
+    if(!attr_value.isNull())
     {
-        QDomElement el = node.toElement();
-        QString attr_value = el.attribute(__attrNames.value);
-
-        if(!attr_value.isNull())
-        {
-            attr_value = _format->normalizeString(attr_value);
-            if(attr_value.isNull()) continue;
-        }
-
-        QString attr_item = el.attribute(__attrNames.text);
-
-        if(!attr_item.isNull())
-        {
-            _label->addItem(attr_item, attr_value);
-            continue;
-        }
-
-        attr_item = el.attribute(__attrNames.picture);
-
-        if(!attr_item.isNull())
-        {
-            _label->addItem(
-                    LCWidgetBuildersCommon::getMovie(attr_item, _app), 
-                    attr_value);
-            continue;
-        }
-
-        /* attr_item = el.attribute(__attrNames.picture); */
-
-        /* if(!attr_item.isNull()) */
-        /* { */
-        /*     _label->addItem( */
-        /*             LCWidgetBuildersCommon::getPixmap(attr_item, _app), */ 
-        /*             attr_value); */
-        /*     continue; */
-        /* } */
+      attr_value = _format->normalizeString(attr_value);
+      if(attr_value.isNull()) continue;
     }
+
+    QString attr_item = el.attribute(__attrNames.text);
+
+    if(addTextItem(_label, attr_value, el, _app))
+    {
+      continue;
+    }
+
+    attr_item = el.attribute(__attrNames.picture);
+
+    if(!attr_item.isNull())
+    {
+      _label->addItem(
+          LCWidgetBuildersCommon::getMovie(attr_item, _app), 
+          attr_value);
+      continue;
+    }
+
+    /* attr_item = el.attribute(__attrNames.picture); */
+
+    /* if(!attr_item.isNull()) */
+    /* { */
+    /*     _label->addItem( */
+    /*             LCWidgetBuildersCommon::getPixmap(attr_item, _app), */ 
+    /*             attr_value); */
+    /*     continue; */
+    /* } */
+  }
 }
+
+//==============================================================================
+static bool addTextItem(
+    LCQRemComboLabel*     _label,
+    const QString&        _value,
+    const QDomElement&    _element, 
+    const LIApplication&  _app)
+{
+    QString attr_item = _element.attribute(__attrNames.text);
+
+    if(attr_item.isNull()) return false;
+
+    QPalette pal = _label->palette();
+    QFont font = _label->font();
+
+    setPalete(pal, _element);
+    setFont(font, _element, _app);
+
+    _label->addItem(attr_item, _value, font, pal); 
+
+    return true;
+}
+
+//==============================================================================
+static void setPalete(QPalette& _palette, const QDomElement& _element)
+{
+  //Цвет фона.
+  QString attr = _element.attribute(LCWidgetBuildersCommon::mAttributes.colorbg);
+
+  if(!attr.isNull())
+  {
+    QColor color = LCWidgetBuildersCommon::attributeToColor(attr);
+    if(color.isValid())
+    {
+      _palette.setColor(QPalette::ColorRole::Background, color);
+    }
+  }
+
+  //Цвет текста.
+  attr = _element.attribute(LCWidgetBuildersCommon::mAttributes.colortext);
+  if(!attr.isNull())
+  {
+    QColor color = LCWidgetBuildersCommon::attributeToColor(attr);
+    if(color.isValid())
+    {
+      _palette.setColor(QPalette::ColorRole::Foreground, color);
+    }
+  }
+}
+
+//==============================================================================
+static void setFont(QFont& _font, const QDomElement& _element, 
+    const LIApplication& _app)
+{
+      QString attr = _element.attribute(LCWidgetBuildersCommon::mAttributes.fontId);
+      if(!attr.isNull())
+      {
+        bool flag = false;
+        QFont f = _app.getFont(attr, &flag);
+        if(flag) 
+        {
+          _font = f;
+          return;
+        }
+      }
+
+      attr = _element.attribute(LCWidgetBuildersCommon::mAttributes.fontname);
+      if(!attr.isNull())
+      {
+        _font.setFamily(attr);
+      }
+
+      attr = _element.attribute(LCWidgetBuildersCommon::mAttributes.fontsize);
+      if(!attr.isNull())
+      {
+        bool flag = false;
+        int size = attr.toInt(&flag);
+        if(flag) _font.setPointSize(size);
+      }
+}
+
+

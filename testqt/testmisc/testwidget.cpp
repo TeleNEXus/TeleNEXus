@@ -5,6 +5,7 @@
 #include <qnamespace.h>
 #include <QScrollArea>
 #include <qscrollarea.h>
+#include <QComboBox>
 
 #include <QList>
 
@@ -13,7 +14,7 @@ int main(int argc, char** argv)
     QApplication app(argc, argv);
     QFrame* widget = new QFrame;
     QScrollArea* sa = new QScrollArea;
-    QLabel* label = new QLabel("label test");
+    /* QLabel* label = new QLabel("label test"); */
     /* QPushButton* button1 = new QPushButton("Buttonh ___________________1"); */
 
     QList<QLabel*> labels;
@@ -25,10 +26,17 @@ int main(int argc, char** argv)
     for(int i = 0; i < 5; i++)
     {
 
-        QLabel* label = new QLabel(QString("Label00 %1").arg(i));
+        /* QLabel* label = new QLabel(QString("Label00 %1").arg(i)); */
         /* QPushButton* label = new QPushButton(QString("Label %1").arg(i)); */
         /* QLineEdit* label = new QLineEdit(QString("Label %1").arg(i)); */
-        label->move(10 + 20 * i, 10 + 25 * i);
+        QComboBox* label = new QComboBox;
+        label->addItem("text item 0");
+        label->addItem("text item 1");
+        label->addItem("text item 2");
+        label->addItem("text item 3");
+
+
+        label->move(10 + 20 * i, 10 + 45 * i);
         label->setParent(widget);
         label->show();
         QFont font = label->font();
@@ -59,16 +67,16 @@ int main(int argc, char** argv)
         /* pal.setColor(QPalette::ColorRole::Background, Qt::GlobalColor::red); */
         
         //Label
-        pal.setColor(QPalette::ColorRole::Background, QColor(QRgb(0x000000ff)));
-        pal.setColor(QPalette::ColorRole::Foreground, QColor(QRgb(0x00ff0000)));
+        /* pal.setColor(QPalette::ColorRole::Background, QColor(QRgb(0x000000ff))); */
+        /* pal.setColor(QPalette::ColorRole::Foreground, QColor(QRgb(0x00ff0000))); */
 
         //LineEdit
         /* pal.setColor(QPalette::ColorRole::Base, QColor(QRgb(0x000000ff))); */
         /* pal.setColor(QPalette::ColorRole::Text, QColor(QRgb(0x00ff0000))); */
 
-        //Button
-        /* pal.setColor(QPalette::ColorRole::Button, QColor(QRgb(0x000000ff))); */
-        /* pal.setColor(QPalette::ColorRole::ButtonText, QColor(QRgb(0x00ff0000))); */
+        //Button ComboBox
+        pal.setColor(QPalette::ColorRole::Button, QColor(QRgb(0x000000ff)));
+        pal.setColor(QPalette::ColorRole::ButtonText, QColor(QRgb(0x00ff0000)));
 
         label->setPalette(pal);
     }
@@ -91,8 +99,10 @@ int main(int argc, char** argv)
     widget->setLineWidth(5);
     widget->resize(width + 100, height + 100);
     QPalette pal = widget->palette();
+
     /* pal.setColor(QPalette::ColorRole::Background, Qt::GlobalColor::red); */
-    pal.setColor(QPalette::ColorRole::Background, QColor(QRgb(0x00ff00ff)));
+    pal.setColor(QPalette::ColorRole::Background, QColor(QRgb(0x00aaaaff)));
+
     widget->setAutoFillBackground(true);
     widget->setPalette(pal);
     /* widget->setFixedSize(width, height); */
