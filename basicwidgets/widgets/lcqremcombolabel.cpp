@@ -4,6 +4,7 @@
 #include <QMap>
 #include "LIMovieAccess.h"
 #include <QMovie>
+#include <qnamespace.h>
 
 //==============================================================================IItem
 class IItem
@@ -20,32 +21,40 @@ public:
 //==============================================================================CItemText
 class CItemText : public IItem
 {
-public:
+private:
   QString mText;
   QFont mFont;
   QPalette mPalette;
+  Qt::Alignment mAlignment;
   QFont mFontPr;
   QPalette mPalettePr;
+  Qt::Alignment mAlignmentPr;
 public:
   CItemText() = delete;
   explicit CItemText(
       QLabel* _label, 
       const QString& _text, 
       QFont _font,
-      QPalette _palette): 
+      QPalette _palette,
+      Qt::Alignment _alignment): 
     IItem(_label), 
     mText(_text),
     mFont(_font),
-    mPalette(_palette)
+    mPalette(_palette),
+    mAlignment(_alignment)
   {}
 
   virtual void install() override
   {
     mPalettePr = mpLabel->palette();
     mFontPr = mpLabel->font();
+    mAlignmentPr = mpLabel->alignment();
+    qDebug() << "install align = " << mAlignment;
+
     mpLabel->setText(mText);
     mpLabel->setPalette(mPalette);
     mpLabel->setFont(mFont);
+    mpLabel->setAlignment(mAlignment);
     mpLabel->adjustSize();
   }
 
@@ -54,6 +63,8 @@ public:
     mpLabel->clear();
     mpLabel->setPalette(mPalettePr);
     mpLabel->setFont(mFontPr);
+    mpLabel->setAlignment(mAlignmentPr);
+    mpLabel->adjustSize();
   }
 };
 
@@ -61,26 +72,42 @@ public:
 class CItemMovie: public IItem
 {
 public:
-    QSharedPointer<LIMovieAccess> mspMovieAccess;
+  QSharedPointer<LIMovieAccess> mspMovieAccess;
+private:
+  Qt::Alignment mAlignment;
+  Qt::Alignment mAlignmentPr;
+  QPalette mPalette;
+  QPalette mPalettePr;
 public:
-    CItemMovie() = delete;
-    CItemMovie(QLabel* _label, QSharedPointer<LIMovieAccess> _movieAccess): 
-        IItem(_label), 
-        mspMovieAccess(_movieAccess){}
+  CItemMovie() = delete;
+  explicit CItemMovie(
+      QLabel* _label, 
+      QSharedPointer<LIMovieAccess> _movieAccess, 
+      const QPalette  _palette,
+      Qt::Alignment _alignment): 
+    IItem(_label), 
+    mspMovieAccess(_movieAccess),
+    mAlignment(_alignment),
+    mColor(_color){}
 
-    virtual void install() override
-    {
-        mpLabel->clear();
-        mpLabel->setMovie(mspMovieAccess->getMovie());
-        mspMovieAccess->start();
-        mpLabel->adjustSize();
-    }
+  virtual void install() override
+  {
+    QPalette pal = mpLabel->palette();
 
-    virtual void uninstall() override
-    {
-        mpLabel->clear();
-        mspMovieAccess->stop();
-    }
+    mAlignmentPr = mpLabel->alignment();
+    mpLabel->setAlignment(mAlignment);
+    mpLabel->clear();
+    mpLabel->setMovie(mspMovieAccess->getMovie());
+    mspMovieAccess->start();
+    mpLabel->adjustSize();
+  }
+
+  virtual void uninstall() override
+  {
+    mpLabel->clear();
+    mpLabel->setAlignment(mAlignmentPr);
+    mspMovieAccess->stop();
+  }
 };
 
 /* //==============================================================================CItemPixmap */
@@ -176,7 +203,7 @@ LCQRemComboLabel::LCQRemComboLabel(const QString& _dataName,
 {
     mpOwnData = new SOwnData();
     setText(mspFormatter->undefStateString());
-    addItem(mspFormatter->undefStateString(), QString(), font(), palette());
+    addItem(mspFormatter->undefStateString(), QString(), font(), palette(), alignment());
     mDataListener = QSharedPointer<CReadListener>(new CReadListener(*this));
     mDataReader = _dataSource->createReader();
     mDataReader->setDataName(_dataName);
@@ -208,11 +235,12 @@ void LCQRemComboLabel::addItem(
     const QString&  _text, 
     const QString&  _val, 
     const QFont&    _font,
-    const QPalette& _palette)
+    const QPalette& _palette,
+    Qt::Alignment _alignment)
 {
     auto pl = QSharedPointer<QLabel>(new QLabel(_text));
     pl->setFont(_font);
-    auto item = new CItemText(this, _text, _font, _palette);
+    auto item = new CItemText(this, _text, _font, _palette, _alignment);
 
     if(_val.isNull())
     {
@@ -230,9 +258,11 @@ void LCQRemComboLabel::addItem(
 
 //------------------------------------------------------------------------------addItem
 void LCQRemComboLabel::addItem(QSharedPointer<LIMovieAccess> _movieAccess, 
-    const QString& _val)
+    const QString& _val,
+    const QColor& _colorbg,
+    Qt::Alignment _alignment)
 {
-    auto item = new CItemMovie(this, _movieAccess);
+    auto item = new CItemMovie(this, _movieAccess, _alignment);
     if(_val.isNull())
     {
         L_OWNDATA(mpOwnData)->undefItem =  

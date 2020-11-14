@@ -237,61 +237,75 @@ QPixmap LCWidgetBuildersCommon::getPixmap(
 }
 
 //------------------------------------------------------------------------------
-Qt::AlignmentFlag 
-LCWidgetBuildersCommon::toAlignFlags(const QString& _attributes)
+  Qt::Alignment 
+LCWidgetBuildersCommon::toAlignFlags(const QString& _attributes, bool* _flag)
 {
-    quint16 flags = 0;
+  Qt::Alignment flags = 0;
 
-    if(_attributes.isNull())
-    {
-        return Qt::AlignLeft;
-    }
+  qDebug() << "Align flags 0 flags = "<<flags;
+  if(_attributes.isNull())
+  {
+    if(_flag) *_flag = false;
+    return Qt::AlignmentFlag::AlignLeft;
+  }
 
-    if(_attributes.contains(mAttributes.aligns.vals.Left))
-    {
-        flags |= Qt::AlignLeft;
-    }
+  if(_attributes.contains(mAttributes.aligns.vals.Left))
+  {
+  qDebug() << "Align flags 1";
+  qDebug() << "Align Left = " << Qt::AlignLeft;
+    flags |= Qt::AlignLeft;
+  }
 
-    if(_attributes.contains(mAttributes.aligns.vals.Right))
-    {
-        flags |= Qt::AlignRight;
-    }
+  if(_attributes.contains(mAttributes.aligns.vals.Right))
+  {
+    flags |= Qt::AlignRight;
+  }
 
-    if(_attributes.contains(mAttributes.aligns.vals.Center))
-    {
-        flags |= Qt::AlignCenter;
-    }
-    
-    if(_attributes.contains(mAttributes.aligns.vals.HCenter))
-    {
-        flags |= Qt::AlignHCenter;
-    }
+  if((_attributes.contains(mAttributes.aligns.vals.Center)) && 
+      (!_attributes.contains(mAttributes.aligns.vals.HCenter)) &&
+      (!_attributes.contains(mAttributes.aligns.vals.VCenter)))
+  {
+  qDebug() << "Align flags 2";
+    flags |= Qt::AlignCenter;
+  }
 
-    if(_attributes.contains(mAttributes.aligns.vals.Top))
-    {
-        flags |= Qt::AlignTop;
-    }
+  if(_attributes.contains(mAttributes.aligns.vals.HCenter))
+  {
+  qDebug() << "Align flags 3";
+    flags |= Qt::AlignHCenter;
+  }
 
-    if(_attributes.contains(mAttributes.aligns.vals.Bottom))
-    {
-        flags |= Qt::AlignBottom;
-    }
+  if(_attributes.contains(mAttributes.aligns.vals.Top))
+  {
+    flags |= Qt::AlignTop;
+  }
 
-    if(_attributes.contains(mAttributes.aligns.vals.VCenter))
-    {
-        flags |= Qt::AlignVCenter;
-    }
+  if(_attributes.contains(mAttributes.aligns.vals.Bottom))
+  {
+    flags |= Qt::AlignBottom;
+  }
 
-    if(flags == 0) return Qt::AlignLeft;
+  if(_attributes.contains(mAttributes.aligns.vals.VCenter))
+  {
+    flags |= Qt::AlignVCenter;
+  }
 
-    return static_cast<Qt::AlignmentFlag>(flags);
+  if(flags == 0) 
+  {
+    if(_flag) *_flag = false;
+    return Qt::AlignmentFlag::AlignLeft;
+  }  
+  if(_flag) *_flag = true;
+  qDebug() << "Align flags = " << flags;
+
+  return flags;
 }
 
 //------------------------------------------------------------------------------
-Qt::AlignmentFlag 
-LCWidgetBuildersCommon::toAlignFlags(const QDomElement& _element)
+Qt::Alignment
+LCWidgetBuildersCommon::toAlignFlags(const QDomElement& _element, bool* _flag)
 {
-    return toAlignFlags(_element.attribute(mAttributes.aligns.attrName));
+    return toAlignFlags(_element.attribute(mAttributes.aligns.attrName), _flag);
 }
 
 //------------------------------------------------------------------------------

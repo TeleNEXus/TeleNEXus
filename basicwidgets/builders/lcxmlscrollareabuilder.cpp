@@ -5,6 +5,7 @@
 #include <QDomElement>
 #include <QFile>
 #include <QDebug>
+#include <qnamespace.h>
 #include "builderscommon.h"
 
 //------------------------------------------------------------------------------
@@ -90,8 +91,10 @@ static QWidget* buildLocal(
     {
         scrollarea->setWidget(new QWidget);
     }
+    bool flag = false;
 
-    scrollarea->setAlignment(LCWidgetBuildersCommon::toAlignFlags(_element));
+    Qt::Alignment a  = LCWidgetBuildersCommon::toAlignFlags(_element, &flag);
+    if(flag) scrollarea->setAlignment(a);
 
 
     LCWidgetBuildersCommon::initPosition(_element, *scrollarea);

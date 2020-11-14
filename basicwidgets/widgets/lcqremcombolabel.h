@@ -2,6 +2,7 @@
 #define LCQREMCOMBOLABEL_H
 
 #include <QLabel>
+#include <qnamespace.h>
 #include "lremgui.h"
 #include "lqextendevent.h"
 #include "lcstringdataformatterbase.h"
@@ -13,19 +14,19 @@ class LIMovieAccess;
 
 class LCQRemComboLabel : public QLabel
 {
-    Q_OBJECT
+  Q_OBJECT
 private:
 
     class CReadListener : public LIRemoteDataReadListener
-    {
-    private:
-        LCQRemComboLabel& mLabel;
-    public:
-        CReadListener(LCQRemComboLabel& _label);
-        virtual ~CReadListener(){}
-        virtual void dataIsRead(QSharedPointer<QByteArray>  _data, 
-                                LERemoteDataStatus          _status) override;
-    };
+  {
+  private:
+    LCQRemComboLabel& mLabel;
+  public:
+    CReadListener(LCQRemComboLabel& _label);
+    virtual ~CReadListener(){}
+    virtual void dataIsRead(QSharedPointer<QByteArray>  _data, 
+        LERemoteDataStatus          _status) override;
+  };
 
     QSize mSizeHint;
     void* mpOwnData;    //Собственные данные.
@@ -38,10 +39,10 @@ private:
     explicit LCQRemComboLabel(QString _text, QWidget* _parent = nullptr);
 public:
     explicit LCQRemComboLabel(   
-                    const QString&                              _dataName,
-                    QSharedPointer<LIRemoteDataSource>          _dataSource,
-                    QSharedPointer<LCStringDataFormatterBase>   _formatter,
-                    QWidget* _parent = nullptr);
+        const QString&                              _dataName,
+        QSharedPointer<LIRemoteDataSource>          _dataSource,
+        QSharedPointer<LCStringDataFormatterBase>   _formatter,
+        QWidget* _parent = nullptr);
 
     virtual ~LCQRemComboLabel();
     void setActive(bool _flag);
@@ -51,9 +52,14 @@ public:
         const QString&  _text, 
         const QString&  _val, 
         const QFont&    _font,
-        const QPalette& _palette);
+        const QPalette& _palette,
+        Qt::Alignment _alignment);
 
-    void addItem(QSharedPointer<LIMovieAccess> _movieAccess, const QString& _val);
+    void addItem(
+        QSharedPointer<LIMovieAccess> _movieAccess, 
+        const QString& _val, 
+        const QColor& _colorbg,
+        Qt::Alignment _alignment);
     /* void addItem(const QPixmap& _pixmap, const QString& _val); */
     virtual QSize sizeHint() const override{return mSizeHint;}
 private:

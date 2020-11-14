@@ -5,6 +5,7 @@
 
 #include <QDomElement>
 #include <qdom.h>
+#include <qnamespace.h>
 #include <qwidget.h>
 
 #include <QDebug>
@@ -45,9 +46,13 @@ static void buildComboLabel( const QDomElement& _element,
                         LCQRemComboLabel* _label,
                         QSharedPointer<LCStringDataFormatterBase> _format,
                         const LIApplication& _app);
+
 static void setPalete(QPalette& _palette, const QDomElement& _element);
+
 static void setFont(QFont& _font, const QDomElement& _element, 
     const LIApplication& _app);
+
+static void setAlign(Qt::Alignment& _alignment, const QDomElement& _element);
 //------------------------------------------------------------------------------
 QWidget* LCXmlRemComboLabelBuilder::build(const QDomElement& _element, 
                                             const LIApplication& _app)
@@ -90,11 +95,14 @@ QWidget* LCXmlRemComboLabelBuilder::build(const QDomElement& _element,
     {
       QFont font = remlabel->font();
       QPalette pal = remlabel->palette();
+      Qt::Alignment alignment = remlabel->alignment();
       remlabel->setAutoFillBackground(true);
       setPalete(pal, _element);
       setFont(font, _element, _app);
+      setAlign(alignment, _element);
       remlabel->setPalette(pal);
       remlabel->setFont(font);
+      remlabel->setAlignment(alignment);
       remlabel->adjustSize();
     }
 
@@ -147,9 +155,19 @@ static void buildComboLabel( const QDomElement& _element,
 
     if(!attr_item.isNull())
     {
+      Qt::Alignment align = _label->alignment();
+      QString attr = el.attribute(LCWidgetBuildersCommon::mAttributes.aligns.attrName);
+
+      if(!attr.isNull())
+      {
+         bool flag = false;
+         Qt::Alignment a = LCWidgetBuildersCommon::toAlignFlags(attr, &flag);
+         if(flag) align = a;
+      }
+
       _label->addItem(
           LCWidgetBuildersCommon::getMovie(attr_item, _app), 
-          attr_value);
+          attr_value, align);
       continue;
     }
 
@@ -178,11 +196,13 @@ static bool addTextItem(
 
     QPalette pal = _label->palette();
     QFont font = _label->font();
+    Qt::Alignment align = _label->alignment();
 
     setPalete(pal, _element);
     setFont(font, _element, _app);
+    setAlign(align, _element);
 
-    _label->addItem(attr_item, _value, font, pal); 
+    _label->addItem(attr_item, _value, font, pal, align); 
 
     return true;
 }
@@ -243,6 +263,18 @@ static void setFont(QFont& _font, const QDomElement& _element,
         int size = attr.toInt(&flag);
         if(flag) _font.setPointSize(size);
       }
+}
+
+//==============================================================================
+static void setAlign(Qt::Alignment& _alignment, const QDomElement& _element)
+{
+  QString attr = _element.attribute(
+      LCWidgetBuildersCommon::mAttributes.aligns.attrName);
+  if(attr.isNull()) return;
+  bool flag = false;
+  Qt::Alignment a = LCWidgetBuildersCommon::toAlignFlags(attr, &flag);
+  if(!flag) return;
+  _alignment = a;
 }
 
 
