@@ -111,7 +111,8 @@ QWidget* LCXmlControlWindowButtonBuilder::build(
         QString attr_action = el.attribute(__slTags.window.attrs.action.attr);
         QString attr_event  = el.attribute(__slTags.window.attrs.event.attr);
 
-        if(attr_id.isNull() || attr_action.isNull() || attr_event.isNull()) continue;
+        if(attr_id.isNull() || attr_action.isNull() || attr_event.isNull()) 
+          continue;
 
         if(attr_event == __slTags.window.attrs.event.vals.pressed)
         {
@@ -151,7 +152,8 @@ QWidget* LCXmlControlWindowButtonBuilder::build(
     QObject::connect(button, &QPushButton::released, 
             [releaseActions, &_app]()
             {
-            for(auto it = releaseActions.begin(); it != releaseActions.end(); it++)
+            for(auto it = releaseActions.begin(); 
+                it != releaseActions.end(); it++)
             {
                 QSharedPointer<LIWindow> window = _app.getWindow(it->window);
                  

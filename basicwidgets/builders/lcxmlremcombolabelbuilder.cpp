@@ -26,26 +26,26 @@ LCXmlRemComboLabelBuilder::~LCXmlRemComboLabelBuilder()
 //------------------------------------------------------------------------------
 const struct
 {
-    QString dataread    = "read";
-    QString source      = "source";
-    QString format      = "format";
-    QString text        = "text";
-    QString value       = "value";
-    /* QString movie       = "movie"; */
-    QString picture     = "picture";
+  QString dataread    = "read";
+  QString source      = "source";
+  QString format      = "format";
+  QString text        = "text";
+  QString value       = "value";
+  /* QString movie       = "movie"; */
+  QString picture     = "picture";
 } __attrNames;
 
 //------------------------------------------------------------------------------
 const struct
 {
-    QString item    = "item";
+  QString item    = "item";
 } __elementNames;
 
 //------------------------------------------------------------------------------
 static void buildComboLabel( const QDomElement& _element, 
-                        LCQRemComboLabel* _label,
-                        QSharedPointer<LCStringDataFormatterBase> _format,
-                        const LIApplication& _app);
+    LCQRemComboLabel* _label,
+    QSharedPointer<LCStringDataFormatterBase> _format,
+    const LIApplication& _app);
 
 static void setPalete(QPalette& _palette, const QDomElement& _element);
 
@@ -55,68 +55,68 @@ static void setFont(QFont& _font, const QDomElement& _element,
 static void setAlign(Qt::Alignment& _alignment, const QDomElement& _element);
 //------------------------------------------------------------------------------
 QWidget* LCXmlRemComboLabelBuilder::build(const QDomElement& _element, 
-                                            const LIApplication& _app)
+    const LIApplication& _app)
 {
-    LCQRemComboLabel *remlabel= nullptr;
-    QString dataread;
-    QString attr = _element.attribute(__attrNames.source);
-    QSharedPointer<LIRemoteDataSource> source;
-    QSharedPointer<LCStringDataFormatterBase> format;
+  LCQRemComboLabel *remlabel= nullptr;
+  QString dataread;
+  QString attr = _element.attribute(__attrNames.source);
+  QSharedPointer<LIRemoteDataSource> source;
+  QSharedPointer<LCStringDataFormatterBase> format;
 
-    if(attr.isNull())
-    {
-        goto LABEL_WRONG_EXIT;
-    }
+  if(attr.isNull())
+  {
+    goto LABEL_WRONG_EXIT;
+  }
 
-    source = _app.getDataSource(attr);
+  source = _app.getDataSource(attr);
 
-    if(source.isNull())
-    {
-        goto LABEL_WRONG_EXIT;
-    }
+  if(source.isNull())
+  {
+    goto LABEL_WRONG_EXIT;
+  }
 
-    dataread = _element.attribute(__attrNames.dataread);
+  dataread = _element.attribute(__attrNames.dataread);
 
-    if(dataread.isNull())
-    {
-        goto LABEL_WRONG_EXIT;
-    }
+  if(dataread.isNull())
+  {
+    goto LABEL_WRONG_EXIT;
+  }
 
-    format = LCXmlStdDataFormatterFactory::instance().
-                                createStringFormatter(_element.attributes());
-    if(format.isNull())
-    {
-        goto LABEL_WRONG_EXIT;
-    }
+  format = LCXmlStdDataFormatterFactory::instance().
+    createStringFormatter(_element.attributes());
+  if(format.isNull())
+  {
+    goto LABEL_WRONG_EXIT;
+  }
 
-    remlabel = new LCQRemComboLabel(dataread, source, format);
+  remlabel = new LCQRemComboLabel(dataread, source, format);
 
-    //Параметры текста для всех текстовых сущностей.
-    {
-      QFont font = remlabel->font();
-      QPalette pal = remlabel->palette();
-      Qt::Alignment alignment = remlabel->alignment();
-      remlabel->setAutoFillBackground(true);
-      setPalete(pal, _element);
-      setFont(font, _element, _app);
-      setAlign(alignment, _element);
-      remlabel->setPalette(pal);
-      remlabel->setFont(font);
-      remlabel->setAlignment(alignment);
-      remlabel->adjustSize();
-    }
+  //Параметры текста для всех текстовых сущностей.
+  {
+    QFont font = remlabel->font();
+    QPalette pal = remlabel->palette();
+    Qt::Alignment alignment = remlabel->alignment();
+    remlabel->setAutoFillBackground(true);
+    setPalete(pal, _element);
+    setFont(font, _element, _app);
+    setAlign(alignment, _element);
+    remlabel->setPalette(pal);
+    remlabel->setFont(font);
+    remlabel->setAlignment(alignment);
+    remlabel->adjustSize();
+  }
 
-    buildComboLabel(_element, remlabel, format, _app);
+  buildComboLabel(_element, remlabel, format, _app);
 
 LABEL_WRONG_EXIT:
-    QLabel* ret = remlabel;
-    if(ret == nullptr) ret = new QLabel(_element.tagName());
+  QLabel* ret = remlabel;
+  if(ret == nullptr) ret = new QLabel(_element.tagName());
 
-    LCWidgetBuildersCommon::initSize(_element, *ret);
-    LCWidgetBuildersCommon::initFixedSize(_element, *ret);
-    LCWidgetBuildersCommon::initPosition(_element, *ret);
+  LCWidgetBuildersCommon::initSize(_element, *ret);
+  LCWidgetBuildersCommon::initFixedSize(_element, *ret);
+  LCWidgetBuildersCommon::initPosition(_element, *ret);
 
-    return ret;
+  return ret;
 }
 
 //------------------------------------------------------------------------------
@@ -155,7 +155,8 @@ static void buildComboLabel( const QDomElement& _element,
 
     if(!attr_item.isNull())
     {
-      QString attr = el.attribute(LCWidgetBuildersCommon::mAttributes.aligns.attrName);
+      QString attr = el.attribute(
+          LCWidgetBuildersCommon::mAttributes.aligns.attrName);
 
       Qt::Alignment align = 0;
       if(!LCWidgetBuildersCommon::toAlignFlags(attr, align))
@@ -199,28 +200,29 @@ static bool addTextItem(
     const QDomElement&    _element, 
     const LIApplication&  _app)
 {
-    QString attr_item = _element.attribute(__attrNames.text);
+  QString attr_item = _element.attribute(__attrNames.text);
 
-    if(attr_item.isNull()) return false;
+  if(attr_item.isNull()) return false;
 
-    QPalette pal = _label->palette();
-    QFont font = _label->font();
-    Qt::Alignment align = _label->alignment();
+  QPalette pal = _label->palette();
+  QFont font = _label->font();
+  Qt::Alignment align = _label->alignment();
 
-    setPalete(pal, _element);
-    setFont(font, _element, _app);
-    setAlign(align, _element);
+  setPalete(pal, _element);
+  setFont(font, _element, _app);
+  setAlign(align, _element);
 
-    _label->addItem(attr_item, _value, font, pal, align); 
+  _label->addItem(attr_item, _value, font, pal, align); 
 
-    return true;
+  return true;
 }
 
 //==============================================================================
 static void setPalete(QPalette& _palette, const QDomElement& _element)
 {
   //Цвет фона.
-  QString attr = _element.attribute(LCWidgetBuildersCommon::mAttributes.colorbg);
+  QString attr = 
+    _element.attribute(LCWidgetBuildersCommon::mAttributes.colorbg);
 
   if(!attr.isNull())
   {
@@ -247,31 +249,32 @@ static void setPalete(QPalette& _palette, const QDomElement& _element)
 static void setFont(QFont& _font, const QDomElement& _element, 
     const LIApplication& _app)
 {
-      QString attr = _element.attribute(LCWidgetBuildersCommon::mAttributes.fontId);
-      if(!attr.isNull())
-      {
-        bool flag = false;
-        QFont f = _app.getFont(attr, &flag);
-        if(flag) 
-        {
-          _font = f;
-          return;
-        }
-      }
+  QString attr = _element.attribute(
+      LCWidgetBuildersCommon::mAttributes.fontId);
+  if(!attr.isNull())
+  {
+    bool flag = false;
+    QFont f = _app.getFont(attr, &flag);
+    if(flag) 
+    {
+      _font = f;
+      return;
+    }
+  }
 
-      attr = _element.attribute(LCWidgetBuildersCommon::mAttributes.fontname);
-      if(!attr.isNull())
-      {
-        _font.setFamily(attr);
-      }
+  attr = _element.attribute(LCWidgetBuildersCommon::mAttributes.fontname);
+  if(!attr.isNull())
+  {
+    _font.setFamily(attr);
+  }
 
-      attr = _element.attribute(LCWidgetBuildersCommon::mAttributes.fontsize);
-      if(!attr.isNull())
-      {
-        bool flag = false;
-        int size = attr.toInt(&flag);
-        if(flag) _font.setPointSize(size);
-      }
+  attr = _element.attribute(LCWidgetBuildersCommon::mAttributes.fontsize);
+  if(!attr.isNull())
+  {
+    bool flag = false;
+    int size = attr.toInt(&flag);
+    if(flag) _font.setPointSize(size);
+  }
 }
 
 //==============================================================================
