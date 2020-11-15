@@ -155,20 +155,29 @@ static void buildComboLabel( const QDomElement& _element,
 
     if(!attr_item.isNull())
     {
-      Qt::Alignment align = _label->alignment();
       QString attr = el.attribute(LCWidgetBuildersCommon::mAttributes.aligns.attrName);
+
+      Qt::Alignment align = 0;
+      if(!LCWidgetBuildersCommon::toAlignFlags(attr, align))
+      {
+        align = _label->alignment();
+      }
+
+      attr = el.attribute(LCWidgetBuildersCommon::mAttributes.colorbg);
+      QPalette pal = _label->palette();
 
       if(!attr.isNull())
       {
-         bool flag = false;
-         Qt::Alignment a = LCWidgetBuildersCommon::toAlignFlags(attr, &flag);
-         if(flag) align = a;
+        QColor color = LCWidgetBuildersCommon::attributeToColor(attr);
+        if(color.isValid())
+        {
+          pal.setColor(QPalette::ColorRole::Background, color);
+        }
       }
 
       _label->addItem(
           LCWidgetBuildersCommon::getMovie(attr_item, _app), 
-          attr_value, align);
-      continue;
+          attr_value, pal, align);
     }
 
     /* attr_item = el.attribute(__attrNames.picture); */
@@ -270,11 +279,6 @@ static void setAlign(Qt::Alignment& _alignment, const QDomElement& _element)
 {
   QString attr = _element.attribute(
       LCWidgetBuildersCommon::mAttributes.aligns.attrName);
-  if(attr.isNull()) return;
-  bool flag = false;
-  Qt::Alignment a = LCWidgetBuildersCommon::toAlignFlags(attr, &flag);
-  if(!flag) return;
-  _alignment = a;
+  LCWidgetBuildersCommon::toAlignFlags(attr, _alignment);
 }
-
 
