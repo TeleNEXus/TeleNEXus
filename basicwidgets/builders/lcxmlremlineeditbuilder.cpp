@@ -26,6 +26,12 @@ const struct
 } __attrNames;
 
 //------------------------------------------------------------------------------
+static void setColors(QLineEdit* _lineEdit, const QDomElement& _element);
+
+static void setFont(QLineEdit* _lineEdit, 
+    const QDomElement& _element, 
+    const LIApplication& _app);
+
 QWidget* LCXmlRemLineEditBuilder::build(const QDomElement& _element, 
     const LIApplication& _app)
 {
@@ -67,10 +73,57 @@ QWidget* LCXmlRemLineEditBuilder::build(const QDomElement& _element,
 
 LABEL_WRONG_EXIT:
 
-  if(ret == nullptr) ret= new QLineEdit(_element.tagName());
+  if(ret == nullptr) ret = new QLineEdit(_element.tagName());
+
+  setColors(static_cast<QLineEdit*>(ret), _element);
+  setFont(static_cast<QLineEdit*>(ret), _element, _app);
+  
   LCWidgetBuildersCommon::initSize(_element, *ret);
   LCWidgetBuildersCommon::initFixedSize(_element, *ret);
   LCWidgetBuildersCommon::initPosition(_element, *ret);
   return ret;
+}
+
+//------------------------------------------------------------------------------
+static void setColors(QLineEdit* _lineEdit, const QDomElement& _element)
+{
+  QPalette pal = _lineEdit->palette();
+
+  QString attr = _element.attribute(LCWidgetBuildersCommon::mAttributes.colorbg);
+  if(!attr.isNull())
+  {
+    QColor color = LCWidgetBuildersCommon::attributeToColor(attr);
+    if(color.isValid())
+    {
+      pal.setColor(QPalette::ColorRole::Base, color);
+    }
+  }
+
+  attr = _element.attribute(LCWidgetBuildersCommon::mAttributes.colortext);
+  if(!attr.isNull())
+  {
+    QColor color = LCWidgetBuildersCommon::attributeToColor(attr);
+    if(color.isValid())
+    {
+      pal.setColor(QPalette::ColorRole::Text, color);
+    }
+  }
+  _lineEdit->setPalette(pal);
+}
+
+//------------------------------------------------------------------------------
+static void setFont(QLineEdit* _lineEdit, 
+    const QDomElement& _element, 
+    const LIApplication& _app)
+{
+  QString attr = _element.attribute(LCWidgetBuildersCommon::mAttributes.fontId);
+  if(attr.isNull()) return;
+  bool flag = false;
+  QFont font = _app.getFont(attr, &flag);
+  if(flag) 
+  {
+    _lineEdit->setFont(font);
+  }
+
 }
 

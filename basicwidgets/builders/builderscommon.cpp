@@ -151,22 +151,27 @@ void LCWidgetBuildersCommon::initSize(const QDomElement& _element,
     QString attr_width = _element.attribute(mAttributes.width);
     QString attr_height = _element.attribute(mAttributes.height);
     
-    int width;
-    int height;
+    int width = _widget.sizeHint().width();
+    int height = _widget.sizeHint().height();
 
-    bool flag;
-    width = attr_width.toInt(&flag);
-    if(!flag)
+    int buff;
+
+    bool flag_transform = false;
+    bool flag_set = false;
+    buff = attr_width.toInt(&flag_transform);
+    if(flag_transform)
     {
-        return;
+      flag_set = true;
+      width = buff;
     }
 
-    height = attr_height.toInt(&flag);
-    if(!flag)
+    buff = attr_height.toInt(&flag_transform);
+    if(flag_transform)
     {
-        return;
+      flag_set = true;
+      height = buff;
     }
-    _widget.resize(width, height);
+    if(flag_set) _widget.resize(width, height);
 }
 
 //------------------------------------------------------------------------------
@@ -176,24 +181,28 @@ void LCWidgetBuildersCommon::initFixedSize(const QDomElement& _element,
     QString attr_width = _element.attribute(mAttributes.fixwidth);
     QString attr_height = _element.attribute(mAttributes.fixheght);
 
-    int width;
-    int height;
+    int width = _widget.sizeHint().width();
+    int height = _widget.sizeHint().height();
 
-    bool flag;
-    width = attr_width.toInt(&flag);
+    int buff;
 
-    if(!flag)
+    bool flag_transform = false;
+    bool flag_set = false;
+    buff = attr_width.toInt(&flag_transform);
+    if(flag_transform)
     {
-        return;
+      flag_set = true;
+      width = buff;
     }
 
-    height = attr_height.toInt(&flag);
-
-    if(!flag)
+    buff = attr_height.toInt(&flag_transform);
+    if(flag_transform)
     {
-        return;
+      flag_set = true;
+      height = buff;
     }
-    _widget.setFixedSize(width, height);
+
+    if(flag_set) _widget.setFixedSize(width, height);
 }
 
 //==============================================================================

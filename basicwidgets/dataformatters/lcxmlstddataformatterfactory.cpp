@@ -24,7 +24,7 @@
 
 static const struct
 {
-    QString size = "size";
+    QString datasize = "dataSize";
     QString separator = "separator";
 }__attributes;
 
@@ -63,7 +63,7 @@ struct SFormatterCreator1
         QChar separator;
 
         //Получение значения размера данных в байтах.
-        node = _attr.namedItem(__attributes.size);
+        node = _attr.namedItem(__attributes.datasize);
         if(!node.isNull())
         {
             size = node.toAttr().value().toInt(&ok_size);
@@ -128,7 +128,7 @@ LCXmlStdDataFormatterFactory::LCXmlStdDataFormatterFactory()
             QChar separator;
 
             //Получение значения размера данных в байтах.
-            node = _attr.namedItem(__attributes.size);
+            node = _attr.namedItem(__attributes.datasize);
             if(!node.isNull())
             {
                 size = node.toAttr().value().toInt(&ok_size);
@@ -176,7 +176,7 @@ LCXmlStdDataFormatterFactory::LCXmlStdDataFormatterFactory()
             QChar separator;
 
             //Получение значения размера данных в байтах.
-            node = _attr.namedItem(__attributes.size);
+            node = _attr.namedItem(__attributes.datasize);
             if(!node.isNull())
             {
                 size = node.toAttr().value().toInt(&ok_size);
@@ -223,7 +223,7 @@ LCXmlStdDataFormatterFactory::LCXmlStdDataFormatterFactory()
             QChar separator;
 
             //Получение значения размера данных в байтах.
-            node = _attr.namedItem(__attributes.size);
+            node = _attr.namedItem(__attributes.datasize);
             if(!node.isNull())
             {
                 size = node.toAttr().value().toInt(&ok_size);
