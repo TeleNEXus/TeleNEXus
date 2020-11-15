@@ -93,36 +93,39 @@ int main(int argc, char** argv)
         /* /1* widget->setAutoFillBackground(true); *1/ */
         /* widget->setPalette(pal); */
 
-    sa->setWidget(widget);
     qDebug() << "widget geometry = " << wr;
     
     /* widget->setFrameStyle(QFrame::Shadow::Plain | QFrame::Shape::HLine); */
     widget->setFrameStyle(QFrame::Shadow::Raised | QFrame::Shape::WinPanel);
     widget->setLineWidth(5);
-    widget->resize(width + 100, height + 100);
+    /* widget->resize(width + 300, height + 300); */
+    widget->setFixedSize(500, 500);
+    widget->resize(500, 500);
+    QPixmap back_pict;
+    qDebug() << "back pict is null = " << back_pict.isNull();
+    back_pict.load("/home/serg/pprj/tnex/xmltestprj/linux/prj1/picture/fon1.png");
+    qDebug() << "back pict is null = " << back_pict.isNull();
+    /* back_pict = back_pict.scaled(500, 500); */
+    back_pict = back_pict.scaled(widget->size().width(), widget->size().height());
     QPalette pal = widget->palette();
 
     /* pal.setColor(QPalette::ColorRole::Background, Qt::GlobalColor::red); */
-    pal.setColor(QPalette::ColorRole::Background, QColor(QRgb(0x00aaaaff)));
+    /* pal.setColor(QPalette::ColorRole::Background, QColor(QRgb(0x00aaaaff))); */
+    pal.setBrush(QPalette::ColorRole::Background, QBrush(back_pict));
 
     widget->setAutoFillBackground(true);
     widget->setPalette(pal);
-    /* widget->setFixedSize(width, height); */
-    /* sa->setFixedSize(width, height); */
+    /* widget->show(); */
+    pal = sa->palette();
+    pal.setColor(QPalette::ColorRole::Background, Qt::GlobalColor::red);
+    sa->setPalette(pal);
+
+    sa->setWidget(widget);
     sa->resize(width +150, height +150);
     sa->setAlignment(Qt::AlignmentFlag::AlignCenter);
-    /* sa->setFrameStyle(QFrame::NoFrame); */
 
-    /* sa->setWindowFlag(Qt::WindowType::CustomizeWindowHint | Qt::WindowType::FramelessWindowHint); */
-    
-    /* sa->setWindowFlag(Qt::WindowType::FramelessWindowHint); */
-        /* sa->setWindowFlags(Qt::Window | Qt::WindowTitleHint | Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint); */
-        /* sa->setWindowFlags(Qt::Window  | Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint); */
-        /* sa->setWindowFlags(Qt::Window  | Qt::FramelessWindowHint); */
     sa->show();
 
-    /* sa->setWindowFlag(Qt::WindowType::CustomizeWindowHint); */
-    /* sa->setWindowFlag(Qt::WindowType::FramelessWindowHint); */
 
     return app.exec();
 }

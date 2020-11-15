@@ -49,8 +49,6 @@ public:
     /* mPalettePr = mpLabel->palette(); */
     /* mFontPr = mpLabel->font(); */
     /* mAlignmentPr = mpLabel->alignment(); */
-    qDebug() << "install align = " << mAlignment;
-    qDebug() << "install palette size= " << mPalette;
 
     mpLabel->setText(mText);
     mpLabel->setPalette(mPalette);

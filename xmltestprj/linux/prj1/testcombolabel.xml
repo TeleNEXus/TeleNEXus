@@ -4,14 +4,14 @@
     <layoutVBox>
       <widgets>
         <!-- <scrollArea width="200" height="200"> -->
-          <scrollArea align="Center">
+          <scrollArea align="Center" bgcolor="Red">
             <!-- <scrollArea > -->
               <!-- <widget bgcolor="00ff0000"> -->
-                <widget bgcolor="00 88 88 ee">
-                  <!-- <widget bgcolor="black"> -->
+                <!-- <widget bgcolor="00 88 88 ee"> -->
+                  <widget bgcolor="black">
                     <widgets>
                       <dataComboLabel  
-                        read="hreg0" source="qtslavetcp" format="hex" size="2" 
+                        read="hreg0" source="qtslavetcp" format="hex" dataSize="2" 
                         posx="300" posy="20" 
                         textcolor="blue" fontname="DejaVu Sans Mono" fontsize="18"
                         align="Right VCenter">
@@ -32,7 +32,7 @@
                       </dataComboLabel>
 
                       <dataComboLabel  
-                        read="hreg0" source="qtslavetcp" format="hex" size="2" 
+                        read="hreg0" source="qtslavetcp" format="hex" dataSize="2" 
                         posx="300" posy="140" 
                         bgcolor="00 004444" textcolor="blue" fontname="DejaVu Sans Mono" fontsize="18"
                         align="Right VCenter">
@@ -53,7 +53,7 @@
                       </dataComboLabel>
 
                       <dataComboLabel  
-                        read="hreg0" source="qtslavetcp" format="hex" size="2" 
+                        read="hreg0" source="qtslavetcp" format="hex" dataSize="2" 
                         posx="450" posy="260" 
                         bgcolor="red" textcolor="blue" fontname="DejaVu Sans Mono" fontsize="18"
                         >
@@ -73,7 +73,7 @@
                         <item text="Test 9"   value="12"/>
                       </dataComboLabel>
 
-                      <dataComboBox  read="hreg0" source="qtslavetcp" format="hex" size="2" posx="0" posy="250">
+                      <dataComboBox  read="hreg0" source="qtslavetcp" format="hex" dataSize="2" posx="0" posy="250">
                         <item text="UNDEFINED"/>
                         <item text="Test 1"   value="a"/>
                         <item text="Test 2"   value="b"/>
@@ -101,21 +101,35 @@
                       <label text="Label 04" posx="100" posy="110" fontId="mnemo13" textcolor="blue"/>
                       <label text="Label 05" posx="120" posy="130" fontId="mnemo14" textcolor="cyan"/>
 
+
+
+
                       <dataLabel data="hreg0" source="qtslavetcp" format="hex" posx="20" posy="120"/>
 
-                      <dataLineEdit   
-                        source="qtslavetcp" 
-                        data="hreg[0-1]" 
-                        format="hex" size="4" separator=" " posx="20" posy="155" />
+                      <dataLineEdit   source="qtslavetcp" data="hreg[0-1]" format="hex" dataSize="4" separator=" " 
+                        textcolor="Red"
+                        bgcolor="00333333"
+                        width="100"
+                        fontId="mnemo10"
+                        posx="100" posy="155" />
 
-                      <dataWriteButton text="write 1" posx="20" posy="185" >
+                      <dataLineEdit   source="qtslavetcp" data="hreg[0-1]" format="hex" dataSize="4" separator=" " 
+                        posx="100" posy="180" />
+
+                      <dataLineEdit   source="qtslavetcp" data="hreg[0-1]" format="hex" dataSize="4" separator=" " 
+                        posx="100" posy="205" />
+
+
+
+
+                      <dataWriteButton text="write 1" posx="10" posy="155" >
                         <data sourceName="qtslavetcp" dataName="hreg0" format="uint16" value="0"/>
                         <data sourceName="qtslavetcp" dataName="hreg1" format="uint16" value="1"/>
                         <data sourceName="qtslavetcp" dataName="hreg2" format="uint16" value="2"/>
                         <data sourceName="qtslavetcp" dataName="hreg3" format="uint16" value="3"/>
                       </dataWriteButton>
 
-                      <dataWriteButton text="write 2" posx="20" posy="210" >
+                      <dataWriteButton text="write 2" posx="10" posy="180" >
                         <data sourceName="qtslavetcp" dataName="hreg0" format="uint16" value="4"/>
                         <data sourceName="qtslavetcp" dataName="hreg1" format="uint16" value="5"/>
                         <data sourceName="qtslavetcp" dataName="hreg2" format="uint16" value="6"/>
@@ -134,6 +148,12 @@
                 <label text="Label0"/>
                 <label text="Label1"/>
                 <label text="Label2"/>
+
+                <dataLineEdit   source="qtslavetcp" data="hreg[0-1]" format="hex" dataSize="4" separator=" " 
+                  textcolor="Red"
+                  bgcolor="black"
+                  fontId="mnemo18"
+                  posx="100" posy="155" />
 
                 <dataComboBox  read="hreg0" source="qtslavetcp" format="uint16">
                   <item text="Test 1"   value="10"/>
