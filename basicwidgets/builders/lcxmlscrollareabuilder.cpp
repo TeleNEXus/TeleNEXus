@@ -11,13 +11,13 @@
 //------------------------------------------------------------------------------
 static const struct
 {
-    QString widgets = "widgets";
+  QString widgets = "widgets";
 } __slTags;
 
 //------------------------------------------------------------------------------
 static const struct
 {
-    QString file = "file";
+  QString file = "file";
 } __attrName;
 
 //==============================================================================
@@ -34,74 +34,74 @@ LCXmlScrollAreaBuilder::~LCXmlScrollAreaBuilder()
 
 //------------------------------------------------------------------------------
 static QWidget* buildLocal(
-        const QDomElement& _element, 
-        const LIApplication& _app);
+    const QDomElement& _element, 
+    const LIApplication& _app);
 
 //------------------------------------------------------------------------------
 QWidget* LCXmlScrollAreaBuilder::build( const QDomElement& _element, 
-                                    const LIApplication& _app)
+    const LIApplication& _app)
 {
 
-    QString attr;
+  QString attr;
 
-    attr = _element.attribute(__attrName.file);
+  attr = _element.attribute(__attrName.file);
 
-    if(!attr.isNull())
+  if(!attr.isNull())
+  {
+    QDomElement el = _app.getDomDocument(attr).documentElement();
+    if(!el.isNull())
     {
-        QDomElement el = _app.getDomDocument(attr).documentElement();
-        if(!el.isNull())
-        {
-            if(el.tagName() == _element.tagName()) return build(el, _app);
-        } 
-    }
+      if(el.tagName() == _element.tagName()) return build(el, _app);
+    } 
+  }
 
-    return buildLocal(_element, _app);
+  return buildLocal(_element, _app);
 }
 
 //------------------------------------------------------------------------------
 static QWidget* buildLocal(
-        const QDomElement& _element, 
-        const LIApplication& _app)
+    const QDomElement& _element, 
+    const LIApplication& _app)
 {
-    QWidget* widget = nullptr;
+  QWidget* widget = nullptr;
 
-    for(QDomNode node = _element.firstChild();
-            !node.isNull();
-            node = node.nextSibling())
+  for(QDomNode node = _element.firstChild();
+      !node.isNull();
+      node = node.nextSibling())
+  {
+    QDomElement el = node.toElement();
+    if(el.isNull()) continue;
+    auto builder = _app.getWidgetBuilder(el.tagName());
+    if(builder.isNull()) continue;
+    QWidget* w = builder->build(el, _app);
+
+    if(w)
     {
-        QDomElement el = node.toElement();
-        if(el.isNull()) continue;
-        auto builder = _app.getWidgetBuilder(el.tagName());
-        if(builder.isNull()) continue;
-        QWidget* w = builder->build(el, _app);
-
-        if(w)
-        {
-            widget = w;
-            break;
-        }
+      widget = w;
+      break;
     }
+  }
 
-    QScrollArea *scrollarea = new QScrollArea;
-    if(widget)
-    {
-        scrollarea->setWidget(widget);
-    }
-    else
-    {
-        scrollarea->setWidget(new QWidget);
-    }
+  QScrollArea *scrollarea = new QScrollArea;
+  if(widget)
+  {
+    scrollarea->setWidget(widget);
+  }
+  else
+  {
+    scrollarea->setWidget(new QWidget);
+  }
 
-    Qt::Alignment a;
-    if(LCWidgetBuildersCommon::toAlignFlags(_element, a))
-    {
-      scrollarea->setAlignment(a);
-    }
+  Qt::Alignment a;
+  if(LCWidgetBuildersCommon::toAlignFlags(_element, a))
+  {
+    scrollarea->setAlignment(a);
+  }
 
-    LCWidgetBuildersCommon::initPosition(_element, *scrollarea);
-    LCWidgetBuildersCommon::initSize(_element, *scrollarea);
-    LCWidgetBuildersCommon::initFixedSize(_element, *scrollarea);
+  LCWidgetBuildersCommon::initPosition(_element, *scrollarea);
+  LCWidgetBuildersCommon::initSize(_element, *scrollarea);
+  LCWidgetBuildersCommon::initFixedSize(_element, *scrollarea);
 
-    return scrollarea;
+  return scrollarea;
 }
 
