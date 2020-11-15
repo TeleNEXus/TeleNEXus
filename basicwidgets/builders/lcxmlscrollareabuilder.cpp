@@ -91,11 +91,12 @@ static QWidget* buildLocal(
     {
         scrollarea->setWidget(new QWidget);
     }
-    bool flag = false;
 
-    Qt::Alignment a  = LCWidgetBuildersCommon::toAlignFlags(_element, &flag);
-    if(flag) scrollarea->setAlignment(a);
-
+    Qt::Alignment a;
+    if(LCWidgetBuildersCommon::toAlignFlags(_element, a))
+    {
+      scrollarea->setAlignment(a);
+    }
 
     LCWidgetBuildersCommon::initPosition(_element, *scrollarea);
     LCWidgetBuildersCommon::initSize(_element, *scrollarea);

@@ -58,7 +58,7 @@ public:
     void addItem(
         QSharedPointer<LIMovieAccess> _movieAccess, 
         const QString& _val, 
-        const QColor& _colorbg,
+        const QPalette& _palette,
         Qt::Alignment _alignment);
     /* void addItem(const QPixmap& _pixmap, const QString& _val); */
     virtual QSize sizeHint() const override{return mSizeHint;}

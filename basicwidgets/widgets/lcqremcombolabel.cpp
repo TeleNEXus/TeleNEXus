@@ -26,9 +26,9 @@ private:
   QFont mFont;
   QPalette mPalette;
   Qt::Alignment mAlignment;
-  QFont mFontPr;
-  QPalette mPalettePr;
-  Qt::Alignment mAlignmentPr;
+  /* QFont mFontPr; */
+  /* QPalette mPalettePr; */
+  /* Qt::Alignment mAlignmentPr; */
 public:
   CItemText() = delete;
   explicit CItemText(
@@ -46,10 +46,11 @@ public:
 
   virtual void install() override
   {
-    mPalettePr = mpLabel->palette();
-    mFontPr = mpLabel->font();
-    mAlignmentPr = mpLabel->alignment();
+    /* mPalettePr = mpLabel->palette(); */
+    /* mFontPr = mpLabel->font(); */
+    /* mAlignmentPr = mpLabel->alignment(); */
     qDebug() << "install align = " << mAlignment;
+    qDebug() << "install palette size= " << mPalette;
 
     mpLabel->setText(mText);
     mpLabel->setPalette(mPalette);
@@ -61,9 +62,9 @@ public:
   virtual void uninstall() override
   {
     mpLabel->clear();
-    mpLabel->setPalette(mPalettePr);
-    mpLabel->setFont(mFontPr);
-    mpLabel->setAlignment(mAlignmentPr);
+    /* mpLabel->setPalette(mPalettePr); */
+    /* mpLabel->setFont(mFontPr); */
+    /* mpLabel->setAlignment(mAlignmentPr); */
     mpLabel->adjustSize();
   }
 };
@@ -77,22 +78,25 @@ private:
   Qt::Alignment mAlignment;
   Qt::Alignment mAlignmentPr;
   QPalette mPalette;
-  QPalette mPalettePr;
+  /* QPalette mPalettePr; */
 public:
   CItemMovie() = delete;
   explicit CItemMovie(
       QLabel* _label, 
       QSharedPointer<LIMovieAccess> _movieAccess, 
-      const QPalette  _palette,
+      const QPalette& _palette,
       Qt::Alignment _alignment): 
     IItem(_label), 
     mspMovieAccess(_movieAccess),
     mAlignment(_alignment),
-    mColor(_color){}
+    mPalette(_palette)
+  {
+  }
 
   virtual void install() override
   {
-    QPalette pal = mpLabel->palette();
+    /* QPalette mPalettePr = mpLabel->palette(); */
+    mpLabel->setPalette(mPalette);
 
     mAlignmentPr = mpLabel->alignment();
     mpLabel->setAlignment(mAlignment);
@@ -105,6 +109,7 @@ public:
   virtual void uninstall() override
   {
     mpLabel->clear();
+    /* mpLabel->setPalette(mPalettePr); */
     mpLabel->setAlignment(mAlignmentPr);
     mspMovieAccess->stop();
   }
@@ -259,10 +264,10 @@ void LCQRemComboLabel::addItem(
 //------------------------------------------------------------------------------addItem
 void LCQRemComboLabel::addItem(QSharedPointer<LIMovieAccess> _movieAccess, 
     const QString& _val,
-    const QColor& _colorbg,
+    const QPalette& _palette,
     Qt::Alignment _alignment)
 {
-    auto item = new CItemMovie(this, _movieAccess, _alignment);
+    auto item = new CItemMovie(this, _movieAccess, _palette, _alignment);
     if(_val.isNull())
     {
         L_OWNDATA(mpOwnData)->undefItem =  

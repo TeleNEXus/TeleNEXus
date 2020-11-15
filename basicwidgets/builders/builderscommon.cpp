@@ -237,75 +237,71 @@ QPixmap LCWidgetBuildersCommon::getPixmap(
 }
 
 //------------------------------------------------------------------------------
-  Qt::Alignment 
-LCWidgetBuildersCommon::toAlignFlags(const QString& _attributes, bool* _flag)
+bool
+LCWidgetBuildersCommon::toAlignFlags(const QString& _attributes, 
+    Qt::Alignment& _flags)
 {
-  Qt::Alignment flags = 0;
 
-  qDebug() << "Align flags 0 flags = "<<flags;
+  bool ret = false;
+
   if(_attributes.isNull())
   {
-    if(_flag) *_flag = false;
-    return Qt::AlignmentFlag::AlignLeft;
+    return ret;
   }
 
   if(_attributes.contains(mAttributes.aligns.vals.Left))
   {
-  qDebug() << "Align flags 1";
-  qDebug() << "Align Left = " << Qt::AlignLeft;
-    flags |= Qt::AlignLeft;
+    ret = true;
+    _flags |= Qt::AlignLeft;
   }
 
   if(_attributes.contains(mAttributes.aligns.vals.Right))
   {
-    flags |= Qt::AlignRight;
+    ret = true;
+    _flags |= Qt::AlignRight;
   }
 
   if((_attributes.contains(mAttributes.aligns.vals.Center)) && 
       (!_attributes.contains(mAttributes.aligns.vals.HCenter)) &&
       (!_attributes.contains(mAttributes.aligns.vals.VCenter)))
   {
-  qDebug() << "Align flags 2";
-    flags |= Qt::AlignCenter;
+    ret = true;
+    _flags |= Qt::AlignCenter;
   }
 
   if(_attributes.contains(mAttributes.aligns.vals.HCenter))
   {
-  qDebug() << "Align flags 3";
-    flags |= Qt::AlignHCenter;
+    ret = true;
+    _flags |= Qt::AlignHCenter;
   }
 
   if(_attributes.contains(mAttributes.aligns.vals.Top))
   {
-    flags |= Qt::AlignTop;
+    ret = true;
+    _flags |= Qt::AlignTop;
   }
 
   if(_attributes.contains(mAttributes.aligns.vals.Bottom))
   {
-    flags |= Qt::AlignBottom;
+    ret = true;
+    _flags |= Qt::AlignBottom;
   }
 
   if(_attributes.contains(mAttributes.aligns.vals.VCenter))
   {
-    flags |= Qt::AlignVCenter;
+    ret = true;
+    _flags |= Qt::AlignVCenter;
   }
 
-  if(flags == 0) 
-  {
-    if(_flag) *_flag = false;
-    return Qt::AlignmentFlag::AlignLeft;
-  }  
-  if(_flag) *_flag = true;
-  qDebug() << "Align flags = " << flags;
-
-  return flags;
+  return ret;
 }
 
 //------------------------------------------------------------------------------
-Qt::Alignment
-LCWidgetBuildersCommon::toAlignFlags(const QDomElement& _element, bool* _flag)
+bool
+LCWidgetBuildersCommon::toAlignFlags(const QDomElement& _element, 
+    Qt::Alignment& _flags)
 {
-    return toAlignFlags(_element.attribute(mAttributes.aligns.attrName), _flag);
+    return toAlignFlags(_element.attribute(mAttributes.aligns.attrName), _flags);
 }
 
 //------------------------------------------------------------------------------
