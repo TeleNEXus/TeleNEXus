@@ -65,7 +65,6 @@ QWidget* LCXmlTextLabelBuilder::build(
     style = style + QString("background: %1;").arg(attr);
   }
   style += "}";
-  qDebug() << "------font style = " << style;
   label->setStyleSheet(style);
 
   LCWidgetBuildersCommon::initPosition(_element, *label);

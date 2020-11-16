@@ -23,49 +23,74 @@ class CItemText : public IItem
 {
 private:
   QString mText;
-  QString mFontStyle;
-  QPalette mPalette;
-  Qt::Alignment mAlignment;
-  /* QFont mFontPr; */
-  /* QPalette mPalettePr; */
-  /* Qt::Alignment mAlignmentPr; */
+  QString mStyleSheet;
 public:
   CItemText() = delete;
-  explicit CItemText(
-      QLabel* _label, 
-      const QString& _text, 
-      const QString& _fontStyle,
-      QPalette _palette,
-      Qt::Alignment _alignment): 
-    IItem(_label), 
-    mText(_text),
-    mFontStyle(_fontStyle),
-    mPalette(_palette),
-    mAlignment(_alignment)
+  explicit CItemText( QLabel* _label, const QString& _text, const QString& _styleSheet): 
+    IItem(_label), mText(_text), mStyleSheet(_styleSheet)
   {}
 
   virtual void install() override
   {
-    /* mPalettePr = mpLabel->palette(); */
-    /* mFontPr = mpLabel->font(); */
-    /* mAlignmentPr = mpLabel->alignment(); */
-
     mpLabel->setText(mText);
-    mpLabel->setPalette(mPalette);
-    mpLabel->setStyleSheet(mFontStyle);
-    mpLabel->setAlignment(mAlignment);
-    mpLabel->adjustSize();
+    mpLabel->setStyleSheet(mStyleSheet);
+    /* mpLabel->adjustSize(); */
   }
 
   virtual void uninstall() override
   {
     mpLabel->clear();
-    /* mpLabel->setPalette(mPalettePr); */
-    /* mpLabel->setFont(mFontPr); */
-    /* mpLabel->setAlignment(mAlignmentPr); */
-    mpLabel->adjustSize();
+    /* mpLabel->adjustSize(); */
   }
 };
+
+/* class CItemText : public IItem */
+/* { */
+/* private: */
+/*   QString mText; */
+/*   QString mFontStyle; */
+/*   QPalette mPalette; */
+/*   Qt::Alignment mAlignment; */
+/*   /1* QFont mFontPr; *1/ */
+/*   /1* QPalette mPalettePr; *1/ */
+/*   /1* Qt::Alignment mAlignmentPr; *1/ */
+/* public: */
+/*   CItemText() = delete; */
+/*   explicit CItemText( */
+/*       QLabel* _label, */ 
+/*       const QString& _text, */ 
+/*       const QString& _fontStyle, */
+/*       QPalette _palette, */
+/*       Qt::Alignment _alignment): */ 
+/*     IItem(_label), */ 
+/*     mText(_text), */
+/*     mFontStyle(_fontStyle), */
+/*     mPalette(_palette), */
+/*     mAlignment(_alignment) */
+/*   {} */
+
+/*   virtual void install() override */
+/*   { */
+/*     /1* mPalettePr = mpLabel->palette(); *1/ */
+/*     /1* mFontPr = mpLabel->font(); *1/ */
+/*     /1* mAlignmentPr = mpLabel->alignment(); *1/ */
+
+/*     mpLabel->setText(mText); */
+/*     mpLabel->setPalette(mPalette); */
+/*     mpLabel->setStyleSheet(mFontStyle); */
+/*     mpLabel->setAlignment(mAlignment); */
+/*     mpLabel->adjustSize(); */
+/*   } */
+
+/*   virtual void uninstall() override */
+/*   { */
+/*     mpLabel->clear(); */
+/*     /1* mpLabel->setPalette(mPalettePr); *1/ */
+/*     /1* mpLabel->setFont(mFontPr); *1/ */
+/*     /1* mpLabel->setAlignment(mAlignmentPr); *1/ */
+/*     mpLabel->adjustSize(); */
+/*   } */
+/* }; */
 
 //==============================================================================CItemMovie
 class CItemMovie: public IItem
@@ -200,18 +225,21 @@ void LCQRemComboLabel::
 LCQRemComboLabel::LCQRemComboLabel(const QString& _dataName,
                          QSharedPointer<LIRemoteDataSource> _dataSource,
                          QSharedPointer<LCStringDataFormatterBase> _formatter,
+                         const QString& _styleSheet,
                          QWidget* _parent) :    QLabel(_parent),
                                                 mDataName(_dataName),
                                                 mspFormatter(_formatter)
 {
     mpOwnData = new SOwnData();
+
     setText(mspFormatter->undefStateString());
-    addItem(mspFormatter->undefStateString(), QString(), QString(), palette(), alignment());
+    if(!_styleSheet.isNull()) setStyleSheet( ".LCQRemComboLabel {" + _styleSheet + "}" );
+    mSizeHint = QLabel::sizeHint();
+
     mDataListener = QSharedPointer<CReadListener>(new CReadListener(*this));
     mDataReader = _dataSource->createReader();
     mDataReader->setDataName(_dataName);
     mDataReader->setDataReadListener(mDataListener);
-    mSizeHint = QLabel::sizeHint();
 }
 
 //------------------------------------------------------------------------------~LCQRemComboLabel
@@ -234,16 +262,11 @@ void LCQRemComboLabel::setActive(bool _flag)
 }
 
 //------------------------------------------------------------------------------addItem
-void LCQRemComboLabel::addItem(
-    const QString&  _text, 
-    const QString&  _val, 
-    const QString&  _fontStyle,
-    const QPalette& _palette,
-    Qt::Alignment _alignment)
+void LCQRemComboLabel::addItem(const QString&  _text, const QString& _val, const QString&  _styleSheet)
 {
     auto pl = QSharedPointer<QLabel>(new QLabel(_text));
-    pl->setStyleSheet(_fontStyle);
-    auto item = new CItemText(this, _text, _fontStyle, _palette, _alignment);
+    pl->setStyleSheet(_styleSheet);
+    auto item = new CItemText(this, _text, _styleSheet);
 
     if(_val.isNull())
     {
@@ -311,6 +334,10 @@ bool LCQRemComboLabel::event(QEvent *_event)
     case QEvent::Type::Hide:
         mDataReader->disconnectFromSource();
         ret = true;
+        break;
+    case QEvent::Type::Resize:
+        qDebug() << "resize event";
+        ret = false;
         break;
     default:
         break;
