@@ -179,7 +179,7 @@ void LCWidgetBuildersCommon::initFixedSize(const QDomElement& _element,
         QWidget& _widget)
 {
     QString attr_width = _element.attribute(mAttributes.fixwidth);
-    QString attr_height = _element.attribute(mAttributes.fixheght);
+    QString attr_height = _element.attribute(mAttributes.fixheight);
 
     int width = _widget.sizeHint().width();
     int height = _widget.sizeHint().height();
@@ -313,6 +313,58 @@ LCWidgetBuildersCommon::toAlignFlags(const QDomElement& _element,
     return toAlignFlags(_element.attribute(mAttributes.aligns.attrName), _flags);
 }
 
+//------------------------------------------------------------------------------
+QString LCWidgetBuildersCommon::toAlignString(const QString& _attributes)
+{
+  
+  QString ret;
+  if(_attributes.isNull())
+  {
+    return ret;
+  }
+
+  if(_attributes.contains(mAttributes.aligns.vals.Left))
+  {
+    ret += "Qt::AlignLeft | ";
+  }
+
+  if(_attributes.contains(mAttributes.aligns.vals.Right))
+  {
+    ret += "Qt::AlignRight | ";
+  }
+
+  if((_attributes.contains(mAttributes.aligns.vals.Center)) && 
+      (!_attributes.contains(mAttributes.aligns.vals.HCenter)) &&
+      (!_attributes.contains(mAttributes.aligns.vals.VCenter)))
+  {
+    ret += "Qt::AlignCenter | ";
+  }
+
+  if(_attributes.contains(mAttributes.aligns.vals.HCenter))
+  {
+    ret += "Qt::AlignHCenter | ";
+  }
+
+  if(_attributes.contains(mAttributes.aligns.vals.Top))
+  {
+    ret += "Qt::AlignTop | ";
+  }
+
+  if(_attributes.contains(mAttributes.aligns.vals.Bottom))
+  {
+    ret += "Qt::AlignBottom | ";
+  }
+
+  if(_attributes.contains(mAttributes.aligns.vals.VCenter))
+  {
+    ret += "Qt::AlignVCenter | ";
+  }
+  if(!ret.isNull())
+  {
+    ret.resize(ret.size() - 3);
+  }
+  return ret;
+}
 //------------------------------------------------------------------------------
 QColor LCWidgetBuildersCommon::attributeToColor(const QString& _color)
 {

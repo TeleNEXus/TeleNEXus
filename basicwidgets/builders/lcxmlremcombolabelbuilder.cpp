@@ -47,12 +47,13 @@ static void buildComboLabel( const QDomElement& _element,
     QSharedPointer<LCStringDataFormatterBase> _format,
     const LIApplication& _app);
 
-static void setPalete(QPalette& _palette, const QDomElement& _element);
+/* static void setPalete(QPalette& _palette, const QDomElement& _element); */
 
-static QString getFontStyle(const QDomElement& _element, 
-    const LIApplication& _app);
+/* static QString getFontStyle(const QDomElement& _element, */ 
+/*     const LIApplication& _app); */
 
-static void setAlign(Qt::Alignment& _alignment, const QDomElement& _element);
+/* static void setAlign(Qt::Alignment& _alignment, const QDomElement& _element); */
+static QString readStyle(const QDomElement& _element, const LIApplication& _app);
 //------------------------------------------------------------------------------
 QWidget* LCXmlRemComboLabelBuilder::build(const QDomElement& _element, 
     const LIApplication& _app)
@@ -62,6 +63,8 @@ QWidget* LCXmlRemComboLabelBuilder::build(const QDomElement& _element,
   QString attr = _element.attribute(__attrNames.source);
   QSharedPointer<LIRemoteDataSource> source;
   QSharedPointer<LCStringDataFormatterBase> format;
+
+  QString style;
 
   if(attr.isNull())
   {
@@ -89,30 +92,38 @@ QWidget* LCXmlRemComboLabelBuilder::build(const QDomElement& _element,
     goto LABEL_WRONG_EXIT;
   }
 
-  remlabel = new LCQRemComboLabel(dataread, source, format);
+  style = readStyle(_element, _app);
+
+  remlabel = new LCQRemComboLabel(dataread, source, format,  style);
+  /* remlabel->setAlignment(Qt::AlignmentFlag::AlignCenter); */
+
+  qDebug() << "build style = " << style;
+
+  /* remlabel->setStyleSheet(style); */
+  /* remlabel->adjustSize(); */
 
   //Параметры текста для всех текстовых сущностей.
-  {
-    QPalette pal = remlabel->palette();
-    Qt::Alignment alignment = remlabel->alignment();
-    remlabel->setAutoFillBackground(true);
-    setPalete(pal, _element);
-    QString font_style = getFontStyle(_element, _app);
-    setAlign(alignment, _element);
-    remlabel->setPalette(pal);
-    remlabel->setStyleSheet(font_style);
-    remlabel->setAlignment(alignment);
-    remlabel->adjustSize();
-  }
+  /* { */
+    /* QPalette pal = remlabel->palette(); */
+    /* Qt::Alignment alignment = remlabel->alignment(); */
+    /* remlabel->setAutoFillBackground(true); */
+    /* setPalete(pal, _element); */
+    /* QString font_style = getFontStyle(_element, _app); */
+    /* setAlign(alignment, _element); */
+    /* remlabel->setPalette(pal); */
+    /* remlabel->setStyleSheet(font_style); */
+    /* remlabel->setAlignment(alignment); */
+    /* remlabel->adjustSize(); */
+  /* } */
 
-  buildComboLabel(_element, remlabel, format, _app);
+  /* buildComboLabel(_element, remlabel, format, _app); */
 
 LABEL_WRONG_EXIT:
   QLabel* ret = remlabel;
   if(ret == nullptr) ret = new QLabel(_element.tagName());
 
-  LCWidgetBuildersCommon::initSize(_element, *ret);
-  LCWidgetBuildersCommon::initFixedSize(_element, *ret);
+  /* LCWidgetBuildersCommon::initSize(_element, *ret); */
+  /* LCWidgetBuildersCommon::initFixedSize(_element, *ret); */
   LCWidgetBuildersCommon::initPosition(_element, *ret);
 
   return ret;
@@ -193,32 +204,94 @@ static void buildComboLabel( const QDomElement& _element,
 }
 
 //==============================================================================
+static QString readStyle(const QDomElement& _element, const LIApplication& _app)
+{
+  /* QString style = ".LCQRemComboLabel { "; */
+  QString style;
+  bool flag = false;
+
+  QString attr = _element.attribute(LCWidgetBuildersCommon::mAttributes.font);
+  if(!attr.isNull())
+  {
+    style += "font : " + attr + "; ";
+  }
+
+  attr = _element.attribute(LCWidgetBuildersCommon::mAttributes.colorbg);
+  if(!attr.isNull())
+  {
+    style += QString("background: %1; ").arg(attr);
+  }
+
+  attr = _element.attribute(LCWidgetBuildersCommon::mAttributes.colortext);
+  if(!attr.isNull())
+  {
+    style += QString("color: %1; ").arg(attr);
+  }
+
+  attr = _element.attribute(LCWidgetBuildersCommon::mAttributes.minwidth);
+  if(!attr.isNull())
+  {
+    style += QString("min-width: %1px; ").arg(attr);
+  }
+
+  attr = _element.attribute(LCWidgetBuildersCommon::mAttributes.minheight);
+  if(!attr.isNull())
+  {
+    style += QString("min-height: %1px; ").arg(attr);
+  }
+
+  attr = _element.attribute(LCWidgetBuildersCommon::mAttributes.aligns.attrName);
+  if(!attr.isNull())
+  {
+    attr = LCWidgetBuildersCommon::toAlignString(attr);
+    if(!attr.isNull()) style += QString("qproperty-alignment: '%1' ;").arg(attr);
+  }
+    style += "font : 43pt ; ";
+    style += "color: green ; ";
+
+  /* style += "}"; */
+  qDebug() << "RemComboLabelBuilder readStyle style = " << style;
+  return style;
+}
+
+//==============================================================================
 static bool addTextItem(
     LCQRemComboLabel*     _label,
     const QString&        _value,
     const QDomElement&    _element, 
     const LIApplication&  _app)
 {
-  QString attr_item = _element.attribute(__attrNames.text);
+  /* if(_element.isNull()) */ 
+  /* { */
+  /*   return false; */
+  /* } */
 
-  if(attr_item.isNull()) return false;
+  /* QString attr_item = _element.attribute(__attrNames.text); */
 
-  QPalette pal = _label->palette();
-  Qt::Alignment align = _label->alignment();
+  /* if(attr_item.isNull()) return false; */
+  /* if(_label == nullptr) */ 
+  /* { */
+  /*   return false; */
+  /* } */
 
-  setPalete(pal, _element);
-  QString fontStyle = getFontStyle(_element, _app);
-  setAlign(align, _element);
+  /* QPalette pal = _label->palette(); */
+  /* Qt::Alignment align = _label->alignment(); */
 
-  _label->addItem(attr_item, _value, fontStyle, pal, align); 
+  /* setPalete(pal, _element); */
+  /* QString fontStyle = getFontStyle(_element, _app); */
+  /* setAlign(align, _element); */
 
-  return true;
+  /* _label->addItem(attr_item, _value, fontStyle, pal, align); */ 
+
+  return false;
 }
 
 //==============================================================================
 static void setPalete(QPalette& _palette, const QDomElement& _element)
 {
   //Цвет фона.
+  qDebug() << "----------------11111111 set palette 0";
+  return;
   QString attr = 
     _element.attribute(LCWidgetBuildersCommon::mAttributes.colorbg);
 

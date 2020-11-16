@@ -22,8 +22,12 @@ public:
     QString posy        = "posy";
     QString width       = "width";
     QString height      = "height";
+    QString maxwidth    = "maxwidth";
+    QString maxheight   = "maxheight";
+    QString minwidth    = "minwidth";
+    QString minheight   = "minheight";
     QString fixwidth    = "fixwidth";
-    QString fixheght    = "fixheight";
+    QString fixheight   = "fixheight";
     QString colorbg     = "bgcolor";
     QString picturebg   = "bgpicture";
     QString colortext   = "textcolor";
@@ -103,6 +107,13 @@ public:
    *  _flags - ссылка на возвращаемое значение флага.
    */
   static bool toAlignFlags(const QDomElement& _element, Qt::Alignment& _flags);
+
+  /*
+   * Преозразует атрибут в строку вида "AlignTop | ... | AlignVCenter"
+   * для использования при задании стилей выравниавния чурез механизм
+   * свойств qproperty-alignment.
+   */
+  static QString toAlignString(const QString& _attributes);
   /*
    * Преозразует атрибут в значение цвета.
    * --------------------------------------

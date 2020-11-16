@@ -42,6 +42,7 @@ public:
         const QString&                              _dataName,
         QSharedPointer<LIRemoteDataSource>          _dataSource,
         QSharedPointer<LCStringDataFormatterBase>   _formatter,
+        const QString& _styleSheet = QString(),
         QWidget* _parent = nullptr);
 
     virtual ~LCQRemComboLabel();
@@ -51,9 +52,8 @@ public:
     void addItem(
         const QString&  _text, 
         const QString&  _val, 
-        const QString&  _fontStyle,
-        const QPalette& _palette,
-        Qt::Alignment _alignment);
+        const QString&  _styleSheet
+        );
 
     void addItem(
         QSharedPointer<LIMovieAccess> _movieAccess, 
