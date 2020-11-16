@@ -23,11 +23,11 @@ int main(int argc, char** argv)
     qDebug() << "widget geometry = " << wr;
         int width = 0;
         int height = 0;
-    for(int i = 0; i < 5; i++)
+    for(int i = 0; i < 2; i++)
     {
 
-        /* QLabel* label = new QLabel(QString("Label00 %1").arg(i)); */
-        QPushButton* label = new QPushButton(QString("Label %1").arg(i));
+        QLabel* label = new QLabel(QString("Label00 %1").arg(i));
+        /* QPushButton* label = new QPushButton(QString("Label %1").arg(i)); */
         /* QLineEdit* label = new QLineEdit(QString("Label %1").arg(i)); */
         /* QComboBox* label = new QComboBox; */
         /* label->addItem("text item 0"); */
@@ -36,7 +36,7 @@ int main(int argc, char** argv)
         /* label->addItem("text item 3"); */
 
 
-        label->move(10 + 20 * i, 10 + 45 * i);
+        label->move(30 + 20 * i, 30 + 45 * i);
         label->setParent(widget);
         label->show();
         QFont font = label->font();
@@ -82,6 +82,32 @@ int main(int argc, char** argv)
 
         label->setPalette(pal);
     }
+
+    QStackedWidget *sw = new QStackedWidget(widget);
+    sw->move(150, 150);
+    QLabel* label_1 = new QLabel("label_1");
+    QLabel* label_2 = new QLabel("label_2");
+    label_1->setStyleSheet(".QLabel {color: red; font : 10pt;background : yellow; qproperty-alignment: AlignRight;}");
+    label_2->setStyleSheet(".QLabel {color: yellow;font : 20pt;}");
+    QPushButton* button_0 = new QPushButton("change button 0", widget);
+    button_0->move(250,0);
+    QObject::connect(button_0, &QPushButton::pressed, 
+            [&]{
+                sw->setCurrentWidget(sw->widget(0));
+                qDebug() << "sw size hint = " << sw->sizeHint();
+            });
+
+    QPushButton* button_1 = new QPushButton("change button 1", widget);
+    button_1->move(250,30);
+    QObject::connect(button_1, &QPushButton::pressed, 
+            [&]{
+
+                sw->setCurrentWidget(sw->widget(1));
+                qDebug() << "sw size hint = " << sw->sizeHint();
+            });
+
+    sw->addWidget(label_1);
+    sw->addWidget(label_2);
 
     qDebug() << "width = " << width;
     qDebug() << "height = " << height;
