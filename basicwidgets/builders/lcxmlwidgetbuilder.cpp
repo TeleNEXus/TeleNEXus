@@ -7,13 +7,14 @@
 #include <QDebug>
 #include <qnamespace.h>
 #include "builderscommon.h"
+#include <QFrame>
 
-class CWidget : public QWidget
+class CWidget : public QFrame
 {
 private:
     QSize mSizeHint;
 public:
-    explicit CWidget(QWidget* _parent=nullptr) : QWidget(_parent){}
+    explicit CWidget(QFrame* _parent=nullptr) : QFrame(_parent){this->setObjectName("MyObject");}
     virtual QSize sizeHint() const override
     {
         return QSize(mSizeHint.width()+5, mSizeHint.height()+5);
@@ -37,7 +38,6 @@ public:
         }
         mSizeHint = QSize(width, height);
     }
-
 };
 //------------------------------------------------------------------------------
 static const struct
@@ -91,14 +91,14 @@ QWidget* LCXmlWidgetBuilder::build( const QDomElement& _element,
 }
 
 //------------------------------------------------------------------------------
-static QWidget* buildFromLayout(const QDomElement& _element, 
+static void buildFromLayout(CWidget* _widget, const QDomElement& _element, 
         const LIApplication& _app);
 //------------------------------------------------------------------------------
-static QWidget* buildFromWidgets(const QDomElement& _element, 
+static void buildFromWidgets(CWidget* _widget, const QDomElement& _element, 
         const LIApplication& _app);
 //------------------------------------------------------------------------------
-static void setColor(const QDomElement& _element, 
-        QWidget* _widget);
+static void setColor(QWidget* _widget, const QDomElement& _element,
+        const LIApplication& _app);
 //------------------------------------------------------------------------------
 static QWidget* buildLocal(
         const QDomElement& _element, 
@@ -106,11 +106,11 @@ static QWidget* buildLocal(
 {
 
     QDomNode  node = _element.firstChildElement(__slTags.layout);
-    QWidget* widget = nullptr;
+    CWidget* widget = new CWidget;
 
     if(!node.isNull()) 
     {
-        widget = buildFromLayout(node.toElement(), _app);
+        buildFromLayout(widget, node.toElement(), _app);
     }
     else
     {
@@ -118,28 +118,22 @@ static QWidget* buildLocal(
 
         if(!node.isNull()) 
         {
-            widget = buildFromWidgets(node.toElement(), _app);
-        }
-        else
-        {
-            widget = new QWidget;
+            buildFromWidgets(widget, node.toElement(), _app);
         }
     }
 
     LCWidgetBuildersCommon::initPosition(_element, *widget);
     LCWidgetBuildersCommon::initSize(_element, *widget);
     LCWidgetBuildersCommon::initFixedSize(_element, *widget);
-    setColor(_element, widget);
+    setColor(widget, _element, _app);
 
     return widget;
 }
 
 //------------------------------------------------------------------------------
-static QWidget* buildFromLayout(const QDomElement& _element, 
+static void buildFromLayout(CWidget* _widget, const QDomElement& _element, 
         const LIApplication& _app)
 {
-    QWidget* widget = new QWidget;
-
     for(QDomNode node = _element.firstChild();
             !node.isNull();
             node = node.nextSibling())
@@ -153,20 +147,18 @@ static QWidget* buildFromLayout(const QDomElement& _element,
                 QLayout* layout = (*builder).build(el, _app);
                 if(layout)
                 {
-                    widget->setLayout(layout);
+                    _widget->setLayout(layout);
                     break;
                 }
              }                 
          }
     }
-    return widget;
 }
 
 //------------------------------------------------------------------------------
-static QWidget* buildFromWidgets(const QDomElement& _element, 
+static void buildFromWidgets(CWidget* _widget, const QDomElement& _element, 
         const LIApplication& _app)
 {
-    CWidget* widget = new CWidget;
 
     for(QDomNode node = _element.firstChild();
             !node.isNull();
@@ -175,33 +167,63 @@ static QWidget* buildFromWidgets(const QDomElement& _element,
          QDomElement el = node.toElement();
          if(el.isNull()) continue;
          auto builder = _app.getWidgetBuilder(el.tagName());
+         if(builder.isNull()) continue;
          QWidget* addWidget = builder->build(el, _app);
          if(addWidget)
          {
-             widget->addWidget(addWidget);
+             _widget->addWidget(addWidget);
          }
     }
-    return widget;
 }
 
 //------------------------------------------------------------------------------
-static void setColor(const QDomElement& _element, 
-        QWidget* _widget)
+static void setColor(QWidget* _widget, const QDomElement& _element,
+        const LIApplication& _app)
 {
-    QString attr_color = _element.attribute(
-            LCWidgetBuildersCommon::mAttributes.colorbg);
+  QPalette pal;
+  QString attr = _element.attribute(
+      LCWidgetBuildersCommon::mAttributes.colorbg);
 
-    if(attr_color.isNull()) return;
-
-    QColor color = LCWidgetBuildersCommon::attributeToColor(attr_color);
+  if(!attr.isNull())
+  {
+    QColor color = LCWidgetBuildersCommon::attributeToColor(attr);
 
     if(color.isValid())
     {
-        QPalette pal = _widget->palette();
-        pal.setColor(QPalette::ColorRole::Background, color);
-        _widget->setAutoFillBackground(true);
-        _widget->setPalette(pal);
+      pal = _widget->palette();
+      pal.setColor(QPalette::ColorRole::Background, color);
+      _widget->setAutoFillBackground(true);
+      _widget->setPalette(pal);
+      return;
     }
+  }
+
+  attr = _element.attribute(
+      LCWidgetBuildersCommon::mAttributes.picturebg);
+
+  if(attr.isNull()) return;
+
+  /* QPixmap pixmap = LCWidgetBuildersCommon::getPixmap(attr, _app); */
+
+  /* if(pixmap.isNull()) return; */
+
+  /* pixmap = pixmap.scaled(_widget->size().width(), _widget->size().height()); */
+
+  /* pal = _widget->palette(); */
+  /* /1* pal = QPalette(); *1/ */
+  /* pal.setBrush(QPalette::ColorRole::Background, QBrush(pixmap)); */
+
+  /* /1* _widget->setAutoFillBackground(true); *1/ */
+  /* _widget->setPalette(pal); */
+
+  /* _widget->setAutoFillBackground(true); */
+
+  attr = _app.getProjectPath()+attr;
+  
+_widget->setStyleSheet(
+/* QString("background-image:url(\"%1\"); background-position: center;" ).arg(attr)); */
+QString(".QFrame{background-image:url(\"%1\"); background-position: center;} " ).arg(attr));
+/* ".QFrame{background: yellow;}"); */
 }
 
 

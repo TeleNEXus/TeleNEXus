@@ -26,8 +26,8 @@ int main(int argc, char** argv)
     for(int i = 0; i < 5; i++)
     {
 
-        QLabel* label = new QLabel(QString("Label00 %1").arg(i));
-        /* QPushButton* label = new QPushButton(QString("Label %1").arg(i)); */
+        /* QLabel* label = new QLabel(QString("Label00 %1").arg(i)); */
+        QPushButton* label = new QPushButton(QString("Label %1").arg(i));
         /* QLineEdit* label = new QLineEdit(QString("Label %1").arg(i)); */
         /* QComboBox* label = new QComboBox; */
         /* label->addItem("text item 0"); */
@@ -46,7 +46,7 @@ int main(int argc, char** argv)
         label->setFont(font);
         label->adjustSize();
         label->resize(label->sizeHint().width() + 50, label->sizeHint().height() + 15);
-        label->setAlignment(Qt::AlignmentFlag::AlignHCenter);
+        /* label->setAlignment(Qt::AlignmentFlag::AlignHCenter); */
         
 
         qDebug() << "labe " << i << " geometry = " << label->geometry();

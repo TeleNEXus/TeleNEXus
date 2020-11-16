@@ -51,7 +51,7 @@ public:
     void addItem(
         const QString&  _text, 
         const QString&  _val, 
-        const QFont&    _font,
+        const QString&  _fontStyle,
         const QPalette& _palette,
         Qt::Alignment _alignment);
 

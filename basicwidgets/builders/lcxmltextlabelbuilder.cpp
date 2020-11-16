@@ -3,6 +3,7 @@
 #include <QDomElement>
 #include "builderscommon.h"
 #include "LIApplication.h"
+#include <QDebug>
 //==============================================================================
 LCXmlTextLabelBuilder::LCXmlTextLabelBuilder()
 {
@@ -29,79 +30,43 @@ QWidget* LCXmlTextLabelBuilder::build(
   {
     label->setText(_element.attribute("text"));
   }
-  else
-  {
-    //Задание текста в виде узла.
-    QDomNode node = _element.firstChild();
-    while(!node.isNull())
-    {
-      if(node.isText())
-      {
-        label->setText(node.nodeValue());
-      }
-      node = node.nextSibling();
-    }
-  }
 
+  QString style = ".QLabel{";
+  QString font_style;
   QString attr = _element.attribute(LCWidgetBuildersCommon::mAttributes.fontId);
-  QFont font;
   if(!attr.isNull())
   {
-    bool flag = false;
-    QFont font = _app.getFont(attr, &flag);
-    if(flag)
+    attr = _app.getFontStyle(attr);
+    if(!attr.isNull())
     {
-      label->setFont(font);
+      font_style = "font: " + attr + ";";
     }
   }
   else
   {
-
-    attr = _element.attribute(LCWidgetBuildersCommon::mAttributes.fontname);
+    QString attr = _element.attribute(LCWidgetBuildersCommon::mAttributes.font);
     if(!attr.isNull())
     {
-      font.setFamily(attr);
-      label->setFont(font);
+      font_style = "font: " + attr + ";";
     }
+  }
 
-    attr = _element.attribute(LCWidgetBuildersCommon::mAttributes.fontsize);
-    if(!attr.isNull())
-    {
-      bool flag = false;
-      int fs = attr.toInt(&flag);
-      if(flag)
-      {
-        font.setPointSize(fs);
-        label->setFont(font);
-      }
-    }
+  if(!font_style.isNull()) style += font_style;
+
+  attr = _element.attribute(LCWidgetBuildersCommon::mAttributes.colortext);
+  if(!attr.isNull())
+  {
+    style += QString("color: %1;").arg(attr);
   }
 
   attr = _element.attribute(LCWidgetBuildersCommon::mAttributes.colorbg);
   if(!attr.isNull())
   {
-    QColor color = LCWidgetBuildersCommon::attributeToColor(attr);
-    if(color.isValid())
-    {
-      QPalette pal = label->palette();
-      label->setAutoFillBackground(true);
-      pal.setColor(QPalette::ColorRole::Background, color);
-      label->setPalette(pal);
-    }
+    style = style + QString("background: %1;").arg(attr);
   }
-
-  attr = _element.attribute(LCWidgetBuildersCommon::mAttributes.colortext);
-  if(!attr.isNull())
-  {
-    QColor color = LCWidgetBuildersCommon::attributeToColor(attr);
-    if(color.isValid())
-    {
-      QPalette pal = label->palette();
-      label->setAutoFillBackground(true);
-      pal.setColor(QPalette::ColorRole::Foreground, color);
-      label->setPalette(pal);
-    }
-  }
+  style += "}";
+  qDebug() << "------font style = " << style;
+  label->setStyleSheet(style);
 
   LCWidgetBuildersCommon::initPosition(_element, *label);
 

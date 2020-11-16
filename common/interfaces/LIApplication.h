@@ -59,9 +59,9 @@ public:
         getWindow(const QString& _windowId) const = 0;
     
     /*
-     * Возвращает указатель на шрифт описанный в приложении. 
+     * Возвращает строку стиля шрифта. 
      */
-    virtual const QFont& getFont(const QString& _fontId, bool* _flag = nullptr) const = 0;
+    virtual QString getFontStyle(const QString& _fontId) const = 0;
 
 };
 
