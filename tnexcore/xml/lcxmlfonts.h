@@ -19,7 +19,7 @@ public:
       const QDomElement &_element, 
       const LIApplication& _app);
 
-  const QFont& getFont(const QString& _fontId, bool* flag = nullptr);
+  QString getFontStyle(const QString& _fontId);
 };
 
 #endif /* LCXMLFONTS_H_ */

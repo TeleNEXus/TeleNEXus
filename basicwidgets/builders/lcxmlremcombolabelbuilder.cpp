@@ -49,7 +49,7 @@ static void buildComboLabel( const QDomElement& _element,
 
 static void setPalete(QPalette& _palette, const QDomElement& _element);
 
-static void setFont(QFont& _font, const QDomElement& _element, 
+static QString getFontStyle(const QDomElement& _element, 
     const LIApplication& _app);
 
 static void setAlign(Qt::Alignment& _alignment, const QDomElement& _element);
@@ -93,15 +93,14 @@ QWidget* LCXmlRemComboLabelBuilder::build(const QDomElement& _element,
 
   //Параметры текста для всех текстовых сущностей.
   {
-    QFont font = remlabel->font();
     QPalette pal = remlabel->palette();
     Qt::Alignment alignment = remlabel->alignment();
     remlabel->setAutoFillBackground(true);
     setPalete(pal, _element);
-    setFont(font, _element, _app);
+    QString font_style = getFontStyle(_element, _app);
     setAlign(alignment, _element);
     remlabel->setPalette(pal);
-    remlabel->setFont(font);
+    remlabel->setStyleSheet(font_style);
     remlabel->setAlignment(alignment);
     remlabel->adjustSize();
   }
@@ -205,14 +204,13 @@ static bool addTextItem(
   if(attr_item.isNull()) return false;
 
   QPalette pal = _label->palette();
-  QFont font = _label->font();
   Qt::Alignment align = _label->alignment();
 
   setPalete(pal, _element);
-  setFont(font, _element, _app);
+  QString fontStyle = getFontStyle(_element, _app);
   setAlign(align, _element);
 
-  _label->addItem(attr_item, _value, font, pal, align); 
+  _label->addItem(attr_item, _value, fontStyle, pal, align); 
 
   return true;
 }
@@ -246,34 +244,16 @@ static void setPalete(QPalette& _palette, const QDomElement& _element)
 }
 
 //==============================================================================
-static void setFont(QFont& _font, const QDomElement& _element, 
+static QString getFontStyle(const QDomElement& _element, 
     const LIApplication& _app)
 {
   QString attr = _element.attribute(
       LCWidgetBuildersCommon::mAttributes.fontId);
-  if(!attr.isNull())
-  {
-    bool flag = false;
-    QFont f = _app.getFont(attr, &flag);
-    if(flag) 
-    {
-      _font = f;
-      return;
-    }
-  }
 
-  attr = _element.attribute(LCWidgetBuildersCommon::mAttributes.fontname);
   if(!attr.isNull())
   {
-    _font.setFamily(attr);
-  }
-
-  attr = _element.attribute(LCWidgetBuildersCommon::mAttributes.fontsize);
-  if(!attr.isNull())
-  {
-    bool flag = false;
-    int size = attr.toInt(&flag);
-    if(flag) _font.setPointSize(size);
+    attr = _app.getFontStyle(attr);
+    if(!attr.isNull()) attr = ".QLabel {font: " + attr + ";}";
   }
 }
 

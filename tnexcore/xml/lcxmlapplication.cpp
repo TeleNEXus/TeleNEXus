@@ -90,9 +90,9 @@ public:
     return LCXmlWindows::instance().getWindow(_windowId);
   }
 
-  virtual const QFont& getFont(const QString& _fontId, bool* _flag = nullptr) const override
+  virtual QString getFontStyle(const QString& _fontId) const override
   {
-    return LCXmlFonts::instance().getFont(_fontId, _flag);
+    return LCXmlFonts::instance().getFontStyle(_fontId);
   }
 };
 

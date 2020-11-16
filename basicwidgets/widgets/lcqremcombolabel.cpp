@@ -23,7 +23,7 @@ class CItemText : public IItem
 {
 private:
   QString mText;
-  QFont mFont;
+  QString mFontStyle;
   QPalette mPalette;
   Qt::Alignment mAlignment;
   /* QFont mFontPr; */
@@ -34,12 +34,12 @@ public:
   explicit CItemText(
       QLabel* _label, 
       const QString& _text, 
-      QFont _font,
+      const QString& _fontStyle,
       QPalette _palette,
       Qt::Alignment _alignment): 
     IItem(_label), 
     mText(_text),
-    mFont(_font),
+    mFontStyle(_fontStyle),
     mPalette(_palette),
     mAlignment(_alignment)
   {}
@@ -52,7 +52,7 @@ public:
 
     mpLabel->setText(mText);
     mpLabel->setPalette(mPalette);
-    mpLabel->setFont(mFont);
+    mpLabel->setStyleSheet(mFontStyle);
     mpLabel->setAlignment(mAlignment);
     mpLabel->adjustSize();
   }
@@ -206,7 +206,7 @@ LCQRemComboLabel::LCQRemComboLabel(const QString& _dataName,
 {
     mpOwnData = new SOwnData();
     setText(mspFormatter->undefStateString());
-    addItem(mspFormatter->undefStateString(), QString(), font(), palette(), alignment());
+    addItem(mspFormatter->undefStateString(), QString(), QString(), palette(), alignment());
     mDataListener = QSharedPointer<CReadListener>(new CReadListener(*this));
     mDataReader = _dataSource->createReader();
     mDataReader->setDataName(_dataName);
@@ -237,13 +237,13 @@ void LCQRemComboLabel::setActive(bool _flag)
 void LCQRemComboLabel::addItem(
     const QString&  _text, 
     const QString&  _val, 
-    const QFont&    _font,
+    const QString&  _fontStyle,
     const QPalette& _palette,
     Qt::Alignment _alignment)
 {
     auto pl = QSharedPointer<QLabel>(new QLabel(_text));
-    pl->setFont(_font);
-    auto item = new CItemText(this, _text, _font, _palette, _alignment);
+    pl->setStyleSheet(_fontStyle);
+    auto item = new CItemText(this, _text, _fontStyle, _palette, _alignment);
 
     if(_val.isNull())
     {

@@ -118,12 +118,8 @@ static void setFont(QLineEdit* _lineEdit,
 {
   QString attr = _element.attribute(LCWidgetBuildersCommon::mAttributes.fontId);
   if(attr.isNull()) return;
-  bool flag = false;
-  QFont font = _app.getFont(attr, &flag);
-  if(flag) 
-  {
-    _lineEdit->setFont(font);
-  }
-
+  attr = _app.getFontStyle(attr);
+  if(attr.isNull()) return;
+  _lineEdit->setStyleSheet(".QLineEdit { font: " + attr + ";}");
 }
 

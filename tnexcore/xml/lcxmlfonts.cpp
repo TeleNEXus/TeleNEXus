@@ -7,18 +7,14 @@
 #include <QDebug>
 
 //==============================================================================
-QMap<QString, QFont> __slFontMap;
-
-static const QFont __slDefFont;
-
+QMap<QString, QString> __slFontStyleMap;
 
 //==============================================================================
 static const struct
 {
-  QString file = "file";
-  QString fontId = "id";
-  QString family = "family";
-  QString size   = "size";
+  QString file    = "file";
+  QString fontId  = "id";
+  QString style   = "style";
 }__slAttributes;
 
 //------------------------------------------------------------------------------
@@ -66,14 +62,10 @@ void LCXmlFonts::create(
 }
 
 //------------------------------------------------------------------------------
-const QFont& LCXmlFonts::getFont(const QString& _fontId, bool* flag)
+QString LCXmlFonts::getFontStyle(const QString& _fontId)
 {
-  auto it = __slFontMap.find(_fontId);
-  if(it == __slFontMap.end()) return __slDefFont;
-  if(flag != nullptr)
-  {
-    *flag = true;
-  }
+  auto it = __slFontStyleMap.find(_fontId);
+  if(it == __slFontStyleMap.end()) return QString();
   return it.value();
 }
 
@@ -89,39 +81,12 @@ static void addFonts(const QDomElement &_element)
 
     if(attr_id.isNull()) continue;
 
-    QFont font;
-
-    QString attr = el.attribute(__slAttributes.family);
-    if(!attr.isNull())
+    QString attr_style = el.attribute(__slAttributes.style);
+    if(!attr_style.isNull())
     {
-      font.setFamily(attr);
-      qDebug() << "label set font family = " << attr;
+      __slFontStyleMap.insert(attr_id, attr_style);
     }
-
-    attr = el.attribute(__slAttributes.size);
-    if(!attr.isNull())
-    {
-      bool flag = false;
-      int size = attr.toInt(&flag);
-      if(flag)
-      {
-        font.setPointSize(size);
-      }
-    }
-
-    attr = el.attribute(__slAttributes.size);
-    if(!attr.isNull())
-    {
-      bool flag = false;
-      int size = attr.toInt(&flag);
-      if(flag)
-      {
-        font.setPointSize(size);
-      }
-    }
-    __slFontMap.insert(attr_id, font);
   }
-
 }
 
 

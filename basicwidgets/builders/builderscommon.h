@@ -25,9 +25,9 @@ public:
     QString fixwidth    = "fixwidth";
     QString fixheght    = "fixheight";
     QString colorbg     = "bgcolor";
+    QString picturebg   = "bgpicture";
     QString colortext   = "textcolor";
-    QString fontname    = "fontname";
-    QString fontsize    = "fontsize";
+    QString font        = "font";
     QString fontId      = "fontId";
     //Атрибута выравнивания.
     struct

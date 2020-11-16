@@ -1,13 +1,18 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <FONTS>
-  <font id="mnemo18" family="DejaVu Sans Mono" size="18"/>
-  <font id="mnemo20" family="DejaVu Sans Mono" size="20"/>
-  <font id="mnemo10" family="DejaVu Sans Mono" size="10"/>
-  <font id="mnemo11" family="FreeMono" size="11"/>
-  <font id="mnemo12" family="FreeMono" size="12"/>
-  <font id="mnemo13" family="FreeMono" size="13"/>
-  <font id="mnemo14" family="FreeMono" size="14"/>
-  <font id="mnemo15" family="FreeMono" size="15"/>
-  <font id="mnemo16" family="FreeMono" size="16"/>
-  <font id="mnemo17" family="FreeMono" size="17"/>
+
+  <font id="mnemo10" style="bold italic underline 10pt DejaVu Sans Mono"/>
+
+  <font id="mnemo11" style="bold italic 11pt FreeMono"/>
+  <font id="mnemo12" style="bold italic 12pt FreeMono"/>
+  <font id="mnemo13" style="bold italic 13pt FreeMono"/>
+  <font id="mnemo14" style="bold italic 14pt FreeMono"/>
+  <font id="mnemo15" style="bold italic 15pt FreeMono"/>
+  <font id="mnemo16" style="bold italic 16pt FreeMono"/>
+  <font id="mnemo17" style="bold italic 17pt FreeMono"/>
+
+  <font id="mnemo18" style="bold italic 18pt DejaVu Sans Mono"/>
+  <font id="mnemo20" style="bold italic 20pt DejaVu Sans Mono"/>
+
+
 </FONTS>
