@@ -14,7 +14,7 @@ class CMovieAccess : public LIMovieAccess
 {
 private:
     QMovie* mpMovie;
-    QSize mSize;
+    /* QSize mSize; */
     int mStartCounter;
 public:
     CMovieAccess() = delete;
@@ -23,7 +23,7 @@ public:
     virtual QMovie* getMovie() override;
     virtual void start() override;
     virtual void stop() override;
-    virtual QSize getSize() override;
+    /* virtual QSize getSize() override; */
 };
 
 //------------------------------------------------------------------------------
@@ -31,17 +31,17 @@ CMovieAccess::CMovieAccess(QMovie* _movie) :
     mpMovie(_movie),
     mStartCounter(0)
 {
-    int width  = 0;
-    int height = 0;
+    /* int width  = 0; */
+    /* int height = 0; */
 
     mpMovie->jumpToFrame(0);
 
-    QSize s = mpMovie->currentPixmap().size();
+    /* QSize s = mpMovie->currentPixmap().size(); */
 
-    width = (s.width() > width) ? (s.width()) : (width);
-    height = (s.height() > height) ? (s.height()) : (height);
+    /* width = (s.width() > width) ? (s.width()) : (width); */
+    /* height = (s.height() > height) ? (s.height()) : (height); */
 
-    mSize = QSize(width, height);
+    /* mSize = QSize(width, height); */
 }
 
 //------------------------------------------------------------------------------
@@ -78,10 +78,11 @@ void CMovieAccess::stop()
 }
 
 //------------------------------------------------------------------------------
-QSize CMovieAccess::getSize()
-{
-    return mSize;
-}
+/* QSize CMovieAccess::getSize() */
+/* { */
+/*     return mSize; */
+/* } */
+
 //==============================================================================
 QMap<QString, Qt::GlobalColor> __slStdColors;
 //==============================================================================
