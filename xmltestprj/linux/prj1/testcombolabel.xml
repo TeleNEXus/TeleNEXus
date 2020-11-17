@@ -8,9 +8,10 @@
           <!-- <scrollArea align="Center" > -->
             <!-- <scrollArea > -->
               <!-- <widget bgcolor="00ff0000"> -->
-                <!-- <widget bgcolor="00 88 88 ee"> -->
+                <widget bgcolor="00 88 88 ee">
                   <!-- <widget bgcolor="black"> -->
-                    <widget bgpicture="picture/fon1.png">
+                    <!-- <widget bgpicture="picture/fon1.png"> -->
+                    <!-- <widget bgpicture="picture/fon3.png" width="300" height="300"> -->
                     <widgets>
                       <!-- <dataComboLabel -->  
                       <!--   read="hreg0" source="qtslavetcp" format="hex" dataSize="2" --> 
@@ -56,35 +57,36 @@
 
                       <!-- <dataComboLabel  read="hreg0" source="qtslavetcp" format="hex" dataSize="2" > -->
                         <dataComboLabel  read="hreg0" source="qtslavetcp" format="hex" dataSize="2" 
-                          bgcolor="red" textcolor="blue" font="bold italic 25pt DejaVu Sans Mono" 
-                          posx="350"
-                          posy="150"
-                          minwidth="150"
-                          minheight="150"
+                          bgcolor="red" textcolor="blue" fontId="mnemo10" 
+                          posx="350" posy="150"
                           align="Right Bottom"
                           >
-                        <item text="UNDEFINED"/>
-                        <item text="Test 1"   value="a" bgcolor="blue" textcolor="red" fontId="mnemo10" align="VCenter Left"/>
-                        <item text="Test 2"   value="b" />
-                        <item text="Test 3"   value="c"/>
-                        <item text="Test 4"   value="d"/>
-                        <item text="Test 5"   value="e"/>
-                        <item text="Test 6"   value="f"/>
-                        <item text="Test 7"   value="10"/>
-                        <item text="Test 8"   value="11"/>
-                        <item text="Test 9"   value="12"/>
+                          <!-- bgcolor="red" textcolor="blue" font="bold italic 25pt DejaVu Sans Mono" --> 
+                          <!-- minwidth="150" minheight="150" -->
+                        <item text="UNDEFINED" mode="undef" fontId="mnemo18" align="Center"/>
+                        <item text="WRONG"     mode="wrong" fontId="mnemo18" align="Center"/>
+                        <!-- <item text="Test 1"   value="a" bgcolor="blue" textcolor="red" fontId="mnemo10" align="VCenter Left"/> -->
+                        <item text="Test 0"   value="a" textcolor="yellow" bgcolor="blue" fontId="mnemo18" align="Left VCenter" />
+                        <item text="Test 1"   value="b" />
+                        <item text="Test 2"   value="c"/>
+                        <item text="Test 3"   value="d"/>
+                        <item text="Test 4"   value="e"/>
+                        <item text="Test 5"   value="f"/>
+                        <item text="Test 6"   value="10"/>
+                        <item text="Test 7"   value="11"/>
+                        <item text="Test 8"   value="12"/>
                       </dataComboLabel>
 
                       <dataComboBox  read="hreg0" source="qtslavetcp" format="hex" dataSize="2" posx="0" posy="250">
-                        <item text="Test 1"   value="a"/>
-                        <item text="Test 2"   value="b"/>
-                        <item text="Test 3"   value="c"/>
-                        <item text="Test 4"   value="d"/>
-                        <item text="Test 5"   value="e"/>
-                        <item text="Test 6"   value="f"/>
-                        <item text="Test 7"   value="10"/>
-                        <item text="Test 8"   value="11"/>
-                        <item text="Test 9"   value="12"/>
+                        <item text="Test 0"   value="a"/>
+                        <item text="Test 1"   value="b"/>
+                        <item text="Test 2"   value="c"/>
+                        <item text="Test 3"   value="d"/>
+                        <item text="Test 4"   value="e"/>
+                        <item text="Test 5"   value="f"/>
+                        <item text="Test 6"   value="10"/>
+                        <item text="Test 7"   value="11"/>
+                        <item text="Test 8"   value="12"/>
                       </dataComboBox>
 
                       <controlWindowButton label="hide win0" posx="0" posy="275">

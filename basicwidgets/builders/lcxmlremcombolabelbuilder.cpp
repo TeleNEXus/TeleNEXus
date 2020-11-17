@@ -7,7 +7,7 @@
 #include <qdom.h>
 #include <qnamespace.h>
 #include <qwidget.h>
-
+#include <QLabel>
 #include <QDebug>
 #include "builderscommon.h"
 
@@ -31,6 +31,17 @@ const struct
   QString format      = "format";
   QString text        = "text";
   QString value       = "value";
+  struct
+  {
+    QString attr_name = "mode";
+    struct
+    {
+      QString normal = "normal";
+      QString undef  = "undef";
+      QString wrong  = "wrong";
+    }vals;
+  }mode;
+
   /* QString movie       = "movie"; */
   QString picture     = "picture";
 } __attrNames;
@@ -45,6 +56,7 @@ const struct
 static void buildComboLabel( const QDomElement& _element, 
     LCQRemComboLabel* _label,
     QSharedPointer<LCStringDataFormatterBase> _format,
+    const QString& _baseStyle,
     const LIApplication& _app);
 
 /* static void setPalete(QPalette& _palette, const QDomElement& _element); */
@@ -94,36 +106,19 @@ QWidget* LCXmlRemComboLabelBuilder::build(const QDomElement& _element,
 
   style = readStyle(_element, _app);
 
-  remlabel = new LCQRemComboLabel(dataread, source, format,  style);
+  remlabel = new LCQRemComboLabel(dataread, source, format);
   /* remlabel->setAlignment(Qt::AlignmentFlag::AlignCenter); */
 
   qDebug() << "build style = " << style;
 
-  /* remlabel->setStyleSheet(style); */
-  /* remlabel->adjustSize(); */
-
-  //Параметры текста для всех текстовых сущностей.
-  /* { */
-    /* QPalette pal = remlabel->palette(); */
-    /* Qt::Alignment alignment = remlabel->alignment(); */
-    /* remlabel->setAutoFillBackground(true); */
-    /* setPalete(pal, _element); */
-    /* QString font_style = getFontStyle(_element, _app); */
-    /* setAlign(alignment, _element); */
-    /* remlabel->setPalette(pal); */
-    /* remlabel->setStyleSheet(font_style); */
-    /* remlabel->setAlignment(alignment); */
-    /* remlabel->adjustSize(); */
-  /* } */
-
-  /* buildComboLabel(_element, remlabel, format, _app); */
+  buildComboLabel(_element, remlabel, format, style, _app);
 
 LABEL_WRONG_EXIT:
-  QLabel* ret = remlabel;
+  QWidget* ret = remlabel;
   if(ret == nullptr) ret = new QLabel(_element.tagName());
 
-  /* LCWidgetBuildersCommon::initSize(_element, *ret); */
-  /* LCWidgetBuildersCommon::initFixedSize(_element, *ret); */
+  LCWidgetBuildersCommon::initSize(_element, *ret);
+  LCWidgetBuildersCommon::initFixedSize(_element, *ret);
   LCWidgetBuildersCommon::initPosition(_element, *ret);
 
   return ret;
@@ -137,70 +132,81 @@ static bool addTextItem(
     const LIApplication&  _app);
 
 static void buildComboLabel( const QDomElement& _element, 
-    LCQRemComboLabel* _label,
+    LCQRemComboLabel* _cl,
     QSharedPointer<LCStringDataFormatterBase> _format,
+    const QString& _baseStyle,
     const LIApplication& _app)
 {
+  enum class EMode
+  {
+    normal,
+    undef,
+    wrong
+  };
   for( QDomNode node = _element.firstChildElement(__elementNames.item);
       !node.isNull();
       node = node.nextSiblingElement(__elementNames.item))
   {
     QDomElement el = node.toElement();
-    QString attr_value = el.attribute(__attrNames.value);
 
-    if(!attr_value.isNull())
+    QLabel* label = nullptr;
+
+    QString attr_text = el.attribute(__attrNames.text);
+    if(attr_text.isNull()) continue;
+
+    QString attr = el.attribute(__attrNames.mode.attr_name);
+
+    EMode  mode = EMode::normal;
+    if(!attr.isNull())
     {
-      attr_value = _format->normalizeString(attr_value);
-      if(attr_value.isNull()) continue;
-    }
-
-    QString attr_item = el.attribute(__attrNames.text);
-
-    if(addTextItem(_label, attr_value, el, _app))
-    {
-      continue;
-    }
-
-    attr_item = el.attribute(__attrNames.picture);
-
-    if(!attr_item.isNull())
-    {
-      QString attr = el.attribute(
-          LCWidgetBuildersCommon::mAttributes.aligns.attrName);
-
-      Qt::Alignment align = 0;
-      if(!LCWidgetBuildersCommon::toAlignFlags(attr, align))
+      if(attr == __attrNames.mode.vals.undef)
       {
-        align = _label->alignment();
+        mode = EMode::undef;
       }
-
-      attr = el.attribute(LCWidgetBuildersCommon::mAttributes.colorbg);
-      QPalette pal = _label->palette();
-
-      if(!attr.isNull())
+      else if(attr == __attrNames.mode.vals.wrong)
       {
-        QColor color = LCWidgetBuildersCommon::attributeToColor(attr);
-        if(color.isValid())
+        mode = EMode::wrong;
+      }
+    }
+
+    switch(mode)
+    {
+    case EMode::normal:
+      {
+        QString attr_value = el.attribute(__attrNames.value);
+
+        if(!attr_value.isNull())
         {
-          pal.setColor(QPalette::ColorRole::Background, color);
+          attr_value = _format->normalizeString(attr_value);
+          if(attr_value.isNull()) continue;
         }
+        label = new QLabel(attr_text);
+        _cl->addItem(label, attr_value);
+
       }
-
-      _label->addItem(
-          LCWidgetBuildersCommon::getMovie(attr_item, _app), 
-          attr_value, pal, align);
+      break;
+    case EMode::undef:
+      {
+        label = new QLabel(attr_text);
+        _cl->addItemUndef(label);
+      }
+      break;
+    case EMode::wrong:
+      {
+        label = new QLabel(attr_text);
+        _cl->addItemWrong(label);
+      }
+      break;
     }
-
-    /* attr_item = el.attribute(__attrNames.picture); */
-
-    /* if(!attr_item.isNull()) */
-    /* { */
-    /*     _label->addItem( */
-    /*             LCWidgetBuildersCommon::getPixmap(attr_item, _app), */ 
-    /*             attr_value); */
-    /*     continue; */
-    /* } */
+    if(label != nullptr)
+    {
+      QString style = readStyle(el,_app);
+      style = _baseStyle + style;
+      label->setStyleSheet(style);
+      qDebug() << "label style sheet = " << style;
+    }
   }
+
 }
 
 //==============================================================================
@@ -208,13 +214,26 @@ static QString readStyle(const QDomElement& _element, const LIApplication& _app)
 {
   /* QString style = ".LCQRemComboLabel { "; */
   QString style;
-  bool flag = false;
 
-  QString attr = _element.attribute(LCWidgetBuildersCommon::mAttributes.font);
+  QString attr = _element.attribute(LCWidgetBuildersCommon::mAttributes.fontId);
+
   if(!attr.isNull())
   {
-    style += "font : " + attr + "; ";
+    QString font = _app.getFontStyle(attr);
+    if(!font.isNull())
+    {
+      style += "font :" + font + "; ";
+    }
   }
+  else
+  {
+    attr = _element.attribute(LCWidgetBuildersCommon::mAttributes.font);
+    if(!attr.isNull())
+    {
+      style += "font : " + attr + "; ";
+    }
+  }
+
 
   attr = _element.attribute(LCWidgetBuildersCommon::mAttributes.colorbg);
   if(!attr.isNull())
@@ -246,11 +265,10 @@ static QString readStyle(const QDomElement& _element, const LIApplication& _app)
     attr = LCWidgetBuildersCommon::toAlignString(attr);
     if(!attr.isNull()) style += QString("qproperty-alignment: '%1' ;").arg(attr);
   }
-    style += "font : 43pt ; ";
-    style += "color: green ; ";
+    /* style += "font : 43pt ; "; */
+    /* style += "color: green ; "; */
 
   /* style += "}"; */
-  qDebug() << "RemComboLabelBuilder readStyle style = " << style;
   return style;
 }
 

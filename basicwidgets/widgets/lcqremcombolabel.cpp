@@ -5,174 +5,18 @@
 #include "LIMovieAccess.h"
 #include <QMovie>
 #include <qnamespace.h>
-
-//==============================================================================IItem
-class IItem
-{
-protected:
-    QLabel* mpLabel;
-public:
-    IItem() = delete;
-    IItem(QLabel* _label) : mpLabel(_label){}
-    virtual void install() = 0;
-    virtual void uninstall() = 0;
-};
-
-//==============================================================================CItemText
-class CItemText : public IItem
-{
-private:
-  QString mText;
-  QString mStyleSheet;
-public:
-  CItemText() = delete;
-  explicit CItemText( QLabel* _label, const QString& _text, const QString& _styleSheet): 
-    IItem(_label), mText(_text), mStyleSheet(_styleSheet)
-  {}
-
-  virtual void install() override
-  {
-    mpLabel->setText(mText);
-    mpLabel->setStyleSheet(mStyleSheet);
-    /* mpLabel->adjustSize(); */
-  }
-
-  virtual void uninstall() override
-  {
-    mpLabel->clear();
-    /* mpLabel->adjustSize(); */
-  }
-};
-
-/* class CItemText : public IItem */
-/* { */
-/* private: */
-/*   QString mText; */
-/*   QString mFontStyle; */
-/*   QPalette mPalette; */
-/*   Qt::Alignment mAlignment; */
-/*   /1* QFont mFontPr; *1/ */
-/*   /1* QPalette mPalettePr; *1/ */
-/*   /1* Qt::Alignment mAlignmentPr; *1/ */
-/* public: */
-/*   CItemText() = delete; */
-/*   explicit CItemText( */
-/*       QLabel* _label, */ 
-/*       const QString& _text, */ 
-/*       const QString& _fontStyle, */
-/*       QPalette _palette, */
-/*       Qt::Alignment _alignment): */ 
-/*     IItem(_label), */ 
-/*     mText(_text), */
-/*     mFontStyle(_fontStyle), */
-/*     mPalette(_palette), */
-/*     mAlignment(_alignment) */
-/*   {} */
-
-/*   virtual void install() override */
-/*   { */
-/*     /1* mPalettePr = mpLabel->palette(); *1/ */
-/*     /1* mFontPr = mpLabel->font(); *1/ */
-/*     /1* mAlignmentPr = mpLabel->alignment(); *1/ */
-
-/*     mpLabel->setText(mText); */
-/*     mpLabel->setPalette(mPalette); */
-/*     mpLabel->setStyleSheet(mFontStyle); */
-/*     mpLabel->setAlignment(mAlignment); */
-/*     mpLabel->adjustSize(); */
-/*   } */
-
-/*   virtual void uninstall() override */
-/*   { */
-/*     mpLabel->clear(); */
-/*     /1* mpLabel->setPalette(mPalettePr); *1/ */
-/*     /1* mpLabel->setFont(mFontPr); *1/ */
-/*     /1* mpLabel->setAlignment(mAlignmentPr); *1/ */
-/*     mpLabel->adjustSize(); */
-/*   } */
-/* }; */
-
-//==============================================================================CItemMovie
-class CItemMovie: public IItem
-{
-public:
-  QSharedPointer<LIMovieAccess> mspMovieAccess;
-private:
-  Qt::Alignment mAlignment;
-  Qt::Alignment mAlignmentPr;
-  QPalette mPalette;
-  /* QPalette mPalettePr; */
-public:
-  CItemMovie() = delete;
-  explicit CItemMovie(
-      QLabel* _label, 
-      QSharedPointer<LIMovieAccess> _movieAccess, 
-      const QPalette& _palette,
-      Qt::Alignment _alignment): 
-    IItem(_label), 
-    mspMovieAccess(_movieAccess),
-    mAlignment(_alignment),
-    mPalette(_palette)
-  {
-  }
-
-  virtual void install() override
-  {
-    /* QPalette mPalettePr = mpLabel->palette(); */
-    mpLabel->setPalette(mPalette);
-
-    mAlignmentPr = mpLabel->alignment();
-    mpLabel->setAlignment(mAlignment);
-    mpLabel->clear();
-    mpLabel->setMovie(mspMovieAccess->getMovie());
-    mspMovieAccess->start();
-    mpLabel->adjustSize();
-  }
-
-  virtual void uninstall() override
-  {
-    mpLabel->clear();
-    /* mpLabel->setPalette(mPalettePr); */
-    mpLabel->setAlignment(mAlignmentPr);
-    mspMovieAccess->stop();
-  }
-};
-
-/* //==============================================================================CItemPixmap */
-/* #include <QPixmap> */
-/* class CItemPixmap: public IItem */
-/* { */
-/* public: */
-/*     QPixmap mPixmap; */
-/* public: */
-/*     CItemPixmap() = delete; */
-/*     CItemPixmap(QLabel* _label, const QPixmap& _pixmap) : IItem(_label), mPixmap(_pixmap){} */
-
-/*     virtual void install() override */
-/*     { */
-/*         mpLabel->setPixmap(mPixmap); */
-/*         mpLabel->adjustSize(); */
-/*     } */
-
-/*     virtual void uninstall() override */
-/*     { */
-/*         mpLabel->clear(); */
-/*     } */
-/* }; */
+#include <QLabel>
 
 //==============================================================================SOwnData
 //Собственные данные класса.
 struct SOwnData
 {
     //Карта соответствий прочитанных данных и выводимых строк.
-    QSharedPointer<IItem> undefItem;
-    QSharedPointer<IItem> currentItem;
-    QMap<QString, QSharedPointer<IItem>> mItemMap;
-    SOwnData(){}
+    QWidget* undefItem; //Сущность для неопределенного состояния данных.
+    QWidget* wrongItem; //Сущность для данных для которых нет соответствия.
+    QMap<QString, QWidget*> normalItemMap;
+    SOwnData(): undefItem(nullptr), wrongItem(nullptr){}
 };
-
-//------------------------------------------------------------------------------
-#define L_OWNDATA(_data) static_cast<SOwnData*>(_data)
 
 //==============================================================================LCQRemComboLabel
 LCQRemComboLabel::
@@ -182,42 +26,40 @@ LCQRemComboLabel::
 
 }
 
+//------------------------------------------------------------------------------
+#define L_LABEL_OWNDATA (static_cast<SOwnData*>(mLabel.mpOwnData))
+
 //------------------------------------------------------------------------------dataIsRead
 void LCQRemComboLabel::
         CReadListener::
             dataIsRead( QSharedPointer<QByteArray> _data, 
                         LERemoteDataStatus _status)
 {
-    QSharedPointer<IItem> item;
-
     if(_status != LERemoteDataStatus::DS_OK)
     {
-        item = L_OWNDATA(mLabel.mpOwnData)->undefItem;
-        /* mLabel.setEnabled(false); */
-    }
-    else
-    {
-        /* mLabel.setEnabled(true); */
-        auto it = L_OWNDATA(mLabel.mpOwnData)->
-            mItemMap.find(mLabel.mspFormatter->toString(*_data));
-
-        if(it == L_OWNDATA(mLabel.mpOwnData)->
-                mItemMap.end())
-        {
-            item = L_OWNDATA(mLabel.mpOwnData)->undefItem;
-        }
-        else
-        {
-            item = it.value();
-        }
+      if(L_LABEL_OWNDATA->undefItem != nullptr)
+      {
+        if(mLabel.currentWidget() != L_LABEL_OWNDATA->undefItem) 
+          mLabel.setCurrentWidget(L_LABEL_OWNDATA->undefItem);
+      }
+      return;
     }
 
-    if((L_OWNDATA(mLabel.mpOwnData)->currentItem != item))
+    auto it = L_LABEL_OWNDATA->normalItemMap.find( mLabel.mspFormatter->toString(*_data));
+
+    if(it == L_LABEL_OWNDATA->normalItemMap.end())
     {
-        if(!L_OWNDATA(mLabel.mpOwnData)->currentItem.isNull())
-            L_OWNDATA(mLabel.mpOwnData)->currentItem->uninstall();
-        L_OWNDATA(mLabel.mpOwnData)->currentItem = item;
-        item->install();
+      if(L_LABEL_OWNDATA->wrongItem != nullptr)
+      {
+        if(mLabel.currentWidget() != L_LABEL_OWNDATA->wrongItem) 
+          mLabel.setCurrentWidget(L_LABEL_OWNDATA->wrongItem);
+      }
+      return;
+    }
+
+    if(it.value() != mLabel.currentWidget())
+    {
+        mLabel.setCurrentWidget(it.value());
     }
 }
 
@@ -225,16 +67,13 @@ void LCQRemComboLabel::
 LCQRemComboLabel::LCQRemComboLabel(const QString& _dataName,
                          QSharedPointer<LIRemoteDataSource> _dataSource,
                          QSharedPointer<LCStringDataFormatterBase> _formatter,
-                         const QString& _styleSheet,
-                         QWidget* _parent) :    QLabel(_parent),
+                         QWidget* _parent) :    QStackedWidget(_parent),
                                                 mDataName(_dataName),
                                                 mspFormatter(_formatter)
 {
     mpOwnData = new SOwnData();
-
-    setText(mspFormatter->undefStateString());
-    if(!_styleSheet.isNull()) setStyleSheet( ".LCQRemComboLabel {" + _styleSheet + "}" );
-    mSizeHint = QLabel::sizeHint();
+    addItemUndef(new QLabel(_formatter->getUndefStateString()));
+    addItemWrong(new QLabel(_formatter->getWrongStateString()));
 
     mDataListener = QSharedPointer<CReadListener>(new CReadListener(*this));
     mDataReader = _dataSource->createReader();
@@ -242,10 +81,13 @@ LCQRemComboLabel::LCQRemComboLabel(const QString& _dataName,
     mDataReader->setDataReadListener(mDataListener);
 }
 
+//------------------------------------------------------------------------------
+#define L_OWNDATA (static_cast<SOwnData*>(mpOwnData))
+
 //------------------------------------------------------------------------------~LCQRemComboLabel
 LCQRemComboLabel::~LCQRemComboLabel()
 {
-    delete L_OWNDATA(mpOwnData);
+    delete L_OWNDATA;
 }
 
 //------------------------------------------------------------------------------setActive
@@ -262,64 +104,45 @@ void LCQRemComboLabel::setActive(bool _flag)
 }
 
 //------------------------------------------------------------------------------addItem
-void LCQRemComboLabel::addItem(const QString&  _text, const QString& _val, const QString&  _styleSheet)
+void LCQRemComboLabel::addItem(QWidget* _widget, const QString&  _val)
 {
-    auto pl = QSharedPointer<QLabel>(new QLabel(_text));
-    pl->setStyleSheet(_styleSheet);
-    auto item = new CItemText(this, _text, _styleSheet);
-
-    if(_val.isNull())
-    {
-        L_OWNDATA(mpOwnData)->undefItem =  
-            QSharedPointer<IItem>(item);
-    }
-    else
-    {
-        L_OWNDATA(mpOwnData)->mItemMap.insert(_val, 
-                QSharedPointer<IItem>(item));
-    }
-    setSizeHint(pl->sizeHint());
-    resize(mSizeHint);
+  auto it = L_OWNDATA->normalItemMap.find(_val);
+  
+  if(it != L_OWNDATA->normalItemMap.end())
+  {
+    if(it.value() == _widget) return;
+    removeWidget(it.value());
+    L_OWNDATA->normalItemMap.erase(it);
+    it.value()->deleteLater();
+  }
+  L_OWNDATA->normalItemMap.insert(_val, _widget);
+  addWidget(_widget);
 }
 
-//------------------------------------------------------------------------------addItem
-void LCQRemComboLabel::addItem(QSharedPointer<LIMovieAccess> _movieAccess, 
-    const QString& _val,
-    const QPalette& _palette,
-    Qt::Alignment _alignment)
+//------------------------------------------------------------------------------addItemUndef
+void LCQRemComboLabel::addItemUndef(QWidget* _widget)
 {
-    auto item = new CItemMovie(this, _movieAccess, _palette, _alignment);
-    if(_val.isNull())
-    {
-        L_OWNDATA(mpOwnData)->undefItem =  
-            QSharedPointer<IItem>(item);
-    }
-    else
-    {
-        L_OWNDATA(mpOwnData)->mItemMap.insert(_val, 
-                QSharedPointer<IItem>(item));
-    }
-    setSizeHint(item->mspMovieAccess->getSize());
-    resize(mSizeHint);
+  if(L_OWNDATA->undefItem != nullptr)
+  {
+    removeWidget(L_OWNDATA->undefItem);
+    L_OWNDATA->undefItem->deleteLater();
+  }
+  L_OWNDATA->undefItem = _widget;
+  addWidget(_widget);
+  setCurrentWidget(_widget);
 }
 
-/* //------------------------------------------------------------------------------addItem */
-/* void LCQRemComboLabel::addItem(const QPixmap& _pixmap, const QString& _val) */
-/* { */
-/*     auto item = new CItemPixmap(this, _pixmap); */
-/*     if(_val.isNull()) */
-/*     { */
-/*         L_OWNDATA(mpOwnData)->undefItem = */  
-/*             QSharedPointer<IItem>(item); */
-/*     } */
-/*     else */
-/*     { */
-/*         L_OWNDATA(mpOwnData)->mItemMap.insert(_val, */ 
-/*                 QSharedPointer<IItem>(item)); */
-/*     } */
-/*     setSizeHint(_pixmap.size()); */
-/*     resize(mSizeHint); */
-/* } */
+//------------------------------------------------------------------------------addItemWrong
+void LCQRemComboLabel::addItemWrong(QWidget* _widget)
+{
+  if(L_OWNDATA->wrongItem != nullptr)
+  {
+    removeWidget(L_OWNDATA->wrongItem);
+    L_OWNDATA->wrongItem->deleteLater();
+  }
+  L_OWNDATA->wrongItem = _widget;
+  addWidget(_widget);
+}
 
 //------------------------------------------------------------------------------event
 bool LCQRemComboLabel::event(QEvent *_event)
@@ -335,33 +158,10 @@ bool LCQRemComboLabel::event(QEvent *_event)
         mDataReader->disconnectFromSource();
         ret = true;
         break;
-    case QEvent::Type::Resize:
-        qDebug() << "resize event";
-        ret = false;
-        break;
     default:
         break;
     }
-    QLabel::event(_event);
+    QStackedWidget::event(_event);
     return ret;
-}
-
-//------------------------------------------------------------------------------
-void LCQRemComboLabel::setSizeHint(const QSize& _size)
-{
-    int width = mSizeHint.width();
-    int height = mSizeHint.height();
-
-    if(_size.width() > width)
-    {
-        width = _size.width();
-    }
-
-    if(_size.height() > height)
-    {
-        height = _size.height();
-    }
-
-    mSizeHint = QSize(width, height);
 }
 
