@@ -8,9 +8,9 @@
           <!-- <scrollArea align="Center" > -->
             <!-- <scrollArea > -->
               <!-- <widget bgcolor="00ff0000"> -->
-                <widget bgcolor="00 88 88 ee">
+                <!-- <widget bgcolor="00 88 88 ee"> -->
                   <!-- <widget bgcolor="black"> -->
-                    <!-- <widget bgpicture="picture/fon1.png"> -->
+                    <widget bgpicture="picture/fon1.png">
                     <!-- <widget bgpicture="picture/fon3.png" width="300" height="300"> -->
                     <widgets>
                       <!-- <dataComboLabel -->  
@@ -63,13 +63,16 @@
                           >
                           <!-- bgcolor="red" textcolor="blue" font="bold italic 25pt DejaVu Sans Mono" --> 
                           <!-- minwidth="150" minheight="150" -->
-                        <item text="UNDEFINED" mode="undef" fontId="mnemo18" align="Center"/>
-                        <item text="WRONG"     mode="wrong" fontId="mnemo18" align="Center"/>
+                        <!-- <item text="UNDEFINED" mode="undef" fontId="mnemo18" align="Center"/> -->
+                        <!-- <item text="WRONG"     mode="wrong" fontId="mnemo18" align="Center"/> -->
+                        <item picture="movies/undef_150_100.gif" mode="undef" fontId="mnemo18" align="Center" bgcolor="white"/>
+                        <item picture="movies/wrong_150_100.gif" mode="wrong" fontId="mnemo18" align="Center" bgcolor="black"/>
                         <!-- <item text="Test 1"   value="a" bgcolor="blue" textcolor="red" fontId="mnemo10" align="VCenter Left"/> -->
                         <item text="Test 0"   value="a" textcolor="yellow" bgcolor="blue" fontId="mnemo18" align="Left VCenter" />
                         <item text="Test 1"   value="b" />
-                        <item text="Test 2"   value="c"/>
-                        <item text="Test 3"   value="d"/>
+
+                        <item picture="movies/20_21_22_23.gif"        value="c" align="Center" bgcolor="black"/>
+                        <item picture="picture/picture_150_100.png"   value="d" bgcolor="yellow"/>
                         <item text="Test 4"   value="e"/>
                         <item text="Test 5"   value="f"/>
                         <item text="Test 6"   value="10"/>
