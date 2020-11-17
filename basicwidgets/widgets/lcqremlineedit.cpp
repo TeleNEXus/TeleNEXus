@@ -3,13 +3,15 @@
 #include <QKeyEvent>
 #include <qnamespace.h>
 #include <QKeyEvent>
-//======================================================================================================================
-LCQRemLineEdit::CReadListener::CReadListener(LCQRemLineEdit& _lineEdit) : mLineEdit(_lineEdit), mFlagActive(false)
+//==============================================================================
+LCQRemLineEdit::CReadListener::CReadListener(LCQRemLineEdit& _lineEdit) : 
+  mLineEdit(_lineEdit), mFlagActive(false)
 {
 
 }
 
-void LCQRemLineEdit::CReadListener::dataIsRead(QSharedPointer<QByteArray> _data, LERemoteDataStatus _status)
+void LCQRemLineEdit::CReadListener::dataIsRead(
+    QSharedPointer<QByteArray> _data, LERemoteDataStatus _status)
 {
     if(mFlagActive)
     {
@@ -25,7 +27,8 @@ void LCQRemLineEdit::CReadListener::dataIsRead(QSharedPointer<QByteArray> _data,
 }
 
 
-LCQRemLineEdit::CWriteListener::CWriteListener(LCQRemLineEdit& _lineEdit) : mLineEdit(_lineEdit)
+LCQRemLineEdit::CWriteListener::CWriteListener(LCQRemLineEdit& _lineEdit) : 
+  mLineEdit(_lineEdit)
 {
 
 }
