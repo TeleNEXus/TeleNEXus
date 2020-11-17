@@ -119,28 +119,15 @@ void LCWidgetBuildersCommon::initPosition(const QDomElement& _element,
         QWidget& _widget)
 {
     QString attr_pos = _element.attribute(mAttributes.posx);
+    int posx = _widget.pos().x(); 
+    int posy = _widget.pos().y();
 
     bool flag = false;
-
-    int posx;
-    int posy;
-
     posx = attr_pos.toInt(&flag);
-    
-    if(!flag)
-    {
-        return;
-    }
-
-    flag = false;
 
     attr_pos = _element.attribute(mAttributes.posy);
+    flag = false;
     posy = attr_pos.toInt(&flag);
-
-    if(!flag)
-    {
-        return;
-    }
     
     _widget.move(posx, posy);
 }

@@ -8,57 +8,16 @@
           <!-- <scrollArea align="Center" > -->
             <!-- <scrollArea > -->
               <!-- <widget bgcolor="00ff0000"> -->
-                <!-- <widget bgcolor="00 88 88 ee"> -->
+                <widget bgcolor="00 88 88 ee">
                   <!-- <widget bgcolor="black"> -->
-                    <widget bgpicture="picture/fon1.png">
+                    <!-- <widget bgpicture="picture/fon1.png"> -->
                     <!-- <widget bgpicture="picture/fon3.png" width="300" height="300"> -->
                     <widgets>
-                      <!-- <dataComboLabel -->  
-                      <!--   read="hreg0" source="qtslavetcp" format="hex" dataSize="2" --> 
-                      <!--   posx="300" posy="20" --> 
-                      <!--   textcolor="blue" fontname="DejaVu Sans Mono" fontsize="18" -->
-                      <!--   align="Right VCenter"> -->
-
-                      <!--   <item picture="movies/10_11_12_13.gif"/> -->
-
-                      <!--   <item picture="movies/20_21_22_23.gif"      value="a" align="Right VCenter" bgcolor="darkblue"/> -->
-                      <!--   <item picture="movies/20_21_22_23.gif"      value="b" align="Center"/> -->
-                      <!--   <item picture="movies/20_21_22_23.gif"      value="c" bgcolor="darkgreen"/> -->
-                      <!--   <item picture="picture/picture_150_100.png" value="d" bgcolor="black"/> -->
-
-                      <!--   <item text="Test 5"   value="e" bgcolor="blue" textcolor="red" fontname="DejaVu Sans Mono" fontsize="18" /> -->
-                      <!--   <item text="Test 6"   value="f" /> -->
-                      <!--   <item text="Test 7"   value="10"/> -->
-                      <!--   <item text="Test 8"   value="11" bgcolor="darkblue" textcolor="red"/> -->
-                      <!--   <item text="Test 9"   value="12"/> -->
-
-                      <!-- </dataComboLabel> -->
-
-                      <!-- <dataComboLabel -->  
-                      <!--   read="hreg0" source="qtslavetcp" format="hex" dataSize="2" --> 
-                      <!--   posx="300" posy="140" --> 
-                      <!--   bgcolor="00 004444" textcolor="blue" fontname="DejaVu Sans Mono" fontsize="18" -->
-                      <!--   align="Right VCenter"> -->
-
-                      <!--   <item picture="movies/10_11_12_13.gif"/> -->
-
-                      <!--   <item picture="movies/20_21_22_23.gif"      value="a" align="Right VCenter" bgcolor="darkblue"/> -->
-                      <!--   <item picture="movies/20_21_22_23.gif"      value="b" align="Center"/> -->
-                      <!--   <item picture="movies/20_21_22_23.gif"      value="c" bgcolor="darkgreen"/> -->
-                      <!--   <item picture="picture/picture_150_100.png" value="d" bgcolor="black"/> -->
-
-                      <!--   <item text="Test 5"   value="e" bgcolor="blue" textcolor="red" fontname="DejaVu Sans Mono" fontsize="18" /> -->
-                      <!--   <item text="Test 6"   value="f" /> -->
-                      <!--   <item text="Test 7"   value="10"/> -->
-                      <!--   <item text="Test 8"   value="11" bgcolor="darkblue" textcolor="red"/> -->
-                      <!--   <item text="Test 9"   value="12"/> -->
-
-                      <!-- </dataComboLabel> -->
 
                       <!-- <dataComboLabel  read="hreg0" source="qtslavetcp" format="hex" dataSize="2" > -->
                         <dataComboLabel  read="hreg0" source="qtslavetcp" format="hex" dataSize="2" 
                           bgcolor="red" textcolor="blue" fontId="mnemo10" 
-                          posx="350" posy="150"
+                          posx="250" posy="25"
                           align="Right Bottom"
                           >
                           <!-- bgcolor="red" textcolor="blue" font="bold italic 25pt DejaVu Sans Mono" --> 
@@ -96,7 +55,8 @@
                         <window id="win0" event="pressed" action="hide"/>
                       </controlWindowButton>
 
-                      <label text="Label0" bgcolor="rgb(0,255,0)" textcolor="red" font="bold italic 30pt DejaVu Sans Mono" posx="200" posy="20" />
+                      <label text="Label0" bgcolor="rgb(0,255,0)" 
+                        textcolor="red" font="bold italic 20pt DejaVu Sans Mono" posx="10" posy="10" />
 
                       <label text="Label 01" posx="40"  posy="50"  fontId="mnemo10" textcolor="white" bgcolor="red"/>
                       <label text="Label 02" posx="60"  posy="70"  fontId="mnemo11" textcolor="red" bgcolor="blue"/>
@@ -119,6 +79,11 @@
                       <dataLineEdit   source="qtslavetcp" data="hreg[0-1]" format="hex" dataSize="4" separator=" " 
                         posx="100" posy="205" />
 
+                      <dataLabel source="qtslavetcp" data="hreg[0-1]" format="hex" dataSize="4" separator=" " 
+                        posx="250" posy="180" />
+
+                      <dataLabel source="qtslavetcp" data="hreg[0-1]" format="hex" dataSize="4" separator=" " 
+                        posx="250" posy="205" />
 
                       <dataWriteButton text="write 1" posx="10" posy="155" >
                         <data sourceName="qtslavetcp" dataName="hreg0" format="uint16" value="0"/>
@@ -142,11 +107,11 @@
               <stretch/>
 
               <widgets align="Center">
-                <widget>
+                <widget >
                   <widgets>
                 <label text="Label0"/>
-                <label text="Label1"/>
-                <label text="Label2"/>
+                <label text="Label1" posx="50" />
+                <label text="Label2" posx="100"/>
                   </widgets>
                 </widget>
 
