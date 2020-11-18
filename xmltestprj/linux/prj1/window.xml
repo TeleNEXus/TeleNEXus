@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <!-- <WINDOW width="50" height="50" posx="50" posy="50"> -->
-<WINDOW>
+<WINDOW height="600" posx="50" posy="50">
+<!-- <WINDOW> -->
     <!-- <tabs file="tabtestwidget.xml"/> -->
     <!-- <widget file="testboxlayout.xml"/> -->
     <!-- <widget file="testgridlayout.xml"/> -->

@@ -51,7 +51,12 @@
                         <item text="Test 8"   value="12"/>
                       </dataComboBox>
 
-                      <controlWindowButton text="hide win0" posx="0" posy="275">
+                      <controlWindowButton text="hide win0" posx="0" posy="275"
+                        bgcolor="yellow"
+                        fontId="mnemo10"
+                        textcolor="red"
+                        minheight="50"
+                        >
                         <window id="win0" event="pressed" action="hide"/>
                       </controlWindowButton>
 
@@ -85,14 +90,23 @@
 
 
 
-                      <dataWriteButton text="write 1" posx="10" posy="155" >
+                      <dataWriteButton text="write 1" posx="10" posy="120"
+                        bgcolor="green"
+                        fontId="mnemo10"
+                        >
                         <data sourceName="qtslavetcp" dataName="hreg0" format="uint16" value="0"/>
                         <data sourceName="qtslavetcp" dataName="hreg1" format="uint16" value="1"/>
                         <data sourceName="qtslavetcp" dataName="hreg2" format="uint16" value="2"/>
                         <data sourceName="qtslavetcp" dataName="hreg3" format="uint16" value="3"/>
                       </dataWriteButton>
 
-                      <dataWriteButton text="write 2" posx="10" posy="180" >
+                      <dataWriteButton text="" posx="10" posy="180"
+                        bgcolor="darkblue"
+                        fontId="mnemo10"
+                        textcolor="red"
+                        minheight="50"
+                        icon="picture/picture_1.png"
+                        >
                         <data sourceName="qtslavetcp" dataName="hreg0" format="uint16" value="4"/>
                         <data sourceName="qtslavetcp" dataName="hreg1" format="uint16" value="5"/>
                         <data sourceName="qtslavetcp" dataName="hreg2" format="uint16" value="6"/>

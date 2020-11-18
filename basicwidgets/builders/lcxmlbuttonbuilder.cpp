@@ -63,18 +63,49 @@ static QPushButton* buildWriteButton(
 static QPushButton* buildControllWindowButton(
     const QDomElement& _element, const LIApplication& _app);
 
+static void setStyleSheet(QPushButton* _button, const QDomElement& _element, 
+    const LIApplication& _app);
+
 QWidget* LCXmlButtonBuilder::build( const QDomElement& _element, 
     const LIApplication& _app)
 {
+  QPushButton* button;
   switch(mType)
   {
   case EType::writeData:
-    return buildWriteButton(_element, _app);
+    button = buildWriteButton(_element, _app);
+    break;
 
   case EType::controlWindows:
-    return buildControllWindowButton(_element, _app);
+    button = buildControllWindowButton(_element, _app);
+    break;
+
   default:
-    return new QPushButton();
+    button = new QPushButton();
+  }
+
+
+  setStyleSheet(button, _element, _app);
+
+  /* LCWidgetBuildersCommon::initSize(       _element, *button); */
+  /* LCWidgetBuildersCommon::initFixedSize(  _element, *button); */
+  LCWidgetBuildersCommon::initPosition(   _element, *button);
+
+  return button;
+}
+
+//==============================================================================
+static void setStyleSheet(QPushButton* _button, const QDomElement& _element, 
+    const LIApplication& _app)
+{
+  QString style = LCWidgetBuildersCommon::getBaseStyleSheet(_element, _app);
+
+  _button->setStyleSheet(style);
+
+  QString attr = _element.attribute(LCWidgetBuildersCommon::mAttributes.icon);
+  if(!attr.isNull())
+  {
+    _button->setIcon(LCWidgetBuildersCommon::getPixmap(attr, _app));
   }
 }
 
@@ -106,19 +137,8 @@ static QPushButton* buildWriteButton(
     if(data.isNull()) continue;
     button->addDataWrite(source, data_name, data);
   } 
-
-  LCWidgetBuildersCommon::initSize(       _element, *button);
-  LCWidgetBuildersCommon::initFixedSize(  _element, *button);
-  LCWidgetBuildersCommon::initPosition(   _element, *button);
   return button;
 }
-
-/* //============================================================================== */
-/* static QPushButton* buildControllWindowButton( */
-/*     const QDomElement& _element, const LIApplication& _app) */
-/* { */
-/* } */
-
 
 //------------------------------------------------------------------------------
 struct SAction
@@ -143,21 +163,10 @@ static QPushButton* buildControllWindowButton(
 {
     Q_UNUSED(_app);
 
-    QPushButton* button = new QPushButton;
-    QString attr_label = _element.attribute(__slAttributes.text);
+    QPushButton* button = new QPushButton(_element.attribute(__slAttributes.text));
 
     QList<SAction> pressActions;
     QList<SAction> releaseActions;
-
-    if(!attr_label.isNull())
-    {
-        button->setText(attr_label);
-    }
-    else
-    {
-        
-        button->setText(_element.tagName());
-    }
 
     for(QDomNode node = _element.firstChildElement( __slTags.window);
             !node.isNull();
@@ -229,10 +238,6 @@ static QPushButton* buildControllWindowButton(
                 }
             }
             });
-
-    LCWidgetBuildersCommon::initSize(_element, *button);
-    LCWidgetBuildersCommon::initFixedSize(_element, *button);
-    LCWidgetBuildersCommon::initPosition(_element, *button);
 
     return button; 
 }
