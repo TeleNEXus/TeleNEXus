@@ -51,7 +51,7 @@
                         <item text="Test 8"   value="12"/>
                       </dataComboBox>
 
-                      <controlWindowButton label="hide win0" posx="0" posy="275">
+                      <controlWindowButton text="hide win0" posx="0" posy="275">
                         <window id="win0" event="pressed" action="hide"/>
                       </controlWindowButton>
 
@@ -76,8 +76,6 @@
 
                       <dataLineEdit   source="qtslavetcp" data="hreg[0-1]" format="hex" dataSize="4" separator=" " 
                         posx="100" posy="205" />
-
-
 
                       <dataLabel source="qtslavetcp" data="hreg[0-1]" format="hex" dataSize="4" separator=" " 
                         posx="250" posy="180" bgcolor="yellow" textcolor="red" fontId="mnemo10" minwidth="150" align="Right"/>

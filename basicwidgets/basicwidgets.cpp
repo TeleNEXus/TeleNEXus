@@ -1,5 +1,6 @@
 #include "basicwidgets.h"
 
+#include "lcqremwritebutton.h"
 #include "lcxmlwidgetbuilder.h"
 #include "lcxmltextlabelbuilder.h"
 #include "lcxmlremlabelbuilder.h"
@@ -8,6 +9,7 @@
 #include "lcxmlremcombolabelbuilder.h"
 #include "lcxmltablewidgetbuilder.h"
 #include "lcxmltabwidgetbuilder.h"
+#include "lcxmlbuttonbuilder.h"
 //------------------------------------------------------------------------------
 void* getWidgetBuilder()
 {
@@ -56,11 +58,16 @@ void* getTabWidgetBuilder()
     return new LCXmlTabWidgetBuilder;
 }
 
-#include "lcxmlremwritebuttonbuilder.h"
 //------------------------------------------------------------------------------
 void* getRemWriteButtonBuilder()
 {
-    return new LCXmlRemWriteButtonBuilder;
+  return new LCXmlButtonBuilder(LCXmlButtonBuilder::EType::writeData);
+}
+
+//------------------------------------------------------------------------------
+void* getControlWindowButtonBuilder()
+{
+  return new LCXmlButtonBuilder(LCXmlButtonBuilder::EType::controlWindows);
 }
 
 //------------------------------------------------------------------------------
@@ -68,14 +75,6 @@ void* getRemWriteButtonBuilder()
 void* getSwitchWidgetsListBuilder()
 {
     return new LCXmlSwitchWidgetsListBuilder;
-}
-
-
-//------------------------------------------------------------------------------
-#include "lcxmlcontrolwindowbuttonbuilder.h"
-void* getControlWindowButtonBuilder()
-{
-    return new LCXmlControlWindowButtonBuilder;
 }
 
 //------------------------------------------------------------------------------
