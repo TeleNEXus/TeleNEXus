@@ -148,18 +148,19 @@ LABEL_WRONG_EXIT:
 }
 
 //------------------------------------------------------------------------------
+enum class EItemMode
+{
+  normal,
+  undef,
+  wrong
+};
+//------------------------------------------------------------------------------
 static void buildComboLabel( const QDomElement& _element, 
     LCQRemComboLabel* _cl,
     QSharedPointer<LCStringDataFormatterBase> _format,
     const QString& _baseStyle,
     const LIApplication& _app)
 {
-  enum class EMode
-  {
-    normal,
-    undef,
-    wrong
-  };
   for( QDomNode node = _element.firstChildElement(__elementNames.item);
       !node.isNull();
       node = node.nextSiblingElement(__elementNames.item))
@@ -171,16 +172,16 @@ static void buildComboLabel( const QDomElement& _element,
 
     QString attr = el.attribute(__attrNames.mode.attr_name);
 
-    EMode  mode = EMode::normal;
+    EItemMode  mode = EItemMode::normal;
     if(!attr.isNull())
     {
       if(attr == __attrNames.mode.vals.undef)
       {
-        mode = EMode::undef;
+        mode = EItemMode::undef;
       }
       else if(attr == __attrNames.mode.vals.wrong)
       {
-        mode = EMode::wrong;
+        mode = EItemMode::wrong;
       }
     }
 
@@ -189,7 +190,7 @@ static void buildComboLabel( const QDomElement& _element,
     {
       switch(mode)
       {
-      case EMode::normal:
+      case EItemMode::normal:
         {
           QString attr_value = el.attribute(__attrNames.value);
 
@@ -202,13 +203,13 @@ static void buildComboLabel( const QDomElement& _element,
           _cl->addItem(label, attr_value);
         }
         break;
-      case EMode::undef:
+      case EItemMode::undef:
         {
           label = new QLabel(attr_data);
           _cl->addItemUndef(label);
         }
         break;
-      case EMode::wrong:
+      case EItemMode::wrong:
         {
           label = new QLabel(attr_data);
           _cl->addItemWrong(label);
@@ -236,7 +237,7 @@ static void buildComboLabel( const QDomElement& _element,
     
     switch(mode)
     {
-    case EMode::normal:
+    case EItemMode::normal:
       {
         QString attr_value = el.attribute(__attrNames.value);
 
@@ -250,13 +251,13 @@ static void buildComboLabel( const QDomElement& _element,
 
       }
       break;
-    case EMode::undef:
+    case EItemMode::undef:
       {
         label = new CQMovieLabel(movie_access);
         _cl->addItemUndef(label);
       }
       break;
-    case EMode::wrong:
+    case EItemMode::wrong:
       {
         label = new CQMovieLabel(movie_access);
         _cl->addItemWrong(label);
@@ -275,10 +276,12 @@ static void buildComboLabel( const QDomElement& _element,
 
 /* #include <functional> */
 /* static void addItem( */
+/*     LCQRemComboLabel& _comboLabel, */ 
 /*     const QDomElement& el, */ 
 /*     const QString& _baseStyle, */ 
-/*     LCQRemComboLabel& _comboLabel, */ 
-/*     std::function<QLabel*()> _newLabel) */
+/*     QSharedPointer<LCStringDataFormatterBase> _format, */
+/*     EItemMode _mode, */
+/*     std::function<void(QLabel**)> _newLabel) */
 /* { */
 /* } */
 

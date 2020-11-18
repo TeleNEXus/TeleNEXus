@@ -80,7 +80,7 @@
 
 
                       <dataLabel source="qtslavetcp" data="hreg[0-1]" format="hex" dataSize="4" separator=" " 
-                        posx="250" posy="180" />
+                        posx="250" posy="180" bgcolor="yellow" textcolor="red" fontId="mnemo10" minwidth="150" align="Right"/>
 
                       <dataLabel source="qtslavetcp" data="hreg[0-1]" format="hex" dataSize="4" separator=" " 
                         posx="250" posy="205" />

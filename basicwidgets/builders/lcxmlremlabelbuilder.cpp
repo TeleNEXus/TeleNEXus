@@ -5,6 +5,7 @@
 
 #include <QDomElement>
 #include "builderscommon.h"
+#include <QDebug>
 
 
 //==============================================================================
@@ -28,7 +29,6 @@ const struct
 } __attrNames;
 
 //------------------------------------------------------------------------------
-static void setStyle(QLabel* _label, const QDomElement& _element);
 QWidget* LCXmlRemLabelBuilder::build(const QDomElement& _element, 
     const LIApplication& _app)
 {
@@ -70,14 +70,11 @@ QWidget* LCXmlRemLabelBuilder::build(const QDomElement& _element,
 LABEL_WRONG_EXIT:
 
   if(ret == nullptr) ret = new QLabel(_element.tagName());
+  QString style = LCWidgetBuildersCommon::getBaseStyleSheet(_element, _app);
+  qDebug() << "LCQRemLabelBuilder style = " << style;
+  ret->setStyleSheet(style);
 
-  LCWidgetBuildersCommon::initSize(_element, *ret);
-  LCWidgetBuildersCommon::initFixedSize(_element, *ret);
   LCWidgetBuildersCommon::initPosition(_element, *ret);
   return ret;
 }
 
-//==============================================================================
-static void setStyle(QLabel* _label, const QDomElement& _element)
-{
-}
