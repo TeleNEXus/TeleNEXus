@@ -122,6 +122,10 @@ public:
    *  либо ARGB значение.
    */
   static QColor attributeToColor(const QString& _attr_color);
+  /*
+   * Получение строки определения базового стиля из DOM элемента.
+   */
+  static QString getBaseStyleSheet(const QDomElement& _element, const LIApplication& _app);
 };
 
 #endif /* BUILDERSCOMMON_H_ */

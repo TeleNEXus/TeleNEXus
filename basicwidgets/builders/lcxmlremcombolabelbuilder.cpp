@@ -285,58 +285,85 @@ static void buildComboLabel( const QDomElement& _element,
 //==============================================================================
 static QString readStyle(const QDomElement& _element, const LIApplication& _app)
 {
-  QString style;
+  return LCWidgetBuildersCommon::getBaseStyleSheet(_element, _app);
+  /* QString style; */
 
-  QString attr = _element.attribute(LCWidgetBuildersCommon::mAttributes.fontId);
+  /* QString attr = _element.attribute(LCWidgetBuildersCommon::mAttributes.fontId); */
 
-  if(!attr.isNull())
-  {
-    QString font = _app.getFontStyle(attr);
-    if(!font.isNull())
-    {
-      style += "font :" + font + "; ";
-    }
-  }
-  else
-  {
-    attr = _element.attribute(LCWidgetBuildersCommon::mAttributes.font);
-    if(!attr.isNull())
-    {
-      style += "font : " + attr + "; ";
-    }
-  }
+  /* if(!attr.isNull()) */
+  /* { */
+  /*   QString font = _app.getFontStyle(attr); */
+  /*   if(!font.isNull()) */
+  /*   { */
+  /*     style += "font :" + font + "; "; */
+  /*   } */
+  /* } */
+  /* else */
+  /* { */
+  /*   attr = _element.attribute(LCWidgetBuildersCommon::mAttributes.font); */
+  /*   if(!attr.isNull()) */
+  /*   { */
+  /*     style += "font : " + attr + "; "; */
+  /*   } */
+  /* } */
 
-  attr = _element.attribute(LCWidgetBuildersCommon::mAttributes.colorbg);
-  if(!attr.isNull())
-  {
-    style += QString("background: %1; ").arg(attr);
-  }
+  /* attr = _element.attribute(LCWidgetBuildersCommon::mAttributes.colorbg); */
+  /* if(!attr.isNull()) */
+  /* { */
+  /*   style += QString("background: %1; ").arg(attr); */
+  /* } */
 
-  attr = _element.attribute(LCWidgetBuildersCommon::mAttributes.colortext);
-  if(!attr.isNull())
-  {
-    style += QString("color: %1; ").arg(attr);
-  }
+  /* attr = _element.attribute(LCWidgetBuildersCommon::mAttributes.colortext); */
+  /* if(!attr.isNull()) */
+  /* { */
+  /*   style += QString("color: %1; ").arg(attr); */
+  /* } */
 
-  attr = _element.attribute(LCWidgetBuildersCommon::mAttributes.minwidth);
-  if(!attr.isNull())
-  {
-    style += QString("min-width: %1px; ").arg(attr);
-  }
+  /* attr = _element.attribute(LCWidgetBuildersCommon::mAttributes.minwidth); */
+  /* if(!attr.isNull()) */
+  /* { */
+  /*   style += QString("min-width: %1px; ").arg(attr); */
+  /* } */
 
-  attr = _element.attribute(LCWidgetBuildersCommon::mAttributes.minheight);
-  if(!attr.isNull())
-  {
-    style += QString("min-height: %1px; ").arg(attr);
-  }
+  /* attr = _element.attribute(LCWidgetBuildersCommon::mAttributes.minheight); */
+  /* if(!attr.isNull()) */
+  /* { */
+  /*   style += QString("min-height: %1px; ").arg(attr); */
+  /* } */
 
-  attr = _element.attribute(LCWidgetBuildersCommon::mAttributes.aligns.attrName);
-  if(!attr.isNull())
-  {
-    attr = LCWidgetBuildersCommon::toAlignString(attr);
-    if(!attr.isNull()) style += QString("qproperty-alignment: '%1' ;").arg(attr);
-  }
+  /* attr = _element.attribute(LCWidgetBuildersCommon::mAttributes.maxwidth); */
+  /* if(!attr.isNull()) */
+  /* { */
+  /*   style += QString("max-width: %1px; ").arg(attr); */
+  /* } */
 
-  return style;
+  /* attr = _element.attribute(LCWidgetBuildersCommon::mAttributes.maxheight); */
+  /* if(!attr.isNull()) */
+  /* { */
+  /*   style += QString("max-height: %1px; ").arg(attr); */
+  /* } */
+
+  /* attr = _element.attribute(LCWidgetBuildersCommon::mAttributes.fixwidth); */
+  /* if(!attr.isNull()) */
+  /* { */
+  /*   style += QString("max-width: %1px; ").arg(attr); */
+  /*   style += QString("min-width: %1px; ").arg(attr); */
+  /* } */
+
+  /* attr = _element.attribute(LCWidgetBuildersCommon::mAttributes.fixheight); */
+  /* if(!attr.isNull()) */
+  /* { */
+  /*   style += QString("max-height: %1px; ").arg(attr); */
+  /*   style += QString("min-height: %1px; ").arg(attr); */
+  /* } */
+
+  /* attr = _element.attribute(LCWidgetBuildersCommon::mAttributes.aligns.attrName); */
+  /* if(!attr.isNull()) */
+  /* { */
+  /*   attr = LCWidgetBuildersCommon::toAlignString(attr); */
+  /*   if(!attr.isNull()) style += QString("qproperty-alignment: '%1' ;").arg(attr); */
+  /* } */
+
+  /* return style; */
 }
 

@@ -28,10 +28,11 @@ const struct
 } __attrNames;
 
 //------------------------------------------------------------------------------
+static void setStyle(QLabel* _label, const QDomElement& _element);
 QWidget* LCXmlRemLabelBuilder::build(const QDomElement& _element, 
     const LIApplication& _app)
 {
-  QWidget* ret = nullptr;
+  QLabel* ret = nullptr;
   QString data;
   QString attr = _element.attribute(__attrNames.source);
   QSharedPointer<LIRemoteDataSource> source;
@@ -74,4 +75,9 @@ LABEL_WRONG_EXIT:
   LCWidgetBuildersCommon::initFixedSize(_element, *ret);
   LCWidgetBuildersCommon::initPosition(_element, *ret);
   return ret;
+}
+
+//==============================================================================
+static void setStyle(QLabel* _label, const QDomElement& _element)
+{
 }

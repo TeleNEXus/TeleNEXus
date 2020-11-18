@@ -353,6 +353,7 @@ QString LCWidgetBuildersCommon::toAlignString(const QString& _attributes)
   }
   return ret;
 }
+
 //------------------------------------------------------------------------------
 QColor LCWidgetBuildersCommon::attributeToColor(const QString& _color)
 {
@@ -377,4 +378,91 @@ QColor LCWidgetBuildersCommon::attributeToColor(const QString& _color)
 
     return QColor();
 }
+
+//------------------------------------------------------------------------------
+QString LCWidgetBuildersCommon::getBaseStyleSheet(const QDomElement& _element, 
+    const LIApplication& _app)
+{
+  QString style;
+
+  QString attr = _element.attribute(LCWidgetBuildersCommon::mAttributes.fontId);
+
+  if(!attr.isNull())
+  {
+    QString font = _app.getFontStyle(attr);
+    if(!font.isNull())
+    {
+      style += "font :" + font + "; ";
+    }
+  }
+  else
+  {
+    attr = _element.attribute(LCWidgetBuildersCommon::mAttributes.font);
+    if(!attr.isNull())
+    {
+      style += "font : " + attr + "; ";
+    }
+  }
+
+  attr = _element.attribute(LCWidgetBuildersCommon::mAttributes.colorbg);
+  if(!attr.isNull())
+  {
+    style += QString("background: %1; ").arg(attr);
+  }
+
+  attr = _element.attribute(LCWidgetBuildersCommon::mAttributes.colortext);
+  if(!attr.isNull())
+  {
+    style += QString("color: %1; ").arg(attr);
+  }
+
+  attr = _element.attribute(LCWidgetBuildersCommon::mAttributes.minwidth);
+  if(!attr.isNull())
+  {
+    style += QString("min-width: %1px; ").arg(attr);
+  }
+
+  attr = _element.attribute(LCWidgetBuildersCommon::mAttributes.minheight);
+  if(!attr.isNull())
+  {
+    style += QString("min-height: %1px; ").arg(attr);
+  }
+
+  attr = _element.attribute(LCWidgetBuildersCommon::mAttributes.maxwidth);
+  if(!attr.isNull())
+  {
+    style += QString("max-width: %1px; ").arg(attr);
+  }
+
+  attr = _element.attribute(LCWidgetBuildersCommon::mAttributes.maxheight);
+  if(!attr.isNull())
+  {
+    style += QString("max-height: %1px; ").arg(attr);
+  }
+
+  attr = _element.attribute(LCWidgetBuildersCommon::mAttributes.fixwidth);
+  if(!attr.isNull())
+  {
+    style += QString("max-width: %1px; ").arg(attr);
+    style += QString("min-width: %1px; ").arg(attr);
+  }
+
+  attr = _element.attribute(LCWidgetBuildersCommon::mAttributes.fixheight);
+  if(!attr.isNull())
+  {
+    style += QString("max-height: %1px; ").arg(attr);
+    style += QString("min-height: %1px; ").arg(attr);
+  }
+
+  attr = _element.attribute(LCWidgetBuildersCommon::mAttributes.aligns.attrName);
+  if(!attr.isNull())
+  {
+    attr = LCWidgetBuildersCommon::toAlignString(attr);
+    if(!attr.isNull()) style += QString("qproperty-alignment: '%1' ;").arg(attr);
+  }
+
+  return style;
+}
+
+
 
