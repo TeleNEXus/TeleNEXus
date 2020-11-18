@@ -64,8 +64,6 @@
                       <label text="Label 04" posx="100" posy="110" fontId="mnemo13" textcolor="blue"/>
                       <label text="Label 05" posx="120" posy="130" />
 
-
-
                       <dataLineEdit   source="qtslavetcp" data="hreg[0-1]" format="hex" dataSize="4" separator=" " 
                         textcolor="Red"
                         bgcolor="00333333"
@@ -79,11 +77,15 @@
                       <dataLineEdit   source="qtslavetcp" data="hreg[0-1]" format="hex" dataSize="4" separator=" " 
                         posx="100" posy="205" />
 
+
+
                       <dataLabel source="qtslavetcp" data="hreg[0-1]" format="hex" dataSize="4" separator=" " 
                         posx="250" posy="180" />
 
                       <dataLabel source="qtslavetcp" data="hreg[0-1]" format="hex" dataSize="4" separator=" " 
                         posx="250" posy="205" />
+
+
 
                       <dataWriteButton text="write 1" posx="10" posy="155" >
                         <data sourceName="qtslavetcp" dataName="hreg0" format="uint16" value="0"/>
@@ -124,6 +126,12 @@
                   bgcolor="black"
                   fontId="mnemo18"
                   posx="100" posy="155" />
+
+                <dataLabel source="qtslavetcp" data="hreg[0-1]" format="hex" dataSize="4" separator=" " 
+                  posx="250" posy="180" />
+
+                <dataLabel source="qtslavetcp" data="hreg[0-1]" format="hex" dataSize="4" separator=" " 
+                  posx="250" posy="205" />
 
                 <dataComboBox  read="hreg0" source="qtslavetcp" format="uint16">
                   <item text="Test 1"   value="10"/>
