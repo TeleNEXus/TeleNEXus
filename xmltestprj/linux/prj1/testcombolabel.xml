@@ -66,7 +66,7 @@
 
                       <dataLineEdit   source="qtslavetcp" data="hreg[0-1]" format="hex" dataSize="4" separator=" " 
                         textcolor="Red"
-                        bgcolor="00333333"
+                        bgcolor="blue"
                         width="100"
                         fontId="mnemo10"
                         posx="100" posy="155" />
@@ -123,8 +123,10 @@
 
                 <dataLineEdit   source="qtslavetcp" data="hreg[0-1]" format="hex" dataSize="4" separator=" " 
                   textcolor="Red"
-                  bgcolor="black"
+                  bgcolor="rgb(100,100,100)"
                   fontId="mnemo18"
+                  maxwidth="170"
+                  align="Right"
                   posx="100" posy="155" />
 
                 <dataLabel source="qtslavetcp" data="hreg[0-1]" format="hex" dataSize="4" separator=" " 
@@ -144,6 +146,7 @@
                   <item text="Test 8"   value="17"/>
                   <item text="Test 9"   value="18"/>
                 </dataComboBox>
+
               </widgets>
             </layoutVBox>
           </layout>
