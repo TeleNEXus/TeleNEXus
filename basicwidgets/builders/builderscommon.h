@@ -33,6 +33,7 @@ public:
     QString colortext   = "textcolor";
     QString font        = "font";
     QString fontId      = "fontId";
+    QString icon        = "icon";
     //Атрибута выравнивания.
     struct
     {
