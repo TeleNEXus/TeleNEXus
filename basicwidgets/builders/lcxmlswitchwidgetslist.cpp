@@ -7,7 +7,7 @@
 #include <QSplitter>
 #include <QStackedWidget>
 #include <qnamespace.h>
-
+#include <QPicture>
 //------------------------------------------------------------------------------
 static const struct
 {
@@ -67,13 +67,28 @@ QWidget* LCXmlSwitchWidgetsListBuilder::build(
     QListWidget* listWidget = new QListWidget;
     QStackedWidget* stacked_widget  = new QStackedWidget;
 
+    QString style = "background-color: green;";
+    style += "color: red;" ;
+    style += "font-size: 15pt;";
+    style = QString(".QListWidget { %1 }").arg(style);
+    qDebug() << "List Widget style = " << style;
+
     /* listWidget->setStyleSheet("font: 22pt;"); */
     /* listWidget->setStyleSheet("font: 6pt; min-width: 100pt;"); */
 
+    listWidget->setStyleSheet(style);
+    listWidget->style()->unpolish(listWidget);
+    listWidget->style()->polish(listWidget);
+    listWidget->update();
+    
+
 
     QFontMetrics font_metrics(listWidget->font());
+    
+    qDebug() << "List Widget font = " << listWidget->font();
 
     int font_max_width = 0;
+    QFont font;
 
     for( QDomNode node = _element.firstChildElement(__sTags.item.name);
             !node.isNull();
@@ -86,18 +101,35 @@ QWidget* LCXmlSwitchWidgetsListBuilder::build(
         QWidget* widget = createWidget(el, _app);
 
         if(widget)
-        {
-            listWidget->addItem(attr_item_name);
+        { 
+          QListWidgetItem *item = new QListWidgetItem;
+          item->setText(attr_item_name);
+
+            listWidget->addItem(item);
+            listWidget->setIconSize(QSize(60, 10));
+            QPixmap pixmap(
+                QString("/home/serg/pprj/tnex/xmltestprj/linux/prj1/picture/icon1.png"));
+            pixmap = pixmap.scaled(60, 30);
+
+            item->setIcon(QIcon(pixmap));
+            
+
             stacked_widget->addWidget(widget);
+
             int text_width = font_metrics.width(attr_item_name);
+            qDebug() << "List Widget font metric = " << text_width;
             font_max_width = (font_max_width < text_width) ? 
                 (text_width):(font_max_width);
         }
     }
 
+    qDebug() << "List Widget font max width = " << font_max_width;
+
     if(font_max_width > 0)
     {
-        listWidget->setMaximumWidth(
+        /* listWidget->setMaximumWidth( */
+        /*         font_max_width + font_metrics.width("    ")); */
+        listWidget->setMinimumWidth(
                 font_max_width + font_metrics.width("    "));
     }
 
