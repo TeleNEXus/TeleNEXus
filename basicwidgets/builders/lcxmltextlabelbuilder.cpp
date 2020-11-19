@@ -31,40 +31,8 @@ QWidget* LCXmlTextLabelBuilder::build(
     label->setText(_element.attribute("text"));
   }
 
-  QString style = ".QLabel{";
-  QString font_style;
-  QString attr = _element.attribute(LCWidgetBuildersCommon::mAttributes.fontId);
-  if(!attr.isNull())
-  {
-    attr = _app.getFontStyle(attr);
-    if(!attr.isNull())
-    {
-      font_style = "font: " + attr + ";";
-    }
-  }
-  else
-  {
-    QString attr = _element.attribute(LCWidgetBuildersCommon::mAttributes.font);
-    if(!attr.isNull())
-    {
-      font_style = "font: " + attr + ";";
-    }
-  }
-
-  if(!font_style.isNull()) style += font_style;
-
-  attr = _element.attribute(LCWidgetBuildersCommon::mAttributes.colortext);
-  if(!attr.isNull())
-  {
-    style += QString("color: %1;").arg(attr);
-  }
-
-  attr = _element.attribute(LCWidgetBuildersCommon::mAttributes.colorbg);
-  if(!attr.isNull())
-  {
-    style = style + QString("background: %1;").arg(attr);
-  }
-  style += "}";
+  QString style;
+  style = LCWidgetBuildersCommon::getBaseStyleSheet(_element, _app);
   label->setStyleSheet(style);
 
   LCWidgetBuildersCommon::initPosition(_element, *label);

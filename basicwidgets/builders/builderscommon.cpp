@@ -460,9 +460,6 @@ QString LCWidgetBuildersCommon::getBaseStyleSheet(const QDomElement& _element,
     attr = LCWidgetBuildersCommon::toAlignString(attr);
     if(!attr.isNull()) style += QString("qproperty-alignment: '%1' ;").arg(attr);
   }
-
   return style;
 }
-
-
 
