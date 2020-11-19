@@ -59,9 +59,6 @@ QWidget* LCXmlScrollAreaBuilder::build( const QDomElement& _element,
 }
 
 //------------------------------------------------------------------------------
-static void setBackgroundColor(QScrollArea* _scrollArea, 
-    const QDomElement& _element, const LIApplication& _app);
-
 static QWidget* buildLocal(
     const QDomElement& _element, 
     const LIApplication& _app)
@@ -95,35 +92,11 @@ static QWidget* buildLocal(
     scrollarea->setWidget(new QWidget);
   }
 
-  Qt::Alignment a;
-  if(LCWidgetBuildersCommon::toAlignFlags(_element, a))
-  {
-    scrollarea->setAlignment(a);
-  }
-
-  LCWidgetBuildersCommon::initPosition(_element, *scrollarea);
-  LCWidgetBuildersCommon::initSize(_element, *scrollarea);
-  LCWidgetBuildersCommon::initFixedSize(_element, *scrollarea);
-  setBackgroundColor(scrollarea, _element, _app);
+  QString style = LCWidgetBuildersCommon::getBaseStyleSheet(_element, _app);
+  style = QString(".QScrollArea { %1 }").arg(style);
+  scrollarea->setStyleSheet(style);
 
   return scrollarea;
 }
-
-//------------------------------------------------------------------------------
-static void setBackgroundColor(QScrollArea* _scrollArea, 
-    const QDomElement& _element, const LIApplication& _app)
-{
-  QString attr = _element.attribute(LCWidgetBuildersCommon::mAttributes.colorbg);
-  if(attr.isNull()) return;
-  QColor color = LCWidgetBuildersCommon::attributeToColor(attr);
-  if(color.isValid())
-  {
-    QPalette pal = _scrollArea->palette();
-    pal.setColor(QPalette::ColorRole::Background, color);
-    _scrollArea->setPalette(pal);
-  }
-}
-
-
 
 
