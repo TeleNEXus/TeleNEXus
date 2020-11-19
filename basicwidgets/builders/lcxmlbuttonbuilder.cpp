@@ -6,6 +6,7 @@
 #include "builderscommon.h"
 #include <QPushButton>
 #include <QDomElement>
+#include <qicon.h>
 
 //==============================================================================
 static const struct 
@@ -102,10 +103,56 @@ static void setStyleSheet(QPushButton* _button, const QDomElement& _element,
 
   _button->setStyleSheet(style);
 
-  QString attr = _element.attribute(LCWidgetBuildersCommon::mAttributes.icon);
-  if(!attr.isNull())
+  QString attr_icon = _element.attribute(
+      LCWidgetBuildersCommon::mAttributes.icon);
+
+  if(!attr_icon.isNull())
   {
-    _button->setIcon(LCWidgetBuildersCommon::getPixmap(attr, _app));
+    /* QIcon icon(LCWidgetBuildersCommon::getPixmap(attr_icon, _app)); */
+    QPixmap pixmap(LCWidgetBuildersCommon::getPixmap(attr_icon, _app));
+
+    QSize size_pixmap = pixmap.size();
+    QSize size_icon = _button->iconSize();
+
+    QString attr = _element.attribute(
+        LCWidgetBuildersCommon::mAttributes.iconScale);
+
+    if(!attr.isNull())
+    {
+      bool flag = false;
+      float scale = attr.toFloat(&flag);
+      if(flag)
+      {
+        pixmap = pixmap.scaled(
+            size_pixmap.width() * scale, size_pixmap.height() * scale);
+        _button->setIconSize(pixmap.size());
+      }
+    }
+    else
+    {
+      attr = _element.attribute(LCWidgetBuildersCommon::mAttributes.iconWidth);
+      if(!attr.isNull())
+      {
+        bool flag = false;
+        int width = attr.toInt(&flag);
+        if(flag) size_icon.setWidth(width);
+      }
+
+      attr = _element.attribute(LCWidgetBuildersCommon::mAttributes.iconHeight);
+      if(!attr.isNull())
+      {
+        bool flag = false;
+        int height = attr.toInt(&flag);
+        if(flag) size_icon.setHeight(height);
+      }
+
+      if(size_icon != _button->iconSize())
+      {
+        pixmap = pixmap.scaled(size_icon.width(), size_icon.height());
+        _button->setIconSize(size_icon);
+      }
+    }
+      _button->setIcon(pixmap);
   }
 }
 
@@ -163,7 +210,8 @@ static QPushButton* buildControllWindowButton(
 {
     Q_UNUSED(_app);
 
-    QPushButton* button = new QPushButton(_element.attribute(__slAttributes.text));
+    QPushButton* button = new QPushButton(
+        _element.attribute(__slAttributes.text));
 
     QList<SAction> pressActions;
     QList<SAction> releaseActions;

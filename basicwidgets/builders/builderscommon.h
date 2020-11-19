@@ -18,6 +18,7 @@ public:
   //Общие атрибуты построителей виджетов.
   struct SAttributes
   {
+
     QString posx        = "posx";
     QString posy        = "posy";
     QString width       = "width";
@@ -34,6 +35,10 @@ public:
     QString font        = "font";
     QString fontId      = "fontId";
     QString icon        = "icon";
+    QString iconWidth   = "iconWidth";
+    QString iconHeight  = "iconHeight";
+    QString iconScale   = "iconScale";
+
     //Атрибута выравнивания.
     struct
     {
