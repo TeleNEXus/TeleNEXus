@@ -246,7 +246,9 @@ LCWidgetBuildersCommon::toAlignFlags(const QString& _attributes,
     return ret;
   }
 
-  if(_attributes.contains(mAttributes.aligns.vals.Left))
+  QString attr = _attributes.toLower();
+
+  if(attr.contains(mAttributes.aligns.vals.Left))
   {
     ret = true;
     _flags |= Qt::AlignLeft;
@@ -258,33 +260,33 @@ LCWidgetBuildersCommon::toAlignFlags(const QString& _attributes,
     _flags |= Qt::AlignRight;
   }
 
-  if((_attributes.contains(mAttributes.aligns.vals.Center)) && 
-      (!_attributes.contains(mAttributes.aligns.vals.HCenter)) &&
-      (!_attributes.contains(mAttributes.aligns.vals.VCenter)))
+  if((attr.contains(mAttributes.aligns.vals.Center)) && 
+      (!attr.contains(mAttributes.aligns.vals.HCenter)) &&
+      (!attr.contains(mAttributes.aligns.vals.VCenter)))
   {
     ret = true;
     _flags |= Qt::AlignCenter;
   }
 
-  if(_attributes.contains(mAttributes.aligns.vals.HCenter))
+  if(attr.contains(mAttributes.aligns.vals.HCenter))
   {
     ret = true;
     _flags |= Qt::AlignHCenter;
   }
 
-  if(_attributes.contains(mAttributes.aligns.vals.Top))
+  if(attr.contains(mAttributes.aligns.vals.Top))
   {
     ret = true;
     _flags |= Qt::AlignTop;
   }
 
-  if(_attributes.contains(mAttributes.aligns.vals.Bottom))
+  if(attr.contains(mAttributes.aligns.vals.Bottom))
   {
     ret = true;
     _flags |= Qt::AlignBottom;
   }
 
-  if(_attributes.contains(mAttributes.aligns.vals.VCenter))
+  if(attr.contains(mAttributes.aligns.vals.VCenter))
   {
     ret = true;
     _flags |= Qt::AlignVCenter;
@@ -310,40 +312,42 @@ QString LCWidgetBuildersCommon::toAlignString(const QString& _attributes)
   {
     return ret;
   }
+  
+  QString attr = _attributes.toLower();
 
-  if(_attributes.contains(mAttributes.aligns.vals.Left))
+  if(attr.contains(mAttributes.aligns.vals.Left))
   {
     ret += "Qt::AlignLeft | ";
   }
 
-  if(_attributes.contains(mAttributes.aligns.vals.Right))
+  if(attr.contains(mAttributes.aligns.vals.Right))
   {
     ret += "Qt::AlignRight | ";
   }
 
-  if((_attributes.contains(mAttributes.aligns.vals.Center)) && 
-      (!_attributes.contains(mAttributes.aligns.vals.HCenter)) &&
-      (!_attributes.contains(mAttributes.aligns.vals.VCenter)))
+  if((attr.contains(mAttributes.aligns.vals.Center)) && 
+      (!attr.contains(mAttributes.aligns.vals.HCenter)) &&
+      (!attr.contains(mAttributes.aligns.vals.VCenter)))
   {
     ret += "Qt::AlignCenter | ";
   }
 
-  if(_attributes.contains(mAttributes.aligns.vals.HCenter))
+  if(attr.contains(mAttributes.aligns.vals.HCenter))
   {
     ret += "Qt::AlignHCenter | ";
   }
 
-  if(_attributes.contains(mAttributes.aligns.vals.Top))
+  if(attr.contains(mAttributes.aligns.vals.Top))
   {
     ret += "Qt::AlignTop | ";
   }
 
-  if(_attributes.contains(mAttributes.aligns.vals.Bottom))
+  if(attr.contains(mAttributes.aligns.vals.Bottom))
   {
     ret += "Qt::AlignBottom | ";
   }
 
-  if(_attributes.contains(mAttributes.aligns.vals.VCenter))
+  if(attr.contains(mAttributes.aligns.vals.VCenter))
   {
     ret += "Qt::AlignVCenter | ";
   }

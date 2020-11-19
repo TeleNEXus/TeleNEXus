@@ -23,21 +23,28 @@ public:
     QString posy        = "posy";
     QString width       = "width";
     QString height      = "height";
-    QString maxwidth    = "maxwidth";
-    QString maxheight   = "maxheight";
-    QString minwidth    = "minwidth";
-    QString minheight   = "minheight";
-    QString fixwidth    = "fixwidth";
-    QString fixheight   = "fixheight";
-    QString colorbg     = "bgcolor";
-    QString picturebg   = "bgpicture";
-    QString colortext   = "textcolor";
+    QString maxwidth    = "maxWidth";
+    QString maxheight   = "maxHeight";
+    QString minwidth    = "minWidth";
+    QString minheight   = "minHeight";
+    QString fixwidth    = "fixWidth";
+    QString fixheight   = "fixHeight";
+    QString colorbg     = "bgColor";
+    QString picturebg   = "bgPicture";
+    QString colortext   = "textColor";
     QString font        = "font";
     QString fontId      = "fontId";
+
     QString icon        = "icon";
     QString iconWidth   = "iconWidth";
     QString iconHeight  = "iconHeight";
     QString iconScale   = "iconScale";
+
+    QString picture        = "picture";
+    QString pictureWidth   = "pictureWidth";
+    QString pictureHeight  = "pictureHeight";
+    QString pictureScale   = "pictureScale";
+
 
     //Атрибута выравнивания.
     struct
@@ -46,20 +53,20 @@ public:
       //Возможные значения выравнивания объеденяемые по "ИЛИ".
       struct
       {
-        QString Left    = "Left";
-        QString Right   = "Right";
-        QString Center  = "Center";
-        QString HCenter = "HCenter";
-        QString Top     = "Top";
-        QString Bottom  = "Bottom";
-        QString VCenter = "VCenter";
+        QString Left    = "left";
+        QString Right   = "right";
+        QString Center  = "center";
+        QString HCenter = "hcenter";
+        QString Top     = "top";
+        QString Bottom  = "bottom";
+        QString VCenter = "vcenter";
       }vals;
     }aligns;
   };
   static const SAttributes mAttributes;
 
 private:
-  static LCWidgetBuildersCommon instance; 
+  static LCWidgetBuildersCommon instance;
   explicit LCWidgetBuildersCommon();
   explicit LCWidgetBuildersCommon(const LCWidgetBuildersCommon&) = delete;
   LCWidgetBuildersCommon& operator=(const LCWidgetBuildersCommon&) = delete;
@@ -85,7 +92,7 @@ public:
    *  _movie - отнисительный путь к файлу фрагметна.
    *  _app - интерфейс доступа к функциям приложения.
    */
-  static QSharedPointer<LIMovieAccess> getMovie(const QString& _movie, 
+  static QSharedPointer<LIMovieAccess> getMovie(const QString& _movie,
       const LIApplication& _app);
   /*
    * Возвращает пиксельное изображение.
@@ -104,7 +111,7 @@ public:
    */
   static bool toAlignFlags(const QString& _attributes, Qt::Alignment& _flags);
   /*
-   * Производит поиск и преобразования атрибута 
+   * Производит поиск и преобразования атрибута
    * DOM елемента вo флаг выравнивания.
    * Возвращает true при успешном преобразовании, и false при неуспешном.
    * --------------------------------------

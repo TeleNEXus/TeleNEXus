@@ -67,6 +67,10 @@ QWidget* LCXmlSwitchWidgetsListBuilder::build(
     QListWidget* listWidget = new QListWidget;
     QStackedWidget* stacked_widget  = new QStackedWidget;
 
+    /* listWidget->setStyleSheet("font: 22pt;"); */
+    /* listWidget->setStyleSheet("font: 6pt; min-width: 100pt;"); */
+
+
     QFontMetrics font_metrics(listWidget->font());
 
     int font_max_width = 0;
@@ -99,6 +103,7 @@ QWidget* LCXmlSwitchWidgetsListBuilder::build(
 
     splitter->addWidget(listWidget);
     splitter->addWidget(stacked_widget);
+    
 
     QObject::connect(
             listWidget, 

@@ -180,50 +180,20 @@ static void buildFromWidgets(CWidget* _widget, const QDomElement& _element,
 static void setColor(QWidget* _widget, const QDomElement& _element,
         const LIApplication& _app)
 {
-  QPalette pal;
-  QString attr = _element.attribute(
-      LCWidgetBuildersCommon::mAttributes.colorbg);
+  QString style = LCWidgetBuildersCommon::getBaseStyleSheet(_element, _app);
 
+  QString attr = _element.attribute(
+      LCWidgetBuildersCommon::mAttributes.picturebg);
   if(!attr.isNull())
   {
-    QColor color = LCWidgetBuildersCommon::attributeToColor(attr);
-
-    if(color.isValid())
-    {
-      pal = _widget->palette();
-      pal.setColor(QPalette::ColorRole::Background, color);
-      _widget->setAutoFillBackground(true);
-      _widget->setPalette(pal);
-      return;
-    }
+    attr = _app.getProjectPath() + attr;
+    attr = QString("background-image:url(\"%1\"); background-position: center; " ).arg(attr);
+    style += attr;
   }
 
-  attr = _element.attribute(
-      LCWidgetBuildersCommon::mAttributes.picturebg);
-
-  if(attr.isNull()) return;
-
-  /* QPixmap pixmap = LCWidgetBuildersCommon::getPixmap(attr, _app); */
-
-  /* if(pixmap.isNull()) return; */
-
-  /* pixmap = pixmap.scaled(_widget->size().width(), _widget->size().height()); */
-
-  /* pal = _widget->palette(); */
-  /* /1* pal = QPalette(); *1/ */
-  /* pal.setBrush(QPalette::ColorRole::Background, QBrush(pixmap)); */
-
-  /* /1* _widget->setAutoFillBackground(true); *1/ */
-  /* _widget->setPalette(pal); */
-
-  /* _widget->setAutoFillBackground(true); */
-
-  attr = _app.getProjectPath()+attr;
-  
-_widget->setStyleSheet(
-/* QString("background-image:url(\"%1\"); background-position: center;" ).arg(attr)); */
-QString(".QFrame{background-image:url(\"%1\"); background-position: center;} " ).arg(attr));
-/* ".QFrame{background: yellow;}"); */
+   style = ".QFrame{ " + style + "}";
+   qDebug() << "Widget builder style = " << style;
+   _widget->setStyleSheet(style);
 }
 
 

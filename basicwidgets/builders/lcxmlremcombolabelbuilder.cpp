@@ -89,7 +89,6 @@ static void buildComboLabel( const QDomElement& _element,
     const QString& _baseStyle,
     const LIApplication& _app);
 
-static QString readStyle(const QDomElement& _element, const LIApplication& _app);
 //------------------------------------------------------------------------------
 QWidget* LCXmlRemComboLabelBuilder::build(const QDomElement& _element, 
     const LIApplication& _app)
@@ -128,20 +127,21 @@ QWidget* LCXmlRemComboLabelBuilder::build(const QDomElement& _element,
     goto LABEL_WRONG_EXIT;
   }
 
-  style = readStyle(_element, _app);
+  style = LCWidgetBuildersCommon::getBaseStyleSheet(_element, _app);
 
   remlabel = new LCQRemComboLabel(dataread, source, format);
-
-  qDebug() << "build style = " << style;
-
   buildComboLabel(_element, remlabel, format, style, _app);
 
 LABEL_WRONG_EXIT:
   QWidget* ret = remlabel;
-  if(ret == nullptr) ret = new QLabel(_element.tagName());
+  if(ret == nullptr) 
+  {
+    ret = new QLabel(_element.tagName());
+    ret->setStyleSheet(style);
+  }
 
-  LCWidgetBuildersCommon::initSize(_element, *ret);
-  LCWidgetBuildersCommon::initFixedSize(_element, *ret);
+  /* LCWidgetBuildersCommon::initSize(_element, *ret); */
+  /* LCWidgetBuildersCommon::initFixedSize(_element, *ret); */
   LCWidgetBuildersCommon::initPosition(_element, *ret);
 
   return ret;
@@ -154,7 +154,11 @@ enum class EItemMode
   undef,
   wrong
 };
+
 //------------------------------------------------------------------------------
+static QString readStylePicture(const QDomElement& _element, 
+    const LIApplication& _app);
+
 static void buildComboLabel( const QDomElement& _element, 
     LCQRemComboLabel* _cl,
     QSharedPointer<LCStringDataFormatterBase> _format,
@@ -219,9 +223,7 @@ static void buildComboLabel( const QDomElement& _element,
 
       if(label != nullptr)
       {
-        QString style = readStyle(el,_app);
-        style = _baseStyle + style;
-        label->setStyleSheet(style);
+        label->setStyleSheet(_baseStyle);
       }
       continue;
     }
@@ -267,7 +269,7 @@ static void buildComboLabel( const QDomElement& _element,
 
     if(label != nullptr)
     {
-      QString style = readStyle(el,_app);
+      QString style = readStylePicture(el,_app);
       style = _baseStyle + style;
       label->setStyleSheet(style);
     }
@@ -286,87 +288,10 @@ static void buildComboLabel( const QDomElement& _element,
 /* } */
 
 //==============================================================================
-static QString readStyle(const QDomElement& _element, const LIApplication& _app)
+static QString readStylePicture(const QDomElement& _element, 
+    const LIApplication& _app)
 {
-  return LCWidgetBuildersCommon::getBaseStyleSheet(_element, _app);
-  /* QString style; */
+  QString style = LCWidgetBuildersCommon::getBaseStyleSheet(_element, _app);
 
-  /* QString attr = _element.attribute(LCWidgetBuildersCommon::mAttributes.fontId); */
-
-  /* if(!attr.isNull()) */
-  /* { */
-  /*   QString font = _app.getFontStyle(attr); */
-  /*   if(!font.isNull()) */
-  /*   { */
-  /*     style += "font :" + font + "; "; */
-  /*   } */
-  /* } */
-  /* else */
-  /* { */
-  /*   attr = _element.attribute(LCWidgetBuildersCommon::mAttributes.font); */
-  /*   if(!attr.isNull()) */
-  /*   { */
-  /*     style += "font : " + attr + "; "; */
-  /*   } */
-  /* } */
-
-  /* attr = _element.attribute(LCWidgetBuildersCommon::mAttributes.colorbg); */
-  /* if(!attr.isNull()) */
-  /* { */
-  /*   style += QString("background: %1; ").arg(attr); */
-  /* } */
-
-  /* attr = _element.attribute(LCWidgetBuildersCommon::mAttributes.colortext); */
-  /* if(!attr.isNull()) */
-  /* { */
-  /*   style += QString("color: %1; ").arg(attr); */
-  /* } */
-
-  /* attr = _element.attribute(LCWidgetBuildersCommon::mAttributes.minwidth); */
-  /* if(!attr.isNull()) */
-  /* { */
-  /*   style += QString("min-width: %1px; ").arg(attr); */
-  /* } */
-
-  /* attr = _element.attribute(LCWidgetBuildersCommon::mAttributes.minheight); */
-  /* if(!attr.isNull()) */
-  /* { */
-  /*   style += QString("min-height: %1px; ").arg(attr); */
-  /* } */
-
-  /* attr = _element.attribute(LCWidgetBuildersCommon::mAttributes.maxwidth); */
-  /* if(!attr.isNull()) */
-  /* { */
-  /*   style += QString("max-width: %1px; ").arg(attr); */
-  /* } */
-
-  /* attr = _element.attribute(LCWidgetBuildersCommon::mAttributes.maxheight); */
-  /* if(!attr.isNull()) */
-  /* { */
-  /*   style += QString("max-height: %1px; ").arg(attr); */
-  /* } */
-
-  /* attr = _element.attribute(LCWidgetBuildersCommon::mAttributes.fixwidth); */
-  /* if(!attr.isNull()) */
-  /* { */
-  /*   style += QString("max-width: %1px; ").arg(attr); */
-  /*   style += QString("min-width: %1px; ").arg(attr); */
-  /* } */
-
-  /* attr = _element.attribute(LCWidgetBuildersCommon::mAttributes.fixheight); */
-  /* if(!attr.isNull()) */
-  /* { */
-  /*   style += QString("max-height: %1px; ").arg(attr); */
-  /*   style += QString("min-height: %1px; ").arg(attr); */
-  /* } */
-
-  /* attr = _element.attribute(LCWidgetBuildersCommon::mAttributes.aligns.attrName); */
-  /* if(!attr.isNull()) */
-  /* { */
-  /*   attr = LCWidgetBuildersCommon::toAlignString(attr); */
-  /*   if(!attr.isNull()) style += QString("qproperty-alignment: '%1' ;").arg(attr); */
-  /* } */
-
-  /* return style; */
+  return style;
 }
-
