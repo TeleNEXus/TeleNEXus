@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <switchWidgetsList>
+<!-- <switchWidgetsList maxwidth="30"> -->
 
     <item name="widget 1">
         <widget>
@@ -25,7 +26,7 @@
                   <!-- <widget bgColor="black"> -->
                     <!-- <widget bgPicture="picture/fon1.png"> -->
                     <!-- <widget bgPicture="picture/fon3.png" width="300" height="300"> -->
-                    <widget bgPicture="picture/fon3.png" >
+                    <widget bgImage="picture/fon3.png" >
                     <widgets>
 
                       <!-- <dataComboLabel  read="hreg0" source="qtslavetcp" format="hex" dataSize="2" > -->
