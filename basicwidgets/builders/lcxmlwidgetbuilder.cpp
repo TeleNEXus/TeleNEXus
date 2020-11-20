@@ -1,12 +1,11 @@
 #include "lcxmlwidgetbuilder.h"
+#include "lcbuilderscommon.h"
 #include "LIApplication.h"
 #include "LIXmlLayoutBuilder.h"
 #include <QWidget>
 #include <QDomElement>
 #include <QFile>
 #include <QDebug>
-#include <qnamespace.h>
-#include "builderscommon.h"
 #include <QFrame>
 
 class CWidget : public QFrame
@@ -99,37 +98,35 @@ static void buildFromLayout(CWidget* _widget, const QDomElement& _element,
 static void buildFromWidgets(CWidget* _widget, const QDomElement& _element, 
         const LIApplication& _app);
 //------------------------------------------------------------------------------
-static void setColor(QWidget* _widget, const QDomElement& _element,
-        const LIApplication& _app);
-//------------------------------------------------------------------------------
 static QWidget* buildLocal(
-        const QDomElement& _element, 
-        const LIApplication& _app)
+    const QDomElement& _element, 
+    const LIApplication& _app)
 {
 
-    QDomNode  node = _element.firstChildElement(__slTags.layout);
-    CWidget* widget = new CWidget;
+  QDomNode  node = _element.firstChildElement(__slTags.layout);
+  CWidget* widget = new CWidget;
+
+  if(!node.isNull()) 
+  {
+    buildFromLayout(widget, node.toElement(), _app);
+  }
+  else
+  {
+    node = _element.firstChildElement(__slTags.widgets);
 
     if(!node.isNull()) 
     {
-        buildFromLayout(widget, node.toElement(), _app);
+      buildFromWidgets(widget, node.toElement(), _app);
     }
-    else
-    {
-        node = _element.firstChildElement(__slTags.widgets);
+  }
 
-        if(!node.isNull()) 
-        {
-            buildFromWidgets(widget, node.toElement(), _app);
-        }
-    }
+  QString style = LCBuildersCommon::getBaseStyleSheet(_element, _app);
+  style = ".QFrame{ " + style + "}";
+  qDebug() << "Widget builder style = " << style;
+  widget->setStyleSheet(style);
+  LCBuildersCommon::initPosition(_element, *widget);
 
-    LCWidgetBuildersCommon::initPosition(_element, *widget);
-    LCWidgetBuildersCommon::initSize(_element, *widget);
-    LCWidgetBuildersCommon::initFixedSize(_element, *widget);
-    setColor(widget, _element, _app);
-
-    return widget;
+  return widget;
 }
 
 //------------------------------------------------------------------------------
@@ -176,27 +173,6 @@ static void buildFromWidgets(CWidget* _widget, const QDomElement& _element,
              _widget->addWidget(addWidget);
          }
     }
-}
-
-//------------------------------------------------------------------------------
-static void setColor(QWidget* _widget, const QDomElement& _element,
-        const LIApplication& _app)
-{
-  QString style = LCWidgetBuildersCommon::getBaseStyleSheet(_element, _app);
-
-  /* QString attr = _element.attribute( */
-  /*     LCWidgetBuildersCommon::mAttributes.bgimage); */
-  /* if(!attr.isNull()) */
-  /* { */
-  /*   attr = _app.getProjectPath() + attr; */
-  /*   attr = QString("background-image:url(\"%1\"); background-position: center; " ).arg(attr); */
-  /*   style += attr; */
-  /* } */
-
-
-   style = ".QFrame{ " + style + "}";
-   qDebug() << "Widget builder style = " << style;
-   _widget->setStyleSheet(style);
 }
 
 

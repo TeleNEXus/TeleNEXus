@@ -1,7 +1,7 @@
 
 #include "lcxmlswitchwidgetslist.h"
 #include "LIApplication.h"
-#include "builderscommon.h"
+#include "lcbuilderscommon.h"
 #include <QDomElement>
 #include <QDebug>
 #include <QListWidget>
@@ -38,7 +38,7 @@ QWidget* LCXmlSwitchWidgetsListBuilder::build(
         const QDomElement& _element, 
         const LIApplication& _app)
 {
-    QString attr = _element.attribute(LCWidgetBuildersCommon::mAttributes.file);
+    QString attr = _element.attribute(LCBuildersCommon::mAttributes.file);
 
     //Рекурсивная загрузка виджета из файлов.
     if(!attr.isNull()) 
@@ -60,12 +60,12 @@ QWidget* LCXmlSwitchWidgetsListBuilder::build(
     QStackedWidget* stacked_widget  = new QStackedWidget;
 
     QString style_sheet = 
-      LCWidgetBuildersCommon::getBaseStyleSheet(_element, _app);
+      LCBuildersCommon::getBaseStyleSheet(_element, _app);
     
     style_sheet = QString(".QListWidget { %1 }").arg(style_sheet);
 
     int icon_size = -1;
-    attr = _element.attribute(LCWidgetBuildersCommon::mAttributes.iconsize);
+    attr = _element.attribute(LCBuildersCommon::mAttributes.iconsize);
     if(!attr.isNull())
     {
       bool flag = 0;
@@ -144,13 +144,13 @@ static QListWidgetItem* createItem(
 {
   QListWidgetItem *item = new QListWidgetItem;
 
-  QString attr = _element.attribute(LCWidgetBuildersCommon::mAttributes.text);
+  QString attr = _element.attribute(LCBuildersCommon::mAttributes.text);
   if(!attr.isNull()) item->setText(attr);
 
-  attr = _element.attribute(LCWidgetBuildersCommon::mAttributes.icon);
+  attr = _element.attribute(LCBuildersCommon::mAttributes.icon);
   if(!attr.isNull()) 
   {
-    QPixmap pixmap = LCWidgetBuildersCommon::getPixmap(attr, _app);
+    QPixmap pixmap = LCBuildersCommon::getPixmap(attr, _app);
     if(_iconSize >= 0)
     {
       int maxsize = (pixmap.width() > pixmap.height()) ? 

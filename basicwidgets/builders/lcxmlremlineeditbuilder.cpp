@@ -1,9 +1,9 @@
 #include "lcxmlremlineeditbuilder.h"
 #include "lcqremlineedit.h"
-#include "LIApplication.h"
 #include "lcxmlstddataformatterfactory.h"
+#include "lcbuilderscommon.h"
+#include "LIApplication.h"
 #include <QDomElement>
-#include "builderscommon.h"
 #include <QDebug>
 
 //==============================================================================
@@ -70,11 +70,11 @@ LABEL_WRONG_EXIT:
 
   if(ret == nullptr) ret = new QLineEdit(_element.tagName());
 
-  QString style = LCWidgetBuildersCommon::getBaseStyleSheet(_element, _app);
+  QString style = LCBuildersCommon::getBaseStyleSheet(_element, _app);
   ret->setStyleSheet(style);
   
-  LCWidgetBuildersCommon::initSize(_element, *ret);
-  LCWidgetBuildersCommon::initPosition(_element, *ret);
+  LCBuildersCommon::initSize(_element, *ret);
+  LCBuildersCommon::initPosition(_element, *ret);
   return ret;
 }
 

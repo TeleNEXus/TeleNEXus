@@ -1,10 +1,10 @@
 #include "lcxmlremlabelbuilder.h"
 #include "lcqremlabel.h"
-#include "LIApplication.h"
+#include "lcbuilderscommon.h"
 #include "lcxmlstddataformatterfactory.h"
+#include "LIApplication.h"
 
 #include <QDomElement>
-#include "builderscommon.h"
 #include <QDebug>
 
 
@@ -70,11 +70,11 @@ QWidget* LCXmlRemLabelBuilder::build(const QDomElement& _element,
 LABEL_WRONG_EXIT:
 
   if(ret == nullptr) ret = new QLabel(_element.tagName());
-  QString style = LCWidgetBuildersCommon::getBaseStyleSheet(_element, _app);
+  QString style = LCBuildersCommon::getBaseStyleSheet(_element, _app);
   qDebug() << "LCQRemLabelBuilder style = " << style;
   ret->setStyleSheet(style);
 
-  LCWidgetBuildersCommon::initPosition(_element, *ret);
+  LCBuildersCommon::initPosition(_element, *ret);
   return ret;
 }
 

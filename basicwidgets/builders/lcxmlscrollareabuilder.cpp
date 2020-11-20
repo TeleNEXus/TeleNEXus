@@ -1,12 +1,11 @@
 #include "lcxmlscrollareabuilder.h"
 #include "LIApplication.h"
 #include "LIXmlLayoutBuilder.h"
+#include "lcbuilderscommon.h"
 #include <QScrollArea>
 #include <QDomElement>
 #include <QFile>
 #include <QDebug>
-#include <qnamespace.h>
-#include "builderscommon.h"
 
 //------------------------------------------------------------------------------
 static const struct
@@ -92,7 +91,7 @@ static QWidget* buildLocal(
     scrollarea->setWidget(new QWidget);
   }
 
-  QString style = LCWidgetBuildersCommon::getBaseStyleSheet(_element, _app);
+  QString style = LCBuildersCommon::getBaseStyleSheet(_element, _app);
   style = QString(".QScrollArea { %1 }").arg(style);
   scrollarea->setStyleSheet(style);
 
