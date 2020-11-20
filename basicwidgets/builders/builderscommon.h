@@ -32,19 +32,19 @@ public:
     QString bgcolor     = "bgColor";
     QString bgimage     = "bgImage";
     QString bgpos       = "bgPos";
-    QString colortext   = "textColor";
+    QString textcolor   = "textColor";
     QString font        = "font";
-    QString fontId      = "fontId";
+    QString fontid      = "fontId";
 
     QString icon        = "icon";
-    QString iconWidth   = "iconWidth";
-    QString iconHeight  = "iconHeight";
-    QString iconScale   = "iconScale";
+    QString iconwidth   = "iconWidth";
+    QString iconheight  = "iconHeight";
+    QString iconscale   = "iconScale";
 
-    QString picture        = "picture";
-    QString pictureWidth   = "pictureWidth";
-    QString pictureHeight  = "pictureHeight";
-    QString pictureScale   = "pictureScale";
+    QString image        = "image";
+    QString imagewidth   = "imageWidth";
+    QString imageheight  = "imageHeight";
+    QString imagescale   = "imageScale";
 
 
     //Атрибута выравнивания.
