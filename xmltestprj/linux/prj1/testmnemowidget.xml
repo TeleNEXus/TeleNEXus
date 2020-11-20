@@ -40,7 +40,13 @@
         <window id="win0" event="pressed" action="hide"/>
       </controlWindowButton>
 
-      <dataComboBox  read="hreg0" source="qtslavetcp" format="hex" dataSize="2" posx="120" posy="275">
+      <dataComboBox  read="hreg0" source="qtslavetcp" format="hex" dataSize="2" 
+        posx="120" posy="275"
+        fontId="mnemo18"
+        textColor="cyan"
+        bgImage="picture/fon1.png"
+        bgColor="darkgreen"
+        >
         <item text="Test 0"   value="a"/>
         <item text="Test 1"   value="b"/>
         <item text="Test 2"   value="c"/>
@@ -52,7 +58,7 @@
         <item text="Test 8"   value="12"/>
       </dataComboBox>
 
-      <dataComboBox  read="hreg0" source="qtslavetcp" format="hex" dataSize="2" posx="200" posy="275">
+      <dataComboBox  read="hreg0" source="qtslavetcp" format="hex" dataSize="2" posx="240" posy="275">
         <item text="Test 0"   value="a"/>
         <item text="Test 1"   value="b"/>
         <item text="Test 2"   value="c"/>
@@ -64,7 +70,7 @@
         <item text="Test 8"   value="12"/>
       </dataComboBox>
 
-      <dataComboBox  read="hreg0" source="qtslavetcp" format="hex" dataSize="2" posx="280" posy="275">
+      <dataComboBox  read="hreg0" source="qtslavetcp" format="hex" dataSize="2" posx="320" posy="275">
         <item text="Test 0"   value="a"/>
         <item text="Test 1"   value="b"/>
         <item text="Test 2"   value="c"/>
