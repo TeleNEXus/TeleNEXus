@@ -115,7 +115,7 @@ static void setStyleSheet(QPushButton* _button, const QDomElement& _element,
     QSize size_icon = _button->iconSize();
 
     QString attr = _element.attribute(
-        LCWidgetBuildersCommon::mAttributes.iconScale);
+        LCWidgetBuildersCommon::mAttributes.iconscale);
 
     if(!attr.isNull())
     {
@@ -130,7 +130,7 @@ static void setStyleSheet(QPushButton* _button, const QDomElement& _element,
     }
     else
     {
-      attr = _element.attribute(LCWidgetBuildersCommon::mAttributes.iconWidth);
+      attr = _element.attribute(LCWidgetBuildersCommon::mAttributes.iconwidth);
       if(!attr.isNull())
       {
         bool flag = false;
@@ -138,7 +138,7 @@ static void setStyleSheet(QPushButton* _button, const QDomElement& _element,
         if(flag) size_icon.setWidth(width);
       }
 
-      attr = _element.attribute(LCWidgetBuildersCommon::mAttributes.iconHeight);
+      attr = _element.attribute(LCWidgetBuildersCommon::mAttributes.iconheight);
       if(!attr.isNull())
       {
         bool flag = false;

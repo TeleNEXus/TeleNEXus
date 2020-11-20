@@ -389,7 +389,7 @@ QString LCWidgetBuildersCommon::getBaseStyleSheet(const QDomElement& _element,
 {
   QString style;
 
-  QString attr = _element.attribute(LCWidgetBuildersCommon::mAttributes.fontId);
+  QString attr = _element.attribute(LCWidgetBuildersCommon::mAttributes.fontid);
 
   if(!attr.isNull())
   {
@@ -426,7 +426,7 @@ QString LCWidgetBuildersCommon::getBaseStyleSheet(const QDomElement& _element,
     if(!attr.isNull()) style += QString("background-position: '%1' ;").arg(attr);
   }
 
-  attr = _element.attribute(LCWidgetBuildersCommon::mAttributes.colortext);
+  attr = _element.attribute(LCWidgetBuildersCommon::mAttributes.textcolor);
   if(!attr.isNull())
   {
     style += QString("color: %1; ").arg(attr);
