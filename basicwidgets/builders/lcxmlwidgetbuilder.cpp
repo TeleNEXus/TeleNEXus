@@ -14,7 +14,8 @@ class CWidget : public QFrame
 private:
     QSize mSizeHint;
 public:
-    explicit CWidget(QFrame* _parent=nullptr) : QFrame(_parent){this->setObjectName("MyObject");}
+    explicit CWidget(QFrame* _parent=nullptr) : 
+      QFrame(_parent){this->setObjectName("MyObject");}
     virtual QSize sizeHint() const override
     {
         return QSize(mSizeHint.width()+5, mSizeHint.height()+5);
@@ -39,6 +40,7 @@ public:
         mSizeHint = QSize(width, height);
     }
 };
+
 //------------------------------------------------------------------------------
 static const struct
 {
@@ -182,14 +184,15 @@ static void setColor(QWidget* _widget, const QDomElement& _element,
 {
   QString style = LCWidgetBuildersCommon::getBaseStyleSheet(_element, _app);
 
-  QString attr = _element.attribute(
-      LCWidgetBuildersCommon::mAttributes.bgimage);
-  if(!attr.isNull())
-  {
-    attr = _app.getProjectPath() + attr;
-    attr = QString("background-image:url(\"%1\"); background-position: center; " ).arg(attr);
-    style += attr;
-  }
+  /* QString attr = _element.attribute( */
+  /*     LCWidgetBuildersCommon::mAttributes.bgimage); */
+  /* if(!attr.isNull()) */
+  /* { */
+  /*   attr = _app.getProjectPath() + attr; */
+  /*   attr = QString("background-image:url(\"%1\"); background-position: center; " ).arg(attr); */
+  /*   style += attr; */
+  /* } */
+
 
    style = ".QFrame{ " + style + "}";
    qDebug() << "Widget builder style = " << style;
