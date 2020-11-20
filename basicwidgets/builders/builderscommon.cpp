@@ -408,10 +408,22 @@ QString LCWidgetBuildersCommon::getBaseStyleSheet(const QDomElement& _element,
     }
   }
 
-  attr = _element.attribute(LCWidgetBuildersCommon::mAttributes.colorbg);
+  attr = _element.attribute(LCWidgetBuildersCommon::mAttributes.bgcolor);
   if(!attr.isNull())
   {
     style += QString("background: %1; ").arg(attr);
+  }
+
+  attr = _element.attribute(LCWidgetBuildersCommon::mAttributes.bgimage);
+  if(!attr.isNull())
+  {
+    style += QString("background-image:url(\"%1\"); " ).arg(attr);
+  }
+
+  attr = _element.attribute(LCWidgetBuildersCommon::mAttributes.bgpos);
+  if(!attr.isNull())
+  {
+    if(!attr.isNull()) style += QString("background-position: '%1' ;").arg(attr);
   }
 
   attr = _element.attribute(LCWidgetBuildersCommon::mAttributes.colortext);

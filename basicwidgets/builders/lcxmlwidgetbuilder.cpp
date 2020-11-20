@@ -183,7 +183,7 @@ static void setColor(QWidget* _widget, const QDomElement& _element,
   QString style = LCWidgetBuildersCommon::getBaseStyleSheet(_element, _app);
 
   QString attr = _element.attribute(
-      LCWidgetBuildersCommon::mAttributes.picturebg);
+      LCWidgetBuildersCommon::mAttributes.bgimage);
   if(!attr.isNull())
   {
     attr = _app.getProjectPath() + attr;

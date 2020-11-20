@@ -29,8 +29,9 @@ public:
     QString minheight   = "minHeight";
     QString fixwidth    = "fixWidth";
     QString fixheight   = "fixHeight";
-    QString colorbg     = "bgColor";
-    QString picturebg   = "bgPicture";
+    QString bgcolor     = "bgColor";
+    QString bgimage     = "bgImage";
+    QString bgpos       = "bgPos";
     QString colortext   = "textColor";
     QString font        = "font";
     QString fontId      = "fontId";
