@@ -417,13 +417,13 @@ QString LCWidgetBuildersCommon::getBaseStyleSheet(const QDomElement& _element,
   attr = _element.attribute(LCWidgetBuildersCommon::mAttributes.bgimage);
   if(!attr.isNull())
   {
-    style += QString("background-image:url(\"%1\"); " ).arg(attr);
+    style += QString("background-image:url(\"%1\"); " ).arg(_app.getProjectPath() + attr);
   }
 
   attr = _element.attribute(LCWidgetBuildersCommon::mAttributes.bgpos);
   if(!attr.isNull())
   {
-    if(!attr.isNull()) style += QString("background-position: '%1' ;").arg(attr);
+    if(!attr.isNull()) style += QString("background-position: %1 ;").arg(attr);
   }
 
   attr = _element.attribute(LCWidgetBuildersCommon::mAttributes.textcolor);

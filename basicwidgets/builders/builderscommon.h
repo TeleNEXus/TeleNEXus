@@ -18,7 +18,7 @@ public:
   //Общие атрибуты построителей виджетов.
   struct SAttributes
   {
-
+    QString file        = "file";
     QString posx        = "posx";
     QString posy        = "posy";
     QString width       = "width";
@@ -32,11 +32,13 @@ public:
     QString bgcolor     = "bgColor";
     QString bgimage     = "bgImage";
     QString bgpos       = "bgPos";
+    QString text        = "text";
     QString textcolor   = "textColor";
     QString font        = "font";
     QString fontid      = "fontId";
 
     QString icon        = "icon";
+    QString iconsize    = "iconSize";
     QString iconwidth   = "iconWidth";
     QString iconheight  = "iconHeight";
     QString iconscale   = "iconScale";
