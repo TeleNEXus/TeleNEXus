@@ -1,4 +1,4 @@
-#include "builderscommon.h"
+#include "lcbuilderscommon.h"
 #include <QDomElement>
 #include <QWidget>
 #include <QDebug>
@@ -86,12 +86,12 @@ void CMovieAccess::stop()
 //==============================================================================
 QMap<QString, Qt::GlobalColor> __slStdColors;
 //==============================================================================
-const LCWidgetBuildersCommon::SAttributes LCWidgetBuildersCommon::mAttributes;
+const LCBuildersCommon::SAttributes LCBuildersCommon::mAttributes;
 //------------------------------------------------------------------------------
-LCWidgetBuildersCommon LCWidgetBuildersCommon::instance; 
+LCBuildersCommon LCBuildersCommon::instance; 
 
 //------------------------------------------------------------------------------
-LCWidgetBuildersCommon::LCWidgetBuildersCommon()
+LCBuildersCommon::LCBuildersCommon()
 {
     __slStdColors.insert( "white"      , Qt::GlobalColor::white);
     __slStdColors.insert( "black"      , Qt::GlobalColor::black);
@@ -115,7 +115,7 @@ LCWidgetBuildersCommon::LCWidgetBuildersCommon()
     __slStdColors.insert( "color1"     , Qt::GlobalColor::color1);
 }
 //------------------------------------------------------------------------------
-void LCWidgetBuildersCommon::initPosition(const QDomElement& _element, 
+void LCBuildersCommon::initPosition(const QDomElement& _element, 
         QWidget& _widget)
 {
     QString attr_pos = _element.attribute(mAttributes.posx);
@@ -133,7 +133,7 @@ void LCWidgetBuildersCommon::initPosition(const QDomElement& _element,
 }
 
 //------------------------------------------------------------------------------
-void LCWidgetBuildersCommon::initSize(const QDomElement& _element, 
+void LCBuildersCommon::initSize(const QDomElement& _element, 
         QWidget& _widget)
 {
     QString attr_width = _element.attribute(mAttributes.width);
@@ -163,7 +163,7 @@ void LCWidgetBuildersCommon::initSize(const QDomElement& _element,
 }
 
 //------------------------------------------------------------------------------
-void LCWidgetBuildersCommon::initFixedSize(const QDomElement& _element, 
+void LCBuildersCommon::initFixedSize(const QDomElement& _element, 
         QWidget& _widget)
 {
     QString attr_width = _element.attribute(mAttributes.fixwidth);
@@ -196,7 +196,7 @@ void LCWidgetBuildersCommon::initFixedSize(const QDomElement& _element,
 //==============================================================================
 static QMap<QString, QSharedPointer<CMovieAccess>> __slMovies;
 //------------------------------------------------------------------------------
-QSharedPointer<LIMovieAccess> LCWidgetBuildersCommon::getMovie(
+QSharedPointer<LIMovieAccess> LCBuildersCommon::getMovie(
         const QString& _movieFile, const LIApplication& _app)
 {
     auto it = __slMovies.find(_movieFile);
@@ -217,7 +217,7 @@ QSharedPointer<LIMovieAccess> LCWidgetBuildersCommon::getMovie(
 //==============================================================================
 QMap<QString, QPixmap> __slPicture;
 //------------------------------------------------------------------------------
-QPixmap LCWidgetBuildersCommon::getPixmap(
+QPixmap LCBuildersCommon::getPixmap(
         const QString& _pixmapFile, const LIApplication& _app)
 {
     auto it = __slPicture.find(_pixmapFile);
@@ -235,7 +235,7 @@ QPixmap LCWidgetBuildersCommon::getPixmap(
 
 //------------------------------------------------------------------------------
 bool
-LCWidgetBuildersCommon::toAlignFlags(const QString& _attributes, 
+LCBuildersCommon::toAlignFlags(const QString& _attributes, 
     Qt::Alignment& _flags)
 {
 
@@ -297,14 +297,14 @@ LCWidgetBuildersCommon::toAlignFlags(const QString& _attributes,
 
 //------------------------------------------------------------------------------
 bool
-LCWidgetBuildersCommon::toAlignFlags(const QDomElement& _element, 
+LCBuildersCommon::toAlignFlags(const QDomElement& _element, 
     Qt::Alignment& _flags)
 {
     return toAlignFlags(_element.attribute(mAttributes.aligns.attrName), _flags);
 }
 
 //------------------------------------------------------------------------------
-QString LCWidgetBuildersCommon::toAlignString(const QString& _attributes)
+QString LCBuildersCommon::toAlignString(const QString& _attributes)
 {
   
   QString ret;
@@ -359,7 +359,7 @@ QString LCWidgetBuildersCommon::toAlignString(const QString& _attributes)
 }
 
 //------------------------------------------------------------------------------
-QColor LCWidgetBuildersCommon::attributeToColor(const QString& _color)
+QColor LCBuildersCommon::attributeToColor(const QString& _color)
 {
 
     QString color_name = _color.toLower();
@@ -384,12 +384,12 @@ QColor LCWidgetBuildersCommon::attributeToColor(const QString& _color)
 }
 
 //------------------------------------------------------------------------------
-QString LCWidgetBuildersCommon::getBaseStyleSheet(const QDomElement& _element, 
+QString LCBuildersCommon::getBaseStyleSheet(const QDomElement& _element, 
     const LIApplication& _app)
 {
   QString style;
 
-  QString attr = _element.attribute(LCWidgetBuildersCommon::mAttributes.fontid);
+  QString attr = _element.attribute(LCBuildersCommon::mAttributes.fontid);
 
   if(!attr.isNull())
   {
@@ -401,80 +401,81 @@ QString LCWidgetBuildersCommon::getBaseStyleSheet(const QDomElement& _element,
   }
   else
   {
-    attr = _element.attribute(LCWidgetBuildersCommon::mAttributes.font);
+    attr = _element.attribute(LCBuildersCommon::mAttributes.font);
     if(!attr.isNull())
     {
       style += "font : " + attr + "; ";
     }
   }
 
-  attr = _element.attribute(LCWidgetBuildersCommon::mAttributes.bgcolor);
+  attr = _element.attribute(LCBuildersCommon::mAttributes.bgcolor);
   if(!attr.isNull())
   {
     style += QString("background: %1; ").arg(attr);
   }
 
-  attr = _element.attribute(LCWidgetBuildersCommon::mAttributes.bgimage);
+  attr = _element.attribute(LCBuildersCommon::mAttributes.bgimage);
   if(!attr.isNull())
   {
     style += QString("background-image:url(\"%1\"); " ).arg(_app.getProjectPath() + attr);
   }
 
-  attr = _element.attribute(LCWidgetBuildersCommon::mAttributes.bgpos);
+  attr = _element.attribute(LCBuildersCommon::mAttributes.bgpos);
   if(!attr.isNull())
   {
     if(!attr.isNull()) style += QString("background-position: %1 ;").arg(attr);
   }
 
-  attr = _element.attribute(LCWidgetBuildersCommon::mAttributes.textcolor);
+  attr = _element.attribute(LCBuildersCommon::mAttributes.textcolor);
   if(!attr.isNull())
   {
     style += QString("color: %1; ").arg(attr);
   }
 
-  attr = _element.attribute(LCWidgetBuildersCommon::mAttributes.minwidth);
+  attr = _element.attribute(LCBuildersCommon::mAttributes.minwidth);
   if(!attr.isNull())
   {
     style += QString("min-width: %1px; ").arg(attr);
   }
 
-  attr = _element.attribute(LCWidgetBuildersCommon::mAttributes.minheight);
+  attr = _element.attribute(LCBuildersCommon::mAttributes.minheight);
   if(!attr.isNull())
   {
     style += QString("min-height: %1px; ").arg(attr);
   }
 
-  attr = _element.attribute(LCWidgetBuildersCommon::mAttributes.maxwidth);
+  attr = _element.attribute(LCBuildersCommon::mAttributes.maxwidth);
   if(!attr.isNull())
   {
     style += QString("max-width: %1px; ").arg(attr);
   }
 
-  attr = _element.attribute(LCWidgetBuildersCommon::mAttributes.maxheight);
+  attr = _element.attribute(LCBuildersCommon::mAttributes.maxheight);
   if(!attr.isNull())
   {
     style += QString("max-height: %1px; ").arg(attr);
   }
 
-  attr = _element.attribute(LCWidgetBuildersCommon::mAttributes.fixwidth);
+  attr = _element.attribute(LCBuildersCommon::mAttributes.fixwidth);
   if(!attr.isNull())
   {
     style += QString("max-width: %1px; ").arg(attr);
     style += QString("min-width: %1px; ").arg(attr);
   }
 
-  attr = _element.attribute(LCWidgetBuildersCommon::mAttributes.fixheight);
+  attr = _element.attribute(LCBuildersCommon::mAttributes.fixheight);
   if(!attr.isNull())
   {
     style += QString("max-height: %1px; ").arg(attr);
     style += QString("min-height: %1px; ").arg(attr);
   }
 
-  attr = _element.attribute(LCWidgetBuildersCommon::mAttributes.aligns.attrName);
+  attr = _element.attribute(LCBuildersCommon::mAttributes.aligns.attrName);
   if(!attr.isNull())
   {
-    attr = LCWidgetBuildersCommon::toAlignString(attr);
-    if(!attr.isNull()) style += QString("qproperty-alignment: '%1' ;").arg(attr);
+    attr = LCBuildersCommon::toAlignString(attr);
+    if(!attr.isNull()) style += 
+      QString("qproperty-alignment: '%1' ;").arg(attr);
   }
   return style;
 }

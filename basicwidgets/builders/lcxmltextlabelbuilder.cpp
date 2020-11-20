@@ -1,8 +1,8 @@
 #include "lcxmltextlabelbuilder.h"
+#include "lcbuilderscommon.h"
+#include "LIApplication.h"
 #include <QLabel>
 #include <QDomElement>
-#include "builderscommon.h"
-#include "LIApplication.h"
 #include <QDebug>
 //==============================================================================
 LCXmlTextLabelBuilder::LCXmlTextLabelBuilder()
@@ -32,10 +32,10 @@ QWidget* LCXmlTextLabelBuilder::build(
   }
 
   QString style;
-  style = LCWidgetBuildersCommon::getBaseStyleSheet(_element, _app);
+  style = LCBuildersCommon::getBaseStyleSheet(_element, _app);
   label->setStyleSheet(style);
 
-  LCWidgetBuildersCommon::initPosition(_element, *label);
+  LCBuildersCommon::initPosition(_element, *label);
 
   return label;
 }

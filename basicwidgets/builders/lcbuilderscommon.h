@@ -12,7 +12,7 @@ class LIApplication;
 class LIMovieAccess;
 
 
-class LCWidgetBuildersCommon
+class LCBuildersCommon
 {
 public:
   //Общие атрибуты построителей виджетов.
@@ -69,10 +69,10 @@ public:
   static const SAttributes mAttributes;
 
 private:
-  static LCWidgetBuildersCommon instance;
-  explicit LCWidgetBuildersCommon();
-  explicit LCWidgetBuildersCommon(const LCWidgetBuildersCommon&) = delete;
-  LCWidgetBuildersCommon& operator=(const LCWidgetBuildersCommon&) = delete;
+  static LCBuildersCommon instance;
+  explicit LCBuildersCommon();
+  explicit LCBuildersCommon(const LCBuildersCommon&) = delete;
+  LCBuildersCommon& operator=(const LCBuildersCommon&) = delete;
 
 public:
 

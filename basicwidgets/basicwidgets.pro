@@ -51,7 +51,7 @@ SOURCES += \
     builders/lcxmlswitchwidgetslist.cpp \
     builders/lcxmlscrollareabuilder.cpp \
     builders/lcxmlbuttonbuilder.cpp \
-    builders/builderscommon.cpp \
+    builders/lcbuilderscommon.cpp \
     dataformatters/lcstringdataformatterbase.cpp \
     dataformatters/lcstringdataformatterbitfield.cpp \
     dataformatters/lcstringdataformatterbits.cpp \
@@ -100,7 +100,7 @@ HEADERS += \
     builders/lcxmlswitchwidgetslist.h \
     builders/lcxmlscrollareabuilder.h \
     builders/lcxmlbuttonbuilder.h \
-    builders/builderscommon.h \
+    builders/lcbuilderscommon.h \
     dataformatters/LIStringDataFormatter.h \
     dataformatters/lcstringdataformatterbase.h \
     dataformatters/lcstringdataformatterbitfield.h \

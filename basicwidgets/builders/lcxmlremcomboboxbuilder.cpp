@@ -1,6 +1,7 @@
 #include "lcxmlremcomboboxbuilder.h"
 #include "lcqremcombobox.h"
 #include "lcxmlstddataformatterfactory.h"
+#include "lcbuilderscommon.h"
 #include "LIApplication.h"
 #include "LIWindow.h"
 
@@ -8,7 +9,6 @@
 #include <qcombobox.h>
 #include <qdom.h>
 #include <qwidget.h>
-#include "builderscommon.h"
 
 //==============================================================================
 LCXmlRemComboBoxBuilder::LCXmlRemComboBoxBuilder()
@@ -100,9 +100,9 @@ LABEL_WRONG_EXIT:
         static_cast<QComboBox*>(ret)->addItem(_element.tagName());
     }
 
-    LCWidgetBuildersCommon::initSize(_element, *ret);
-    LCWidgetBuildersCommon::initFixedSize(_element, *ret);
-    LCWidgetBuildersCommon::initPosition(_element, *ret);
+    LCBuildersCommon::initSize(_element, *ret);
+    LCBuildersCommon::initFixedSize(_element, *ret);
+    LCBuildersCommon::initPosition(_element, *ret);
     return ret;
 }
 

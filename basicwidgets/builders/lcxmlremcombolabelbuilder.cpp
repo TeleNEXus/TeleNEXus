@@ -1,6 +1,7 @@
 #include "lcxmlremcombolabelbuilder.h"
 #include "lcqremcombolabel.h"
 #include "lcxmlstddataformatterfactory.h"
+#include "lcbuilderscommon.h"
 #include "LIApplication.h"
 #include "LIMovieAccess.h"
 
@@ -10,7 +11,6 @@
 #include <qwidget.h>
 #include <QLabel>
 #include <QDebug>
-#include "builderscommon.h"
 
 //==============================================================================
 class CQMovieLabel : public QLabel
@@ -127,7 +127,7 @@ QWidget* LCXmlRemComboLabelBuilder::build(const QDomElement& _element,
     goto LABEL_WRONG_EXIT;
   }
 
-  style = LCWidgetBuildersCommon::getBaseStyleSheet(_element, _app);
+  style = LCBuildersCommon::getBaseStyleSheet(_element, _app);
 
   remlabel = new LCQRemComboLabel(dataread, source, format);
   buildComboLabel(_element, remlabel, format, style, _app);
@@ -140,9 +140,9 @@ LABEL_WRONG_EXIT:
     ret->setStyleSheet(style);
   }
 
-  /* LCWidgetBuildersCommon::initSize(_element, *ret); */
-  /* LCWidgetBuildersCommon::initFixedSize(_element, *ret); */
-  LCWidgetBuildersCommon::initPosition(_element, *ret);
+  /* LCBuildersCommon::initSize(_element, *ret); */
+  /* LCBuildersCommon::initFixedSize(_element, *ret); */
+  LCBuildersCommon::initPosition(_element, *ret);
 
   return ret;
 }
@@ -232,7 +232,7 @@ static void buildComboLabel( const QDomElement& _element,
     attr_data= el.attribute(__attrNames.picture);
     if(attr_data.isNull()) continue;
 
-    auto movie_access = LCWidgetBuildersCommon::getMovie(attr_data, _app);  
+    auto movie_access = LCBuildersCommon::getMovie(attr_data, _app);  
     if(movie_access.isNull()) continue;
 
     label = nullptr;
@@ -291,7 +291,7 @@ static void buildComboLabel( const QDomElement& _element,
 static QString readStylePicture(const QDomElement& _element, 
     const LIApplication& _app)
 {
-  QString style = LCWidgetBuildersCommon::getBaseStyleSheet(_element, _app);
+  QString style = LCBuildersCommon::getBaseStyleSheet(_element, _app);
 
   return style;
 }

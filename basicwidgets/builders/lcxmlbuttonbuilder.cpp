@@ -3,7 +3,7 @@
 #include "lcqremwritebutton.h"
 #include "LIApplication.h"
 #include "LIWindow.h"
-#include "builderscommon.h"
+#include "lcbuilderscommon.h"
 #include <QPushButton>
 #include <QDomElement>
 #include <qicon.h>
@@ -88,9 +88,9 @@ QWidget* LCXmlButtonBuilder::build( const QDomElement& _element,
 
   setStyleSheet(button, _element, _app);
 
-  /* LCWidgetBuildersCommon::initSize(       _element, *button); */
-  /* LCWidgetBuildersCommon::initFixedSize(  _element, *button); */
-  LCWidgetBuildersCommon::initPosition(   _element, *button);
+  /* LCBuildersCommon::initSize(       _element, *button); */
+  /* LCBuildersCommon::initFixedSize(  _element, *button); */
+  LCBuildersCommon::initPosition(   _element, *button);
 
   return button;
 }
@@ -99,23 +99,23 @@ QWidget* LCXmlButtonBuilder::build( const QDomElement& _element,
 static void setStyleSheet(QPushButton* _button, const QDomElement& _element, 
     const LIApplication& _app)
 {
-  QString style = LCWidgetBuildersCommon::getBaseStyleSheet(_element, _app);
+  QString style = LCBuildersCommon::getBaseStyleSheet(_element, _app);
 
   _button->setStyleSheet(style);
 
   QString attr_icon = _element.attribute(
-      LCWidgetBuildersCommon::mAttributes.icon);
+      LCBuildersCommon::mAttributes.icon);
 
   if(!attr_icon.isNull())
   {
-    /* QIcon icon(LCWidgetBuildersCommon::getPixmap(attr_icon, _app)); */
-    QPixmap pixmap(LCWidgetBuildersCommon::getPixmap(attr_icon, _app));
+    /* QIcon icon(LCBuildersCommon::getPixmap(attr_icon, _app)); */
+    QPixmap pixmap(LCBuildersCommon::getPixmap(attr_icon, _app));
 
     QSize size_pixmap = pixmap.size();
     QSize size_icon = _button->iconSize();
 
     QString attr = _element.attribute(
-        LCWidgetBuildersCommon::mAttributes.iconscale);
+        LCBuildersCommon::mAttributes.iconscale);
 
     if(!attr.isNull())
     {
@@ -130,7 +130,7 @@ static void setStyleSheet(QPushButton* _button, const QDomElement& _element,
     }
     else
     {
-      attr = _element.attribute(LCWidgetBuildersCommon::mAttributes.iconwidth);
+      attr = _element.attribute(LCBuildersCommon::mAttributes.iconwidth);
       if(!attr.isNull())
       {
         bool flag = false;
@@ -138,7 +138,7 @@ static void setStyleSheet(QPushButton* _button, const QDomElement& _element,
         if(flag) size_icon.setWidth(width);
       }
 
-      attr = _element.attribute(LCWidgetBuildersCommon::mAttributes.iconheight);
+      attr = _element.attribute(LCBuildersCommon::mAttributes.iconheight);
       if(!attr.isNull())
       {
         bool flag = false;
