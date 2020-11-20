@@ -25,117 +25,121 @@ LCXmlRemComboBoxBuilder::~LCXmlRemComboBoxBuilder()
 //------------------------------------------------------------------------------
 const struct
 {
-    QString dataread    = "read";
-    QString datawrite   = "write";
-    QString source      = "source";
-    QString format      = "format";
-    QString text        = "text";
-    QString value       = "value";
+  QString dataread    = "read";
+  QString datawrite   = "write";
+  QString source      = "source";
+  QString format      = "format";
+  QString text        = "text";
+  QString value       = "value";
 } __attrNames;
 
 //------------------------------------------------------------------------------
 const struct
 {
-    QString item    = "item";
+  QString item    = "item";
 } __elementNames;
 
 //------------------------------------------------------------------------------buildCombobox
 static void buildCombobox(   const QDomElement& _element, 
-                        LCQRemComboBox* _box, 
-                        QSharedPointer<LCStringDataFormatterBase> __format);
+    LCQRemComboBox* _box, 
+    QSharedPointer<LCStringDataFormatterBase> __format);
 
 //------------------------------------------------------------------------------build
 QWidget* LCXmlRemComboBoxBuilder::build(const QDomElement& _element, 
-                                            const LIApplication& _app)
+    const LIApplication& _app)
 {
-    QWidget *ret = nullptr;
-    QString dataread;
-    QString datawrite;
-    QString attr = _element.attribute(__attrNames.source);
-    QSharedPointer<LIRemoteDataSource> source;
-    QSharedPointer<LCStringDataFormatterBase> format;
+  QWidget *ret = nullptr;
+  QString dataread;
+  QString datawrite;
+  QString attr = _element.attribute(__attrNames.source);
+  QSharedPointer<LIRemoteDataSource> source;
+  QSharedPointer<LCStringDataFormatterBase> format;
 
-    if(attr.isNull())
-    {
-        goto LABEL_WRONG_EXIT;
-    }
+  if(attr.isNull())
+  {
+    goto LABEL_WRONG_EXIT;
+  }
 
-    source = _app.getDataSource(attr);
+  source = _app.getDataSource(attr);
 
-    if(source.isNull())
-    {
-        goto LABEL_WRONG_EXIT;
-    }
+  if(source.isNull())
+  {
+    goto LABEL_WRONG_EXIT;
+  }
 
-    dataread = _element.attribute(__attrNames.dataread);
+  dataread = _element.attribute(__attrNames.dataread);
 
-    if(dataread.isNull())
-    {
-        goto LABEL_WRONG_EXIT;
-    }
+  if(dataread.isNull())
+  {
+    goto LABEL_WRONG_EXIT;
+  }
 
-    datawrite = _element.attribute(__attrNames.datawrite);
-    
-    if(datawrite.isNull())
-    {
-        datawrite = dataread;
-    }
+  datawrite = _element.attribute(__attrNames.datawrite);
 
-    format = LCXmlStdDataFormatterFactory::instance().
-                                createStringFormatter(_element.attributes());
+  if(datawrite.isNull())
+  {
+    datawrite = dataread;
+  }
 
-    if(format.isNull())
-    {
-        goto LABEL_WRONG_EXIT;
-    }
-    
-    ret = new LCQRemComboBox(dataread, datawrite, source, format);
-    buildCombobox(_element, static_cast<LCQRemComboBox*>(ret), format);
+  format = LCXmlStdDataFormatterFactory::instance().
+    createStringFormatter(_element.attributes());
+
+  if(format.isNull())
+  {
+    goto LABEL_WRONG_EXIT;
+  }
+
+  ret = new LCQRemComboBox(dataread, datawrite, source, format);
+  buildCombobox(_element, static_cast<LCQRemComboBox*>(ret), format);
 
 LABEL_WRONG_EXIT:
-    if(ret == nullptr) 
-    {
-        ret = new QComboBox(); 
-        static_cast<QComboBox*>(ret)->setEnabled(false);
-        static_cast<QComboBox*>(ret)->addItem(_element.tagName());
-    }
+  if(ret == nullptr) 
+  {
+    ret = new QComboBox(); 
+    static_cast<QComboBox*>(ret)->setEnabled(false);
+    static_cast<QComboBox*>(ret)->addItem(_element.tagName());
+  }
 
-    LCBuildersCommon::initSize(_element, *ret);
-    LCBuildersCommon::initFixedSize(_element, *ret);
-    LCBuildersCommon::initPosition(_element, *ret);
-    return ret;
+  QString style = LCBuildersCommon::getBaseStyleSheet(_element, _app);
+  /* style = QString(".LCQRemComboBox { %1 }").arg(style); */
+  ret->setStyleSheet(style);
+
+  /* LCBuildersCommon::initFixedSize(_element, *ret); */
+  /* LCBuildersCommon::initSize(_element, *ret); */
+  LCBuildersCommon::initPosition(_element, *ret);
+  return ret;
 }
 
 //------------------------------------------------------------------------------buildCombobox
 static void buildCombobox(   const QDomElement& _element, 
-                        LCQRemComboBox* _box,
-                        QSharedPointer<LCStringDataFormatterBase> _format)
+    LCQRemComboBox* _box,
+    QSharedPointer<LCStringDataFormatterBase> _format)
 {
-    QDomNodeList nodes = _element.childNodes();
-    for(int i = 0; i < nodes.length(); i++)
+  QDomNodeList nodes = _element.childNodes();
+  for(int i = 0; i < nodes.length(); i++)
+  {
+    QDomElement el = nodes.at(i).toElement();
+    if(el.isNull()) continue;
+    if(el.tagName() != __elementNames.item) continue;
+
+    QString name = el.attribute(__attrNames.text);
+    QString val = el.attribute(__attrNames.value);
+    if (val.isNull()) 
     {
-        QDomElement el = nodes.at(i).toElement();
-        if(el.isNull()) continue;
-        if(el.tagName() != __elementNames.item) continue;
-
-        QString name = el.attribute(__attrNames.text);
-        QString val = el.attribute(__attrNames.value);
-        if (val.isNull()) 
-        {
-            continue;
-        }
-        if (name == "")
-        {
-            name = val;
-        }
-
-        val = _format->normalizeString(val);
-
-        if(val.isNull())
-        {
-            continue;
-        }
-
-        _box->addItem(name, val);
+      continue;
     }
+    if (name == "")
+    {
+      name = val;
+    }
+
+    val = _format->normalizeString(val);
+
+    if(val.isNull())
+    {
+      continue;
+    }
+
+    _box->addItem(name, val);
+  }
 }
