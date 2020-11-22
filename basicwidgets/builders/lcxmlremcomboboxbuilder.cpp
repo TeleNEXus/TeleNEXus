@@ -101,7 +101,6 @@ LABEL_WRONG_EXIT:
   }
 
   QString style = LCBuildersCommon::getBaseStyleSheet(_element, _app);
-  /* style = QString(".LCQRemComboBox { %1 }").arg(style); */
   ret->setStyleSheet(style);
 
   /* LCBuildersCommon::initFixedSize(_element, *ret); */

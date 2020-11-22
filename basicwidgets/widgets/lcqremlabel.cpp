@@ -20,7 +20,6 @@ void LCQRemLabel::CReadListener::dataIsRead(QSharedPointer<QByteArray>  _data,
         return;
     }
     mLabel.setText(mLabel.mFormatter.data()->toString(*_data));
-    mLabel.adjustSize();
 }
 
 //==============================================================================LCQRemLabel
