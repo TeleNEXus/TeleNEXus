@@ -71,7 +71,8 @@ LABEL_WRONG_EXIT:
   if(ret == nullptr) ret = new QLineEdit(_element.tagName());
 
   QString style = LCBuildersCommon::getBaseStyleSheet(_element, _app);
-  ret->setStyleSheet(style);
+  
+  ret->setStyleSheet(".LCQRemLineEdit { " + style + "}" );
   
   LCBuildersCommon::initSize(_element, *ret);
   LCBuildersCommon::initPosition(_element, *ret);

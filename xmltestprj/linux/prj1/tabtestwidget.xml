@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-
-<!-- <tabs pos="Top"> -->
-<!-- <tabs pos="Bottom"> -->
-<tabs pos="Left">
-<!-- <tabs pos="Right"> -->
+<tabs>
     <item label="Tab xxx">
         <table>
             <col name="Столбец 1">
@@ -44,12 +40,9 @@
                     <item value="1 1_011"/>
                     <item value="1 1_111"/>
                 </dataComboLabel>
-                <!-- <dataComboLabel  read="coil[0-3]" source="qtslavetcp" format="bits" size="4"> -->
-                    <!--     <item text="On"        value="1 1_001"/> -->
-                    <!--     <item text="Off"       value="1 1_011"/> -->
-                    <!--     <item text="Reset"     value="1 1_111"/> -->
-                    <!-- </dataComboLabel> -->
+
                 <dataLabel      source="qtslavetcp"  data="coil[0-2]" format="bits"/>
+
                 <dataLineEdit   source="qtslavetcp"  data="coil[0-2]" format="bits" size="3" separator=" " />
             </col>
 
@@ -62,7 +55,7 @@
             <col name="Столбец 3" width="200">
                 <dataLineEdit   source="qtslavetcp" data="hreg[0-1]" format="hex" size="4" separator=" "/>
                 <dataComboLabel  read="hreg0" source="qtslavetcp" format="hex" size="2">
-                    <item text="On"        value="a" style="color:#102235;  background:black;}>"/>
+                    <item text="On"        value="a"/>
                     <item text="Off"       value="b"/>
                     <item text="Reset"     value="c"/>
                     <item text="Test"      value="d"/>
@@ -73,7 +66,7 @@
                 <dataLabel      source="qtslavetcp"  data="inflt"  format="float32"/>
                 <dataLabel      source="qtslavetcp"  data="hreg1"  format="hex"/>
             </col>
-            <row height="90">
+            <row>
 
                 <dataLabel      source="qtslavetcp"  data="coil[0-2]" format="bits"/>
                 <dataLabel      source="qtslavetcp"  data="coil[0-2]" format="bits"/>
@@ -81,12 +74,4 @@
             </row>
         </table>
     </item>
-    <item />
-    <item />
-    <item />
-    <item />
-    <!-- <item label="Tab 01"/> -->
-    <!-- <item label="Tab 02"/> -->
-    <!-- <item label="Tab 03"/> -->
-    <!-- <item label="Tab 04"/> -->
 </tabs>

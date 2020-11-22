@@ -11,10 +11,13 @@
   maxWidth="300"
   >
 
-    <item text="widget 1" icon="picture/picture_1.png">
+    <item text="widget mnemo" icon="picture/picture_1.png">
       <scrollArea align="Center" bgColor="rgb(102,102,102)">
         <widget file="testmnemowidget.xml"/>
       </scrollArea>
+    </item>
+    <item text="widget tab" icon="picture/picture_1.png">
+      <tabs file="tabtestwidget.xml"/>
     </item>
 
     <item text="widget 2" icon="picture/icon1.png">

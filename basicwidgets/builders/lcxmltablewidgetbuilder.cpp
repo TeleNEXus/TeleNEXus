@@ -37,36 +37,37 @@ static const struct
 //------------------------------------------------------------------------------
 struct SBuildData
 {
-    /*
-     * Фильтр обработки события нажатия клавиши Esc.
-     */
-    class CQEventFilter : public QObject
+  /*
+   * Фильтр обработки события нажатия клавиши Esc.
+   */
+  class CQEventFilter : public QObject
+  {
+  public:
+    explicit CQEventFilter(QObject* _parent = nullptr) : QObject(_parent){}
+    virtual bool eventFilter(QObject* _p_obj, QEvent* _p_event) override
     {
-    public:
-        explicit CQEventFilter(QObject* _parent = nullptr) : QObject(_parent){}
-        virtual bool eventFilter(QObject* _p_obj, QEvent* _p_event) override
+      if(_p_event->type() == QEvent::KeyRelease)
+      {
+        //Очиска фокуса видета при нажатии клавиши Escape.
+        if( static_cast<QKeyEvent*>(_p_event)->key() == Qt::Key_Escape)
         {
-            if(_p_event->type() == QEvent::KeyRelease)
-            {
-                //Очиска фокуса видета при нажатии клавиши Escape.
-                if( static_cast<QKeyEvent*>(_p_event)->key() == Qt::Key_Escape)
-                {
-                    static_cast<QTableWidget*>(_p_obj)->clearFocus();
-                    static_cast<QTableWidget*>(_p_obj)->clearSelection();
-                    return true;
-                }
-            }
-            return false;
+          static_cast<QTableWidget*>(_p_obj)->clearFocus();
+          static_cast<QTableWidget*>(_p_obj)->clearSelection();
+          return true;
         }
-    };
-    quint32 mRow = 0;
-    quint32 mColumn = 0;
-    QTableWidget* mpTable= nullptr;
-    SBuildData() : mpTable(new QTableWidget)
-    {
-        mpTable->installEventFilter(new CQEventFilter);
-        mpTable->setEditTriggers(QTableWidget::EditTrigger::NoEditTriggers);
+      }
+      return false;
     }
+  };
+  quint32 mRow = 0;
+  quint32 mColumn = 0;
+  QTableWidget* mpTable= nullptr;
+  SBuildData() : mpTable(new QTableWidget)
+  {
+    mpTable->setSelectionMode(QTableWidget::SelectionMode::NoSelection);
+    mpTable->installEventFilter(new CQEventFilter);
+    mpTable->setEditTriggers(QTableWidget::EditTrigger::NoEditTriggers);
+  }
 };
 
 //------------------------------------------------------------------------------

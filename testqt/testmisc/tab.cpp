@@ -260,12 +260,42 @@ public:
 int main(int argc, char** argv)
 {
     QApplication app(argc, argv);
-    LQTabWidget* tab = new LQTabWidget;
-    tab->setTabPosition(QTabWidget::TabPosition::West);
+    /* LQTabWidget* tab = new LQTabWidget; */
+    QTabWidget* tab = new QTabWidget;
+    tab->setTabPosition(QTabWidget::TabPosition::North);
     /* tab->addTab(new QWidget(), "tab0_______________________"); */
     /* tab->addTab(new QWidget(), "TAB1"); */
-    tab->addTab(new QWidget(), "tab 1_____________111");
+    tab->addTab(new QWidget(), "tab 1");
     tab->addTab(new QWidget(), "tab 2");
+    tab->addTab(new QWidget(), "tab 3");
+    tab->addTab(new QWidget(), "tab 4");
+    tab->addTab(new QWidget(), "tab 5");
+    tab->addTab(new QWidget(), "tab 6");
+    QString style;
+    style += "color: red;";
+    style += "background-color: green;";
+    style += "font: 22pt;";
+    /* style += "min-width: 150px;"; */
+    /* style += "min-height: 50px;"; */
+/* style = "background: green;" */
+/*         " border: 2px solid #C4C4C3;" */
+/*         " border-bottom-color: #C2C7CB; " */
+/*         " border-top-left-radius: 4px;" */
+/*         " border-top-right-radius: 4px;" */
+/*         " min-width: 8ex;" */
+/*         " padding: 2px;"; */
+/* style = "background: green;" */
+/*         " min-width: 8ex;" */
+/*         " padding: 2px;"; */
+    /* tab->setStyleSheet("QTabBar { " + style + " }" + "QTabBar:tab:selected { background: blue}"); */
+    /* tab->setStyleSheet("QTabWidget::tab-bar { " + style + " }"); */
+    /* style = "background: blue"; */
+    /* tab->setStyleSheet("QTabBar:tab{ " + style + " }"); */
+    /* style = "QTabBar{ " + style + " }" + "QTabBar:tab:selected { background: yellow}"; */
+    style = "QTabBar{ " + style + " }" + "QTabBar:tab:selected { background: yellow}";
+    /* style = "QTabBar{ " + style + " }"; */
+    /* style = "QTabWidget QTabBar{ " + style + " }"; */
+    tab->setStyleSheet(style);
     tab->show();
     return app.exec();
 }

@@ -74,27 +74,27 @@ QWidget* LCXmlTabWidgetBuilder::build(
 
     QTabWidget* tabwidget = new QTabWidget;
 
-    QString attr_pos = _element.attribute(__slAttrs.position.attr);
+    /* QString attr_pos = _element.attribute(__slAttrs.position.attr); */
 
-    if(!attr_pos.isNull())
-    {
-        if(attr_pos == __slAttrs.position.vals.top)
-        {
-            tabwidget->setTabPosition(QTabWidget::TabPosition::North);
-        }
-        else if(attr_pos == __slAttrs.position.vals.bottom)
-        {
-            tabwidget->setTabPosition(QTabWidget::TabPosition::South);
-        }
-        else if(attr_pos == __slAttrs.position.vals.left)
-        {
-            tabwidget->setTabPosition(QTabWidget::TabPosition::West);
-        }
-        else if(attr_pos == __slAttrs.position.vals.right)
-        {
-            tabwidget->setTabPosition(QTabWidget::TabPosition::East);
-        }
-    }
+    /* if(!attr_pos.isNull()) */
+    /* { */
+    /*     if(attr_pos == __slAttrs.position.vals.top) */
+    /*     { */
+    /*         tabwidget->setTabPosition(QTabWidget::TabPosition::North); */
+    /*     } */
+    /*     else if(attr_pos == __slAttrs.position.vals.bottom) */
+    /*     { */
+    /*         tabwidget->setTabPosition(QTabWidget::TabPosition::South); */
+    /*     } */
+    /*     else if(attr_pos == __slAttrs.position.vals.left) */
+    /*     { */
+    /*         tabwidget->setTabPosition(QTabWidget::TabPosition::West); */
+    /*     } */
+    /*     else if(attr_pos == __slAttrs.position.vals.right) */
+    /*     { */
+    /*         tabwidget->setTabPosition(QTabWidget::TabPosition::East); */
+    /*     } */
+    /* } */
 
     int index = 0;
 

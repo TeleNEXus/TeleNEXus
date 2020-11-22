@@ -71,9 +71,7 @@ LABEL_WRONG_EXIT:
 
   if(ret == nullptr) ret = new QLabel(_element.tagName());
   QString style = LCBuildersCommon::getBaseStyleSheet(_element, _app);
-  qDebug() << "LCQRemLabelBuilder style = " << style;
-  ret->setStyleSheet(style);
-
+  if(!style.isNull()) ret->setStyleSheet(".LCQRemLabel { " + style + " }");
   LCBuildersCommon::initPosition(_element, *ret);
   return ret;
 }
