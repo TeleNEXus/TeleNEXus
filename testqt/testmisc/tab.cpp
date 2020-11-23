@@ -263,10 +263,14 @@ int main(int argc, char** argv)
     /* LQTabWidget* tab = new LQTabWidget; */
     QTabWidget* tab = new QTabWidget;
     tab->setTabPosition(QTabWidget::TabPosition::North);
+    tab->setIconSize(QSize(60,30));
     /* tab->addTab(new QWidget(), "tab0_______________________"); */
     /* tab->addTab(new QWidget(), "TAB1"); */
-    tab->addTab(new QWidget(), "tab 1");
-    tab->addTab(new QWidget(), "tab 2");
+    QPixmap pixmap1 = QPixmap("/home/serg/pprj/tnex/xmltestprj/linux/prj1/picture/picture_1.png");
+    QPixmap pixmap2 = QPixmap("/home/serg/pprj/tnex/xmltestprj/linux/prj1/picture/icon1.png");
+    pixmap2 = pixmap2.scaled(60, 30);
+    /* tab->addTab(new QWidget(), QIcon(pixmap1), ""); */
+    tab->addTab(new QWidget(), QIcon(pixmap2), "");
     tab->addTab(new QWidget(), "tab 3");
     tab->addTab(new QWidget(), "tab 4");
     tab->addTab(new QWidget(), "tab 5");
