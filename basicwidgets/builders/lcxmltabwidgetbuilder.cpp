@@ -1,4 +1,5 @@
 #include "lcxmltabwidgetbuilder.h"
+#include "lcbuilderscommon.h"
 #include "LIApplication.h"
 #include <QTabWidget>
 #include <QDomElement>
@@ -9,35 +10,7 @@
 //------------------------------------------------------------------------------
 static const struct
 {
-    struct
-    {
-        QString attr = "pos";
-        struct
-        {
-            QString top     = "Top";
-            QString bottom  = "Bottom";
-            QString left    = "Left";
-            QString right   = "Right";
-        }vals;
-    }position;
-
-    QString file = "file";
-
-} __slAttrs;
-
-//------------------------------------------------------------------------------
-static const struct
-{
-    struct
-    {
-        QString tag = "item";
-        struct
-        {
-            QString label   = "label";
-            QString icon    = "icon";
-        }attrs;
-    }item;
-
+  QString item = "item";
 } __slTags;
 
 //==============================================================================
@@ -51,7 +24,7 @@ LCXmlTabWidgetBuilder::~LCXmlTabWidgetBuilder()
 }
 
 //------------------------------------------------------------------------------
-static void createTab(
+static void buildTab(
         const QDomElement& _element, 
         QTabWidget* tabwidget, 
         int _tabindex, 
@@ -61,7 +34,7 @@ QWidget* LCXmlTabWidgetBuilder::build(
         const QDomElement& _element, 
         const LIApplication& _app)
 {
-    QString attr_file = _element.attribute(__slAttrs.file);
+    QString attr_file = _element.attribute(LCBuildersCommon::mAttributes.file);
     if(!attr_file.isNull())
     {
         QDomElement el = _app.getDomDocument(attr_file).documentElement();
@@ -74,50 +47,31 @@ QWidget* LCXmlTabWidgetBuilder::build(
 
     QTabWidget* tabwidget = new QTabWidget;
 
-    /* QString attr_pos = _element.attribute(__slAttrs.position.attr); */
-
-    /* if(!attr_pos.isNull()) */
-    /* { */
-    /*     if(attr_pos == __slAttrs.position.vals.top) */
-    /*     { */
-    /*         tabwidget->setTabPosition(QTabWidget::TabPosition::North); */
-    /*     } */
-    /*     else if(attr_pos == __slAttrs.position.vals.bottom) */
-    /*     { */
-    /*         tabwidget->setTabPosition(QTabWidget::TabPosition::South); */
-    /*     } */
-    /*     else if(attr_pos == __slAttrs.position.vals.left) */
-    /*     { */
-    /*         tabwidget->setTabPosition(QTabWidget::TabPosition::West); */
-    /*     } */
-    /*     else if(attr_pos == __slAttrs.position.vals.right) */
-    /*     { */
-    /*         tabwidget->setTabPosition(QTabWidget::TabPosition::East); */
-    /*     } */
-    /* } */
-
     int index = 0;
 
-    for( QDomNode node = _element.firstChildElement(__slTags.item.tag);
+    for( QDomNode node = _element.firstChildElement(__slTags.item);
             !node.isNull();
-            node = node.nextSiblingElement(__slTags.item.tag))
+            node = node.nextSiblingElement(__slTags.item))
     {
-        createTab(node.toElement(), tabwidget, index, _app); 
+        buildTab(node.toElement(), tabwidget, index, _app); 
         index++;
     }
+
+    QString style = LCBuildersCommon::getBaseStyleSheet(_element, _app);
+    tabwidget->setStyleSheet(style);
 
     return tabwidget;
 }
 
 //------------------------------------------------------------------------------
-static void createTab(
+static void buildTab(
         const QDomElement& _element, 
         QTabWidget* _tabwidget, 
         int _tabindex, 
         const LIApplication& _app)
 {
-    //TODO: Добавить иконки.
-    QString attr_label = _element.attribute(__slTags.item.attrs.label);
+    QString attr_label = 
+      _element.attribute(LCBuildersCommon::mAttributes.label);
 
     if(attr_label.isNull())
     {

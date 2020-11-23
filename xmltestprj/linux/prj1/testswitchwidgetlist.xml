@@ -16,8 +16,9 @@
         <widget file="testmnemowidget.xml"/>
       </scrollArea>
     </item>
+
     <item text="widget tab" icon="picture/picture_1.png">
-      <tabs file="tabtestwidget.xml"/>
+      <tabs file="testtab.xml"/>
     </item>
 
     <item text="widget 2" icon="picture/icon1.png">
