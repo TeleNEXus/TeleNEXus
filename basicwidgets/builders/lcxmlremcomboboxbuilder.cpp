@@ -101,6 +101,7 @@ LABEL_WRONG_EXIT:
   }
 
   QString style = LCBuildersCommon::getBaseStyleSheet(_element, _app);
+  /* ret->setStyleSheet("QComboBox {" + style + " }"); */
   ret->setStyleSheet(style);
 
   /* LCBuildersCommon::initFixedSize(_element, *ret); */
