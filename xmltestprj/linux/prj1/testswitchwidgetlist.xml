@@ -22,7 +22,7 @@
     </item>
 
     <item text="widget 2" icon="picture/icon1.png">
-        <widget minWidth="600">
+        <widget>
             <layout>
                 <layoutVBox>
                     <widgets>

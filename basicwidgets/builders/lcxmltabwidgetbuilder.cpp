@@ -28,6 +28,7 @@ static void buildTab(
         const QDomElement& _element, 
         QTabWidget* tabwidget, 
         int _tabindex, 
+        int _iconSize,
         const LIApplication& _app);
 
 QWidget* LCXmlTabWidgetBuilder::build(
@@ -48,17 +49,37 @@ QWidget* LCXmlTabWidgetBuilder::build(
     QTabWidget* tabwidget = new QTabWidget;
 
     int index = 0;
+    int icon_size = -1;
+
+    QString attr = _element.attribute(LCBuildersCommon::mAttributes.iconsize);
+
+    if(!attr.isNull())
+    {
+      bool flag = 0;
+      icon_size = attr.toInt(&flag);
+      if(flag)
+      {
+        tabwidget->setIconSize(QSize(icon_size, icon_size));
+      }
+      else
+      {
+        icon_size = -1;
+      }
+    }
 
     for( QDomNode node = _element.firstChildElement(__slTags.item);
             !node.isNull();
             node = node.nextSiblingElement(__slTags.item))
     {
-        buildTab(node.toElement(), tabwidget, index, _app); 
+        buildTab(node.toElement(), tabwidget, index, icon_size, _app); 
         index++;
     }
 
     QString style = LCBuildersCommon::getBaseStyleSheet(_element, _app);
-    tabwidget->setStyleSheet(style);
+
+    tabwidget->setStyleSheet(".QTabBar {" + style + " } ");
+
+    LCBuildersCommon::initPosition(_element, *tabwidget);
 
     return tabwidget;
 }
@@ -68,12 +89,40 @@ static void buildTab(
         const QDomElement& _element, 
         QTabWidget* _tabwidget, 
         int _tabindex, 
+        int _iconSize,
         const LIApplication& _app)
 {
     QString attr_label = 
       _element.attribute(LCBuildersCommon::mAttributes.label);
 
-    if(attr_label.isNull())
+    QIcon icon;
+
+    QString attr_icon = _element.attribute(LCBuildersCommon::mAttributes.icon);
+    if(!attr_icon.isNull()) 
+    {
+      //Зогрузка изображения.
+      QPixmap pixmap = LCBuildersCommon::getPixmap(attr_icon, _app);
+      //Масштабирование изобразения под заданные размеры.
+      if(_iconSize >= 0)
+      {
+        int maxsize = (pixmap.width() > pixmap.height()) ? 
+          (pixmap.width()) : (pixmap.height());
+
+        float scale = 1;
+
+        if(maxsize > 0)
+        {
+          scale = (float) _iconSize /(float)  maxsize;
+        }
+
+        pixmap = pixmap.scaled(
+            pixmap.width() * scale, pixmap.height() * scale);
+      }
+      if(!pixmap.isNull()) icon.addPixmap(pixmap);
+    }
+
+
+    if(attr_label.isNull() && icon.isNull())
     {
         attr_label = QString("Tab %1").arg(_tabindex);
     }
@@ -92,11 +141,12 @@ static void buildTab(
                         childs.at(i).toElement(), _app);
                 if (widget)
                 {
-                    _tabwidget->addTab( widget, attr_label);
+                    _tabwidget->addTab( widget, icon, attr_label);
                     return;
                 }
             }
         }
     }
-    _tabwidget->addTab( new QWidget, attr_label);
+
+    _tabwidget->addTab( new QWidget, icon, attr_label);
 }
