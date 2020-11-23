@@ -108,9 +108,15 @@
       <dataLabel source="qtslavetcp" data="hreg[0-1]" format="hex" dataSize="4" separator=" " 
         posx="250" posy="180" bgColor="yellow" textColor="red" fontId="mnemo10" minWidth="150" align="Right"/>
 
-      <dataLabel source="qtslavetcp" data="hreg[0-1]" format="hex" dataSize="4" separator=" " 
-        posx="250" posy="205" />
+      <!-- <dataLabel source="qtslavetcp" data="hreg[0-1]" format="hex" dataSize="4" minWidth="150" separator=" " --> 
+      <!--   posx="250" posy="205" /> -->
 
+    <widget posx="250" posy="205">
+      <widgets>
+        <dataLabel source="qtslavetcp" data="hreg[0-1]" format="hex" dataSize="4" fontId="mnemo10" separator=" " 
+          />
+      </widgets>
+    </widget>
 
 
       <dataWriteButton text="write 1" posx="10" posy="120"

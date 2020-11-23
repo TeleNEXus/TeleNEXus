@@ -3,10 +3,13 @@
   <!-- bgImage="picture/fon3.png" bgPos="bottom" -->
   <!-- bgColor="rgb(150,150,250)" -->
   <!-- bgColor="rgb(160,160,160)" -->
+  <!-- textColor="rgb(100,0,0)" -->
+  <!-- bgColor="rgb(160,160,160)" -->
+  <!-- bgImage="picture/fon3.png" bgPos="left" -->
+  <!-- textColor="rgb(100,0,0)" -->
+  <!-- bgColor="rgb(160,160,160)" -->
+  <!-- bgImage="picture/fon3.png" bgPos="left" -->
 <table
-  textColor="rgb(100,0,0)"
-  bgColor="rgb(160,160,160)"
-  bgImage="picture/fon3.png" bgPos="left"
   >
   <col label="Столбец 1">
     <dataComboBox  read="hreg0" source="qtslavetcp" format="uint16">
