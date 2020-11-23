@@ -125,6 +125,10 @@ static QWidget* buildLocal(const QDomElement& _element,
       }
     }
   }
+  QString style = LCBuildersCommon::getBaseStyleSheet(_element, _app);
+  buildData.mpTable->setStyleSheet("QTableWidget { " + style + " }");
+  /* buildData.mpTable->setStyleSheet(style); */
+  LCBuildersCommon::initPosition(_element, *buildData.mpTable);
   return buildData.mpTable;
 }
 

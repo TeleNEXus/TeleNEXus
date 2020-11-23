@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<table>
+  <!-- bgImage="picture/fon3.png" bgPos="bottom" -->
+<table
+  bgColor="rgb(50,50,50)"
+  textColor="rgb(0,255,0)"
+  bgImage="picture/fon3.png" bgPos="bottom"
+  >
   <col name="Столбец 1">
     <dataComboBox  read="hreg0" source="qtslavetcp" format="uint16">
       <item text="On"     value="010"/>
@@ -41,7 +46,7 @@
 
     <dataLabel      source="qtslavetcp"  data="coil[0-2]" format="bits"/>
 
-    <dataLineEdit   source="qtslavetcp"  data="coil[0-2]" format="bits" size="3" separator=" " />
+    <dataLineEdit   bgColor="red" source="qtslavetcp"  data="coil[0-2]" format="bits" size="3" separator=" " />
   </col>
 
   <col name="Столбец 2">
