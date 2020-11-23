@@ -78,6 +78,7 @@ QWidget* LCXmlTabWidgetBuilder::build(
     QString style = LCBuildersCommon::getBaseStyleSheet(_element, _app);
 
     tabwidget->setStyleSheet(".QTabBar {" + style + " } ");
+    /* tabwidget->setStyleSheet(".QTabWidget {" + style + " } "); */
 
     LCBuildersCommon::initPosition(_element, *tabwidget);
 
