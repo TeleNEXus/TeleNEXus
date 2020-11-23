@@ -18,6 +18,7 @@ public:
   //Общие атрибуты построителей виджетов.
   struct SAttributes
   {
+    QString label       = "label";
     QString file        = "file";
     QString posx        = "posx";
     QString posy        = "posy";

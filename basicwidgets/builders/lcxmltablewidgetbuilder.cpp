@@ -1,4 +1,5 @@
 #include "lcxmltablewidgetbuilder.h"
+#include "lcbuilderscommon.h"
 #include <QTableWidget>
 #include <QDomElement>
 #include <qnamespace.h>
@@ -71,6 +72,9 @@ struct SBuildData
 };
 
 //------------------------------------------------------------------------------
+static QWidget* buildLocal(const QDomElement& _element,
+    const LIApplication& _app);
+
 static void createRow(
         const QDomElement &_element,
         const LIApplication& _app,
@@ -85,30 +89,43 @@ static void createCol(
 QWidget* LCXmlTableWidgetBuilder::build(const QDomElement& _element,
         const LIApplication& _app)
 {
-    SBuildData buildData;
-
-    QDomNode childNode = _element.firstChild();
-
-    while(!childNode.isNull())
+  QString attr_file = _element.attribute(LCBuildersCommon::mAttributes.file);
+  if(!attr_file.isNull())
+  {
+    QDomElement el = _app.getDomDocument(attr_file).documentElement();
+    if(!el.isNull())
     {
-        if(childNode.isElement())
-        {
-            QDomElement element = childNode.toElement();
-            if(element.tagName() == __elementNames.row)
-            {
-                createRow(element, _app, buildData);
-            }
-            else if(element.tagName() == __elementNames.column)
-            {
-                createCol(element, _app, buildData);
-
-            }
-        }
-        //--------------------------------
-        childNode = childNode.nextSibling();
+      if(el.tagName() == _element.tagName()) return build(el, _app);
     }
-    return buildData.mpTable;
+  }
+  return buildLocal(_element, _app);
+}
 
+//------------------------------------------------------------------------------
+static QWidget* buildLocal(const QDomElement& _element,
+    const LIApplication& _app)
+{
+  SBuildData buildData;
+
+  QDomNode childNode = _element.firstChild();
+  for(QDomNode node = _element.firstChild();
+      !node.isNull();
+      node = node.nextSiblingElement())
+  {
+    if(childNode.isElement())
+    {
+      QDomElement element = node.toElement();
+      if(element.tagName() == __elementNames.row)
+      {
+        createRow(element, _app, buildData);
+      }
+      else if(element.tagName() == __elementNames.column)
+      {
+        createCol(element, _app, buildData);
+      }
+    }
+  }
+  return buildData.mpTable;
 }
 
 //------------------------------------------------------------------------------
