@@ -22,7 +22,6 @@ LCXmlTableWidgetBuilder::~LCXmlTableWidgetBuilder()
 //------------------------------------------------------------------------------
 static const struct
 {
-    QString name = "name";
     QString width = "width";
     QString height = "height";
 } __attrNames;
@@ -126,7 +125,12 @@ static QWidget* buildLocal(const QDomElement& _element,
     }
   }
   QString style = LCBuildersCommon::getBaseStyleSheet(_element, _app);
-  buildData.mpTable->setStyleSheet("QTableWidget { " + style + " }");
+  buildData.mpTable->setStyleSheet(
+      "QTableWidget { " + style + " }" + 
+      "QTableCornerButton { " + style + " }" + 
+      "QHeaderView { " + style + " }" );
+  /* buildData.mpTable->setStyleSheet("QTableWidget { " + style + " }"); */
+  /* buildData.mpTable->setStyleSheet("QTableWidget { " + style + " }"); */
   /* buildData.mpTable->setStyleSheet(style); */
   LCBuildersCommon::initPosition(_element, *buildData.mpTable);
   return buildData.mpTable;
@@ -143,7 +147,7 @@ static void createRow(
 
     _buildData.mpTable->setRowCount(++_buildData.mRow);
 
-    QString row_name = _element.attribute(__attrNames.name);
+    QString row_name = _element.attribute(LCBuildersCommon::mAttributes.label);
 
     int curr_row = _buildData.mRow - 1;
 
@@ -219,7 +223,7 @@ static void createCol(
 
     _buildData.mpTable->setColumnCount(++_buildData.mColumn);
 
-    QString col_name = _element.attribute( __attrNames.name);
+    QString col_name = _element.attribute( LCBuildersCommon::mAttributes.label);
 
     if(!col_name.isNull())
     {

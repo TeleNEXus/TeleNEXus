@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" ?>
   <!-- bgImage="picture/fon3.png" bgPos="bottom" -->
+  <!-- bgImage="picture/fon3.png" bgPos="bottom" -->
+  <!-- bgColor="rgb(150,150,250)" -->
+  <!-- bgColor="rgb(160,160,160)" -->
 <table
-  bgColor="rgb(50,50,50)"
-  textColor="rgb(0,255,0)"
-  bgImage="picture/fon3.png" bgPos="bottom"
+  textColor="rgb(100,0,0)"
+  bgColor="rgb(160,160,160)"
+  bgImage="picture/fon3.png" bgPos="left"
   >
-  <col name="Столбец 1">
+  <col label="Столбец 1">
     <dataComboBox  read="hreg0" source="qtslavetcp" format="uint16">
       <item text="On"     value="010"/>
       <item text="Off"    value="011"/>
@@ -49,13 +52,13 @@
     <dataLineEdit   bgColor="red" source="qtslavetcp"  data="coil[0-2]" format="bits" size="3" separator=" " />
   </col>
 
-  <col name="Столбец 2">
+  <col label="Столбец 2">
     <dataLabel source="qtslavetcp"  data="coil[0-2]" format="hex"/>
     <dataLabel source="qtslavetcp"  data="hreg1" format="uint16"/>
     <dataLabel source="qtslavetcp"  data="hflt"  format="float32"/>
   </col>
 
-  <col name="Столбец 3" width="200">
+  <col label="Столбец 3" width="200">
     <dataLineEdit   source="qtslavetcp" data="hreg[0-1]" format="hex" size="4" separator=" "/>
     <dataComboLabel  read="hreg0" source="qtslavetcp" format="hex" size="2">
       <item text="On"        value="a"/>
