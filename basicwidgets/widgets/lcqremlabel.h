@@ -46,6 +46,8 @@ public:
     virtual ~LCQRemLabel();
     void setActive(bool _flag);
     virtual bool event(QEvent *e) override;
+    /* virtual QSize sizeHint() const override; */
+    /* virtual void paintEvent(QPaintEvent* _event) override; */
 
 };
 

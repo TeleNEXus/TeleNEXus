@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
+  <!-- bgColor="rgb(150, 150, 255)" -->
+  <!-- iconSize="60" -->
+  <!-- fontId="mnemo18" -->
+  <!-- textColor="yellow" -->
 <tabs 
-  bgColor="rgb(150, 150, 255)"
-  iconSize="60"
-  fontId="mnemo18"
-  textColor="yellow"
   >
   <!-- iconSize="100" -->
 
