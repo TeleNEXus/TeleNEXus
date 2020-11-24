@@ -2,8 +2,6 @@
 #define LCXMLWIDGETBUILDER_H
 
 #include "LIXmlWidgetBuilder.h"
-#include <QFrame>
-
 
 class LCXmlWidgetBuilder : public LIXmlWidgetBuilder
 {

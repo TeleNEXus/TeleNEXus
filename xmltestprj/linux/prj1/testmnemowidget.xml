@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
+  <!-- minWidth="350" -->
+  <!-- minHeight="350" -->
+  <!-- maxWidth="350" -->
+  <!-- maxHeight="350" -->
 <widget 
-  minWidth="350"
-  minHeight="350"
+
   bgImage="picture/fon3.png" bgPos="bottom"
   >
   <widgets>
@@ -111,7 +114,8 @@
       <!-- <dataLabel source="qtslavetcp" data="hreg[0-1]" format="hex" dataSize="4" minWidth="150" separator=" " --> 
       <!--   posx="250" posy="205" /> -->
 
-    <widget posx="250" posy="205">
+    <widget posx="250" posy="205" minWidth="100" 
+      bgImage="picture/fon1.png" bgPos="bottom">
       <widgets>
         <dataLabel source="qtslavetcp" data="hreg[0-1]" format="hex" dataSize="4" fontId="mnemo10" separator=" " 
           />

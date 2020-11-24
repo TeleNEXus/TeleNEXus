@@ -11,97 +11,106 @@
   maxWidth="300"
   >
 
-    <item text="widget mnemo" icon="picture/picture_1.png">
-      <scrollArea align="Center" bgColor="rgb(102,102,102)">
-        <widget file="testmnemowidget.xml"/>
-      </scrollArea>
-    </item>
+  <item text="widget mnemo" icon="picture/picture_1.png">
+    <scrollArea align="Center" bgColor="rgb(102,102,102)">
+      <widget file="testmnemowidget.xml"/>
+    </scrollArea>
+  </item>
 
-    <item text="widget tab" icon="picture/picture_1.png">
-      <tabs file="testtab.xml"/>
-    </item>
+  <item text="widget tab" icon="picture/picture_1.png">
+    <tabs file="testtab.xml"/>
+  </item>
 
-    <item text="widget 2" icon="picture/icon1.png">
-        <widget>
-            <layout>
-                <layoutVBox>
-                    <widgets>
-                        <label text="Label 1 widget 1" /> 
-                        <label text="Label 2 widget 1" /> 
-                    </widgets>
-                </layoutVBox>
-            </layout>
-        </widget>
-    </item>
+  <item text="widget 2" icon="picture/icon1.png">
+    <widget>
+      <layout>
+        <layoutVBox>
+          <!-- <widgets align="left hcenter"> -->
+          <widgets>
+            <label text="Label 1 widget 1" /> 
+            <label text="Label 2 widget 1" /> 
+            <widget file="testmnemowidget.xml"/>
+          </widgets>
 
-    <item text="widget 3" icon="picture/picture_2.png">
-        <widget>
-            <layout>
-                <layoutVBox>
-                    <widgets>
-                        <label text="Label 1 widget 3" /> 
-                        <label text="Label 2 widget 3" /> 
-                        <dataComboBox  read="hreg0" source="qtslavetcp" format="uint16">
-                            <item text="On"     value="010"/>
-                            <item text="Off"    value="011"/>
-                            <item text="Reset"  value="012"/>
-                            <item text="Test"   value="013"/>
-                        </dataComboBox>
+          <widgets align="center">
+            <label text="Label 1 widget 1" /> 
+            <label text="Label 2 widget 1" /> 
+            <widget file="testmnemowidget.xml"/>
+          </widgets>
 
-                        <dataComboBox  read="hreg0" source="qtslavetcp" format="hex" size="2">
-                            <item text="On"        value="00_0 a"/>
-                            <item text="Off"       value="00_0 b"/>
-                            <item text="Reset"     value="00_0 c"/>
-                            <item text="Test"      value="00_0 d"/>
-                        </dataComboBox>
+        </layoutVBox>
+      </layout>
+    </widget>
+  </item>
 
-                        <dataComboLabel  read="coil0" source="qtslavetcp" format="bool">
-                            <item text="Включен"        value="true"/>
-                            <item text="Выключен"       value="false"/>
-                        </dataComboLabel>
+  <item text="widget 3" icon="picture/picture_2.png">
+    <widget>
+      <layout>
+        <layoutVBox>
+          <widgets>
+            <label text="Label 1 widget 3" /> 
+            <label text="Label 2 widget 3" /> 
+            <dataComboBox  read="hreg0" source="qtslavetcp" format="uint16">
+              <item text="On"     value="010"/>
+              <item text="Off"    value="011"/>
+              <item text="Reset"  value="012"/>
+              <item text="Test"   value="013"/>
+            </dataComboBox>
+
+            <dataComboBox  read="hreg0" source="qtslavetcp" format="hex" size="2">
+              <item text="On"        value="00_0 a"/>
+              <item text="Off"       value="00_0 b"/>
+              <item text="Reset"     value="00_0 c"/>
+              <item text="Test"      value="00_0 d"/>
+            </dataComboBox>
+
+            <dataComboLabel  read="coil0" source="qtslavetcp" format="bool">
+              <item text="Включен"        value="true"/>
+              <item text="Выключен"       value="false"/>
+            </dataComboLabel>
 
 
-                        <!-- <widget fixwidth="100" fixheight="100"> -->
-                        <!--     <widgets> -->
-                                <dataComboLabel  read="hreg0" source="qtslavetcp" format="hex" size="2">
-                                    <!-- <item text="On"        value="a"/> -->
-                                    <!-- <item text="Off"       value="b"/> -->
-                                    <!-- <item text="Reset"     value="c"/> -->
-                                    <item text="Test"      value="d"/>
-                                    <!-- <item picture="Test"      value="d"/> -->
-                                    <item movie="/movies/10_11_12_13.gif"      value="a"/>
-                                    <item picture="/picture/picture_2.png"     value="b"/>
-                                    <!-- <item movie="/movies/20_21_22_23.gif"      value="b"/> -->
-                                    <item movie="/movies/30_31_32_33.gif"      value="c"/>
+            <!-- <widget fixwidth="100" fixheight="100"> -->
+              <!--     <widgets> -->
+                <dataComboLabel  read="hreg0" source="qtslavetcp" format="hex" size="2">
+                  <!-- <item text="On"        value="a"/> -->
+                  <!-- <item text="Off"       value="b"/> -->
+                  <!-- <item text="Reset"     value="c"/> -->
+                  <item text="Test"      value="d"/>
+                  <!-- <item picture="Test"      value="d"/> -->
+                  <item movie="/movies/10_11_12_13.gif"      value="a"/>
+                  <item picture="/picture/picture_2.png"     value="b"/>
+                  <!-- <item movie="/movies/20_21_22_23.gif"      value="b"/> -->
+                  <item movie="/movies/30_31_32_33.gif"      value="c"/>
 
-                                </dataComboLabel>
-                                <dataComboLabel  read="hreg0" source="qtslavetcp" format="hex" size="2">
-                                    <!-- <item text="On"        value="a"/> -->
-                                    <!-- <item text="Off"       value="b"/> -->
-                                    <!-- <item text="Reset"     value="c"/> -->
-                                    <item text="Test"      value="d"/>
-                                    <!-- <item picture="Test"      value="d"/> -->
-                                    <item movie="/movies/10_11_12_13.gif"      value="a"/>
-                                    <item movie="/movies/20_21_22_23.gif"      value="b"/>
-                                    <item movie="/movies/30_31_32_33.gif"      value="c"/>
+                </dataComboLabel>
+                <dataComboLabel  read="hreg0" source="qtslavetcp" format="hex" size="2">
+                  <!-- <item text="On"        value="a"/> -->
+                  <!-- <item text="Off"       value="b"/> -->
+                  <!-- <item text="Reset"     value="c"/> -->
+                  <item text="Test"      value="d"/>
+                  <!-- <item picture="Test"      value="d"/> -->
+                  <item movie="/movies/10_11_12_13.gif"      value="a"/>
+                  <item movie="/movies/20_21_22_23.gif"      value="b"/>
+                  <item movie="/movies/30_31_32_33.gif"      value="c"/>
 
-                                </dataComboLabel>
-                                <dataComboLabel  read="hreg0" source="qtslavetcp" format="hex" size="2">
-                                    <!-- <item text="On"        value="a"/> -->
-                                    <!-- <item text="Off"       value="b"/> -->
-                                    <!-- <item text="Reset"     value="c"/> -->
-                                    <item text="Test"      value="d"/>
-                                    <!-- <item picture="Test"      value="d"/> -->
-                                    <item movie="/movies/10_11_12_13.gif"      value="a"/>
-                                    <item movie="/movies/20_21_22_23.gif"      value="b"/>
-                                    <item movie="/movies/30_31_32_33.gif"      value="c"/>
+                </dataComboLabel>
+                <dataComboLabel  read="hreg0" source="qtslavetcp" format="hex" size="2">
+                  <!-- <item text="On"        value="a"/> -->
+                  <!-- <item text="Off"       value="b"/> -->
+                  <!-- <item text="Reset"     value="c"/> -->
+                  <item text="Test"      value="d"/>
+                  <!-- <item picture="Test"      value="d"/> -->
+                  <item movie="/movies/10_11_12_13.gif"      value="a"/>
+                  <item movie="/movies/20_21_22_23.gif"      value="b"/>
+                  <item movie="/movies/30_31_32_33.gif"      value="c"/>
 
-                                </dataComboLabel>
-                            <!-- </widgets> -->
-                        <!-- </widget> -->
-                    </widgets>
-                </layoutVBox>
-            </layout>
-        </widget>
-    </item>
+                </dataComboLabel>
+                <!-- </widgets> -->
+              <!-- </widget> -->
+          </widgets>
+        </layoutVBox>
+      </layout>
+    </widget>
+  </item>
 </switchWidgetsList>

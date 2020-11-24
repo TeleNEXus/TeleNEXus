@@ -3,9 +3,6 @@
 #include <QDebug>
 #include <qnamespace.h>
 
-#define __WRONG_DATA_STRING "####"
-
-
 //==============================================================================LCQRemLabel
 LCQRemLabel::CReadListener::CReadListener(LCQRemLabel& _label) : mLabel(_label)
 {
@@ -87,25 +84,3 @@ bool LCQRemLabel::event(QEvent *_event)
     return ret;
 }
 
-/* //------------------------------------------------------------------------------event */
-/* void LCQRemLabel::paintEvent(QPaintEvent* _event) */ 
-/* { */
-/*     /1* QFontMetrics fm(font()); *1/ */
-/*    /1* setMinimumWidth(fm.size(Qt::TextFlag::TextSingleLine, text()).width()); *1/ */
-/*    /1* resize( *1/ */
-/*   /1* setUpdatesEnabled(false); *1/ */
-/*   /1* adjustSize(); *1/ */
-/*   /1* setUpdatesEnabled(true); *1/ */
-/*   QLabel::paintEvent(_event); */
-/*   /1* this->adjustSize(); *1/ */
-/*   this->updateGeometry(); */
-/* } */
-
-/* QSize LCQRemLabel::sizeHint() const */
-/* { */
-/*   QFontMetrics fm(font()); */
-/*   QSize s =fm.size(Qt::TextFlag::TextSingleLine, text()); */ 
-/*   qDebug() << "LCQRemLabel size hint = " << s; */
-
-/*   return s; */
-/* } */

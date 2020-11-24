@@ -192,9 +192,24 @@ static void buildComboLabel( const QDomElement& _element,
     QString attr_data= el.attribute(__attrNames.text);
     if(!attr_data.isNull())
     {
+
       switch(mode)
       {
-      case EItemMode::normal:
+      case EItemMode::undef:
+        {
+          label = new QLabel(attr_data);
+          _cl->addItemUndef(label);
+        }
+        break;
+
+      case EItemMode::wrong:
+        {
+          label = new QLabel(attr_data);
+          _cl->addItemWrong(label);
+        }
+        break;
+
+      default: //normal
         {
           QString attr_value = el.attribute(__attrNames.value);
 
@@ -206,19 +221,6 @@ static void buildComboLabel( const QDomElement& _element,
           label = new QLabel(attr_data);
           _cl->addItem(label, attr_value);
         }
-        break;
-      case EItemMode::undef:
-        {
-          label = new QLabel(attr_data);
-          _cl->addItemUndef(label);
-        }
-        break;
-      case EItemMode::wrong:
-        {
-          label = new QLabel(attr_data);
-          _cl->addItemWrong(label);
-        }
-        break;
       }
 
       if(label != nullptr)
@@ -239,7 +241,21 @@ static void buildComboLabel( const QDomElement& _element,
     
     switch(mode)
     {
-    case EItemMode::normal:
+    case EItemMode::undef:
+      {
+        label = new CQMovieLabel(movie_access);
+        _cl->addItemUndef(label);
+      }
+      break;
+
+    case EItemMode::wrong:
+      {
+        label = new CQMovieLabel(movie_access);
+        _cl->addItemWrong(label);
+      }
+      break;
+
+    default: //normal
       {
         QString attr_value = el.attribute(__attrNames.value);
 
@@ -251,18 +267,6 @@ static void buildComboLabel( const QDomElement& _element,
         label = new CQMovieLabel(movie_access);
         _cl->addItem(label, attr_value);
 
-      }
-      break;
-    case EItemMode::undef:
-      {
-        label = new CQMovieLabel(movie_access);
-        _cl->addItemUndef(label);
-      }
-      break;
-    case EItemMode::wrong:
-      {
-        label = new CQMovieLabel(movie_access);
-        _cl->addItemWrong(label);
       }
       break;
     }
