@@ -1,7 +1,6 @@
 ﻿#ifndef LCQEXTLABEL_H
 #define LCQEXTLABEL_H
 
-#include <QLabel>
 #include "lremgui.h"
 #include "lqextendevent.h"
 #include "lcstringdataformatterbase.h"
@@ -10,6 +9,7 @@
 #include "LIRemoteDataReadListener.h"
 #include "LIRemoteDataSource.h"
 
+#include <QLabel>
 
 class LCQRemLabel : public QLabel
 {
@@ -46,9 +46,6 @@ public:
     virtual ~LCQRemLabel();
     void setActive(bool _flag);
     virtual bool event(QEvent *e) override;
-    /* virtual QSize sizeHint() const override; */
-    /* virtual void paintEvent(QPaintEvent* _event) override; */
-
 };
 
 #endif // LCQEXTLABEL_H

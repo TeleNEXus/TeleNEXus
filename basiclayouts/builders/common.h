@@ -13,13 +13,13 @@ public:
         const QString attrName = "align";
         const struct
         {
-            QString Left    = "Left";
-            QString Right   = "Right";
-            QString Center  = "Center";
-            QString HCenter = "HCenter";
-            QString Top     = "Top";
-            QString Bottom  = "Bottom";
-            QString VCenter = "VCenter";
+            QString Left    = "left";
+            QString Right   = "right";
+            QString Center  = "center";
+            QString HCenter = "hcenter";
+            QString Top     = "top";
+            QString Bottom  = "bottom";
+            QString VCenter = "vcenter";
         }vals;
         Qt::AlignmentFlag toFlags(const QString& _attributes) const;
         SAligns(){}

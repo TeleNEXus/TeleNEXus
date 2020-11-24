@@ -2,88 +2,58 @@
 #include "lcbuilderscommon.h"
 #include "LIApplication.h"
 #include "LIXmlLayoutBuilder.h"
-#include <QWidget>
+#include <QFrame>
 #include <QDomElement>
 #include <QFile>
 #include <QDebug>
-#include <QWidget>
 
-class LCWidget : public QWidget 
+//==============================================================================
+class LCWidget : public QFrame
 {
-  /* Q_OBJECT */
 private:
     static int mObjectCounter;
     QSize mSizeHint;
 public:
     explicit LCWidget(QWidget* _parent=nullptr); 
-
     virtual QSize sizeHint() const override;
-
     void addWidget(QWidget* _widget);
 };
 
-      int LCWidget::mObjectCounter = 0;
-    LCWidget::LCWidget(QWidget* _parent) : 
-      QWidget(_parent)
-    {
-      this->setObjectName(QString("LCWidget_%1").arg(mObjectCounter));
-      mObjectCounter++;
-    }
+//------------------------------------------------------------------------------
+int LCWidget::mObjectCounter = 0;
+//------------------------------------------------------------------------------
+LCWidget::LCWidget(QWidget* _parent) : 
+  QFrame(_parent)
+{
+  this->setObjectName(QString("LCWidget_%1").arg(mObjectCounter));
+  mObjectCounter++;
+}
 
-    QSize LCWidget::sizeHint() const 
-    {
-        return QSize(mSizeHint.width()+5, mSizeHint.height()+5);
-    }
+//------------------------------------------------------------------------------
+QSize LCWidget::sizeHint() const 
+{
+  return QSize(mSizeHint.width()+5, mSizeHint.height()+5);
+}
 
-    void LCWidget::addWidget(QWidget* _widget)
-    {
-        int width   = mSizeHint.width();
-        int height  = mSizeHint.height();
-        _widget->setParent(this);
-        _widget->show();
+//------------------------------------------------------------------------------
+void LCWidget::addWidget(QWidget* _widget)
+{
+  int width   = mSizeHint.width();
+  int height  = mSizeHint.height();
+  _widget->setParent(this);
+  _widget->show();
 
-        if( _widget->geometry().bottomRight().x() > width)
-        {
-            width = _widget->geometry().bottomRight().x();
-        }
+  if( _widget->geometry().bottomRight().x() > width)
+  {
+    width = _widget->geometry().bottomRight().x();
+  }
 
-        if( _widget->geometry().bottomRight().y() > height)
-        {
-            height = _widget->geometry().bottomRight().y();
-        }
-        mSizeHint = QSize(width, height);
-    }
-/* class LCWidget : public QWidget */ 
-/* { */
-/* private: */
-/*     QSize mSizeHint; */
-/* public: */
-/*     explicit LCWidget(QWidget* _parent=nullptr) : */ 
-/*       QWidget(_parent){this->setObjectName("MyObject");} */
-/*     virtual QSize sizeHint() const override */
-/*     { */
-/*         return QSize(mSizeHint.width()+5, mSizeHint.height()+5); */
-/*     } */
-
-/*     void addWidget(QWidget* _widget) */
-/*     { */
-/*         int width   = mSizeHint.width(); */
-/*         int height  = mSizeHint.height(); */
-/*         _widget->setParent(this); */
-/*         _widget->show(); */
-
-/*         if( _widget->geometry().bottomRight().x() > width) */
-/*         { */
-/*             width = _widget->geometry().bottomRight().x(); */
-/*         } */
-
-/*         if( _widget->geometry().bottomRight().y() > height) */
-/*         { */
-/*             height = _widget->geometry().bottomRight().y(); */
-/*         } */
-/*         mSizeHint = QSize(width, height); */
-/*     } */
-/* }; */
+  if( _widget->geometry().bottomRight().y() > height)
+  {
+    height = _widget->geometry().bottomRight().y();
+  }
+  mSizeHint = QSize(width, height);
+}
 
 //------------------------------------------------------------------------------
 static const struct
@@ -150,26 +120,12 @@ static QWidget* buildLocal(
 
   QDomNode  node = _element.firstChildElement(__slTags.layout);
   LCWidget* widget = new LCWidget;
-  /* widget->setObjectName("LCWidget"); */
 
   QString style = LCBuildersCommon::getBaseStyleSheet(_element, _app);
 
-
   style = QString("QWidget#%1{  %2 }").arg(widget->objectName()).arg(style);
-  qDebug() << "Widget builder style = " << style;
 
   widget->setStyleSheet(style);
-  /* QString attr_image = _element.attribute("bgImage"); */
-  /* if(!attr_image.isNull()) */
-  /* { */
-  /*   QPixmap pix = LCBuildersCommon::getPixmap(attr_image, _app); */
-  /*   QPalette pal; */
-  /*   pal.setBrush(QPalette::ColorRole::Background, pix); */
-    
-  /*   widget->setPalette(pal); */
-  /*   /1* widget->setAutoFillBackground(false); *1/ */
-  /* } */
-
 
   if(!node.isNull()) 
   {
@@ -185,10 +141,6 @@ static QWidget* buildLocal(
     }
   }
 
-  /* QString style = LCBuildersCommon::getBaseStyleSheet(_element, _app); */
-  /* style = ".QWidget{ " + style + "}"; */
-  /* qDebug() << "Widget builder style = " << style; */
-  /* widget->setStyleSheet(style); */
   LCBuildersCommon::initPosition(_element, *widget);
 
   return widget;

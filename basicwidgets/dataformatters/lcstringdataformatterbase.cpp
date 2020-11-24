@@ -2,7 +2,7 @@
 
 
 QChar     LCStringDataFormatterBase::msFillCharUndefDef('#');
-quint8    LCStringDataFormatterBase::msFillCharUndefDefLength(4);
+quint8    LCStringDataFormatterBase::msFillCharUndefDefLength(8);
 QChar     LCStringDataFormatterBase::msFillCharWrongDef('?');
 quint8    LCStringDataFormatterBase::msFillCharWrongDefLength(3);
 
