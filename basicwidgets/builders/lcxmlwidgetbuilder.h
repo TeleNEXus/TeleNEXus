@@ -1,15 +1,18 @@
 #ifndef LCXMLWIDGETBUILDER_H
 #define LCXMLWIDGETBUILDER_H
 
-#include "LIXmlWidgetBuilder.h"
+#include "lcxmlbuilderbase.h"
 
-class LCXmlWidgetBuilder : public LIXmlWidgetBuilder
+class LCXmlWidgetBuilder : public LCXmlBuilderBase
 {
 public:
     LCXmlWidgetBuilder();
     virtual ~LCXmlWidgetBuilder();
-    virtual QWidget* build( const QDomElement& _element, 
-                            const LIApplication& _app) override;
+
+protected:
+    virtual QWidget* buildLocal( 
+        const QDomElement& _element, 
+        const LIApplication& _app) override;
 };
 
 #endif // LCXMLWIDGETBUILDER_H

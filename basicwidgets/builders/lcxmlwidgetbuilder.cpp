@@ -11,12 +11,12 @@
 class LCWidget : public QFrame
 {
 private:
-    static int mObjectCounter;
-    QSize mSizeHint;
+  static int mObjectCounter;
+  QSize mSizeHint;
 public:
-    explicit LCWidget(QWidget* _parent=nullptr); 
-    virtual QSize sizeHint() const override;
-    void addWidget(QWidget* _widget);
+  explicit LCWidget(QWidget* _parent=nullptr); 
+  virtual QSize sizeHint() const override;
+  void addWidget(QWidget* _widget);
 };
 
 //------------------------------------------------------------------------------
@@ -25,7 +25,7 @@ int LCWidget::mObjectCounter = 0;
 LCWidget::LCWidget(QWidget* _parent) : 
   QFrame(_parent)
 {
-  this->setObjectName(QString("LCWidget_%1").arg(mObjectCounter));
+  setObjectName(QString("LCWidget_%1").arg(mObjectCounter));
   mObjectCounter++;
 }
 
@@ -58,14 +58,14 @@ void LCWidget::addWidget(QWidget* _widget)
 //------------------------------------------------------------------------------
 static const struct
 {
-    QString layout = "layout";
-    QString widgets = "widgets";
+  QString layout = "layout";
+  QString widgets = "widgets";
 } __slTags;
 
 //------------------------------------------------------------------------------
 static const struct
 {
-    QString file = "file";
+  QString file = "file";
 } __attrName;
 
 //==============================================================================
@@ -81,43 +81,17 @@ LCXmlWidgetBuilder::~LCXmlWidgetBuilder()
 }
 
 //------------------------------------------------------------------------------
-static QWidget* buildLocal(
-        const QDomElement& _element, 
-        const LIApplication& _app);
-
-//------------------------------------------------------------------------------
-QWidget* LCXmlWidgetBuilder::build( const QDomElement& _element, 
-                                    const LIApplication& _app)
-{
-
-    QString attr;
-
-    attr = _element.attribute(__attrName.file);
-
-    if(!attr.isNull())
-    {
-        QDomElement el = _app.getDomDocument(attr).documentElement();
-        if(!el.isNull())
-        {
-            if(el.tagName() == _element.tagName()) return build(el, _app);
-        } 
-    }
-
-    return buildLocal(_element, _app);
-}
-
-//------------------------------------------------------------------------------
 static void buildFromLayout(LCWidget* _widget, const QDomElement& _element, 
-        const LIApplication& _app);
+    const LIApplication& _app);
 //------------------------------------------------------------------------------
 static void buildFromWidgets(LCWidget* _widget, const QDomElement& _element, 
-        const LIApplication& _app);
+    const LIApplication& _app);
+
 //------------------------------------------------------------------------------
-static QWidget* buildLocal(
+QWidget* LCXmlWidgetBuilder::buildLocal( 
     const QDomElement& _element, 
     const LIApplication& _app)
 {
-
   QDomNode  node = _element.firstChildElement(__slTags.layout);
   LCWidget* widget = new LCWidget;
 
@@ -146,50 +120,50 @@ static QWidget* buildLocal(
   return widget;
 }
 
+
 //------------------------------------------------------------------------------
 static void buildFromLayout(LCWidget* _widget, const QDomElement& _element, 
-        const LIApplication& _app)
+    const LIApplication& _app)
 {
-    for(QDomNode node = _element.firstChild();
-            !node.isNull();
-            node = node.nextSibling())
+  for(QDomNode node = _element.firstChild();
+      !node.isNull();
+      node = node.nextSibling())
+  {
+    QDomElement el = node.toElement();
+    if(!el.isNull())
     {
-         QDomElement el = node.toElement();
-         if(!el.isNull())
-         {
-             auto builder = _app.getLayoutBuilder(el.tagName());
-             if(!builder.isNull())
-             {
-                QLayout* layout = (*builder).build(el, _app);
-                if(layout)
-                {
-                    _widget->setLayout(layout);
-                    break;
-                }
-             }                 
-         }
+      auto builder = _app.getLayoutBuilder(el.tagName());
+      if(!builder.isNull())
+      {
+        QLayout* layout = (*builder).build(el, _app);
+        if(layout)
+        {
+          _widget->setLayout(layout);
+          break;
+        }
+      }                 
     }
+  }
 }
 
 //------------------------------------------------------------------------------
 static void buildFromWidgets(LCWidget* _widget, const QDomElement& _element, 
-        const LIApplication& _app)
+    const LIApplication& _app)
 {
 
-    for(QDomNode node = _element.firstChild();
-            !node.isNull();
-            node = node.nextSibling())
+  for(QDomNode node = _element.firstChild();
+      !node.isNull();
+      node = node.nextSibling())
+  {
+    QDomElement el = node.toElement();
+    if(el.isNull()) continue;
+    auto builder = _app.getWidgetBuilder(el.tagName());
+    if(builder.isNull()) continue;
+    QWidget* build_widget = builder->build(el, _app);
+    if(build_widget)
     {
-         QDomElement el = node.toElement();
-         if(el.isNull()) continue;
-         auto builder = _app.getWidgetBuilder(el.tagName());
-         if(builder.isNull()) continue;
-         QWidget* addWidget = builder->build(el, _app);
-         if(addWidget)
-         {
-             _widget->addWidget(addWidget);
-         }
+      _widget->addWidget(build_widget);
     }
+  }
 }
-
 

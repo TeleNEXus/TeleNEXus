@@ -40,6 +40,7 @@ SOURCES += \
     widgets/lcqremcombobox.cpp \
     widgets/lcqremcombolabel.cpp \
     widgets/lcqremwritebutton.cpp \
+    builders/lcxmlbuilderbase.cpp \
     builders/lcxmlremlabelbuilder.cpp \
     builders/lcxmlremlineeditbuilder.cpp \
     builders/lcxmltextlabelbuilder.cpp \
@@ -88,6 +89,7 @@ HEADERS += \
     widgets/lcqremcombobox.h \
     widgets/lcqremcombolabel.h \
     widgets/lcqremwritebutton.h \
+    builders/lcxmlbuilderbase.h \
     builders/lcxmlremlineeditbuilder.h \
     builders/lcxmlremlabelbuilder.h \
     builders/lcxmlremlineeditbuilder.h \
