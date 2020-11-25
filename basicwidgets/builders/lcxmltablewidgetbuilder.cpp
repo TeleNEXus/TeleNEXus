@@ -139,16 +139,6 @@ QWidget* LCXmlTableWidgetBuilder::buildLocal(const QDomElement& _element,
 
   buildData.mpTable->setStyleSheet(table_style + header_style);
 
-  /* buildData.mpTable->setStyleSheet( */
-  /*     QString("QTableWidget#%1 { %2 }"). */
-  /*     arg(buildData.mpTable->objectName()). */
-  /*     arg(table_style)); */
-
-  /* buildData.mpTable->setStyleSheet( */
-  /*     "QTableWidget { " + style + " }" + */ 
-  /*     "QTableCornerButton { " + style + " }" + */ 
-  /*     "QHeaderView { " + style + " }" ); */
-
   LCBuildersCommon::initPosition(_element, *buildData.mpTable);
   return buildData.mpTable;
 }

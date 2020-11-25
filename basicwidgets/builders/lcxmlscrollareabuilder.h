@@ -1,14 +1,15 @@
 #ifndef LCXMLSCROLLAREABUILDER_H_ 
 #define LCXMLSCROLLAREABUILDER_H_
 
-#include "LIXmlWidgetBuilder.h"
+#include "lcxmlbuilderbase.h"
 
-class LCXmlScrollAreaBuilder: public LIXmlWidgetBuilder
+class LCXmlScrollAreaBuilder: public LCXmlBuilderBase 
 {
 public:
   LCXmlScrollAreaBuilder();
   virtual ~LCXmlScrollAreaBuilder();
-  virtual QWidget* build( const QDomElement& _element, 
+protected:
+  virtual QWidget* buildLocal( const QDomElement& _element, 
       const LIApplication& _app) override;
 };
 
