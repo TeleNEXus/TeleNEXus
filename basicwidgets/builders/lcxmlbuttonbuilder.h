@@ -1,11 +1,9 @@
 #ifndef LCXMLBUTTONBUILDER_H__
 #define LCXMLBUTTONBUILDER_H__
 
-#include "LIXmlWidgetBuilder.h"
+#include "lcxmlbuilderbase.h"
 
-#include <QString>
-
-class LCXmlButtonBuilder : public LIXmlWidgetBuilder
+class LCXmlButtonBuilder : public LCXmlBuilderBase
 {
 public:
 
@@ -15,6 +13,7 @@ public:
     writeData,      //Кнопка записи данных.
     controlWindows  //Кнопка управления окнами.
   };
+
 private:
   EType mType;
 
@@ -22,7 +21,9 @@ public:
   LCXmlButtonBuilder() = delete;
   explicit LCXmlButtonBuilder(EType _type = EType::writeData);
   ~LCXmlButtonBuilder();
-  virtual QWidget* build( const QDomElement& _element, 
+
+protected:
+  virtual QWidget* buildLocal( const QDomElement& _element, 
       const LIApplication& _app) override;
 };
 

@@ -1,16 +1,18 @@
 #ifndef LCXMLREMCOMBOBOXBUILDER_H
 #define LCXMLREMCOMBOBOXBUILDER_H
 
-#include "LIXmlWidgetBuilder.h"
+#include "lcxmlbuilderbase.h"
 
-
-class LCXmlRemComboBoxBuilder: public LIXmlWidgetBuilder
+class LCXmlRemComboBoxBuilder: public LCXmlBuilderBase 
 {
+
 public:
     LCXmlRemComboBoxBuilder();
     virtual ~LCXmlRemComboBoxBuilder();
-    virtual QWidget* build( const QDomElement& _element, 
-                            const LIApplication& _app) override;
+
+protected:
+    virtual QWidget* buildLocal( const QDomElement& _element, 
+                            const LIApplication& _app) override final;
 };
 
 #endif // LCXMLREMCOMBOBOXBUILDER_H

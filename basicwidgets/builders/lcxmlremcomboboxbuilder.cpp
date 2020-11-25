@@ -27,9 +27,9 @@ const struct
 {
   QString dataread    = "read";
   QString datawrite   = "write";
-  QString source      = "source";
+  /* QString source      = "source"; */
   QString format      = "format";
-  QString text        = "text";
+  /* QString text        = "text"; */
   QString value       = "value";
 } __attrNames;
 
@@ -45,13 +45,13 @@ static void buildCombobox(   const QDomElement& _element,
     QSharedPointer<LCStringDataFormatterBase> __format);
 
 //------------------------------------------------------------------------------build
-QWidget* LCXmlRemComboBoxBuilder::build(const QDomElement& _element, 
+QWidget* LCXmlRemComboBoxBuilder::buildLocal(const QDomElement& _element, 
     const LIApplication& _app)
 {
   QWidget *ret = nullptr;
   QString dataread;
   QString datawrite;
-  QString attr = _element.attribute(__attrNames.source);
+  QString attr = _element.attribute(LCBuildersCommon::mAttributes.source);
   QSharedPointer<LIRemoteDataSource> source;
   QSharedPointer<LCStringDataFormatterBase> format;
 
@@ -122,7 +122,7 @@ static void buildCombobox(   const QDomElement& _element,
     if(el.isNull()) continue;
     if(el.tagName() != __elementNames.item) continue;
 
-    QString name = el.attribute(__attrNames.text);
+    QString name = el.attribute(LCBuildersCommon::mAttributes.text);
     QString val = el.attribute(__attrNames.value);
     if (val.isNull()) 
     {

@@ -11,8 +11,8 @@
 //==============================================================================
 static const struct 
 {
-  QString text      = "text";
-  QString source    = "sourceName";
+  /* QString text      = "text"; */
+  /* QString source    = "sourceName"; */
   QString dataName  = "dataName";
   QString value     = "value";
   QString id        = "id";
@@ -67,7 +67,8 @@ static QPushButton* buildControllWindowButton(
 static void setStyleSheet(QPushButton* _button, const QDomElement& _element, 
     const LIApplication& _app);
 
-QWidget* LCXmlButtonBuilder::build( const QDomElement& _element, 
+//------------------------------------------------------------------------------
+QWidget* LCXmlButtonBuilder::buildLocal( const QDomElement& _element, 
     const LIApplication& _app)
 {
   QPushButton* button;
@@ -161,7 +162,8 @@ static QPushButton* buildWriteButton(
     const QDomElement& _element, const LIApplication& _app)
 {
   LCQRemWriteButton* button = 
-    new LCQRemWriteButton(_element.attribute(__slAttributes.text));
+    new LCQRemWriteButton(
+        _element.attribute(LCBuildersCommon::mAttributes.text));
 
   for(    QDomNode node = _element.firstChild(); 
       !node.isNull(); 
@@ -174,7 +176,7 @@ static QPushButton* buildWriteButton(
       instance().createStringFormatter(el.attributes());
     if(format.isNull()) continue;
     auto source = _app.getDataSource(
-        el.attribute(__slAttributes.source));
+        el.attribute(LCBuildersCommon::mAttributes.source));
     if(source.isNull()) continue;
     auto data_name = el.attribute(__slAttributes.dataName);
     if(data_name.isNull()) continue;
@@ -211,7 +213,7 @@ static QPushButton* buildControllWindowButton(
     Q_UNUSED(_app);
 
     QPushButton* button = new QPushButton(
-        _element.attribute(__slAttributes.text));
+        _element.attribute(LCBuildersCommon::mAttributes.text));
 
     QList<SAction> pressActions;
     QList<SAction> releaseActions;
