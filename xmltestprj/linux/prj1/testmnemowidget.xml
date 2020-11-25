@@ -98,7 +98,7 @@
       <dataLineEdit   source="qtslavetcp" data="hreg[0-1]" format="hex" dataSize="4" separator=" " 
         textColor="red"
         bgColor="rgba(0,0,255,128)"
-        width="100"
+        maxWidth="100"
         fontId="mnemo10"
         posx="120" posy="155" />
 

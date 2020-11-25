@@ -21,20 +21,12 @@ LCXmlRemLabelBuilder::~LCXmlRemLabelBuilder()
 }
 
 //------------------------------------------------------------------------------
-const struct
-{
-  QString data    = "data";
-  QString source  = "source";
-  QString format  = "format";
-} __attrNames;
-
-//------------------------------------------------------------------------------
-QWidget* LCXmlRemLabelBuilder::build(const QDomElement& _element, 
+QWidget* LCXmlRemLabelBuilder::buildLocal(const QDomElement& _element, 
     const LIApplication& _app)
 {
   QLabel* ret = nullptr;
   QString data;
-  QString attr = _element.attribute(__attrNames.source);
+  QString attr = _element.attribute(LCBuildersCommon::mAttributes.source);
   QSharedPointer<LIRemoteDataSource> source;
   QSharedPointer<LCStringDataFormatterBase> format;
 
@@ -50,7 +42,7 @@ QWidget* LCXmlRemLabelBuilder::build(const QDomElement& _element,
     goto LABEL_WRONG_EXIT;
   }
 
-  data = _element.attribute(__attrNames.data);
+  data = _element.attribute(LCBuildersCommon::mAttributes.data);
 
   if(data.isNull())
   {
