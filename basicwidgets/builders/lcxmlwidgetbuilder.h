@@ -6,13 +6,16 @@
 class LCXmlWidgetBuilder : public LCXmlBuilderBase
 {
 public:
-    LCXmlWidgetBuilder();
-    virtual ~LCXmlWidgetBuilder();
+  LCXmlWidgetBuilder();
+  virtual ~LCXmlWidgetBuilder();
 
 protected:
-    virtual QWidget* buildLocal( 
-        const QDomElement& _element, 
-        const LIApplication& _app) override;
+  virtual QWidget* buildLocal( 
+      const QDomElement& _element, 
+      const LIApplication& _app) override final;
+
+  virtual QWidget* buildLocal1(
+      QSharedPointer<SBaseData> _buildData) override final;
 };
 
 #endif // LCXMLWIDGETBUILDER_H

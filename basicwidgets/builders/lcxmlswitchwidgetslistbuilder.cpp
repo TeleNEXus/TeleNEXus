@@ -81,7 +81,7 @@ QWidget* LCXmlSwitchWidgetsListBuilder::buildLocal(
       stacked_widget->addWidget(widget);
     }
   }
-
+  /* listWidget->setCurrentRow(0); */
   splitter->addWidget(listWidget);
   splitter->addWidget(stacked_widget);
 

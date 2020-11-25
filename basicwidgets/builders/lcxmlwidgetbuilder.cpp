@@ -90,8 +90,12 @@ static void buildFromWidgets(LCWidget* _widget, const QDomElement& _element,
 //------------------------------------------------------------------------------
 QWidget* LCXmlWidgetBuilder::buildLocal( 
     const QDomElement& _element, 
-    const LIApplication& _app)
+    const LIApplication& _app){ return nullptr; }
+//------------------------------------------------------------------------------
+QWidget* LCXmlWidgetBuilder::buildLocal1(QSharedPointer<SBaseData> _buildData)
 {
+  const QDomElement& _element = _buildData->element;
+  const LIApplication& _app = _buildData->application;
   QDomNode  node = _element.firstChildElement(__slTags.layout);
   LCWidget* widget = new LCWidget;
 

@@ -5,6 +5,7 @@
 #include <QWidget>
 
 #include <QDomElement>
+#include <QDebug>
 
 //==============================================================================
 LCXmlBuilderBase::LCXmlBuilderBase()
@@ -27,6 +28,14 @@ QWidget* LCXmlBuilderBase::build( const QDomElement& _element,
     if(el.isNull()) return nullptr;
     if(el.tagName() != _element.tagName()) return nullptr;
     return build(el, _app);
+  }
+
+  auto data = new SBaseData{QPoint(), _element, _app};
+  QWidget* w = buildLocal1(QSharedPointer<SBaseData>(data));
+  if(w)
+  {
+    qDebug() << "buildLocal1------------------";
+    return w;
   }
   return buildLocal(_element, _app);
 }
