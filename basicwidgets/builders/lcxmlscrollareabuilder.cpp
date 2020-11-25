@@ -1,23 +1,12 @@
 #include "lcxmlscrollareabuilder.h"
+#include "lcbuilderscommon.h"
+
 #include "LIApplication.h"
 #include "LIXmlLayoutBuilder.h"
-#include "lcbuilderscommon.h"
+
 #include <QScrollArea>
 #include <QDomElement>
-#include <QFile>
 #include <QDebug>
-
-//------------------------------------------------------------------------------
-static const struct
-{
-  QString widgets = "widgets";
-} __slTags;
-
-//------------------------------------------------------------------------------
-static const struct
-{
-  QString file = "file";
-} __attrName;
 
 //==============================================================================
 LCXmlScrollAreaBuilder::LCXmlScrollAreaBuilder()
@@ -32,33 +21,7 @@ LCXmlScrollAreaBuilder::~LCXmlScrollAreaBuilder()
 }
 
 //------------------------------------------------------------------------------
-static QWidget* buildLocal(
-    const QDomElement& _element, 
-    const LIApplication& _app);
-
-//------------------------------------------------------------------------------
-QWidget* LCXmlScrollAreaBuilder::build( const QDomElement& _element, 
-    const LIApplication& _app)
-{
-
-  QString attr;
-
-  attr = _element.attribute(__attrName.file);
-
-  if(!attr.isNull())
-  {
-    QDomElement el = _app.getDomDocument(attr).documentElement();
-    if(!el.isNull())
-    {
-      if(el.tagName() == _element.tagName()) return build(el, _app);
-    } 
-  }
-
-  return buildLocal(_element, _app);
-}
-
-//------------------------------------------------------------------------------
-static QWidget* buildLocal(
+QWidget* LCXmlScrollAreaBuilder::buildLocal(
     const QDomElement& _element, 
     const LIApplication& _app)
 {
