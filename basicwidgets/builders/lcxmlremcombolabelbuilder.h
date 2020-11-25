@@ -1,16 +1,17 @@
 #ifndef LCXMLREMCOMBOLABELBUILDER_H
 #define LCXMLREMCOMBOLABELBUILDER_H
 
-#include "LIXmlWidgetBuilder.h"
+#include "lcxmlbuilderbase.h"
 
-
-class LCXmlRemComboLabelBuilder: public LIXmlWidgetBuilder
+class LCXmlRemComboLabelBuilder: public LCXmlBuilderBase 
 {
 public:
   LCXmlRemComboLabelBuilder();
   virtual ~LCXmlRemComboLabelBuilder();
-  virtual QWidget* build( const QDomElement& _element, 
-      const LIApplication& _app) override;
+
+protected:
+  virtual QWidget* buildLocal( const QDomElement& _element, 
+      const LIApplication& _app) override final;
 };
 
 #endif // LCXMLREMCOMBOLABELBUILDER_H

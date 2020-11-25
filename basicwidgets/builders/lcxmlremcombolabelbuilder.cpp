@@ -57,9 +57,9 @@ LCXmlRemComboLabelBuilder::~LCXmlRemComboLabelBuilder()
 const struct
 {
   QString dataread    = "read";
-  QString source      = "source";
+  /* QString source      = "source"; */
   QString format      = "format";
-  QString text        = "text";
+  /* QString text        = "text"; */
   QString value       = "value";
   struct
   {
@@ -90,12 +90,12 @@ static void buildComboLabel( const QDomElement& _element,
     const LIApplication& _app);
 
 //------------------------------------------------------------------------------
-QWidget* LCXmlRemComboLabelBuilder::build(const QDomElement& _element, 
+QWidget* LCXmlRemComboLabelBuilder::buildLocal(const QDomElement& _element, 
     const LIApplication& _app)
 {
   LCQRemComboLabel *remlabel= nullptr;
   QString dataread;
-  QString attr = _element.attribute(__attrNames.source);
+  QString attr = _element.attribute(LCBuildersCommon::mAttributes.source);
   QSharedPointer<LIRemoteDataSource> source;
   QSharedPointer<LCStringDataFormatterBase> format;
 
@@ -189,7 +189,7 @@ static void buildComboLabel( const QDomElement& _element,
       }
     }
 
-    QString attr_data= el.attribute(__attrNames.text);
+    QString attr_data= el.attribute(LCBuildersCommon::mAttributes.text);
     if(!attr_data.isNull())
     {
 
