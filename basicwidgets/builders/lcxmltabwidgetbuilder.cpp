@@ -7,6 +7,9 @@
 #include <qdom.h>
 #include <qtablewidget.h>
 
+
+//------------------------------------------------------------------------------
+static int __slObjectCounter = 0;
 //------------------------------------------------------------------------------
 static const struct
 {
@@ -31,22 +34,15 @@ static void buildTab(
         int _iconSize,
         const LIApplication& _app);
 
-QWidget* LCXmlTabWidgetBuilder::build(
+QWidget* LCXmlTabWidgetBuilder::buildLocal(
         const QDomElement& _element, 
         const LIApplication& _app)
 {
-    QString attr_file = _element.attribute(LCBuildersCommon::mAttributes.file);
-    if(!attr_file.isNull())
-    {
-        QDomElement el = _app.getDomDocument(attr_file).documentElement();
-        if(!el.isNull())
-        {
-            return build(el, _app);
-        }
-        return new QTabWidget;
-    }
-
     QTabWidget* tabwidget = new QTabWidget;
+
+    QString object_name = QString("XmlTabWidgetBar_%1").arg(__slObjectCounter);
+    __slObjectCounter++;
+    tabwidget->tabBar()->setObjectName(object_name);
 
     int index = 0;
     int icon_size = -1;
@@ -77,8 +73,8 @@ QWidget* LCXmlTabWidgetBuilder::build(
 
     QString style = LCBuildersCommon::getBaseStyleSheet(_element, _app);
 
-    tabwidget->setStyleSheet(".QTabBar {" + style + " } ");
-    /* tabwidget->setStyleSheet(".QTabWidget {" + style + " } "); */
+    tabwidget->setStyleSheet(
+        QString("QTabBar#%1 { %2 }").arg(object_name).arg(style));
 
     LCBuildersCommon::initPosition(_element, *tabwidget);
 

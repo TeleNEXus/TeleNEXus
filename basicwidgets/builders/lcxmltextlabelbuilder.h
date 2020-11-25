@@ -1,15 +1,17 @@
 #ifndef LCXMLTEXTLABELBUILDER_H
 #define LCXMLTEXTLABELBUILDER_H
 
-#include "LIXmlWidgetBuilder.h"
+#include "lcxmlbuilderbase.h"
 
-class LCXmlTextLabelBuilder : public LIXmlWidgetBuilder
+class LCXmlTextLabelBuilder : public LCXmlBuilderBase
 {
 public:
-    LCXmlTextLabelBuilder();
-    virtual ~LCXmlTextLabelBuilder();
-    virtual QWidget* build( const QDomElement& _element, 
-                            const LIApplication& _app) override;
+  LCXmlTextLabelBuilder();
+  virtual ~LCXmlTextLabelBuilder();
+protected:
+  virtual QWidget* buildLocal( 
+      const QDomElement& _element, 
+      const LIApplication& _app) override;
 };
 
 #endif // LCXMLTEXTLABELBUILDER_H

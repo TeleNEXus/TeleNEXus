@@ -1,14 +1,16 @@
 #ifndef LCQTABLEWIDGETBUILDER_H
 #define LCQTABLEWIDGETBUILDER_H
 
-#include "LIXmlWidgetBuilder.h"
+#include "lcxmlbuilderbase.h"
 
-class LCXmlTableWidgetBuilder : public LIXmlWidgetBuilder
+class LCXmlTableWidgetBuilder : public LCXmlBuilderBase 
 {
 public:
     LCXmlTableWidgetBuilder();
     virtual ~LCXmlTableWidgetBuilder();
-    virtual QWidget* build( const QDomElement& _element, 
+
+protected:
+    virtual QWidget* buildLocal( const QDomElement& _element, 
                             const LIApplication& _app) override;
 };
 

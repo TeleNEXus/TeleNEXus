@@ -1,11 +1,35 @@
 #include "lcxmltablewidgetbuilder.h"
 #include "lcbuilderscommon.h"
+#include "LIApplication.h"
+
 #include <QTableWidget>
 #include <QDomElement>
 #include <qnamespace.h>
 #include <qtablewidget.h>
 #include <QDebug>
-#include "LIApplication.h"
+#include <QEvent>
+#include <QtWidgets>
+//==============================================================================
+static int __slObjectCounter = 0;
+
+//------------------------------------------------------------------------------
+static const struct
+{
+    QString width = "width";
+    QString height = "height";
+    QString bgColorHeader = "bgColorHeader";
+    QString textColorHeader = "textColorHeader";
+    QString fontHeader = "fontHeader";
+    QString fontIdHeader = "fontIdHeader";
+    QString gridColor = "gridColor";
+} __attrNames;
+
+//------------------------------------------------------------------------------
+static const struct
+{
+    QString row = "row";
+    QString column = "col";
+} __elementNames;
 
 //==============================================================================
 LCXmlTableWidgetBuilder::LCXmlTableWidgetBuilder()
@@ -19,21 +43,7 @@ LCXmlTableWidgetBuilder::~LCXmlTableWidgetBuilder()
 
 }
 
-//------------------------------------------------------------------------------
-static const struct
-{
-    QString width = "width";
-    QString height = "height";
-} __attrNames;
 
-//------------------------------------------------------------------------------
-static const struct
-{
-    QString row = "row";
-    QString column = "col";
-} __elementNames;
-#include <QEvent>
-#include <QtWidgets>
 //------------------------------------------------------------------------------
 struct SBuildData
 {
@@ -67,12 +77,17 @@ struct SBuildData
     mpTable->setSelectionMode(QTableWidget::SelectionMode::NoSelection);
     mpTable->installEventFilter(new CQEventFilter);
     mpTable->setEditTriggers(QTableWidget::EditTrigger::NoEditTriggers);
+    mpTable->setObjectName(QString("XmlTableWidget_%1").arg(__slObjectCounter));
+    __slObjectCounter++;
   }
 };
 
 //------------------------------------------------------------------------------
-static QWidget* buildLocal(const QDomElement& _element,
+static QString getTableStyle(const QDomElement& _element, 
     const LIApplication& _app);
+
+static QString getHeaderStyle(
+    const QDomElement& _element, const LIApplication& _app);
 
 static void createRow(
         const QDomElement &_element,
@@ -85,23 +100,7 @@ static void createCol(
         SBuildData& _buildData);
 
 //------------------------------------------------------------------------------
-QWidget* LCXmlTableWidgetBuilder::build(const QDomElement& _element,
-        const LIApplication& _app)
-{
-  QString attr_file = _element.attribute(LCBuildersCommon::mAttributes.file);
-  if(!attr_file.isNull())
-  {
-    QDomElement el = _app.getDomDocument(attr_file).documentElement();
-    if(!el.isNull())
-    {
-      if(el.tagName() == _element.tagName()) return build(el, _app);
-    }
-  }
-  return buildLocal(_element, _app);
-}
-
-//------------------------------------------------------------------------------
-static QWidget* buildLocal(const QDomElement& _element,
+QWidget* LCXmlTableWidgetBuilder::buildLocal(const QDomElement& _element,
     const LIApplication& _app)
 {
   SBuildData buildData;
@@ -124,16 +123,80 @@ static QWidget* buildLocal(const QDomElement& _element,
       }
     }
   }
-  QString style = LCBuildersCommon::getBaseStyleSheet(_element, _app);
-  buildData.mpTable->setStyleSheet(
-      "QTableWidget { " + style + " }" + 
-      "QTableCornerButton { " + style + " }" + 
-      "QHeaderView { " + style + " }" );
-  /* buildData.mpTable->setStyleSheet("QTableWidget { " + style + " }"); */
-  /* buildData.mpTable->setStyleSheet("QTableWidget { " + style + " }"); */
-  /* buildData.mpTable->setStyleSheet(style); */
+
+  QString table_style = getTableStyle(_element, _app);
+
+  table_style = QString("QTableWidget#%1 { %2 }").
+    arg(buildData.mpTable->objectName()).
+    arg(table_style);
+
+  QString header_style = getHeaderStyle(_element, _app);
+  header_style = QString(
+      "QTableCornerButton { %1 }"
+      "QHeaderView { %1 }").
+    arg(header_style);
+  qDebug() << "Table Widget Style Sheet = " << table_style + header_style;
+
+  buildData.mpTable->setStyleSheet(table_style + header_style);
+
+  /* buildData.mpTable->setStyleSheet( */
+  /*     QString("QTableWidget#%1 { %2 }"). */
+  /*     arg(buildData.mpTable->objectName()). */
+  /*     arg(table_style)); */
+
+  /* buildData.mpTable->setStyleSheet( */
+  /*     "QTableWidget { " + style + " }" + */ 
+  /*     "QTableCornerButton { " + style + " }" + */ 
+  /*     "QHeaderView { " + style + " }" ); */
+
   LCBuildersCommon::initPosition(_element, *buildData.mpTable);
   return buildData.mpTable;
+}
+
+//------------------------------------------------------------------------------
+static QString getTableStyle(const QDomElement& _element, const LIApplication& _app)
+{
+  QString style = LCBuildersCommon::getBaseStyleSheet(_element, _app);
+  QString attr = _element.attribute(__attrNames.gridColor);
+  if(!attr.isNull())
+  {
+    style += QString("gridline-color: %1;").arg(attr);
+  }
+  return style;
+}
+
+//------------------------------------------------------------------------------
+static QString getHeaderStyle(const QDomElement& _element, const LIApplication& _app)
+{
+  QString style;
+
+  QString attr =_element.attribute(__attrNames.bgColorHeader);
+  if(!attr.isNull()) 
+    style += QString("background: %1;").arg(attr);
+
+  attr =_element.attribute(__attrNames.textColorHeader);
+  if(!attr.isNull()) 
+    style += QString("color: %1;").arg(attr);
+
+  attr =_element.attribute(__attrNames.fontIdHeader);
+  if(!attr.isNull())
+  {
+    QString font = _app.getFontStyle(attr);
+    if(!font.isNull())
+    {
+      style += QString("font: %1;").arg(font);
+    }
+  }
+
+  attr =_element.attribute(__attrNames.fontHeader);
+  if(!attr.isNull()) 
+    style += QString("font: %1;").arg(attr);
+
+  attr =_element.attribute(__attrNames.gridColor);
+  if(!attr.isNull()) 
+    style += QString("gridline-color: %1;").arg(attr);
+ 
+  return style;
 }
 
 //------------------------------------------------------------------------------
