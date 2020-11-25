@@ -4,19 +4,17 @@
   <!-- fontId="mnemo18" -->
   <!-- textColor="yellow" -->
 <tabs 
+  bgColor="rgb(150, 150, 255)"
+  iconSize="30"
+  fontId="mnemo18"
+  textColor="yellow"
   >
-  <!-- iconSize="100" -->
 
   <!-- <item label="Tab 001"> -->
   <!-- <item label="Tab 001" icon="picture/picture_1.png"> -->
   <item label="Tab 001" icon="picture/icon1.png">
   <!-- <item icon="picture/icon1.png"> -->
   <!-- <item> -->
-    <table file="testtable.xml" />
-  </item>
-
-  <!-- <item label="Tab 002"> -->
-  <item label="Tab 002" icon="picture/picture_1.png">
     <table file="testtable.xml" />
   </item>
 

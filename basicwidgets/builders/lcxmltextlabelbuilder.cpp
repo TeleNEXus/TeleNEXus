@@ -17,7 +17,7 @@ LCXmlTextLabelBuilder::~LCXmlTextLabelBuilder()
 }
 
 //------------------------------------------------------------------------------
-QWidget* LCXmlTextLabelBuilder::build(
+QWidget* LCXmlTextLabelBuilder::buildLocal(
     const QDomElement& _element, 
     const LIApplication& _app)
 {

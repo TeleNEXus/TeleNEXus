@@ -1,14 +1,17 @@
 #ifndef LCXMLTABBUILDER_H_
 #define LCXMLTABBUILDER_H_
 
-#include "LIXmlWidgetBuilder.h"
+#include "lcxmlbuilderbase.h"
 
-class LCXmlTabWidgetBuilder : public LIXmlWidgetBuilder
+class LCXmlTabWidgetBuilder : public LCXmlBuilderBase
 {
 public:
-    LCXmlTabWidgetBuilder();
-    virtual ~LCXmlTabWidgetBuilder();
-    virtual QWidget* build( const QDomElement& _element, 
-                            const LIApplication& _app) override;
+  LCXmlTabWidgetBuilder();
+  virtual ~LCXmlTabWidgetBuilder();
+
+protected: 
+  virtual QWidget* buildLocal( 
+      const QDomElement& _element, 
+      const LIApplication& _app) override;
 };
 #endif /* LCXMLTABBUILDER_H_ */
