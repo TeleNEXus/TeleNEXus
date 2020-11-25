@@ -1,15 +1,19 @@
 #ifndef LCXMLREMLINEEDITBUILDER_H
 #define LCXMLREMLINEEDITBUILDER_H
 
-#include "LIXmlWidgetBuilder.h"
+#include "lcxmlbuilderbase.h"
 
-class LCXmlRemLineEditBuilder : public LIXmlWidgetBuilder
+class LCXmlRemLineEditBuilder : public LCXmlBuilderBase 
 {
+
 public:
   LCXmlRemLineEditBuilder();
   virtual ~LCXmlRemLineEditBuilder();
-  virtual QWidget* build( const QDomElement& _element, 
+
+protected:
+  virtual QWidget* buildLocal( const QDomElement& _element, 
       const LIApplication& _app) override;
+
 };
 
 

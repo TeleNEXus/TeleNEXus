@@ -71,7 +71,7 @@ void* getControlWindowButtonBuilder()
 }
 
 //------------------------------------------------------------------------------
-#include "lcxmlswitchwidgetslist.h"
+#include "lcxmlswitchwidgetslistbuilder.h"
 void* getSwitchWidgetsListBuilder()
 {
     return new LCXmlSwitchWidgetsListBuilder;

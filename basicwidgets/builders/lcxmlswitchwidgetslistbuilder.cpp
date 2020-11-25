@@ -1,5 +1,5 @@
 
-#include "lcxmlswitchwidgetslist.h"
+#include "lcxmlswitchwidgetslistbuilder.h"
 #include "LIApplication.h"
 #include "lcbuilderscommon.h"
 #include <QDomElement>
