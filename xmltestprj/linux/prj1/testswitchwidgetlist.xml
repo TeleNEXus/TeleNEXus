@@ -5,9 +5,9 @@
   textColor="yellow"
   bgColor="green"
   bgImage="picture/fon1.png"
-  iconSize="100"
-  font="15pt"
-  minWidth="250"
+  iconSize="60"
+  font="bold 18pt"
+  minWidth="200"
   maxWidth="300"
   >
 

@@ -18,12 +18,14 @@ public:
   //Общие атрибуты построителей виджетов.
   struct SAttributes
   {
+    QString data        = "data";
+    QString source      = "source";
     QString label       = "label";
     QString file        = "file";
     QString posx        = "posx";
     QString posy        = "posy";
-    QString width       = "width";
-    QString height      = "height";
+    QString width       = "fixWidth";
+    QString height      = "fixHeight";
     QString maxwidth    = "maxWidth";
     QString maxheight   = "maxHeight";
     QString minwidth    = "minWidth";
