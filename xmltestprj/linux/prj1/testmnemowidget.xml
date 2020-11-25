@@ -127,10 +127,10 @@
         bgColor="green"
         fontId="mnemo10"
         >
-        <data sourceName="qtslavetcp" dataName="hreg0" format="uint16" value="0"/>
-        <data sourceName="qtslavetcp" dataName="hreg1" format="uint16" value="1"/>
-        <data sourceName="qtslavetcp" dataName="hreg2" format="uint16" value="2"/>
-        <data sourceName="qtslavetcp" dataName="hreg3" format="uint16" value="3"/>
+        <data source="qtslavetcp" dataName="hreg0" format="uint16" value="0"/>
+        <data source="qtslavetcp" dataName="hreg1" format="uint16" value="1"/>
+        <data source="qtslavetcp" dataName="hreg2" format="uint16" value="2"/>
+        <data source="qtslavetcp" dataName="hreg3" format="uint16" value="3"/>
       </dataWriteButton>
 
       <!-- minWidth = "220" -->
@@ -146,10 +146,10 @@
         icon="picture/icon1.png"
         iconScale="1.5"
         >
-        <data sourceName="qtslavetcp" dataName="hreg0" format="uint16" value="4"/>
-        <data sourceName="qtslavetcp" dataName="hreg1" format="uint16" value="5"/>
-        <data sourceName="qtslavetcp" dataName="hreg2" format="uint16" value="6"/>
-        <data sourceName="qtslavetcp" dataName="hreg3" format="uint16" value="7"/>
+        <data source="qtslavetcp" dataName="hreg0" format="uint16" value="4"/>
+        <data source="qtslavetcp" dataName="hreg1" format="uint16" value="5"/>
+        <data source="qtslavetcp" dataName="hreg2" format="uint16" value="6"/>
+        <data source="qtslavetcp" dataName="hreg3" format="uint16" value="7"/>
       </dataWriteButton>
 
       <dataWriteButton text="WB 2" posx="10" posy="200"
@@ -159,7 +159,7 @@
         icon="picture/icon1.png"
         iconScale="2"
         >
-        <data sourceName="qtslavetcp" dataName="hreg0" format="uint16" value="255"/>
+        <data source="qtslavetcp" dataName="hreg0" format="uint16" value="255"/>
       </dataWriteButton>
 
     </widgets>

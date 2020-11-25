@@ -93,6 +93,8 @@ int main(int argc, char** argv)
     label_2->setStyleSheet(".QLabel {color: yellow;font : 20pt;}");
     QPushButton* button_0 = new QPushButton("change button 0", widget);
     button_0->move(250,0);
+    /* button_0->setStyleSheet("QWidget {qproperty-pos: QPoint(100,100) }"); */
+
     QObject::connect(button_0, &QPushButton::pressed, 
             [&]{
                 sw->setCurrentWidget(sw->widget(0));
