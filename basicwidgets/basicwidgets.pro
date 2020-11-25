@@ -49,7 +49,7 @@ SOURCES += \
     builders/lcxmlremcombolabelbuilder.cpp \
     builders/lcxmltablewidgetbuilder.cpp \
     builders/lcxmltabwidgetbuilder.cpp \
-    builders/lcxmlswitchwidgetslist.cpp \
+    builders/lcxmlswitchwidgetslistbuilder.cpp \
     builders/lcxmlscrollareabuilder.cpp \
     builders/lcxmlbuttonbuilder.cpp \
     builders/lcbuilderscommon.cpp \
@@ -99,7 +99,7 @@ HEADERS += \
     builders/lcxmlremcombolabelbuilder.h \
     builders/lcxmltablewidgetbuilder.h \
     builders/lcxmltabwidgetbuilder.h \
-    builders/lcxmlswitchwidgetslist.h \
+    builders/lcxmlswitchwidgetslistbuilder.h \
     builders/lcxmlscrollareabuilder.h \
     builders/lcxmlbuttonbuilder.h \
     builders/lcbuilderscommon.h \

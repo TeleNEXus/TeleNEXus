@@ -27,7 +27,7 @@ const struct
 } __attrNames;
 
 //------------------------------------------------------------------------------
-QWidget* LCXmlRemLineEditBuilder::build(const QDomElement& _element, 
+QWidget* LCXmlRemLineEditBuilder::buildLocal(const QDomElement& _element, 
     const LIApplication& _app)
 {
   QLineEdit* ret = nullptr;
@@ -74,7 +74,7 @@ LABEL_WRONG_EXIT:
   
   ret->setStyleSheet(".LCQRemLineEdit { " + style + "}" );
   
-  LCBuildersCommon::initSize(_element, *ret);
+  /* LCBuildersCommon::initSize(_element, *ret); */
   LCBuildersCommon::initPosition(_element, *ret);
   return ret;
 }
