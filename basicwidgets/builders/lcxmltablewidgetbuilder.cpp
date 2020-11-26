@@ -221,12 +221,10 @@ static void createRow(
     }
 
 
-    for(QDomNode node = _element.firstChild();
+    for(QDomNode node = _element.firstChildElement();
         !node.isNull();
-        node = node.nextSibling())
+        node = node.nextSiblingElement())
     {
-      if(!node.isElement()) continue;
-
       QDomElement nel = node.toElement();
 
       QWidget* widget = nullptr;
@@ -284,11 +282,10 @@ static void createCol(
       _localData.mpTable->setColumnWidth(_localData.mColumn -1, width);
   }
 
-  for(QDomNode node = _element.firstChild();
+  for(QDomNode node = _element.firstChildElement();
       !node.isNull();
-      node = node.nextSibling())
+      node = node.nextSiblingElement())
   {
-    if(!node.isElement()) continue;
     QDomElement nel = node.toElement();
 
     QWidget* widget = nullptr;
