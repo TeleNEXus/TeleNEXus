@@ -11,16 +11,14 @@ private:
     QIntValidator mValidator;   //Контроллер диапазона ввода.
 
 public:
-    explicit LCStringDataFormatterS32( int     _fieldWidth     = 0,
-                                          QChar   _fillChar       = QChar(' '),
-                                          int     _base           = 10,
-                                          QChar   _fillCharUndef  = QChar(),
-                                          QChar   _fillCharWrong  = QChar());
+    explicit LCStringDataFormatterS32( 
+        int     _fieldWidth     = 0,
+        QChar   _fillChar       = QChar(' '),
+        int     _base           = 10);
 
     virtual QString     toString(const QByteArray& _data) override;
     virtual QString     normalizeString(const QString& _str) override;
     virtual QByteArray  toBytes(const QString& _str) override;
-    virtual QString     undefStateString() override;
     virtual QValidator* validator() override;
 };
 

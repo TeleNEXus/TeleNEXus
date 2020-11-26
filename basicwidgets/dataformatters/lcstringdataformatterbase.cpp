@@ -1,48 +1,22 @@
 ﻿#include "lcstringdataformatterbase.h"
+static const QString __slUndefStateString = "######";
+static const QString __slWrongStateString = "??????";
 
-
-QChar     LCStringDataFormatterBase::msFillCharUndefDef('#');
-quint8    LCStringDataFormatterBase::msFillCharUndefDefLength(8);
-QChar     LCStringDataFormatterBase::msFillCharWrongDef('?');
-quint8    LCStringDataFormatterBase::msFillCharWrongDefLength(3);
-
-QString LCStringDataFormatterBase::getUndefStateString(int _fieldWidth, QChar _charUndef)
+QString LCStringDataFormatterBase::undefStateString()
 {
-    QChar ch = (_charUndef.isNull()) ? (msFillCharUndefDef):(_charUndef);
-    if(_fieldWidth == 0) return QString(msFillCharUndefDefLength, ch);
-    return QString(abs(_fieldWidth), ch);
+  return __slUndefStateString;
 }
 
-QString LCStringDataFormatterBase::getWrongStateString(int _fieldWidth, QChar _charWrong)
+QString LCStringDataFormatterBase::wrongStateString()
 {
-    QChar ch = (_charWrong.isNull()) ? (msFillCharWrongDef):(_charWrong);
-    if(_fieldWidth == 0) return QString(msFillCharWrongDefLength, ch);
-    return QString(abs(_fieldWidth), ch);
+  return __slWrongStateString;
 }
-
-void LCStringDataFormatterBase::setFillCharUndefDef(QChar _c, quint8 _length)
-{
-    msFillCharUndefDef = _c;
-    msFillCharUndefDefLength = _length;
-}
-
-
-
-void LCStringDataFormatterBase::setFillCharWrongDef(QChar _c, quint8 _length)
-{
-    msFillCharWrongDef = _c;
-    msFillCharUndefDefLength = _length;
-}
-
-
 
 LCStringDataFormatterBase::LCStringDataFormatterBase()
 {
-
 }
 
 LCStringDataFormatterBase::~LCStringDataFormatterBase()
 {
-
 }
 

@@ -2,16 +2,13 @@
 
 //==============================================================================LCQDataStringFormatterInt32
 LCStringDataFormatterS32::
-    LCStringDataFormatterS32( int     _fieldWidth,
-                        QChar   _fillChar,
-                        int     _base,
-                        QChar   _fillCharUndef,
-                        QChar   _fillCharWrong) :
-                            LCStringDataFormatterIntBase( _fieldWidth,
-                                                    _fillChar,
-                                                    _base,
-                                                    _fillCharUndef,
-                                                    _fillCharWrong)
+LCStringDataFormatterS32( 
+    int     _fieldWidth,
+    QChar   _fillChar,
+    int     _base) :
+  LCStringDataFormatterIntBase( _fieldWidth,
+      _fillChar,
+      _base)
 {
 }
 
@@ -20,9 +17,7 @@ QString LCStringDataFormatterS32::toString(const QByteArray& _data)
 {
     if(_data.size() < 4)
     {
-        QChar ch = (mFillCharWrong.isNull()) ? (msFillCharWrongDef):(mFillCharWrong);
-        int length = (mFieldWidth == 0) ? (msFillCharWrongDefLength) : (abs(mFieldWidth));
-        return QString(length, ch);
+      return wrongStateString();
     }
     return QString("%1").arg( ((qint32*)_data.constData())[0], mFieldWidth, mBase, mFillChar);
 }
@@ -45,11 +40,6 @@ QByteArray LCStringDataFormatterS32::toBytes(const QString& _str)
     return QByteArray((char*)(&r), 4);
 }
 
-//------------------------------------------------------------------------------undefStateString
-QString LCStringDataFormatterS32::undefStateString()
-{
-    return getUndefStateString(mFieldWidth, mFillCharUndef);
-}
 
 //------------------------------------------------------------------------------validator
 QValidator* LCStringDataFormatterS32::validator()

@@ -6,55 +6,46 @@
 class LCStringDataFormatterHex : public LCStringDataFormatterBase
 {
 private:
-    //Валидатор вводимых данных.
-    class CValidator : public QValidator
-    {
-    public:
-        const int&      mSize;
-        const QChar&    mSeparator;
+  //Валидатор вводимых данных.
+  class CValidator : public QValidator
+  {
+  public:
+    int      mSize;
+    QChar    mSeparator;
 
-        explicit CValidator(
-                const int& _size, 
-                const QChar& _separator, 
-                QObject *_parent = nullptr);
-        ~CValidator(){}
+    explicit CValidator(
+        int _size = 0, 
+        QChar _separator = QChar(), 
+        QObject *_parent = nullptr);
+    virtual ~CValidator(){}
 
-        virtual QValidator::State validate(
-                QString &_input, 
-                int& _pos) const override;
-    };
+    virtual QValidator::State validate(
+        QString &_input, 
+        int& _pos) const override;
+  };
 
 private:
-    int         mSize;            //Заданный размер последовательности в байтах.
-    QChar       mSeparator;       //Разделитель между отображаемыми числами.
-    QChar       mFillCharUndef;   //Заполнение при отсутствии значения.
-    QChar       mFillCharWrong;   //Заполнение при ошибочном значении.
-    CValidator* mpValidator;      //Валидатор.
+  CValidator  mValidator;      //Валидатор.
 public:
 
-    explicit LCStringDataFormatterHex(    
-                        int     _size           = 0, 
-                        QChar   _separator      = QChar(),
-                        QChar   _fillCharUndef  = msFillCharUndefDef,
-                        QChar   _fillCharWrong  = msFillCharWrongDef);
+  explicit LCStringDataFormatterHex(    
+      int     _size           = 0, 
+      QChar   _separator      = QChar());
 
-    explicit LCStringDataFormatterHex( 
-            const LCStringDataFormatterHex& _formatter);
-    virtual ~LCStringDataFormatterHex();
+  explicit LCStringDataFormatterHex( 
+      const LCStringDataFormatterHex& _formatter);
+  virtual ~LCStringDataFormatterHex();
 
-    LCStringDataFormatterHex& operator=(
-            const LCStringDataFormatterHex& _formatter);
+  LCStringDataFormatterHex& operator=(
+      const LCStringDataFormatterHex& _formatter);
 
-    virtual QString     toString(const QByteArray& _data) override;
-    virtual QString     normalizeString(const QString& _str) override;
-    virtual QByteArray  toBytes(const QString& _str) override;
-    virtual QString     undefStateString() override;
-    virtual QValidator* validator() override {return mpValidator;}
+  virtual QString     toString(const QByteArray& _data) override;
+  virtual QString     normalizeString(const QString& _str) override;
+  virtual QByteArray  toBytes(const QString& _str) override;
+  virtual QValidator* validator() override {return &mValidator;}
 
-    void setFillCharUndef(QChar _c){mFillCharUndef = _c;}
-    void setFillCharWrong(QChar _c){mFillCharWrong = _c;}
-    void setSize(int _size);
-    void setSeparator(QChar _separator);
+  void setSize(int _size);
+  void setSeparator(QChar _separator);
 };
 
 

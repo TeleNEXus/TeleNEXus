@@ -5,17 +5,11 @@
 #include <qglobal.h>
 
 //==============================================================================LCQDataFormatterInt16
-LCStringDataFormatterS16::
-    LCStringDataFormatterS16(   int     _fieldWidth,
-                          QChar   _fillChar,
-                          int     _base,
-                          QChar   _fillCharUndef,
-                          QChar   _fillCharWrong) :
-                              LCStringDataFormatterIntBase( _fieldWidth,
-                                                      _fillChar,
-                                                      _base,
-                                                      _fillCharUndef,
-                                                      _fillCharWrong)
+LCStringDataFormatterS16::LCStringDataFormatterS16(   
+    int     _fieldWidth,
+    QChar   _fillChar,
+    int     _base) :
+  LCStringDataFormatterIntBase( _fieldWidth, _fillChar, _base)
 {
     mValidator.setRange(std::numeric_limits<qint16>::min(), 
                                          std::numeric_limits<qint16>::max());
@@ -26,11 +20,7 @@ QString LCStringDataFormatterS16::toString(const QByteArray& _data)
 {
     if(_data.size() < 2)
     {
-        QChar ch = (mFillCharWrong.isNull()) ? 
-                                (msFillCharWrongDef):(mFillCharWrong);
-        int length = (mFieldWidth == 0) ? 
-                                (msFillCharWrongDefLength) : (abs(mFieldWidth));
-        return QString(length, ch);
+      return wrongStateString();
     }
     return QString("%1").arg( 
              ((qint16*)_data.constData())[0], mFieldWidth, mBase, mFillChar);
@@ -54,11 +44,6 @@ QByteArray LCStringDataFormatterS16::toBytes(const QString& _str)
     return QByteArray((char*)(&r), 2);
 }
 
-//------------------------------------------------------------------------------undefStateString
-QString LCStringDataFormatterS16::undefStateString()
-{
-    return getUndefStateString(mFieldWidth, mFillCharUndef);
-}
 
 //------------------------------------------------------------------------------validator
 QValidator* LCStringDataFormatterS16::validator()
