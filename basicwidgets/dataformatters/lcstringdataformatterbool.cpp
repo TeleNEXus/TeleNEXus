@@ -1,12 +1,8 @@
 #include "lcstringdataformatterbool.h"
 
 LCStringDataFormatterBool::LCStringDataFormatterBool(const QString& _strFalse,
-                                         const QString& _strTrue,
-                                         QChar   _fillCharUndef,
-                                         QChar   _fillCharWrong) :  mStrFalse(_strFalse),
-                                                                    mStrTrue(_strTrue),
-                                                                    mFillCharUndef(_fillCharUndef),
-                                                                    mFillCharWrong(_fillCharWrong)
+                                         const QString& _strTrue) :  mStrFalse(_strFalse),
+                                                                    mStrTrue(_strTrue)
 {
 
 }
@@ -16,9 +12,7 @@ QString LCStringDataFormatterBool::toString(const QByteArray& _data)
 {
     if(_data.size() == 0)
     {
-        return getWrongStateString(   (mStrTrue.size() > mStrFalse.size()) ?
-                                            (mStrTrue.size()) : (mStrFalse.size()),
-                                        mFillCharWrong);
+        return wrongStateString();
     }
 
     quint8 byte = 0;
@@ -46,10 +40,4 @@ QByteArray LCStringDataFormatterBool::toBytes(const QString& _str)
     return QByteArray();
 }
 
-//------------------------------------------------------------------------------
-QString     LCStringDataFormatterBool::undefStateString()
-{
-    return getUndefStateString((mStrTrue.size() > mStrFalse.size()) ?
-                                     (mStrTrue.size()) : (mStrFalse.size()), mFillCharUndef);
-}
 

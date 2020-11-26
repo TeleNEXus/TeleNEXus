@@ -10,22 +10,18 @@ protected:
     int     mFieldWidth;        //Ширина поля.
     QChar   mFillChar;          //Символ заполнения выравнивания.
     int     mBase;              //Основание системы счисления.
-    QChar   mFillCharUndef;     //Заполнение при неопределеном значении.
-    QChar   mFillCharWrong;     //Заполнение при ошибочном значении.
 
 public:
     LCStringDataFormatterIntBase() = delete;
-    explicit LCStringDataFormatterIntBase( int     _fieldWidth,
-                                     QChar   _fillChar,
-                                     int     _base,
-                                     QChar   _fillCharUndef,
-                                     QChar   _fillCharWrong);
+    explicit LCStringDataFormatterIntBase( 
+        int     _fieldWidth,
+        QChar   _fillChar,
+        int     _base);
 
+    ~LCStringDataFormatterIntBase();
     void setFieldWidth(int _fieldWidth){mFieldWidth = _fieldWidth;}
     void setFillChar(QChar _c){mFillChar = _c;}
     void setBase(int _base){mBase = _base;}
-    void setFillCharUndef(QChar _c){mFillCharUndef = _c;}
-    void setFillCharWrong(QChar _c){mFillCharWrong = _c;}
 };
 
 

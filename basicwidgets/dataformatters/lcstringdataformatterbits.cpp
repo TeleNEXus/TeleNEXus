@@ -42,11 +42,7 @@ CValidator::validate(QString &_input, int& _pos) const
 //==============================================================================
 LCStringDataFormatterBits::LCStringDataFormatterBits( 
         int     _size,
-        QChar   _separator,
-        QChar   _fillCharUndef,
-        QChar   _fillCharWrong) :  
-    mFillCharUndef(_fillCharUndef),
-    mFillCharWrong(_fillCharWrong),
+        QChar   _separator) :  
     mValidator(_size, _separator)
 {
 }
@@ -57,8 +53,6 @@ LCStringDataFormatterBits( const LCStringDataFormatterBits& _formatter)
 {
     mValidator.mSize      = _formatter.mValidator.mSize;         
     mValidator.mSeparator = _formatter.mValidator.mSeparator;    
-    mFillCharUndef = _formatter.mFillCharUndef;
-    mFillCharWrong = _formatter.mFillCharWrong;
 }
 //------------------------------------------------------------------------------
 LCStringDataFormatterBits::~LCStringDataFormatterBits()
@@ -70,8 +64,6 @@ LCStringDataFormatterBits::operator=(const LCStringDataFormatterBits& _formatter
 {
     mValidator.mSize          = _formatter.mValidator.mSize;         
     mValidator.mSeparator     = _formatter.mValidator.mSeparator;    
-    mFillCharUndef = _formatter.mFillCharUndef;
-    mFillCharWrong = _formatter.mFillCharWrong;
     return *this;
 }
 //------------------------------------------------------------------------------toString
@@ -81,7 +73,7 @@ QString LCStringDataFormatterBits::toString(const QByteArray& _data)
 
     if(_data.size() < 1)
     {
-        return QString(msFillCharWrongDefLength, mFillCharWrong);
+      return wrongStateString();
     }
 
     for(int i = (_data.size() - 1); i >= 0; i--)
@@ -166,12 +158,6 @@ QByteArray LCStringDataFormatterBits::toBytes(const QString& _str)
         }
     }
     return arr;
-}
-
-//------------------------------------------------------------------------------undefStateString
-QString     LCStringDataFormatterBits::undefStateString()
-{
-    return QString(msFillCharUndefDefLength, mFillCharUndef);
 }
 
 //------------------------------------------------------------------------------setSize

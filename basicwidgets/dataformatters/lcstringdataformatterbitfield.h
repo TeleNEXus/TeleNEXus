@@ -26,16 +26,12 @@ private:
     };
 
 private:
-    QChar       mFillCharUndef;   //Заполнение при отсутствии значения.
-    QChar       mFillCharWrong;   //Заполнение при ошибочном значении.
     CValidator  mValidator;       //Валидатор.
 public:
 
-    explicit LCStringDataFormatterBitfield(    
-                        int     _size           = 0, 
-                        QChar   _separator      = QChar(),
-                        QChar   _fillCharUndef  = msFillCharUndefDef,
-                        QChar   _fillCharWrong  = msFillCharWrongDef);
+    explicit LCStringDataFormatterBitfield(
+        int _size = 0, 
+        QChar _separator = QChar());
 
     explicit LCStringDataFormatterBitfield( 
             const LCStringDataFormatterBitfield& _formatter);
@@ -48,11 +44,8 @@ public:
     virtual QString     toString(const QByteArray& _data) override;
     virtual QString     normalizeString(const QString& _str) override;
     virtual QByteArray  toBytes(const QString& _str) override;
-    virtual QString     undefStateString() override;
     virtual QValidator* validator() override {return &mValidator;}
 
-    void setFillCharUndef(QChar _c){mFillCharUndef = _c;}
-    void setFillCharWrong(QChar _c){mFillCharWrong = _c;}
     void setSize(int _size);
     void setSeparator(QChar _separator);
 };

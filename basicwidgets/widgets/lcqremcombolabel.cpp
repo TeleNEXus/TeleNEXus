@@ -72,8 +72,8 @@ LCQRemComboLabel::LCQRemComboLabel(const QString& _dataName,
                                                 mspFormatter(_formatter)
 {
     mpOwnData = new SOwnData();
-    addItemUndef(new QLabel(_formatter->getUndefStateString()));
-    addItemWrong(new QLabel(_formatter->getWrongStateString()));
+    addItemUndef(new QLabel(_formatter->undefStateString()));
+    addItemWrong(new QLabel(_formatter->wrongStateString()));
 
     mDataListener = QSharedPointer<CReadListener>(new CReadListener(*this));
     mDataReader = _dataSource->createReader();

@@ -11,10 +11,12 @@ class LCXmlStdDataFormatterFactory final
 private:
     LCXmlStdDataFormatterFactory();
     LCXmlStdDataFormatterFactory(const LCXmlStdDataFormatterFactory&) = delete;
-    LCXmlStdDataFormatterFactory& operator=(const LCXmlStdDataFormatterFactory&) = delete;
+    LCXmlStdDataFormatterFactory& 
+      operator=(const LCXmlStdDataFormatterFactory&) = delete;
 public:
     static LCXmlStdDataFormatterFactory& instance();
-    QSharedPointer<LCStringDataFormatter> createStringFormatter(const QDomNamedNodeMap& _attr);
+    QSharedPointer<LCStringDataFormatter> 
+      createStringFormatter(const QDomNamedNodeMap& _attr);
 };
 
 #endif // LCXMLSTDDATAFORMATTERFACTORY_H

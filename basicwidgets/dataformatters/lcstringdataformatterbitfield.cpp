@@ -42,11 +42,7 @@ CValidator::validate(QString &_input, int& _pos) const
 //==============================================================================
 LCStringDataFormatterBitfield::LCStringDataFormatterBitfield( 
         int     _size,
-        QChar   _separator,
-        QChar   _fillCharUndef,
-        QChar   _fillCharWrong) :  
-    mFillCharUndef(_fillCharUndef),
-    mFillCharWrong(_fillCharWrong),
+        QChar   _separator) :  
     mValidator(_size, _separator)
 {
 }
@@ -55,10 +51,8 @@ LCStringDataFormatterBitfield::LCStringDataFormatterBitfield(
 LCStringDataFormatterBitfield::
 LCStringDataFormatterBitfield( const LCStringDataFormatterBitfield& _formatter)
 {
-    mValidator.mSize          = _formatter.mValidator.mSize;         
-    mValidator.mSeparator     = _formatter.mValidator.mSeparator;    
-    mFillCharUndef = _formatter.mFillCharUndef;
-    mFillCharWrong = _formatter.mFillCharWrong;
+  mValidator.mSize          = _formatter.mValidator.mSize;         
+  mValidator.mSeparator     = _formatter.mValidator.mSeparator;    
 }
 //------------------------------------------------------------------------------
 LCStringDataFormatterBitfield::~LCStringDataFormatterBitfield()
@@ -68,9 +62,9 @@ LCStringDataFormatterBitfield::~LCStringDataFormatterBitfield()
 LCStringDataFormatterBitfield& 
 LCStringDataFormatterBitfield::operator=(const LCStringDataFormatterBitfield& _formatter)
 {
-    this->mFillCharUndef = _formatter.mFillCharUndef;
-    this->mFillCharWrong = _formatter.mFillCharWrong;
-    return *this;
+  mValidator.mSize          = _formatter.mValidator.mSize;         
+  mValidator.mSeparator     = _formatter.mValidator.mSeparator;    
+  return *this;
 }
 
 //------------------------------------------------------------------------------toString
@@ -79,7 +73,7 @@ QString LCStringDataFormatterBitfield::toString(const QByteArray& _data)
     QString str;
     if(_data.size() < 1)
     {
-        return QString(msFillCharWrongDefLength, mFillCharWrong);
+      return wrongStateString();
     }
 
     for(int i = (_data.size() - 1); i >= 0; i--)
@@ -211,12 +205,6 @@ QByteArray LCStringDataFormatterBitfield::toBytes(const QString& _str)
         out_array.append(1,data);
     }
     return out_array;
-}
-
-//------------------------------------------------------------------------------undefStateString
-QString     LCStringDataFormatterBitfield::undefStateString()
-{
-    return QString(msFillCharUndefDefLength, mFillCharUndef);
 }
 
 //------------------------------------------------------------------------------setSize
