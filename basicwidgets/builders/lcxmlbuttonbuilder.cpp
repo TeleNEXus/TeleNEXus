@@ -92,8 +92,6 @@ QWidget* LCXmlButtonBuilder::buildLocal(
 
   setStyleSheet(button, element, app);
 
-  /* LCBuildersCommon::initSize(       element, *button); */
-  /* LCBuildersCommon::initFixedSize(  element, *button); */
   LCBuildersCommon::initPosition(   element, *button);
 
   return button;

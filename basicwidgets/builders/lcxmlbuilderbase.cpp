@@ -31,16 +31,7 @@ QWidget* LCXmlBuilderBase::build( const QDomElement& _element,
     return build(el, _app);
   }
 
-  /* auto data = new SBaseData{QPoint(), _element, _app}; */
-  /* QWidget* w = buildLocal1(QSharedPointer<SBaseData>(data)); */
-  /* if(w) */
-  /* { */
-  /*   return w; */
-  /* } */
-
-  auto data = new SBuildData{QPoint(), _element, _app};
-  return buildLocal(QSharedPointer<SBuildData>(data));
-
-  /* return buildLocal(_element, _app); */
+  return buildLocal(
+      QSharedPointer<SBuildData>(new SBuildData{QPoint(), _element, _app}));
 }
 

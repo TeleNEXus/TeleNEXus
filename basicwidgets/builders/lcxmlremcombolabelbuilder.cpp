@@ -25,7 +25,6 @@ public:
     mspMovieAccess(_movieAccess)
   {
     setMovie(mspMovieAccess->getMovie());
-    /* adjustSize(); */
   }
 
   virtual void showEvent(QShowEvent* _event) override
@@ -143,8 +142,6 @@ LABEL_WRONG_EXIT:
     ret->setStyleSheet(style);
   }
 
-  /* LCBuildersCommon::initSize(_element, *ret); */
-  /* LCBuildersCommon::initFixedSize(_element, *ret); */
   LCBuildersCommon::initPosition(element, *ret);
 
   return ret;
