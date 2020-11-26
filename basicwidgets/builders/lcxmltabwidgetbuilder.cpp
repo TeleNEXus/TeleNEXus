@@ -28,122 +28,123 @@ LCXmlTabWidgetBuilder::~LCXmlTabWidgetBuilder()
 
 //------------------------------------------------------------------------------
 static void buildTab(
-        const QDomElement& _element, 
-        QTabWidget* tabwidget, 
-        int _tabindex, 
-        int _iconSize,
-        const LIApplication& _app);
+    const QDomElement& _element, 
+    QTabWidget* tabwidget, 
+    int _tabindex, 
+    int _iconSize,
+    const LIApplication& _app);
 
-QWidget* LCXmlTabWidgetBuilder::buildLocal(
-        const QDomElement& _element, 
-        const LIApplication& _app)
+QWidget* LCXmlTabWidgetBuilder::buildLocal(QSharedPointer<SBuildData> _buildData) 
 {
-    QTabWidget* tabwidget = new QTabWidget;
+  const QDomElement& element = _buildData->element;
+  const LIApplication& app = _buildData->application;
 
-    QString object_name = QString("XmlTabWidgetBar_%1").arg(__slObjectCounter);
-    __slObjectCounter++;
-    tabwidget->tabBar()->setObjectName(object_name);
+  QTabWidget* tabwidget = new QTabWidget;
 
-    int index = 0;
-    int icon_size = -1;
+  QString object_name = QString("XmlTabWidgetBar_%1").arg(__slObjectCounter);
+  __slObjectCounter++;
+  tabwidget->tabBar()->setObjectName(object_name);
 
-    QString attr = _element.attribute(LCBuildersCommon::mAttributes.iconsize);
+  int index = 0;
+  int icon_size = -1;
 
-    if(!attr.isNull())
+  QString attr = element.attribute(LCBuildersCommon::mAttributes.iconsize);
+
+  if(!attr.isNull())
+  {
+    bool flag = 0;
+    icon_size = attr.toInt(&flag);
+    if(flag)
     {
-      bool flag = 0;
-      icon_size = attr.toInt(&flag);
-      if(flag)
-      {
-        tabwidget->setIconSize(QSize(icon_size, icon_size));
-      }
-      else
-      {
-        icon_size = -1;
-      }
+      tabwidget->setIconSize(QSize(icon_size, icon_size));
     }
-
-    for( QDomNode node = _element.firstChildElement(__slTags.item);
-            !node.isNull();
-            node = node.nextSiblingElement(__slTags.item))
+    else
     {
-        buildTab(node.toElement(), tabwidget, index, icon_size, _app); 
-        index++;
+      icon_size = -1;
     }
+  }
 
-    QString style = LCBuildersCommon::getBaseStyleSheet(_element, _app);
+  for( QDomNode node = element.firstChildElement(__slTags.item);
+      !node.isNull();
+      node = node.nextSiblingElement(__slTags.item))
+  {
+    buildTab(node.toElement(), tabwidget, index, icon_size, app); 
+    index++;
+  }
 
-    tabwidget->setStyleSheet(
-        QString("QTabBar#%1 { %2 }").arg(object_name).arg(style));
+  QString style = LCBuildersCommon::getBaseStyleSheet(element, app);
 
-    LCBuildersCommon::initPosition(_element, *tabwidget);
+  tabwidget->setStyleSheet(
+      QString("QTabBar#%1 { %2 }").arg(object_name).arg(style));
 
-    return tabwidget;
+  LCBuildersCommon::initPosition(element, *tabwidget);
+
+  return tabwidget;
 }
 
 //------------------------------------------------------------------------------
 static void buildTab(
-        const QDomElement& _element, 
-        QTabWidget* _tabwidget, 
-        int _tabindex, 
-        int _iconSize,
-        const LIApplication& _app)
+    const QDomElement& _element, 
+    QTabWidget* _tabwidget, 
+    int _tabindex, 
+    int _iconSize,
+    const LIApplication& _app)
 {
-    QString attr_label = 
-      _element.attribute(LCBuildersCommon::mAttributes.label);
+  QString attr_label = 
+    _element.attribute(LCBuildersCommon::mAttributes.label);
 
-    QIcon icon;
+  QIcon icon;
 
-    QString attr_icon = _element.attribute(LCBuildersCommon::mAttributes.icon);
-    if(!attr_icon.isNull()) 
+  QString attr_icon = _element.attribute(LCBuildersCommon::mAttributes.icon);
+  if(!attr_icon.isNull()) 
+  {
+    //Зогрузка изображения.
+    QPixmap pixmap = LCBuildersCommon::getPixmap(attr_icon, _app);
+    //Масштабирование изобразения под заданные размеры.
+    if(_iconSize >= 0)
     {
-      //Зогрузка изображения.
-      QPixmap pixmap = LCBuildersCommon::getPixmap(attr_icon, _app);
-      //Масштабирование изобразения под заданные размеры.
-      if(_iconSize >= 0)
+      int maxsize = (pixmap.width() > pixmap.height()) ? 
+        (pixmap.width()) : (pixmap.height());
+
+      float scale = 1;
+
+      if(maxsize > 0)
       {
-        int maxsize = (pixmap.width() > pixmap.height()) ? 
-          (pixmap.width()) : (pixmap.height());
-
-        float scale = 1;
-
-        if(maxsize > 0)
-        {
-          scale = (float) _iconSize /(float)  maxsize;
-        }
-
-        pixmap = pixmap.scaled(
-            pixmap.width() * scale, pixmap.height() * scale);
+        scale = (float) _iconSize /(float)  maxsize;
       }
-      if(!pixmap.isNull()) icon.addPixmap(pixmap);
+
+      pixmap = pixmap.scaled(
+          pixmap.width() * scale, pixmap.height() * scale);
     }
+    if(!pixmap.isNull()) icon.addPixmap(pixmap);
+  }
 
 
-    if(attr_label.isNull() && icon.isNull())
+  if(attr_label.isNull() && icon.isNull())
+  {
+    attr_label = QString("Tab %1").arg(_tabindex);
+  }
+
+  QDomNodeList childs = _element.childNodes(); 
+  for (int i = 0; i < childs.count(); i++)
+  {
+    QDomElement element = childs.at(i).toElement();
+    if(!element.isNull())
     {
-        attr_label = QString("Tab %1").arg(_tabindex);
-    }
-
-    QDomNodeList childs = _element.childNodes(); 
-    for (int i = 0; i < childs.count(); i++)
-    {
-        QDomElement element = childs.at(i).toElement();
-        if(!element.isNull())
+      QSharedPointer<LIXmlWidgetBuilder> builder = 
+        _app.getWidgetBuilder(element.tagName());
+      if(!builder.isNull())
+      {
+        QWidget* widget = (*builder).build(
+            childs.at(i).toElement(), _app);
+        if (widget)
         {
-            QSharedPointer<LIXmlWidgetBuilder> builder = 
-                _app.getWidgetBuilder(element.tagName());
-            if(!builder.isNull())
-            {
-                QWidget* widget = (*builder).build(
-                        childs.at(i).toElement(), _app);
-                if (widget)
-                {
-                    _tabwidget->addTab( widget, icon, attr_label);
-                    return;
-                }
-            }
+          _tabwidget->addTab( widget, icon, attr_label);
+          return;
         }
+      }
     }
+  }
 
-    _tabwidget->addTab( new QWidget, icon, attr_label);
+  _tabwidget->addTab( new QWidget, icon, attr_label);
 }

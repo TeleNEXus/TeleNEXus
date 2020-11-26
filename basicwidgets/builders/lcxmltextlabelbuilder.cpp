@@ -18,24 +18,24 @@ LCXmlTextLabelBuilder::~LCXmlTextLabelBuilder()
 
 //------------------------------------------------------------------------------
 QWidget* LCXmlTextLabelBuilder::buildLocal(
-    const QDomElement& _element, 
-    const LIApplication& _app)
+      QSharedPointer<SBuildData> _buildData) 
 {
-  Q_UNUSED(_app);
 
+  const QDomElement& element = _buildData->element;
+  const LIApplication& app = _buildData->application;
   QLabel* label = new QLabel();
 
   //Задание текста в виде атрибута.
-  if(!_element.attribute("text").isNull())
+  if(!element.attribute("text").isNull())
   {
-    label->setText(_element.attribute("text"));
+    label->setText(element.attribute("text"));
   }
 
   QString style;
-  style = LCBuildersCommon::getBaseStyleSheet(_element, _app);
+  style = LCBuildersCommon::getBaseStyleSheet(element, app);
   label->setStyleSheet(style);
 
-  LCBuildersCommon::initPosition(_element, *label);
+  LCBuildersCommon::initPosition(element, *label);
 
   return label;
 }

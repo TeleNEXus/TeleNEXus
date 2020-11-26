@@ -36,21 +36,24 @@ static QListWidgetItem* createItem(
 
 //------------------------------------------------------------------------------
 QWidget* LCXmlSwitchWidgetsListBuilder::buildLocal(
-    const QDomElement& _element, 
-    const LIApplication& _app)
+      QSharedPointer<SBuildData> _buildData)
 {
+
+  const QDomElement& element = _buildData->element;
+  const LIApplication& app = _buildData->application;
+
   QString attr;
   QSplitter* splitter = new QSplitter(Qt::Orientation::Horizontal);
   QListWidget* listWidget = new QListWidget;
   QStackedWidget* stacked_widget  = new QStackedWidget;
 
   QString style_sheet = 
-    LCBuildersCommon::getBaseStyleSheet(_element, _app);
+    LCBuildersCommon::getBaseStyleSheet(element, app);
 
   style_sheet = QString(".QListWidget { %1 }").arg(style_sheet);
 
   int icon_size = -1;
-  attr = _element.attribute(LCBuildersCommon::mAttributes.iconsize);
+  attr = element.attribute(LCBuildersCommon::mAttributes.iconsize);
   if(!attr.isNull())
   {
     bool flag = 0;
@@ -67,17 +70,17 @@ QWidget* LCXmlSwitchWidgetsListBuilder::buildLocal(
 
   listWidget->setStyleSheet(style_sheet);
 
-  for( QDomNode node = _element.firstChildElement(__slTags.item);
+  for( QDomNode node = element.firstChildElement(__slTags.item);
       !node.isNull();
       node = node.nextSiblingElement(__slTags.item))
   {
     QDomElement el = node.toElement();
 
-    QWidget* widget = createWidget(el, _app);
+    QWidget* widget = createWidget(el, app);
 
     if(widget)
     { 
-      listWidget->addItem(createItem(el, _app, icon_size));
+      listWidget->addItem(createItem(el, app, icon_size));
       stacked_widget->addWidget(widget);
     }
   }

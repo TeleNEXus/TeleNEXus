@@ -90,12 +90,15 @@ static void buildComboLabel( const QDomElement& _element,
     const LIApplication& _app);
 
 //------------------------------------------------------------------------------
-QWidget* LCXmlRemComboLabelBuilder::buildLocal(const QDomElement& _element, 
-    const LIApplication& _app)
+QWidget* LCXmlRemComboLabelBuilder::buildLocal( 
+      QSharedPointer<SBuildData> _buildData)
 {
+  const QDomElement& element = _buildData->element;
+  const LIApplication& app = _buildData->application;
+
   LCQRemComboLabel *remlabel= nullptr;
   QString dataread;
-  QString attr = _element.attribute(LCBuildersCommon::mAttributes.source);
+  QString attr = element.attribute(LCBuildersCommon::mAttributes.source);
   QSharedPointer<LIRemoteDataSource> source;
   QSharedPointer<LCStringDataFormatterBase> format;
 
@@ -106,14 +109,14 @@ QWidget* LCXmlRemComboLabelBuilder::buildLocal(const QDomElement& _element,
     goto LABEL_WRONG_EXIT;
   }
 
-  source = _app.getDataSource(attr);
+  source = app.getDataSource(attr);
 
   if(source.isNull())
   {
     goto LABEL_WRONG_EXIT;
   }
 
-  dataread = _element.attribute(__attrNames.dataread);
+  dataread = element.attribute(__attrNames.dataread);
 
   if(dataread.isNull())
   {
@@ -121,28 +124,28 @@ QWidget* LCXmlRemComboLabelBuilder::buildLocal(const QDomElement& _element,
   }
 
   format = LCXmlStdDataFormatterFactory::instance().
-    createStringFormatter(_element.attributes());
+    createStringFormatter(element.attributes());
   if(format.isNull())
   {
     goto LABEL_WRONG_EXIT;
   }
 
-  style = LCBuildersCommon::getBaseStyleSheet(_element, _app);
+  style = LCBuildersCommon::getBaseStyleSheet(element, app);
 
   remlabel = new LCQRemComboLabel(dataread, source, format);
-  buildComboLabel(_element, remlabel, format, style, _app);
+  buildComboLabel(element, remlabel, format, style, app);
 
 LABEL_WRONG_EXIT:
   QWidget* ret = remlabel;
   if(ret == nullptr) 
   {
-    ret = new QLabel(_element.tagName());
+    ret = new QLabel(element.tagName());
     ret->setStyleSheet(style);
   }
 
   /* LCBuildersCommon::initSize(_element, *ret); */
   /* LCBuildersCommon::initFixedSize(_element, *ret); */
-  LCBuildersCommon::initPosition(_element, *ret);
+  LCBuildersCommon::initPosition(element, *ret);
 
   return ret;
 }

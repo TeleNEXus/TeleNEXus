@@ -22,20 +22,21 @@ LCXmlScrollAreaBuilder::~LCXmlScrollAreaBuilder()
 
 //------------------------------------------------------------------------------
 QWidget* LCXmlScrollAreaBuilder::buildLocal(
-    const QDomElement& _element, 
-    const LIApplication& _app)
+      QSharedPointer<SBuildData> _buildData)
 {
+  const QDomElement& element = _buildData->element;
+  const LIApplication& app = _buildData->application;
   QWidget* widget = nullptr;
 
-  for(QDomNode node = _element.firstChild();
+  for(QDomNode node = element.firstChild();
       !node.isNull();
       node = node.nextSibling())
   {
     QDomElement el = node.toElement();
     if(el.isNull()) continue;
-    auto builder = _app.getWidgetBuilder(el.tagName());
+    auto builder = app.getWidgetBuilder(el.tagName());
     if(builder.isNull()) continue;
-    QWidget* w = builder->build(el, _app);
+    QWidget* w = builder->build(el, app);
 
     if(w)
     {
@@ -54,7 +55,7 @@ QWidget* LCXmlScrollAreaBuilder::buildLocal(
     scrollarea->setWidget(new QWidget);
   }
 
-  QString style = LCBuildersCommon::getBaseStyleSheet(_element, _app);
+  QString style = LCBuildersCommon::getBaseStyleSheet(element, app);
   style = QString(".QScrollArea { %1 }").arg(style);
   scrollarea->setStyleSheet(style);
 

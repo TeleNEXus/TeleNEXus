@@ -11,8 +11,8 @@ public:
     virtual ~LCXmlRemComboBoxBuilder();
 
 protected:
-    virtual QWidget* buildLocal( const QDomElement& _element, 
-                            const LIApplication& _app) override final;
+    virtual QWidget* buildLocal(
+      QSharedPointer<SBuildData> _buildData) override final;
 };
 
 #endif // LCXMLREMCOMBOBOXBUILDER_H

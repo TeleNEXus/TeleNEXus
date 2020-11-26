@@ -21,6 +21,7 @@ LCXmlBuilderBase::~LCXmlBuilderBase()
 QWidget* LCXmlBuilderBase::build( const QDomElement& _element, 
     const LIApplication&    _app)
 {
+
   QString attr_file = _element.attribute(LCBuildersCommon::mAttributes.file);
   if(!attr_file.isNull())
   {
@@ -30,13 +31,16 @@ QWidget* LCXmlBuilderBase::build( const QDomElement& _element,
     return build(el, _app);
   }
 
-  auto data = new SBaseData{QPoint(), _element, _app};
-  QWidget* w = buildLocal1(QSharedPointer<SBaseData>(data));
-  if(w)
-  {
-    qDebug() << "buildLocal1------------------";
-    return w;
-  }
-  return buildLocal(_element, _app);
+  /* auto data = new SBaseData{QPoint(), _element, _app}; */
+  /* QWidget* w = buildLocal1(QSharedPointer<SBaseData>(data)); */
+  /* if(w) */
+  /* { */
+  /*   return w; */
+  /* } */
+
+  auto data = new SBuildData{QPoint(), _element, _app};
+  return buildLocal(QSharedPointer<SBuildData>(data));
+
+  /* return buildLocal(_element, _app); */
 }
 

@@ -9,8 +9,8 @@ public:
   LCXmlScrollAreaBuilder();
   virtual ~LCXmlScrollAreaBuilder();
 protected:
-  virtual QWidget* buildLocal( const QDomElement& _element, 
-      const LIApplication& _app) override;
+  virtual QWidget* buildLocal( 
+      QSharedPointer<SBuildData> _buildData) override final;
 };
 
 #endif /* LCXMLSCROLLAREABUILDER_H_ */

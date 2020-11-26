@@ -9,7 +9,7 @@
 class LCXmlBuilderBase : public LIXmlWidgetBuilder
 {
 protected:
-  struct SBaseData
+  struct SBuildData
   {
     QPoint pos;
     const QDomElement& element;
@@ -26,12 +26,10 @@ public:
 
 protected:
 
-  virtual QWidget* buildLocal(
-      const QDomElement&      _element, 
-      const LIApplication&    _app) = 0;
-
-  virtual QWidget* buildLocal1(QSharedPointer<SBaseData> _buildData)
-  {Q_UNUSED(_buildData); return nullptr;}
+  /* virtual QWidget* buildLocal( */
+  /*     const QDomElement&      _element, */ 
+  /*     const LIApplication&    _app) = 0; */
+  virtual QWidget* buildLocal(QSharedPointer<SBuildData> _buildData) = 0;
 };
 
 #endif

@@ -6,11 +6,11 @@
 class LCXmlSwitchWidgetsListBuilder : public LCXmlBuilderBase 
 {
 public:
-    LCXmlSwitchWidgetsListBuilder();
-    virtual ~LCXmlSwitchWidgetsListBuilder();
+  LCXmlSwitchWidgetsListBuilder();
+  virtual ~LCXmlSwitchWidgetsListBuilder();
 
 protected:
-    virtual QWidget* buildLocal( const QDomElement& _element, 
-                            const LIApplication& _app) override;
+  virtual QWidget* buildLocal( 
+      QSharedPointer<SBuildData> _buildData) override final;
 };
 #endif /* LCXMLSWITCHWIDGETSLISTBUILDER_H_ */

@@ -21,12 +21,14 @@ LCXmlRemLabelBuilder::~LCXmlRemLabelBuilder()
 }
 
 //------------------------------------------------------------------------------
-QWidget* LCXmlRemLabelBuilder::buildLocal(const QDomElement& _element, 
-    const LIApplication& _app)
+QWidget* LCXmlRemLabelBuilder::buildLocal(
+      QSharedPointer<SBuildData> _buildData) 
 {
+  const QDomElement& element = _buildData->element;
+  const LIApplication& app = _buildData->application;
   QLabel* ret = nullptr;
   QString data;
-  QString attr = _element.attribute(LCBuildersCommon::mAttributes.source);
+  QString attr = element.attribute(LCBuildersCommon::mAttributes.source);
   QSharedPointer<LIRemoteDataSource> source;
   QSharedPointer<LCStringDataFormatterBase> format;
 
@@ -35,14 +37,14 @@ QWidget* LCXmlRemLabelBuilder::buildLocal(const QDomElement& _element,
     goto LABEL_WRONG_EXIT;
   }
 
-  source = _app.getDataSource(attr);
+  source = app.getDataSource(attr);
 
   if(source.isNull())
   {
     goto LABEL_WRONG_EXIT;
   }
 
-  data = _element.attribute(LCBuildersCommon::mAttributes.data);
+  data = element.attribute(LCBuildersCommon::mAttributes.data);
 
   if(data.isNull())
   {
@@ -50,7 +52,7 @@ QWidget* LCXmlRemLabelBuilder::buildLocal(const QDomElement& _element,
   }
 
   format = LCXmlStdDataFormatterFactory::
-    instance().createStringFormatter(_element.attributes());
+    instance().createStringFormatter(element.attributes());
 
   if(format.isNull())
   {
@@ -61,10 +63,10 @@ QWidget* LCXmlRemLabelBuilder::buildLocal(const QDomElement& _element,
 
 LABEL_WRONG_EXIT:
 
-  if(ret == nullptr) ret = new QLabel(_element.tagName());
-  QString style = LCBuildersCommon::getBaseStyleSheet(_element, _app);
+  if(ret == nullptr) ret = new QLabel(element.tagName());
+  QString style = LCBuildersCommon::getBaseStyleSheet(element, app);
   ret->setStyleSheet(style);
-  LCBuildersCommon::initPosition(_element, *ret);
+  LCBuildersCommon::initPosition(element, *ret);
   return ret;
 }
 

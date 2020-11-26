@@ -88,18 +88,19 @@ static void buildFromWidgets(LCWidget* _widget, const QDomElement& _element,
     const LIApplication& _app);
 
 //------------------------------------------------------------------------------
-QWidget* LCXmlWidgetBuilder::buildLocal( 
-    const QDomElement& _element, 
-    const LIApplication& _app){ return nullptr; }
+/* QWidget* LCXmlWidgetBuilder::buildLocal( */ 
+/*     const QDomElement& _element, */ 
+/*     const LIApplication& _app){ return nullptr; } */
 //------------------------------------------------------------------------------
-QWidget* LCXmlWidgetBuilder::buildLocal1(QSharedPointer<SBaseData> _buildData)
+QWidget* LCXmlWidgetBuilder::buildLocal(QSharedPointer<SBuildData> _buildData)
 {
-  const QDomElement& _element = _buildData->element;
-  const LIApplication& _app = _buildData->application;
-  QDomNode  node = _element.firstChildElement(__slTags.layout);
+  const QDomElement& element = _buildData->element;
+  const LIApplication& app = _buildData->application;
+
+  QDomNode  node = element.firstChildElement(__slTags.layout);
   LCWidget* widget = new LCWidget;
 
-  QString style = LCBuildersCommon::getBaseStyleSheet(_element, _app);
+  QString style = LCBuildersCommon::getBaseStyleSheet(element, app);
 
   style = QString("QWidget#%1{  %2 }").arg(widget->objectName()).arg(style);
 
@@ -107,19 +108,19 @@ QWidget* LCXmlWidgetBuilder::buildLocal1(QSharedPointer<SBaseData> _buildData)
 
   if(!node.isNull()) 
   {
-    buildFromLayout(widget, node.toElement(), _app);
+    buildFromLayout(widget, node.toElement(), app);
   }
   else
   {
-    node = _element.firstChildElement(__slTags.widgets);
+    node = element.firstChildElement(__slTags.widgets);
 
     if(!node.isNull()) 
     {
-      buildFromWidgets(widget, node.toElement(), _app);
+      buildFromWidgets(widget, node.toElement(), app);
     }
   }
 
-  LCBuildersCommon::initPosition(_element, *widget);
+  LCBuildersCommon::initPosition(element, *widget);
 
   return widget;
 }
