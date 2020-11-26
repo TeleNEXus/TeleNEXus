@@ -26,9 +26,6 @@ public:
 
 protected:
 
-  /* virtual QWidget* buildLocal( */
-  /*     const QDomElement&      _element, */ 
-  /*     const LIApplication&    _app) = 0; */
   virtual QWidget* buildLocal(QSharedPointer<SBuildData> _buildData) = 0;
 };
 

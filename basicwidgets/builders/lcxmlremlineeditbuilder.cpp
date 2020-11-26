@@ -74,10 +74,8 @@ LABEL_WRONG_EXIT:
 
   QString style = LCBuildersCommon::getBaseStyleSheet(element, app);
   
-  /* ret->setStyleSheet(".LCQRemLineEdit { " + style + "}" ); */
   ret->setStyleSheet(style);
   
-  /* LCBuildersCommon::initSize(_element, *ret); */
   LCBuildersCommon::initPosition(element, *ret);
   return ret;
 }
