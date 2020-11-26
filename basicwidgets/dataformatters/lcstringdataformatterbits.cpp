@@ -4,7 +4,7 @@
 
 //==============================================================================
 LCStringDataFormatterBits::
-    CValidator::CValidator(const int& _size, const QChar& _separator, QObject *_parent) : 
+    CValidator::CValidator(int _size, QChar _separator, QObject *_parent) : 
     QValidator(_parent),
     mSize(_size),
     mSeparator(_separator)
@@ -45,36 +45,33 @@ LCStringDataFormatterBits::LCStringDataFormatterBits(
         QChar   _separator,
         QChar   _fillCharUndef,
         QChar   _fillCharWrong) :  
-    mSize(_size),
-    mSeparator(_separator),
     mFillCharUndef(_fillCharUndef),
-    mFillCharWrong(_fillCharWrong)
+    mFillCharWrong(_fillCharWrong),
+    mValidator(_size, _separator)
 {
-    mpValidator = new CValidator(mSize, mSeparator);
 }
 
 //------------------------------------------------------------------------------
 LCStringDataFormatterBits::
 LCStringDataFormatterBits( const LCStringDataFormatterBits& _formatter)
 {
-    this->mSize          = _formatter.mSize;         
-    this->mSeparator     = _formatter.mSeparator;    
-    this->mFillCharUndef = _formatter.mFillCharUndef;
-    this->mFillCharWrong = _formatter.mFillCharWrong;
+    mValidator.mSize      = _formatter.mValidator.mSize;         
+    mValidator.mSeparator = _formatter.mValidator.mSeparator;    
+    mFillCharUndef = _formatter.mFillCharUndef;
+    mFillCharWrong = _formatter.mFillCharWrong;
 }
 //------------------------------------------------------------------------------
 LCStringDataFormatterBits::~LCStringDataFormatterBits()
 {
-    mpValidator->deleteLater();
 }
 
 LCStringDataFormatterBits& 
 LCStringDataFormatterBits::operator=(const LCStringDataFormatterBits& _formatter)
 {
-    this->mSize          = _formatter.mSize;         
-    this->mSeparator     = _formatter.mSeparator;    
-    this->mFillCharUndef = _formatter.mFillCharUndef;
-    this->mFillCharWrong = _formatter.mFillCharWrong;
+    mValidator.mSize          = _formatter.mValidator.mSize;         
+    mValidator.mSeparator     = _formatter.mValidator.mSeparator;    
+    mFillCharUndef = _formatter.mFillCharUndef;
+    mFillCharWrong = _formatter.mFillCharWrong;
     return *this;
 }
 //------------------------------------------------------------------------------toString
@@ -98,7 +95,7 @@ QString LCStringDataFormatterBits::toString(const QByteArray& _data)
             out_str += '0';
         }
 
-        if(!mSeparator.isNull())
+        if(!mValidator.mSeparator.isNull())
         {
             if( (i - 1) >= 0) out_str += ' ';
         }
@@ -112,10 +109,10 @@ QString LCStringDataFormatterBits::normalizeString(const QString& _str)
     QString out_str = _str;
 
     //Удаляем разделительные символы.
-    out_str.remove(QRegExp(QString("[ _%1]{1,}").arg(mSeparator)));
+    out_str.remove(QRegExp(QString("[ _%1]{1,}").arg(mValidator.mSeparator)));
 
     // Проверяем задан ли размер битового поля. 
-    if(mSize < 0)
+    if(mValidator.mSize < 0)
     {
         //Если размер не задан.
         //проверяем на наличие не цифровых значений.
@@ -132,13 +129,13 @@ QString LCStringDataFormatterBits::normalizeString(const QString& _str)
     out_str.remove(QRegExp("^[0]{1,}"));
 
 
-    if( mSize < out_str.size())
+    if( mValidator.mSize < out_str.size())
     {
-        out_str.remove(0, out_str.size() - mSize);
+        out_str.remove(0, out_str.size() - mValidator.mSize);
     }
-    else if(mSize > out_str.size())
+    else if(mValidator.mSize > out_str.size())
     {
-        out_str.insert(0, QString( mSize - out_str.size(), '0'));
+        out_str.insert(0, QString( mValidator.mSize - out_str.size(), '0'));
     }
 
     /* if( mSize < out_str.size()) */
@@ -155,7 +152,7 @@ QByteArray LCStringDataFormatterBits::toBytes(const QString& _str)
     QByteArray arr;
     QString instr = _str;
 
-    instr.remove(QRegExp(QString("[ _%1]{1,}").arg(mSeparator)));
+    instr.remove(QRegExp(QString("[ _%1]{1,}").arg(mValidator.mSeparator)));
 
     for(int i = (instr.length() - 1); i >= 0; i -= 1)
     {
@@ -180,11 +177,11 @@ QString     LCStringDataFormatterBits::undefStateString()
 //------------------------------------------------------------------------------setSize
 void LCStringDataFormatterBits::setSize(int _size)
 {
-    mSize = _size;
+    mValidator.mSize = _size;
 }
 
 //------------------------------------------------------------------------------setSeparator
 void LCStringDataFormatterBits::setSeparator(QChar _separator)
 {
-    this->mSeparator = _separator;
+    mValidator.mSeparator = _separator;
 }

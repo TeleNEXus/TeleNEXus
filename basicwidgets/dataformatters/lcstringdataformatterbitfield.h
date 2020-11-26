@@ -10,14 +10,15 @@ private:
     class CValidator : public QValidator
     {
     public:
-        const int&      mSize;
-        const QChar&    mSeparator;
+        int      mSize;
+        QChar    mSeparator;
 
         explicit CValidator(
-                const int& _size, 
-                const QChar& _separator, 
+                int _size = 0, 
+                QChar _separator = QChar(), 
                 QObject *_parent = nullptr);
-        ~CValidator(){}
+        
+        virtual ~CValidator(){}
 
         virtual QValidator::State validate(
                 QString &_input, 
@@ -25,11 +26,9 @@ private:
     };
 
 private:
-    int         mSize;            //Заданный размер последовательности в байтах.
-    QChar       mSeparator;       //Разделитель между отображаемыми числами.
     QChar       mFillCharUndef;   //Заполнение при отсутствии значения.
     QChar       mFillCharWrong;   //Заполнение при ошибочном значении.
-    CValidator* mpValidator;      //Валидатор.
+    CValidator  mValidator;       //Валидатор.
 public:
 
     explicit LCStringDataFormatterBitfield(    
@@ -40,6 +39,7 @@ public:
 
     explicit LCStringDataFormatterBitfield( 
             const LCStringDataFormatterBitfield& _formatter);
+
     virtual ~LCStringDataFormatterBitfield();
 
     LCStringDataFormatterBitfield& operator=(
@@ -49,7 +49,7 @@ public:
     virtual QString     normalizeString(const QString& _str) override;
     virtual QByteArray  toBytes(const QString& _str) override;
     virtual QString     undefStateString() override;
-    virtual QValidator* validator() override {return mpValidator;}
+    virtual QValidator* validator() override {return &mValidator;}
 
     void setFillCharUndef(QChar _c){mFillCharUndef = _c;}
     void setFillCharWrong(QChar _c){mFillCharWrong = _c;}
