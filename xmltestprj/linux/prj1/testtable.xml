@@ -24,7 +24,7 @@
       <item text="Test"   value="013"/>
     </dataComboBox>
 
-    <dataComboBox  read="hreg0" source="qtslavetcp" format="hex" size="2">
+    <dataComboBox  read="hreg0" source="qtslavetcp" format="hex" dataSize="2">
       <item text="On"        value="00_0 a"/>
       <item text="Off"       value="00_0 b"/>
       <item text="Reset"     value="00_0 c"/>
@@ -36,28 +36,30 @@
       <item text="Выключен"       value="false"/>
     </dataComboLabel>
 
-    <dataComboLabel  read="hreg0" source="qtslavetcp" format="hex" size="2">
+
+
+    <dataComboLabel  read="hreg0" source="qtslavetcp" format="hex" dataSize="2">
       <item text="On"        value="a"/>
       <item text="Off"       value="b"/>
       <item text="Reset"     value="c"/>
       <item text="Test"      value="d"/>
     </dataComboLabel>
 
-    <dataComboBox  read="coil[0-3]" source="qtslavetcp" format="bits" size="4">
+    <dataComboBox  read="coil[0-3]" source="qtslavetcp" format="bits" dataSize="4">
       <item value="1 1_001"/>
       <item value="1 1_011"/>
       <item value="1 1_111"/>
     </dataComboBox>
 
-    <dataComboLabel  read="coil[0-3]" source="qtslavetcp" format="bits" size="4">
-      <item value="1 1_001"/>
-      <item value="1 1_011"/>
-      <item value="1 1_111"/>
+    <dataComboLabel  read="coil[0-3]" source="qtslavetcp" format="bits" dataSize="4">
+      <item text="1 1_001" value="1 1_001"/>
+      <item text="1 1_011" value="1 1_011"/>
+      <item text="1 1_111" value="1 1_111"/>
     </dataComboLabel>
 
     <dataLabel      source="qtslavetcp"  data="coil[0-2]" format="bits"/>
 
-    <dataLineEdit   bgColor="red" source="qtslavetcp"  data="coil[0-2]" format="bits" size="3" separator=" " />
+    <dataLineEdit   bgColor="red" source="qtslavetcp"  data="coil[0-2]" format="bits" dataSize="3" separator=" " />
   </col>
 
   <col label="Столбец 2">
@@ -66,19 +68,22 @@
     <dataLabel source="qtslavetcp"  data="hflt"  format="float32"/>
   </col>
 
+
   <col label="Столбец 3" width="200">
-    <dataLineEdit   source="qtslavetcp" data="hreg[0-1]" format="hex" size="4" separator=" "/>
-    <dataComboLabel  read="hreg0" source="qtslavetcp" format="hex" size="2">
+    <dataLineEdit   source="qtslavetcp" data="hreg[0-1]" format="hex" dataSize="4" separator=" "/>
+
+    <dataComboLabel  read="hreg0" source="qtslavetcp" format="hex" dataSize="2">
       <item text="On"        value="a"/>
       <item text="Off"       value="b"/>
       <item text="Reset"     value="c"/>
       <item text="Test"      value="d"/>
     </dataComboLabel>
-    <dataLabel      source="qtslavetcp"  data="hreg0" format="bitfield"/>
-    <dataLineEdit   source="qtslavetcp"  data="hreg0" format="bitfield" size="2" separator=" "/>
-    <dataLabel      source="qtslavetcp"  data="inreg1" format="uint16"/>
-    <dataLabel      source="qtslavetcp"  data="inflt"  format="float32"/>
-    <dataLabel      source="qtslavetcp"  data="hreg1"  format="hex"/>
+
+    <dataLabel      source="qtslavetcp"  data="hreg0"   format="bitfield"/>
+    <dataLineEdit   source="qtslavetcp"  data="hreg0"   format="bitfield" size="2" separator=" "/>
+    <dataLabel      source="qtslavetcp"  data="inreg1"  format="uint16"/>
+    <dataLabel      source="qtslavetcp"  data="inflt"   format="float32"/>
+    <dataLabel      source="qtslavetcp"  data="hreg1"   format="hex"/>
   </col>
   <row height="100">
 
