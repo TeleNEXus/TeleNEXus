@@ -45,7 +45,7 @@ LCXmlTableWidgetBuilder::~LCXmlTableWidgetBuilder()
 
 
 //------------------------------------------------------------------------------
-struct SBuildData
+struct SLocalData
 {
   /*
    * Фильтр обработки события нажатия клавиши Esc.
@@ -72,7 +72,7 @@ struct SBuildData
   quint32 mRow = 0;
   quint32 mColumn = 0;
   QTableWidget* mpTable= nullptr;
-  SBuildData() : mpTable(new QTableWidget)
+  SLocalData() : mpTable(new QTableWidget)
   {
     mpTable->setSelectionMode(QTableWidget::SelectionMode::NoSelection);
     mpTable->installEventFilter(new CQEventFilter);
@@ -92,45 +92,47 @@ static QString getHeaderStyle(
 static void createRow(
         const QDomElement &_element,
         const LIApplication& _app,
-        SBuildData& _buildData);
+        SLocalData& _localData);
 
 static void createCol(
         const QDomElement &_element,
         const LIApplication& _app,
-        SBuildData& _buildData);
+        SLocalData& _localData);
 
 //------------------------------------------------------------------------------
-QWidget* LCXmlTableWidgetBuilder::buildLocal(const QDomElement& _element,
-    const LIApplication& _app)
+QWidget* LCXmlTableWidgetBuilder::buildLocal(
+    QSharedPointer<SBuildData> _buildData)
 {
-  SBuildData buildData;
+  const QDomElement& element = _buildData->element;
+  const LIApplication& app = _buildData->application;
 
-  QDomNode childNode = _element.firstChild();
-  for(QDomNode node = _element.firstChild();
+  SLocalData buildData;
+
+  for(QDomNode node = element.firstChild();
       !node.isNull();
-      node = node.nextSiblingElement())
+      node = node.nextSibling())
   {
-    if(childNode.isElement())
+    if(!node.isElement()) continue;
+
+    QDomElement nel = node.toElement();
+
+    if(nel.tagName() == __elementNames.row)
     {
-      QDomElement element = node.toElement();
-      if(element.tagName() == __elementNames.row)
-      {
-        createRow(element, _app, buildData);
-      }
-      else if(element.tagName() == __elementNames.column)
-      {
-        createCol(element, _app, buildData);
-      }
+      createRow(nel, app, buildData);
+    }
+    else if(nel.tagName() == __elementNames.column)
+    {
+      createCol(nel, app, buildData);
     }
   }
 
-  QString table_style = getTableStyle(_element, _app);
+  QString table_style = getTableStyle(element, app);
 
   table_style = QString("QTableWidget#%1 { %2 }").
     arg(buildData.mpTable->objectName()).
     arg(table_style);
 
-  QString header_style = getHeaderStyle(_element, _app);
+  QString header_style = getHeaderStyle(element, app);
   header_style = QString(
       "QTableCornerButton { %1 }"
       "QHeaderView { %1 }").
@@ -139,7 +141,7 @@ QWidget* LCXmlTableWidgetBuilder::buildLocal(const QDomElement& _element,
 
   buildData.mpTable->setStyleSheet(table_style + header_style);
 
-  LCBuildersCommon::initPosition(_element, *buildData.mpTable);
+  LCBuildersCommon::initPosition(element, *buildData.mpTable);
   return buildData.mpTable;
 }
 
@@ -193,20 +195,19 @@ static QString getHeaderStyle(const QDomElement& _element, const LIApplication& 
 static void createRow(
         const QDomElement &_element, 
         const LIApplication& _app, 
-        SBuildData& _buildData)
+        SLocalData& _localData)
 {
     quint32 col = 0;
-    QDomNode childNode = _element.firstChild();
 
-    _buildData.mpTable->setRowCount(++_buildData.mRow);
+    _localData.mpTable->setRowCount(++_localData.mRow);
 
     QString row_name = _element.attribute(LCBuildersCommon::mAttributes.label);
 
-    int curr_row = _buildData.mRow - 1;
+    int curr_row = _localData.mRow - 1;
 
     if(!row_name.isNull())
     {
-        _buildData.mpTable->setVerticalHeaderItem(curr_row, 
+        _localData.mpTable->setVerticalHeaderItem(curr_row, 
                 new QTableWidgetItem(row_name));
     }
 
@@ -216,52 +217,43 @@ static void createRow(
         bool flag = false;
         int height = attr_height.toInt(&flag);
         if(flag)
-            _buildData.mpTable->setRowHeight(curr_row, height);
+            _localData.mpTable->setRowHeight(curr_row, height);
     }
 
-    if(childNode.isNull())
+
+    for(QDomNode node = _element.firstChild();
+        !node.isNull();
+        node = node.nextSibling())
     {
-        return;
-    }
+      if(!node.isElement()) continue;
 
-    while(!childNode.isNull())
-    {
-        if(!childNode.isElement())
-        {
-            childNode = childNode.nextSibling();
-            continue;
-        }
+      QDomElement nel = node.toElement();
 
-        QDomElement nodeElement = childNode.toElement();
+      QWidget* widget = nullptr;
 
-        QWidget* widget = nullptr;
+      //Попытка получения построителя виджета.
+      QSharedPointer<LIXmlWidgetBuilder> widget_builder = 
+        _app.getWidgetBuilder(nel.tagName());
 
-        //Попытка получения построителя виджета.
-        QSharedPointer<LIXmlWidgetBuilder> widget_builder = 
-            _app.getWidgetBuilder(nodeElement.tagName());
+      col++;
+      if(col > _localData.mColumn)  
+      {
+        _localData.mpTable->setColumnCount(col);
+        _localData.mColumn = col;
+      }
 
-        col++;
-        if(col > _buildData.mColumn)  
-        {
-            _buildData.mpTable->setColumnCount(col);
-            _buildData.mColumn = col;
-        }
+      if(!widget_builder.isNull())
+      {
+        widget = widget_builder->build(nel, _app);
+      }
 
-        if(!widget_builder.isNull())
-        {
-            widget = widget_builder->build(nodeElement, _app);
-        }
-
-        if(widget)
-        {
-            _buildData.mpTable->setCellWidget(
-                    _buildData.mRow - 1, 
-                    col - 1, 
-                    widget);
-        }
-
-        //--------------------------------
-        childNode = childNode.nextSibling();
+      if(widget)
+      {
+        _localData.mpTable->setCellWidget(
+            _localData.mRow - 1, 
+            col - 1, 
+            widget);
+      }
     }
 }
 
@@ -269,72 +261,61 @@ static void createRow(
 static void createCol(
         const QDomElement &_element, 
         const LIApplication& _app, 
-        SBuildData& _buildData)
+        SLocalData& _localData)
 {
-    quint32 row = 0;
-    QDomNode childNode = _element.firstChild();
+  quint32 row = 0;
 
-    _buildData.mpTable->setColumnCount(++_buildData.mColumn);
+  _localData.mpTable->setColumnCount(++_localData.mColumn);
 
-    QString col_name = _element.attribute( LCBuildersCommon::mAttributes.label);
+  QString col_name = _element.attribute( LCBuildersCommon::mAttributes.label);
 
-    if(!col_name.isNull())
+  if(!col_name.isNull())
+  {
+    _localData.mpTable->setHorizontalHeaderItem(_localData.mColumn -1, 
+        new QTableWidgetItem(col_name));
+  }
+
+  QString attr_width = _element.attribute(__attrNames.width);
+  if(!attr_width.isNull())
+  {
+    bool flag = false;
+    int width = attr_width.toInt(&flag);
+    if(flag)
+      _localData.mpTable->setColumnWidth(_localData.mColumn -1, width);
+  }
+
+  for(QDomNode node = _element.firstChild();
+      !node.isNull();
+      node = node.nextSibling())
+  {
+    if(!node.isElement()) continue;
+    QDomElement nel = node.toElement();
+
+    QWidget* widget = nullptr;
+
+    //Попытка получения построителя виджета.
+    QSharedPointer<LIXmlWidgetBuilder> widget_builder = 
+      _app.getWidgetBuilder(nel.tagName());
+
+    //Добавление новой строки.
+    row++;
+    if(row > _localData.mRow)  
     {
-        _buildData.mpTable->setHorizontalHeaderItem(_buildData.mColumn -1, 
-            new QTableWidgetItem(col_name));
+      _localData.mpTable->setRowCount(row);
+      _localData.mRow = row;
     }
 
-    QString attr_width = _element.attribute(__attrNames.width);
-    if(!attr_width.isNull())
+    if(!widget_builder.isNull())
     {
-        bool flag = false;
-        int width = attr_width.toInt(&flag);
-        if(flag)
-            _buildData.mpTable->setColumnWidth(_buildData.mColumn -1, width);
+      widget = widget_builder->build(nel, _app);
     }
 
-    if(childNode.isNull())
+    if(widget)
     {
-        return;
+      _localData.mpTable->setCellWidget(
+          row - 1, 
+          _localData.mColumn - 1, 
+          widget);
     }
-
-    while(!childNode.isNull())
-    {
-        if(!childNode.isElement())
-        {
-            childNode = childNode.nextSibling();
-            continue;
-        }
-
-        QDomElement nodeElement = childNode.toElement();
-
-        QWidget* widget = nullptr;
-        //Попытка получения построителя виджета.
-        QSharedPointer<LIXmlWidgetBuilder> widget_builder = 
-            _app.getWidgetBuilder(nodeElement.tagName());
-
-        //Добавление новой строки.
-        row++;
-        if(row > _buildData.mRow)  
-        {
-            _buildData.mpTable->setRowCount(row);
-            _buildData.mRow = row;
-        }
-
-        if(!widget_builder.isNull())
-        {
-            widget = widget_builder->build(nodeElement, _app);
-        }
-
-        if(widget)
-        {
-            _buildData.mpTable->setCellWidget(
-                    row - 1, 
-                    _buildData.mColumn - 1, 
-                    widget);
-        }
-
-        //--------------------------------
-        childNode = childNode.nextSibling();
-    }
+  }
 }

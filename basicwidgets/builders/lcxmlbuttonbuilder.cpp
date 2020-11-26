@@ -68,18 +68,21 @@ static void setStyleSheet(QPushButton* _button, const QDomElement& _element,
     const LIApplication& _app);
 
 //------------------------------------------------------------------------------
-QWidget* LCXmlButtonBuilder::buildLocal( const QDomElement& _element, 
-    const LIApplication& _app)
+QWidget* LCXmlButtonBuilder::buildLocal(
+      QSharedPointer<SBuildData> _buildData)
 {
+  const QDomElement& element = _buildData->element;
+  const LIApplication& app = _buildData->application;
+
   QPushButton* button;
   switch(mType)
   {
   case EType::writeData:
-    button = buildWriteButton(_element, _app);
+    button = buildWriteButton(element, app);
     break;
 
   case EType::controlWindows:
-    button = buildControllWindowButton(_element, _app);
+    button = buildControllWindowButton(element, app);
     break;
 
   default:
@@ -87,11 +90,11 @@ QWidget* LCXmlButtonBuilder::buildLocal( const QDomElement& _element,
   }
 
 
-  setStyleSheet(button, _element, _app);
+  setStyleSheet(button, element, app);
 
-  /* LCBuildersCommon::initSize(       _element, *button); */
-  /* LCBuildersCommon::initFixedSize(  _element, *button); */
-  LCBuildersCommon::initPosition(   _element, *button);
+  /* LCBuildersCommon::initSize(       element, *button); */
+  /* LCBuildersCommon::initFixedSize(  element, *button); */
+  LCBuildersCommon::initPosition(   element, *button);
 
   return button;
 }

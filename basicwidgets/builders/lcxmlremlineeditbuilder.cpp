@@ -27,13 +27,15 @@ const struct
 } __attrNames;
 
 //------------------------------------------------------------------------------
-QWidget* LCXmlRemLineEditBuilder::buildLocal(const QDomElement& _element, 
-    const LIApplication& _app)
+QWidget* LCXmlRemLineEditBuilder::buildLocal(
+      QSharedPointer<SBuildData> _buildData)
 {
+  const QDomElement& element = _buildData->element;
+  const LIApplication& app = _buildData->application;
   QLineEdit* ret = nullptr;
 
   QString data;
-  QString attr = _element.attribute(__attrNames.source);
+  QString attr = element.attribute(__attrNames.source);
   QSharedPointer<LIRemoteDataSource> source;
   QSharedPointer<LCStringDataFormatterBase> format;
 
@@ -42,14 +44,14 @@ QWidget* LCXmlRemLineEditBuilder::buildLocal(const QDomElement& _element,
     goto LABEL_WRONG_EXIT;
   }
 
-  source = _app.getDataSource(attr);
+  source = app.getDataSource(attr);
 
   if(source.isNull())
   {
     goto LABEL_WRONG_EXIT;
   }
 
-  data = _element.attribute(__attrNames.data);
+  data = element.attribute(__attrNames.data);
 
   if(data.isNull())
   {
@@ -57,7 +59,7 @@ QWidget* LCXmlRemLineEditBuilder::buildLocal(const QDomElement& _element,
   }
 
   format = LCXmlStdDataFormatterFactory::
-    instance().createStringFormatter(_element.attributes());
+    instance().createStringFormatter(element.attributes());
 
   if(format.isNull())
   {
@@ -68,15 +70,15 @@ QWidget* LCXmlRemLineEditBuilder::buildLocal(const QDomElement& _element,
 
 LABEL_WRONG_EXIT:
 
-  if(ret == nullptr) ret = new QLineEdit(_element.tagName());
+  if(ret == nullptr) ret = new QLineEdit(element.tagName());
 
-  QString style = LCBuildersCommon::getBaseStyleSheet(_element, _app);
+  QString style = LCBuildersCommon::getBaseStyleSheet(element, app);
   
   /* ret->setStyleSheet(".LCQRemLineEdit { " + style + "}" ); */
   ret->setStyleSheet(style);
   
   /* LCBuildersCommon::initSize(_element, *ret); */
-  LCBuildersCommon::initPosition(_element, *ret);
+  LCBuildersCommon::initPosition(element, *ret);
   return ret;
 }
 
