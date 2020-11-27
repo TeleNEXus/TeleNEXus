@@ -35,7 +35,7 @@ LCQRemLabel::LCQRemLabel(QString _text, QWidget* _parent) : QLabel(_text, _paren
 
 LCQRemLabel::LCQRemLabel(const QString& _dataName,
                          QSharedPointer<LIRemoteDataSource> _dataSource,
-                         QSharedPointer<LCStringDataFormatterBase> _formatter,
+                         QSharedPointer<LIDataFormatter> _formatter,
                          QWidget* _parent) :    QLabel(_parent),
                                                 mDataName(_dataName),
                                                 mFormatter(_formatter)

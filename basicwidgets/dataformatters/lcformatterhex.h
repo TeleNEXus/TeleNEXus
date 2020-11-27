@@ -1,9 +1,10 @@
 #ifndef LCSTRINGDATAFORMATTERHEX_H
 #define LCSTRINGDATAFORMATTERHEX_H
 
-#include "lcstringdataformatterbase.h"
+#include "lcformatterbase.h"
+#include <QValidator>
 
-class LCStringDataFormatterHex : public LCStringDataFormatterBase
+class LCFormatterHex : public LCFormatterBase
 {
 private:
   //Валидатор вводимых данных.
@@ -28,16 +29,16 @@ private:
   CValidator  mValidator;      //Валидатор.
 public:
 
-  explicit LCStringDataFormatterHex(    
+  explicit LCFormatterHex(    
       int     _size           = 0, 
       QChar   _separator      = QChar());
 
-  explicit LCStringDataFormatterHex( 
-      const LCStringDataFormatterHex& _formatter);
-  virtual ~LCStringDataFormatterHex();
+  explicit LCFormatterHex( 
+      const LCFormatterHex& _formatter);
+  virtual ~LCFormatterHex();
 
-  LCStringDataFormatterHex& operator=(
-      const LCStringDataFormatterHex& _formatter);
+  LCFormatterHex& operator=(
+      const LCFormatterHex& _formatter);
 
   virtual QString     toString(const QByteArray& _data) override;
   virtual QString     normalize(const QString& _str) override;

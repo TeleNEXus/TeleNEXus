@@ -1,6 +1,6 @@
 #include "lcxmlremcombolabelbuilder.h"
 #include "lcqremcombolabel.h"
-#include "lcxmlstddataformatterfactory.h"
+#include "lcxmlformatterfactory.h"
 #include "lcbuilderscommon.h"
 #include "LIApplication.h"
 #include "LIMovieAccess.h"
@@ -84,7 +84,7 @@ const struct
 //------------------------------------------------------------------------------
 static void buildComboLabel( const QDomElement& _element, 
     LCQRemComboLabel* _label,
-    QSharedPointer<LCStringDataFormatterBase> _format,
+    QSharedPointer<LIDataFormatter> _format,
     const QString& _baseStyle,
     const LIApplication& _app);
 
@@ -99,7 +99,7 @@ QWidget* LCXmlRemComboLabelBuilder::buildLocal(
   QString dataread;
   QString attr = element.attribute(LCBuildersCommon::mAttributes.source);
   QSharedPointer<LIRemoteDataSource> source;
-  QSharedPointer<LCStringDataFormatterBase> format;
+  QSharedPointer<LIDataFormatter> format;
 
   QString style;
 
@@ -161,7 +161,7 @@ static QString readStylePicture(const QDomElement& _element,
 
 static void buildComboLabel( const QDomElement& _element, 
     LCQRemComboLabel* _cl,
-    QSharedPointer<LCStringDataFormatterBase> _format,
+    QSharedPointer<LIDataFormatter> _format,
     const QString& _baseStyle,
     const LIApplication& _app)
 {
@@ -285,7 +285,7 @@ static void buildComboLabel( const QDomElement& _element,
 /*     LCQRemComboLabel& _comboLabel, */ 
 /*     const QDomElement& el, */ 
 /*     const QString& _baseStyle, */ 
-/*     QSharedPointer<LCStringDataFormatterBase> _format, */
+/*     QSharedPointer<LIDataFormatter> _format, */
 /*     EItemMode _mode, */
 /*     std::function<void(QLabel**)> _newLabel) */
 /* { */

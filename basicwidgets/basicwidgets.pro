@@ -53,20 +53,20 @@ SOURCES += \
     builders/lcxmlscrollareabuilder.cpp \
     builders/lcxmlbuttonbuilder.cpp \
     builders/lcbuilderscommon.cpp \
-    dataformatters/lcstringdataformatterbase.cpp \
-    dataformatters/lcstringdataformatterbitfield.cpp \
-    dataformatters/lcstringdataformatterbits.cpp \
-    dataformatters/lcstringdataformatterbool.cpp \
-    dataformatters/lcstringdataformatterf32.cpp \
-    dataformatters/lcstringdataformatterhex.cpp \
-    dataformatters/lcstringdataformatterintbase.cpp \
-    dataformatters/lcstringdataformatters16.cpp \
-    dataformatters/lcstringdataformatters32.cpp \
-    dataformatters/lcstringdataformatters8.cpp \
-    dataformatters/lcstringdataformatteru16.cpp \
-    dataformatters/lcstringdataformatteru32.cpp \
-    dataformatters/lcstringdataformatteru8.cpp \
-    dataformatters/lcxmlstddataformatterfactory.cpp
+    dataformatters/lcformatterbase.cpp \
+    dataformatters/lcformatterbitfield.cpp \
+    dataformatters/lcformatterbits.cpp \
+    dataformatters/lcformatterbool.cpp \
+    dataformatters/lcformatterf32.cpp \
+    dataformatters/lcformatterhex.cpp \
+    dataformatters/lcformatterintbase.cpp \
+    dataformatters/lcformatters16.cpp \
+    dataformatters/lcformatters32.cpp \
+    dataformatters/lcformatters8.cpp \
+    dataformatters/lcformatteru16.cpp \
+    dataformatters/lcformatteru32.cpp \
+    dataformatters/lcformatteru8.cpp \
+    dataformatters/lcxmlformatterfactory.cpp
 
 
 HEADERS += \
@@ -103,21 +103,21 @@ HEADERS += \
     builders/lcxmlscrollareabuilder.h \
     builders/lcxmlbuttonbuilder.h \
     builders/lcbuilderscommon.h \
-    dataformatters/LIStringDataFormatter.h \
-    dataformatters/lcstringdataformatterbase.h \
-    dataformatters/lcstringdataformatterbitfield.h \
-    dataformatters/lcstringdataformatterbits.h \
-    dataformatters/lcstringdataformatterbool.h \
-    dataformatters/lcstringdataformatterf32.h \
-    dataformatters/lcstringdataformatterhex.h \
-    dataformatters/lcstringdataformatterintbase.h \
-    dataformatters/lcstringdataformatters16.h \
-    dataformatters/lcstringdataformatters32.h \
-    dataformatters/lcstringdataformatters8.h \
-    dataformatters/lcstringdataformatteru16.h \
-    dataformatters/lcstringdataformatteru32.h \
-    dataformatters/lcstringdataformatteru8.h \
-    dataformatters/lcxmlstddataformatterfactory.h
+    dataformatters/LIDataFormatter.h \
+    dataformatters/lcformatterbase.h \
+    dataformatters/lcformatterbitfield.h \
+    dataformatters/lcformatterbits.h \
+    dataformatters/lcformatterbool.h \
+    dataformatters/lcformatterf32.h \
+    dataformatters/lcformatterhex.h \
+    dataformatters/lcformatterintbase.h \
+    dataformatters/lcformatters16.h \
+    dataformatters/lcformatters32.h \
+    dataformatters/lcformatters8.h \
+    dataformatters/lcformatteru16.h \
+    dataformatters/lcformatteru32.h \
+    dataformatters/lcformatteru8.h \
+    dataformatters/lcxmlformatterfactory.h
 
 # Default rules for deployment.
 unix {

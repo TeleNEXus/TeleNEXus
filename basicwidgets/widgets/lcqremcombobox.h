@@ -6,8 +6,8 @@
 #include "LIRemoteDataReader.h"
 #include "LIRemoteDataWriter.h"
 #include "lqextendevent.h"
-#include "lcstringdataformatterbase.h"
 
+#include "LIDataFormatter.h"
 #include "LIRemoteDataReadListener.h"
 #include "LIRemoteDataWriteListner.h"
 
@@ -41,7 +41,7 @@ private:
     QSharedPointer<CReadListener>               mDataReadListener;
     QSharedPointer<LIRemoteDataReader>          mDataReader;
     QSharedPointer<LIRemoteDataWriter>          mDataWriter;
-    QSharedPointer<LCStringDataFormatterBase>   mFormatter;
+    QSharedPointer<LIDataFormatter>             mFormatter;
     QMetaObject::Connection                     mIndexChangeConnection;
     bool mFlagPopupOn; //Флаг состояния всплывающего меню.
 
@@ -55,7 +55,7 @@ public:
             const QString&                              _dataNameRead,
             const QString&                              _dataNameWrite,
             QSharedPointer<LIRemoteDataSource>          _dataSource,
-            QSharedPointer<LCStringDataFormatterBase>   _formatter,
+            QSharedPointer<LIDataFormatter>   _formatter,
             QWidget* _parent = nullptr);
     virtual ~LCQRemComboBox();
     virtual bool event(QEvent *e) override;

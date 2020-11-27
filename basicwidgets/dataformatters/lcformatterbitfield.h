@@ -1,9 +1,10 @@
 #ifndef LCSTRINGDATAFORMATTERBITFIELD_H 
 #define LCSTRINGDATAFORMATTERBITFIELD_H 
 
-#include "lcstringdataformatterbase.h"
+#include "lcformatterbase.h"
+#include <QValidator>
 
-class LCStringDataFormatterBitfield : public LCStringDataFormatterBase
+class LCFormatterBitfield : public LCFormatterBase
 {
 private:
     //Валидатор вводимых данных.
@@ -29,17 +30,17 @@ private:
     CValidator  mValidator;       //Валидатор.
 public:
 
-    explicit LCStringDataFormatterBitfield(
+    explicit LCFormatterBitfield(
         int _size = 0, 
         QChar _separator = QChar());
 
-    explicit LCStringDataFormatterBitfield( 
-            const LCStringDataFormatterBitfield& _formatter);
+    explicit LCFormatterBitfield( 
+            const LCFormatterBitfield& _formatter);
 
-    virtual ~LCStringDataFormatterBitfield();
+    virtual ~LCFormatterBitfield();
 
-    LCStringDataFormatterBitfield& operator=(
-            const LCStringDataFormatterBitfield& _formatter);
+    LCFormatterBitfield& operator=(
+            const LCFormatterBitfield& _formatter);
 
     virtual QString     toString(const QByteArray& _data) override;
     virtual QString     normalize(const QString& _str) override;

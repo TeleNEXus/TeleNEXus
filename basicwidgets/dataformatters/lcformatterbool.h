@@ -1,17 +1,18 @@
 #ifndef LCDATAFORMATBOOL_H
 #define LCDATAFORMATBOOL_H
 
-#include "lcstringdataformatterbase.h"
+#include "lcformatterbase.h"
+#include <QValidator>
 
-class LCStringDataFormatterBool : public LCStringDataFormatterBase
+class LCFormatterBool : public LCFormatterBase
 {
 private:
     QString mStrFalse;
     QString mStrTrue;
 public:
-    explicit LCStringDataFormatterBool(   const QString& _strFalse = "false",
+    explicit LCFormatterBool(   const QString& _strFalse = "false",
                                     const QString& _strTrue = "true");
-    virtual ~LCStringDataFormatterBool(){}
+    virtual ~LCFormatterBool(){}
     virtual QString     toString(const QByteArray& _data) override;
     virtual QString     normalize(const QString& _str) override;
     virtual QByteArray  toBytes(const QString& _str) override;

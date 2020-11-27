@@ -1,9 +1,9 @@
-#include "lcstringdataformatterbits.h"
+#include "lcformatterbits.h"
 #include <QDebug>
 #include <functional>
 
 //==============================================================================
-LCStringDataFormatterBits::
+LCFormatterBits::
     CValidator::CValidator(int _size, QChar _separator, QObject *_parent) : 
     QValidator(_parent),
     mSize(_size),
@@ -13,7 +13,7 @@ LCStringDataFormatterBits::
 
 //-----------------------------------------------------------------------------
 QValidator::State 
-LCStringDataFormatterBits::
+LCFormatterBits::
 CValidator::validate(QString &_input, int& _pos) const
 {
     Q_UNUSED(_pos);
@@ -40,7 +40,7 @@ CValidator::validate(QString &_input, int& _pos) const
 }
 
 //==============================================================================
-LCStringDataFormatterBits::LCStringDataFormatterBits( 
+LCFormatterBits::LCFormatterBits( 
         int     _size,
         QChar   _separator) :  
     mValidator(_size, _separator)
@@ -48,26 +48,26 @@ LCStringDataFormatterBits::LCStringDataFormatterBits(
 }
 
 //------------------------------------------------------------------------------
-LCStringDataFormatterBits::
-LCStringDataFormatterBits( const LCStringDataFormatterBits& _formatter)
+LCFormatterBits::
+LCFormatterBits( const LCFormatterBits& _formatter)
 {
     mValidator.mSize      = _formatter.mValidator.mSize;         
     mValidator.mSeparator = _formatter.mValidator.mSeparator;    
 }
 //------------------------------------------------------------------------------
-LCStringDataFormatterBits::~LCStringDataFormatterBits()
+LCFormatterBits::~LCFormatterBits()
 {
 }
 
-LCStringDataFormatterBits& 
-LCStringDataFormatterBits::operator=(const LCStringDataFormatterBits& _formatter)
+LCFormatterBits& 
+LCFormatterBits::operator=(const LCFormatterBits& _formatter)
 {
     mValidator.mSize          = _formatter.mValidator.mSize;         
     mValidator.mSeparator     = _formatter.mValidator.mSeparator;    
     return *this;
 }
 //------------------------------------------------------------------------------toString
-QString LCStringDataFormatterBits::toString(const QByteArray& _data)
+QString LCFormatterBits::toString(const QByteArray& _data)
 {
     QString out_str;
 
@@ -98,7 +98,7 @@ QString LCStringDataFormatterBits::toString(const QByteArray& _data)
 }
 
 //------------------------------------------------------------------------------normalize
-QString LCStringDataFormatterBits::normalize(const QString& _str)
+QString LCFormatterBits::normalize(const QString& _str)
 {
     QString out_str = _str;
 
@@ -141,7 +141,7 @@ QString LCStringDataFormatterBits::normalize(const QString& _str)
 }
 
 //------------------------------------------------------------------------------toBytes
-QByteArray LCStringDataFormatterBits::toBytes(const QString& _str)
+QByteArray LCFormatterBits::toBytes(const QString& _str)
 {
     QByteArray arr;
     QString instr = _str;
@@ -163,13 +163,13 @@ QByteArray LCStringDataFormatterBits::toBytes(const QString& _str)
 }
 
 //------------------------------------------------------------------------------setSize
-void LCStringDataFormatterBits::setSize(int _size)
+void LCFormatterBits::setSize(int _size)
 {
     mValidator.mSize = _size;
 }
 
 //------------------------------------------------------------------------------setSeparator
-void LCStringDataFormatterBits::setSeparator(QChar _separator)
+void LCFormatterBits::setSeparator(QChar _separator)
 {
     mValidator.mSeparator = _separator;
 }

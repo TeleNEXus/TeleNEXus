@@ -1,5 +1,5 @@
 #include "lcxmlbuttonbuilder.h"
-#include "lcxmlstddataformatterfactory.h"
+#include "lcxmlformatterfactory.h"
 #include "lcqremwritebutton.h"
 #include "LIApplication.h"
 #include "LIWindow.h"

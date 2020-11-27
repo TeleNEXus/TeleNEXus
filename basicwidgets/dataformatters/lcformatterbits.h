@@ -1,9 +1,10 @@
 #ifndef LCSTRINGDATAFORMATTERBITS_H
 #define LCSTRINGDATAFORMATTERBITS_H
 
-#include "lcstringdataformatterbase.h"
+#include "lcformatterbase.h"
+#include <QValidator>
 
-class LCStringDataFormatterBits : public LCStringDataFormatterBase
+class LCFormatterBits : public LCFormatterBase
 {
 private:
   //Валидатор вводимых данных.
@@ -28,16 +29,16 @@ private:
   CValidator  mValidator;      //Валидатор.
 public:
 
-  explicit LCStringDataFormatterBits(    
+  explicit LCFormatterBits(    
       int _size = 0, 
       QChar _separator = QChar());
 
-  explicit LCStringDataFormatterBits( 
-      const LCStringDataFormatterBits& _formatter);
-  virtual ~LCStringDataFormatterBits();
+  explicit LCFormatterBits( 
+      const LCFormatterBits& _formatter);
+  virtual ~LCFormatterBits();
 
-  LCStringDataFormatterBits& operator=(
-      const LCStringDataFormatterBits& _formatter);
+  LCFormatterBits& operator=(
+      const LCFormatterBits& _formatter);
 
   virtual QString     toString(const QByteArray& _data) override;
   virtual QString     normalize(const QString& _str) override;

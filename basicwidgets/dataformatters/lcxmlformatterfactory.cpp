@@ -1,16 +1,16 @@
-#include "lcxmlstddataformatterfactory.h"
+#include "lcxmlformatterfactory.h"
 
-#include "lcstringdataformatterbitfield.h"
-#include "lcstringdataformatterbits.h"
-#include "lcstringdataformatterhex.h"
-#include "lcstringdataformatterbool.h"
-#include "lcstringdataformatteru8.h"
-#include "lcstringdataformatters8.h"
-#include "lcstringdataformatteru16.h"
-#include "lcstringdataformatters16.h"
-#include "lcstringdataformatteru32.h"
-#include "lcstringdataformatters32.h"
-#include "lcstringdataformatterf32.h"
+#include "lcformatterbitfield.h"
+#include "lcformatterbits.h"
+#include "lcformatterhex.h"
+#include "lcformatterbool.h"
+#include "lcformatteru8.h"
+#include "lcformatters8.h"
+#include "lcformatteru16.h"
+#include "lcformatters16.h"
+#include "lcformatteru32.h"
+#include "lcformatters32.h"
+#include "lcformatterf32.h"
 
 #include <QSharedPointer>
 
@@ -30,30 +30,30 @@ static const struct
 
 //------------------------------------------------------------------------------
 
-static QSharedPointer<LCStringDataFormatterBase> __formatterBitfield;
-static QSharedPointer<LCStringDataFormatterBase> __formatterBits;
-static QSharedPointer<LCStringDataFormatterBase> __formatterHex;
-static QSharedPointer<LCStringDataFormatterBase> __formatterBool;
-static QSharedPointer<LCStringDataFormatterBase> __formatterUint8;
-static QSharedPointer<LCStringDataFormatterBase> __formatterInt8;
-static QSharedPointer<LCStringDataFormatterBase> __formatterUint16;
-static QSharedPointer<LCStringDataFormatterBase> __formatterInt16;
-static QSharedPointer<LCStringDataFormatterBase> __formatterUint32;
-static QSharedPointer<LCStringDataFormatterBase> __formatterInt32;
-static QSharedPointer<LCStringDataFormatterBase> __formatterFloat32;
+static QSharedPointer<LIDataFormatter> __formatterBitfield;
+static QSharedPointer<LIDataFormatter> __formatterBits;
+static QSharedPointer<LIDataFormatter> __formatterHex;
+static QSharedPointer<LIDataFormatter> __formatterBool;
+static QSharedPointer<LIDataFormatter> __formatterUint8;
+static QSharedPointer<LIDataFormatter> __formatterInt8;
+static QSharedPointer<LIDataFormatter> __formatterUint16;
+static QSharedPointer<LIDataFormatter> __formatterInt16;
+static QSharedPointer<LIDataFormatter> __formatterUint32;
+static QSharedPointer<LIDataFormatter> __formatterInt32;
+static QSharedPointer<LIDataFormatter> __formatterFloat32;
 
 //==============================================================================
 
 QMap <
 QString, 
-    std::function< QSharedPointer< LCStringDataFormatterBase>(
+    std::function< QSharedPointer< LIDataFormatter >(
             const QDomNamedNodeMap& _attr)>>
     __formatterCreators;
 
 struct SFormatterCreator1
 {
     SFormatterCreator1(){}
-    QSharedPointer<LCStringDataFormatterBase> 
+    QSharedPointer<LIDataFormatter> 
         operator()(const QDomNamedNodeMap& _attr)
     {
         QDomNode node;
@@ -81,11 +81,11 @@ struct SFormatterCreator1
             return __formatterBitfield;
         }
 
-        LCStringDataFormatterBitfield *formatter = 
-            new LCStringDataFormatterBitfield();
+        LCFormatterBitfield *formatter = 
+            new LCFormatterBitfield();
 
         //Копируем параметры форматтера по умолчанию.
-        *formatter = *(static_cast<LCStringDataFormatterBitfield*>
+        *formatter = *(static_cast<LCFormatterBitfield*>
                 (__formatterBitfield.data()));
 
         //Установка значения размера данных в байтах.
@@ -97,23 +97,23 @@ struct SFormatterCreator1
 
         //Установка сепаратора.
         formatter->setSeparator(separator); 
-        return QSharedPointer<LCStringDataFormatterBase>(formatter); 
+        return QSharedPointer<LIDataFormatter>(formatter); 
     }
 };
 
 LCXmlStdDataFormatterFactory::LCXmlStdDataFormatterFactory()
 {
-    __formatterBitfield.reset(    new LCStringDataFormatterBitfield());
-    __formatterBits.reset(        new LCStringDataFormatterBits());
-    __formatterHex.reset(         new LCStringDataFormatterHex());
-    __formatterBool.reset(        new LCStringDataFormatterBool());
-    __formatterUint8.reset(       new LCStringDataFormatterU8());
-    __formatterInt8.reset(        new LCStringDataFormatterS8());
-    __formatterUint16.reset(      new LCStringDataFormatterU16());
-    __formatterInt16.reset(       new LCStringDataFormatterS16());
-    __formatterUint32.reset(      new LCStringDataFormatterU32());
-    __formatterInt32.reset(       new LCStringDataFormatterS32());
-    __formatterFloat32.reset(     new LCStringDataFormatterF32());
+    __formatterBitfield.reset(    new LCFormatterBitfield());
+    __formatterBits.reset(        new LCFormatterBits());
+    __formatterHex.reset(         new LCFormatterHex());
+    __formatterBool.reset(        new LCFormatterBool());
+    __formatterUint8.reset(       new LCFormatterU8());
+    __formatterInt8.reset(        new LCFormatterS8());
+    __formatterUint16.reset(      new LCFormatterU16());
+    __formatterInt16.reset(       new LCFormatterS16());
+    __formatterUint32.reset(      new LCFormatterU32());
+    __formatterInt32.reset(       new LCFormatterS32());
+    __formatterFloat32.reset(     new LCFormatterF32());
 
     //TODO: Добавить подключение сепаратора для форматтеров.
     
@@ -146,11 +146,11 @@ LCXmlStdDataFormatterFactory::LCXmlStdDataFormatterFactory()
                 return __formatterBitfield;
             }
 
-            LCStringDataFormatterBitfield *formatter = 
-                new LCStringDataFormatterBitfield();
+            LCFormatterBitfield *formatter = 
+                new LCFormatterBitfield();
 
             //Копируем параметры форматтера по умолчанию.
-            *formatter = *(static_cast<LCStringDataFormatterBitfield*>
+            *formatter = *(static_cast<LCFormatterBitfield*>
                     (__formatterBitfield.data()));
 
             //Установка значения размера данных в байтах.
@@ -162,7 +162,7 @@ LCXmlStdDataFormatterFactory::LCXmlStdDataFormatterFactory()
 
             //Установка сепаратора.
             formatter->setSeparator(separator); 
-            return QSharedPointer<LCStringDataFormatterBase>(formatter); 
+            return QSharedPointer<LIDataFormatter>(formatter); 
             });
 
     //--------------------------------------------------------------------------bits
@@ -194,11 +194,11 @@ LCXmlStdDataFormatterFactory::LCXmlStdDataFormatterFactory()
                 return __formatterBits;
             }
 
-            LCStringDataFormatterBits *formatter = 
-                new LCStringDataFormatterBits();
+            LCFormatterBits *formatter = 
+                new LCFormatterBits();
 
             //Копируем параметры форматтера по умолчанию.
-            *formatter = *(static_cast<LCStringDataFormatterBits*>
+            *formatter = *(static_cast<LCFormatterBits*>
                     (__formatterBits.data()));
 
             //Установка значения размера данных в байтах.
@@ -210,7 +210,7 @@ LCXmlStdDataFormatterFactory::LCXmlStdDataFormatterFactory()
 
             //Установка сепаратора.
             formatter->setSeparator(separator); 
-            return QSharedPointer<LCStringDataFormatterBase>(formatter); 
+            return QSharedPointer<LIDataFormatter>(formatter); 
             });
 
     //--------------------------------------------------------------------------hex
@@ -241,11 +241,11 @@ LCXmlStdDataFormatterFactory::LCXmlStdDataFormatterFactory()
                 return __formatterHex;
             }
 
-            LCStringDataFormatterHex *formatter = 
-                new LCStringDataFormatterHex();
+            LCFormatterHex *formatter = 
+                new LCFormatterHex();
 
             //Копируем параметры форматтера по умолчанию.
-            *formatter = *(static_cast<LCStringDataFormatterHex*>
+            *formatter = *(static_cast<LCFormatterHex*>
                     (__formatterHex.data()));
 
             //Установка значения размера данных в байтах.
@@ -257,7 +257,7 @@ LCXmlStdDataFormatterFactory::LCXmlStdDataFormatterFactory()
 
             //Установка сепаратора.
             formatter->setSeparator(separator); 
-            return QSharedPointer<LCStringDataFormatterBase>(formatter); 
+            return QSharedPointer<LIDataFormatter>(formatter); 
             });
      
     //--------------------------------------------------------------------------bool
@@ -295,7 +295,7 @@ LCXmlStdDataFormatterFactory& LCXmlStdDataFormatterFactory::instance()
 }
 
 //------------------------------------------------------------------------------
-QSharedPointer<LCStringDataFormatter> 
+QSharedPointer<LIDataFormatter> 
         LCXmlStdDataFormatterFactory::
                         createStringFormatter( const QDomNamedNodeMap& _attr)
 {

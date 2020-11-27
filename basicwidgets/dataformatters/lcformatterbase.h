@@ -2,17 +2,14 @@
 #define LCSTRINGDATAFORMATTERBASE_H
 
 #include <QString>
-#include <QByteArray>
-#include <QValidator>
+/* #include <QValidator> */
+#include "LIDataFormatter.h"
 
-#include "LIStringDataFormatter.h"
-
-
-class LCStringDataFormatterBase : public LIStringDataFormatter
+class LCFormatterBase : public LIDataFormatter
 {
 public:
-    LCStringDataFormatterBase();
-    virtual ~LCStringDataFormatterBase();
+    LCFormatterBase();
+    virtual ~LCFormatterBase();
 
     virtual bool undefState(QString& _string) override;
     virtual bool wrongState(QString& _string) override;

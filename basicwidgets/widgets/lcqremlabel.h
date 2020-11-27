@@ -3,8 +3,8 @@
 
 #include "lremgui.h"
 #include "lqextendevent.h"
-#include "lcstringdataformatterbase.h"
 
+#include "LIDataFormatter.h"
 #include "LIRemoteDataReader.h"
 #include "LIRemoteDataReadListener.h"
 #include "LIRemoteDataSource.h"
@@ -29,7 +29,7 @@ private:
 
     QString mDataName;
     QSharedPointer<LIRemoteDataReader>  mDataReader;
-    QSharedPointer<LCStringDataFormatterBase> mFormatter;
+    QSharedPointer<LIDataFormatter> mFormatter;
     QSharedPointer<CReadListener> mDataListener;
 
 public:
@@ -38,9 +38,9 @@ public:
     explicit LCQRemLabel(QString _text, QWidget* _parent = nullptr);
 
     explicit LCQRemLabel(   
-        const QString&                              _dataName,
-        QSharedPointer<LIRemoteDataSource>          _dataSource,
-        QSharedPointer<LCStringDataFormatterBase>   _formatter,
+        const QString&                      _dataName,
+        QSharedPointer<LIRemoteDataSource>  _dataSource,
+        QSharedPointer<LIDataFormatter>     _formatter,
         QWidget* _parent = nullptr);
 
     virtual ~LCQRemLabel();
