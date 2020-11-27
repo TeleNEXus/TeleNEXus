@@ -1,6 +1,6 @@
-#include "lcstringdataformatterbool.h"
+#include "lcformatterbool.h"
 
-LCStringDataFormatterBool::LCStringDataFormatterBool(const QString& _strFalse,
+LCFormatterBool::LCFormatterBool(const QString& _strFalse,
     const QString& _strTrue) :  mStrFalse(_strFalse),
   mStrTrue(_strTrue)
 {
@@ -8,7 +8,7 @@ LCStringDataFormatterBool::LCStringDataFormatterBool(const QString& _strFalse,
 }
 
 //------------------------------------------------------------------------------
-QString LCStringDataFormatterBool::toString(const QByteArray& _data)
+QString LCFormatterBool::toString(const QByteArray& _data)
 {
   if(_data.size() == 0)
   {
@@ -27,7 +27,7 @@ QString LCStringDataFormatterBool::toString(const QByteArray& _data)
 }
 
 //------------------------------------------------------------------------------normalize
-QString LCStringDataFormatterBool::normalize(const QString& _str)
+QString LCFormatterBool::normalize(const QString& _str)
 {
   //Удаление незначащих нулей.
   //Удаление сепараторов.
@@ -35,7 +35,7 @@ QString LCStringDataFormatterBool::normalize(const QString& _str)
 }
 
 //------------------------------------------------------------------------------
-QByteArray LCStringDataFormatterBool::toBytes(const QString& _str)
+QByteArray LCFormatterBool::toBytes(const QString& _str)
 {
   if(_str == mStrTrue) return QByteArray(1,1);
   else if(_str == mStrFalse) return QByteArray(1,0);

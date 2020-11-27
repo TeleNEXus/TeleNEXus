@@ -1,24 +1,25 @@
-﻿#include "lcstringdataformatters8.h"
+﻿#include "lcformatteru8.h"
 
 #include <limits>
 #include <math.h>
 
-//==============================================================================LCQDataFormatterInt8
-LCStringDataFormatterS8::
-LCStringDataFormatterS8(  
+//==============================================================================LCQDataFormatterUint8
+LCFormatterU8::LCFormatterU8(   
     int     _fieldWidth,
     QChar   _fillChar,
     int     _base) :
-  LCStringDataFormatterIntBase( _fieldWidth,
+  LCFormatterIntBase( 
+      _fieldWidth,
       _fillChar,
       _base)
 {
-  mValidator.setRange(    std::numeric_limits<qint8>::min(), 
-      std::numeric_limits<qint8>::max());
+  mValidator.setRange(
+      std::numeric_limits<quint8>::min(), 
+      std::numeric_limits<quint8>::max());
 }
 
 //------------------------------------------------------------------------------toString
-QString LCStringDataFormatterS8::toString(const QByteArray& _data)
+QString LCFormatterU8::toString(const QByteArray& _data)
 {
   if(_data.size() < 1)
   {
@@ -26,34 +27,32 @@ QString LCStringDataFormatterS8::toString(const QByteArray& _data)
     wrongState(str);
     return str;
   }
-  qint8 r = ((qint8*)_data.constData())[0];
-  return QString("%1").arg( r, mFieldWidth, mBase, mFillChar);
+  return QString("%1").arg( ((quint8*)_data.constData())[0], mFieldWidth, mBase, mFillChar);
 }
 
 //------------------------------------------------------------------------------normalize
-QString LCStringDataFormatterS8::normalize(const QString& _str)
+QString LCFormatterU8::normalize(const QString& _str)
 {
   bool    ok  = false;
-  qint8   val = _str.toShort(&ok);
+  qint16  val = _str.toUShort(&ok);
   if(!ok) return QString();
   return QString("%1").arg( val, mFieldWidth, mBase, mFillChar);
 }
 
 //------------------------------------------------------------------------------toBytes
-QByteArray LCStringDataFormatterS8::toBytes(const QString& _str)
+QByteArray LCFormatterU8::toBytes(const QString& _str)
 {
   bool ok = false;
-  qint8 r = (qint8)_str.toShort(&ok, mBase);
-  if(!ok) return QByteArray();
+  quint16 r = ((quint16)_str.toUShort(&ok, mBase));
+  if((!ok) || ((r & 0xff00) != 0)) return QByteArray();
   return QByteArray((char*)(&r), 1);
 }
 
 
 //------------------------------------------------------------------------------validator
-QValidator* LCStringDataFormatterS8::validator()
+QValidator* LCFormatterU8::validator()
 {
   return &mValidator;
 }
-
 
 

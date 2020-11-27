@@ -5,8 +5,8 @@
 #include <qnamespace.h>
 #include "lremgui.h"
 #include "lqextendevent.h"
-#include "lcstringdataformatterbase.h"
 
+#include "LIDataFormatter.h"
 #include "LIRemoteDataReader.h"
 #include "LIRemoteDataReadListener.h"
 #include "LIRemoteDataSource.h"
@@ -31,13 +31,13 @@ private:
     void* mpOwnData;    //Собственные данные.
     QString mDataName;
     QSharedPointer<LIRemoteDataReader>  mDataReader;
-    QSharedPointer<LCStringDataFormatterBase> mspFormatter;
+    QSharedPointer<LIDataFormatter> mspFormatter;
     QSharedPointer<CReadListener> mDataListener;
 public:
     explicit LCQRemComboLabel(   
         const QString&                              _dataName,
         QSharedPointer<LIRemoteDataSource>          _dataSource,
-        QSharedPointer<LCStringDataFormatterBase>   _formatter,
+        QSharedPointer<LIDataFormatter>             _formatter,
         QWidget* _parent = nullptr);
 
     virtual ~LCQRemComboLabel();

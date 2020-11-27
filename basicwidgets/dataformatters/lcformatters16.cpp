@@ -1,22 +1,22 @@
-﻿#include "lcstringdataformatters16.h"
+﻿#include "lcformatters16.h"
 
 #include <limits>
 #include <math.h>
 #include <qglobal.h>
 
 //==============================================================================LCQDataFormatterInt16
-LCStringDataFormatterS16::LCStringDataFormatterS16(   
+LCFormatterS16::LCFormatterS16(   
     int     _fieldWidth,
     QChar   _fillChar,
     int     _base) :
-  LCStringDataFormatterIntBase( _fieldWidth, _fillChar, _base)
+  LCFormatterIntBase( _fieldWidth, _fillChar, _base)
 {
   mValidator.setRange(std::numeric_limits<qint16>::min(), 
       std::numeric_limits<qint16>::max());
 }
 
 //------------------------------------------------------------------------------toString
-QString LCStringDataFormatterS16::toString(const QByteArray& _data)
+QString LCFormatterS16::toString(const QByteArray& _data)
 {
   if(_data.size() < 2)
   {
@@ -29,7 +29,7 @@ QString LCStringDataFormatterS16::toString(const QByteArray& _data)
 }
 
 //------------------------------------------------------------------------------normalize
-QString LCStringDataFormatterS16::normalize(const QString& _str)
+QString LCFormatterS16::normalize(const QString& _str)
 {
   bool    ok = false;
   qint16  val = _str.toShort(&ok);
@@ -38,7 +38,7 @@ QString LCStringDataFormatterS16::normalize(const QString& _str)
 }
 
 //------------------------------------------------------------------------------toBytes
-QByteArray LCStringDataFormatterS16::toBytes(const QString& _str)
+QByteArray LCFormatterS16::toBytes(const QString& _str)
 {
   bool ok = false;
   qint16 r = _str.toShort(&ok, mBase);
@@ -48,7 +48,7 @@ QByteArray LCStringDataFormatterS16::toBytes(const QString& _str)
 
 
 //------------------------------------------------------------------------------validator
-QValidator* LCStringDataFormatterS16::validator()
+QValidator* LCFormatterS16::validator()
 {
   return &mValidator;
 }

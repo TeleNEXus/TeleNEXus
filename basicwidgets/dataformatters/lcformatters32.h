@@ -1,17 +1,17 @@
 ﻿#ifndef LCSTRINGDATAFORMATTERINT32_H
 #define LCSTRINGDATAFORMATTERINT32_H
 
-#include "lcstringdataformatterintbase.h"
+#include "lcformatterintbase.h"
 #include <QIntValidator>
 
-class LCStringDataFormatterS32 : public LCStringDataFormatterIntBase
+class LCFormatterS32 : public LCFormatterIntBase
 {
 private:
 
     QIntValidator mValidator;   //Контроллер диапазона ввода.
 
 public:
-    explicit LCStringDataFormatterS32( 
+    explicit LCFormatterS32( 
         int     _fieldWidth     = 0,
         QChar   _fillChar       = QChar(' '),
         int     _base           = 10);

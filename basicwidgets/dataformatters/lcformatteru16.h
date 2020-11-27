@@ -1,16 +1,16 @@
-﻿#ifndef LCSTRINGDATAFORMATTERUINT8_H
-#define LCSTRINGDATAFORMATTERUINT8_H
+﻿#ifndef LCSTRINGDATAFORMATTERUINT16_H
+#define LCSTRINGDATAFORMATTERUINT16_H
 
-#include "lcstringdataformatterintbase.h"
+#include "lcformatterintbase.h"
+#include <QIntValidator>
 
-class LCStringDataFormatterU8 : public LCStringDataFormatterIntBase
+class LCFormatterU16 : public LCFormatterIntBase
 {
 private:
-
   QIntValidator mValidator;   //Контроллер диапазона ввода.
 
 public:
-  explicit LCStringDataFormatterU8(    
+  explicit LCFormatterU16(  
       int     _fieldWidth     = 0,
       QChar   _fillChar       = QChar(' '),
       int     _base           = 10);
@@ -21,4 +21,4 @@ public:
   virtual QValidator* validator() override;
 };
 
-#endif // LCSTRINGDATAFORMATTERUINT8_H
+#endif // LCSTRINGDATAFORMATTERUINT16_H

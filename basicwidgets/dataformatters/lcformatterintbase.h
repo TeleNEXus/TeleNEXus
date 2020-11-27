@@ -1,9 +1,9 @@
 #ifndef LCSTRINGDATASTRFORMATTERBASEINT_H
 #define LCSTRINGDATASTRFORMATTERBASEINT_H
 
-#include "lcstringdataformatterbase.h"
+#include "lcformatterbase.h"
 
-class LCStringDataFormatterIntBase : public LCStringDataFormatterBase
+class LCFormatterIntBase : public LCFormatterBase
 {
 protected:
 
@@ -12,13 +12,13 @@ protected:
     int     mBase;              //Основание системы счисления.
 
 public:
-    LCStringDataFormatterIntBase() = delete;
-    explicit LCStringDataFormatterIntBase( 
+    LCFormatterIntBase() = delete;
+    explicit LCFormatterIntBase( 
         int     _fieldWidth,
         QChar   _fillChar,
         int     _base);
 
-    ~LCStringDataFormatterIntBase();
+    virtual ~LCFormatterIntBase();
     void setFieldWidth(int _fieldWidth){mFieldWidth = _fieldWidth;}
     void setFillChar(QChar _c){mFillChar = _c;}
     void setBase(int _base){mBase = _base;}

@@ -1,6 +1,6 @@
 #include "lcxmlremlineeditbuilder.h"
 #include "lcqremlineedit.h"
-#include "lcxmlstddataformatterfactory.h"
+#include "lcxmlformatterfactory.h"
 #include "lcbuilderscommon.h"
 #include "LIApplication.h"
 #include <QDomElement>
@@ -37,7 +37,7 @@ QWidget* LCXmlRemLineEditBuilder::buildLocal(
   QString data;
   QString attr = element.attribute(__attrNames.source);
   QSharedPointer<LIRemoteDataSource> source;
-  QSharedPointer<LCStringDataFormatterBase> format;
+  QSharedPointer<LIDataFormatter> format;
 
   if(attr.isNull())
   {

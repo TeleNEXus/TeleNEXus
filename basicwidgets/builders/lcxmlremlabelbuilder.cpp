@@ -1,7 +1,7 @@
 #include "lcxmlremlabelbuilder.h"
 #include "lcqremlabel.h"
 #include "lcbuilderscommon.h"
-#include "lcxmlstddataformatterfactory.h"
+#include "lcxmlformatterfactory.h"
 #include "LIApplication.h"
 
 #include <QDomElement>
@@ -30,7 +30,7 @@ QWidget* LCXmlRemLabelBuilder::buildLocal(
   QString data;
   QString attr = element.attribute(LCBuildersCommon::mAttributes.source);
   QSharedPointer<LIRemoteDataSource> source;
-  QSharedPointer<LCStringDataFormatterBase> format;
+  QSharedPointer<LIDataFormatter> format;
 
   if(attr.isNull())
   {

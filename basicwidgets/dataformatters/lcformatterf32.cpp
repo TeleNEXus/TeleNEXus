@@ -1,8 +1,8 @@
-﻿#include "lcstringdataformatterf32.h"
+﻿#include "lcformatterf32.h"
 
 
 //==============================================================================LCQDataStringFormatterFloat32
-LCStringDataFormatterF32::LCStringDataFormatterF32(
+LCFormatterF32::LCFormatterF32(
     int     _fieldWidth,
     char    _format,
     int     _precision,
@@ -20,12 +20,12 @@ LCStringDataFormatterF32::LCStringDataFormatterF32(
 }
 
 //------------------------------------------------------------------------------
-LCStringDataFormatterF32::~LCStringDataFormatterF32()
+LCFormatterF32::~LCFormatterF32()
 {
 }
 
 //------------------------------------------------------------------------------toString
-QString LCStringDataFormatterF32::toString(const QByteArray& _data)
+QString LCFormatterF32::toString(const QByteArray& _data)
 {
   if(_data.size() < 4)
   {
@@ -40,7 +40,7 @@ QString LCStringDataFormatterF32::toString(const QByteArray& _data)
 }
 
 //------------------------------------------------------------------------------
-QString LCStringDataFormatterF32::normalize(const QString& _str)
+QString LCFormatterF32::normalize(const QString& _str)
 {
   bool ok = false;
   float valf = ((float)_str.toFloat(&ok));
@@ -52,7 +52,7 @@ QString LCStringDataFormatterF32::normalize(const QString& _str)
 }
 
 //------------------------------------------------------------------------------toBytes
-QByteArray LCStringDataFormatterF32::toBytes(const QString& _str)
+QByteArray LCFormatterF32::toBytes(const QString& _str)
 {
   bool ok = false;
   float r = ((float)_str.toFloat(&ok));
@@ -61,7 +61,7 @@ QByteArray LCStringDataFormatterF32::toBytes(const QString& _str)
 }
 
 //------------------------------------------------------------------------------validator
-QValidator* LCStringDataFormatterF32::validator()
+QValidator* LCFormatterF32::validator()
 {
   return &mValidator;
 }

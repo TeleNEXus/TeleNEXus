@@ -1,6 +1,6 @@
 #include "lcxmlremcomboboxbuilder.h"
 #include "lcqremcombobox.h"
-#include "lcxmlstddataformatterfactory.h"
+#include "lcxmlformatterfactory.h"
 #include "lcbuilderscommon.h"
 #include "LIApplication.h"
 #include "LIWindow.h"
@@ -42,7 +42,7 @@ const struct
 //------------------------------------------------------------------------------buildCombobox
 static void buildCombobox(   const QDomElement& _element, 
     LCQRemComboBox* _box, 
-    QSharedPointer<LCStringDataFormatterBase> __format);
+    QSharedPointer<LIDataFormatter> __format);
 
 //------------------------------------------------------------------------------build
 QWidget* LCXmlRemComboBoxBuilder::buildLocal(
@@ -56,7 +56,7 @@ QWidget* LCXmlRemComboBoxBuilder::buildLocal(
   QString datawrite;
   QString attr = element.attribute(LCBuildersCommon::mAttributes.source);
   QSharedPointer<LIRemoteDataSource> source;
-  QSharedPointer<LCStringDataFormatterBase> format;
+  QSharedPointer<LIDataFormatter> format;
 
   if(attr.isNull())
   {
@@ -113,7 +113,7 @@ LABEL_WRONG_EXIT:
 //------------------------------------------------------------------------------buildCombobox
 static void buildCombobox(   const QDomElement& _element, 
     LCQRemComboBox* _box,
-    QSharedPointer<LCStringDataFormatterBase> _format)
+    QSharedPointer<LIDataFormatter> _format)
 {
   QDomNodeList nodes = _element.childNodes();
   for(int i = 0; i < nodes.length(); i++)

@@ -1,9 +1,8 @@
-#include "lcstringdataformatterbitfield.h"
+#include "lcformatterhex.h"
 #include <QDebug>
 #include <functional>
-
 //==============================================================================
-LCStringDataFormatterBitfield::
+LCFormatterHex::
 CValidator::CValidator(int _size, QChar _separator, QObject *_parent) : 
   QValidator(_parent),
   mSize(_size),
@@ -13,34 +12,32 @@ CValidator::CValidator(int _size, QChar _separator, QObject *_parent) :
 
 //-----------------------------------------------------------------------------
 QValidator::State 
-LCStringDataFormatterBitfield::
+LCFormatterHex::
 CValidator::validate(QString &_input, int& _pos) const
 {
   Q_UNUSED(_pos);
-  QString instr = _input;
+  QString str = _input;
+  str.remove(QRegExp(QString("[ _%1]").arg(mSeparator)));
+  if(str.isNull())
+  {
+    return State::Intermediate;
+  }
 
-  instr.remove(QRegExp(QString("[ _%1]").arg(mSeparator)));
-
-  // Определить наличие нечисловых значений после удаления 
-  // сепараторов и длины строки при явном указании длины
-  // данных в байтах.    
-  if( ( instr.contains( QRegExp( QString("[^0-1]{1,}"))) ) || 
-      ( ( mSize > 0) && (instr.size() > (8 * mSize) )) )
+  if( str.contains( QRegExp( QString("[^0-9a-fA-F]{1,}"))) )
   {
     return State::Invalid;
   }
 
-  //Проверка на ненулевую строку.
-  if(instr.isNull())
+  if( ( mSize > 0) && (str.size() > (2 * mSize) ))
   {
-    return State::Intermediate;
+    return State::Invalid;
   }
 
   return State::Acceptable;
 }
 
 //==============================================================================
-LCStringDataFormatterBitfield::LCStringDataFormatterBitfield( 
+LCFormatterHex::LCFormatterHex( 
     int     _size,
     QChar   _separator) :  
   mValidator(_size, _separator)
@@ -48,19 +45,19 @@ LCStringDataFormatterBitfield::LCStringDataFormatterBitfield(
 }
 
 //------------------------------------------------------------------------------
-LCStringDataFormatterBitfield::
-LCStringDataFormatterBitfield( const LCStringDataFormatterBitfield& _formatter)
+LCFormatterHex::
+LCFormatterHex( const LCFormatterHex& _formatter)
 {
   mValidator.mSize          = _formatter.mValidator.mSize;         
   mValidator.mSeparator     = _formatter.mValidator.mSeparator;    
 }
 //------------------------------------------------------------------------------
-LCStringDataFormatterBitfield::~LCStringDataFormatterBitfield()
+LCFormatterHex::~LCFormatterHex()
 {
 }
 
-  LCStringDataFormatterBitfield& 
-LCStringDataFormatterBitfield::operator=(const LCStringDataFormatterBitfield& _formatter)
+  LCFormatterHex& 
+LCFormatterHex::operator=(const LCFormatterHex& _formatter)
 {
   mValidator.mSize          = _formatter.mValidator.mSize;         
   mValidator.mSeparator     = _formatter.mValidator.mSeparator;    
@@ -68,12 +65,12 @@ LCStringDataFormatterBitfield::operator=(const LCStringDataFormatterBitfield& _f
 }
 
 //------------------------------------------------------------------------------toString
-QString LCStringDataFormatterBitfield::toString(const QByteArray& _data)
+QString LCFormatterHex::toString(const QByteArray& _data)
 {
   QString str;
   if(_data.size() < 1)
   {
-    str = "Wrong";
+    QString str = "Wrong";
     wrongState(str);
     return str;
   }
@@ -83,12 +80,12 @@ QString LCStringDataFormatterBitfield::toString(const QByteArray& _data)
     if(mValidator.mSeparator.isNull())
     {
       str = str + QString("%1").arg(
-          ((quint8*)_data.constData())[i], 8, 2, QChar('0'));
+          ((quint8*)_data.constData())[i], 2, 16, QChar('0'));
     }
     else
     {
       str = str + QString("%1%2").arg(
-          ((quint8*)_data.constData())[i], 8, 2, QChar('0')).
+          ((quint8*)_data.constData())[i], 2, 16, QChar('0')).
         arg(mValidator.mSeparator);
     }
   }
@@ -100,18 +97,8 @@ QString LCStringDataFormatterBitfield::toString(const QByteArray& _data)
   return str;
 }
 
-//-----------------------------------------------------------------------------
-static inline void __l_byte_align(QString& _instr)
-{
-  int remains = _instr.size() % 8;
-  if( remains != 0)
-  {
-    //Добавляем незначащие нули.
-    _instr.insert(0, QString(8-remains, '0'));
-  }
-}
 //------------------------------------------------------------------------------normalize
-QString LCStringDataFormatterBitfield::normalize(const QString& _instr)
+QString LCFormatterHex::normalize(const QString& _instr)
 {
   QString out_string = _instr;
 
@@ -126,7 +113,7 @@ QString LCStringDataFormatterBitfield::normalize(const QString& _instr)
   }
 
   //Проверяем на наличие нецифровых значений.
-  if( out_string.contains(QRegExp("[^0-1]{1,}")))
+  if( out_string.contains(QRegExp("[^0-9a-f]{1,}")))
   {
     //Если присутствуют посторонние символы, 
     //возвращаем пустую строку.
@@ -138,35 +125,41 @@ QString LCStringDataFormatterBitfield::normalize(const QString& _instr)
 
   if(mValidator.mSize <= 0)
   {
-    //Если размер не задан, то производим нормализацию 
-    //до количества символов кратного восьми и проверку значений.
-    __l_byte_align(out_string);
+    //Если размер не задан, то производим нормализацию до четного количества
+    //символов и проверку значений.
+    if( (out_string.size() % 2 ) != 0)
+    {
+      //Добавляем незначащий ноль.
+      out_string.insert(0, '0');
+    }
     return out_string;
   }
   //Если установлен размер данных.
   //Удаляем незначащие нули.
   out_string.remove(QRegExp("^[0]{1,}"));
-
-  //Выравниваем количество бит по байту в 8 бит.
-  __l_byte_align(out_string);
-
-  int str_byte_size = out_string.length() / 8;
+  //Добавляем незначащий ноль для сохранения четности количества цифр.
+  if( (out_string.size() % 2 ) != 0)
+  {
+    //Добавляем незначащий ноль.
+    out_string.insert(0, '0');
+  }
+  int str_byte_size = out_string.length() / 2;
 
   if( str_byte_size > mValidator.mSize )
   {
     //Удаляем лишние цифры.
-    out_string.remove(0, (str_byte_size - mValidator.mSize) * 8);
+    out_string.remove(0, (str_byte_size - mValidator.mSize) * 2);
   }
   else if( mValidator.mSize > str_byte_size )
   {
     //Добавляем незначащий ноль.
-    out_string.insert(0, QString((mValidator.mSize - str_byte_size) * 8, '0'));
+    out_string.insert(0, QString((mValidator.mSize - str_byte_size) * 2, '0'));
   }
   return out_string;
 }
 
 //------------------------------------------------------------------------------toBytes
-QByteArray LCStringDataFormatterBitfield::toBytes(const QString& _str)
+QByteArray LCFormatterHex::toBytes(const QString& _str)
 {
   QByteArray out_array;
   QString instr = _str;
@@ -179,46 +172,49 @@ QByteArray LCStringDataFormatterBitfield::toBytes(const QString& _str)
   // Проверка на нулевую строку.
   if(instr.length() == 0) return out_array;
 
+  //Переводим в нижний регистр
+  instr  = instr.toLower(); 
+
   // Проверка на нечисловые значения.
-  if(instr.contains(QRegExp("[^0-1]{1,}")))
+  if(instr.contains(QRegExp("[^0-9a-f]{1,}")))
   {
     return out_array;
   }
-
-  //Выравниваем количество бит по байту 8 бит.
-  __l_byte_align(instr);
-  //Форматируем строку усли явно задан размер данных в байтах.
+  //Проверяем на количество цифр.
+  if( (instr.length() % 2) != 0)
+  {
+    //Добавляем незначащий ноль.
+    instr.insert(0, '0');
+  }
   if(mValidator.mSize > 0)
   {
-    int str_byte_size = instr.length() / 8;
+    int str_byte_size = instr.length() / 2;
     if(str_byte_size > mValidator.mSize )
     {
-      instr.remove(0, (str_byte_size - mValidator.mSize) * 8);
+      instr.remove(0, (str_byte_size - mValidator.mSize) * 2);
     }
     else if(mValidator.mSize > str_byte_size)
     {
-      instr.insert(0, QString((mValidator.mSize - str_byte_size) * 8, '0'));
+      instr.insert(0, QString((mValidator.mSize - str_byte_size) * 2, '0'));
     }
   }
-  //Декодируем битовое поле в строке в массив байтов.
-  for(int i = (instr.length() - 8); i >= 0; i -= 8 )
+
+  for(int i = (instr.length() - 2); i >= 0; i -=2 )
   {
-    char data = instr.mid(i,8).toShort(nullptr, 2);
+    char data = instr.mid(i,2).toShort(nullptr, 16);
     out_array.append(1,data);
   }
   return out_array;
 }
 
 //------------------------------------------------------------------------------setSize
-void LCStringDataFormatterBitfield::setSize(int _size)
+void LCFormatterHex::setSize(int _size)
 {
   mValidator.mSize = _size;
 }
 
 //------------------------------------------------------------------------------setSeparator
-void LCStringDataFormatterBitfield::setSeparator(QChar _separator)
+void LCFormatterHex::setSeparator(QChar _separator)
 {
   mValidator.mSeparator = _separator;
 }
-
-

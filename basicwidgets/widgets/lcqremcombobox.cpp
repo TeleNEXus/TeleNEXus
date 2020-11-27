@@ -9,38 +9,38 @@
 #include <QKeyEvent>
 //==============================================================================CReadListener
 LCQRemComboBox::
-    CReadListener::
-        CReadListener(LCQRemComboBox& _combobox) :  mOwner(_combobox)
+CReadListener::
+CReadListener(LCQRemComboBox& _combobox) :  mOwner(_combobox)
 {
 }
 
 //------------------------------------------------------------------------------
 void LCQRemComboBox::
-        CReadListener::
-            dataIsRead( QSharedPointer<QByteArray>  _data, 
-                        LERemoteDataStatus          _status)
+CReadListener::
+dataIsRead( QSharedPointer<QByteArray>  _data, 
+    LERemoteDataStatus          _status)
 {
-    switch(_status)
-    {
-    case LERemoteDataStatus::DS_OK:
-        mOwner.setCurrentIndex(
-                mOwner.findData( 
-                    mOwner.mFormatter->
-                                toString( *_data.data())) ); 
-        mOwner.setEnabled(true);
-        break;
+  switch(_status)
+  {
+  case LERemoteDataStatus::DS_OK:
+    mOwner.setCurrentIndex(
+        mOwner.findData( 
+          mOwner.mFormatter->
+          toString( *_data.data())) ); 
+    mOwner.setEnabled(true);
+    break;
 
-    case LERemoteDataStatus::DS_WRONG:
-        mOwner.setCurrentIndex(-1);
-        mOwner.setEnabled(true);
-        break;
+  case LERemoteDataStatus::DS_WRONG:
+    mOwner.setCurrentIndex(-1);
+    mOwner.setEnabled(true);
+    break;
 
-    case LERemoteDataStatus::DS_UNDEF:
-        mOwner.setCurrentIndex(-1);
-        mOwner.setEnabled(false);
-    default:
-        break;
-    }
+  case LERemoteDataStatus::DS_UNDEF:
+    mOwner.setCurrentIndex(-1);
+    mOwner.setEnabled(false);
+  default:
+    break;
+  }
 }
 
 
@@ -51,35 +51,35 @@ void LCQRemComboBox::
 
 //------------------------------------------------------------------------------
 LCQRemComboBox::LCQRemComboBox( 
-        const QString&                              _dataNameRead,
-        const QString&                              _dataNameWrite,
-        QSharedPointer<LIRemoteDataSource>          _dataSource,
-        QSharedPointer<LCStringDataFormatterBase>   _formatter,
-        QWidget* _parent):  QComboBox(_parent),
-                            mFormatter(_formatter),
-                            mFlagPopupOn(false)
+    const QString&                              _dataNameRead,
+    const QString&                              _dataNameWrite,
+    QSharedPointer<LIRemoteDataSource>          _dataSource,
+    QSharedPointer<LIDataFormatter>             _formatter,
+    QWidget* _parent):  QComboBox(_parent),
+  mFormatter(_formatter),
+  mFlagPopupOn(false)
 {
 
-    mDataReadListener = QSharedPointer<CReadListener>(new CReadListener(*this));
+  mDataReadListener = QSharedPointer<CReadListener>(new CReadListener(*this));
 
-    mDataReader = _dataSource->createReader();
-    mDataReader->setDataName(_dataNameRead);
-    mDataReader->setDataReadListener(mDataReadListener);
+  mDataReader = _dataSource->createReader();
+  mDataReader->setDataName(_dataNameRead);
+  mDataReader->setDataReadListener(mDataReadListener);
 
-    mDataWriter = _dataSource->createWriter();
-    mDataWriter->setDataName(_dataNameWrite);
+  mDataWriter = _dataSource->createWriter();
+  mDataWriter->setDataName(_dataNameWrite);
 
-    this->setEnabled(false);
+  this->setEnabled(false);
 
-    connect(this, 
-            static_cast <void(LCQRemComboBox::*)(int)> 
-                    (&LCQRemComboBox::activated),
-            [&](int index)
-            {
-                Q_UNUSED(index);
-                mDataWriter->writeRequest(
-                        mFormatter->toBytes(currentData().toString()));
-            });
+  connect(this, 
+      static_cast <void(LCQRemComboBox::*)(int)> 
+      (&LCQRemComboBox::activated),
+      [&](int index)
+      {
+      Q_UNUSED(index);
+      mDataWriter->writeRequest(
+          mFormatter->toBytes(currentData().toString()));
+      });
 }
 
 //------------------------------------------------------------------------------
@@ -90,53 +90,53 @@ LCQRemComboBox::~LCQRemComboBox()
 //------------------------------------------------------------------------------
 bool LCQRemComboBox::event(QEvent *_event)
 {
-    int key;
-    switch(_event->type())
+  int key;
+  switch(_event->type())
+  {
+  case QEvent::Type::Show:
+    mDataReader->connectToSource();
+    setCurrentIndex(-1);
+    return false;
+
+  case QEvent::Type::Hide:
+    mDataReader->disconnectFromSource();
+    return false;
+
+  case QEvent::Type::KeyPress:
+    //Очиска фокуса видета при нажатии клавиши Escape.
+    key = static_cast<QKeyEvent*>(_event)->key();
+    if(( key == Qt::Key_Enter) || ( key == Qt::Key_Return))
     {
-    case QEvent::Type::Show:
-        mDataReader->connectToSource();
-        setCurrentIndex(-1);
-        return false;
-
-    case QEvent::Type::Hide:
-        mDataReader->disconnectFromSource();
-        return false;
-
-    case QEvent::Type::KeyPress:
-        //Очиска фокуса видета при нажатии клавиши Escape.
-        key = static_cast<QKeyEvent*>(_event)->key();
-        if(( key == Qt::Key_Enter) || ( key == Qt::Key_Return))
-        {
-            showPopup();
-        } else if( static_cast<QKeyEvent*>(_event)->key() == Qt::Key_Escape)
-        {
-            if ( mFlagPopupOn )
-            {
-                hidePopup();
-            }
-            else
-            {
-                clearFocus();
-            }
-        }
-        return false;
-
-    default:
-        break;
+      showPopup();
+    } else if( static_cast<QKeyEvent*>(_event)->key() == Qt::Key_Escape)
+    {
+      if ( mFlagPopupOn )
+      {
+        hidePopup();
+      }
+      else
+      {
+        clearFocus();
+      }
     }
-    return QComboBox::event(_event);
+    return false;
+
+  default:
+    break;
+  }
+  return QComboBox::event(_event);
 }
 
 //------------------------------------------------------------------------------
 void LCQRemComboBox::showPopup(void)
 {
-    mFlagPopupOn = true;
-    QComboBox::showPopup();
+  mFlagPopupOn = true;
+  QComboBox::showPopup();
 }
 
 //------------------------------------------------------------------------------
 void LCQRemComboBox::hidePopup(void)
 {
-    mFlagPopupOn = false;
-    QComboBox::hidePopup();
+  mFlagPopupOn = false;
+  QComboBox::hidePopup();
 }

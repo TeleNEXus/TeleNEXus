@@ -66,7 +66,7 @@ dataIsRead( QSharedPointer<QByteArray> _data,
 //==============================================================================LCQRemComboLabel
 LCQRemComboLabel::LCQRemComboLabel(const QString& _dataName,
     QSharedPointer<LIRemoteDataSource> _dataSource,
-    QSharedPointer<LCStringDataFormatterBase> _formatter,
+    QSharedPointer<LIDataFormatter> _formatter,
     QWidget* _parent) :    QStackedWidget(_parent),
   mDataName(_dataName),
   mspFormatter(_formatter)

@@ -4,12 +4,13 @@
 #include <QLineEdit>
 
 #include "lqextendevent.h"
-#include "lcstringdataformatterbase.h"
+#include "LIDataFormatter.h"
 #include "LIRemoteDataReader.h"
 #include "LIRemoteDataWriter.h"
 #include "LIRemoteDataReadListener.h"
 #include "LIRemoteDataWriteListner.h"
 #include "LIRemoteDataSource.h"
+
 
 class LCQRemLineEdit : public QLineEdit
 {
@@ -47,18 +48,18 @@ private:
     QSharedPointer<CReadListener>   mReadListener;
     QSharedPointer<CWriteListener>  mWriteListener;
 
-    QSharedPointer<LCStringDataFormatterBase> mFormatter;
+    QSharedPointer<LIDataFormatter> mFormatter;
 
 public:
     explicit LCQRemLineEdit(const QString& _dataName,
                             QSharedPointer<LIRemoteDataSource> _dataSource,
-                            QSharedPointer<LCStringDataFormatterBase> _formatter,
+                            QSharedPointer<LIDataFormatter> _formatter,
                             QWidget* _parent = nullptr);
 
     explicit LCQRemLineEdit(const QString& _dataNameRead,
                             const QString& _dataNameWrite,
                             QSharedPointer<LIRemoteDataSource> _dataSource,
-                            QSharedPointer<LCStringDataFormatterBase> _formatter,
+                            QSharedPointer<LIDataFormatter> _formatter,
                             QWidget* _parent = nullptr);
 
     virtual ~LCQRemLineEdit();
