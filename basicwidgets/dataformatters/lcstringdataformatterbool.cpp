@@ -24,8 +24,8 @@ QString LCStringDataFormatterBool::toString(const QByteArray& _data)
     return mStrFalse;
 }
 
-//------------------------------------------------------------------------------normalizeString
-QString LCStringDataFormatterBool::normalizeString(const QString& _str)
+//------------------------------------------------------------------------------normalize
+QString LCStringDataFormatterBool::normalize(const QString& _str)
 {
     //Удаление незначащих нулей.
     //Удаление сепараторов.

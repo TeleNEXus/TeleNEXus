@@ -28,8 +28,8 @@ QString LCStringDataFormatterU8::toString(const QByteArray& _data)
   return QString("%1").arg( ((quint8*)_data.constData())[0], mFieldWidth, mBase, mFillChar);
 }
 
-//------------------------------------------------------------------------------normalizeString
-QString LCStringDataFormatterU8::normalizeString(const QString& _str)
+//------------------------------------------------------------------------------normalize
+QString LCStringDataFormatterU8::normalize(const QString& _str)
 {
   bool    ok  = false;
   qint16  val = _str.toUShort(&ok);
