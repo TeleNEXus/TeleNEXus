@@ -95,8 +95,8 @@ QString LCStringDataFormatterBits::toString(const QByteArray& _data)
     return out_str;
 }
 
-//------------------------------------------------------------------------------normalizeString
-QString LCStringDataFormatterBits::normalizeString(const QString& _str)
+//------------------------------------------------------------------------------normalize
+QString LCStringDataFormatterBits::normalize(const QString& _str)
 {
     QString out_str = _str;
 

@@ -38,7 +38,7 @@ QString LCStringDataFormatterF32::toString(const QByteArray& _data)
 }
 
 //------------------------------------------------------------------------------
-QString LCStringDataFormatterF32::normalizeString(const QString& _str)
+QString LCStringDataFormatterF32::normalize(const QString& _str)
 {
     bool ok = false;
     float valf = ((float)_str.toFloat(&ok));

@@ -18,7 +18,7 @@ public:
 
 
     virtual QString     toString(const QByteArray& _data) override;
-    QString normalizeString(const QString& _str) override;
+    QString normalize(const QString& _str) override;
     virtual QByteArray  toBytes(const QString& _str) override;
     virtual QValidator* validator() override;
 };

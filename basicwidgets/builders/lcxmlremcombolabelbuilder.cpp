@@ -215,7 +215,7 @@ static void buildComboLabel( const QDomElement& _element,
 
           if(!attr_value.isNull())
           {
-            attr_value = _format->normalizeString(attr_value);
+            attr_value = _format->normalize(attr_value);
             if(attr_value.isNull()) continue;
           }
           label = new QLabel(attr_data);
@@ -261,7 +261,7 @@ static void buildComboLabel( const QDomElement& _element,
 
         if(!attr_value.isNull())
         {
-          attr_value = _format->normalizeString(attr_value);
+          attr_value = _format->normalize(attr_value);
           if(attr_value.isNull()) continue;
         }
         label = new CQMovieLabel(movie_access);

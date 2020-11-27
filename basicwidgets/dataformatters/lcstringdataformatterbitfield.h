@@ -42,7 +42,7 @@ public:
             const LCStringDataFormatterBitfield& _formatter);
 
     virtual QString     toString(const QByteArray& _data) override;
-    virtual QString     normalizeString(const QString& _str) override;
+    virtual QString     normalize(const QString& _str) override;
     virtual QByteArray  toBytes(const QString& _str) override;
     virtual QValidator* validator() override {return &mValidator;}
 

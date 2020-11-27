@@ -95,8 +95,8 @@ QString LCStringDataFormatterHex::toString(const QByteArray& _data)
     return str;
 }
 
-//------------------------------------------------------------------------------normalizeString
-QString LCStringDataFormatterHex::normalizeString(const QString& _instr)
+//------------------------------------------------------------------------------normalize
+QString LCStringDataFormatterHex::normalize(const QString& _instr)
 {
     QString out_string = _instr;
 
