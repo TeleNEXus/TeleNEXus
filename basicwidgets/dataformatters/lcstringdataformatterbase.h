@@ -14,8 +14,8 @@ public:
     LCStringDataFormatterBase();
     virtual ~LCStringDataFormatterBase();
 
-    virtual QString wrongStateString() override;
-    virtual QString undefStateString() override;
+    virtual bool undefState(QString& _string) override;
+    virtual bool wrongState(QString& _string) override;
 };
 
 

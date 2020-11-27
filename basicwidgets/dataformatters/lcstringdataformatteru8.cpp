@@ -23,7 +23,9 @@ QString LCStringDataFormatterU8::toString(const QByteArray& _data)
 {
   if(_data.size() < 1)
   {
-    return wrongStateString();
+    QString str = "Wrong";
+    wrongState(str);
+    return str;
   }
   return QString("%1").arg( ((quint8*)_data.constData())[0], mFieldWidth, mBase, mFillChar);
 }
