@@ -2,14 +2,16 @@
 static const QString __slUndefStateString = "######";
 static const QString __slWrongStateString = "??????";
 
-QString LCStringDataFormatterBase::undefStateString()
+bool LCStringDataFormatterBase::undefState(QString& _string)
 {
-  return __slUndefStateString;
+  _string = __slUndefStateString;
+  return true;
 }
 
-QString LCStringDataFormatterBase::wrongStateString()
+bool LCStringDataFormatterBase::wrongState(QString& _string)
 {
-  return __slWrongStateString;
+  _string = __slWrongStateString;
+  return true;
 }
 
 LCStringDataFormatterBase::LCStringDataFormatterBase()

@@ -73,7 +73,9 @@ QString LCStringDataFormatterBits::toString(const QByteArray& _data)
 
     if(_data.size() < 1)
     {
-      return wrongStateString();
+      out_str = "Wrong";
+      wrongState(out_str);
+      return out_str;
     }
 
     for(int i = (_data.size() - 1); i >= 0; i--)

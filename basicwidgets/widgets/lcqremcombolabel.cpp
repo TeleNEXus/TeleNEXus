@@ -11,17 +11,17 @@
 //Собственные данные класса.
 struct SOwnData
 {
-    //Карта соответствий прочитанных данных и выводимых строк.
-    QWidget* undefItem; //Сущность для неопределенного состояния данных.
-    QWidget* wrongItem; //Сущность для данных для которых нет соответствия.
-    QMap<QString, QWidget*> normalItemMap;
-    SOwnData(): undefItem(nullptr), wrongItem(nullptr){}
+  //Карта соответствий прочитанных данных и выводимых строк.
+  QWidget* undefItem; //Сущность для неопределенного состояния данных.
+  QWidget* wrongItem; //Сущность для данных для которых нет соответствия.
+  QMap<QString, QWidget*> normalItemMap;
+  SOwnData(): undefItem(nullptr), wrongItem(nullptr){}
 };
 
 //==============================================================================LCQRemComboLabel
 LCQRemComboLabel::
-    CReadListener::
-        CReadListener(LCQRemComboLabel& _label) : mLabel(_label)
+CReadListener::
+CReadListener(LCQRemComboLabel& _label) : mLabel(_label)
 {
 
 }
@@ -31,54 +31,60 @@ LCQRemComboLabel::
 
 //------------------------------------------------------------------------------dataIsRead
 void LCQRemComboLabel::
-        CReadListener::
-            dataIsRead( QSharedPointer<QByteArray> _data, 
-                        LERemoteDataStatus _status)
+CReadListener::
+dataIsRead( QSharedPointer<QByteArray> _data, 
+    LERemoteDataStatus _status)
 {
-    if(_status != LERemoteDataStatus::DS_OK)
+  if(_status != LERemoteDataStatus::DS_OK)
+  {
+    if(L_LABEL_OWNDATA->undefItem != nullptr)
     {
-      if(L_LABEL_OWNDATA->undefItem != nullptr)
-      {
-        if(mLabel.currentWidget() != L_LABEL_OWNDATA->undefItem) 
-          mLabel.setCurrentWidget(L_LABEL_OWNDATA->undefItem);
-      }
-      return;
+      if(mLabel.currentWidget() != L_LABEL_OWNDATA->undefItem) 
+        mLabel.setCurrentWidget(L_LABEL_OWNDATA->undefItem);
     }
+    return;
+  }
 
-    auto it = L_LABEL_OWNDATA->normalItemMap.find( mLabel.mspFormatter->toString(*_data));
+  auto it = L_LABEL_OWNDATA->normalItemMap.find( mLabel.mspFormatter->toString(*_data));
 
-    if(it == L_LABEL_OWNDATA->normalItemMap.end())
+  if(it == L_LABEL_OWNDATA->normalItemMap.end())
+  {
+    if(L_LABEL_OWNDATA->wrongItem != nullptr)
     {
-      if(L_LABEL_OWNDATA->wrongItem != nullptr)
-      {
-        if(mLabel.currentWidget() != L_LABEL_OWNDATA->wrongItem) 
-          mLabel.setCurrentWidget(L_LABEL_OWNDATA->wrongItem);
-      }
-      return;
+      if(mLabel.currentWidget() != L_LABEL_OWNDATA->wrongItem) 
+        mLabel.setCurrentWidget(L_LABEL_OWNDATA->wrongItem);
     }
+    return;
+  }
 
-    if(it.value() != mLabel.currentWidget())
-    {
-        mLabel.setCurrentWidget(it.value());
-    }
+  if(it.value() != mLabel.currentWidget())
+  {
+    mLabel.setCurrentWidget(it.value());
+  }
 }
 
 //==============================================================================LCQRemComboLabel
 LCQRemComboLabel::LCQRemComboLabel(const QString& _dataName,
-                         QSharedPointer<LIRemoteDataSource> _dataSource,
-                         QSharedPointer<LCStringDataFormatterBase> _formatter,
-                         QWidget* _parent) :    QStackedWidget(_parent),
-                                                mDataName(_dataName),
-                                                mspFormatter(_formatter)
+    QSharedPointer<LIRemoteDataSource> _dataSource,
+    QSharedPointer<LCStringDataFormatterBase> _formatter,
+    QWidget* _parent) :    QStackedWidget(_parent),
+  mDataName(_dataName),
+  mspFormatter(_formatter)
 {
-    mpOwnData = new SOwnData();
-    addItemUndef(new QLabel(_formatter->undefStateString()));
-    addItemWrong(new QLabel(_formatter->wrongStateString()));
+  mpOwnData = new SOwnData();
 
-    mDataListener = QSharedPointer<CReadListener>(new CReadListener(*this));
-    mDataReader = _dataSource->createReader();
-    mDataReader->setDataName(_dataName);
-    mDataReader->setDataReadListener(mDataListener);
+  QString str = "Undef";
+  _formatter->undefState(str);
+  addItemUndef(new QLabel(str));
+
+  str = "Wrong";
+  _formatter->wrongState(str);
+  addItemWrong(new QLabel(str));
+
+  mDataListener = QSharedPointer<CReadListener>(new CReadListener(*this));
+  mDataReader = _dataSource->createReader();
+  mDataReader->setDataName(_dataName);
+  mDataReader->setDataReadListener(mDataListener);
 }
 
 //------------------------------------------------------------------------------
@@ -87,27 +93,27 @@ LCQRemComboLabel::LCQRemComboLabel(const QString& _dataName,
 //------------------------------------------------------------------------------~LCQRemComboLabel
 LCQRemComboLabel::~LCQRemComboLabel()
 {
-    delete L_OWNDATA;
+  delete L_OWNDATA;
 }
 
 //------------------------------------------------------------------------------setActive
 void LCQRemComboLabel::setActive(bool _flag)
 {
-    if(_flag)
-    {
-        mDataReader->connectToSource();
-    }
-    else
-    {
-        mDataReader->disconnectFromSource();
-    }
+  if(_flag)
+  {
+    mDataReader->connectToSource();
+  }
+  else
+  {
+    mDataReader->disconnectFromSource();
+  }
 }
 
 //------------------------------------------------------------------------------addItem
 void LCQRemComboLabel::addItem(QWidget* _widget, const QString&  _val)
 {
   auto it = L_OWNDATA->normalItemMap.find(_val);
-  
+
   if(it != L_OWNDATA->normalItemMap.end())
   {
     if(it.value() == _widget) return;
@@ -147,21 +153,21 @@ void LCQRemComboLabel::addItemWrong(QWidget* _widget)
 //------------------------------------------------------------------------------event
 bool LCQRemComboLabel::event(QEvent *_event)
 {
-    bool ret = false;
-    switch(_event->type())
-    {
-    case QEvent::Type::Show:
-        mDataReader->connectToSource();
-        ret = true;
-        break;
-    case QEvent::Type::Hide:
-        mDataReader->disconnectFromSource();
-        ret = true;
-        break;
-    default:
-        break;
-    }
-    QStackedWidget::event(_event);
-    return ret;
+  bool ret = false;
+  switch(_event->type())
+  {
+  case QEvent::Type::Show:
+    mDataReader->connectToSource();
+    ret = true;
+    break;
+  case QEvent::Type::Hide:
+    mDataReader->disconnectFromSource();
+    ret = true;
+    break;
+  default:
+    break;
+  }
+  QStackedWidget::event(_event);
+  return ret;
 }
 

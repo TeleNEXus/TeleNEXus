@@ -12,13 +12,15 @@ LCQRemLabel::CReadListener::CReadListener(LCQRemLabel& _label) : mLabel(_label)
 void LCQRemLabel::CReadListener::dataIsRead(QSharedPointer<QByteArray>  _data, 
                                             LERemoteDataStatus          _status)
 {
-    if(_status != LERemoteDataStatus::DS_OK)
-    {
-        mLabel.setText(mLabel.mFormatter.data()->undefStateString());
-        return;
-    }
-    QString str = mLabel.mFormatter.data()->toString(*_data);
+  if(_status != LERemoteDataStatus::DS_OK)
+  {
+    QString str = "Undef";
+    mLabel.mFormatter.data()->undefState(str);
     mLabel.setText(str);
+    return;
+  }
+  QString str = mLabel.mFormatter.data()->toString(*_data);
+  mLabel.setText(str);
 }
 
 //==============================================================================LCQRemLabel
@@ -38,7 +40,9 @@ LCQRemLabel::LCQRemLabel(const QString& _dataName,
                                                 mDataName(_dataName),
                                                 mFormatter(_formatter)
 {
-    setText(mFormatter.data()->undefStateString());
+    QString str = "Undef";
+    mFormatter.data()->undefState(str);
+    setText(str);
     mDataListener = QSharedPointer<CReadListener>(new CReadListener(*this));
     mDataReader = _dataSource->createReader();
     mDataReader->setDataName(_dataName);
