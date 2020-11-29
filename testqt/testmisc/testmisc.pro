@@ -1,5 +1,6 @@
 QT += gui
 QT += widgets
+QT += qml 
 
 CONFIG += console c++11
 #CONFIG += c++11
@@ -24,9 +25,11 @@ DEFINES += QT_DEPRECATED_WARNINGS
 # SOURCES +=  ./testlayout.cpp \
 # SOURCES +=  ./testgridlayout.cpp \
 # SOURCES +=  ./listwidget.cpp \
-SOURCES +=  ./testwidget.cpp \
+# SOURCES +=  ./testwidget.cpp \
 # SOURCES +=  ./testwidget1.cpp \
 # SOURCES +=  ./testtable.cpp \
+SOURCES +=  ./testjs.cpp \
+  ./jsclass.cpp \
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
@@ -34,5 +37,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 HEADERS += \
+    ./jsclass.h \
+
 
 
