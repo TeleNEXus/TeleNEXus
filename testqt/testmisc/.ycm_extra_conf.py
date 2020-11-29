@@ -80,6 +80,8 @@ flags = [
              '/usr/include/x86_64-linux-gnu/qt5/QtXml',
              '-isystem',
              '/usr/include/x86_64-linux-gnu/qt5/QtCore',
+             '-isystem',
+             '/usr/include/x86_64-linux-gnu/qt5/QtQml',
              '-I', '.',
              '-isystem',
              '/usr/include/libdrm',
