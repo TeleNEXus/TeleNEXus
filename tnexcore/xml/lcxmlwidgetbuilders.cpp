@@ -1,5 +1,5 @@
 #include "lcxmlwidgetbuilders.h"
-#include "lcxmlapplication.h"
+#include "lcxmlcommon.h"
 
 #include <QMap>
 #include <QLibrary>
@@ -13,7 +13,7 @@ static LQLayoutBuildersMap __buildersMap;
 
 //======================================================================================================================
 LCXmlWidgetBuilders::LCXmlWidgetBuilders() :
-        LCXmlBuildersLoader(    LCXmlApplication::mBaseTags.widgetBuilders)
+        LCXmlBuildersLoader(    LCXmlCommon::mBaseTags.widgetBuilders)
 {
 }
 

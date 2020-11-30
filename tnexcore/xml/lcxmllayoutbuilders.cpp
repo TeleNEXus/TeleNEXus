@@ -1,6 +1,5 @@
 #include "lcxmllayoutbuilders.h"
-
-#include "lcxmlapplication.h"
+#include "lcxmlcommon.h"
 
 #include <QMap>
 #include <QLibrary>
@@ -11,7 +10,7 @@ static QMap<QString, QSharedPointer<LIXmlLayoutBuilder>> __slBuildersMap;
 
 //==============================================================================
 LCXmlLayoutBuilders::LCXmlLayoutBuilders() :
-        LCXmlBuildersLoader( LCXmlApplication::mBaseTags.layoutBuilders )
+        LCXmlBuildersLoader( LCXmlCommon::mBaseTags.layoutBuilders )
 {
 }
 

@@ -1,6 +1,8 @@
 #include "lcxmlwindows.h"
+#include "lcxmlcommon.h"
 #include "LIWindow.h"
 #include "LIApplication.h"
+
 #include <QDomElement>
 #include <QMap>
 #include <QWidget>
@@ -74,11 +76,11 @@ void LCXmlWindows::create(
     if(window == nullptr) return;
 
     QString attr_id = _element.attribute(
-            LCXmlApplication::mBaseTags.window.attrs.id);
+            LCXmlCommon::mCommonAttributes.id);
     QString attr_title = _element.attribute(
-            LCXmlApplication::mBaseTags.window.attrs.title);
+            LCXmlCommon::mCommonAttributes.title);
     QString attr_show = _element.attribute(
-            LCXmlApplication::mBaseTags.window.attrs.show.tag);
+            LCXmlCommon::mCommonAttributes.show.tag);
 
 
     if(!attr_id.isNull()) 
@@ -103,7 +105,7 @@ static LCXmlWindow* createLocal(const QDomElement& _element,
         const LIApplication& _app)
 {
     QString attr_file =  _element.attribute(
-            LCXmlApplication::mBaseTags.window.attrs.file);
+            LCXmlCommon::mCommonAttributes.file);
     if(!attr_file.isNull())
     {
         QDomElement el = _app.getDomDocument(attr_file).documentElement();
@@ -126,10 +128,10 @@ static LCXmlWindow* createLocal(const QDomElement& _element,
 
     //Получение атрибутов.
     QString attr_width = _element.attribute(
-            LCXmlApplication::mBaseTags.window.attrs.widht);
+            LCXmlCommon::mCommonAttributes.widht);
 
     QString attr_height = _element.attribute(
-            LCXmlApplication::mBaseTags.window.attrs.height);
+            LCXmlCommon::mCommonAttributes.height);
 
     //Переопределение размеров окна.
     QSize s = window->mpWidget->geometry().size();
@@ -161,11 +163,11 @@ static LCXmlWindow* createLocal(const QDomElement& _element,
     int posy;
 
     QString attr = _element.attribute(
-            LCXmlApplication::mBaseTags.window.attrs.posx);
+            LCXmlCommon::mCommonAttributes.posx);
     posx = attr.toInt(&flag_posx);
 
     attr = _element.attribute(
-            LCXmlApplication::mBaseTags.window.attrs.posy);
+            LCXmlCommon::mCommonAttributes.posy);
     posy = attr.toInt(&flag_posy);
 
     if(flag_posx && flag_posy)

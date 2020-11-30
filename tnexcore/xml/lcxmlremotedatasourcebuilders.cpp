@@ -1,5 +1,5 @@
 #include "lcxmlremotedatasourcebuilders.h"
-#include "lcxmlapplication.h"
+#include "lcxmlcommon.h"
 
 #include <QMap>
 #include <QLibrary>
@@ -13,7 +13,7 @@ static LQWidgetBuildersMap sl_BuildersMap;
 
 //======================================================================================================================
 LCXmlRemoteDataSourceBuilders::LCXmlRemoteDataSourceBuilders() :
-        LCXmlBuildersLoader(    LCXmlApplication::mBaseTags.sourceBuilders)
+        LCXmlBuildersLoader(LCXmlCommon::mBaseTags.sourceBuilders)
 {
 }
 
