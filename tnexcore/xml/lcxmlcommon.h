@@ -22,12 +22,13 @@ public:
     QString fonts           = "FONTS";
     QString sources         = "SOURCES";
     QString plaginpath      = "PLAGINPATHS";
-
+    QString scripts         = "SCRIPTS";
   };
 
   struct SCommonTags
   {
     QString item  = "item";
+    QString script = "script";
   };
 
   struct SCommonAttributes
@@ -40,6 +41,7 @@ public:
     QString height  = "height";
     QString posx    = "posx";
     QString posy    = "posy";
+
     struct
     {
       QString tag = "show";

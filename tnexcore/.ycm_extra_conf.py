@@ -87,6 +87,8 @@ flags = [
              '/usr/include/x86_64-linux-gnu/qt5/QtSerialBus',
              '-isystem',
              '/usr/include/x86_64-linux-gnu/qt5/QtSerialPort',
+             '-isystem',
+             '/usr/include/x86_64-linux-gnu/qt5/QtQml',
              '-I', '.',
              '-isystem',
              '/usr/include/libdrm',
