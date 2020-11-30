@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<SCRIPTS>
+  <script id="s1" file="jscripts/script1.js" interval="500" state="start"/>
+  <script id="s2" file="jscripts/script2.js" interval="250" state="start"/>
+</SCRIPTS>

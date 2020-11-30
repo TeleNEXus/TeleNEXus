@@ -4,6 +4,9 @@
 #include <QTimer>
 
 //==============================================================================
+static const QString __slApplicationProp = "Application";
+
+//==============================================================================
 struct SLocalData
 {
   QJSEngine jsEngin;
@@ -17,17 +20,16 @@ struct SLocalData
   {
     QJSValue  js_value_app;
     js_value_app = jsEngin.newQObject(&LCQJSApplicationInterface::instance());
-    jsEngin.globalObject().setProperty("Application", js_value_app);
+    jsEngin.globalObject().setProperty(__slApplicationProp, js_value_app);
 
     timer = new QTimer;
-    if(_interval <=0)
+    if(_interval <= 0)
     {
       timer->setSingleShot(true);
+      _interval = 0;
     }
-    else
-    {
-      timer->setInterval(_interval);
-    }
+
+    timer->setInterval(_interval);
 
     QObject::connect(timer, &QTimer::timeout,
         [this]()
@@ -56,7 +58,6 @@ struct SLocalData
   {
     timer->stop();
   }
-
 };
 
 //==============================================================================
@@ -75,17 +76,15 @@ LCJScript::~LCJScript()
 }
 
 //------------------------------------------------------------------------------
-void LCJScript::start()
+void LCJScript::start() const
 {
   mData.start();
 }
 
 //------------------------------------------------------------------------------
-void LCJScript::stop()
+void LCJScript::stop() const
 {
   mData.stop();
 }
-
-
 
 

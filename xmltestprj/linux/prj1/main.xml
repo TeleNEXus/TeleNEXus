@@ -33,6 +33,8 @@
     </WIDGETBUILDERS>
 
     <FONTS file="fonts.xml"/>
+
+    <SCRIPTS file="scripts.xml"/>
     
     <!-- <WINDOW id="main window 1" title="MAIN WINDOW 1" file="widgets.xml"/> -->
     <!-- <WINDOW id="main window 2" title="MAIN WINDOW 2" file="widgets.xml"/> -->

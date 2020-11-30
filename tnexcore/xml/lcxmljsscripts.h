@@ -1,25 +1,25 @@
-#ifndef LCXMLWINDOWS_H_
-#define LCXMLWINDOWS_H_
+#ifndef LCXMLJSCRIPTS_H_ 
+#define LCXMLJSCRIPTS_H_
 
 #include <QSharedPointer>
 
 class QDomElement;
 class LIApplication;
-class LIWindow;
+class LIJScript;
 
-class LCXmlWindows
+class LCXmlJScripts
 {
 private:
-    LCXmlWindows();
-    ~LCXmlWindows();
-    LCXmlWindows(const LCXmlWindows&) = delete;
-    LCXmlWindows& operator=(const LCXmlWindows&) = delete;
+    LCXmlJScripts();
+    ~LCXmlJScripts();
+    LCXmlJScripts(const LCXmlJScripts&) = delete;
+    LCXmlJScripts& operator=(const LCXmlJScripts&) = delete;
 public:
-    static LCXmlWindows& instance();
-    void create(
+    static LCXmlJScripts& instance();
+    void load(
         const QDomElement &_element, 
         const LIApplication& _app);
 
-    QSharedPointer<LIWindow> getWindow(const QString& _windowId);
+    QSharedPointer<LIJScript> getScript(const QString& _scriptId);
 };
 #endif /* LCXMLWINDOWS_H_ */

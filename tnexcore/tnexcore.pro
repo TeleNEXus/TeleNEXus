@@ -40,6 +40,7 @@ SOURCES += \
         xml/lcxmlwidgetbuilders.cpp \
         xml/lcxmlwindows.cpp \
         xml/lcxmlfonts.cpp \
+        xml/lcxmljsscripts.cpp \
         main.cpp \
 
 # Default rules for deployment.
@@ -69,4 +70,5 @@ HEADERS += \
     xml/lcxmlwidgetbuilders.h \
     xml/lcxmlwindows.h \
     xml/lcxmlfonts.h \
+    xml/lcxmljsscripts.h\
 

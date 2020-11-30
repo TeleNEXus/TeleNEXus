@@ -1,200 +1,132 @@
-#include "lcxmlwindows.h"
+#include "lcxmljsscripts.h"
 #include "lcxmlcommon.h"
-#include "LIWindow.h"
+#include "lcjscript.h"
+
+#include "LIJScript.h"
 #include "LIApplication.h"
 
 #include <QDomElement>
 #include <QMap>
 #include <QWidget>
 #include <QDebug>
+#include <QFile>
 
-//==============================================================================LCXmlWindow
-class LCXmlWindow : public LIWindow
+
+//==============================================================================
+static const struct
 {
-public:
-    static QMap<QString, QSharedPointer<LIWindow>> smWindowsMap;
-    QWidget* mpWidget;
-public:
-    LCXmlWindow(){}
-    virtual ~LCXmlWindow()
+  struct
+  {
+    QString attr = "state";
+    struct
     {
-    }
-    //--------------------------------------------------------------------------
-    virtual void show() override
-    {
-        mpWidget->show();
-    }
+      QString start = "start";
+      QString stop = "stop";
+    }vals;
+  }state;
+}__slAttr;
 
-    //--------------------------------------------------------------------------
-    virtual void hide() override
-    {
-        mpWidget->close();
-    }
-};
+//==============================================================================
+QMap<QString, QSharedPointer<LIJScript>> __slScriptMap;
+static int __slScriptCounter = 0;
 
-//------------------------------------------------------------------------------
-QMap<QString, QSharedPointer<LIWindow>> LCXmlWindow::smWindowsMap;
-
-//==============================================================================LCXmlWindows
-LCXmlWindows::LCXmlWindows()
+//==============================================================================LCXmlJScripts
+LCXmlJScripts::LCXmlJScripts()
 {
 }
 
 //------------------------------------------------------------------------------
-LCXmlWindows::~LCXmlWindows()
+LCXmlJScripts::~LCXmlJScripts()
 {
 }
 
 //------------------------------------------------------------------------------
-LCXmlWindows& LCXmlWindows::instance()
+LCXmlJScripts& LCXmlJScripts::instance()
 {
-    static LCXmlWindows instance;
+    static LCXmlJScripts instance;
     return instance;
 }
 
 //------------------------------------------------------------------------------
-QSharedPointer<LIWindow> LCXmlWindows::getWindow(const QString& _windowId)
+QSharedPointer<LIJScript> LCXmlJScripts::getScript(const QString& _scriptId)
 {
-    return LCXmlWindow::smWindowsMap.find(_windowId).value();
+    return __slScriptMap.find(_scriptId).value();
 }
 
-//------------------------------------------------------------------------------
-#include "LIXmlWidgetBuilder.h"
-
-static QWidget* buildWidget(const QDomElement& _element, 
-        const LIApplication& _app);
-
-static LCXmlWindow* createLocal(const QDomElement& _element, 
-        const LIApplication& _app);
-
-void LCXmlWindows::create(
+void LCXmlJScripts::load(
         const QDomElement &_element, 
         const LIApplication& _app)
 {
-    auto window = createLocal(_element, _app); 
-    if(window == nullptr) return;
-
-    QString attr_id = _element.attribute(
-            LCXmlCommon::mCommonAttributes.id);
-    QString attr_title = _element.attribute(
-            LCXmlCommon::mCommonAttributes.title);
-    QString attr_show = _element.attribute(
-            LCXmlCommon::mCommonAttributes.show.tag);
-
-
-    if(!attr_id.isNull()) 
+  QString attr_file = _element.attribute(LCXmlCommon::mCommonAttributes.file);
+  if(!attr_file.isNull())
+  {
+    QDomElement el = _app.getDomDocument(attr_file).documentElement();
+    if(!el.isNull())
     {
-        LCXmlWindow::smWindowsMap.insert(attr_id, 
-                QSharedPointer<LIWindow>(window));
-        if(attr_title.isNull()) attr_title = attr_id;
+      if(el.tagName() == _element.tagName())
+      {
+        load(el, _app);
+      }
+    }
+    return;
+  }
+
+  for(QDomNode node = _element.firstChildElement(LCXmlCommon::mCommonTags.script);
+      !node.isNull();
+      node = node.nextSiblingElement(LCXmlCommon::mCommonTags.script))
+  {
+    QDomElement el = node.toElement();
+    QString attr = el.attribute(LCXmlCommon::mCommonAttributes.file);
+    if(attr.isNull()) continue;
+
+    QString fileName = _app.getProjectPath() + attr;
+    QFile scriptFile(fileName);
+    if (!scriptFile.open(QIODevice::ReadOnly)) 
+    {
+      qDebug() << "LCXmlJScripts::load message: can't open script file " << fileName;
+      continue;
     }
 
-    if(!attr_title.isNull())
+    QTextStream stream(&scriptFile);
+    QString script = stream.readAll();
+    scriptFile.close();
+
+    if(script.isNull()) 
     {
-        window->mpWidget->setWindowTitle(attr_title);
+      qDebug() << "LCXmlJScripts::load message: empty script file " << fileName;
+      continue;
     }
 
-
-    if(!attr_show.isNull())
-        window->mpWidget->show();
+    LCJScript* p_jsscript = nullptr;
+    int interval = 0;
+    attr = el.attribute(LCXmlCommon::mCommonAttributes.interval);
+    if(!attr.isNull())
+    {
+      bool flag = false;
+      interval = attr.toInt(&flag);
+      if(!flag)
+      {
+        interval = 0;
+      }
+    }
+    p_jsscript  = new LCJScript(script, interval);
+    attr = el.attribute(LCXmlCommon::mCommonAttributes.id);
+    if(attr.isNull())
+    {
+      attr = QString("%1").arg(__slScriptCounter);
+    }
+    __slScriptMap.insert(attr, QSharedPointer<LIJScript>(p_jsscript));
+    __slScriptCounter++;
+    attr = el.attribute(__slAttr.state.attr);
+    if(!attr.isNull())
+    {
+      if(attr == __slAttr.state.vals.start)
+      {
+        p_jsscript->start();
+      }
+    }
+  }
 }
 
-//------------------------------------------------------------------------------
-static LCXmlWindow* createLocal(const QDomElement& _element, 
-        const LIApplication& _app)
-{
-    QString attr_file =  _element.attribute(
-            LCXmlCommon::mCommonAttributes.file);
-    if(!attr_file.isNull())
-    {
-        QDomElement el = _app.getDomDocument(attr_file).documentElement();
-        if(!el.isNull())
-        {
-            return createLocal(el, _app);
-        }
-        return nullptr;
-    }
 
-    LCXmlWindow* window = new LCXmlWindow();
-    QWidget* widget = buildWidget(_element, _app);
-    if(widget == nullptr) 
-    {
-        delete window;
-        return nullptr;
-    }
 
-    window->mpWidget = widget;
-
-    //Получение атрибутов.
-    QString attr_width = _element.attribute(
-            LCXmlCommon::mCommonAttributes.widht);
-
-    QString attr_height = _element.attribute(
-            LCXmlCommon::mCommonAttributes.height);
-
-    //Переопределение размеров окна.
-    QSize s = window->mpWidget->geometry().size();
-
-    if(!attr_width.isNull())
-    {
-        bool flag = false;
-        int width = attr_width.toInt(&flag);
-
-        if(flag) 
-        {
-            s.setWidth(width);
-        }
-    }
-
-    if(!attr_height.isNull())
-    {
-        bool flag = false;
-        int height = attr_height.toInt(&flag);
-        if(flag) 
-        {
-            s.setHeight(height);
-        }
-    }
-
-    bool flag_posx = false;
-    bool flag_posy = false;
-    int posx;
-    int posy;
-
-    QString attr = _element.attribute(
-            LCXmlCommon::mCommonAttributes.posx);
-    posx = attr.toInt(&flag_posx);
-
-    attr = _element.attribute(
-            LCXmlCommon::mCommonAttributes.posy);
-    posy = attr.toInt(&flag_posy);
-
-    if(flag_posx && flag_posy)
-    {
-        window->mpWidget->move(posx, posy);
-    }
-    window->mpWidget->resize(s);
-    return window;
-}
-
-//------------------------------------------------------------------------------
-static QWidget* buildWidget(const QDomElement& _element, 
-        const LIApplication& _app)
-{
-    for(auto node = _element.firstChild(); 
-            !node.isNull(); 
-            node = node.nextSibling())
-    {
-        if(node.isElement())
-        {
-            auto el = node.toElement();
-            auto builder = _app.getWidgetBuilder(el.tagName());
-            if(!builder.isNull())
-            {
-                auto widget = builder->build(el, _app);
-                if(widget) return widget;
-            }
-        }
-    }
-    return nullptr;
-}

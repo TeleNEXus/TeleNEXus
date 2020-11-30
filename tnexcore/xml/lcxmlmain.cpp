@@ -7,6 +7,7 @@
 #include "lcxmlwidgetbuilders.h"
 #include "lcxmlwindows.h"
 #include "lcxmlfonts.h"
+#include "lcxmljsscripts.h"
 
 #include <QDebug>
 #include <QApplication>
@@ -42,6 +43,7 @@ static void addFonts(const QDomElement& _rootElement);
 static void addLayoutsBuilders(const QDomElement& _rootElement);
 static void addWidgetsBuilders(const QDomElement& _rootElement);
 static void addWindows(const QDomElement& _rootElement);
+static void addScripts(const QDomElement& _rootElement);
 
 //==============================================================================
 class CApplicationInterface : public LIApplication
@@ -223,6 +225,8 @@ int LCXmlMain::exec(int argc, char *argv[])
     addWidgetsBuilders(rootElement);
     //----------------------------------------------------
     addWindows(rootElement);
+    //----------------------------------------------------
+    addScripts(rootElement);
 
 
     QObject::connect(&app, &QApplication::aboutToQuit,
@@ -393,6 +397,14 @@ static void addWindows(const QDomElement& _rootElement)
         if(el.isNull()) continue;
         LCXmlWindows::instance().create(el, __slAppInterface);
     }
+}
+
+//==============================================================================
+static void addScripts(const QDomElement& _rootElement)
+{
+  LCXmlJScripts::instance().load(
+      _rootElement.firstChildElement(LCXmlCommon::mBaseTags.scripts), 
+      __slAppInterface);
 }
 
 //==============================================================================

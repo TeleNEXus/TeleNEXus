@@ -33,14 +33,15 @@ public:
 
   struct SCommonAttributes
   {
-    QString file    = "file";
-    QString path    = "path";
-    QString id      = "id";
-    QString title   = "title";
-    QString widht   = "width";
-    QString height  = "height";
-    QString posx    = "posx";
-    QString posy    = "posy";
+    QString file      = "file";
+    QString path      = "path";
+    QString id        = "id";
+    QString title     = "title";
+    QString widht     = "width";
+    QString height    = "height";
+    QString posx      = "posx";
+    QString posy      = "posy";
+    QString interval  = "interval";
 
     struct
     {
