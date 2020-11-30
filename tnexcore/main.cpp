@@ -1,7 +1,7 @@
-﻿#include "lcxmlapplication.h"
+﻿#include "lcxmlmain.h"
 
 int main(int argc, char *argv[])
 {
-    return LCXmlApplication::instance().exec(argc, argv);
+    return LCXmlMain::instance().exec(argc, argv);
 }
 

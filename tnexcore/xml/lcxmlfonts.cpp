@@ -1,9 +1,10 @@
 #include "lcxmlfonts.h"
+#include "lcxmlcommon.h"
+#include "LIApplication.h"
+
 #include <QFont>
 #include <QMap>
 #include <QDomElement>
-#include "LIApplication.h"
-#include "lcxmlapplication.h"
 #include <QDebug>
 
 //==============================================================================
@@ -54,7 +55,7 @@ void LCXmlFonts::create(
     QDomElement el = _app.getDomDocument(attr_file).documentElement();
     if(!el.isNull())
     {
-      if(el.tagName() == LCXmlApplication::mBaseTags.fonts) create(el, _app);
+      if(el.tagName() == LCXmlCommon::mBaseTags.fonts) create(el, _app);
     }
     return;
   }

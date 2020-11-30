@@ -29,7 +29,9 @@ INCLUDEPATH +=                                  \
 
 SOURCES += \
         ../../common/lqvalidatoru32.cpp \
-        xml/lcxmlapplication.cpp \
+        jscript/lcqjsapplicationinterface.cpp \
+        xml/lcxmlcommon.cpp \
+        xml/lcxmlmain.cpp \
         xml/lcxmlbuildersloader.cpp \
         xml/lcxmllayoutbuilders.cpp \
         xml/lcxmlremotedatasourcebuilders.cpp \
@@ -55,7 +57,9 @@ HEADERS += \
     ../common/interfaces/xmlbuilders/LIXmlRemoteDataSourceBuilder.h \
     ../common/interfaces/xmlbuilders/LIXmlWidgetBuilder.h \
     ../common/interfaces/LIWindow.h \
-    xml/lcxmlapplication.h \
+    jscript/lcqjsapplicationinterface.h \
+    xml/lcxmlcommon.h \
+    xml/lcxmlmain.h \
     xml/lcxmlbuildersloader.h \
     xml/lcxmllayoutbuilders.h \
     xml/lcxmlremotedatasourcebuilders.h \
