@@ -4,20 +4,16 @@
 #include <QDebug>
 
 //==============================================================================
-LCQJSApplicationInterface::LCQJSApplicationInterface(const LIApplication& _app):
-  edApplication(_app)
+LCQJSApplicationInterface::LCQJSApplicationInterface()
 {
 }
 
-/* //------------------------------------------------------------------------------ */
-/* LCQJSApplicationInterface& LCQJSApplicationInterface::instance() */
-/* { */
-/*   static LCQJSApplicationInterface inst(LCXmlMain::getApplicationInterface()); */
-/*   return inst; */
-/* } */
-
+LCQJSApplicationInterface::~LCQJSApplicationInterface()
+{
+  qDebug() << "LCQJSApplicationInterface destructor";
+}
 //------------------------------------------------------------------------------
-void LCQJSApplicationInterface::print(const QString& _str)
+void LCQJSApplicationInterface::printapp(const QString& _str)
 {
   qDebug() << _str;
 }

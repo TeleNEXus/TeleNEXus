@@ -2,80 +2,84 @@
 #include "lcqjsapplicationinterface.h"
 #include <QJSEngine>
 #include <QTimer>
+#include <QDebug>
+#include <QThread>
 
 //==============================================================================
 static const QString __slApplicationProp = "Application";
 
 //==============================================================================
-struct SLocalData
+class CLocalData : public QObject
 {
-    QJSValue  js_value_app;
-  QJSEngine jsEngin;
+private:
+  QJSEngine mJSEngin;
+  QJSValue  mJSValue;
   QString jsScript;
   QTimer *timer = nullptr;
-  int timeIntervalMs = 0;
+  QThread *thr;
 
-  explicit SLocalData() = delete;
-
-  SLocalData(const QString& _script, int _interval) : jsScript(_script)
+public:
+  explicit CLocalData() = delete;
+  CLocalData(const QString& _script, int _interval) : 
+    QObject(nullptr), 
+    jsScript(_script)
   {
-    /* QJSValue  js_value_app; */
+    mJSValue = mJSEngin.newQObject(new LCQJSApplicationInterface);
+    mJSEngin.globalObject().setProperty(__slApplicationProp, mJSValue);
+    thr = new QThread;
 
-    js_value_app = jsEngin.newQObject(&LCQJSApplicationInterface::instance());
-    jsEngin.globalObject().setProperty(__slApplicationProp, js_value_app);
+    timer = new QTimer;
+    timer->moveToThread(thr);
+    QObject::connect(thr, &QThread::started, [&]{timer->start();});
+    QObject::connect(thr, &QThread::finished, [&]{timer->stop();});
+    if(_interval <= 0)
+    {
+      timer->setSingleShot(true);
+      _interval = 0;
+    }
 
-    /* timer = new QTimer; */
-    /* if(_interval <= 0) */
-    /* { */
-    /*   timer->setSingleShot(true); */
-    /*   _interval = 0; */
-    /* } */
+    timer->setInterval(_interval);
 
-    /* timer->setInterval(_interval); */
-
-    /* QObject::connect(timer, &QTimer::timeout, */
-    /*     [&]() */
-    /*     { */
-    /*       this->evaluate(); */
-    /*     }); */
+    QObject::connect(timer, &QTimer::timeout,
+        [&]()
+        {
+          mJSEngin.evaluate(jsScript);
+        });
+    thr->start();
   }
 
-  ~SLocalData()
+  ~CLocalData()
   {
-    /* delete timer; */
-    /* if(timer) timer->deleteLater(); */
-  }
-
-  QJSValue evaluate()
-  {
-    /* return jsEngin.evaluate(jsScript); */
+    if(timer) timer->deleteLater();
   }
 
   void start()
   {
     /* if(timer->isActive()) return; */
     /* timer->start(); */
+    thr->start();
   }
 
   void stop()
   {
+    thr->quit();
     /* timer->stop(); */
   }
 };
 
 //==============================================================================
-#define mData (*(static_cast<SLocalData*>(mpData)))
+#define mData (*(static_cast<CLocalData*>(mpData)))
 
 //==============================================================================
 LCJScript::LCJScript(const QString& _script, int _interval) 
 {
-  mpData = new SLocalData(_script, _interval);
+  mpData = new CLocalData(_script, _interval);
 }
 
 //------------------------------------------------------------------------------
 LCJScript::~LCJScript()
 {
-  delete static_cast<SLocalData*>(mpData);
+  mData.deleteLater();
 }
 
 //------------------------------------------------------------------------------
