@@ -9,12 +9,12 @@ LCQJSApplicationInterface::LCQJSApplicationInterface(const LIApplication& _app):
 {
 }
 
-//------------------------------------------------------------------------------
-LCQJSApplicationInterface& LCQJSApplicationInterface::instance()
-{
-  static LCQJSApplicationInterface inst(LCXmlMain::getApplicationInterface());
-  return inst;
-}
+/* //------------------------------------------------------------------------------ */
+/* LCQJSApplicationInterface& LCQJSApplicationInterface::instance() */
+/* { */
+/*   static LCQJSApplicationInterface inst(LCXmlMain::getApplicationInterface()); */
+/*   return inst; */
+/* } */
 
 //------------------------------------------------------------------------------
 void LCQJSApplicationInterface::print(const QString& _str)

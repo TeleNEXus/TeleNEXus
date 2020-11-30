@@ -10,9 +10,9 @@ private:
   void* mpData;
 public:
   explicit LCJScript(const QString& _script = QString(), int _interval = -1);
-  ~LCJScript();
-  virtual void start() const override;
-  virtual void stop() const override;
+  virtual ~LCJScript();
+  virtual void start() override;
+  virtual void stop() override;
 };
 
 #endif

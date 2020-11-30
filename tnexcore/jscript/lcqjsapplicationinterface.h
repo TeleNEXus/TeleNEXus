@@ -6,16 +6,17 @@ class LIApplication;
 
 class LCQJSApplicationInterface : public QObject
 {
+  Q_OBJECT
 private:
 
   const LIApplication& edApplication;
 
   LCQJSApplicationInterface(const LIApplication& _app);
   LCQJSApplicationInterface() = delete;
-  LCQJSApplicationInterface(const LCQJSApplicationInterface&) = delete;
-  LCQJSApplicationInterface& operator=(const LCQJSApplicationInterface&) = delete;
+  /* LCQJSApplicationInterface(const LCQJSApplicationInterface&) = delete; */
+  /* LCQJSApplicationInterface& operator=(const LCQJSApplicationInterface&) = delete; */
 public:
-  static LCQJSApplicationInterface& instance();
+  /* static LCQJSApplicationInterface& instance(); */
 public slots:
   void print(const QString& _str);
 };

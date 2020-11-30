@@ -22,11 +22,12 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 INCLUDEPATH +=                                  \
-        ../common/interfaces                 \
-        ../common/interfaces/remotedata      \
-        ../common/interfaces/xmlbuilders     \
-        ../common/                           \
+        ../common/interfaces                    \
+        ../common/interfaces/remotedata         \
+        ../common/interfaces/xmlbuilders        \
+        ../common/                              \
         xml/                                    \
+        jscript/                                \
 
 SOURCES += \
         ../../common/lqvalidatoru32.cpp \
@@ -60,6 +61,7 @@ HEADERS += \
     ../common/interfaces/xmlbuilders/LIXmlRemoteDataSourceBuilder.h \
     ../common/interfaces/xmlbuilders/LIXmlWidgetBuilder.h \
     ../common/interfaces/LIWindow.h \
+    ../common/interfaces/LIJScript.h \
     jscript/lcqjsapplicationinterface.h \
     jscript/lcjscript.h \
     xml/lcxmlcommon.h \
@@ -70,5 +72,5 @@ HEADERS += \
     xml/lcxmlwidgetbuilders.h \
     xml/lcxmlwindows.h \
     xml/lcxmlfonts.h \
-    xml/lcxmljsscripts.h\
+    xml/lcxmljsscripts.h \
 

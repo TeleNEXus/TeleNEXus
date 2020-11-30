@@ -9,6 +9,7 @@ static const QString __slApplicationProp = "Application";
 //==============================================================================
 struct SLocalData
 {
+    QJSValue  js_value_app;
   QJSEngine jsEngin;
   QString jsScript;
   QTimer *timer = nullptr;
@@ -18,50 +19,52 @@ struct SLocalData
 
   SLocalData(const QString& _script, int _interval) : jsScript(_script)
   {
-    QJSValue  js_value_app;
+    /* QJSValue  js_value_app; */
+
     js_value_app = jsEngin.newQObject(&LCQJSApplicationInterface::instance());
     jsEngin.globalObject().setProperty(__slApplicationProp, js_value_app);
 
-    timer = new QTimer;
-    if(_interval <= 0)
-    {
-      timer->setSingleShot(true);
-      _interval = 0;
-    }
+    /* timer = new QTimer; */
+    /* if(_interval <= 0) */
+    /* { */
+    /*   timer->setSingleShot(true); */
+    /*   _interval = 0; */
+    /* } */
 
-    timer->setInterval(_interval);
+    /* timer->setInterval(_interval); */
 
-    QObject::connect(timer, &QTimer::timeout,
-        [this]()
-        {
-          evaluate();
-        });
+    /* QObject::connect(timer, &QTimer::timeout, */
+    /*     [&]() */
+    /*     { */
+    /*       this->evaluate(); */
+    /*     }); */
   }
 
   ~SLocalData()
   {
-    if(timer) timer->deleteLater();
+    /* delete timer; */
+    /* if(timer) timer->deleteLater(); */
   }
 
   QJSValue evaluate()
   {
-    return jsEngin.evaluate(jsScript);
+    /* return jsEngin.evaluate(jsScript); */
   }
 
   void start()
   {
-    if(timer->isActive()) return;
-    timer->start();
+    /* if(timer->isActive()) return; */
+    /* timer->start(); */
   }
 
   void stop()
   {
-    timer->stop();
+    /* timer->stop(); */
   }
 };
 
 //==============================================================================
-#define mData (*static_cast<SLocalData*>(mpData))
+#define mData (*(static_cast<SLocalData*>(mpData)))
 
 //==============================================================================
 LCJScript::LCJScript(const QString& _script, int _interval) 
@@ -76,13 +79,13 @@ LCJScript::~LCJScript()
 }
 
 //------------------------------------------------------------------------------
-void LCJScript::start() const
+void LCJScript::start() 
 {
   mData.start();
 }
 
 //------------------------------------------------------------------------------
-void LCJScript::stop() const
+void LCJScript::stop() 
 {
   mData.stop();
 }
