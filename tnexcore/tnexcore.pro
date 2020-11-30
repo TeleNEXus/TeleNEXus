@@ -4,6 +4,7 @@ QT += network
 #QT += serialport
 #QT += serialbus
 QT += xml
+QT += qml 
 
 CONFIG += console c++11
 #CONFIG += c++11
@@ -30,6 +31,7 @@ INCLUDEPATH +=                                  \
 SOURCES += \
         ../../common/lqvalidatoru32.cpp \
         jscript/lcqjsapplicationinterface.cpp \
+        jscript/lcjscript.cpp \
         xml/lcxmlcommon.cpp \
         xml/lcxmlmain.cpp \
         xml/lcxmlbuildersloader.cpp \
@@ -58,6 +60,7 @@ HEADERS += \
     ../common/interfaces/xmlbuilders/LIXmlWidgetBuilder.h \
     ../common/interfaces/LIWindow.h \
     jscript/lcqjsapplicationinterface.h \
+    jscript/lcjscript.h \
     xml/lcxmlcommon.h \
     xml/lcxmlmain.h \
     xml/lcxmlbuildersloader.h \
