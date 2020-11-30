@@ -5,8 +5,8 @@ class LIJScript
 {
 public:
   LIJScript(){}
-  virtual void start() = 0;
-  virtual void stop() = 0;
+  virtual void start() const = 0;
+  virtual void stop() const = 0;
 };
 
 #endif
