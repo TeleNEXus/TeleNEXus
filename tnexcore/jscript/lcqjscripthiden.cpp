@@ -5,16 +5,19 @@
 #include <QTimer>
 #include <QCoreApplication>
 #include <QJSEngine>
+#include <QSharedPointer>
 
 static const QString __slApplicationProp = "Application";
 //==============================================================================SLocalData
-struct SLocalData
+class SLocalData : public QObject
 {
+public:
         QJSEngine   jsengin;
         QJSValue    jsvalue;
   QString     mScriptString;
-  QThread*    mpThread;
-  QTimer*     mpTimer;
+  QSharedPointer<QThread>  mpThread;
+  QSharedPointer<QTimer>   mpTimer;
+  SLocalData(): QObject(nullptr){}
 };
 
 //==============================================================================CEventBase
@@ -58,36 +61,58 @@ void LCQJScriptHiden::CEventStop::handle(LCQJScriptHiden* _sender)
 {
   Q_UNUSED(_sender);
   qDebug() << "LCQJScriptHiden event stop handler";
-  reinterpret_cast<SLocalData*>(_sender->mpData)->mpTimer->stop();
+  static_cast<SLocalData*>(_sender->mpData)->mpTimer->stop();
 }
 
 int LCQJScriptHiden::mObjectCounter = 0;
 
-#define mpLocalData ((reinterpret_cast<SLocalData*>(mpData)))
+#define mpLocalData ((static_cast<SLocalData*>(mpData)))
+
+static void doDeleteThread(QThread*obj)
+  {
+    obj->exit(0);
+    obj->terminate();
+    obj->wait();
+      obj->deleteLater();
+  }
+
+static void doDeleteTimer(QTimer *obj)
+  {
+    obj->stop();
+      obj->deleteLater();
+  }
+
+
+
 //==============================================================================LCQJScriptHiden
 LCQJScriptHiden::LCQJScriptHiden(const QString& _script, QObject* _parent) : 
-  QObject(_parent)
+  QObject(_parent),
+  mpData(nullptr)
 {
 
-  mpData = new SLocalData;
+  mpData = static_cast<void*>(new SLocalData);
   mpLocalData->mScriptString = _script;
-  mpLocalData->mpThread = new QThread;
-  mpLocalData->mpTimer = new QTimer;
+  mpLocalData->mpTimer = QSharedPointer<QTimer>(new QTimer, doDeleteTimer);
+  mpLocalData->mpThread = QSharedPointer<QThread>(new QThread, doDeleteThread);
 
-  moveToThread(mpLocalData->mpThread);
-  mpLocalData->mpTimer->moveToThread(mpLocalData->mpThread);
+  moveToThread(mpLocalData->mpThread.data());
+  mpLocalData->mpTimer->moveToThread(mpLocalData->mpThread.data());
+  mpLocalData->jsengin.moveToThread(mpLocalData->mpThread.data());
+  /* mpLocalData->jsvalue.moveToThread(mpLocalData->mpThread); */
 
   int nobj = mObjectCounter;
 
         mpLocalData->jsvalue = mpLocalData->jsengin.newQObject(new LCQJSApplicationInterface);
         mpLocalData->jsengin.globalObject().setProperty(__slApplicationProp, mpLocalData->jsvalue);
   
-  connect(mpLocalData->mpTimer, &QTimer::timeout, 
+  connect(mpLocalData->mpTimer.data(), &QTimer::timeout, 
       [this, nobj]
       {
-        qDebug() << "************************************Script timer timeout " << nobj;
+      for(int i = 0; i < 10000; i++)
+        qDebug() << "Script timer timeout " << nobj<< " i = " << i;
+        
 
-        mpLocalData->jsengin.evaluate(mpLocalData->mScriptString);
+        /* mpLocalData->jsengin.evaluate(mpLocalData->mScriptString); */
 
         /* for(int i = 0; i < 100; i++) */
         /* { */
@@ -116,8 +141,6 @@ LCQJScriptHiden::LCQJScriptHiden(const QString& _script, QObject* _parent) :
   /*     }); */
 
 
-
-
   mpLocalData->mpThread->start();
   mObjectCounter++;
 }
@@ -125,9 +148,16 @@ LCQJScriptHiden::LCQJScriptHiden(const QString& _script, QObject* _parent) :
 //------------------------------------------------------------------------------
 LCQJScriptHiden::~LCQJScriptHiden()
 {
-  mpLocalData->mpThread->deleteLater();
-  mpLocalData->mpTimer->deleteLater();
-  delete mpLocalData;
+  if(mpLocalData)
+  {
+    /* mpLocalData->mpThread->terminate(); */
+    /* mpLocalData->mpThread->quit(); */
+    /* mpLocalData->mpThread->wait(); */
+
+    /* mpLocalData->mpThread->deleteLater(); */
+    /* mpLocalData->mpTimer->deleteLater(); */
+    mpLocalData->deleteLater();
+  }
 }
 
 //------------------------------------------------------------------------------
@@ -147,6 +177,12 @@ void LCQJScriptHiden::customEvent(QEvent* _event)
 {
     if(_event->type() == CEventBase::msExtendedEventType)
     {
-        static_cast<CEventBase*>(_event)->handle(this);
+      CEventBase* e = dynamic_cast<CEventBase*>(_event);
+      if(e == nullptr)
+      {
+        qDebug() << "LCQJScriptHiden::customEvent dynamic cast err";
+        return;
+      }
+      e->handle(this);
     }
 }

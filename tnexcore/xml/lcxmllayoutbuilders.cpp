@@ -40,6 +40,6 @@ bool LCXmlLayoutBuilders::add(const QString &_name, void *_builder)
 
     __slBuildersMap.insert(_name,
                          QSharedPointer<LIXmlLayoutBuilder>
-                            (reinterpret_cast<LIXmlLayoutBuilder*>(_builder)));
+                            (static_cast<LIXmlLayoutBuilder*>(_builder)));
     return true;
 }

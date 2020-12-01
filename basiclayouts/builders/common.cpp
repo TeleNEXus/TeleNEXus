@@ -9,10 +9,10 @@ CCommonAttributes::CCommonAttributes()
 }
 
 //------------------------------------------------------------------------------
-Qt::AlignmentFlag 
+Qt::Alignment
 CCommonAttributes::SAligns::toFlags(const QString& _attributes) const
 {
-    quint16 flags = 0;
+  Qt::Alignment flags = 0;
 
     if(_attributes.isNull())
     {
@@ -60,5 +60,5 @@ CCommonAttributes::SAligns::toFlags(const QString& _attributes) const
 
     if(flags == 0) return Qt::AlignLeft;
 
-    return static_cast<Qt::AlignmentFlag>(flags);
+    return flags;
 }

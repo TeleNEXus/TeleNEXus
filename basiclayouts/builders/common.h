@@ -21,7 +21,7 @@ public:
             QString Bottom  = "bottom";
             QString VCenter = "vcenter";
         }vals;
-        Qt::AlignmentFlag toFlags(const QString& _attributes) const;
+        Qt::Alignment toFlags(const QString& _attributes) const;
         SAligns(){}
     };
     static const SAligns mAligns;

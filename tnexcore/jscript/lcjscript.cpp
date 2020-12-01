@@ -71,13 +71,14 @@ struct SLocalData
   int mInterval = 0;
   LCQJScriptHiden* mpScriptHiden = nullptr;
 };
+
 //==============================================================================
 #define mpLocalData (static_cast<SLocalData*>(mpData))
 
 //==============================================================================
 LCJScript::LCJScript(const QString& _script, int _interval) 
 {
-  mpData = new SLocalData();
+  mpData = static_cast<void*>(new SLocalData());
   mpLocalData->mpScriptHiden = new LCQJScriptHiden(_script);
   mpLocalData->mInterval= _interval;
 }
