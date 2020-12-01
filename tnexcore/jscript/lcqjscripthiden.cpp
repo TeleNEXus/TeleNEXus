@@ -154,8 +154,8 @@ LCQJScriptHiden::~LCQJScriptHiden()
   if(mpLocalData)
   {
     /* mpLocalData->mpThread->terminate(); */
-    /* mpLocalData->mpThread->quit(); */
-    /* mpLocalData->mpThread->wait(); */
+    mpLocalData->mpThread->quit();
+    mpLocalData->mpThread->wait();
 
     /* mpLocalData->mpThread->deleteLater(); */
     /* mpLocalData->mpTimer->deleteLater(); */
