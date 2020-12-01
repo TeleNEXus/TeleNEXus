@@ -12,8 +12,9 @@ LCQJSApplicationInterface::~LCQJSApplicationInterface()
 {
   qDebug() << "LCQJSApplicationInterface destructor";
 }
+
 //------------------------------------------------------------------------------
-void LCQJSApplicationInterface::printapp(const QString& _str)
+void LCQJSApplicationInterface::print(const QString& _str)
 {
   qDebug() << _str;
 }

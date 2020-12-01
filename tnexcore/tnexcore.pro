@@ -33,6 +33,7 @@ SOURCES += \
         ../../common/lqvalidatoru32.cpp \
         jscript/lcqjsapplicationinterface.cpp \
         jscript/lcjscript.cpp \
+        jscript/lcqjscripthiden.cpp \
         xml/lcxmlcommon.cpp \
         xml/lcxmlmain.cpp \
         xml/lcxmlbuildersloader.cpp \
@@ -64,6 +65,7 @@ HEADERS += \
     ../common/interfaces/LIJScript.h \
     jscript/lcqjsapplicationinterface.h \
     jscript/lcjscript.h \
+    jscript/lcqjscripthiden.h \
     xml/lcxmlcommon.h \
     xml/lcxmlmain.h \
     xml/lcxmlbuildersloader.h \

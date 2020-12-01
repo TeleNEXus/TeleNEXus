@@ -18,6 +18,7 @@ public slots:
   QString getFullFileName(const QString& _file);
   QVariantList getArray();
   QVariantList getArray(const QVariantList _list);
+  void print(const QString&);
     
 };
 #endif
