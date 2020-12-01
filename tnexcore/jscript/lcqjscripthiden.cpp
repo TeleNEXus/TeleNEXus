@@ -119,6 +119,7 @@ LCQJScriptHiden::LCQJScriptHiden(const QString& _script, QObject* _parent) :
         /*   qDebug() << "Script timer timeout " << mpLocalData->mpTimer->interval() << " i = " << i; */
         /* } */
       });
+  connect(mpLocalData->mpThread.data(), &QThread::finished, [this]{mpLocalData->mpTimer->stop();});
 
   
   /* connect(mpLocalData->mpTimer, &QTimer::timeout, */ 
