@@ -71,7 +71,6 @@ int LCQJScriptHiden::mObjectCounter = 0;
 static void doDeleteThread(QThread*obj)
   {
     obj->exit(0);
-    obj->terminate();
     obj->wait();
       obj->deleteLater();
   }
@@ -92,8 +91,10 @@ LCQJScriptHiden::LCQJScriptHiden(const QString& _script, QObject* _parent) :
 
   mpData = static_cast<void*>(new SLocalData);
   mpLocalData->mScriptString = _script;
-  mpLocalData->mpTimer = QSharedPointer<QTimer>(new QTimer, doDeleteTimer);
-  mpLocalData->mpThread = QSharedPointer<QThread>(new QThread, doDeleteThread);
+  /* mpLocalData->mpTimer = QSharedPointer<QTimer>(new QTimer, doDeleteTimer); */
+  /* mpLocalData->mpThread = QSharedPointer<QThread>(new QThread, doDeleteThread); */
+  mpLocalData->mpTimer = QSharedPointer<QTimer>(new QTimer);
+  mpLocalData->mpThread = QSharedPointer<QThread>(new QThread);
 
   moveToThread(mpLocalData->mpThread.data());
   mpLocalData->mpTimer->moveToThread(mpLocalData->mpThread.data());
@@ -108,11 +109,12 @@ LCQJScriptHiden::LCQJScriptHiden(const QString& _script, QObject* _parent) :
   connect(mpLocalData->mpTimer.data(), &QTimer::timeout, 
       [this, nobj]
       {
-      for(int i = 0; i < 10000; i++)
-        qDebug() << "Script timer timeout " << nobj<< " i = " << i;
+      /* for(int i = 0; i < 10000; i++) */
+        /* qDebug() << "Script timer timeout " << nobj<< " i = " << i; */
+        qDebug() << "Script timer timeout " << nobj;
         
 
-        /* mpLocalData->jsengin.evaluate(mpLocalData->mScriptString); */
+        mpLocalData->jsengin.evaluate(mpLocalData->mScriptString);
 
         /* for(int i = 0; i < 100; i++) */
         /* { */
@@ -120,7 +122,7 @@ LCQJScriptHiden::LCQJScriptHiden(const QString& _script, QObject* _parent) :
         /* } */
       });
   connect(mpLocalData->mpThread.data(), &QThread::finished, [this]{mpLocalData->mpTimer->stop();});
-
+connect( mpLocalData->mpThread.data(), SIGNAL( finished() ), mpLocalData->mpThread.data(), SLOT( deleteLater() ) );
   
   /* connect(mpLocalData->mpTimer, &QTimer::timeout, */ 
   /*     [this, nobj] */
