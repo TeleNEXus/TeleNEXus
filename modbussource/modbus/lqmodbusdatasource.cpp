@@ -870,7 +870,7 @@ void LQModbusDataSource::start(QSharedPointer<QThread> _thread, int _updateInter
 
     mspThread = _thread;
     moveToThread(mspThread.data());
-    if(!mspThread.data()->isRunning()) mspThread.data()->start();
+    if(!mspThread->isRunning()) mspThread->start();
 
     _updateIntervalMs = (_updateIntervalMs > 50) ? (_updateIntervalMs) : (50);
 

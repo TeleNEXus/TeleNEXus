@@ -1,4 +1,5 @@
 #include "lcjscript.h"
+#include "lcqjscripthiden.h"
 #include "lcqjsapplicationinterface.h"
 #include <QJSEngine>
 #include <QTimer>
@@ -9,89 +10,95 @@
 static const QString __slApplicationProp = "Application";
 
 //==============================================================================
-class CLocalData : public QObject
+/* class CLocalData : public QObject */
+/* { */
+/* private: */
+
+/*   QJSEngine   mJSEngin; */
+/*   QJSValue    mJSValue; */
+/*   QString     jsScript; */
+/*   QTimer      *mpTimer = nullptr; */
+/*   QThread     *mpThread = nullptr; */
+
+/* public: */
+/*   explicit CLocalData() = delete; */
+/*   CLocalData(const QString& _script, int _interval) : */ 
+/*     QObject(nullptr), */ 
+/*     jsScript(_script) */
+/*   { */
+/*     mJSValue = mJSEngin.newQObject(new LCQJSApplicationInterface); */
+/*     mJSEngin.globalObject().setProperty(__slApplicationProp, mJSValue); */
+/*     mpThread = new QThread; */
+
+/*     mpTimer = new QTimer; */
+/*     mpTimer->moveToThread(mpThread); */
+/*     QObject::connect(mpThread, &QThread::started, [&]{mpTimer->start();}); */
+/*     QObject::connect(mpThread, &QThread::finished, [&]{mpTimer->stop();}); */
+/*     if(_interval <= 0) */
+/*     { */
+/*       mpTimer->setSingleShot(true); */
+/*       _interval = 0; */
+/*     } */
+
+/*     mpTimer->setInterval(_interval); */
+
+/*     QObject::connect(mpTimer, &QTimer::timeout, */
+/*         [&]() */
+/*         { */
+/*           mJSEngin.evaluate(jsScript); */
+/*         }); */
+/*   } */
+
+/*   ~CLocalData() */
+/*   { */
+/*     if(mpTimer) { mpTimer->deleteLater(); } */
+/*     if(mpThread) { mpThread->deleteLater(); } */
+/*   } */
+
+/*   void start() */
+/*   { */
+/*     mpThread->start(); */
+/*   } */
+
+/*   void stop() */
+/*   { */
+/*     mpThread->quit(); */
+/*   } */
+/* }; */
+
+struct SLocalData
 {
-private:
-  QJSEngine mJSEngin;
-  QJSValue  mJSValue;
-  QString jsScript;
-  QTimer *timer = nullptr;
-  QThread *thr;
-
-public:
-  explicit CLocalData() = delete;
-  CLocalData(const QString& _script, int _interval) : 
-    QObject(nullptr), 
-    jsScript(_script)
-  {
-    mJSValue = mJSEngin.newQObject(new LCQJSApplicationInterface);
-    mJSEngin.globalObject().setProperty(__slApplicationProp, mJSValue);
-    thr = new QThread;
-
-    timer = new QTimer;
-    timer->moveToThread(thr);
-    QObject::connect(thr, &QThread::started, [&]{timer->start();});
-    QObject::connect(thr, &QThread::finished, [&]{timer->stop();});
-    if(_interval <= 0)
-    {
-      timer->setSingleShot(true);
-      _interval = 0;
-    }
-
-    timer->setInterval(_interval);
-
-    QObject::connect(timer, &QTimer::timeout,
-        [&]()
-        {
-          mJSEngin.evaluate(jsScript);
-        });
-    thr->start();
-  }
-
-  ~CLocalData()
-  {
-    if(timer) timer->deleteLater();
-  }
-
-  void start()
-  {
-    /* if(timer->isActive()) return; */
-    /* timer->start(); */
-    thr->start();
-  }
-
-  void stop()
-  {
-    thr->quit();
-    /* timer->stop(); */
-  }
+  int mInterval = 0;
+  LCQJScriptHiden* mpScriptHiden = nullptr;
 };
-
 //==============================================================================
-#define mData (*(static_cast<CLocalData*>(mpData)))
+#define mpLocalData (static_cast<SLocalData*>(mpData))
 
 //==============================================================================
 LCJScript::LCJScript(const QString& _script, int _interval) 
 {
-  mpData = new CLocalData(_script, _interval);
+  mpData = new SLocalData();
+  mpLocalData->mpScriptHiden = new LCQJScriptHiden(_script);
+  mpLocalData->mInterval= _interval;
 }
 
 //------------------------------------------------------------------------------
 LCJScript::~LCJScript()
 {
-  mData.deleteLater();
+  mpLocalData->mpScriptHiden->deleteLater();
+  delete mpLocalData;
 }
 
 //------------------------------------------------------------------------------
 void LCJScript::start() 
 {
-  mData.start();
+  mpLocalData->mpScriptHiden->start(mpLocalData->mInterval);
 }
 
 //------------------------------------------------------------------------------
 void LCJScript::stop() 
 {
-  mData.stop();
+  mpLocalData->mpScriptHiden->stop();
 }
 
 

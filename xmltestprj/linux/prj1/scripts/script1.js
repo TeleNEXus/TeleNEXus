@@ -1,8 +1,7 @@
-Application.printapp("------Script 1");
-// var j;
-str = new String;
-for(i = 0; i < 300; i++)
+Application.print("------Script 1");
+// str = new String;
+for(i = 0; i < 3; i++)
 {
-  str = i;
-  Application.printapp("------Script 1 cycle " + str);
+  // str = i;
+  Application.print("------Script 1 cycle " + i);
 }

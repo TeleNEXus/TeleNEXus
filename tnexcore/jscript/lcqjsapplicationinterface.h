@@ -13,7 +13,7 @@ public:
   ~LCQJSApplicationInterface();
 
 public slots:
-  void printapp(const QString& _str);
+  void print(const QString& _str);
 };
 
 #endif

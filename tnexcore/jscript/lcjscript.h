@@ -9,6 +9,7 @@ class LCJScript : public LIJScript
 private:
   void* mpData;
 public:
+  LCJScript() = delete;
   explicit LCJScript(const QString& _script, int _interval = -1);
   virtual ~LCJScript();
   virtual void start() override;

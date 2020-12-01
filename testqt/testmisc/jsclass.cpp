@@ -53,3 +53,8 @@ QVariantList LJsClass::getArray(const QVariantList _list)
 
   return list;
 }
+
+void LJsClass::print(const QString& _str)
+{
+  qDebug() << _str;
+}
