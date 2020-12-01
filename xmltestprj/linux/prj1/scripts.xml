@@ -2,14 +2,63 @@
 
 <SCRIPTS>
   <!-- <script id="s1" file="scripts/script1.js" interval="500" state="start"/> -->
-  <script id="s1" file="scripts/script1.js" interval="500" state="start"/>
-  <script id="s2" file="scripts/script2.js" interval="500" state="start"/>
-  <script id="s3" file="scripts/script2.js" interval="500" state="start"/>
-  <script id="s4" file="scripts/script2.js" interval="500" state="start"/>
-  <script id="s5" file="scripts/script2.js" interval="500" state="start"/>
-  <script id="s6" file="scripts/script2.js" interval="500" state="start"/>
-  <script id="s7" file="scripts/script1.js" interval="500" state="start"/>
-  <script id="s8" file="scripts/script1.js" interval="500" state="start"/>
-  <script id="s9" file="scripts/script1.js" interval="500" state="start"/>
+  <script id="s1" file="scripts/script1.js" interval="10" state="start"/>
+  <script id="s2" file="scripts/script2.js" interval="10" state="start"/>
+  <!-- <script file="scripts/script2.js" interval="10" state="start"/> -->
+  <!-- <script file="scripts/script2.js" interval="10" state="start"/> -->
+  <!-- <script file="scripts/script2.js" interval="10" state="start"/> -->
+  <!-- <script file="scripts/script2.js" interval="10" state="start"/> -->
+  <!-- <script file="scripts/script1.js" interval="10" state="start"/> -->
+  <!-- <script file="scripts/script1.js" interval="10" state="start"/> -->
+  <!-- <script file="scripts/script1.js" interval="10" state="start"/> -->
+  <!-- <script file="scripts/script1.js" interval="10" state="start"/> -->
+  <!-- <script file="scripts/script1.js" interval="10" state="start"/> -->
+  <!-- <script file="scripts/script1.js" interval="10" state="start"/> -->
+  <!-- <script file="scripts/script1.js" interval="10" state="start"/> -->
+  <!-- <script file="scripts/script1.js" interval="10" state="start"/> -->
+  <!-- <script file="scripts/script1.js" interval="10" state="start"/> -->
+  <!-- <script file="scripts/script1.js" interval="10" state="start"/> -->
+  <!-- <script file="scripts/script1.js" interval="10" state="start"/> -->
+  <!-- <script file="scripts/script1.js" interval="10" state="start"/> -->
+  <!-- <script file="scripts/script1.js" interval="10" state="start"/> -->
+  <!-- <script file="scripts/script1.js" interval="10" state="start"/> -->
+  <!-- <script file="scripts/script1.js" interval="10" state="start"/> -->
+  <!-- <script file="scripts/script1.js" interval="10" state="start"/> -->
+  <!-- <script file="scripts/script1.js" interval="10" state="start"/> -->
+  <!-- <script file="scripts/script1.js" interval="10" state="start"/> -->
+  <!-- <script file="scripts/script1.js" interval="10" state="start"/> -->
+  <!-- <script file="scripts/script1.js" interval="10" state="start"/> -->
+  <!-- <script file="scripts/script1.js" interval="10" state="start"/> -->
+  <!-- <script file="scripts/script1.js" interval="10" state="start"/> -->
+  <!-- <script file="scripts/script1.js" interval="10" state="start"/> -->
+  <!-- <script file="scripts/script1.js" interval="10" state="start"/> -->
+  <!-- <script file="scripts/script1.js" interval="10" state="start"/> -->
+  <!-- <script file="scripts/script1.js" interval="10" state="start"/> -->
+  <!-- <script file="scripts/script1.js" interval="10" state="start"/> -->
+  <!-- <script file="scripts/script1.js" interval="10" state="start"/> -->
+  <!-- <script file="scripts/script1.js" interval="10" state="start"/> -->
+  <!-- <script file="scripts/script1.js" interval="10" state="start"/> -->
+  <!-- <script file="scripts/script1.js" interval="10" state="start"/> -->
+  <!-- <script file="scripts/script1.js" interval="10" state="start"/> -->
+  <!-- <script file="scripts/script1.js" interval="10" state="start"/> -->
+  <!-- <script file="scripts/script1.js" interval="10" state="start"/> -->
+  <!-- <script file="scripts/script1.js" interval="10" state="start"/> -->
+  <!-- <script file="scripts/script1.js" interval="10" state="start"/> -->
+  <!-- <script file="scripts/script1.js" interval="10" state="start"/> -->
+  <!-- <script file="scripts/script1.js" interval="10" state="start"/> -->
+  <!-- <script file="scripts/script1.js" interval="10" state="start"/> -->
+  <!-- <script file="scripts/script1.js" interval="10" state="start"/> -->
+  <!-- <script file="scripts/script1.js" interval="500" state="start"/> -->
+  <!-- <script file="scripts/script1.js" interval="500" state="start"/> -->
+  <!-- <script file="scripts/script1.js" interval="500" state="start"/> -->
+  <!-- <script file="scripts/script1.js" interval="500" state="start"/> -->
+  <!-- <script file="scripts/script1.js" interval="500" state="start"/> -->
+  <!-- <script file="scripts/script1.js" interval="500" state="start"/> -->
+  <!-- <script file="scripts/script1.js" interval="500" state="start"/> -->
+  <!-- <script file="scripts/script1.js" interval="500" state="start"/> -->
+  <!-- <script file="scripts/script1.js" interval="500" state="start"/> -->
+  <!-- <script file="scripts/script1.js" interval="500" state="start"/> -->
+  <!-- <script file="scripts/script1.js" interval="500" state="start"/> -->
+  <!-- <script file="scripts/script1.js" interval="500" state="start"/> -->
   <!-- <script id="s2" file="scripts/script2.js" interval="0" state="start"/> -->
 </SCRIPTS>

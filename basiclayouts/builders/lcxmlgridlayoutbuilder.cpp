@@ -19,10 +19,10 @@ public:
     QGridLayout* mpLayout = nullptr;
 
     //Карта глобального выравнивания элементов столбцов.
-    QMap<int, Qt::AlignmentFlag> mColumnAlign; 
+    QMap<int, Qt::Alignment> mColumnAlign; 
 
     //Карта глобального выравнивания элементов строк.
-    QMap<int, Qt::AlignmentFlag> mRowAlign;
+    QMap<int, Qt::Alignment> mRowAlign;
 private:
 public:
     CBuildData() = delete;
@@ -179,7 +179,7 @@ static int addRowWidgets(
 {
     int col = 0;
 
-    quint16 align_flags = 0; 
+    Qt::Alignment  align_flags = 0; 
     //Анализ атрибута выравнивания элемента.
     QString attr = _element.attribute(
                     CCommonAttributes::mAligns.attrName);
@@ -215,7 +215,7 @@ static int addRowWidgets(
                     widget, 
                     _buildData.mRow, 
                     curr_col,
-                    static_cast<Qt::AlignmentFlag>(align_flags));
+                    align_flags);
         }
         else if(_buildData.mColumnAlign.contains(curr_col))
         {
@@ -223,8 +223,7 @@ static int addRowWidgets(
                     widget, 
                     _buildData.mRow, 
                     curr_col,
-                    static_cast<Qt::AlignmentFlag>(
-                        _buildData.mColumnAlign[curr_col]));
+                    _buildData.mColumnAlign[curr_col]);
         }
         else
         {
@@ -368,7 +367,8 @@ static int addColWidgets(
 {
     int row = 0;
 
-    quint16 align_flags = 0; 
+    /* quint16 align_flags = 0; */ 
+    Qt::Alignment align_flags = 0; 
 
     //Анализ атрибута выравнивания элемента.
     QString attr = _element.attribute(
@@ -405,7 +405,7 @@ static int addColWidgets(
                     widget, 
                     curr_row,
                     _buildData.mColumn, 
-                    static_cast<Qt::AlignmentFlag>(align_flags));
+                    align_flags);
         }
         else if(_buildData.mRowAlign.contains(curr_row))
         {
@@ -413,8 +413,7 @@ static int addColWidgets(
                     widget, 
                     curr_row,
                     _buildData.mColumn,
-                    static_cast<Qt::AlignmentFlag>(
-                        _buildData.mRowAlign[curr_row]));
+                        _buildData.mRowAlign[curr_row]);
         }
         else
         {

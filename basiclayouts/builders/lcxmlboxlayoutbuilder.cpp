@@ -5,6 +5,7 @@
 #include <QDomNode>
 #include <QBoxLayout>
 #include <QDebug>
+#include <qnamespace.h>
 #include "common.h"
 //==============================================================================
 const LCXmlBoxLayoutBuilder::SAttributes LCXmlBoxLayoutBuilder::mAttributes;
@@ -167,7 +168,7 @@ static void addWidgets(
 
     QString attr_align = _element.attribute(
             CCommonAttributes::mAligns.attrName);
-    quint16 align = 0;
+    Qt::Alignment align = 0;
     if(!attr_align.isNull())
     {
         align = CCommonAttributes::mAligns.toFlags(attr_align);
@@ -195,7 +196,7 @@ static void addWidgets(
             else
             {
                 _layout->addWidget(
-                        widget, 0, static_cast<Qt::AlignmentFlag>(align));
+                        widget, 0, align);
             }
         }
     }

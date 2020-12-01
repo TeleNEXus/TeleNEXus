@@ -914,7 +914,7 @@ void LQModbusDataSource::customEvent(QEvent* _event)
 {
     if(_event->type() == CQEventBase::msExtendedEventType)
     {
-        reinterpret_cast<CQEventBase*>(_event)->handle(this);
+        static_cast<CQEventBase*>(_event)->handle(this);
     }
 }
 

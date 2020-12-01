@@ -155,11 +155,18 @@ bool LCQRemLineEdit::event(QEvent *_event)
 
   case QEvent::KeyPress:
     //Очиска фокуса видета при нажатии клавиши Escape.
-    if( static_cast<QKeyEvent*>(_event)->key() == Qt::Key_Escape)
     {
-      clearFocus();
-      return false;
+      QKeyEvent* e = dynamic_cast<QKeyEvent*>(_event);
+      if(e)
+      {
+        if( e->key() == Qt::Key_Escape)
+        {
+          clearFocus();
+          return false;
+        }
+      }
     }
+    break;
 
   default:
     break;
