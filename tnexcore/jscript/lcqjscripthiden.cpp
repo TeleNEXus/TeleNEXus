@@ -89,21 +89,6 @@ LCQJScriptHiden::~LCQJScriptHiden()
 }
 
 //------------------------------------------------------------------------------
-void LCQJScriptHiden::customEvent(QEvent* _event)
-{
-    if(_event->type() == CEventBase::msExtendedEventType)
-    {
-      CEventBase* e = dynamic_cast<CEventBase*>(_event);
-      if(e == nullptr)
-      {
-        qDebug() << "LCQJScriptHiden::customEvent dynamic cast err";
-        return;
-      }
-      e->handle(this);
-    }
-}
-
-//------------------------------------------------------------------------------
 void LCQJScriptHiden::timerEvent(QTimerEvent* _event)
 {
   Q_UNUSED(_event);
@@ -154,4 +139,17 @@ void LCQJScriptHiden::scriptEvaluate()
   mJSEngin.evaluate(mScriptString);
 }
 
-
+//------------------------------------------------------------------------------
+void LCQJScriptHiden::customEvent(QEvent* _event)
+{
+    if(_event->type() == CEventBase::msExtendedEventType)
+    {
+      CEventBase* e = dynamic_cast<CEventBase*>(_event);
+      if(e == nullptr)
+      {
+        qDebug() << "LCQJScriptHiden::customEvent dynamic cast err";
+        return;
+      }
+      e->handle(this);
+    }
+}
