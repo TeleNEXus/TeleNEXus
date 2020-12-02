@@ -31,7 +31,7 @@ INCLUDEPATH +=                                  \
 
 SOURCES += \
         ../../common/lqvalidatoru32.cpp \
-        jscript/lcqjsapplicationinterface.cpp \
+        jscript/lcqjsappinterface.cpp \
         jscript/lcjscript.cpp \
         jscript/lcqjscripthiden.cpp \
         xml/lcxmlcommon.cpp \
@@ -63,7 +63,7 @@ HEADERS += \
     ../common/interfaces/xmlbuilders/LIXmlWidgetBuilder.h \
     ../common/interfaces/LIWindow.h \
     ../common/interfaces/LIJScript.h \
-    jscript/lcqjsapplicationinterface.h \
+    jscript/lcqjsappinterface.h \
     jscript/lcjscript.h \
     jscript/lcqjscripthiden.h \
     xml/lcxmlcommon.h \

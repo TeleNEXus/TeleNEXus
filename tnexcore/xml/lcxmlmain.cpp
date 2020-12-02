@@ -19,6 +19,7 @@
 #include <QCommandLineParser>
 
 #include <QStringList>
+#include <QThread>
 
 static QString      __slXmlMainFileName;
 static QString      __slXmlMainFilePath;
