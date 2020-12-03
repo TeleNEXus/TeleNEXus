@@ -9,10 +9,9 @@
 #include <QMutex>
 #include <QWaitCondition>
 
-
 class QThread;
 
-class LCQJSAppService final : private QObject 
+class LCQJSAppService final : public QObject 
 {
   Q_OBJECT
 private:
@@ -39,9 +38,9 @@ private:
 
 private:
   QThread* mpThread;
-  QWaitCondition mWaitCond;
-  QMutex mMutexEvent;
-  QMutex mMutexThread;
+  /* QWaitCondition mWaitCond; */
+  /* QMutex mMutexEvent; */
+  /* QMutex mMutexThread; */
 
   LCQJSAppService();
   ~LCQJSAppService();
@@ -49,11 +48,12 @@ private:
   LCQJSAppService& operator=(const LCQJSAppService&) = delete;
 
 public:
+
   static QSharedPointer<LCQJSAppService> getService();
-  void readSourceData(const QString& _dataId);
+  QString readSourceData(const QString& _dataId);
 
 private:
-  virtual void customEvent(QEvent*) override;
+  /* virtual void customEvent(QEvent*) override; */
   static void serviceDeleter(LCQJSAppService* _inst);
 
 

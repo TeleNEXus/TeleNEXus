@@ -1,5 +1,6 @@
 
 #include "lcqjsappservice.h"
+#include "lcqreadfromsourcereq.h"
 
 #include <QCoreApplication>
 #include <QMutex>
@@ -27,8 +28,6 @@ LCQJSAppService::CEventReadData::CEventReadData(
 void LCQJSAppService::CEventReadData::handle(LCQJSAppService* _sender)
 {
   Q_UNUSED(_sender);
-  qDebug() << "LCQJSAppService::CEventReadData::handle data ID = " << edDataId;
-  _sender->mWaitCond.wakeOne();
 }
 
 //==============================================================================LCQJSAppService
@@ -72,38 +71,32 @@ QSharedPointer<LCQJSAppService> LCQJSAppService::getService()
 }
 
 //------------------------------------------------------------------------------
-void LCQJSAppService::readSourceData(const QString& _dataId)
+QString LCQJSAppService::readSourceData(const QString& _dataId)
 {
-  QMutex mutex;
-  QWaitCondition cond;
-  mutex.lock();
-  mMutexEvent.lock();
-  QCoreApplication::postEvent(this, new CEventReadData(_dataId, mutex));
-  
-  
-  mWaitCond.wait(&mMutexEvent);
+  LCQReadFromSourceReq req(_dataId, mpThread);
+  return req.getData();
 }
 
-//------------------------------------------------------------------------------
-void LCQJSAppService::customEvent(QEvent* _event)
-{
+/* //------------------------------------------------------------------------------ */
+/* void LCQJSAppService::customEvent(QEvent* _event) */
+/* { */
 
-  //Внимание!!!
-  //Необходимо для синхронизации с началом ожидания вызывающего потока.
-  mMutexEvent.lock();
-  mMutexEvent.unlock();
+/*   //Внимание!!! */
+/*   //Необходимо для синхронизации с началом ожидания вызывающего потока. */
+/*   mMutexEvent.lock(); */
+/*   mMutexEvent.unlock(); */
 
-  if(_event->type() == CEventBase::msExtendedEventType)
-  {
-    CEventBase* e = dynamic_cast<CEventBase*>(_event);
-    if(e == nullptr)
-    {
-      qDebug() << "LCQJScriptHiden::customEvent dynamic cast err";
-      return;
-    }
-    e->handle(this);
-  }
-}
+/*   if(_event->type() == CEventBase::msExtendedEventType) */
+/*   { */
+/*     CEventBase* e = dynamic_cast<CEventBase*>(_event); */
+/*     if(e == nullptr) */
+/*     { */
+/*       qDebug() << "LCQJScriptHiden::customEvent dynamic cast err"; */
+/*       return; */
+/*     } */
+/*     e->handle(this); */
+/*   } */
+/* } */
 
 
 
