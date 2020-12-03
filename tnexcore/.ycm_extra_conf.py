@@ -71,6 +71,7 @@ flags = [
              '-I', '../common',
              '-I', '../tnexcore/xml',
              '-I', '../tnexcore/jscript',
+             '-I', '../tnexcore/jscript/jsappservice',
              '-isystem',
              '/usr/include/x86_64-linux-gnu/qt5',
              '-isystem',

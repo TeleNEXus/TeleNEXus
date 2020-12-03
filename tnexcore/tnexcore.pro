@@ -28,12 +28,15 @@ INCLUDEPATH +=                                  \
         ../common/                              \
         xml/                                    \
         jscript/                                \
+        jscript/jsappservice                    \
 
 SOURCES += \
         ../../common/lqvalidatoru32.cpp \
         jscript/lcqjsappinterface.cpp \
         jscript/lcjscript.cpp \
         jscript/lcqjscripthiden.cpp \
+        jscript/jsappservice/lcqjsappservice.cpp \
+        jscript/jsappservice/lcqreadfromsourcereq.cpp \
         xml/lcxmlcommon.cpp \
         xml/lcxmlmain.cpp \
         xml/lcxmlbuildersloader.cpp \
@@ -66,6 +69,8 @@ HEADERS += \
     jscript/lcqjsappinterface.h \
     jscript/lcjscript.h \
     jscript/lcqjscripthiden.h \
+    jscript/jsappservice/lcqjsappservice.h \
+    jscript/jsappservice/lcqreadfromsourcereq.h \
     xml/lcxmlcommon.h \
     xml/lcxmlmain.h \
     xml/lcxmlbuildersloader.h \
