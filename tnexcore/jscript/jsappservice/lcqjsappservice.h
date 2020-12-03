@@ -10,52 +10,22 @@
 #include <QWaitCondition>
 
 class QThread;
+class LIApplication;
 
-class LCQJSAppService final : public QObject 
+class LCQJSAppService final 
 {
-  Q_OBJECT
-private:
-  //----------------------------------------------------------------------------CEventBase
-  class CEventBase : public QEvent
-  {
-  __LQ_EXTENDED_QEVENT_DECLARATION
-  public:
-      CEventBase();
-      virtual void handle(LCQJSAppService* _sender) = 0;
-  };
-
-  //----------------------------------------------------------------------------CEventReadData
-  class CEventReadData : public CEventBase 
-  {
-  private:
-    const QString& edDataId;
-    QMutex& edMutex;
-  public:
-      CEventReadData() = delete;
-      CEventReadData(const QString& _dataId, QMutex& _mutex);
-      virtual void handle(LCQJSAppService* _sender);
-  };
-
 private:
   QThread* mpThread;
-  /* QWaitCondition mWaitCond; */
-  /* QMutex mMutexEvent; */
-  /* QMutex mMutexThread; */
-
   LCQJSAppService();
-  ~LCQJSAppService();
   LCQJSAppService(const LCQJSAppService&) = delete;
   LCQJSAppService& operator=(const LCQJSAppService&) = delete;
-
 public:
 
+  ~LCQJSAppService();
   static QSharedPointer<LCQJSAppService> getService();
-  QString readSourceData(const QString& _dataId);
 
-private:
-  /* virtual void customEvent(QEvent*) override; */
-  static void serviceDeleter(LCQJSAppService* _inst);
-
+  QString readSourceData(QString _dataId);
+  QString getProjectPath();
 
 };
 #endif
