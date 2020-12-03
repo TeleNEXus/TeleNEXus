@@ -1,41 +1,40 @@
 
 #include "lcqjsappservice.h"
 #include "lcqreadfromsourcereq.h"
+#include "LIApplication.h"
+#include "lcxmlmain.h"
 
-#include <QCoreApplication>
 #include <QMutex>
 #include <QThread>
 #include <QDebug>
 
-//==============================================================================CEventBase
-__LQ_EXTENDED_QEVENT_IMPLEMENTATION(LCQJSAppService::CEventBase);
+/* //==============================================================================CEventBase */
+/* __LQ_EXTENDED_QEVENT_IMPLEMENTATION(LCQJSAppService::CEventBase); */
 
-LCQJSAppService::CEventBase::CEventBase() : 
-  QEvent(__LQ_EXTENDED_QEVENT_REGISTERED)
-{
-}
+/* LCQJSAppService::CEventBase::CEventBase() : */ 
+/*   QEvent(__LQ_EXTENDED_QEVENT_REGISTERED) */
+/* { */
+/* } */
 
-//==============================================================================CEventReadData
-LCQJSAppService::CEventReadData::CEventReadData(
-    const QString& _dataId,
-    QMutex& _mutex) :
-  edDataId(_dataId),
-  edMutex(_mutex)
-{
-}
+/* //==============================================================================CEventReadData */
+/* LCQJSAppService::CEventReadData::CEventReadData( */
+/*     const QString& _dataId, */
+/*     QMutex& _mutex) : */
+/*   edDataId(_dataId), */
+/*   edMutex(_mutex) */
+/* { */
+/* } */
 
-//------------------------------------------------------------------------------
-void LCQJSAppService::CEventReadData::handle(LCQJSAppService* _sender)
-{
-  Q_UNUSED(_sender);
-}
+/* //------------------------------------------------------------------------------ */
+/* void LCQJSAppService::CEventReadData::handle(LCQJSAppService* _sender) */
+/* { */
+/*   Q_UNUSED(_sender); */
+/* } */
 
 //==============================================================================LCQJSAppService
 LCQJSAppService::LCQJSAppService() : 
-  QObject(nullptr),
   mpThread(new QThread)
 {
-  moveToThread(mpThread);
   mpThread->start();
 }
 
@@ -48,33 +47,36 @@ LCQJSAppService::~LCQJSAppService()
 }
 
 //------------------------------------------------------------------------------
-void LCQJSAppService::serviceDeleter(LCQJSAppService* _inst)
-{
-  _inst->deleteLater();
-}
-
-//------------------------------------------------------------------------------
 QSharedPointer<LCQJSAppService> LCQJSAppService::getService()
 {
   static QWeakPointer<LCQJSAppService> wp_inst;
   static QMutex mutex;
-  QMutexLocker mlocker(&mutex);
+  QMutexLocker locker(&mutex);
 
   auto sp_inst = wp_inst.toStrongRef();
-  if(!sp_inst.isNull())
+  if(sp_inst.isNull())
   {
     sp_inst = 
-      QSharedPointer<LCQJSAppService>(new LCQJSAppService, serviceDeleter);
+      QSharedPointer<LCQJSAppService>(new LCQJSAppService);
     wp_inst = sp_inst;
   }
   return sp_inst;
 }
 
 //------------------------------------------------------------------------------
-QString LCQJSAppService::readSourceData(const QString& _dataId)
+QString LCQJSAppService::readSourceData(QString _dataId)
 {
-  LCQReadFromSourceReq req(_dataId, mpThread);
-  return req.getData();
+  /* LCQReadFromSourceReq req(_dataId, mpThread); */
+  auto req = LCQReadFromSourceReq::create();
+  req.data()->moveToThread(mpThread);
+  req.data()->moveToThread(mpThread);
+  return req->getData(_dataId);
+}
+
+//------------------------------------------------------------------------------
+QString LCQJSAppService::getProjectPath()
+{
+  return LCXmlMain::getApplicationInterface().getProjectPath();
 }
 
 /* //------------------------------------------------------------------------------ */

@@ -6,11 +6,12 @@
 #include <QObject>
 #include <QMutex>
 #include <QWaitCondition>
+#include <QSharedPointer>
 
 
 class QThread;
 
-class LCQReadFromSourceReq final : public QObject
+class LCQReadFromSourceReq  : public QObject
 {
   Q_OBJECT
 private:
@@ -29,27 +30,32 @@ private:
   {
   private:
     const QString& mDataId;
+    QString& mRetData;
   public:
       CEventRead() = delete;
-      CEventRead(const QString& _dataId);
+      CEventRead(const QString& _dataId, QString& _retData);
       virtual void handle(LCQReadFromSourceReq* _sender);
   };
 
+  /* QThread *mpThread; */
+  /* QString mDataId; */
   QMutex mMutexEvent;
   QWaitCondition mWaitCond;
-  QString mRetData;
+  /* QString mRetData; */
 
-public:
-  LCQReadFromSourceReq() = delete;
-  LCQReadFromSourceReq(QObject*) = delete;
+
+  /* LCQReadFromSourceReq(QObject*) = delete; */
 
   LCQReadFromSourceReq(
-      const QString& _dataId, 
-      QThread* _thread, 
-      QObject* _parent = nullptr);
+      /* const QString& _dataId, */ 
+      /* QThread* _thread */
+      );
 
+public:
   virtual ~LCQReadFromSourceReq();
-  QString getData();
-  virtual void customEvent(QEvent*); 
+  static QSharedPointer<LCQReadFromSourceReq> create();
+  QString getData(const QString& _dataId);
+private:
+  virtual void customEvent(QEvent*) override; 
 };
 #endif

@@ -4,6 +4,7 @@
 #include "lqextendevent.h"
 #include <QObject>
 #include <QJSEngine>
+#include <QDebug>
 
 class QTimer;
 class LCQJScriptHiden : public QObject
@@ -45,12 +46,15 @@ private:
   public:
     CEventEvaluate();
     virtual void handle(LCQJScriptHiden* _sender) override;
+
   };
 
   QString     mScriptString;
   QJSEngine   mJSEngin;
   QJSValue    mJSValue;
+
   QThread*    mpThread;
+
   int         mObjectNumber;
   int         mTimerId;
 
