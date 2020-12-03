@@ -11,31 +11,32 @@ LCQReadFromSourceReq::CEventBase::CEventBase() :
 }
 
 //==============================================================================CEventRead
-LCQReadFromSourceReq::CEventRead::CEventRead(const QString& _dataId,
-    QString& _retData) :
-  mDataId(_dataId),
-  mRetData(_retData)
+LCQReadFromSourceReq::CEventRead::CEventRead()
 {
 }
 
 //------------------------------------------------------------------------------
 void LCQReadFromSourceReq::CEventRead::handle(LCQReadFromSourceReq* _sender)
 {
-  Q_UNUSED(_sender)
-  mRetData = QString(
-      "LCQReadFromSourceReq::CEventRead::handle data Id = ").arg(mDataId);
+  _sender->mRetData = _sender->mDataId;
+  _sender->mWaitCond.wakeOne();
+
 }
 
-//==============================================================================
-QSharedPointer<LCQReadFromSourceReq> LCQReadFromSourceReq::create()
+static void requestDeleter(LCQReadFromSourceReq* _req)
 {
-  return QSharedPointer<LCQReadFromSourceReq>(new LCQReadFromSourceReq);
+  qDebug() << "Read Request Deleter";
+  _req->deleteLater();
+}
+//==============================================================================
+QSharedPointer<LCQReadFromSourceReq> LCQReadFromSourceReq::create(const QString& _dataId)
+{
+  return QSharedPointer<LCQReadFromSourceReq>(new LCQReadFromSourceReq(_dataId), requestDeleter);
 }
 
-LCQReadFromSourceReq::LCQReadFromSourceReq() :
-    /* const QString& _dataId, */
-    /* QThread* _thread): */
-  QObject(nullptr)
+LCQReadFromSourceReq::LCQReadFromSourceReq(const QString& _dataId) :
+  QObject(nullptr),
+  mDataId(_dataId)
 {
 }
 
@@ -45,15 +46,15 @@ LCQReadFromSourceReq::~LCQReadFromSourceReq()
 }
 
 //------------------------------------------------------------------------------
-QString LCQReadFromSourceReq::getData(const QString& _dataId)
+QString LCQReadFromSourceReq::getData()
 {
-  /* moveToThread(_thread); */
-  QString ret_data;
+  /* mMutexThread.lock(); */
   mMutexEvent.lock();
-  QCoreApplication::sendEvent(this, new CEventRead(_dataId, ret_data));
+  QCoreApplication::postEvent(this, new CEventRead());
   mWaitCond.wait(&mMutexEvent);
   mMutexEvent.unlock();
-  return ret_data;
+  /* mMutexThread.unlock(); */
+  return mRetData;
 }
 
 //------------------------------------------------------------------------------
@@ -67,10 +68,8 @@ void LCQReadFromSourceReq::customEvent(QEvent* _event)
     CEventBase* e = dynamic_cast<CEventBase*>(_event);
     if(e == nullptr)
     {
-      qDebug() << "LCQReadFromSourceReq::customEvent dynamic cast err";
       return;
     }
-    qDebug() << "LCQReadFromSourceReq::customEvent";
     e->handle(this);
   }
 }

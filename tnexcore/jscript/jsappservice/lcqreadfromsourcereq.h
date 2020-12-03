@@ -28,33 +28,30 @@ private:
   //----------------------------------------------------------------------------CEventBase
   class CEventRead: public CEventBase 
   {
-  private:
-    const QString& mDataId;
-    QString& mRetData;
   public:
-      CEventRead() = delete;
-      CEventRead(const QString& _dataId, QString& _retData);
+      CEventRead();
       virtual void handle(LCQReadFromSourceReq* _sender);
   };
 
   /* QThread *mpThread; */
-  /* QString mDataId; */
+  /* QMutex mMutexThread; */
   QMutex mMutexEvent;
   QWaitCondition mWaitCond;
-  /* QString mRetData; */
+  QString mDataId;
+  QString mRetData;
 
 
   /* LCQReadFromSourceReq(QObject*) = delete; */
 
   LCQReadFromSourceReq(
-      /* const QString& _dataId, */ 
+      const QString& _dataId
       /* QThread* _thread */
       );
 
 public:
   virtual ~LCQReadFromSourceReq();
-  static QSharedPointer<LCQReadFromSourceReq> create();
-  QString getData(const QString& _dataId);
+  static QSharedPointer<LCQReadFromSourceReq> create(const QString& _dataId);
+  QString getData();
 private:
   virtual void customEvent(QEvent*) override; 
 };
