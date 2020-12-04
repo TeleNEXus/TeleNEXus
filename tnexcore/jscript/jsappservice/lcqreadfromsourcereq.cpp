@@ -29,9 +29,13 @@ static void requestDeleter(LCQReadFromSourceReq* _req)
   _req->deleteLater();
 }
 //==============================================================================
-QSharedPointer<LCQReadFromSourceReq> LCQReadFromSourceReq::create(const QString& _dataId)
+QSharedPointer<LCQReadFromSourceReq> LCQReadFromSourceReq::create(
+    const QString& _dataId,
+    QThread* _thread)
 {
-  return QSharedPointer<LCQReadFromSourceReq>(new LCQReadFromSourceReq(_dataId), requestDeleter);
+  LCQReadFromSourceReq* req = new LCQReadFromSourceReq(_dataId);
+  req->moveToThread(_thread);
+  return QSharedPointer<LCQReadFromSourceReq>(req, requestDeleter);
 }
 
 LCQReadFromSourceReq::LCQReadFromSourceReq(const QString& _dataId) :
@@ -48,12 +52,10 @@ LCQReadFromSourceReq::~LCQReadFromSourceReq()
 //------------------------------------------------------------------------------
 QString LCQReadFromSourceReq::getData()
 {
-  /* mMutexThread.lock(); */
   mMutexEvent.lock();
   QCoreApplication::postEvent(this, new CEventRead());
   mWaitCond.wait(&mMutexEvent);
   mMutexEvent.unlock();
-  /* mMutexThread.unlock(); */
   return mRetData;
 }
 
