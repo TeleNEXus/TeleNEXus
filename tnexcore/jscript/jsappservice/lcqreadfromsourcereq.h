@@ -8,6 +8,9 @@
 #include <QWaitCondition>
 #include <QSharedPointer>
 
+#include "LIRemoteDataReader.h"
+#include "LIRemoteDataReadListener.h"
+#include "LIRemoteDataSource.h"
 
 class QThread;
 
@@ -15,6 +18,21 @@ class LCQReadFromSourceReq  : public QObject
 {
   Q_OBJECT
 private:
+
+  //----------------------------------------------------------------------------CReadListener
+  class CReadListener : public LIRemoteDataReadListener
+  {
+  private:
+    LCQReadFromSourceReq* mpRequest;
+  public:
+    CReadListener() =  delete;
+    CReadListener(LCQReadFromSourceReq* _req);
+
+    virtual ~CReadListener(){}
+    virtual void dataIsRead(
+        QSharedPointer<QByteArray> _data, 
+        LERemoteDataStatus _status) override;
+  };
 
   //----------------------------------------------------------------------------CEventBase
   class CEventBase : public QEvent
@@ -33,23 +51,27 @@ private:
       virtual void handle(LCQReadFromSourceReq* _sender);
   };
 
-  QMutex mMutexEvent;
-  QWaitCondition mWaitCond;
-  QString mDataId;
-  QString mRetData;
+  QString     mSourceId;
+  QString     mDataId;
+  QByteArray  mRetData;
 
-  LCQReadFromSourceReq(
-      const QString& _dataId
-      );
+  QSharedPointer<CReadListener>       mspDataListener;
+  QSharedPointer<LIRemoteDataReader>  mspDataReader;
+
+  QMutex          mMutexEvent;
+  QWaitCondition  mWaitCond;
+
+  LCQReadFromSourceReq(const QString& _sourceId, const QString& _dataId);
 
 public:
   virtual ~LCQReadFromSourceReq();
 
   static QSharedPointer<LCQReadFromSourceReq> create(
+      const QString& _sourceId,
       const QString& _dataId,
       QThread* _thread);
 
-  QString getData();
+  QByteArray getData();
 private:
   virtual void customEvent(QEvent*) override; 
 };

@@ -40,9 +40,17 @@ QString LCQJSAppInterface::getProjectPath()
 }
 
 //------------------------------------------------------------------------------
-QString LCQJSAppInterface::readSourceData(const QString& _dataId)
+QVariantList LCQJSAppInterface::readSourceData(
+    const QString& _sourceId, const QString& _dataId)
 {
-  return mpPrivateData->psAppService->readSourceData(_dataId); 
+  QByteArray data_array = 
+    mpPrivateData->psAppService->readSourceData(_sourceId, _dataId); 
+  QVariantList ret;
+  for(int i = 0; i < data_array.size(); i++)
+  {
+    ret << QVariant(static_cast<unsigned char>(data_array.at(i)));
+  }
+  return ret; 
 }
 
 //------------------------------------------------------------------------------

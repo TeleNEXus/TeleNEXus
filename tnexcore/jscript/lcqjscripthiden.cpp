@@ -72,6 +72,9 @@ LCQJScriptHiden::LCQJScriptHiden(const QString& _script, QObject* _parent) :
 {
   moveToThread(mpThread);
 
+  /* QJSEngine mJSEngin; */
+  /* QJSValue mJSValue = mJSEngin.newQObject(new LCQJSAppInterface); */
+
   mJSValue = mJSEngin.newQObject(new LCQJSAppInterface);
   mJSEngin.globalObject().setProperty(__slApplicationProp, mJSValue);
 
@@ -136,6 +139,10 @@ void LCQJScriptHiden::timerStop()
 //------------------------------------------------------------------------------
 void LCQJScriptHiden::scriptEvaluate()
 {
+  /* QJSEngine jsengine; */
+  /* QJSValue jsvalue = jsengine.newQObject(new LCQJSAppInterface); */
+  /* jsengine.globalObject().setProperty(__slApplicationProp, jsvalue); */
+  /* jsengine.evaluate(mScriptString); */
   mJSEngin.evaluate(mScriptString);
 }
 
