@@ -18,7 +18,7 @@ public:
 public slots:
   void print(QString _str);
   QString getProjectPath();
-  QString readSourceData(const QString& _dataId);
+  QVariantList readSourceData(const QString& _sourceId, const QString& _dataId);
   QVariantList testGetByteArray();
 };
 

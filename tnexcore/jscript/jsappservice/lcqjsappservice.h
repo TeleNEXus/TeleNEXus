@@ -24,7 +24,7 @@ public:
   ~LCQJSAppService();
   static QSharedPointer<LCQJSAppService> getService();
 
-  QString readSourceData(const QString& _dataId);
+  QByteArray readSourceData(const QString& _sourceId, const QString& _dataId);
   QString getProjectPath();
 
 };

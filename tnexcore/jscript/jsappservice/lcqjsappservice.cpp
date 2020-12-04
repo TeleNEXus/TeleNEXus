@@ -64,9 +64,10 @@ QSharedPointer<LCQJSAppService> LCQJSAppService::getService()
 }
 
 //------------------------------------------------------------------------------
-QString LCQJSAppService::readSourceData(const QString& _dataId)
+QByteArray LCQJSAppService::readSourceData(
+    const QString& _sourceId, const QString& _dataId)
 {
-  auto req = LCQReadFromSourceReq::create(_dataId, mpThread);
+  auto req = LCQReadFromSourceReq::create(_sourceId, _dataId, mpThread);
   return req->getData();
 }
 
