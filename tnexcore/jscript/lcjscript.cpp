@@ -11,10 +11,11 @@
 struct SPrivateData
 {
   int mInterval;
-  LCQJScriptHiden* mpScriptHiden = nullptr;
-  SPrivateData(LCQJScriptHiden* _p_scriptHiden, int _interval):
+  LCQJScriptHiden* mpScriptHiden;
+
+  SPrivateData(const QString& _script, int _interval):
     mInterval(_interval),
-    mpScriptHiden(_p_scriptHiden){}
+    mpScriptHiden(new LCQJScriptHiden(_script)){}
   ~SPrivateData()
   {
     mpScriptHiden->deleteLater();
@@ -26,17 +27,13 @@ struct SPrivateData
 
 //==============================================================================
 LCJScript::LCJScript(const QString& _script, int _interval)  :
-  mpData( new SPrivateData(new LCQJScriptHiden(_script), _interval) )
+  mpData( new SPrivateData(_script, _interval) )
 {
-  /* mpData = static_cast<void*>(new SPrivateData()); */
-  /* mpPrivateData->mpScriptHiden = new LCQJScriptHiden(_script); */
-  /* mpPrivateData->mInterval= _interval; */
 }
 
 //------------------------------------------------------------------------------
 LCJScript::~LCJScript()
 {
-  /* mpPrivateData->mpScriptHiden->deleteLater(); */
   delete mpPrivateData;
 }
 

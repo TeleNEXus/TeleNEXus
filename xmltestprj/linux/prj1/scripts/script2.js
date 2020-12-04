@@ -10,12 +10,12 @@ Application.print("------Script 2");
 // var prj_path = Application.getProjectPath();
 // Application.print("Script 2 " + prj_path);
 
-var res = 0;
-for(i = 0; i < 3000000; i++)
-{
-  // str = i;
-  res += Math.sqrt(3)/3.5;
-}
+// var res = 0;
+// for(i = 0; i < 3000000; i++)
+// {
+//   // str = i;
+//   res += Math.sqrt(3)/3.5;
+// }
 var data_id = "{ request data script 2 }";
 var sourceData = Application.readSourceData(data_id);
 Application.print("--------------------------------------------> " + sourceData + "res = " + res);

@@ -33,24 +33,22 @@ private:
       virtual void handle(LCQReadFromSourceReq* _sender);
   };
 
-  /* QThread *mpThread; */
-  /* QMutex mMutexThread; */
   QMutex mMutexEvent;
   QWaitCondition mWaitCond;
   QString mDataId;
   QString mRetData;
 
-
-  /* LCQReadFromSourceReq(QObject*) = delete; */
-
   LCQReadFromSourceReq(
       const QString& _dataId
-      /* QThread* _thread */
       );
 
 public:
   virtual ~LCQReadFromSourceReq();
-  static QSharedPointer<LCQReadFromSourceReq> create(const QString& _dataId);
+
+  static QSharedPointer<LCQReadFromSourceReq> create(
+      const QString& _dataId,
+      QThread* _thread);
+
   QString getData();
 private:
   virtual void customEvent(QEvent*) override; 
