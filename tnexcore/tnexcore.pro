@@ -37,6 +37,7 @@ SOURCES += \
         jscript/lcqjscripthiden.cpp \
         jscript/jsappservice/lcqjsappservice.cpp \
         jscript/jsappservice/lcqreadfromsourcereq.cpp \
+        jscript/jsappservice/lcqwritetosourcereq.cpp \
         xml/lcxmlcommon.cpp \
         xml/lcxmlmain.cpp \
         xml/lcxmlbuildersloader.cpp \
@@ -60,7 +61,7 @@ HEADERS += \
     ../common/interfaces/remotedata/LIRemoteDataReadListener.h \
     ../common/interfaces/remotedata/LIRemoteDataReader.h \
     ../common/interfaces/remotedata/LIRemoteDataSource.h \
-    ../common/interfaces/remotedata/LIRemoteDataWriteListner.h \
+    ../common/interfaces/remotedata/LIRemoteDataWriteListener.h \
     ../common/interfaces/remotedata/LIRemoteDataWriter.h \
     ../common/interfaces/xmlbuilders/LIXmlRemoteDataSourceBuilder.h \
     ../common/interfaces/xmlbuilders/LIXmlWidgetBuilder.h \
@@ -71,6 +72,7 @@ HEADERS += \
     jscript/lcqjscripthiden.h \
     jscript/jsappservice/lcqjsappservice.h \
     jscript/jsappservice/lcqreadfromsourcereq.h \
+    jscript/jsappservice/lcqwritetosourcereq.h \
     xml/lcxmlcommon.h \
     xml/lcxmlmain.h \
     xml/lcxmlbuildersloader.h \

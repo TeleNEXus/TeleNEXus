@@ -1,6 +1,6 @@
 #include "lqmodbusdatawriter.h"
 #include "lqmodbusdatasource.h"
-#include "LIRemoteDataWriteListner.h"
+#include "LIRemoteDataWriteListener.h"
 
 namespace modbus
 {
@@ -34,9 +34,9 @@ void LQModbusDataWriter::setDataName(const QString& _dataName)
 
 //------------------------------------------------------------------------------
 void LQModbusDataWriter::
-        setDataWriteListener(QWeakPointer<LIRemoteDataWriteListner> _listener)
+        setDataWriteListener(QWeakPointer<LIRemoteDataWriteListener> _listener)
 {
-    QSharedPointer<LIRemoteDataWriteListner> sp = _listener.lock();
+    QSharedPointer<LIRemoteDataWriteListener> sp = _listener.lock();
     if(!sp.isNull()) mwpWriteListener = sp;
 }
 
@@ -46,7 +46,7 @@ void LQModbusDataWriter::writeRequest(const QByteArray& _data)
     QSharedPointer<LIRemoteDataSource> sp = mDataSource.lock();
     if(sp.isNull())
     {
-        QSharedPointer<LIRemoteDataWriteListner> listener = 
+        QSharedPointer<LIRemoteDataWriteListener> listener = 
                                                         mwpWriteListener.lock();
         if(!listener.isNull())
         {
@@ -64,7 +64,7 @@ void LQModbusDataWriter::customEvent(QEvent *_event)
 {
     if(_event->type() == CQEventDataIsWrite::msExtendedEventType)
     {
-        QSharedPointer<LIRemoteDataWriteListner> listener = 
+        QSharedPointer<LIRemoteDataWriteListener> listener = 
                                                         mwpWriteListener.lock();
         if(!listener.isNull())
         {

@@ -19,12 +19,21 @@ private:
   LCQJSAppService();
   LCQJSAppService(const LCQJSAppService&) = delete;
   LCQJSAppService& operator=(const LCQJSAppService&) = delete;
+
 public:
 
   ~LCQJSAppService();
   static QSharedPointer<LCQJSAppService> getService();
 
-  QByteArray readSourceData(const QString& _sourceId, const QString& _dataId);
+  QByteArray readData(
+      const QString& _sourceId, 
+      const QString& _dataId);
+
+  int writeData(
+      const QString&    _sourceId, 
+      const QString&    _dataId, 
+      const QByteArray& _data);
+
   QString getProjectPath();
 
 };

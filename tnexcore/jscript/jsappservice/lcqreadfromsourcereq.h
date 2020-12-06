@@ -71,7 +71,7 @@ public:
       const QString& _dataId,
       QThread* _thread);
 
-  QByteArray getData();
+  QByteArray readData();
 private:
   virtual void customEvent(QEvent*) override; 
 };

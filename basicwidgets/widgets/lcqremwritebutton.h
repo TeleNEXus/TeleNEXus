@@ -9,7 +9,7 @@
 class LCQRemWriteButton : public QPushButton
 {
 private:
-    class CWriteListener : public LIRemoteDataWriteListner 
+    class CWriteListener : public LIRemoteDataWriteListener 
     {
     private:
         QString mDataName;
@@ -25,7 +25,7 @@ private:
         QByteArray mData;
         QString mDataName;
         QSharedPointer<LIRemoteDataWriter> mWriter;
-        QSharedPointer<LIRemoteDataWriteListner> mListener;
+        QSharedPointer<LIRemoteDataWriteListener> mListener;
         void write();
     };
 
@@ -33,7 +33,9 @@ private:
 
 public:
     explicit LCQRemWriteButton(QPushButton* _parent = nullptr);
-    explicit LCQRemWriteButton(const QString& _text, QPushButton* _parent = nullptr);
+    explicit LCQRemWriteButton(
+        const QString& _text, 
+        QPushButton* _parent = nullptr);
 
     void addDataWrite(
             QSharedPointer<LIRemoteDataSource>  _source, 

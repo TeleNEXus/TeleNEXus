@@ -16,9 +16,18 @@ public:
   ~LCQJSAppInterface();
 
 public slots:
-  void print(QString _str);
+
+  void debug(const QString& _str);
+
   QString getProjectPath();
-  QVariantList readSourceData(const QString& _sourceId, const QString& _dataId);
+
+  QVariantList readData(const QString& _sourceId, const QString& _dataId);
+
+  int writeData(
+      const QString& _sourceId, 
+      const QString& _dataId, 
+      const QVariantList& _data);
+
   QVariantList testGetByteArray();
 };
 

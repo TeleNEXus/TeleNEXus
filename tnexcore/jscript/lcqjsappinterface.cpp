@@ -3,6 +3,8 @@
 #include "LIApplication.h"
 #include <QDebug>
 #include <QSharedPointer>
+#include <QVariantList>
+
 
 //==============================================================================
 struct SPrivateData
@@ -28,7 +30,7 @@ LCQJSAppInterface::~LCQJSAppInterface()
 }
 
 //------------------------------------------------------------------------------
-void LCQJSAppInterface::print(QString _str)
+void LCQJSAppInterface::debug(const QString& _str)
 {
   qDebug() << _str;
 }
@@ -40,17 +42,27 @@ QString LCQJSAppInterface::getProjectPath()
 }
 
 //------------------------------------------------------------------------------
-QVariantList LCQJSAppInterface::readSourceData(
+QVariantList LCQJSAppInterface::readData(
     const QString& _sourceId, const QString& _dataId)
 {
   QByteArray data_array = 
-    mpPrivateData->psAppService->readSourceData(_sourceId, _dataId); 
+    mpPrivateData->psAppService->readData(_sourceId, _dataId); 
   QVariantList ret;
   for(int i = 0; i < data_array.size(); i++)
   {
     ret << QVariant(static_cast<unsigned char>(data_array.at(i)));
   }
   return ret; 
+}
+
+//------------------------------------------------------------------------------
+int LCQJSAppInterface::writeData(
+    const QString& _sourceId, 
+    const QString& _dataId, 
+    const QVariantList& _data)
+{
+  /* mpPrivateData->psAppService->writeData(_sourceId, _dataId, ); */
+  return 0;
 }
 
 //------------------------------------------------------------------------------

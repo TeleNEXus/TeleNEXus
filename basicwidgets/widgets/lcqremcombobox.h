@@ -9,7 +9,7 @@
 
 #include "LIDataFormatter.h"
 #include "LIRemoteDataReadListener.h"
-#include "LIRemoteDataWriteListner.h"
+#include "LIRemoteDataWriteListener.h"
 
 
 class LCQRemComboBox : public QComboBox
@@ -30,7 +30,7 @@ private:
     };
 
     //--------------------------------------------------------------------------
-    class CWriteListener : public LIRemoteDataWriteListner
+    class CWriteListener : public LIRemoteDataWriteListener
     {
     public:
         CWriteListener(){}
