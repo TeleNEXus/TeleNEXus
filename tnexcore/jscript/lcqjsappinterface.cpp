@@ -61,8 +61,21 @@ int LCQJSAppInterface::writeData(
     const QString& _dataId, 
     const QVariantList& _data)
 {
-  /* mpPrivateData->psAppService->writeData(_sourceId, _dataId, ); */
-  return 0;
+
+  QByteArray wd;
+
+  for(int i = 0; i < _data.size(); i++)
+  {
+    bool flag = false;
+    int d = _data.at(i).toUInt(&flag);
+    if(!flag) 
+    {
+      return 0;
+    }
+    wd[i] =  (unsigned char)d;
+  }
+
+  return mpPrivateData->psAppService->writeData(_sourceId, _dataId, wd);
 }
 
 //------------------------------------------------------------------------------

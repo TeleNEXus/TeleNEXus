@@ -46,9 +46,10 @@
     </dataComboLabel>
 
     <dataComboBox  read="coil[0-3]" source="qtslavetcp" format="bits" dataSize="4">
-      <item value="1 1_001"/>
-      <item value="1 1_011"/>
-      <item value="1 1_111"/>
+    <!-- <dataComboBox  read="coil[0-3]" source="qtslavetcp" format="bits"> -->
+      <item value="1_001"/>
+      <item value="1_011"/>
+      <item value="1_111"/>
     </dataComboBox>
 
     <dataComboLabel  read="coil[0-3]" source="qtslavetcp" format="bits" dataSize="4">
@@ -80,7 +81,7 @@
     </dataComboLabel>
 
     <dataLabel      source="qtslavetcp"  data="hreg0"   format="bitfield"/>
-    <dataLineEdit   source="qtslavetcp"  data="hreg0"   format="bitfield" size="2" separator=" "/>
+    <dataLineEdit   source="qtslavetcp"  data="hreg0"   format="bitfield" separator=" "/>
     <dataLabel      source="qtslavetcp"  data="inreg1"  format="uint16"/>
     <dataLabel      source="qtslavetcp"  data="inflt"   format="float32"/>
     <dataLabel      source="qtslavetcp"  data="hreg1"   format="hex"/>

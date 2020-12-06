@@ -6,35 +6,37 @@
 #include <QDebug>
 
 //==============================================================================CReadListener
-LCQWtiteToSource::CWriteListener::CWriteListener(LCQWtiteToSource* _req) :
+LCQWriteToSource::CWriteListener::CWriteListener(LCQWriteToSource* _req) :
   mpRequest(_req)
 {
 }
 
 //------------------------------------------------------------------------------
-void LCQWtiteToSource::CWriteListener::dataIsWrite(LERemoteDataStatus _status)
+void LCQWriteToSource::CWriteListener::dataIsWrite(LERemoteDataStatus _status)
 {
   Q_UNUSED(_status);
   if(_status == LERemoteDataStatus::DS_OK) 
+  {
     mpRequest->mWriteDataSize = mpRequest->edWriteData.size();
+  }
   mpRequest->mWaitCond.wakeOne();
 }
 
 //==============================================================================CEventBase
-__LQ_EXTENDED_QEVENT_IMPLEMENTATION(LCQWtiteToSource::CEventBase);
+__LQ_EXTENDED_QEVENT_IMPLEMENTATION(LCQWriteToSource::CEventBase);
 
-LCQWtiteToSource::CEventBase::CEventBase() : 
+LCQWriteToSource::CEventBase::CEventBase() : 
   QEvent(__LQ_EXTENDED_QEVENT_REGISTERED)
 {
 }
 
 //==============================================================================CEventRead
-LCQWtiteToSource::CEventWrite::CEventWrite()
+LCQWriteToSource::CEventWrite::CEventWrite()
 {
 }
 
 //------------------------------------------------------------------------------
-void LCQWtiteToSource::CEventWrite::handle(LCQWtiteToSource* _sender)
+void LCQWriteToSource::CEventWrite::handle(LCQWriteToSource* _sender)
 {
   auto source = 
     LCXmlMain::getApplicationInterface().getDataSource(_sender->mSourceId);
@@ -46,14 +48,14 @@ void LCQWtiteToSource::CEventWrite::handle(LCQWtiteToSource* _sender)
 }
 
 //==============================================================================requestDeleter
-static void requestDeleter(LCQWtiteToSource* _req)
+static void requestDeleter(LCQWriteToSource* _req)
 {
   qDebug() << "Write Request Deleter";
   _req->deleteLater();
 }
 
-//==============================================================================LCQWtiteToSource
-LCQWtiteToSource::LCQWtiteToSource(
+//==============================================================================LCQWriteToSource
+LCQWriteToSource::LCQWriteToSource(
     const QString&      _sourceId,
     const QString&      _dataId,
     const QByteArray&   _writeData
@@ -68,25 +70,25 @@ LCQWtiteToSource::LCQWtiteToSource(
 }
 
 //------------------------------------------------------------------------------
-QSharedPointer<LCQWtiteToSource> LCQWtiteToSource::create(
+QSharedPointer<LCQWriteToSource> LCQWriteToSource::create(
     const QString&      _sourceId,
     const QString&      _dataId,
     const QByteArray&   _writeData,
     QThread* _thread)
 {
-  LCQWtiteToSource* req = new LCQWtiteToSource(_sourceId, _dataId, _writeData);
+  LCQWriteToSource* req = new LCQWriteToSource(_sourceId, _dataId, _writeData);
   req->moveToThread(_thread);
-  return QSharedPointer<LCQWtiteToSource>(req, requestDeleter);
+  return QSharedPointer<LCQWriteToSource>(req, requestDeleter);
 }
 
 
 //------------------------------------------------------------------------------
-LCQWtiteToSource::~LCQWtiteToSource()
+LCQWriteToSource::~LCQWriteToSource()
 {
 }
 
 //------------------------------------------------------------------------------
-int LCQWtiteToSource::writeData()
+int LCQWriteToSource::writeData()
 {
   mMutexEvent.lock();
 
@@ -99,7 +101,7 @@ int LCQWtiteToSource::writeData()
 }
 
 //------------------------------------------------------------------------------
-void LCQWtiteToSource::customEvent(QEvent* _event)
+void LCQWriteToSource::customEvent(QEvent* _event)
 {
   mMutexEvent.lock();
   mMutexEvent.unlock();

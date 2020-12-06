@@ -1,5 +1,5 @@
-#ifndef LCQREADFROMSOURCEREQ_H_
-#define LCQREADFROMSOURCEREQ_H_
+#ifndef LCQWRITETOSOURCE_H_
+#define LCQWRITETOSOURCE_H_
 
 #include "lqextendevent.h"
 
@@ -14,7 +14,7 @@
 
 class QThread;
 
-class LCQWtiteToSource  : public QObject
+class LCQWriteToSource  : public QObject
 {
   Q_OBJECT
 private:
@@ -23,10 +23,10 @@ private:
   class CWriteListener : public LIRemoteDataWriteListener
   {
   private:
-    LCQWtiteToSource* mpRequest;
+    LCQWriteToSource* mpRequest;
   public:
     CWriteListener() =  delete;
-    CWriteListener(LCQWtiteToSource* _req);
+    CWriteListener(LCQWriteToSource* _req);
 
     virtual ~CWriteListener(){}
     virtual void dataIsWrite(LERemoteDataStatus _status);
@@ -38,7 +38,7 @@ private:
   __LQ_EXTENDED_QEVENT_DECLARATION
   public:
       CEventBase();
-      virtual void handle(LCQWtiteToSource* _sender) = 0;
+      virtual void handle(LCQWriteToSource* _sender) = 0;
   };
 
   //----------------------------------------------------------------------------CEventBase
@@ -46,7 +46,7 @@ private:
   {
   public:
       CEventWrite();
-      virtual void handle(LCQWtiteToSource* _sender);
+      virtual void handle(LCQWriteToSource* _sender);
   };
 
   QString     mSourceId;
@@ -62,16 +62,16 @@ private:
   QMutex          mMutexEvent;
   QWaitCondition  mWaitCond;
 
-  LCQWtiteToSource(
+  LCQWriteToSource(
       const QString&      _sourceId, 
       const QString&      _dataId,
       const QByteArray&   _writeData
       );
 
 public:
-  virtual ~LCQWtiteToSource();
+  virtual ~LCQWriteToSource();
 
-  static QSharedPointer<LCQWtiteToSource> create(
+  static QSharedPointer<LCQWriteToSource> create(
       const QString&      _sourceId,
       const QString&      _dataId,
       const QByteArray&   _writeData,

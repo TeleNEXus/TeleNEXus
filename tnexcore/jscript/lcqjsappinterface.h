@@ -21,7 +21,9 @@ public slots:
 
   QString getProjectPath();
 
-  QVariantList readData(const QString& _sourceId, const QString& _dataId);
+  QVariantList readData(
+      const QString& _sourceId, 
+      const QString& _dataId);
 
   int writeData(
       const QString& _sourceId, 

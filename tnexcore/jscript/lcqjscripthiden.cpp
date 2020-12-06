@@ -25,13 +25,8 @@ LCQJScriptHiden::CEventStart::CEventStart(int _interval) : mInterval(_interval)
 void LCQJScriptHiden::CEventStart::handle(LCQJScriptHiden* _sender)
 {
   qDebug() << "LCQJScriptHiden event start handler";
-
-  if(mInterval <= 0)
-  {
-    _sender->scriptEvaluate();
-    return;
-  }
-
+  _sender->scriptEvaluate();
+  if(mInterval <= 0) { return; }
   _sender->timerStart(mInterval);
 }
 
@@ -139,11 +134,12 @@ void LCQJScriptHiden::timerStop()
 //------------------------------------------------------------------------------
 void LCQJScriptHiden::scriptEvaluate()
 {
-  /* QJSEngine jsengine; */
-  /* QJSValue jsvalue = jsengine.newQObject(new LCQJSAppInterface); */
-  /* jsengine.globalObject().setProperty(__slApplicationProp, jsvalue); */
-  /* jsengine.evaluate(mScriptString); */
-  mJSEngin.evaluate(mScriptString);
+  QJSValue result = mJSEngin.evaluate(mScriptString);
+  if (result.isError())
+    qDebug()
+      << "Script uncaught exception at line"
+      << result.property("lineNumber").toInt()
+      << ":" << result.toString();
 }
 
 //------------------------------------------------------------------------------

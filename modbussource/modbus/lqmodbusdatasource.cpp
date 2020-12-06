@@ -182,9 +182,8 @@ void LQModbusDataSource::CControllerRegistersBase::write(quint16 _addr,
                                                              const QByteArray& _data,
                                                              QObject* _writer)
 {
-    LERemoteDataStatus status = LERemoteDataStatus::DS_UNDEF;
+    LERemoteDataStatus status = LERemoteDataStatus::DS_WRONG;
 
-    status = LERemoteDataStatus::DS_WRONG;
     if(_data.size() % 2 == 0)
     {
         quint16 length = _data.size() >> 1;
