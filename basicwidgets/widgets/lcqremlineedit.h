@@ -8,7 +8,7 @@
 #include "LIRemoteDataReader.h"
 #include "LIRemoteDataWriter.h"
 #include "LIRemoteDataReadListener.h"
-#include "LIRemoteDataWriteListner.h"
+#include "LIRemoteDataWriteListener.h"
 #include "LIRemoteDataSource.h"
 
 
@@ -30,7 +30,7 @@ private:
         void setActive(bool _flag){mFlagActive = _flag;}
     };
 
-    class CWriteListener : public LIRemoteDataWriteListner
+    class CWriteListener : public LIRemoteDataWriteListener
     {
     private:
         LCQRemLineEdit& mLineEdit;

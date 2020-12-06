@@ -23,7 +23,7 @@ private:
 
     QString mDataName;
     QWeakPointer<LIRemoteDataSource> mDataSource;
-    QWeakPointer<LIRemoteDataWriteListner> mwpWriteListener;
+    QWeakPointer<LIRemoteDataWriteListener> mwpWriteListener;
 
 private:
     explicit LQModbusDataWriter(QObject* _parent = nullptr) = delete;
@@ -33,7 +33,7 @@ private:
 public:
     virtual void setDataName(const QString& _dataName) override;
     virtual void setDataWriteListener(
-                    QWeakPointer<LIRemoteDataWriteListner> _listener) override;
+                    QWeakPointer<LIRemoteDataWriteListener> _listener) override;
     virtual void writeRequest(const QByteArray& _data) override;
 
 private:

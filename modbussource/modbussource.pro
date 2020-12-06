@@ -35,7 +35,7 @@ HEADERS += \
     ../../common/interfaces/remotedata/LIRemoteDataReadListener.h \
     ../../common/interfaces/remotedata/LIRemoteDataReader.h \
     ../../common/interfaces/remotedata/LIRemoteDataSource.h \
-    ../../common/interfaces/remotedata/LIRemoteDataWriteListner.h \
+    ../../common/interfaces/remotedata/LIRemoteDataWriteListener.h \
     ../../common/interfaces/remotedata/LIRemoteDataWriter.h \
     ../../common/interfaces/xmlbuilders/LIXmlRemoteDataSourceBuilder.h \
     ../../common/lqextendevent.h \

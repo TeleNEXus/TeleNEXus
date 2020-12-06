@@ -35,22 +35,13 @@ LCQReadFromSourceReq::CEventRead::CEventRead()
 //------------------------------------------------------------------------------
 void LCQReadFromSourceReq::CEventRead::handle(LCQReadFromSourceReq* _sender)
 {
-
-  auto source = LCXmlMain::getApplicationInterface().getDataSource(_sender->mSourceId);
+  auto source = 
+    LCXmlMain::getApplicationInterface().getDataSource(_sender->mSourceId);
   if(source.isNull()) _sender->mWaitCond.wakeOne();
   _sender->mspDataReader = source->createReader();
   _sender->mspDataReader->setDataName(_sender->mDataId);
   _sender->mspDataReader->setDataReadListener(_sender->mspDataListener);
   _sender->mspDataReader->readRequest();
-
-  /* QString ret_string = QString("Read from Source(%1) data(%2)"). */
-  /*   arg(_sender->mSourceId). */
-  /*   arg(_sender->mDataId); */
-
-  /* _sender->mRetData = QByteArray( */
-  /*     ret_string.toStdString().c_str(), ret_string.length()); */
-
-  /* _sender->mWaitCond.wakeOne(); */
 }
 
 static void requestDeleter(LCQReadFromSourceReq* _req)
@@ -88,7 +79,7 @@ LCQReadFromSourceReq::~LCQReadFromSourceReq()
 }
 
 //------------------------------------------------------------------------------
-QByteArray LCQReadFromSourceReq::getData()
+QByteArray LCQReadFromSourceReq::readData()
 {
   mMutexEvent.lock();
 
