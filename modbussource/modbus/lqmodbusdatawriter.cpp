@@ -69,7 +69,7 @@ void LQModbusDataWriter::customEvent(QEvent *_event)
         if(!listener.isNull())
         {
             CQEventDataIsWrite *e = dynamic_cast<CQEventDataIsWrite*>(_event);
-            if(e != nullptr)
+            if(e == nullptr)
             {
                 listener->dataIsWrite(LERemoteDataStatus::DS_WRONG);
             }
