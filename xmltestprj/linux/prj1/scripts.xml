@@ -1,25 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <SCRIPTS>
-  <script file="scripts/readsourcedata.js" interval="500" state="start"/>
-  <script file="scripts/readsourcedata.js" interval="500" state="start"/>
-  <script file="scripts/readsourcedata.js" interval="500" state="start"/>
-  <script file="scripts/readsourcedata.js" interval="500" state="start"/>
-  <script file="scripts/readsourcedata.js" interval="500" state="start"/>
-  <script file="scripts/readsourcedata.js" interval="500" state="start"/>
-  <script file="scripts/readsourcedata.js" interval="500" state="start"/>
-  <script file="scripts/readsourcedata.js" interval="500" state="start"/>
-  <script file="scripts/readsourcedata.js" interval="500" state="start"/>
-  <script file="scripts/readsourcedata.js" interval="500" state="start"/>
-  <script file="scripts/readsourcedata.js" interval="500" state="start"/>
-  <script file="scripts/readsourcedata.js" interval="500" state="start"/>
-  <script file="scripts/readsourcedata.js" interval="500" state="start"/>
-  <script file="scripts/readsourcedata.js" interval="500" state="start"/>
-  <script file="scripts/readsourcedata.js" interval="500" state="start"/>
-  <script file="scripts/readsourcedata.js" interval="500" state="start"/>
-  <script file="scripts/readsourcedata.js" interval="500" state="start"/>
-  <script file="scripts/readsourcedata.js" interval="500" state="start"/>
-  <script file="scripts/readsourcedata.js" interval="500" state="start"/>
+  <!-- <script file="scripts/readsourcedata.js" interval="500" state="start"/> -->
+  <script file="scripts/writedatatosource.js" interval="500" state="start"/>
+  <!-- <script file="scripts/readsourcedata.js" interval="100" state="start"/> -->
+
+  <!-- <script file="scripts/readsourcedata.js" interval="500" state="start"/> -->
+  <!-- <script file="scripts/readsourcedata.js" interval="500" state="start"/> -->
+  <!-- <script file="scripts/readsourcedata.js" interval="500" state="start"/> -->
+  <!-- <script file="scripts/readsourcedata.js" interval="500" state="start"/> -->
+  <!-- <script file="scripts/readsourcedata.js" interval="500" state="start"/> -->
+  <!-- <script file="scripts/readsourcedata.js" interval="500" state="start"/> -->
+  <!-- <script file="scripts/readsourcedata.js" interval="500" state="start"/> -->
   <!-- <script id="s1" file="scripts/script1.js" interval="500" state="start"/> -->
   <!-- <script id="s2" file="scripts/script2.js" interval="500" state="start"/> -->
 </SCRIPTS>

@@ -1,6 +1,7 @@
 
 #include "lcqjsappservice.h"
 #include "lcqreadfromsourcereq.h"
+#include "lcqwritetosourcereq.h"
 #include "LIApplication.h"
 #include "lcxmlmain.h"
 
@@ -77,10 +78,8 @@ int LCQJSAppService::writeData(
     const QString& _dataId, 
     const QByteArray& _data)
 {
-  Q_UNUSED(_sourceId);
-  Q_UNUSED(_dataId);
-  Q_UNUSED(_data);
-  return 0;
+  auto req = LCQWriteToSource::create(_sourceId, _dataId, _data, mpThread);
+  return req->writeData();
 }
 
 //------------------------------------------------------------------------------
