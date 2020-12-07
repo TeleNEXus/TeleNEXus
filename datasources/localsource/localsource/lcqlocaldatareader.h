@@ -16,18 +16,21 @@ private:
   class CQEventDataIsRead : public QEvent
   {
     __LQ_EXTENDED_QEVENT_DECLARATION
+
   public:
-      QSharedPointer<QByteArray> mData;
+      QSharedPointer<QByteArray> mspData;
       LERemoteDataStatus mStatus;
+
       explicit CQEventDataIsRead(
           const QByteArray& _data, 
           LERemoteDataStatus _status);
+
       explicit CQEventDataIsRead(LERemoteDataStatus _status);
   };
 
   QString mDataName;
-  QWeakPointer<LCQLocalSourceHiden> mDataSource;
-  QWeakPointer<LIRemoteDataReadListener> mpReadListener;
+  QWeakPointer<LCQLocalSourceHiden> mwpDataSource;
+  QWeakPointer<LIRemoteDataReadListener> mwpReadListener;
 
 public:
 
@@ -40,9 +43,7 @@ public:
   virtual void disconnectFromSource() override;
 
 private:
-  explicit LCQLocalDataReader(  
-      QWeakPointer<LCQLocalSourceHiden> _dataSource, 
-      QObject* _parent = nullptr);
+  explicit LCQLocalDataReader(QWeakPointer<LCQLocalSourceHiden> _dataSource);
 
   virtual void customEvent(QEvent* _event) override;
 

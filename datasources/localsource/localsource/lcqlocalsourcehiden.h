@@ -22,6 +22,9 @@ private:
   void write(const QByteArray& _data, LCQLocalDataWriter* _writer);
 
   virtual void customEvent(QEvent* _event) override;
+
+  friend class LCQLocalDataReader;
+  friend class LCQLocalDataWriter;
 };
 
 #endif //LCLOCALSOURCEHIDEN_H_
