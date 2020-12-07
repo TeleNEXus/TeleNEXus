@@ -24,11 +24,12 @@
       <item text="Test"   value="013"/>
     </dataComboBox>
 
-    <dataComboBox  read="hreg0" source="qtslavetcp" format="hex" dataSize="2">
-      <item text="On"        value="00_0 a"/>
-      <item text="Off"       value="00_0 b"/>
-      <item text="Reset"     value="00_0 c"/>
-      <item text="Test"      value="00_0 d"/>
+    <!-- <dataComboBox  read="hreg0" source="qtslavetcp" format="hex" dataSize="2"> -->
+    <dataComboBox  read="hreg0" source="qtslavetcp" format="hex" >
+      <item text="On"        value="000a"/>
+      <item text="Off"       value="000b"/>
+      <item text="Reset"     value="000c"/>
+      <item text="Test"      value="000d"/>
     </dataComboBox>
 
     <dataComboLabel  read="coil0" source="qtslavetcp" format="bool">
@@ -45,11 +46,11 @@
       <item text="Test"      value="d"/>
     </dataComboLabel>
 
-    <dataComboBox  read="coil[0-3]" source="qtslavetcp" format="bits" dataSize="4">
-    <!-- <dataComboBox  read="coil[0-3]" source="qtslavetcp" format="bits"> -->
-      <item value="1_001"/>
-      <item value="1_011"/>
-      <item value="1_111"/>
+    <!-- <dataComboBox  read="coil[0-3]" source="qtslavetcp" format="bits" dataSize="4"> -->
+    <dataComboBox  read="coil[0-3]" source="qtslavetcp" format="bits">
+      <item value="1001"/>
+      <item value="1011"/>
+      <item value="1111"/>
     </dataComboBox>
 
     <dataComboLabel  read="coil[0-3]" source="qtslavetcp" format="bits" dataSize="4">

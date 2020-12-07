@@ -15,9 +15,8 @@ CReadListener(LCQRemComboBox& _combobox) :  mOwner(_combobox)
 }
 
 //------------------------------------------------------------------------------
-void LCQRemComboBox::
-CReadListener::
-dataIsRead( QSharedPointer<QByteArray>  _data, 
+void LCQRemComboBox::CReadListener::dataIsRead( 
+    QSharedPointer<QByteArray>  _data, 
     LERemoteDataStatus          _status)
 {
   switch(_status)
