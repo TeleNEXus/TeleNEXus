@@ -2,7 +2,7 @@
 #define LCQREMWRITEBUTTON_H_
 
 #include "LIRemoteDataSource.h"
-#include "LIRemoteDataWriteListner.h"
+#include "LIRemoteDataWriteListener.h"
 #include <QPushButton>
 #include <QList>
 
