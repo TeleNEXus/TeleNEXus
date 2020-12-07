@@ -43,20 +43,17 @@ void LQModbusDataWriter::
 //------------------------------------------------------------------------------
 void LQModbusDataWriter::writeRequest(const QByteArray& _data)
 {
-    QSharedPointer<LIRemoteDataSource> sp = mDataSource.lock();
-    if(sp.isNull())
-    {
-        QSharedPointer<LIRemoteDataWriteListener> listener = 
-                                                        mwpWriteListener.lock();
-        if(!listener.isNull())
-        {
-            listener->dataIsWrite(LERemoteDataStatus::DS_WRONG);
-        }
-    }
-    else
-    {
-        ((LQModbusDataSource*)sp.data())->write(mDataName, _data, this);
-    }
+  QSharedPointer<LIRemoteDataSource> sp = mDataSource.lock();
+  if(sp.isNull())
+  {
+    auto listener = mwpWriteListener.lock();
+
+    if(!listener.isNull()) listener->dataIsWrite(LERemoteDataStatus::DS_WRONG);
+  }
+  else
+  {
+    ((LQModbusDataSource*)sp.data())->write(mDataName, _data, this);
+  }
 }
 
 //------------------------------------------------------------------------------
