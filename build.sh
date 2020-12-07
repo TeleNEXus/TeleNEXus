@@ -2,7 +2,7 @@
 
 v_basiclayouts="`pwd`/basiclayouts"
 v_basicwidgets="`pwd`/basicwidgets"
-v_modbussource="`pwd`/modbussource"
+v_modbussource="`pwd`/datasources/modbussource"
 v_tnexcore="`pwd`/tnexcore"
 
 v_build_dir_name=__builds
