@@ -106,7 +106,7 @@ QString LCFormatterBits::normalize(const QString& _str)
     out_str.remove(QRegExp(QString("[ _%1]{1,}").arg(mValidator.mSeparator)));
 
     // Проверяем задан ли размер битового поля. 
-    if(mValidator.mSize < 0)
+    if(mValidator.mSize <= 0)
     {
         //Если размер не задан.
         //проверяем на наличие не цифровых значений.
