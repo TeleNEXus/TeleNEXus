@@ -1,0 +1,12 @@
+#ifndef LOCALSOURCE_GLOBAL_H
+#define LOCALSOURCE_GLOBAL_H
+
+#include <QtCore/qglobal.h>
+
+#if defined(LOCALSOURCE_LIBRARY)
+#  define LOCALSOURCE_EXPORT Q_DECL_EXPORT
+#else
+#  define LOCALSOURCE_EXPORT Q_DECL_IMPORT
+#endif
+
+#endif // LOCALSOURCE_GLOBAL_H
