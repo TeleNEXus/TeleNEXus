@@ -23,18 +23,16 @@ void LCDataItemMap::CDataItemBase::notifyReaders(const QByteArray& _data)
 
 //------------------------------------------------------------------------------
 void LCDataItemMap::CDataItemBase::connectReader(
-    QWeakPointer<LCQLocalDataReader> _pw_reader)
+    QSharedPointer<LCQLocalDataReader> _sp_reader)
 {
-  auto sp = _pw_reader.lock();
-  if(sp.isNull()) return;
-  mReadersList << sp;
+  mReadersList << _sp_reader;
 }
 
 //------------------------------------------------------------------------------
 void LCDataItemMap::CDataItemBase::disconnectReader(
-    QWeakPointer<LCQLocalDataReader> _sw_reader)
+    QSharedPointer<LCQLocalDataReader> _sp_reader)
 {
-  mReadersList.removeOne(_sw_reader);
+  mReadersList.removeOne(_sp_reader);
 }
 
 //==============================================================================
@@ -75,7 +73,7 @@ int LCDataItemMap::CDataItemBits::setData(const QByteArray& _data)
 //------------------------------------------------------------------------------
 QByteArray LCDataItemMap::CDataItemBits::getData()
 {
-  QByteArray ret_data(mData.size(), 0);
+  QByteArray ret_data;
   for(int i = 0; i < mData.size(); i++)
   {
     ret_data[i] = (mData.at(i) == false) ? (0):(1);
@@ -107,10 +105,11 @@ void LCDataItemMap::addItem(const QString& _id, const QBitArray& _data)
 }
 
 //------------------------------------------------------------------------------
-int LCDataItemMap::setData(const QString& _id, const QByteArray& _data)
+int LCDataItemMap::setData(
+    const QString& _id, const QByteArray& _data)
 {
   auto it = mDataMap.find(_id);
-  if(it == mDataMap.end()) return -1;
+  if(it == mDataMap.end()) return 0;
   return it->data()->setData(_data);
 }
 
@@ -126,14 +125,19 @@ QByteArray LCDataItemMap::getData(const QString& _id)
 void LCDataItemMap::connectReader(QSharedPointer<LCQLocalDataReader> _sp_reader)
 {
   auto it = mDataMap.find(_sp_reader->getDataName());
-  if(it == mDataMap.end()) return;
+  if(it == mDataMap.end()) 
+  {
+    _sp_reader->notifyListener(LERemoteDataStatus::DS_UNDEF);
+    return;
+  }
   it.value()->connectReader(_sp_reader);
-
   mReadersMap.insert(_sp_reader, _sp_reader->getDataName());
+  _sp_reader->notifyListener(it->data()->getData());
 }
 
 //------------------------------------------------------------------------------
-void LCDataItemMap::disconnectReader(QSharedPointer<LCQLocalDataReader> _sp_reader)
+void LCDataItemMap::disconnectReader(
+    QSharedPointer<LCQLocalDataReader> _sp_reader)
 {
   auto it = mReadersMap.find(_sp_reader);
   if(it == mReadersMap.end()) return;

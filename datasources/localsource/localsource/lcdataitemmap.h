@@ -24,8 +24,8 @@ private:
   public:
     CDataItemBase(TReadersMap& _rm): edReadersMap(_rm){}
 
-    void connectReader(QWeakPointer<LCQLocalDataReader> _sw_reader);
-    void disconnectReader(QWeakPointer<LCQLocalDataReader> _sw_reader);
+    void connectReader(QSharedPointer<LCQLocalDataReader> _sw_reader);
+    void disconnectReader(QSharedPointer<LCQLocalDataReader> _sw_reader);
 
     virtual QByteArray getData() = 0;
     virtual int setData(const QByteArray& _data) = 0;
