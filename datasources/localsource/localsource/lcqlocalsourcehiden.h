@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include "lcdataitemmap.h"
+#include "lqextendevent.h"
 
 class LCQLocalDataReader;
 class LCQLocalDataWriter;
@@ -12,6 +13,31 @@ class LIRemoteDataWriter;
 class LCQLocalSourceHiden final : public QObject 
 {
 private:
+  //----------------------------------------------------------------------------CEventBase
+  class CEventBase : public QEvent
+  {
+    __LQ_EXTENDED_QEVENT_DECLARATION
+  public:
+      CEventBase();
+      virtual void handle() = 0;
+  };
+
+  //----------------------------------------------------------------------------CEventConnetcReader
+  class CEventConnectReader : public CEventBase 
+  {
+  private:
+    LCQLocalSourceHiden* mpSender;
+    QSharedPointer<LCQLocalDataReader> mspDataReader;
+
+  public:
+    CEventConnectReader() = delete;
+
+    CEventConnectReader(
+        LCQLocalSourceHiden* _sender, 
+        QSharedPointer<LCQLocalDataReader> _sp_reader);
+
+    virtual void handle() override;
+  };
 
   LCDataItemMap mDataMap;
 public:
@@ -25,10 +51,10 @@ public:
 
 private:
 
-  void connectReader(LCQLocalDataReader* _p_reader);
-  void disconnectReader(LCQLocalDataReader* _p_reader);
-  void read(LCQLocalDataReader* _p_reader);
-  void write(const QByteArray& _data, LCQLocalDataWriter* _writer);
+  void connectReader(QSharedPointer<LCQLocalDataReader> _sp_reader);
+  void disconnectReader(QSharedPointer<LCQLocalDataReader> _sp_reader);
+  void read(QSharedPointer<LCQLocalDataReader> _ps_reader);
+  void write(const QByteArray& _data, QSharedPointer<LCQLocalDataWriter> _sp_writer);
 
   virtual void customEvent(QEvent* _event) override;
 
