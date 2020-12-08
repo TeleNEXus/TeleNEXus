@@ -10,8 +10,8 @@
 class LCQLocalDataReader final: public QObject, public LIRemoteDataReader
 {
   Q_OBJECT
-private:
 
+public:
   //----------------------------------------------------------------------------CQEventDataRead
   class CQEventDataIsRead : public QEvent
   {
@@ -22,16 +22,20 @@ private:
       LERemoteDataStatus mStatus;
 
       explicit CQEventDataIsRead(
-          QSharedPointer<QByteArray> _data, 
+          const QByteArray& _data,
           LERemoteDataStatus _status);
 
       explicit CQEventDataIsRead(LERemoteDataStatus _status);
   };
 
+private:
+
   QString mDataName;
   QWeakPointer<LCQLocalSourceHiden> mwpDataSource;
   QWeakPointer<LIRemoteDataReadListener> mwpReadListener;
+  QWeakPointer<LCQLocalDataReader> mwpThis;
 
+  explicit LCQLocalDataReader();
 public:
 
   virtual ~LCQLocalDataReader();
@@ -42,11 +46,16 @@ public:
   virtual void connectToSource() override;
   virtual void disconnectFromSource() override;
 
+
+public:
+  static QSharedPointer<LCQLocalDataReader> 
+    create(QSharedPointer<LCQLocalSourceHiden> _dataSource);
+
+  void setReadData(const QByteArray& _data);
+  void setReadData(LERemoteDataStatus _status);
+
 private:
-  explicit LCQLocalDataReader(QWeakPointer<LCQLocalSourceHiden> _dataSource);
-
   virtual void customEvent(QEvent* _event) override;
-
 };
 
 #endif // LCQLOCALDATAREADER_H_

@@ -4,15 +4,28 @@
 #include <QMap>
 #include <QBitArray>
 #include <QSharedPointer>
+#include <QList>
+
+class LCQLocalDataReader;
 
 class LCDataItemMap
 {
 private:
+  using TReadersMap =QMap<QWeakPointer<LCQLocalDataReader>, QString>;
 
   class CDataItemBase
   {
+  protected:
+    TReadersMap& edReadersMap;
+    QList<QWeakPointer<LCQLocalDataReader>> mReadersList;
+    void notifyReaders(const QByteArray& _data);
+
   public:
-    CDataItemBase(){}
+    CDataItemBase(TReadersMap& _rm): edReadersMap(_rm){}
+
+    void connectReader(QWeakPointer<LCQLocalDataReader> _sw_reader);
+    void disconnectReader(QWeakPointer<LCQLocalDataReader> _sw_reader);
+
     virtual QByteArray getData() = 0;
     virtual int setData(const QByteArray& _data) = 0;
   }; 
@@ -23,7 +36,8 @@ private:
     QByteArray mData;
   public:
     CDataItemBytes() = delete;
-    CDataItemBytes(const QByteArray& _data):
+    CDataItemBytes(const QByteArray& _data, TReadersMap& _rm):
+      CDataItemBase(_rm),
       mData(_data){}
     virtual QByteArray getData() override { return mData; }
     virtual int setData(const QByteArray& _data) override;
@@ -35,12 +49,15 @@ private:
     QBitArray mData;
   public:
     CDataItemBits() = delete;
-    CDataItemBits(const QBitArray& _data) : mData(_data){}
+    CDataItemBits(const QBitArray& _data, TReadersMap& _rm) :
+      CDataItemBase(_rm),
+      mData(_data){}
     virtual QByteArray getData() override;
     virtual int setData(const QByteArray& _data) override;
   };
 
   QMap<QString, QSharedPointer<CDataItemBase>> mDataMap;
+  QMap<QWeakPointer<LCQLocalDataReader>, QString> mReadersMap;
   
 public:
 
@@ -48,6 +65,7 @@ public:
 
   void addItem(const QString& _id, const QByteArray& _data);
   void addItem(const QString& _id, const QBitArray& _data);
+  bool connectReader(QSharedPointer<LCQLocalDataReader> _pw_reader);
   int setData(const QString& _id, const QByteArray& _data);
   QByteArray getData(const QString& _id);
 };
