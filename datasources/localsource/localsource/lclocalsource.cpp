@@ -1,21 +1,37 @@
-#include "lcqlocalsource.h"
+#include "lcqlocalsourcehiden.h"
+#include "lcqlocaldatareader.h"
+#include "lcqlocaldatawriter.h"
+
+#include <QSharedPointer>
+
 
 //==============================================================================
-LCLocalDataSource::LCLocalDataSource()
+LCQLocalSourceHiden::LCQLocalSourceHiden()
 {
 }
 
 //------------------------------------------------------------------------------
-LCLocalDataSource::~LCLocalDataSource()
+LCQLocalSourceHiden::~LCQLocalSourceHiden()
 {
 }
 
 //------------------------------------------------------------------------------
-QSharedPointer<LIRemoteDataReader> createReader()
+void LCQLocalSourceHiden::connectReader(LCQLocalDataReader* _p_reader)
 {
 }
 
 //------------------------------------------------------------------------------
-QSharedPointer<LIRemoteDataWriter> createWriter()
+void LCQLocalSourceHiden::disconnectReader(LCQLocalDataReader* _p_reader)
+{
+}
+
+//------------------------------------------------------------------------------
+void LCQLocalSourceHiden::read(LCQLocalDataReader* _p_reader)
+{
+}
+
+//------------------------------------------------------------------------------
+void LCQLocalSourceHiden::write( const QByteArray& _data, 
+    LCQLocalDataWriter* _writer)
 {
 }

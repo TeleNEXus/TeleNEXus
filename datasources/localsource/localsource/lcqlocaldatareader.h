@@ -7,7 +7,7 @@
 #include "LIRemoteDataReader.h"
 
 
-class LCQLocalDataReader : public QObject, public LIRemoteDataReader
+class LCQLocalDataReader final: public QObject, public LIRemoteDataReader
 {
   Q_OBJECT
 private:
@@ -22,7 +22,7 @@ private:
       LERemoteDataStatus mStatus;
 
       explicit CQEventDataIsRead(
-          const QByteArray& _data, 
+          QSharedPointer<QByteArray> _data, 
           LERemoteDataStatus _status);
 
       explicit CQEventDataIsRead(LERemoteDataStatus _status);
