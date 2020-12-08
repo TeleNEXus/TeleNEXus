@@ -29,12 +29,15 @@ private:
     LCQLocalDataWriter();
 
 public:
-    static QSharedPointer<LCQLocalDataWriter> create(QSharedPointer<LCQLocalSourceHiden> _dataSource);
+    static QSharedPointer<LCQLocalDataWriter> 
+      create(QSharedPointer<LCQLocalSourceHiden> _dataSource);
 
     virtual void setDataName(const QString& _dataName) override;
     virtual void setDataWriteListener(
                     QWeakPointer<LIRemoteDataWriteListener> _listener) override;
     virtual void writeRequest(const QByteArray& _data) override;
+
+    QString getDataName(){ return mDataName; }
 
 private:
     virtual void customEvent(QEvent *_event) override;
