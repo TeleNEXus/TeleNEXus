@@ -2,7 +2,6 @@
 #include "lcqlocalsourcehiden.h"
 #include "LIRemoteDataWriteListener.h"
 
-
 //==============================================================================
 __LQ_EXTENDED_QEVENT_IMPLEMENTATION(LCQLocalDataWriter::CQEventDataIsWrite);
 
@@ -14,11 +13,19 @@ LCQLocalDataWriter::CQEventDataIsWrite::CQEventDataIsWrite(
 }
 
 //==============================================================================
-LCQLocalDataWriter::LCQLocalDataWriter(
-    QWeakPointer<LCQLocalSourceHiden> _dataSource) : 
-  QObject(nullptr),
-  mspDataSource(_dataSource)
+LCQLocalDataWriter::LCQLocalDataWriter():
+  QObject(nullptr)
 {
+}
+
+//------------------------------------------------------------------------------
+QSharedPointer<LCQLocalDataWriter> LCQLocalDataWriter::create(
+    QSharedPointer<LCQLocalSourceHiden> _dataSource)
+{
+  auto sp_writer = QSharedPointer<LCQLocalDataWriter>(new LCQLocalDataWriter());
+  sp_writer->mwpDataSource = _dataSource;
+  sp_writer->mwpThis = sp_writer;
+  return sp_writer;
 }
 
 //------------------------------------------------------------------------------
@@ -37,7 +44,7 @@ setDataWriteListener(QWeakPointer<LIRemoteDataWriteListener> _listener)
 //------------------------------------------------------------------------------
 void LCQLocalDataWriter::writeRequest(const QByteArray& _data)
 {
-  auto sp = mspDataSource.lock();
+  auto sp = mwpDataSource.lock();
   if(sp.isNull())
   {
     auto listener = mwpWriteListener.lock();
@@ -46,7 +53,7 @@ void LCQLocalDataWriter::writeRequest(const QByteArray& _data)
   }
   else
   {
-    sp->write(_data, this);
+    sp->write(_data, mwpThis);
   }
 }
 

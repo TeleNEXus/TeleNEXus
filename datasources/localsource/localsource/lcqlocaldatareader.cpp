@@ -82,14 +82,14 @@ void LCQLocalDataReader::disconnectFromSource()
 }
 
 //------------------------------------------------------------------------------
-void LCQLocalDataReader::setReadData(const QByteArray& _data)
+void LCQLocalDataReader::notifyListener(const QByteArray& _data)
 {
   QCoreApplication::postEvent(this, 
       new CQEventDataIsRead(_data, LERemoteDataStatus::DS_OK));
 }
 
 //------------------------------------------------------------------------------
-void LCQLocalDataReader::setReadData(LERemoteDataStatus _status)
+void LCQLocalDataReader::notifyListener(LERemoteDataStatus _status)
 {
   QCoreApplication::postEvent(this, new CQEventDataIsRead(_status));
 }

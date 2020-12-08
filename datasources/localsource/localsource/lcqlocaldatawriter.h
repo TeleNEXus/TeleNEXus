@@ -21,12 +21,16 @@ private:
     };
 
     QString mDataName;
-    QWeakPointer<LCQLocalSourceHiden> mspDataSource;
+    QWeakPointer<LCQLocalSourceHiden> mwpDataSource;
     QWeakPointer<LIRemoteDataWriteListener> mwpWriteListener;
+    QWeakPointer<LCQLocalDataWriter> mwpThis;
 
 private:
-    LCQLocalDataWriter(QWeakPointer<LCQLocalSourceHiden> _dataSource);
+    LCQLocalDataWriter();
+
 public:
+    static QSharedPointer<LCQLocalDataWriter> create(QSharedPointer<LCQLocalSourceHiden> _dataSource);
+
     virtual void setDataName(const QString& _dataName) override;
     virtual void setDataWriteListener(
                     QWeakPointer<LIRemoteDataWriteListener> _listener) override;
@@ -34,8 +38,6 @@ public:
 
 private:
     virtual void customEvent(QEvent *_event) override;
-
-    friend class LCQLocalSourceHiden;
 };
 
 

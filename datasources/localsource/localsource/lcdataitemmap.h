@@ -11,6 +11,7 @@ class LCQLocalDataReader;
 class LCDataItemMap
 {
 private:
+
   using TReadersMap =QMap<QWeakPointer<LCQLocalDataReader>, QString>;
 
   class CDataItemBase
@@ -65,9 +66,12 @@ public:
 
   void addItem(const QString& _id, const QByteArray& _data);
   void addItem(const QString& _id, const QBitArray& _data);
-  bool connectReader(QSharedPointer<LCQLocalDataReader> _pw_reader);
+
   int setData(const QString& _id, const QByteArray& _data);
   QByteArray getData(const QString& _id);
+
+  void connectReader(QSharedPointer<LCQLocalDataReader> _sp_reader);
+  void disconnectReader(QSharedPointer<LCQLocalDataReader> _sp_reader);
 };
 
 #endif //LCDATAITEMMAP_H_

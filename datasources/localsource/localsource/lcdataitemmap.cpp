@@ -17,7 +17,7 @@ void LCDataItemMap::CDataItemBase::notifyReaders(const QByteArray& _data)
       edReadersMap.remove(*it);
       continue;
     }
-    sp->setReadData(_data);
+    sp->notifyListener(_data);
   }
 }
 
@@ -121,4 +121,24 @@ QByteArray LCDataItemMap::getData(const QString& _id)
   if(it ==  mDataMap.end()) return QByteArray();
   return it->data()->getData();
 }
+
+//------------------------------------------------------------------------------
+void LCDataItemMap::connectReader(QSharedPointer<LCQLocalDataReader> _sp_reader)
+{
+  auto it = mDataMap.find(_sp_reader->getDataName());
+  if(it == mDataMap.end()) return;
+  it.value()->connectReader(_sp_reader);
+
+  mReadersMap.insert(_sp_reader, _sp_reader->getDataName());
+}
+
+//------------------------------------------------------------------------------
+void LCDataItemMap::disconnectReader(QSharedPointer<LCQLocalDataReader> _sp_reader)
+{
+  auto it = mReadersMap.find(_sp_reader);
+  if(it == mReadersMap.end()) return;
+  mDataMap.find(it.value()).value()->disconnectReader(_sp_reader);
+  mReadersMap.erase(it);
+}
+
 
