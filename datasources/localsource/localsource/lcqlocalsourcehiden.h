@@ -22,6 +22,8 @@ private:
       virtual void handle() = 0;
   };
 
+
+
   //----------------------------------------------------------------------------CEventConnetcReader
   class CEventConnectReader : public CEventBase 
   {
@@ -38,6 +40,8 @@ private:
 
     virtual void handle() override;
   };
+
+
 
   LCDataItemMap mDataMap;
 public:

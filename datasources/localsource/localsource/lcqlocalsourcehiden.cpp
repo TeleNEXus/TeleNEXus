@@ -1,6 +1,5 @@
 #include "lcqlocalsourcehiden.h"
 
-
 //==============================================================================
 __LQ_EXTENDED_QEVENT_IMPLEMENTATION(LCQLocalSourceHiden::CEventBase);
 
@@ -8,6 +7,7 @@ LCQLocalSourceHiden::CEventBase::CEventBase() :
   QEvent(__LQ_EXTENDED_QEVENT_REGISTERED)
 {
 }
+
 //==============================================================================
 LCQLocalSourceHiden::CEventConnectReader::CEventConnectReader(
     LCQLocalSourceHiden* _sender,

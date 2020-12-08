@@ -51,8 +51,9 @@ public:
   static QSharedPointer<LCQLocalDataReader> 
     create(QSharedPointer<LCQLocalSourceHiden> _dataSource);
 
-  void setReadData(const QByteArray& _data);
-  void setReadData(LERemoteDataStatus _status);
+  void notifyListener(const QByteArray& _data);
+  void notifyListener(LERemoteDataStatus _status);
+  QString getDataName(){ return mDataName; }
 
 private:
   virtual void customEvent(QEvent* _event) override;
