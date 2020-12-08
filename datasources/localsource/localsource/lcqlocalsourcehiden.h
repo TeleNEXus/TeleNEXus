@@ -2,17 +2,26 @@
 #define LCLOCALSOURCEHIDEN_H_
 
 #include <QObject>
-#include "lcqlocaldatawriter.h"
+#include "lcdataitemmap.h"
 
 class LCQLocalDataReader;
 class LCQLocalDataWriter;
+class LIRemoteDataReader;
+class LIRemoteDataWriter;
 
 class LCQLocalSourceHiden final : public QObject 
 {
+private:
+
+  LCDataItemMap mDataMap;
 public:
 
   explicit LCQLocalSourceHiden();
+
   virtual ~LCQLocalSourceHiden();
+
+  void addItem(const QString& _id, const QByteArray& _data); 
+  void addItem(const QString& _id, const QBitArray& _data); 
 
 private:
 

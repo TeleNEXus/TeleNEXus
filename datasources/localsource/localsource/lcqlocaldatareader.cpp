@@ -7,10 +7,10 @@
 __LQ_EXTENDED_QEVENT_IMPLEMENTATION(LCQLocalDataReader::CQEventDataIsRead);
 
 LCQLocalDataReader::CQEventDataIsRead::CQEventDataIsRead(
-        const QByteArray& _data,
+        QSharedPointer<QByteArray> _data,
         LERemoteDataStatus _status) : 
     QEvent(__LQ_EXTENDED_QEVENT_REGISTERED),
-    mspData(new QByteArray(_data)),
+    mspData(_data),
     mStatus(_status)
 {
 }
@@ -69,16 +69,16 @@ void LCQLocalDataReader::connectToSource()
     qDebug() << "LCQLocalDataReader::connectToSource:" << mDataName;
     auto sp = mwpDataSource.lock();
     if(sp.isNull()) return;
-    sp.data()->connectReader(this);
+    sp->connectReader(this);
 }
 
 //------------------------------------------------------------------------------
 void LCQLocalDataReader::disconnectFromSource()
 {
-    qDebug() << "disconnectFromSource:" << mDataName;
+    qDebug() << "LCQLocalDataReader::disconnectFromSource():" << mDataName;
     auto sp = mwpDataSource.lock();
     if(sp.isNull()) return;
-    sp.data()->disconnectReader(this);
+    sp->disconnectReader(this);
 }
 
 //------------------------------------------------------------------------------
