@@ -107,6 +107,22 @@ void LCQLocalSourceHiden::addItem(const QString& _id, const QBitArray& _data)
 }
 
 //------------------------------------------------------------------------------
+QSharedPointer<LCQLocalDataReader> LCQLocalSourceHiden::createReader(
+    const QString& _dataName, 
+    QSharedPointer<LIRemoteDataReadListener> _listener)
+{
+  return LCQLocalDataReader::create(_dataName, _listener, mwpThis);
+}
+
+//------------------------------------------------------------------------------
+QSharedPointer<LCQLocalDataWriter> LCQLocalSourceHiden::createWriter(
+    const QString& _dataName, 
+    QSharedPointer<LIRemoteDataWriteListener> _listener)
+{
+  return LCQLocalDataWriter::create(_dataName, _listener, mwpThis);
+}
+
+//------------------------------------------------------------------------------
 void LCQLocalSourceHiden::customEvent(QEvent* _event)
 {
   if(_event->type() != CEventBase::msExtendedEventType) return;

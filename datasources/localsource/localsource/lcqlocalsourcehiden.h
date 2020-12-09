@@ -92,7 +92,7 @@ public:
 
   QSharedPointer<LCQLocalDataWriter> createWriter(
       const QString& _dataName, 
-      QSharedPointer<LIRemoteDataWriteListener> _listener = nullptr);
+      QSharedPointer<LIRemoteDataWriteListener> _listener);
 
 private:
 
