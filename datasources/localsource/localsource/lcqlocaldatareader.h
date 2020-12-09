@@ -6,7 +6,6 @@
 #include "LIRemoteDataSource.h"
 #include "LIRemoteDataReader.h"
 
-
 class LCQLocalDataReader final: public QObject, public LIRemoteDataReader
 {
   Q_OBJECT
@@ -31,25 +30,31 @@ public:
 private:
 
   QString mDataName;
-  QWeakPointer<LCQLocalSourceHiden> mwpDataSource;
   QWeakPointer<LIRemoteDataReadListener> mwpReadListener;
+  QWeakPointer<LCQLocalSourceHiden> mwpDataSource;
   QWeakPointer<LCQLocalDataReader> mwpThis;
 
-  explicit LCQLocalDataReader();
-public:
+  explicit LCQLocalDataReader() = delete;
 
+  LCQLocalDataReader(
+      const QString& _dataName, 
+      QSharedPointer<LIRemoteDataReadListener> _readListener,
+      QSharedPointer<LCQLocalSourceHiden> _dataSource);
+
+public:
   virtual ~LCQLocalDataReader();
-  virtual void setDataName(const QString& _dataName) override;
-  virtual void setDataReadListener(
-      QWeakPointer<LIRemoteDataReadListener> _listener) override;
+
+  static QSharedPointer<LCQLocalDataReader> 
+    create(
+        const QString& _dataName, 
+        QSharedPointer<LIRemoteDataReadListener> _readListener,
+        QSharedPointer<LCQLocalSourceHiden> _dataSource);
+
   virtual void readRequest() override;
   virtual void connectToSource() override;
   virtual void disconnectFromSource() override;
 
-
 public:
-  static QSharedPointer<LCQLocalDataReader> 
-    create(QSharedPointer<LCQLocalSourceHiden> _dataSource);
 
   void notifyListener(const QByteArray& _data);
   void notifyListener(LERemoteDataStatus _status);

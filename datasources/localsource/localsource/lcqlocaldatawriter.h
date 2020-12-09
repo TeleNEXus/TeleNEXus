@@ -9,38 +9,42 @@ class LCQLocalSourceHiden;
 
 class LCQLocalDataWriter final : public QObject, public LIRemoteDataWriter
 {
-    Q_OBJECT
+  Q_OBJECT
 private:
     //--------------------------------------------------------------------------
-    class CQEventDataIsWrite : public QEvent
-    {
-        __LQ_EXTENDED_QEVENT_DECLARATION
-    public:
-        const LERemoteDataStatus mStatus;
-        explicit CQEventDataIsWrite(LERemoteDataStatus _status);
-    };
+  class CQEventDataIsWrite : public QEvent
+  {
+    __LQ_EXTENDED_QEVENT_DECLARATION
+  public:
+      const LERemoteDataStatus mStatus;
+      explicit CQEventDataIsWrite(LERemoteDataStatus _status);
+  };
 
-    QString mDataName;
-    QWeakPointer<LCQLocalSourceHiden> mwpDataSource;
-    QWeakPointer<LIRemoteDataWriteListener> mwpWriteListener;
-    QWeakPointer<LCQLocalDataWriter> mwpThis;
+  QString mDataName;
+  QWeakPointer<LIRemoteDataWriteListener> mwpWriteListener;
+  QWeakPointer<LCQLocalSourceHiden> mwpDataSource;
+  QWeakPointer<LCQLocalDataWriter> mwpThis;
 
 private:
-    LCQLocalDataWriter();
+  LCQLocalDataWriter() = delete;
+  LCQLocalDataWriter(
+      const QString& _dataName,
+      QSharedPointer<LIRemoteDataWriteListener> _writeListener,
+      QSharedPointer<LCQLocalSourceHiden> _dataSource);
 
 public:
-    static QSharedPointer<LCQLocalDataWriter> 
-      create(QSharedPointer<LCQLocalSourceHiden> _dataSource);
+  static QSharedPointer<LCQLocalDataWriter> create(
+      const QString& _dataName,
+      QSharedPointer<LIRemoteDataWriteListener> _writeListener,
+      QSharedPointer<LCQLocalSourceHiden> _dataSource);
 
-    virtual void setDataName(const QString& _dataName) override;
-    virtual void setDataWriteListener(
-                    QWeakPointer<LIRemoteDataWriteListener> _listener) override;
-    virtual void writeRequest(const QByteArray& _data) override;
+  virtual void writeRequest(const QByteArray& _data) override;
 
-    QString getDataName(){ return mDataName; }
+  QString getDataName(){ return mDataName; }
+  void notifyListener(LERemoteDataStatus _status);
 
 private:
-    virtual void customEvent(QEvent *_event) override;
+  virtual void customEvent(QEvent *_event) override;
 };
 
 

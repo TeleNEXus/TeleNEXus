@@ -10,7 +10,9 @@ namespace modbus
 class LQModbusDataSource;
 class LQModbusDataWriter : public QObject, public LIRemoteDataWriter
 {
+
     Q_OBJECT
+
 private:
     //--------------------------------------------------------------------------
     class CQEventDataIsWrite : public QEvent
@@ -22,18 +24,20 @@ private:
     };
 
     QString mDataName;
-    QWeakPointer<LIRemoteDataSource> mDataSource;
     QWeakPointer<LIRemoteDataWriteListener> mwpWriteListener;
+    QWeakPointer<LIRemoteDataSource> mDataSource;
 
 private:
-    explicit LQModbusDataWriter(QObject* _parent = nullptr) = delete;
+    explicit LQModbusDataWriter() = delete;
 
-    explicit LQModbusDataWriter(QWeakPointer<LQModbusDataSource> _dataSource, 
-            QObject* _parent = nullptr);
+    explicit LQModbusDataWriter(
+        const QString& _dataName,
+        QWeakPointer<LIRemoteDataWriteListener> _writeListener,
+        QWeakPointer<LQModbusDataSource> _dataSource);
 public:
-    virtual void setDataName(const QString& _dataName) override;
-    virtual void setDataWriteListener(
-                    QWeakPointer<LIRemoteDataWriteListener> _listener) override;
+    /* virtual void setDataName(const QString& _dataName) override; */
+    /* virtual void setDataWriteListener( */
+    /*                 QWeakPointer<LIRemoteDataWriteListener> _listener) override; */
     virtual void writeRequest(const QByteArray& _data) override;
 
 private:

@@ -42,7 +42,6 @@ void LCQRemComboBox::CReadListener::dataIsRead(
   }
 }
 
-
 //==============================================================================LCQRemComboBox
 //LCQRemComboBox::LCQRemComboBox(QWidget* _parent) : QComboBox(_parent)
 //{
@@ -61,12 +60,10 @@ LCQRemComboBox::LCQRemComboBox(
 
   mDataReadListener = QSharedPointer<CReadListener>(new CReadListener(*this));
 
-  mDataReader = _dataSource->createReader();
-  mDataReader->setDataName(_dataNameRead);
-  mDataReader->setDataReadListener(mDataReadListener);
+  mDataReader = _dataSource->createReader(_dataNameRead, mDataReadListener);
 
-  mDataWriter = _dataSource->createWriter();
-  mDataWriter->setDataName(_dataNameWrite);
+  mDataWriter = _dataSource->createWriter(_dataNameWrite, 
+      QSharedPointer<LIRemoteDataWriteListener>(nullptr));
 
   this->setEnabled(false);
 

@@ -37,10 +37,15 @@ void LCQReadFromSourceReq::CEventRead::handle(LCQReadFromSourceReq* _sender)
 {
   auto source = 
     LCXmlMain::getApplicationInterface().getDataSource(_sender->mSourceId);
-  if(source.isNull()) _sender->mWaitCond.wakeOne();
-  _sender->mspDataReader = source->createReader();
-  _sender->mspDataReader->setDataName(_sender->mDataId);
-  _sender->mspDataReader->setDataReadListener(_sender->mspDataListener);
+  if(source.isNull()) 
+  {
+    _sender->mWaitCond.wakeOne();
+    return;
+  }
+
+  _sender->mspDataReader = 
+    source->createReader( _sender->mDataId, _sender->mspDataListener);
+
   _sender->mspDataReader->readRequest();
 }
 

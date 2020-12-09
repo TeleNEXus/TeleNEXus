@@ -47,27 +47,30 @@ LCQLocalSourceHiden::CEventRead::CEventRead(
 void LCQLocalSourceHiden::CEventRead::handle(
     LCQLocalSourceHiden* _sender)
 {
-  QByteArray data = _sender->mDataMap.getData(mspDataReader->getDataName());
-
-  if(data.isNull())
-  {
-    mspDataReader->notifyListener(LERemoteDataStatus::DS_UNDEF);
-  }
-
-  mspDataReader->notifyListener(data);
+  _sender->mDataMap.readData(mspDataReader);
 }
 
 //==============================================================================CEventWrite
 LCQLocalSourceHiden::CEventWrite::CEventWrite(
-    QSharedPointer<LCQLocalDataWriter> _sp_writer) :
-  mspDataWriter(_sp_writer)
+    QSharedPointer<LCQLocalDataWriter> _sp_writer,
+    const QByteArray& _data
+    ) :
+  mspDataWriter(_sp_writer),
+  mData(_data)
 {}
 
 //------------------------------------------------------------------------------
 void LCQLocalSourceHiden::CEventWrite::handle(
     LCQLocalSourceHiden* _sender)
 {
-  int ds = _sender->mDataMap.setData(mspDataWriter->getDataName());
+  _sender->mDataMap.writeData(mspDataWriter, mData);
+}
+
+
+//==============================================================================
+void pointerDeleter(QObject* _obj)
+{
+  _obj->deleteLater();
 }
 
 //==============================================================================LCQLocalSourceHiden
@@ -79,6 +82,16 @@ LCQLocalSourceHiden::LCQLocalSourceHiden() :
 //------------------------------------------------------------------------------
 LCQLocalSourceHiden::~LCQLocalSourceHiden()
 {
+}
+
+//------------------------------------------------------------------------------
+QSharedPointer<LCQLocalSourceHiden> LCQLocalSourceHiden::create()
+{
+  auto sp = QSharedPointer<LCQLocalSourceHiden>(
+      new LCQLocalSourceHiden(),
+      pointerDeleter);
+  sp->mwpThis= sp;
+  return sp;
 }
 
 //------------------------------------------------------------------------------
@@ -106,20 +119,21 @@ void LCQLocalSourceHiden::customEvent(QEvent* _event)
 void LCQLocalSourceHiden::connectReader(
     QSharedPointer<LCQLocalDataReader> _sp_reader)
 {
-  CEventConnectReader* event = new CEventConnectReader(_sp_reader);
-  QCoreApplication::postEvent(this, event);
+  QCoreApplication::postEvent(this, new CEventConnectReader(_sp_reader));
 }
 
 //------------------------------------------------------------------------------
 void LCQLocalSourceHiden::disconnectReader(
     QSharedPointer<LCQLocalDataReader> _sp_reader)
 {
+  QCoreApplication::postEvent(this, new CEventDisconnectReader(_sp_reader));
 }
 
 //------------------------------------------------------------------------------
 void LCQLocalSourceHiden::read(
-    QSharedPointer<LCQLocalDataReader> _ps_reader)
+    QSharedPointer<LCQLocalDataReader> _sp_reader)
 {
+  QCoreApplication::postEvent(this, new CEventRead(_sp_reader));
 }
 
 //------------------------------------------------------------------------------
@@ -127,6 +141,7 @@ void LCQLocalSourceHiden::write(
     const QByteArray& _data, 
     QSharedPointer<LCQLocalDataWriter> _sp_writer)
 {
+  QCoreApplication::postEvent(this, new CEventWrite(_sp_writer, _data));
 }
 
 

@@ -26,21 +26,24 @@ private:
     };
 
     QString mDataName;
+    QWeakPointer<LIRemoteDataReadListener> mwpReadListener;
     QWeakPointer<LIRemoteDataSource> mDataSource;
-    QWeakPointer<LIRemoteDataReadListener> mpReadListener;
 
 public:
 
     virtual ~LQModbusDataReader();
-    virtual void setDataName(const QString& _dataName) override;
-    virtual void setDataReadListener(QWeakPointer<LIRemoteDataReadListener> _listener) override;
+    /* virtual void setDataName(const QString& _dataName) override; */
+    /* virtual void setDataReadListener(QWeakPointer<LIRemoteDataReadListener> _listener) override; */
     virtual void readRequest() override;
     virtual void connectToSource() override;
     virtual void disconnectFromSource() override;
 private:
-    explicit LQModbusDataReader(  QObject* _parent = nullptr) = delete;
-    explicit LQModbusDataReader(  QWeakPointer<LQModbusDataSource> _dataSource, 
-            QObject* _parent = nullptr);
+    explicit LQModbusDataReader() = delete;
+
+    explicit LQModbusDataReader(  
+        const QString& _dataName,
+        QWeakPointer<LIRemoteDataReadListener> _readListener,
+        QWeakPointer<LQModbusDataSource> _dataSource);
  
     virtual void customEvent(QEvent* _event) override;
     friend class LQModbusDataSource;

@@ -25,9 +25,21 @@ LCQLocalDataReader::CQEventDataIsRead::CQEventDataIsRead(
 {
 }
 
+//==============================================================================
+static void pointerDeleter(QObject* _obj)
+{
+  _obj->deleteLater();
+}
+
 //==============================================================================LCQRemoteDataListener
-LCQLocalDataReader::LCQLocalDataReader() :   
-  QObject(nullptr)
+LCQLocalDataReader::LCQLocalDataReader(
+    const QString& _dataName, 
+    QSharedPointer<LIRemoteDataReadListener> _readListener,
+    QSharedPointer<LCQLocalSourceHiden> _dataSource) :   
+  QObject(nullptr),
+  mDataName(_dataName),
+  mwpReadListener(_readListener),
+  mwpDataSource(_dataSource)
 {
 }
 
@@ -40,19 +52,16 @@ LCQLocalDataReader::~LCQLocalDataReader()
 }
 
 //------------------------------------------------------------------------------
-void LCQLocalDataReader::setDataName(const QString& _dataName)
+QSharedPointer<LCQLocalDataReader> LCQLocalDataReader::create(
+    const QString& _dataName, 
+    QSharedPointer<LIRemoteDataReadListener> _readListener,
+    QSharedPointer<LCQLocalSourceHiden> _dataSource)
 {
-    auto sp = mwpDataSource.lock();
-    if(!sp.isNull()) sp->disconnectReader(mwpThis);
-    mDataName = _dataName;
-}
-
-//------------------------------------------------------------------------------
-void LCQLocalDataReader::setDataReadListener(
-        QWeakPointer<LIRemoteDataReadListener> _listener)
-{
-    auto sp = _listener.lock();
-    if(!sp.isNull()) mwpReadListener = sp;
+  auto sp = QSharedPointer<LCQLocalDataReader>(
+      new LCQLocalDataReader( _dataName, _readListener, _dataSource), 
+      pointerDeleter);
+  sp->mwpThis = sp;
+  return sp;
 }
 
 //------------------------------------------------------------------------------
@@ -94,15 +103,6 @@ void LCQLocalDataReader::notifyListener(LERemoteDataStatus _status)
   QCoreApplication::postEvent(this, new CQEventDataIsRead(_status));
 }
 
-//------------------------------------------------------------------------------
-QSharedPointer<LCQLocalDataReader> LCQLocalDataReader::create(
-    QSharedPointer<LCQLocalSourceHiden> _dataSource)
-{
-  auto sp = QSharedPointer<LCQLocalDataReader>(new LCQLocalDataReader());
-  sp->mwpDataSource = _dataSource;
-  sp->mwpThis = sp;
-  return sp;
-}
 
 //------------------------------------------------------------------------------
 void LCQLocalDataReader::customEvent(QEvent* _event)

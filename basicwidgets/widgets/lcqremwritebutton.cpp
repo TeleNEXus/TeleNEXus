@@ -60,10 +60,9 @@ void LCQRemWriteButton::addDataWrite(
     write_set.mListener = 
         QSharedPointer<LIRemoteDataWriteListener>(new CWriteListener(_dataName));
 
-    write_set.mData = _data;
-    write_set.mWriter = _source->createWriter();
-    write_set.mWriter->setDataName(_dataName);
-    write_set.mWriter->setDataWriteListener(write_set.mListener);
+    write_set.mData     = _data;
     write_set.mDataName = _dataName;
+    write_set.mWriter   = 
+      _source->createWriter(write_set.mDataName, write_set.mListener);
     mListWriteSets << write_set;
 }
