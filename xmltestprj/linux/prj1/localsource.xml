@@ -1,0 +1,28 @@
+<localsource id="localsource">
+
+  <bits id="bits_size(1)" size="1">
+  <bits id="bits_size(2)" size="2">
+  <bits id="bits_size(3)" size="3">
+
+  <bits id="bits_defs_1" defval="      01">
+  <bits id="bits_defs_2" defval="    0101">
+  <bits id="bits_defs_3" defval="  010101">
+  <bits id="bits_defs_4" defval="01010101">
+
+  <bytes id="bytes_n1" size="1">
+  <bytes id="bytes_n2" size="2">
+  <bytes id="bytes_n4" size="4">
+
+  <bytes id="bytes_uint8"     type="uint8"      defval="151 ">
+  <bytes id="bytes_uint16"    type="uint16"     defval="152 ">
+  <bytes id="bytes_uint32"    type="uint32"     defval="153 ">
+  <bytes id="bytes_int8"      type="int8"       defval="154 ">
+  <bytes id="bytes_int16"     type="int16"      defval="155 ">
+  <bytes id="bytes_int32"     type="int32"      defval="156 ">
+  <bytes id="bytes_float32"   type="float32"    defval="1.57">
+  <bytes id="bytes_hex1"      type="hex"        defval="ca fd 43 20">
+  <bytes id="bytes_hex2"      type="hex"        defval="a fd 43 20">
+  <bytes id="bytes_string"    type="string"     defval="TestString">
+  <bytes id="bytes_string16"  type="string16"   defval="TestStringβαΩ¥₦16">
+
+</localsource>
