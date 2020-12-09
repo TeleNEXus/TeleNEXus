@@ -1,37 +1,81 @@
-#include "lcqlocalsourcehiden.h"
+#include "lclocalsource.h"
 #include "lcqlocaldatareader.h"
 #include "lcqlocaldatawriter.h"
+#include "lcqlocalsourcehiden.h"
 
-#include <QSharedPointer>
+#include <QThread>
 
-
-//==============================================================================
-LCQLocalSourceHiden::LCQLocalSourceHiden()
+//==============================================================================SLocalData
+struct SLocalData
 {
+  QThread* mpThread;
+  QSharedPointer<LCQLocalSourceHiden> mspLocalSourceHiden;
+  SLocalData() :
+    mpThread(new QThread)
+  {
+    mspLocalSourceHiden = LCQLocalSourceHiden::create();
+    mspLocalSourceHiden.data()->moveToThread(mpThread);
+    mpThread->start();
+  }
+
+  ~SLocalData()
+  {
+    mpThread->quit();
+    mpThread->wait(1000);
+    mpThread->deleteLater();
+  }
+};
+
+//------------------------------------------------------------------------------
+#define mpLocalData (static_cast<SLocalData*>(mpData))
+
+//==============================================================================LCLocalDataSource
+LCLocalDataSource::LCLocalDataSource()
+{
+  mpData = new SLocalData();
 }
 
 //------------------------------------------------------------------------------
-LCQLocalSourceHiden::~LCQLocalSourceHiden()
+LCLocalDataSource::~LCLocalDataSource()
 {
+  delete mpLocalData;
 }
 
 //------------------------------------------------------------------------------
-void LCQLocalSourceHiden::connectReader(LCQLocalDataReader* _p_reader)
+QSharedPointer<LCLocalDataSource> LCLocalDataSource::create()
 {
+  return QSharedPointer<LCLocalDataSource>(new LCLocalDataSource());
 }
 
 //------------------------------------------------------------------------------
-void LCQLocalSourceHiden::disconnectReader(LCQLocalDataReader* _p_reader)
+void LCLocalDataSource::addByteItem(const QString& _dataName, const QByteArray& _data)
 {
+  mpLocalData->mspLocalSourceHiden->addItem(_dataName, _data);
 }
 
 //------------------------------------------------------------------------------
-void LCQLocalSourceHiden::read(LCQLocalDataReader* _p_reader)
+void LCLocalDataSource::addBitItem(const QString& _dataName, const QBitArray& _data)
 {
+  mpLocalData->mspLocalSourceHiden->addItem(_dataName, _data);
 }
 
-//------------------------------------------------------------------------------
-void LCQLocalSourceHiden::write( const QByteArray& _data, 
-    LCQLocalDataWriter* _writer)
+QSharedPointer<LIRemoteDataReader> LCLocalDataSource::createReader(
+    const QString& _dataName,
+    QWeakPointer<LIRemoteDataReadListener> _readListener)
 {
+  return mpLocalData->mspLocalSourceHiden->createReader(
+      _dataName, 
+      _readListener);
 }
+
+QSharedPointer<LIRemoteDataWriter> LCLocalDataSource::createWriter(
+    const QString& _dataName,
+    QWeakPointer<LIRemoteDataWriteListener> _writeListener)
+{
+  return mpLocalData->mspLocalSourceHiden->createWriter(
+      _dataName, 
+      _writeListener);
+}
+
+
+

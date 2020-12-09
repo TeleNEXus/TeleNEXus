@@ -388,6 +388,7 @@ private:
     explicit LQModbusDataSource(quint8 _devId,
                                  QSharedPointer<LQModbusMasterBase> _modbusMaster,
                                  QObject *_parent = nullptr);
+
     LQModbusDataSource(const LQModbusDataSource&) = delete;
     LQModbusDataSource& operator=(const LQModbusDataSource&) = delete;
 public:
@@ -412,9 +413,15 @@ private:
     virtual void customEvent(QEvent* _event) override;
 
 public:
+
     //----------------------------------------------------------------------------------------------------------override
-    virtual QSharedPointer<LIRemoteDataReader> createReader() override;
-    virtual QSharedPointer<LIRemoteDataWriter> createWriter() override;
+    virtual QSharedPointer<LIRemoteDataReader> createReader(
+        const QString& _dataName,
+        QWeakPointer<LIRemoteDataReadListener> _readListener) override;
+
+    virtual QSharedPointer<LIRemoteDataWriter> createWriter(
+        const QString& _dataName,
+        QWeakPointer<LIRemoteDataWriteListener> _writeListener) override;
 
     friend class LQModbusDataReader;
     friend class LQModbusDataWriter;

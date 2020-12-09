@@ -9,6 +9,8 @@ class LCQLocalDataReader;
 class LCQLocalDataWriter;
 class LIRemoteDataReader;
 class LIRemoteDataWriter;
+class LIRemoteDataReadListener;
+class LIRemoteDataWriteListener;
 
 class LCQLocalSourceHiden final : public QObject 
 {
@@ -64,22 +66,33 @@ private:
   {
   private:
     QSharedPointer<LCQLocalDataWriter> mspDataWriter;
-
+    QByteArray mData;
   public:
     CEventWrite() = delete;
-    CEventWrite(QSharedPointer<LCQLocalDataWriter> _sp_reader);
+    CEventWrite(
+        QSharedPointer<LCQLocalDataWriter> _sp_writer, 
+        const QByteArray& _data);
     virtual void handle(LCQLocalSourceHiden* _sender) override;
   };
 
   LCDataItemMap mDataMap;
-public:
-
+  QWeakPointer<LCQLocalSourceHiden> mwpThis;
   explicit LCQLocalSourceHiden();
-
+public:
   virtual ~LCQLocalSourceHiden();
+
+  static QSharedPointer<LCQLocalSourceHiden> create();
 
   void addItem(const QString& _id, const QByteArray& _data); 
   void addItem(const QString& _id, const QBitArray& _data); 
+
+  QSharedPointer<LCQLocalDataReader> createReader(
+      const QString& _dataName, 
+      QSharedPointer<LIRemoteDataReadListener> _listener);
+
+  QSharedPointer<LCQLocalDataWriter> createWriter(
+      const QString& _dataName, 
+      QSharedPointer<LIRemoteDataWriteListener> _listener = nullptr);
 
 private:
 

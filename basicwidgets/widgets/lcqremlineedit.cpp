@@ -55,15 +55,11 @@ LCQRemLineEdit::LCQRemLineEdit(
   setValidator(_formatter->validator());
   setEnabled(false);
 
-  mDataReader = _dataSource->createReader();
-  mDataReader->setDataName(_dataName);
   mReadListener = QSharedPointer<CReadListener>(new CReadListener(*this));
-  mDataReader->setDataReadListener(mReadListener);
+  mDataReader = _dataSource->createReader(_dataName, mReadListener);
 
-  mDataWriter = _dataSource->createWriter();
-  mDataWriter->setDataName(_dataName);
   mWriteListener = QSharedPointer<CWriteListener>(new CWriteListener(*this));
-  mDataWriter->setDataWriteListener(mWriteListener);
+  mDataWriter = _dataSource->createWriter(_dataName, mWriteListener);
 }
 
 //------------------------------------------------------------------------------
@@ -82,15 +78,11 @@ LCQRemLineEdit::LCQRemLineEdit(
   setValidator(_formatter->validator());
   setEnabled(false);
 
-  mDataReader = _dataSource->createReader();
-  mDataReader->setDataName(_dataNameRead);
   mReadListener = QSharedPointer<CReadListener>(new CReadListener(*this));
-  mDataReader->setDataReadListener(mReadListener);
+  mDataReader = _dataSource->createReader(_dataNameRead, mReadListener);
 
-  mDataWriter = _dataSource->createWriter();
-  mDataWriter->setDataName(_dataNameWrite);
   mWriteListener = QSharedPointer<CWriteListener>(new CWriteListener(*this));
-  mDataWriter->setDataWriteListener(mWriteListener);
+  mDataWriter = _dataSource->createWriter(_dataNameWrite, mWriteListener);
 }
 
 //------------------------------------------------------------------------------

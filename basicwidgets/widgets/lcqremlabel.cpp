@@ -44,9 +44,7 @@ LCQRemLabel::LCQRemLabel(const QString& _dataName,
     mFormatter.data()->undefState(str);
     setText(str);
     mDataListener = QSharedPointer<CReadListener>(new CReadListener(*this));
-    mDataReader = _dataSource->createReader();
-    mDataReader->setDataName(_dataName);
-    mDataReader->setDataReadListener(mDataListener);
+    mDataReader = _dataSource->createReader(_dataName, mDataListener);
 
 }
 
