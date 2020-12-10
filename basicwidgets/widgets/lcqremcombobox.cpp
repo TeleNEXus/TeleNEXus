@@ -134,5 +134,6 @@ void LCQRemComboBox::showPopup(void)
 void LCQRemComboBox::hidePopup(void)
 {
   mFlagPopupOn = false;
+  mDataReader->readRequest();
   QComboBox::hidePopup();
 }
