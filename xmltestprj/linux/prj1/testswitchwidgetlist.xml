@@ -15,6 +15,10 @@
     <table file="testtablelocalsource.xml" />
   </item>
 
+  <item text="Table local source">
+    <table file="testtablelocalsource.xml" />
+  </item>
+
   <item text="widget mnemo" icon="picture/picture_1.png">
     <scrollArea align="Center" bgColor="rgb(102,102,102)">
       <widget file="testmnemowidget.xml"/>

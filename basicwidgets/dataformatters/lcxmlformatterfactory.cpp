@@ -44,11 +44,9 @@ static QSharedPointer<LIDataFormatter> __formatterFloat32;
 
 //==============================================================================
 
-QMap <
-QString, 
-    std::function< QSharedPointer< LIDataFormatter >(
-            const QDomNamedNodeMap& _attr)>>
-    __formatterCreators;
+QMap < QString, 
+     std::function<QSharedPointer<LIDataFormatter>(const QDomNamedNodeMap& _attr)>> 
+     __formatterCreators;
 
 struct SFormatterCreator1
 {

@@ -66,7 +66,6 @@ void LCQLocalSourceHiden::CEventWrite::handle(
   _sender->mDataMap.writeData(mspDataWriter, mData);
 }
 
-
 //==============================================================================
 void pointerDeleter(QObject* _obj)
 {
