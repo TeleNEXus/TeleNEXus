@@ -111,6 +111,7 @@ void LCQRemLineEdit::keyPressEvent(QKeyEvent *_ev)
   if((_ev->key() == Qt::Key_Enter) ||(_ev->key() == Qt::Key_Return))
   {
     mDataWriter->writeRequest(mFormatter->toBytes(text()));
+    mDataReader->readRequest();
     mReadListener->setActive(true);
   }
   else
@@ -129,6 +130,7 @@ void LCQRemLineEdit::focusInEvent(QFocusEvent *_event)
 void LCQRemLineEdit::focusOutEvent(QFocusEvent *_event)
 {
   mReadListener->setActive(true);
+  mDataReader->readRequest();
   QLineEdit::focusOutEvent(_event);
 }
 
