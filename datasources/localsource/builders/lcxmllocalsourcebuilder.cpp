@@ -24,6 +24,20 @@ static const struct
   QString bytes           = "bytes";
 }__slTags;
 
+static const struct
+{
+  QString type_uint8    = "uint8";
+  QString type_uint16   = "uint16";
+  QString type_uint32   = "uint32";
+  QString type_int8     = "int8";
+  QString type_int16    = "int16";
+  QString type_int32    = "int32";
+  QString type_float32  = "float32";
+  QString type_hex      = "hex";
+  QString type_string   = "string";
+  QString type_string16 = "string16";
+}__slBytesTypes;
+
 //==============================================================================
 LCXmlLocalSourceBuilder::LCXmlLocalSourceBuilder()
 {
@@ -142,6 +156,7 @@ static void addItemBits(
 {
 
   Q_UNUSED(_app);
+  qDebug() << "Local source builder: add item bits";
   
   QString attr_id= _item_element.attribute(__slAttributes.id);
   if(attr_id.isNull()) return;
@@ -179,15 +194,144 @@ static void addItemBits(
   _source.addBitItem(attr_id, bits);
 }
 
+
 //==============================================================================addItemBytes
+#include <functional>
+#include <limits>
+static class CBytesCreator
+{
+
+public:
+  QMap<
+    QString, 
+    std::function<
+      void(
+          LCLocalDataSource&,
+          const QString& _dataName,
+          const QString& _defVal
+          )>> mCreatorsMap;
+public:
+  CBytesCreator()
+  {
+
+    //-----------------------------------------------------uint8
+    mCreatorsMap.insert(
+        __slBytesTypes.type_uint8, 
+        [](LCLocalDataSource& _source, 
+          const QString& _dataName, 
+          const QString& _defVal)
+        {
+          QByteArray byte_array(1,0);
+          if(!_defVal.isNull())
+          {
+            bool flag = false;
+            qint16 data = _defVal.toShort(&flag);
+            if(flag && ((data & 0x00ff) == data))
+            {
+              byte_array[0] = data;
+            }
+          }
+          _source.addByteItem(_dataName, byte_array);
+        });
+
+    //-----------------------------------------------------int8
+    mCreatorsMap.insert(
+        __slBytesTypes.type_int8, 
+        [](LCLocalDataSource& _source, 
+          const QString& _dataName, 
+          const QString& _defVal)
+        {
+          QByteArray byte_array(1,0);
+          if(!_defVal.isNull())
+          {
+            bool flag = false;
+            qint8 data = _defVal.toShort(&flag);
+            if(flag)
+            {
+              byte_array[0] = data;
+            }
+          }
+          _source.addByteItem(_dataName, byte_array);
+        });
+
+    //-----------------------------------------------------uint16
+    mCreatorsMap.insert(
+        __slBytesTypes.type_uint16, 
+        [](LCLocalDataSource& _source, 
+          const QString& _dataName, 
+          const QString& _defVal)
+        {
+
+        QByteArray byte_array(2, 0);
+
+        if(!_defVal.isNull())
+        {
+          bool flag = false;
+          quint16 data = _defVal.toUShort(&flag);
+          if(flag)
+          {
+          byte_array = QByteArray(reinterpret_cast<char*>(&data), 2);
+          }
+        }
+        _source.addByteItem(_dataName, byte_array);
+        });
+
+    //-----------------------------------------------------int16
+    mCreatorsMap.insert(
+        __slBytesTypes.type_int16, 
+        [](LCLocalDataSource& _source, 
+          const QString& _dataName, 
+          const QString& _defVal)
+        {
+
+        QByteArray byte_array(2, 0);
+
+        if(!_defVal.isNull())
+        {
+          bool flag = false;
+          qint16 data = _defVal.toShort(&flag);
+          if(flag)
+          {
+          byte_array = QByteArray(reinterpret_cast<char*>(&data), 2);
+          }
+        }
+        _source.addByteItem(_dataName, byte_array);
+        });
+  }
+} __slTypedBytesCreator;
+
+//------------------------------------------------------------------------------
 static void addItemBytes(
     LCLocalDataSource& _source, 
     const QDomElement& _item_element, 
     const LIApplication& _app)
 {
-  Q_UNUSED(_source);
-  Q_UNUSED(_item_element);
   Q_UNUSED(_app);
+
+  QString attr_id = _item_element.attribute(__slAttributes.id);
+
+  if(attr_id.isNull()) return;
+
+  QString attr = _item_element.attribute(__slAttributes.size);
+
+  if(!attr.isNull())
+  {
+    int size = 0;
+    size = attr.toInt();
+    if(size <= 0) return;
+    _source.addByteItem(attr_id, QByteArray(size, 0)); 
+  }
+
+  attr = _item_element.attribute(__slAttributes.type);
+
+  if(attr.isNull()) return;
+  auto creator_it = __slTypedBytesCreator.mCreatorsMap.find(attr);
+  if(creator_it == __slTypedBytesCreator.mCreatorsMap.end()) return;
+
+  creator_it.value()(
+      _source, 
+      attr_id, 
+      _item_element.attribute(__slAttributes.defval));
 }
 
 
