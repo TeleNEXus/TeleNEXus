@@ -124,6 +124,7 @@ static void createSources(const QDomNodeList& nodes,
         QDomElement el;
         qDebug() << "createSources pass0";
         el = nodes.at(i).toElement();
+        if(el.isNull()) continue;
 
         attrName = el.attribute(__sourceAttributes.name);
         if(attrName.isNull()) continue;

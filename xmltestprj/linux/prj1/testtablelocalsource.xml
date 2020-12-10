@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<table>
+
+  <col label="Столбец 1">
+    <dataLabel      source="localsource"  data="bits_size(1)" format="bits"/>
+    <dataLabel      source="localsource"  data="bits_size(2)" format="bits"/>
+    <dataLabel      source="localsource"  data="bits_size(3)" format="bits"/>
+  </col>
+
+  <col label="Столбец 2">
+    <!-- <dataLineEdit   source="localsource"  data="bits_size(1)" format="bits" dataSize="3" separator=" " /> -->
+    <dataLineEdit   source="localsource"  data="bits_size(1)" format="bits" />
+    <dataLineEdit   source="localsource"  data="bits_size(2)" format="bits" />
+    <dataLineEdit   source="localsource"  data="bits_size(3)" format="bits" />
+  </col>
+
+</table>
