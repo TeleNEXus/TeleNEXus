@@ -2,7 +2,7 @@
 
 <SOURCEBUILDERS>
     <modbussources  lib="modbussource"  libhandler="getModbusSourceBuilder" />
-    <localsource    lib="localsource"   libhandler="getLocalSourceBuilder"  />
+    <localsources   lib="localsource"   libhandler="getLocalSourceBuilder"  />
 
     <!--
     <mssqlsource   lib="libs/sqlsources"     libhandler="getMsSqlSourcesBuilder" />

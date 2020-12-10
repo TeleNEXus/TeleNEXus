@@ -820,7 +820,6 @@ bool LQModbusDataSource::CDataMap::disconnectReader(QObject* _reader)
   mMapReaders.erase(it);
   return true;
 }
-int __i = 0;
 //==============================================================================LCQModbusDataSource
 LQModbusDataSource::LQModbusDataSource(
     quint8 _devId,
@@ -833,7 +832,6 @@ LQModbusDataSource::LQModbusDataSource(
   mTimer(this),
   mDataMap(mDevId, _modbusMaster)
 {
-  __i++;
   connect(&mTimer, &QTimer::timeout,[=](){
       mDataMap.update(); });
 }
@@ -844,7 +842,7 @@ LQModbusDataSource::~LQModbusDataSource()
 }
 
 //------------------------------------------------------------------------------doDeleteLater
-static void doDeleteLater(LQModbusDataSource* _obj)
+static void doDeleteLater(QObject* _obj)
 {
   _obj->deleteLater();
 }
