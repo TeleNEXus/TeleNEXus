@@ -245,9 +245,11 @@ public:
           if(!_defVal.isNull())
           {
             bool flag = false;
-            qint8 data = _defVal.toShort(&flag);
+            qint16 data = _defVal.toShort(&flag);
             if(flag)
             {
+            if((data <= std::numeric_limits<qint8>::max())&&
+                (data >= std::numeric_limits<qint8>::min()))
               byte_array[0] = data;
             }
           }
