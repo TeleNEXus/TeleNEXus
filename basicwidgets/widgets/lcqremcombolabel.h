@@ -21,11 +21,13 @@ private:
   {
   private:
     LCQRemComboLabel& mLabel;
+    bool mFlagActive;
   public:
     CReadListener(LCQRemComboLabel& _label);
     virtual ~CReadListener(){}
     virtual void dataIsRead(QSharedPointer<QByteArray>  _data, 
         LERemoteDataStatus          _status) override;
+    void setActive(bool _flag){ mFlagActive = _flag;}
   };
 
     void* mpOwnData;    //Собственные данные.
@@ -34,6 +36,7 @@ private:
     QSharedPointer<LIDataFormatter> mspFormatter;
     QSharedPointer<CReadListener> mDataListener;
 public:
+
     explicit LCQRemComboLabel(   
         const QString&                              _dataName,
         QSharedPointer<LIRemoteDataSource>          _dataSource,
