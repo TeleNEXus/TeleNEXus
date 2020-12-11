@@ -26,5 +26,6 @@
   <!-- <bytes id="bytes_hex2"      type="hex"        defval="a fd 43 20"/> -->
   <!-- <bytes id="bytes_string"    type="string"     defval="TestString"/> -->
   <!-- <bytes id="bytes_string16"  type="string16"   defval="TestStringβαΩ¥₦16"/> -->
+  <bytes id="bytes_string"    type="string"     defval="TestStringПроверка"/>
 
 </localsourcemap>
