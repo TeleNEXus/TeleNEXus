@@ -40,7 +40,11 @@ void LCQWriteToSource::CEventWrite::handle(LCQWriteToSource* _sender)
 {
   auto source = 
     LCXmlMain::getApplicationInterface().getDataSource(_sender->mSourceId);
-  if(source.isNull()) _sender->mWaitCond.wakeOne();
+  if(source.isNull()) 
+  {
+    _sender->mWaitCond.wakeOne();
+    return;
+  }
   _sender->mspDataWriter = source->createWriter(
       _sender->mDataId, 
       _sender->mspDataListener);
