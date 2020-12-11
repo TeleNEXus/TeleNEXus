@@ -14,7 +14,10 @@
     <label text="bytes_uint8"   /> 
     <label text="bytes_int8"    /> 
     <label text="bytes_uint16"  /> 
-    <label text="bytes_int16"  /> 
+    <label text="bytes_int16"   /> 
+    <label text="bytes_uint32"  /> 
+    <label text="bytes_int32"   /> 
+    <label text="bytes_float32" /> 
 
   </col>
 
@@ -28,10 +31,13 @@
     <dataLabel      source="localsource"  data="bits_defs_3" format="bits"/>
     <dataLabel      source="localsource"  data="bits_defs_4" format="bits"/>
 
-    <dataLabel      source="localsource"  data="bytes_uint8"  format="uint8"  />
-    <dataLabel      source="localsource"  data="bytes_int8"   format="int8"   />
-    <dataLabel      source="localsource"  data="bytes_uint16" format="uint16" />
-    <dataLabel      source="localsource"  data="bytes_int16"  format="int16"  />
+    <dataLabel      source="localsource"  data="bytes_uint8"   format="uint8"    />
+    <dataLabel      source="localsource"  data="bytes_int8"    format="int8"     />
+    <dataLabel      source="localsource"  data="bytes_uint16"  format="uint16"   />
+    <dataLabel      source="localsource"  data="bytes_int16"   format="int16"    />
+    <dataLabel      source="localsource"  data="bytes_uint32"  format="uint32"   />
+    <dataLabel      source="localsource"  data="bytes_int32"   format="int32"    />
+    <dataLabel      source="localsource"  data="bytes_float32" format="float32"  />
   </col>
 
   <col label="Data edit">
@@ -45,10 +51,13 @@
     <dataLineEdit   source="localsource"  data="bits_defs_3" format="bits" />
     <dataLineEdit   source="localsource"  data="bits_defs_4" format="bits" />
 
-    <dataLineEdit   source="localsource"  data="bytes_uint8"  format="uint8"  />
-    <dataLineEdit   source="localsource"  data="bytes_int8"   format="int8"   />
-    <dataLineEdit   source="localsource"  data="bytes_uint16" format="uint16" />
-    <dataLineEdit   source="localsource"  data="bytes_int16"  format="int16"  />
+    <dataLineEdit   source="localsource"  data="bytes_uint8"   format="uint8"    />
+    <dataLineEdit   source="localsource"  data="bytes_int8"    format="int8"     />
+    <dataLineEdit   source="localsource"  data="bytes_uint16"  format="uint16"   />
+    <dataLineEdit   source="localsource"  data="bytes_int16"   format="int16"    />
+    <dataLineEdit   source="localsource"  data="bytes_uint32"  format="uint32"   />
+    <dataLineEdit   source="localsource"  data="bytes_int32"   format="int32"    />
+    <dataLineEdit   source="localsource"  data="bytes_float32" format="float32"  />
 
   </col>
   
