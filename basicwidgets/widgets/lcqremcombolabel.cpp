@@ -21,7 +21,7 @@ struct SOwnData
 //==============================================================================LCQRemComboLabel
 LCQRemComboLabel::
 CReadListener::
-CReadListener(LCQRemComboLabel& _label) : mLabel(_label)
+CReadListener(LCQRemComboLabel& _label) : mLabel(_label), mFlagActive(false)
 {
 
 }
@@ -30,36 +30,41 @@ CReadListener(LCQRemComboLabel& _label) : mLabel(_label)
 #define L_LABEL_OWNDATA (static_cast<SOwnData*>(mLabel.mpOwnData))
 
 //------------------------------------------------------------------------------dataIsRead
-void LCQRemComboLabel::
-CReadListener::
-dataIsRead( QSharedPointer<QByteArray> _data, 
-    LERemoteDataStatus _status)
+void LCQRemComboLabel::CReadListener::dataIsRead( 
+    QSharedPointer<QByteArray> _data, LERemoteDataStatus _status)
 {
-  if(_status != LERemoteDataStatus::DS_OK)
+
+  if(mFlagActive)
   {
-    if(L_LABEL_OWNDATA->undefItem != nullptr)
+    if(_status != LERemoteDataStatus::DS_OK)
     {
-      if(mLabel.currentWidget() != L_LABEL_OWNDATA->undefItem) 
-        mLabel.setCurrentWidget(L_LABEL_OWNDATA->undefItem);
+      if(L_LABEL_OWNDATA->undefItem != nullptr)
+      {
+        if(mLabel.currentWidget() != L_LABEL_OWNDATA->undefItem) 
+          mLabel.setCurrentWidget(L_LABEL_OWNDATA->undefItem);
+      }
+      mLabel.setEnabled(false);
+      return;
     }
-    return;
-  }
 
-  auto it = L_LABEL_OWNDATA->normalItemMap.find( mLabel.mspFormatter->toString(*_data));
+    mLabel.setEnabled(true);
 
-  if(it == L_LABEL_OWNDATA->normalItemMap.end())
-  {
-    if(L_LABEL_OWNDATA->wrongItem != nullptr)
+    auto it = L_LABEL_OWNDATA->normalItemMap.find( mLabel.mspFormatter->toString(*_data));
+
+    if(it == L_LABEL_OWNDATA->normalItemMap.end())
     {
-      if(mLabel.currentWidget() != L_LABEL_OWNDATA->wrongItem) 
-        mLabel.setCurrentWidget(L_LABEL_OWNDATA->wrongItem);
+      if(L_LABEL_OWNDATA->wrongItem != nullptr)
+      {
+        if(mLabel.currentWidget() != L_LABEL_OWNDATA->wrongItem) 
+          mLabel.setCurrentWidget(L_LABEL_OWNDATA->wrongItem);
+      }
+      return;
     }
-    return;
-  }
 
-  if(it.value() != mLabel.currentWidget())
-  {
-    mLabel.setCurrentWidget(it.value());
+    if(it.value() != mLabel.currentWidget())
+    {
+      mLabel.setCurrentWidget(it.value());
+    }
   }
 }
 
@@ -83,6 +88,8 @@ LCQRemComboLabel::LCQRemComboLabel(const QString& _dataName,
 
   mDataListener = QSharedPointer<CReadListener>(new CReadListener(*this));
   mDataReader = _dataSource->createReader(_dataName, mDataListener);
+
+  setEnabled(false);
 }
 
 //------------------------------------------------------------------------------
@@ -100,10 +107,13 @@ void LCQRemComboLabel::setActive(bool _flag)
   if(_flag)
   {
     mDataReader->connectToSource();
+    mDataListener->setActive(true);
   }
   else
   {
     mDataReader->disconnectFromSource();
+    setEnabled(false);
+    mDataListener->setActive(false);
   }
 }
 
@@ -155,11 +165,13 @@ bool LCQRemComboLabel::event(QEvent *_event)
   switch(_event->type())
   {
   case QEvent::Type::Show:
-    mDataReader->connectToSource();
+    setActive(true);
+    /* mDataReader->connectToSource(); */
     ret = true;
     break;
   case QEvent::Type::Hide:
-    mDataReader->disconnectFromSource();
+    setActive(false);
+    /* mDataReader->disconnectFromSource(); */
     ret = true;
     break;
   default:

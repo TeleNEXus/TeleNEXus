@@ -72,6 +72,7 @@ void LCQRemLabel::setActive(bool _flag)
   else
   {
     mDataListener->setActive(false);
+    setEnabled(false);
     mDataReader->disconnectFromSource();
   }
 }
