@@ -66,6 +66,7 @@ SOURCES += \
     dataformatters/lcformatteru16.cpp \
     dataformatters/lcformatteru32.cpp \
     dataformatters/lcformatteru8.cpp \
+    dataformatters/lcformatterstring.cpp \
     dataformatters/lcxmlformatterfactory.cpp
 
 
@@ -117,6 +118,7 @@ HEADERS += \
     dataformatters/lcformatteru16.h \
     dataformatters/lcformatteru32.h \
     dataformatters/lcformatteru8.h \
+    dataformatters/lcformatterstring.h \
     dataformatters/lcxmlformatterfactory.h
 
 # Default rules for deployment.

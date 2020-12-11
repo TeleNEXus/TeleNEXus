@@ -18,6 +18,7 @@
     <label text="bytes_uint32"  /> 
     <label text="bytes_int32"   /> 
     <label text="bytes_float32" /> 
+    <label text="bytes_string"  /> 
 
   </col>
 
@@ -38,6 +39,7 @@
     <dataLabel      source="localsource"  data="bytes_uint32"  format="uint32"   />
     <dataLabel      source="localsource"  data="bytes_int32"   format="int32"    />
     <dataLabel      source="localsource"  data="bytes_float32" format="float32"  />
+    <dataLabel      source="localsource"  data="bytes_string"  format="string"   />
   </col>
 
   <col label="Data edit">

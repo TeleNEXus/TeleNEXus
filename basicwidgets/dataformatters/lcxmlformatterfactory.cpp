@@ -11,6 +11,7 @@
 #include "lcformatteru32.h"
 #include "lcformatters32.h"
 #include "lcformatterf32.h"
+#include "lcformatterstring.h"
 
 #include <QSharedPointer>
 
@@ -41,6 +42,7 @@ static QSharedPointer<LIDataFormatter> __formatterInt16;
 static QSharedPointer<LIDataFormatter> __formatterUint32;
 static QSharedPointer<LIDataFormatter> __formatterInt32;
 static QSharedPointer<LIDataFormatter> __formatterFloat32;
+static QSharedPointer<LIDataFormatter> __formatterString;
 
 //==============================================================================
 
@@ -112,6 +114,7 @@ LCXmlStdDataFormatterFactory::LCXmlStdDataFormatterFactory()
     __formatterUint32.reset(      new LCFormatterU32());
     __formatterInt32.reset(       new LCFormatterS32());
     __formatterFloat32.reset(     new LCFormatterF32());
+    __formatterString.reset(      new LCFormatterString());
 
     //TODO: Добавить подключение сепаратора для форматтеров.
     
@@ -283,6 +286,9 @@ LCXmlStdDataFormatterFactory::LCXmlStdDataFormatterFactory()
     __formatterCreators.insert("float32",
             [](const QDomNamedNodeMap& _attr){
             Q_UNUSED(_attr); return __formatterFloat32;});
+    __formatterCreators.insert("string",
+            [](const QDomNamedNodeMap& _attr){
+            Q_UNUSED(_attr); return __formatterString;});
 }
 
 //------------------------------------------------------------------------------
