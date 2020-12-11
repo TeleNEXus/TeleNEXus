@@ -13,7 +13,7 @@
   <bytes id="bytes_n2" size="2"/>
   <bytes id="bytes_n4" size="4"/>
 
-  <bytes id="bytes_uint8"     type="uint8"      defval="255"/>
+  <!-- <bytes id="bytes_uint8"     type="uint8"      defval="255"/> -->
   <!-- <bytes id="bytes_uint8"     type="uint8"      defval="151 "/> -->
   <bytes id="bytes_int8"      type="int8"       defval="-125 "/>
   <bytes id="bytes_uint16"    type="uint16"     defval="152 "/>

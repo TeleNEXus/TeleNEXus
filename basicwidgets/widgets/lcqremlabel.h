@@ -20,11 +20,13 @@ private:
   {
   private:
     LCQRemLabel& mLabel;
+    bool mFlagActive;
   public:
     CReadListener(LCQRemLabel& _label);
     virtual ~CReadListener(){}
     virtual void dataIsRead(QSharedPointer<QByteArray> _data, 
         LERemoteDataStatus status) override;
+    void setActive(bool _flag){mFlagActive = _flag;}
   };
 
     QString mDataName;
