@@ -33,9 +33,9 @@ static const struct
   QString type_int16    = "int16";
   QString type_int32    = "int32";
   QString type_float32  = "float32";
-  QString type_hex      = "hex";
   QString type_string   = "string";
   QString type_string16 = "string16";
+  QString type_hex      = "hex";
 }__slBytesTypes;
 
 //==============================================================================
@@ -215,90 +215,174 @@ public:
   {
 
     //-----------------------------------------------------uint8
-    mCreatorsMap.insert(
-        __slBytesTypes.type_uint8, 
+    mCreatorsMap.insert( __slBytesTypes.type_uint8, 
         [](LCLocalDataSource& _source, 
           const QString& _dataName, 
           const QString& _defVal)
         {
-          QByteArray byte_array(1,0);
           if(!_defVal.isNull())
           {
             bool flag = false;
-            qint16 data = _defVal.toShort(&flag);
+            qint16 data = _defVal.toShort(&flag,0);
             if(flag && ((data & 0x00ff) == data))
             {
-              byte_array[0] = data;
+              QByteArray byte_array = QByteArray(
+                  reinterpret_cast<char*>(&data), sizeof(quint8));
+              _source.addByteItem(_dataName, byte_array);
             }
           }
-          _source.addByteItem(_dataName, byte_array);
+          /* else */
+          /* { */
+          /*   QByteArray byte_array = QByteArray(sizeof(quint8),0); */
+          /*   _source.addByteItem(_dataName, byte_array); */
+          /* } */
         });
 
     //-----------------------------------------------------int8
-    mCreatorsMap.insert(
-        __slBytesTypes.type_int8, 
+    mCreatorsMap.insert( __slBytesTypes.type_int8, 
         [](LCLocalDataSource& _source, 
           const QString& _dataName, 
-          const QString& _defVal)
+          const QString& _defVal) 
         {
-          QByteArray byte_array(1,0);
           if(!_defVal.isNull())
           {
             bool flag = false;
-            qint16 data = _defVal.toShort(&flag);
-            if(flag)
-            {
-            if((data <= std::numeric_limits<qint8>::max())&&
-                (data >= std::numeric_limits<qint8>::min()))
-              byte_array[0] = data;
+            qint16 data = _defVal.toShort(&flag,0);
+            if(flag) {
+              if((data <= std::numeric_limits<qint8>::max())&&
+                  (data >= std::numeric_limits<qint8>::min()))
+              {
+                QByteArray byte_array = QByteArray(
+                  reinterpret_cast<char*>(&data), sizeof(qint8));
+                _source.addByteItem(_dataName, byte_array);
+              }
             }
           }
-          _source.addByteItem(_dataName, byte_array);
+          /* else */
+          /* { */
+          /*   QByteArray byte_array = QByteArray(sizeof(qint8),0); */
+          /*   _source.addByteItem(_dataName, byte_array); */
+          /* } */
         });
 
     //-----------------------------------------------------uint16
-    mCreatorsMap.insert(
-        __slBytesTypes.type_uint16, 
+    mCreatorsMap.insert( __slBytesTypes.type_uint16, 
         [](LCLocalDataSource& _source, 
           const QString& _dataName, 
           const QString& _defVal)
         {
-
-        QByteArray byte_array(2, 0);
-
-        if(!_defVal.isNull())
-        {
-          bool flag = false;
-          quint16 data = _defVal.toUShort(&flag);
-          if(flag)
+          if(!_defVal.isNull())
           {
-          byte_array = QByteArray(reinterpret_cast<char*>(&data), 2);
+            bool flag = false;
+            quint16 data = _defVal.toUShort(&flag,0);
+            if(flag)
+            {
+              QByteArray byte_array = QByteArray(
+                  reinterpret_cast<char*>(&data), sizeof(quint16));
+              _source.addByteItem(_dataName, byte_array);
+            }
           }
-        }
-        _source.addByteItem(_dataName, byte_array);
+          /* else */
+          /* { */
+          /*   QByteArray byte_array = QByteArray(sizeof(quint16),0); */
+          /*   _source.addByteItem(_dataName, byte_array); */
+          /* } */
         });
 
     //-----------------------------------------------------int16
-    mCreatorsMap.insert(
-        __slBytesTypes.type_int16, 
+    mCreatorsMap.insert( __slBytesTypes.type_int16, 
         [](LCLocalDataSource& _source, 
           const QString& _dataName, 
           const QString& _defVal)
         {
-
-        QByteArray byte_array(2, 0);
-
-        if(!_defVal.isNull())
-        {
-          bool flag = false;
-          qint16 data = _defVal.toShort(&flag);
-          if(flag)
+          if(!_defVal.isNull())
           {
-          byte_array = QByteArray(reinterpret_cast<char*>(&data), 2);
+            bool flag = false;
+            qint16 data = _defVal.toShort(&flag,0);
+            if(flag)
+            {
+              QByteArray byte_array = QByteArray(
+                  reinterpret_cast<char*>(&data), sizeof(qint16));
+              _source.addByteItem(_dataName, byte_array);
+            }
           }
-        }
-        _source.addByteItem(_dataName, byte_array);
+          /* else */
+          /* { */
+          /*   QByteArray byte_array = QByteArray(sizeof(qint16),0); */
+          /*   _source.addByteItem(_dataName, byte_array); */
+          /* } */
         });
+
+    //-----------------------------------------------------uint32
+    mCreatorsMap.insert( __slBytesTypes.type_uint32, 
+        [](LCLocalDataSource& _source, 
+          const QString& _dataName, 
+          const QString& _defVal)
+        {
+          if(!_defVal.isNull())
+          {
+            bool flag = false;
+            quint32 data = _defVal.toUInt(&flag,0);
+            if(flag)
+            {
+              QByteArray byte_array = QByteArray(
+                  reinterpret_cast<char*>(&data), sizeof(quint32));
+              _source.addByteItem(_dataName, byte_array);
+            }
+          }
+        });
+
+    //-----------------------------------------------------int32
+    mCreatorsMap.insert( __slBytesTypes.type_int32, 
+        [](LCLocalDataSource& _source, 
+          const QString& _dataName, 
+          const QString& _defVal)
+        {
+          if(!_defVal.isNull())
+          {
+            bool flag = false;
+            qint32 data = _defVal.toInt(&flag,0);
+            if(flag)
+            {
+              QByteArray byte_array = QByteArray(
+                  reinterpret_cast<char*>(&data), sizeof(qint32));
+              _source.addByteItem(_dataName, byte_array);
+            }
+          }
+        });
+
+    //-----------------------------------------------------float32
+    mCreatorsMap.insert( __slBytesTypes.type_float32, 
+        [](LCLocalDataSource& _source, 
+          const QString& _dataName, 
+          const QString& _defVal)
+        {
+          if(!_defVal.isNull())
+          {
+            bool flag = false;
+            float data = _defVal.toFloat(&flag);
+            if(flag)
+            {
+              QByteArray byte_array = QByteArray(
+                  reinterpret_cast<char*>(&data), sizeof(float));
+              _source.addByteItem(_dataName, byte_array);
+            }
+          }
+        });
+
+    //-----------------------------------------------------string
+    mCreatorsMap.insert( __slBytesTypes.type_string, 
+        [](LCLocalDataSource& _source, 
+          const QString& _dataName, 
+          const QString& _defVal)
+        {
+          if(!_defVal.isNull())
+          {
+            if(_defVal.size() == 0) return;
+            _source.addByteItem(_dataName, _defVal.toLatin1());
+          }
+        });
+
   }
 } __slTypedBytesCreator;
 
