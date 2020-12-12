@@ -20,8 +20,13 @@ LCQLocalDataWriter::LCQLocalDataWriter(
     QSharedPointer<LCQLocalSourceHiden> _dataSource):
   QObject(nullptr),
   mDataName(_dataName),
-  mwpWriteListener(_writeListener),
+  mspWriteListener(_writeListener),
   mwpDataSource(_dataSource)
+{
+}
+
+//------------------------------------------------------------------------------
+LCQLocalDataWriter::~LCQLocalDataWriter()
 {
 }
 
@@ -51,9 +56,8 @@ void LCQLocalDataWriter::writeRequest(const QByteArray& _data)
   auto sp = mwpDataSource.lock();
   if(sp.isNull())
   {
-    auto listener = mwpWriteListener.lock();
-
-    if(!listener.isNull()) listener->dataIsWrite(LERemoteDataStatus::DS_WRONG);
+    if(!mspWriteListener.isNull()) 
+      mspWriteListener->dataIsWrite(LERemoteDataStatus::DS_WRONG);
   }
   else
   {
@@ -72,19 +76,16 @@ void LCQLocalDataWriter::customEvent(QEvent *_event)
 {
   if(_event->type() == CQEventDataIsWrite::msExtendedEventType)
   {
-
-    auto listener = mwpWriteListener.lock();
-
-    if(!listener.isNull())
+    if(!mspWriteListener.isNull())
     {
       CQEventDataIsWrite *e = dynamic_cast<CQEventDataIsWrite*>(_event);
       if(e == nullptr)
       {
-        listener->dataIsWrite(LERemoteDataStatus::DS_WRONG);
+        mspWriteListener->dataIsWrite(LERemoteDataStatus::DS_WRONG);
       }
       else
       {
-        listener->dataIsWrite(e->mStatus);
+        mspWriteListener->dataIsWrite(e->mStatus);
       }
     }
   }

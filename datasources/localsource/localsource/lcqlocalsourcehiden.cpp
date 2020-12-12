@@ -2,6 +2,7 @@
 #include "lcqlocaldatareader.h"
 #include "lcqlocaldatawriter.h"
 #include <QCoreApplication>
+#include <QDebug>
 
 //==============================================================================CEventBase
 __LQ_EXTENDED_QEVENT_IMPLEMENTATION(LCQLocalSourceHiden::CEventBase);

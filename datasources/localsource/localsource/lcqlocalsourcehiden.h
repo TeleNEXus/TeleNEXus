@@ -95,6 +95,7 @@ public:
       QSharedPointer<LIRemoteDataWriteListener> _listener);
 
 private:
+  int counter = 0;
 
   void connectReader(QSharedPointer<LCQLocalDataReader> _sp_reader);
   void disconnectReader(QSharedPointer<LCQLocalDataReader> _sp_reader);
