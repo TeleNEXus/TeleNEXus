@@ -30,7 +30,7 @@ public:
 private:
 
   QString mDataName;
-  QWeakPointer<LIRemoteDataReadListener> mwpReadListener;
+  QSharedPointer<LIRemoteDataReadListener> mspReadListener;
   QWeakPointer<LCQLocalSourceHiden> mwpDataSource;
   QWeakPointer<LCQLocalDataReader> mwpThis;
 
@@ -62,6 +62,7 @@ public:
 
 private:
   virtual void customEvent(QEvent* _event) override;
+  
 };
 
 #endif // LCQLOCALDATAREADER_H_

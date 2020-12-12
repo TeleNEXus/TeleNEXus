@@ -17,7 +17,7 @@ Application.debug("---- Script writedatatosource.js");
 // var sourceId = "qtslavetcp";
 // var dataId = "hreg1";
 var sourceId = "localsource";
-var dataId = "bytes_uint16";
+var dataId = "bytes_int16";
 var read_reg = 0;
 
 var read_data = Application.readData(sourceId, dataId);

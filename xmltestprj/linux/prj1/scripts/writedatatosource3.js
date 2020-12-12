@@ -17,7 +17,7 @@ Application.debug("---- Script writedatatosource.js");
 // var sourceId = "qtslavetcp";
 // var dataId = "hreg1";
 var sourceId = "localsource";
-var dataId = "bytes_uint16";
+var dataId = "bytes_int32";
 var read_reg = 0;
 
 var read_data = Application.readData(sourceId, dataId);
@@ -29,9 +29,9 @@ for(var i = 0; i < read_data.length; i++)
 
 Application.debug("Register = " + read_reg);
 read_reg++;
-read_reg &= 0xffff;
+read_reg &= 0xffffffff;
 
-var write_data = [read_reg & 0x00ff, read_reg >>> 8];
+var write_data = [read_reg & 0x00ff, read_reg >>> 8, read_reg >>> 8*2, read_reg >>> 8*3];
 var write_size = Application.writeData(sourceId, dataId, write_data);
 
 Application.debug("Write Size = " + write_size);

@@ -15,8 +15,11 @@ void LCQReadFromSourceReq::CReadListener::dataIsRead(
     QSharedPointer<QByteArray>  _data, 
     LERemoteDataStatus          _status)
 {
-  if(_status == LERemoteDataStatus::DS_OK) mpRequest->mRetData = *_data;
+  qDebug() << "LCQReadFromSourceReq::CReadListener::dataIsRead 0";
+  if(_status == LERemoteDataStatus::DS_OK) mpRequest->mRetData = *_data.data();
+  qDebug() << "LCQReadFromSourceReq::CReadListener::dataIsRead 1";
   mpRequest->mWaitCond.wakeOne();
+  qDebug() << "LCQReadFromSourceReq::CReadListener::dataIsRead 2";
 }
 
 //==============================================================================CEventBase
@@ -101,15 +104,21 @@ void LCQReadFromSourceReq::customEvent(QEvent* _event)
 {
   mMutexEvent.lock();
   mMutexEvent.unlock();
+  qDebug() << "LCQReadFromSourceReq::customEvent 0";
 
   if(_event->type() == CEventBase::msExtendedEventType)
   {
+  qDebug() << "LCQReadFromSourceReq::customEvent 1";
     CEventBase* e = dynamic_cast<CEventBase*>(_event);
+  qDebug() << "LCQReadFromSourceReq::customEvent 2";
     if(e == nullptr)
     {
+  qDebug() << "LCQReadFromSourceReq::customEvent 3";
       return;
     }
+  qDebug() << "LCQReadFromSourceReq::customEvent 4";
     e->handle(this);
   }
+  qDebug() << "LCQReadFromSourceReq::customEvent 5";
 }
 

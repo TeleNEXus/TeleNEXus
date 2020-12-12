@@ -2,6 +2,7 @@
 #include "lcqlocaldatareader.h"
 #include "lcqlocaldatawriter.h"
 #include "LIRemoteDataSource.h"
+#include <QDebug>
 
 //==============================================================================
 void LCDataItemMap::CDataItemBase::notifyReaders(const QByteArray& _data)
@@ -31,6 +32,7 @@ void LCDataItemMap::CDataItemBase::connectReader(
 void LCDataItemMap::CDataItemBase::disconnectReader(
     QSharedPointer<LCQLocalDataReader> _sp_reader)
 {
+  qDebug() << "LCDataItemMap::CDataItemBase::disconnectReader";
   mReadersList.removeAll(_sp_reader);
 }
 
@@ -110,8 +112,13 @@ void LCDataItemMap::readData(QSharedPointer<LCQLocalDataReader> _sp_reader)
   if(it ==  mDataMap.end()) 
   {
     _sp_reader->notifyListener(LERemoteDataStatus::DS_UNDEF);
+    qDebug() << "LCDataItemMap::readData 0";
     return;
   }
+  qDebug() << "LCDataItemMap::readData 1";
+
+  /* _sp_reader->notifyListener(QByteArray(2,0xff)); */
+
   _sp_reader->notifyListener(it.value()->getData());
 }
 

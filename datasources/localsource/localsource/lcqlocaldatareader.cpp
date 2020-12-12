@@ -26,9 +26,10 @@ LCQLocalDataReader::CQEventDataIsRead::CQEventDataIsRead(
 }
 
 //==============================================================================
-static void pointerDeleter(QObject* _obj)
+static void pointerDeleter(LCQLocalDataReader* _reader)
 {
-  _obj->deleteLater();
+  qDebug() << "LCQLocalDataReader  pointerDeleter";
+  _reader->deleteLater();
 }
 
 //==============================================================================LCQRemoteDataListener
@@ -38,7 +39,7 @@ LCQLocalDataReader::LCQLocalDataReader(
     QSharedPointer<LCQLocalSourceHiden> _dataSource) :   
   QObject(nullptr),
   mDataName(_dataName),
-  mwpReadListener(_readListener),
+  mspReadListener(_readListener),
   mwpDataSource(_dataSource)
 {
 }
@@ -46,9 +47,7 @@ LCQLocalDataReader::LCQLocalDataReader(
 //------------------------------------------------------------------------------
 LCQLocalDataReader::~LCQLocalDataReader()
 {
-    auto sp = mwpDataSource.lock();
-    if(sp.isNull()) return;
-    sp->disconnectReader(mwpThis);
+  qDebug() << "++++++++++++++++++++++++++++++LCQLocalDataReader::~LCQLocalDataReader";
 }
 
 //------------------------------------------------------------------------------
@@ -67,15 +66,14 @@ QSharedPointer<LCQLocalDataReader> LCQLocalDataReader::create(
 //------------------------------------------------------------------------------
 void LCQLocalDataReader::readRequest()
 {
-    auto sp = mwpDataSource.lock();
-    if(sp.isNull()) return;
-    sp->read(mwpThis);
+  auto sp = mwpDataSource.lock();
+  if(sp.isNull()) return;
+  sp->read(mwpThis.lock());
 }
 
 //------------------------------------------------------------------------------
 void LCQLocalDataReader::connectToSource()
 {
-    qDebug() << "LCQLocalDataReader::connectToSource:" << mDataName;
     auto sp = mwpDataSource.lock();
     if(sp.isNull()) return;
     sp->connectReader(mwpThis);
@@ -84,7 +82,6 @@ void LCQLocalDataReader::connectToSource()
 //------------------------------------------------------------------------------
 void LCQLocalDataReader::disconnectFromSource()
 {
-    qDebug() << "LCQLocalDataReader::disconnectFromSource():" << mDataName;
     auto sp = mwpDataSource.lock();
     if(sp.isNull()) return;
     sp->disconnectReader(mwpThis);
@@ -103,20 +100,18 @@ void LCQLocalDataReader::notifyListener(LERemoteDataStatus _status)
   QCoreApplication::postEvent(this, new CQEventDataIsRead(_status));
 }
 
-
 //------------------------------------------------------------------------------
 void LCQLocalDataReader::customEvent(QEvent* _event)
 {
-    if(_event->type() != CQEventDataIsRead::msExtendedEventType) return;
+  if(_event->type() != CQEventDataIsRead::msExtendedEventType) return;
 
-    CQEventDataIsRead *e = dynamic_cast<CQEventDataIsRead*>(_event);
+  CQEventDataIsRead *e = dynamic_cast<CQEventDataIsRead*>(_event);
 
-    if(e == nullptr) return;
+  if(e == nullptr) return;
 
-    auto listener = mwpReadListener.lock();
-
-    if(!listener.isNull())
-    {
-        listener->dataIsRead(e->mspData, e->mStatus);
-    }
+  if(!mspReadListener.isNull())
+  {
+    mspReadListener->dataIsRead(e->mspData, e->mStatus);
+  }
 }
+

@@ -17,7 +17,7 @@
   <!-- <bytes id="bytes_uint8"     type="uint8"      defval="0xff"/> -->
   <bytes id="bytes_int8"      type="int8"       defval="-125"/>
   <!-- <bytes id="bytes_int8"      type="int8"       defval="-0x0f"/> -->
-  <bytes id="bytes_uint16"    type="uint16"     defval="    152 "/>
+  <bytes id="bytes_uint16"    type="uint16"     defval="0xfa10"/>
   <bytes id="bytes_int16"     type="int16"      defval="    -30000 "/>
   <bytes id="bytes_uint32"    type="uint32"     defval="153000 "/>
   <bytes id="bytes_int32"     type="int32"      defval="-156000 "/>

@@ -21,7 +21,7 @@ private:
   };
 
   QString mDataName;
-  QWeakPointer<LIRemoteDataWriteListener> mwpWriteListener;
+  QSharedPointer<LIRemoteDataWriteListener> mspWriteListener;
   QWeakPointer<LCQLocalSourceHiden> mwpDataSource;
   QWeakPointer<LCQLocalDataWriter> mwpThis;
 
@@ -33,6 +33,7 @@ private:
       QSharedPointer<LCQLocalSourceHiden> _dataSource);
 
 public:
+  virtual ~LCQLocalDataWriter();
   static QSharedPointer<LCQLocalDataWriter> create(
       const QString& _dataName,
       QSharedPointer<LIRemoteDataWriteListener> _writeListener,
