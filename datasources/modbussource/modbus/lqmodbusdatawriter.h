@@ -11,39 +11,46 @@ class LQModbusDataSource;
 class LQModbusDataWriter : public QObject, public LIRemoteDataWriter
 {
 
-    Q_OBJECT
+  Q_OBJECT;
 
 private:
-    //--------------------------------------------------------------------------
-    class CQEventDataIsWrite : public QEvent
-    {
-        __LQ_EXTENDED_QEVENT_DECLARATION
-    public:
-        const LERemoteDataStatus mStatus;
-        explicit CQEventDataIsWrite(LERemoteDataStatus _status);
-    };
+  //--------------------------------------------------------------------------
+  class CQEventDataIsWrite : public QEvent
+  {
+    __LQ_EXTENDED_QEVENT_DECLARATION
+  public:
+      const LERemoteDataStatus mStatus;
+      explicit CQEventDataIsWrite(LERemoteDataStatus _status);
+  };
 
-    QString mDataName;
-    QWeakPointer<LIRemoteDataWriteListener> mwpWriteListener;
-    QWeakPointer<LIRemoteDataSource> mDataSource;
+  QString mDataName;
+
+  QWeakPointer<LIRemoteDataWriteListener> mwpWriteListener;
+  QWeakPointer<LQModbusDataSource> mwpDataSource;
+  QWeakPointer<LQModbusDataWriter> mwpThis;
 
 private:
-    explicit LQModbusDataWriter() = delete;
+  explicit LQModbusDataWriter() = delete;
 
-    explicit LQModbusDataWriter(
-        const QString& _dataName,
-        QWeakPointer<LIRemoteDataWriteListener> _writeListener,
-        QWeakPointer<LQModbusDataSource> _dataSource);
+  explicit LQModbusDataWriter(
+      const QString& _dataName,
+      QSharedPointer<LIRemoteDataWriteListener> _writeListener,
+      QSharedPointer<LQModbusDataSource> _dataSource);
 public:
-    /* virtual void setDataName(const QString& _dataName) override; */
-    /* virtual void setDataWriteListener( */
-    /*                 QWeakPointer<LIRemoteDataWriteListener> _listener) override; */
-    virtual void writeRequest(const QByteArray& _data) override;
+
+  virtual ~LQModbusDataWriter();
+  static QSharedPointer<LQModbusDataWriter> create(
+      const QString& _dataName,
+      QSharedPointer<LIRemoteDataWriteListener> _writeListener,
+      QSharedPointer<LQModbusDataSource> _dataSource);
+
+
+  virtual void writeRequest(const QByteArray& _data) override;
+  QString getDataName(){ return mDataName; }
+  void notifyListener(LERemoteDataStatus _status);
 
 private:
-    virtual void customEvent(QEvent *_event) override;
-
-    friend class LQModbusDataSource;
+  virtual void customEvent(QEvent *_event) override;
 };
 
 }
