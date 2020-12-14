@@ -3,13 +3,13 @@
 <SCRIPTS>
   <!-- <script file="scripts/readsourcedata.js" interval="500" state="start"/> -->
   <script file="scripts/writedatatosource.js"  interval="1000" state="start"/>
-  <!-- <script file="scripts/writedatatosource1.js" interval="100" state="start"/> -->
-  <!-- <script file="scripts/writedatatosource2.js" interval="100" state="start"/> -->
-  <!-- <script file="scripts/writedatatosource3.js" interval="100" state="start"/> -->
-  <!-- <script file="scripts/writedatatosource.js"  interval="10" state="start"/> -->
-  <!-- <script file="scripts/writedatatosource1.js" interval="10" state="start"/> -->
-  <!-- <script file="scripts/writedatatosource2.js" interval="10" state="start"/> -->
-  <!-- <script file="scripts/writedatatosource3.js" interval="10" state="start"/> -->
+  <script file="scripts/writedatatosource1.js" interval="100" state="start"/>
+  <script file="scripts/writedatatosource2.js" interval="100" state="start"/>
+  <script file="scripts/writedatatosource3.js" interval="100" state="start"/>
+  <script file="scripts/writedatatosource.js"  interval="10" state="start"/>
+  <script file="scripts/writedatatosource1.js" interval="10" state="start"/>
+  <script file="scripts/writedatatosource2.js" interval="10" state="start"/>
+  <script file="scripts/writedatatosource3.js" interval="10" state="start"/>
   <!-- <script file="scripts/writedatatosource.js" state="start"/> -->
   <!-- <script file="scripts/readsourcedata.js" interval="100" state="start"/> -->
 
