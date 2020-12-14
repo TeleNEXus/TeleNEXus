@@ -28,7 +28,7 @@ private:
       virtual void handle(LQModbusDataSource* _sender) = 0;
   };
 
-  //------------------------------------------------------------------------CQEventStart
+  //----------------------------------------------------------------------------CQEventStart
   class CQEventStart : public CQEventBase
   {
   private:
@@ -38,7 +38,7 @@ private:
     virtual void handle(LQModbusDataSource* _sender) override;
   };
 
-  //------------------------------------------------------------------------CQEventStop
+  //----------------------------------------------------------------------------CQEventStop
   class CQEventStop : public CQEventBase
   {
   public:
@@ -46,7 +46,7 @@ private:
     virtual void handle(LQModbusDataSource* _sender) override;
   };
 
-  //------------------------------------------------------------------------CQEventReqRead
+  //----------------------------------------------------------------------------CQEventReqRead
   class CQEventReqRead : public CQEventBase
   {
   private:
@@ -56,7 +56,7 @@ private:
     virtual void handle(LQModbusDataSource* _sender) override;
   };
 
-  //--------------------------------------------------------------------------CQEventReqWrite
+  //----------------------------------------------------------------------------CQEventReqWrite
   class CQEventReqWrite : public CQEventBase
   {
   private:
@@ -70,7 +70,7 @@ private:
     virtual void handle(LQModbusDataSource* _sender) override;
   };
 
-  //------------------------------------------------------------------------CQEventReqConnectReader
+  //----------------------------------------------------------------------------CQEventReqConnectReader
   class CQEventReqConnectReader : public CQEventBase
   {
   private:
@@ -80,7 +80,7 @@ private:
     virtual void handle(LQModbusDataSource* _sender) override;
   };
 
-  //------------------------------------------------------------------------CQEventReqDisconnectReader
+  //----------------------------------------------------------------------------CQEventReqDisconnectReader
   class CQEventReqDisconnectReader : public CQEventBase
   {
   private:
@@ -90,7 +90,7 @@ private:
     virtual void handle(LQModbusDataSource* _sender) override;
   };
 
-  //------------------------------------------------------------------------CControllerRegistersBase
+  //----------------------------------------------------------------------------CControllerRegistersBase
   class CControllerRegistersBase
   {
   public:
@@ -128,9 +128,18 @@ private:
     ~CControllerRegistersBase();
     void addReadDataItem(CDataItem* _dataItem);
     void deleteReadDataItem(CDataItem* _dataItem);
-    void read(quint16 _addr, quint16 _size, QSharedPointer<LQModbusDataReader> _reader);
-    void write(quint16 _addr, quint16 _size, const QByteArray& _data,
+
+    void read(
+        quint16 _addr, 
+        quint16 _size, 
+        QSharedPointer<LQModbusDataReader> _reader);
+
+    void write(
+        quint16 _addr, 
+        quint16 _size, 
+        const QByteArray& _data,
         QSharedPointer<LQModbusDataWriter> _writer);
+
     void update();
   protected:
     virtual LQModbusMasterBase::SReply readRegs(LQModbusMasterBase* master,
@@ -139,11 +148,9 @@ private:
         quint16 _addr, quint16 _size, quint16 _regs[]) = 0;
   };
 
-  //------------------------------------------------------------------------CControllerHoldingRegisters
+  //----------------------------------------------------------------------------CControllerHoldingRegisters
   class CControllerHoldingRegisters : public CControllerRegistersBase
   {
-  public:
-
   public:
     CControllerHoldingRegisters(
         const quint8& _devId,
@@ -155,7 +162,7 @@ private:
         quint16 _addr, quint16 _size, quint16 _regs[]) override;
   };
 
-  //------------------------------------------------------------------------CControllerInputRegisters
+  //----------------------------------------------------------------------------CControllerInputRegisters
   class CControllerInputRegisters : public CControllerRegistersBase
   {
   public:
@@ -171,7 +178,7 @@ private:
         quint16 _addr, quint16 _size, quint16 _regs[]) override;
   };
 
-  //-----------------------------------------------------------------------------------------------CControllerBitsBase
+  //----------------------------------------------------------------------------CControllerBitsBase
   class CControllerBitsBase
   {
   public:
@@ -203,11 +210,13 @@ private:
     QLinkedList<CDataItem*> mReadDataList;
 
   public:
-    CControllerBitsBase(const quint8& _devId, QWeakPointer<LQModbusMasterBase> _master);
+    CControllerBitsBase(
+        const quint8& _devId, QSharedPointer<LQModbusMasterBase> _master);
     ~CControllerBitsBase();
     void addReadDataItem(CDataItem* _dataItem);
     void deleteReadDataItem(CDataItem* _dataItem);
-    void read(quint16 _addr, quint16 _size, QSharedPointer<LQModbusDataReader> _reader);
+    void read(
+        quint16 _addr, quint16 _size, QSharedPointer<LQModbusDataReader> _reader);
     void write(
         quint16 _addr,
         quint16 _size,
@@ -221,14 +230,14 @@ private:
         quint16 _addr, quint16 _size, quint8 _bits[]) = 0;
   };
 
-
-  //-----------------------------------------------------------------------------------------CControllerDiscreteInputs
+  //----------------------------------------------------------------------------CControllerDiscreteInputs
   class CControllerDiscreteInputs : public CControllerBitsBase
   {
   public:
 
   public:
-    CControllerDiscreteInputs(const quint8& _devId, QWeakPointer<LQModbusMasterBase> _master);
+    CControllerDiscreteInputs(
+        const quint8& _devId, QWeakPointer<LQModbusMasterBase> _master);
     ~CControllerDiscreteInputs();
     virtual LQModbusMasterBase::SReply readBits(LQModbusMasterBase* master,
         quint16 _addr, quint16 _size, quint8 _bits[]) override;
@@ -236,13 +245,14 @@ private:
         quint16 _addr, quint16 _size, quint8 _bits[]) override;
   };
 
-  //-----------------------------------------------------------------------------------------CControllerDiscreteInputs
+  //----------------------------------------------------------------------------CControllerDiscreteInputs
   class CControllerCoils : public CControllerBitsBase
   {
   public:
 
   public:
-    CControllerCoils(const quint8& _devId, QWeakPointer<LQModbusMasterBase> _master);
+    CControllerCoils(
+        const quint8& _devId, QWeakPointer<LQModbusMasterBase> _master);
     ~CControllerCoils();
     virtual LQModbusMasterBase::SReply readBits(LQModbusMasterBase* master,
         quint16 _addr, quint16 _size, quint8 _bits[]) override;
@@ -250,8 +260,7 @@ private:
         quint16 _addr, quint16 _size, quint8 _bits[]) override;
   };
 
-
-  //--------------------------------------------------------------------------------------------------CDataMapItemBase
+  //----------------------------------------------------------------------------CDataMapItemBase
   class CDataMapItemBase
   {
   public:
@@ -265,57 +274,65 @@ private:
     virtual void read(QSharedPointer<LQModbusDataReader> _reader) = 0;
   };
 
-  //----------------------------------------------------------------------------------------------CDataMapItemRegsBase
+  //----------------------------------------------------------------------------CDataMapItemRegsBase
   class CDataMapItemRegsBase : public CDataMapItemBase
   {
   protected:
     CControllerRegistersBase::CDataItem mDataItem;
     CControllerRegistersBase& mController;
   public:
-    explicit CDataMapItemRegsBase(quint16 _addr, quint16 _size, CControllerRegistersBase& _controller);
+    explicit CDataMapItemRegsBase(
+        quint16 _addr, quint16 _size, CControllerRegistersBase& _controller);
     virtual ~CDataMapItemRegsBase();
 
-    virtual void connectReader(QWeakPointer<LQModbusDataReader> _reader) override;
-    virtual void disconnectReader(QWeakPointer<LQModbusDataReader> _reader) override;
+    virtual void connectReader(
+        QWeakPointer<LQModbusDataReader> _reader) override;
+    virtual void disconnectReader(
+        QWeakPointer<LQModbusDataReader> _reader) override;
     virtual void read(QSharedPointer<LQModbusDataReader> _reader) override;
   };
 
-  //-------------------------------------------------------------------------------------------CDataMapItemHoldingRegs
+  //----------------------------------------------------------------------------CDataMapItemHoldingRegs
   class CDataMapItemHoldingRegs : public CDataMapItemRegsBase
   {
   public:
-    explicit CDataMapItemHoldingRegs(quint16 _addr, quint16 _size, CControllerHoldingRegisters& _controller);
+    explicit CDataMapItemHoldingRegs(
+        quint16 _addr, quint16 _size, CControllerHoldingRegisters& _controller);
     virtual ~CDataMapItemHoldingRegs();
     virtual void write(const QByteArray& _data,
         QSharedPointer<LQModbusDataWriter> _writer) override;
   };
 
-  //---------------------------------------------------------------------------------------------CDataMapItemInputRegs
+  //----------------------------------------------------------------------------CDataMapItemInputRegs
   class CDataMapItemInputRegs : public CDataMapItemRegsBase
   {
   public:
-    explicit CDataMapItemInputRegs(quint16 _addr, quint16 _size, CControllerInputRegisters& _controller);
+    explicit CDataMapItemInputRegs(
+        quint16 _addr, quint16 _size, CControllerInputRegisters& _controller);
     virtual ~CDataMapItemInputRegs();
     virtual void write(const QByteArray& _data,
         QSharedPointer<LQModbusDataWriter> _writer) override;
   };
 
-  //----------------------------------------------------------------------------------------------CDataMapItemBitsBase
+  //----------------------------------------------------------------------------CDataMapItemBitsBase
   class CDataMapItemBitsBase : public CDataMapItemBase
   {
   protected:
     CControllerBitsBase::CDataItem mDataItem;
     CControllerBitsBase& mController;
   public:
-    explicit CDataMapItemBitsBase(quint16 _addr, quint16 _size, CControllerBitsBase& _controller);
+    explicit CDataMapItemBitsBase(
+        quint16 _addr, quint16 _size, CControllerBitsBase& _controller);
     virtual ~CDataMapItemBitsBase();
 
-    virtual void connectReader(QWeakPointer<LQModbusDataReader> _reader) override;
-    virtual void disconnectReader(QWeakPointer<LQModbusDataReader> _reader) override;
+    virtual void connectReader(
+        QWeakPointer<LQModbusDataReader> _reader) override;
+    virtual void disconnectReader(
+        QWeakPointer<LQModbusDataReader> _reader) override;
     virtual void read(QSharedPointer<LQModbusDataReader> _reader) override;
   };
 
-  //-------------------------------------------------------------------------------------------------CDataMapItemCoils
+  //----------------------------------------------------------------------------CDataMapItemCoils
   class CDataMapItemCoils : public CDataMapItemBitsBase
   {
   public:
@@ -326,11 +343,12 @@ private:
         QSharedPointer<LQModbusDataWriter> _writer) override;
   };
 
-  //----------------------------------------------------------------------------------------CDataMapItemDiscreteInputs
+  //----------------------------------------------------------------------------CDataMapItemDiscreteInputs
   class CDataMapItemDiscreteInputs : public CDataMapItemBitsBase
   {
   public:
-    explicit CDataMapItemDiscreteInputs(quint16 _addr, quint16 _size, CControllerBitsBase& _controller);
+    explicit CDataMapItemDiscreteInputs(
+        quint16 _addr, quint16 _size, CControllerBitsBase& _controller);
     virtual ~CDataMapItemDiscreteInputs();
     virtual void write(const QByteArray& _data,
         QSharedPointer<LQModbusDataWriter> _writer) override;
@@ -340,7 +358,6 @@ private:
   class CDataMap
   {
   private:
-
     CControllerHoldingRegisters mControllerHoldingRegs;
     CControllerInputRegisters   mControllerInputRegs;
 
@@ -404,7 +421,6 @@ private:
 
 public:
 
-  //----------------------------------------------------------------------------------------------------------override
   virtual QSharedPointer<LIRemoteDataReader> createReader(
       const QString& _dataName,
       QWeakPointer<LIRemoteDataReadListener> _readListener) override;

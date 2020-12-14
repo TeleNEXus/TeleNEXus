@@ -304,7 +304,7 @@ void LQModbusDataSource::CControllerBitsBase::CDataItem::notifyReaders()
 //------------------------------------------------------------------------------
 LQModbusDataSource::CControllerBitsBase::CControllerBitsBase(
     const quint8& _devId,
-    QWeakPointer<LQModbusMasterBase> _master) :
+    QSharedPointer<LQModbusMasterBase> _master) :
   mDevId(_devId),
   mspMaster(_master)
 {
@@ -337,8 +337,6 @@ void LQModbusDataSource::CControllerBitsBase::deleteReadDataItem(
 void LQModbusDataSource::CControllerBitsBase::read(
     quint16 _addr, quint16 _size, QSharedPointer<LQModbusDataReader> _reader)
 {
-  /* QSharedPointer<LQModbusMasterBase> master = mwpMaster.lock(); */
-
   LERemoteDataStatus status = LERemoteDataStatus::DS_WRONG;
 
   if(!mspMaster.isNull())
@@ -363,7 +361,6 @@ void LQModbusDataSource::CControllerBitsBase::write(
 
   if(_data.size() == _size)
   {
-    /* QSharedPointer<LQModbusMasterBase> sp = mwpMaster.lock(); */
     if(!mspMaster.isNull())
     {
       if(writeBits(
@@ -381,7 +378,6 @@ void LQModbusDataSource::CControllerBitsBase::write(
 //------------------------------------------------------------------------------
 void LQModbusDataSource::CControllerBitsBase::update()
 {
-  /* QSharedPointer<LQModbusMasterBase> master = mwpMaster.lock(); */
   if(mspMaster.isNull()) return;
   {
     //TODO: Проработать опережающий ответ
@@ -799,18 +795,18 @@ LQModbusDataSource::LQModbusDataSource(
     mDataMap.update(); });
 }
 
-//------------------------------------------------------------------------------~LCQModbusDataController
+//------------------------------------------------------------------------------
 LQModbusDataSource::~LQModbusDataSource()
 {
 }
 
-//------------------------------------------------------------------------------doDeleteLater
+//------------------------------------------------------------------------------
 static void doDeleteLater(QObject* _obj)
 {
   _obj->deleteLater();
 }
 
-//------------------------------------------------------------------------------create
+//------------------------------------------------------------------------------
 QSharedPointer<LQModbusDataSource> LQModbusDataSource::create(
     quint8 _devId,
     QSharedPointer<LQModbusMasterBase> _modbusMaster)
@@ -821,7 +817,7 @@ QSharedPointer<LQModbusDataSource> LQModbusDataSource::create(
   return source;
 }
 
-//------------------------------------------------------------------------------addDataItemHoldingRegs
+//------------------------------------------------------------------------------
 void LQModbusDataSource::addDataItemHoldingRegs(
     const QString& _name, quint16 _addr, quint16 _size)
 {
@@ -849,7 +845,7 @@ void LQModbusDataSource::addDataItemCoils(
   mDataMap.addItemCoils(_name, _addr, _size);
 }
 
-//------------------------------------------------------------------------------start
+//------------------------------------------------------------------------------
 void LQModbusDataSource::start(int _updateIntervalMs)
 {
   QCoreApplication::postEvent(this, new CQEventStart(_updateIntervalMs));
