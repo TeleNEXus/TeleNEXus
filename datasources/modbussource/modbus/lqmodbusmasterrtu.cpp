@@ -2,7 +2,6 @@
 #include <QDebug>
 #include <QThread>
 
-namespace modbus {
 
 LQModbusMasterRtu::LQModbusMasterRtu(QObject* _parent) :
             LQModbusMasterBase(_parent),
@@ -88,4 +87,3 @@ QModbusClient* LQModbusMasterRtu::getMaster()
     return mpMaster;
 }
 
-}//namespace

@@ -5,8 +5,6 @@
 #include <QCoreApplication>
 #include <QDebug>
 
-namespace modbus
-{
 //==============================================================================CQEventDataRead
 __LQ_EXTENDED_QEVENT_IMPLEMENTATION(LQModbusDataReader::CQEventDataIsRead);
 
@@ -45,9 +43,9 @@ LQModbusDataReader::~LQModbusDataReader()
 }
 
 //==============================================================================create
-static void pointerDeleter(LQModbusDataReader* _reader)
+static void doDeleteLater(LQModbusDataReader* _reader)
 {
-  qDebug() << "LQModbusDataReader  pointerDeleter";
+  qDebug() << "LQModbusDataReader  doDeleteLater";
   _reader->deleteLater();
 }
 
@@ -58,7 +56,7 @@ QSharedPointer<LQModbusDataReader> LQModbusDataReader::create(
 {
   auto sp = QSharedPointer<LQModbusDataReader>(
       new LQModbusDataReader( _dataName, _readListener, _dataSource), 
-      pointerDeleter);
+      doDeleteLater);
   sp->mwpThis = sp;
   return sp;
 }
@@ -74,6 +72,7 @@ void LQModbusDataReader::readRequest()
 //------------------------------------------------------------------------------
 void LQModbusDataReader::connectToSource()
 {
+    qDebug() << "//-------------------------------------------------------------";
     qDebug() << "LCQModbusDataReader::connectToSource:" << mDataName;
     auto sp = mwpDataSource.lock();
     if(sp.isNull()) return;
@@ -83,7 +82,7 @@ void LQModbusDataReader::connectToSource()
 //------------------------------------------------------------------------------
 void LQModbusDataReader::disconnectFromSource()
 {
-    qDebug() << "disconnectFromSource:" << mDataName;
+    qDebug() << "LQModbusDataReader::disconnectFromSource:" << mDataName;
     auto sp = mwpDataSource.lock();
     if(sp.isNull()) return;
     sp.data()->disconnectReader(mwpThis);
@@ -107,11 +106,8 @@ void LQModbusDataReader::notifyListener(LERemoteDataStatus _status)
 void LQModbusDataReader::customEvent(QEvent* _event)
 {
     if(_event->type() != CQEventDataIsRead::msExtendedEventType) return;
-
     CQEventDataIsRead *e = dynamic_cast<CQEventDataIsRead*>(_event);
-
     if(e == nullptr) return;
-
     auto listener = mwpReadListener.lock();
     if(!listener.isNull())
     {
@@ -119,4 +115,3 @@ void LQModbusDataReader::customEvent(QEvent* _event)
     }
 }
 
-}//namespace

@@ -8,15 +8,8 @@
 #include "LIRemoteDataSource.h"
 #include "lqmodbusmasterbase.h"
 
-/* namespace modbus */
-/* { */
-namespace modbus
-{
 class LQModbusDataWriter;
 class LQModbusDataReader;
-}
-
-using namespace modbus;
 
 class CDataMap
 {

@@ -2,7 +2,6 @@
 #include <QDebug>
 #include <QThread>
 
-namespace modbus {
 
 //----------------------------------------------------------------------------------------------------------------------
 LQModbusMasterTcp::LQModbusMasterTcp(QObject *_parent) :  LQModbusMasterBase(_parent),
@@ -71,4 +70,3 @@ QModbusClient* LQModbusMasterTcp::getMaster()
     return mpMaster;
 }
 
-}//namespace

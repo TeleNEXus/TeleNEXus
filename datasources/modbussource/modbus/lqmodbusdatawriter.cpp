@@ -2,10 +2,9 @@
 #include "lqmodbusdatasource.h"
 #include "LIRemoteDataWriteListener.h"
 
-#include <QCoreApplication>
+#include <QDebug>
 
-namespace modbus
-{
+#include <QCoreApplication>
 
 //==============================================================================
 __LQ_EXTENDED_QEVENT_IMPLEMENTATION(LQModbusDataWriter::CQEventDataIsWrite);
@@ -36,6 +35,12 @@ LQModbusDataWriter::~LQModbusDataWriter()
 {
 }
 
+//==============================================================================create
+static void doDeleteLater(LQModbusDataWriter* _writer)
+{
+  qDebug() << "LQModbusDataWriter  doDeleteLater";
+  _writer->deleteLater();
+}
 //------------------------------------------------------------------------------
 QSharedPointer<LQModbusDataWriter> LQModbusDataWriter::create(
     const QString& _dataName,
@@ -43,7 +48,8 @@ QSharedPointer<LQModbusDataWriter> LQModbusDataWriter::create(
     QSharedPointer<LQModbusDataSource> _dataSource)
 {
   auto sp  = QSharedPointer<LQModbusDataWriter>(
-      new LQModbusDataWriter(_dataName, _writeListener, _dataSource));
+      new LQModbusDataWriter(_dataName, _writeListener, _dataSource),
+      doDeleteLater);
   sp->mwpThis = sp;
   return sp;
 }
@@ -93,4 +99,3 @@ void LQModbusDataWriter::customEvent(QEvent *_event)
   }
 }
 
-} //namespace

@@ -5,8 +5,6 @@
 #include "LIRemoteDataWriter.h"
 #include "LIRemoteDataSource.h"
 
-namespace modbus
-{
 class LQModbusDataSource;
 class LQModbusDataWriter : public QObject, public LIRemoteDataWriter
 {
@@ -52,7 +50,5 @@ public:
 private:
   virtual void customEvent(QEvent *_event) override;
 };
-
-}
 
 #endif // LQMODBUSDATAWRITER_H

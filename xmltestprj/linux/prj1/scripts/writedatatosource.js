@@ -13,11 +13,13 @@ function sleep(milliseconds) {
 
 // sleep(2000);
 //
-Application.debug("---- Script writedatatosource.js");
-// var sourceId = "qtslavetcp";
-// var dataId = "hreg1";
-var sourceId = "localsource";
-var dataId = "bytes_uint16";
+
+// Application.debug("---- Script writedatatosource.js");
+
+var sourceId = "qtslavetcp";
+var dataId = "hreg1";
+// var sourceId = "localsource";
+// var dataId = "bytes_uint16";
 var read_reg = 0;
 
 var read_data = Application.readData(sourceId, dataId);
@@ -27,15 +29,15 @@ for(var i = 0; i < read_data.length; i++)
   read_reg = (read_reg | (read_data[i] << (8 * i)));
 }
 
-Application.debug("Register = " + read_reg);
+// Application.debug("Register = " + read_reg);
 read_reg++;
 read_reg &= 0xffff;
 
 var write_data = [read_reg & 0x00ff, read_reg >>> 8];
 var write_size = Application.writeData(sourceId, dataId, write_data);
 
-Application.debug("Write Size = " + write_size);
+// Application.debug("Write Size = " + write_size);
 
-Application.debug("End Script");
+// Application.debug("End Script");
 
 

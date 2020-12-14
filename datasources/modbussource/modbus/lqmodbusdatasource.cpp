@@ -9,8 +9,6 @@
 #include "lqmodbusdatareader.h"
 #include "lqmodbusdatawriter.h"
 
-namespace modbus
-{
 
 //==============================================================================CQEventBase
 __LQ_EXTENDED_QEVENT_IMPLEMENTATION(LQModbusDataSource::CQEventBase);
@@ -86,6 +84,7 @@ LQModbusDataSource::CQEventReqConnectReader::CQEventReqConnectReader(
 void LQModbusDataSource::CQEventReqConnectReader::handle(
     LQModbusDataSource* _sender)
 {
+  qDebug() << "LQModbusDataSource::CQEventReqConnectReader::handle: "<< mspReader->getDataName();
   _sender->mDataMap.connectReader(mspReader);
 }
 //==============================================================================CQEventReqDisconnectReader
@@ -493,11 +492,14 @@ LQModbusDataSource::CDataMapItemRegsBase::~CDataMapItemRegsBase()
 }
 
 //------------------------------------------------------------------------------
-void LQModbusDataSource::
-CDataMapItemRegsBase::connectReader(QWeakPointer<LQModbusDataReader> _reader)
+void LQModbusDataSource::CDataMapItemRegsBase::connectReader(
+    QWeakPointer<LQModbusDataReader> _reader)
 {
   if(mDataItem.mReadersList.isEmpty()) mController.addReadDataItem(&mDataItem);
   mDataItem.mReadersList << _reader;
+  qDebug() << 
+    "LQModbusDataSource::CDataMapItemRegsBase::connectReader mReadersList size = " 
+    << mDataItem.mReadersList.size();
 }
 
 //------------------------------------------------------------------------------
@@ -925,4 +927,3 @@ QSharedPointer<LIRemoteDataWriter> LQModbusDataSource::createWriter(
   return LQModbusDataWriter::create(_dataName, _writeListener, mwpThis);
 }
 
-} /* namespace modbus */
