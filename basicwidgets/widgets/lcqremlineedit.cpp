@@ -29,16 +29,16 @@ void LCQRemLineEdit::CReadListener::dataIsRead(
 }
 
 
-LCQRemLineEdit::CWriteListener::CWriteListener(LCQRemLineEdit& _lineEdit) : 
-  mLineEdit(_lineEdit)
-{
+/* LCQRemLineEdit::CWriteListener::CWriteListener(LCQRemLineEdit& _lineEdit) : */ 
+/*   mLineEdit(_lineEdit) */
+/* { */
 
-}
+/* } */
 
-void LCQRemLineEdit::CWriteListener::dataIsWrite(LERemoteDataStatus _status)
-{
-  Q_UNUSED(_status);
-}
+/* void LCQRemLineEdit::CWriteListener::dataIsWrite(LERemoteDataStatus _status) */
+/* { */
+/*   Q_UNUSED(_status); */
+/* } */
 
 //==============================================================================
 LCQRemLineEdit::LCQRemLineEdit(
@@ -58,8 +58,11 @@ LCQRemLineEdit::LCQRemLineEdit(
   mReadListener = QSharedPointer<CReadListener>(new CReadListener(*this));
   mDataReader = _dataSource->createReader(_dataName, mReadListener);
 
-  mWriteListener = QSharedPointer<CWriteListener>(new CWriteListener(*this));
-  mDataWriter = _dataSource->createWriter(_dataName, mWriteListener);
+  /* mWriteListener = QSharedPointer<CWriteListener>(new CWriteListener(*this)); */
+  /* mDataWriter = _dataSource->createWriter(_dataName, mWriteListener); */
+  /* mWriteListener = QSharedPointer<CWriteListener>(new CWriteListener(*this)); */
+  mDataWriter = _dataSource->createWriter(_dataName, 
+      [](LERemoteDataStatus _status){ Q_UNUSED(_status); });
 }
 
 //------------------------------------------------------------------------------
@@ -81,8 +84,10 @@ LCQRemLineEdit::LCQRemLineEdit(
   mReadListener = QSharedPointer<CReadListener>(new CReadListener(*this));
   mDataReader = _dataSource->createReader(_dataNameRead, mReadListener);
 
-  mWriteListener = QSharedPointer<CWriteListener>(new CWriteListener(*this));
-  mDataWriter = _dataSource->createWriter(_dataNameWrite, mWriteListener);
+  /* mWriteListener = QSharedPointer<CWriteListener>(new CWriteListener(*this)); */
+  /* mDataWriter = _dataSource->createWriter(_dataNameWrite, mWriteListener); */
+  mDataWriter = _dataSource->createWriter(_dataNameWrite, 
+      [](LERemoteDataStatus _status){ Q_UNUSED(_status); });
 }
 
 //------------------------------------------------------------------------------

@@ -8,9 +8,8 @@
 #include <qnamespace.h>
 #include <QKeyEvent>
 //==============================================================================CReadListener
-LCQRemComboBox::
-CReadListener::
-CReadListener(LCQRemComboBox& _combobox) :  mOwner(_combobox)
+LCQRemComboBox::CReadListener::CReadListener(LCQRemComboBox& _combobox) :  
+  mOwner(_combobox)
 {
 }
 
@@ -49,8 +48,7 @@ void LCQRemComboBox::CReadListener::dataIsRead(
 
 //------------------------------------------------------------------------------
 LCQRemComboBox::LCQRemComboBox( 
-    const QString&                              _dataNameRead,
-    const QString&                              _dataNameWrite,
+    const QString&                              _dataNameRead, const QString&                              _dataNameWrite,
     QSharedPointer<LIRemoteDataSource>          _dataSource,
     QSharedPointer<LIDataFormatter>             _formatter,
     QWidget* _parent):  QComboBox(_parent),
@@ -62,8 +60,10 @@ LCQRemComboBox::LCQRemComboBox(
 
   mDataReader = _dataSource->createReader(_dataNameRead, mDataReadListener);
 
-  mDataWriter = _dataSource->createWriter(_dataNameWrite, 
-      QSharedPointer<LIRemoteDataWriteListener>(nullptr));
+  /* mDataWriter = _dataSource->createWriter(_dataNameWrite, */ 
+  /*     [](LERemoteDataStatus _status){ Q_UNUSED(_status); }); */
+
+  mDataWriter = _dataSource->createWriter(_dataNameWrite); 
 
   this->setEnabled(false);
 

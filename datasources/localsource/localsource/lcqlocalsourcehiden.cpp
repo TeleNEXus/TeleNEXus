@@ -117,9 +117,10 @@ QSharedPointer<LCQLocalDataReader> LCQLocalSourceHiden::createReader(
 //------------------------------------------------------------------------------
 QSharedPointer<LCQLocalDataWriter> LCQLocalSourceHiden::createWriter(
     const QString& _dataName, 
-    QSharedPointer<LIRemoteDataWriteListener> _listener)
+    LTWriteListener _writeListener)
+    /* QSharedPointer<LIRemoteDataWriteListener> _listener) */
 {
-  return LCQLocalDataWriter::create(_dataName, _listener, mwpThis);
+  return LCQLocalDataWriter::create(_dataName, _writeListener, mwpThis);
 }
 
 //------------------------------------------------------------------------------

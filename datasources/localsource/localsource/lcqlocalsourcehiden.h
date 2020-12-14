@@ -4,13 +4,14 @@
 #include <QObject>
 #include "lcdataitemmap.h"
 #include "lqextendevent.h"
+#include "LIRemoteDataSource.h"
 
 class LCQLocalDataReader;
 class LCQLocalDataWriter;
 class LIRemoteDataReader;
 class LIRemoteDataWriter;
 class LIRemoteDataReadListener;
-class LIRemoteDataWriteListener;
+/* class LIRemoteDataWriteListener; */
 
 class LCQLocalSourceHiden final : public QObject 
 {
@@ -92,7 +93,8 @@ public:
 
   QSharedPointer<LCQLocalDataWriter> createWriter(
       const QString& _dataName, 
-      QSharedPointer<LIRemoteDataWriteListener> _listener);
+      LTWriteListener _writeListener);
+      /* QSharedPointer<LIRemoteDataWriteListener> _listener); */
 
 private:
   int counter = 0;

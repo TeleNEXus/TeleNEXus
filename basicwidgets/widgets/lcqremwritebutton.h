@@ -9,23 +9,23 @@
 class LCQRemWriteButton : public QPushButton
 {
 private:
-    class CWriteListener : public LIRemoteDataWriteListener 
-    {
-    private:
-        QString mDataName;
-    public:
-        CWriteListener(){};
-        CWriteListener(const QString& _dataName);
-        ~CWriteListener(){};
-        virtual void dataIsWrite(LERemoteDataStatus _status) override;
-    };
+    /* class CWriteListener : public LIRemoteDataWriteListener */ 
+    /* { */
+    /* private: */
+    /*     QString mDataName; */
+    /* public: */
+    /*     CWriteListener(){}; */
+    /*     CWriteListener(const QString& _dataName); */
+    /*     ~CWriteListener(){}; */
+    /*     virtual void dataIsWrite(LERemoteDataStatus _status) override; */
+    /* }; */
 
     struct SWriteSet
     {
         QByteArray mData;
         QString mDataName;
         QSharedPointer<LIRemoteDataWriter> mWriter;
-        QSharedPointer<LIRemoteDataWriteListener> mListener;
+        /* QSharedPointer<LIRemoteDataWriteListener> mListener; */
         void write();
     };
 
