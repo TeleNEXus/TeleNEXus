@@ -68,7 +68,7 @@ void LQModbusDataReader::readRequest()
 {
     auto sp = mwpDataSource.lock();
     if(sp.isNull()) return;
-    sp.data()->read(mDataName, this);
+    sp.data()->read(mwpThis);
 }
 
 //------------------------------------------------------------------------------
@@ -77,7 +77,7 @@ void LQModbusDataReader::connectToSource()
     qDebug() << "LCQModbusDataReader::connectToSource:" << mDataName;
     auto sp = mwpDataSource.lock();
     if(sp.isNull()) return;
-    sp.data()->connectReader(mDataName, this);
+    sp.data()->connectReader(mwpThis);
 }
 
 //------------------------------------------------------------------------------
@@ -86,7 +86,7 @@ void LQModbusDataReader::disconnectFromSource()
     qDebug() << "disconnectFromSource:" << mDataName;
     auto sp = mwpDataSource.lock();
     if(sp.isNull()) return;
-    sp.data()->disconnectReader(this);
+    sp.data()->disconnectReader(mwpThis);
 }
 
 //------------------------------------------------------------------------------
