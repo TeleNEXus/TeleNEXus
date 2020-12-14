@@ -29,14 +29,14 @@ private:
                 LERemoteDataStatus status) override;
     };
 
-    //--------------------------------------------------------------------------
-    class CWriteListener : public LIRemoteDataWriteListener
-    {
-    public:
-        CWriteListener(){}
-        virtual ~CWriteListener(){}
-        virtual void dataIsWrite(LERemoteDataStatus _status) = 0;
-    };
+    /* //-------------------------------------------------------------------------- */
+    /* class CWriteListener : public LIRemoteDataWriteListener */
+    /* { */
+    /* public: */
+    /*     CWriteListener(){} */
+    /*     virtual ~CWriteListener(){} */
+    /*     virtual void dataIsWrite(LERemoteDataStatus _status) = 0; */
+    /* }; */
 
     QSharedPointer<CReadListener>               mDataReadListener;
     QSharedPointer<LIRemoteDataReader>          mDataReader;

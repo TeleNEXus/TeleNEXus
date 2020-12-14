@@ -21,7 +21,8 @@ private:
   };
 
   QString mDataName;
-  QSharedPointer<LIRemoteDataWriteListener> mspWriteListener;
+  /* QSharedPointer<LIRemoteDataWriteListener> mspWriteListener; */
+  LTWriteListener mListener;
   QWeakPointer<LCQLocalSourceHiden> mwpDataSource;
   QWeakPointer<LCQLocalDataWriter> mwpThis;
 
@@ -29,14 +30,16 @@ private:
   LCQLocalDataWriter() = delete;
   LCQLocalDataWriter(
       const QString& _dataName,
-      QSharedPointer<LIRemoteDataWriteListener> _writeListener,
+      LTWriteListener _writeListener,
+      /* QSharedPointer<LIRemoteDataWriteListener> _writeListener, */
       QSharedPointer<LCQLocalSourceHiden> _dataSource);
 
 public:
   virtual ~LCQLocalDataWriter();
   static QSharedPointer<LCQLocalDataWriter> create(
       const QString& _dataName,
-      QSharedPointer<LIRemoteDataWriteListener> _writeListener,
+      LTWriteListener _writeListener,
+      /* QSharedPointer<LIRemoteDataWriteListener> _writeListener, */
       QSharedPointer<LCQLocalSourceHiden> _dataSource);
 
   virtual void writeRequest(const QByteArray& _data) override;

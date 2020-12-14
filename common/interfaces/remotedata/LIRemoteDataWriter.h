@@ -4,7 +4,6 @@
 #include <QWeakPointer>
 
 class LIRemoteDataSource;
-class LIRemoteDataWriteListener;
 
 class LIRemoteDataWriter
 {

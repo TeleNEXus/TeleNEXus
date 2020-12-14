@@ -2,6 +2,7 @@
 #define LIREMOTEDATASOURCE_H
 
 #include <QSharedPointer>
+#include <functional>
 
 enum class LERemoteDataStatus
 {
@@ -14,9 +15,10 @@ enum class LERemoteDataStatus
 class LIRemoteDataReader;
 class LIRemoteDataWriter;
 class LIRemoteDataReadListener;
-class LIRemoteDataWriteListener;
+/* class LIRemoteDataWriteListener; */
 
-#include <functional>
+using LTWriteListener = std::function<void(LERemoteDataStatus)>;
+
 
 class LIRemoteDataSource
 {
@@ -30,7 +32,16 @@ public:
 
     virtual QSharedPointer<LIRemoteDataWriter> createWriter(
         const QString& _dataName,
-        QWeakPointer<LIRemoteDataWriteListener> _writeListener) = 0;
+        LTWriteListener _listener = [](LERemoteDataStatus _status){Q_UNUSED(_status);}) = 0;
+
+
+    /* virtual QSharedPointer<LIRemoteDataReader> createReader( */
+    /*     const QString& _dataName, */
+    /*     QWeakPointer<LIRemoteDataReadListener> _readListener) = 0; */
+
+    /* virtual QSharedPointer<LIRemoteDataWriter> createWriter( */
+    /*     const QString& _dataName, */
+    /*     QWeakPointer<LIRemoteDataWriteListener> _writeListener) = 0; */
 
     /* virtual QSharedPointer<LIRemoteDataReader> createReader( */
     /*     const QString& _dataName, */

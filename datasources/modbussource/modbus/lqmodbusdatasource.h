@@ -427,7 +427,8 @@ public:
 
   virtual QSharedPointer<LIRemoteDataWriter> createWriter(
       const QString& _dataName,
-      QWeakPointer<LIRemoteDataWriteListener> _writeListener) override;
+      LTWriteListener _writeListner) override;
+      /* QWeakPointer<LIRemoteDataWriteListener> _writeListener) override; */
 
   friend class LQModbusDataReader;
   friend class LQModbusDataWriter;

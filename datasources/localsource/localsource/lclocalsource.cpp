@@ -70,7 +70,8 @@ QSharedPointer<LIRemoteDataReader> LCLocalDataSource::createReader(
 
 QSharedPointer<LIRemoteDataWriter> LCLocalDataSource::createWriter(
     const QString& _dataName,
-    QWeakPointer<LIRemoteDataWriteListener> _writeListener)
+    LTWriteListener _writeListener)
+    /* QWeakPointer<LIRemoteDataWriteListener> _writeListener) */
 {
   return mpLocalData->mspLocalSourceHiden->createWriter(
       _dataName, 

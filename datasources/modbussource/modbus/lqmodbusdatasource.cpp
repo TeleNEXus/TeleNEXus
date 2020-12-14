@@ -918,7 +918,8 @@ QSharedPointer<LIRemoteDataReader> LQModbusDataSource::createReader(
 //------------------------------------------------------------------------------
 QSharedPointer<LIRemoteDataWriter> LQModbusDataSource::createWriter(
     const QString& _dataName,
-    QWeakPointer<LIRemoteDataWriteListener> _writeListener)
+    LTWriteListener _writeListener)
+    /* QWeakPointer<LIRemoteDataWriteListener> _writeListener) */
 {
   return LQModbusDataWriter::create(_dataName, _writeListener, mwpThis);
 }

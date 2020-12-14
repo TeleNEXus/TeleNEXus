@@ -16,11 +16,13 @@ LCQLocalDataWriter::CQEventDataIsWrite::CQEventDataIsWrite(
 //==============================================================================
 LCQLocalDataWriter::LCQLocalDataWriter(
     const QString& _dataName,
-    QSharedPointer<LIRemoteDataWriteListener> _writeListener,
+    LTWriteListener _writeListener,
+    /* QSharedPointer<LIRemoteDataWriteListener> _writeListener, */
     QSharedPointer<LCQLocalSourceHiden> _dataSource):
   QObject(nullptr),
   mDataName(_dataName),
-  mspWriteListener(_writeListener),
+  /* mspWriteListener(_writeListener), */
+  mListener(_writeListener),
   mwpDataSource(_dataSource)
 {
 }
@@ -39,7 +41,8 @@ static void pointerDeleter(QObject* _obj)
 //------------------------------------------------------------------------------
 QSharedPointer<LCQLocalDataWriter> LCQLocalDataWriter::create(
     const QString& _dataName,
-    QSharedPointer<LIRemoteDataWriteListener> _writeListener,
+    LTWriteListener _writeListener,
+    /* QSharedPointer<LIRemoteDataWriteListener> _writeListener, */
     QSharedPointer<LCQLocalSourceHiden> _dataSource)
 {
   auto sp_writer = 
@@ -56,8 +59,9 @@ void LCQLocalDataWriter::writeRequest(const QByteArray& _data)
   auto sp = mwpDataSource.lock();
   if(sp.isNull())
   {
-    if(!mspWriteListener.isNull()) 
-      mspWriteListener->dataIsWrite(LERemoteDataStatus::DS_WRONG);
+    /* if(!mspWriteListener.isNull()) */ 
+    /*   mspWriteListener->dataIsWrite(LERemoteDataStatus::DS_WRONG); */
+    mListener(LERemoteDataStatus::DS_WRONG);
   }
   else
   {
@@ -76,18 +80,20 @@ void LCQLocalDataWriter::customEvent(QEvent *_event)
 {
   if(_event->type() == CQEventDataIsWrite::msExtendedEventType)
   {
-    if(!mspWriteListener.isNull())
-    {
+    /* if(!mspWriteListener.isNull()) */
+    /* { */
       CQEventDataIsWrite *e = dynamic_cast<CQEventDataIsWrite*>(_event);
       if(e == nullptr)
       {
-        mspWriteListener->dataIsWrite(LERemoteDataStatus::DS_WRONG);
+        /* mspWriteListener->dataIsWrite(LERemoteDataStatus::DS_WRONG); */
+        mListener(LERemoteDataStatus::DS_WRONG);
       }
       else
       {
-        mspWriteListener->dataIsWrite(e->mStatus);
+        mListener(e->mStatus);
+        /* mspWriteListener->dataIsWrite(e->mStatus); */
       }
-    }
+    /* } */
   }
 }
 

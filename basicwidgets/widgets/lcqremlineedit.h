@@ -30,15 +30,15 @@ private:
         void setActive(bool _flag){mFlagActive = _flag;}
     };
 
-    class CWriteListener : public LIRemoteDataWriteListener
-    {
-    private:
-        LCQRemLineEdit& mLineEdit;
-    public:
-        CWriteListener(LCQRemLineEdit& _lineEdit);
-        virtual ~CWriteListener(){}
-        virtual void dataIsWrite(LERemoteDataStatus _status) override;
-    };
+    /* class CWriteListener : public LIRemoteDataWriteListener */
+    /* { */
+    /* private: */
+    /*     LCQRemLineEdit& mLineEdit; */
+    /* public: */
+    /*     CWriteListener(LCQRemLineEdit& _lineEdit); */
+    /*     virtual ~CWriteListener(){} */
+    /*     virtual void dataIsWrite(LERemoteDataStatus _status) override; */
+    /* }; */
 
     QString mDataName;
 
@@ -46,7 +46,7 @@ private:
     QSharedPointer<LIRemoteDataWriter>  mDataWriter;
 
     QSharedPointer<CReadListener>   mReadListener;
-    QSharedPointer<CWriteListener>  mWriteListener;
+    /* QSharedPointer<CWriteListener>  mWriteListener; */
 
     QSharedPointer<LIDataFormatter> mFormatter;
 

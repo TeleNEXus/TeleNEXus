@@ -5,7 +5,7 @@
 #include "LIRemoteDataSource.h"
 #include "LIRemoteDataReader.h"
 
-
+#include <functional>
 class LQModbusDataSource;
 
 class LQModbusDataReader : public QObject, public LIRemoteDataReader
@@ -29,6 +29,7 @@ private:
   QWeakPointer<LIRemoteDataReadListener> mwpReadListener;
   QWeakPointer<LQModbusDataSource> mwpDataSource;
   QWeakPointer<LQModbusDataReader> mwpThis;
+  /* std::function<void(QSharedPointer<QByteArray>, LERemoteDataStatus)> mListener; */
 
 private:
   explicit LQModbusDataReader() = delete;

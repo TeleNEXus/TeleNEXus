@@ -20,17 +20,17 @@ class LCQWriteToSource  : public QObject
 private:
 
   //----------------------------------------------------------------------------CWriteListener
-  class CWriteListener : public LIRemoteDataWriteListener
-  {
-  private:
-    LCQWriteToSource* mpRequest;
-  public:
-    CWriteListener() =  delete;
-    CWriteListener(LCQWriteToSource* _req);
+  /* class CWriteListener : public LIRemoteDataWriteListener */
+  /* { */
+  /* private: */
+  /*   LCQWriteToSource* mpRequest; */
+  /* public: */
+  /*   CWriteListener() =  delete; */
+  /*   CWriteListener(LCQWriteToSource* _req); */
 
-    virtual ~CWriteListener(){}
-    virtual void dataIsWrite(LERemoteDataStatus _status);
-  };
+  /*   virtual ~CWriteListener(){} */
+  /*   virtual void dataIsWrite(LERemoteDataStatus _status); */
+  /* }; */
 
   //----------------------------------------------------------------------------CEventBase
   class CEventBase : public QEvent
@@ -56,7 +56,7 @@ private:
 
   int mWriteDataSize;
 
-  QSharedPointer<CWriteListener>        mspDataListener;
+  /* QSharedPointer<CWriteListener>        mspDataListener; */
   QSharedPointer<LIRemoteDataWriter>    mspDataWriter;
 
   QMutex          mMutexEvent;

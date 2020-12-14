@@ -2,18 +2,18 @@
 #include "LIRemoteDataWriter.h"
 #include <QDebug>
 
-//==============================================================================CWriteListener
-LCQRemWriteButton::CWriteListener::CWriteListener(
-        const QString& _dataName):
-    mDataName(_dataName)
-{
-}
+/* //==============================================================================CWriteListener */
+/* LCQRemWriteButton::CWriteListener::CWriteListener( */
+/*         const QString& _dataName): */
+/*     mDataName(_dataName) */
+/* { */
+/* } */
 
-//------------------------------------------------------------------------------dataIsWrite
-void LCQRemWriteButton::CWriteListener::dataIsWrite(LERemoteDataStatus _status)
-{
-    Q_UNUSED(_status); 
-}
+/* //------------------------------------------------------------------------------dataIsWrite */
+/* void LCQRemWriteButton::CWriteListener::dataIsWrite(LERemoteDataStatus _status) */
+/* { */
+/*     Q_UNUSED(_status); */ 
+/* } */
 
 //==============================================================================SWriteSet
 void LCQRemWriteButton::SWriteSet::write()
@@ -57,12 +57,16 @@ void LCQRemWriteButton::addDataWrite(
 
     if(_source.isNull()) return;
 
-    write_set.mListener = 
-        QSharedPointer<LIRemoteDataWriteListener>(new CWriteListener(_dataName));
+    /* write_set.mListener = */ 
+    /*     QSharedPointer<LIRemoteDataWriteListener>(new CWriteListener(_dataName)); */
 
     write_set.mData     = _data;
     write_set.mDataName = _dataName;
-    write_set.mWriter   = 
-      _source->createWriter(write_set.mDataName, write_set.mListener);
+    write_set.mWriter   = _source->createWriter(write_set.mDataName, 
+      [](LERemoteDataStatus _status)
+      {
+        Q_UNUSED(_status);
+      });
+          /* write_set.mListener); */
     mListWriteSets << write_set;
 }

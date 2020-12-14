@@ -10,25 +10,36 @@
 __LQ_EXTENDED_QEVENT_IMPLEMENTATION(LQModbusDataWriter::CQEventDataIsWrite);
 
 LQModbusDataWriter::
-  CQEventDataIsWrite::
-  CQEventDataIsWrite(LERemoteDataStatus _status) : 
-    QEvent(__LQ_EXTENDED_QEVENT_REGISTERED),
-    mStatus(_status)
-  {
-  }
+CQEventDataIsWrite::
+CQEventDataIsWrite(LERemoteDataStatus _status) : 
+  QEvent(__LQ_EXTENDED_QEVENT_REGISTERED),
+  mStatus(_status)
+{
+}
 
 //==============================================================================
 LQModbusDataWriter::LQModbusDataWriter(
     const QString& _dataName,
-    QSharedPointer<LIRemoteDataWriteListener> _writeListener,
+    LTWriteListener _writeListener,
     QSharedPointer<LQModbusDataSource> _dataSource) : 
   QObject(nullptr),
   mDataName(_dataName),
-  mwpWriteListener(_writeListener),
+  mListener(_writeListener),
   mwpDataSource(_dataSource)
-  {
+{
 
-  }
+}
+/* LQModbusDataWriter::LQModbusDataWriter( */
+/*     const QString& _dataName, */
+/*     QSharedPointer<LIRemoteDataWriteListener> _writeListener, */
+/*     QSharedPointer<LQModbusDataSource> _dataSource) : */ 
+/*   QObject(nullptr), */
+/*   mDataName(_dataName), */
+/*   mwpWriteListener(_writeListener), */
+/*   mwpDataSource(_dataSource) */
+/*   { */
+
+/*   } */
 
 //------------------------------------------------------------------------------
 LQModbusDataWriter::~LQModbusDataWriter()
@@ -44,7 +55,7 @@ static void doDeleteLater(LQModbusDataWriter* _writer)
 //------------------------------------------------------------------------------
 QSharedPointer<LQModbusDataWriter> LQModbusDataWriter::create(
     const QString& _dataName,
-    QSharedPointer<LIRemoteDataWriteListener> _writeListener,
+    LTWriteListener _writeListener,
     QSharedPointer<LQModbusDataSource> _dataSource)
 {
   auto sp  = QSharedPointer<LQModbusDataWriter>(
@@ -53,18 +64,26 @@ QSharedPointer<LQModbusDataWriter> LQModbusDataWriter::create(
   sp->mwpThis = sp;
   return sp;
 }
+/* QSharedPointer<LQModbusDataWriter> LQModbusDataWriter::create( */
+/*     const QString& _dataName, */
+/*     QSharedPointer<LIRemoteDataWriteListener> _writeListener, */
+/*     QSharedPointer<LQModbusDataSource> _dataSource) */
+/* { */
+/*   auto sp  = QSharedPointer<LQModbusDataWriter>( */
+/*       new LQModbusDataWriter(_dataName, _writeListener, _dataSource), */
+/*       doDeleteLater); */
+/*   sp->mwpThis = sp; */
+/*   return sp; */
+/* } */
 
 //------------------------------------------------------------------------------
 void LQModbusDataWriter::writeRequest(const QByteArray& _data)
 {
   auto sp = mwpDataSource.lock();
 
-  auto listener = mwpWriteListener.lock();
-
   if(sp.isNull())
   {
-    if(!listener.isNull()) 
-      listener->dataIsWrite(LERemoteDataStatus::DS_WRONG);
+    mListener(LERemoteDataStatus::DS_WRONG);
   }
   else
   {
@@ -83,18 +102,14 @@ void LQModbusDataWriter::customEvent(QEvent *_event)
 {
   if(_event->type() == CQEventDataIsWrite::msExtendedEventType)
   {
-    auto listener = mwpWriteListener.lock();
-    if(!listener.isNull())
+    CQEventDataIsWrite *e = dynamic_cast<CQEventDataIsWrite*>(_event);
+    if(e == nullptr)
     {
-      CQEventDataIsWrite *e = dynamic_cast<CQEventDataIsWrite*>(_event);
-      if(e == nullptr)
-      {
-        listener->dataIsWrite(LERemoteDataStatus::DS_WRONG);
-      }
-      else
-      {
-        listener->dataIsWrite(e->mStatus);
-      }
+      mListener(LERemoteDataStatus::DS_WRONG);
+    }
+    else
+    {
+      mListener(e->mStatus);
     }
   }
 }

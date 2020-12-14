@@ -5,22 +5,22 @@
 #include <QCoreApplication>
 #include <QDebug>
 
-//==============================================================================CReadListener
-LCQWriteToSource::CWriteListener::CWriteListener(LCQWriteToSource* _req) :
-  mpRequest(_req)
-{
-}
+/* //==============================================================================CReadListener */
+/* LCQWriteToSource::CWriteListener::CWriteListener(LCQWriteToSource* _req) : */
+/*   mpRequest(_req) */
+/* { */
+/* } */
 
-//------------------------------------------------------------------------------
-void LCQWriteToSource::CWriteListener::dataIsWrite(LERemoteDataStatus _status)
-{
-  Q_UNUSED(_status);
-  if(_status == LERemoteDataStatus::DS_OK) 
-  {
-    mpRequest->mWriteDataSize = mpRequest->edWriteData.size();
-  }
-  mpRequest->mWaitCond.wakeOne();
-}
+/* //------------------------------------------------------------------------------ */
+/* void LCQWriteToSource::CWriteListener::dataIsWrite(LERemoteDataStatus _status) */
+/* { */
+/*   Q_UNUSED(_status); */
+/*   if(_status == LERemoteDataStatus::DS_OK) */ 
+/*   { */
+/*     mpRequest->mWriteDataSize = mpRequest->edWriteData.size(); */
+/*   } */
+/*   mpRequest->mWaitCond.wakeOne(); */
+/* } */
 
 //==============================================================================CEventBase
 __LQ_EXTENDED_QEVENT_IMPLEMENTATION(LCQWriteToSource::CEventBase);
@@ -45,9 +45,18 @@ void LCQWriteToSource::CEventWrite::handle(LCQWriteToSource* _sender)
     _sender->mWaitCond.wakeOne();
     return;
   }
-  _sender->mspDataWriter = source->createWriter(
+
+  _sender->mspDataWriter = source->createWriter( 
       _sender->mDataId, 
-      _sender->mspDataListener);
+      [_sender](LERemoteDataStatus _status)
+      {
+        if(_status == LERemoteDataStatus::DS_OK) 
+        {
+          _sender->mWriteDataSize = _sender->edWriteData.size();
+        }
+        _sender->mWaitCond.wakeOne();
+      });
+
   _sender->mspDataWriter->writeRequest(_sender->edWriteData);
 }
 
@@ -68,8 +77,8 @@ LCQWriteToSource::LCQWriteToSource(
   mSourceId(_sourceId),
   mDataId(_dataId),
   edWriteData(_writeData),
-  mWriteDataSize(0),
-  mspDataListener(new CWriteListener(this))
+  mWriteDataSize(0)
+  /* mspDataListener(new CWriteListener(this)) */
 {
 }
 

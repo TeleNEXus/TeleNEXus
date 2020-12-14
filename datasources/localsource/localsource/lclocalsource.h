@@ -25,7 +25,9 @@ public:
 
   virtual QSharedPointer<LIRemoteDataWriter> createWriter(
       const QString& _dataName,
-      QWeakPointer<LIRemoteDataWriteListener> _writeListener)  override;
+      LTWriteListener _writeListener) override;
+
+      /* QWeakPointer<LIRemoteDataWriteListener> _writeListener)  override; */
 
 };
 
