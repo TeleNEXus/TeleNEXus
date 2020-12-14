@@ -11,118 +11,118 @@
   maxWidth="300"
   >
 
-  <!-- <item text="Table local source"> -->
-  <!--   <table file="testtablelocalsource.xml" /> -->
-  <!-- </item> -->
+  <item text="Table local source">
+    <table file="testtablelocalsource.xml" />
+  </item>
 
-  <!-- <item text="Table local source"> -->
-  <!--   <table file="testtablelocalsource.xml" /> -->
-  <!-- </item> -->
+  <item text="Table local source">
+    <table file="testtablelocalsource.xml" />
+  </item>
 
-  <!-- <item text="widget mnemo" icon="picture/picture_1.png"> -->
-  <!--   <scrollArea align="Center" bgColor="rgb(102,102,102)"> -->
-  <!--     <widget file="testmnemowidget.xml"/> -->
-  <!--   </scrollArea> -->
-  <!-- </item> -->
+  <item text="widget mnemo" icon="picture/picture_1.png">
+    <scrollArea align="Center" bgColor="rgb(102,102,102)">
+      <widget file="testmnemowidget.xml"/>
+    </scrollArea>
+  </item>
 
-  <!-- <item text="widget tab" icon="picture/picture_1.png"> -->
-  <!--   <tabs file="testtab.xml"/> -->
-  <!-- </item> -->
+  <item text="widget tab" icon="picture/picture_1.png">
+    <tabs file="testtab.xml"/>
+  </item>
 
-  <!-- <item text="widget 2" icon="picture/icon1.png"> -->
-  <!--   <widget> -->
-  <!--     <layout> -->
-  <!--       <layoutVBox> -->
-  <!--         <!-1- <widgets align="left hcenter"> -1-> -->
-  <!--         <widgets> -->
-  <!--           <label text="Label 1 widget 1" /> --> 
-  <!--           <label text="Label 2 widget 1" /> --> 
-  <!--           <widget file="testmnemowidget.xml"/> -->
-  <!--         </widgets> -->
+  <item text="widget 2" icon="picture/icon1.png">
+    <widget>
+      <layout>
+        <layoutVBox>
+          <!-- <widgets align="left hcenter"> -->
+          <widgets>
+            <label text="Label 1 widget 1" /> 
+            <label text="Label 2 widget 1" /> 
+            <widget file="testmnemowidget.xml"/>
+          </widgets>
 
-  <!--         <widgets align="center"> -->
-  <!--           <widget file="testmnemowidget.xml"/> -->
-  <!--         </widgets> -->
+          <widgets align="center">
+            <widget file="testmnemowidget.xml"/>
+          </widgets>
 
-  <!--       </layoutVBox> -->
-  <!--     </layout> -->
-  <!--   </widget> -->
-  <!-- </item> -->
+        </layoutVBox>
+      </layout>
+    </widget>
+  </item>
 
-  <!-- <item text="widget 3" icon="picture/picture_2.png"> -->
-  <!--   <widget> -->
-  <!--     <layout> -->
-  <!--       <layoutVBox> -->
-  <!--         <widgets> -->
+  <item text="widget 3" icon="picture/picture_2.png">
+    <widget>
+      <layout>
+        <layoutVBox>
+          <widgets>
 
-  <!--           <label text="Label 1 widget 3" /> --> 
-  <!--           <label text="Label 2 widget 3" /> --> 
-  <!--           <dataComboBox  read="hreg0" source="qtslavetcp" format="uint16"> -->
-  <!--             <item text="On"     value="010"/> -->
-  <!--             <item text="Off"    value="011"/> -->
-  <!--             <item text="Reset"  value="012"/> -->
-  <!--             <item text="Test"   value="013"/> -->
-  <!--           </dataComboBox> -->
+            <label text="Label 1 widget 3" /> 
+            <label text="Label 2 widget 3" /> 
+            <dataComboBox  read="hreg0" source="qtslavetcp" format="uint16">
+              <item text="On"     value="010"/>
+              <item text="Off"    value="011"/>
+              <item text="Reset"  value="012"/>
+              <item text="Test"   value="013"/>
+            </dataComboBox>
 
-  <!--           <dataComboBox  read="hreg0" source="qtslavetcp" format="hex" size="2"> -->
-  <!--             <item text="On"        value="00_0 a"/> -->
-  <!--             <item text="Off"       value="00_0 b"/> -->
-  <!--             <item text="Reset"     value="00_0 c"/> -->
-  <!--             <item text="Test"      value="00_0 d"/> -->
-  <!--           </dataComboBox> -->
+            <dataComboBox  read="hreg0" source="qtslavetcp" format="hex" size="2">
+              <item text="On"        value="00_0 a"/>
+              <item text="Off"       value="00_0 b"/>
+              <item text="Reset"     value="00_0 c"/>
+              <item text="Test"      value="00_0 d"/>
+            </dataComboBox>
 
-  <!--           <dataComboLabel  read="coil0" source="qtslavetcp" format="bool"> -->
-  <!--             <item text="Включен"        value="true"/> -->
-  <!--             <item text="Выключен"       value="false"/> -->
-  <!--           </dataComboLabel> -->
+            <dataComboLabel  read="coil0" source="qtslavetcp" format="bool">
+              <item text="Включен"        value="true"/>
+              <item text="Выключен"       value="false"/>
+            </dataComboLabel>
 
 
-  <!--             <scrollArea align="Center" bgColor="rgb(102,102,102)"> -->
-  <!--               <dataComboLabel  read="hreg0" source="qtslavetcp" format="hex" dataSize="2" --> 
-  <!--                 bgColor="red" textColor="blue" fontId="mnemo10" --> 
-  <!--                 posx="250" posy="25" -->
-  <!--                 align="Right Bottom" -->
-  <!--                 > -->
-  <!--                 <!-1- bgColor="red" textColor="blue" font="bold italic 25pt DejaVu Sans Mono" -1-> --> 
-  <!--                 <!-1- minWidth="150" minHeight="150" -1-> -->
-  <!--                 <!-1- <item text="UNDEFINED" mode="undef" fontId="mnemo18" align="Center"/> -1-> -->
-  <!--                 <!-1- <item text="WRONG"     mode="wrong" fontId="mnemo18" align="Center"/> -1-> -->
-  <!--                 <item picture="movies/undef_150_100.gif" mode="undef" fontId="mnemo18" align="Center" bgColor="white"/> -->
-  <!--                 <item picture="movies/wrong_150_100.gif" mode="wrong" fontId="mnemo18" align="Center" bgColor="black"/> -->
-  <!--                 <item text="Test 0"   value="a" textColor="yellow" bgColor="blue" fontId="mnemo18" align="Left VCenter" /> -->
-  <!--                 <item text="Test 1"   value="b" /> -->
+              <scrollArea align="Center" bgColor="rgb(102,102,102)">
+                <dataComboLabel  read="hreg0" source="qtslavetcp" format="hex" dataSize="2" 
+                  bgColor="red" textColor="blue" fontId="mnemo10" 
+                  posx="250" posy="25"
+                  align="Right Bottom"
+                  >
+                  <!-- bgColor="red" textColor="blue" font="bold italic 25pt DejaVu Sans Mono" --> 
+                  <!-- minWidth="150" minHeight="150" -->
+                  <!-- <item text="UNDEFINED" mode="undef" fontId="mnemo18" align="Center"/> -->
+                  <!-- <item text="WRONG"     mode="wrong" fontId="mnemo18" align="Center"/> -->
+                  <item picture="movies/undef_150_100.gif" mode="undef" fontId="mnemo18" align="Center" bgColor="white"/>
+                  <item picture="movies/wrong_150_100.gif" mode="wrong" fontId="mnemo18" align="Center" bgColor="black"/>
+                  <item text="Test 0"   value="a" textColor="yellow" bgColor="blue" fontId="mnemo18" align="Left VCenter" />
+                  <item text="Test 1"   value="b" />
 
-  <!--                 <item picture="movies/20_21_22_23.gif"        value="c" align="Center" bgColor="black"/> -->
-  <!--                 <item picture="picture/picture_150_100.png"   value="d" bgColor="yellow"/> -->
-  <!--                 <item text="Test 4"   value="e"/> -->
-  <!--                 <item text="Test 5"   value="f"/> -->
-  <!--                 <item text="Test 6"   value="10"/> -->
-  <!--                 <item text="Test 7"   value="11"/> -->
-  <!--                 <item text="Test 8"   value="12"/> -->
-  <!--               </dataComboLabel> -->
-  <!--             </scrollArea> -->
+                  <item picture="movies/20_21_22_23.gif"        value="c" align="Center" bgColor="black"/>
+                  <item picture="picture/picture_150_100.png"   value="d" bgColor="yellow"/>
+                  <item text="Test 4"   value="e"/>
+                  <item text="Test 5"   value="f"/>
+                  <item text="Test 6"   value="10"/>
+                  <item text="Test 7"   value="11"/>
+                  <item text="Test 8"   value="12"/>
+                </dataComboLabel>
+              </scrollArea>
 
-  <!--               <dataComboLabel  read="hreg0" source="qtslavetcp" format="hex" dataSize="2"> -->
-  <!--                 <item text="On"        value="a"/> -->
-  <!--                 <item text="Off"       value="b"/> -->
-  <!--                 <item text="Reset"     value="c"/> -->
-  <!--                 <item text="Test"      value="d"/> -->
-  <!--               </dataComboLabel> -->
+                <dataComboLabel  read="hreg0" source="qtslavetcp" format="hex" dataSize="2">
+                  <item text="On"        value="a"/>
+                  <item text="Off"       value="b"/>
+                  <item text="Reset"     value="c"/>
+                  <item text="Test"      value="d"/>
+                </dataComboLabel>
 
-  <!--               <dataComboLabel  read="hreg0" source="qtslavetcp" format="hex" dataSize="2"> -->
-  <!--                 <item text="On"        value="a"/> -->
-  <!--                 <item text="Off"       value="b"/> -->
-  <!--                 <item text="Reset"     value="c"/> -->
-  <!--                 <item text="Test"      value="d"/> -->
+                <dataComboLabel  read="hreg0" source="qtslavetcp" format="hex" dataSize="2">
+                  <item text="On"        value="a"/>
+                  <item text="Off"       value="b"/>
+                  <item text="Reset"     value="c"/>
+                  <item text="Test"      value="d"/>
 
-  <!--               </dataComboLabel> -->
-  <!--               <!-1- </widgets> -1-> -->
-  <!--             <!-1- </widget> -1-> -->
-  <!--         </widgets> -->
-  <!--       </layoutVBox> -->
-  <!--     </layout> -->
-  <!--   </widget> -->
-  <!-- </item> -->
+                </dataComboLabel>
+                <!-- </widgets> -->
+              <!-- </widget> -->
+          </widgets>
+        </layoutVBox>
+      </layout>
+    </widget>
+  </item>
 
 
 </switchWidgetsList>
