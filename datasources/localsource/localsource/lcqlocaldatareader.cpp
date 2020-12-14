@@ -35,11 +35,11 @@ static void pointerDeleter(LCQLocalDataReader* _reader)
 //==============================================================================LCQRemoteDataListener
 LCQLocalDataReader::LCQLocalDataReader(
     const QString& _dataName, 
-    QSharedPointer<LIRemoteDataReadListener> _readListener,
-    QSharedPointer<LCQLocalSourceHiden> _dataSource) :   
+    QWeakPointer<LIRemoteDataReadListener> _readListener,
+    QWeakPointer<LCQLocalSourceHiden> _dataSource) :   
   QObject(nullptr),
   mDataName(_dataName),
-  mspReadListener(_readListener),
+  mwpReadListener(_readListener),
   mwpDataSource(_dataSource)
 {
 }
@@ -53,8 +53,8 @@ LCQLocalDataReader::~LCQLocalDataReader()
 //------------------------------------------------------------------------------
 QSharedPointer<LCQLocalDataReader> LCQLocalDataReader::create(
     const QString& _dataName, 
-    QSharedPointer<LIRemoteDataReadListener> _readListener,
-    QSharedPointer<LCQLocalSourceHiden> _dataSource)
+    QWeakPointer<LIRemoteDataReadListener> _readListener,
+    QWeakPointer<LCQLocalSourceHiden> _dataSource)
 {
   auto sp = QSharedPointer<LCQLocalDataReader>(
       new LCQLocalDataReader( _dataName, _readListener, _dataSource), 
@@ -109,9 +109,11 @@ void LCQLocalDataReader::customEvent(QEvent* _event)
 
   if(e == nullptr) return;
 
-  if(!mspReadListener.isNull())
+  auto listener = mwpReadListener.lock();
+
+  if(!listener.isNull())
   {
-    mspReadListener->dataIsRead(e->mspData, e->mStatus);
+    listener->dataIsRead(e->mspData, e->mStatus);
   }
 }
 

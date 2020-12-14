@@ -2,7 +2,9 @@
 #include "LIRemoteDataReadListener.h"
 #include "lqmodbusdatasource.h"
 
+#include <QCoreApplication>
 #include <QDebug>
+
 namespace modbus
 {
 //==============================================================================CQEventDataRead
@@ -33,63 +35,75 @@ LQModbusDataReader::LQModbusDataReader(
   QObject(nullptr),
   mDataName(_dataName),
   mwpReadListener(_readListener),
-  mDataSource(_dataSource)
+  mwpDataSource(_dataSource)
 {
 }
 
+//------------------------------------------------------------------------------
 LQModbusDataReader::~LQModbusDataReader()
 {
-    QSharedPointer<LIRemoteDataSource> sp = mDataSource.lock();
-    if(sp.isNull()) return;
-    ((LQModbusDataSource*)sp.data())->disconnectReader(this);
 }
 
-/* //------------------------------------------------------------------------------setDataName */
-/* void LQModbusDataReader::setDataName(const QString& _dataName) */
-/* { */
-/*     QSharedPointer<LIRemoteDataSource> sp = mDataSource.lock(); */
-/*     if(!sp.isNull()) */
-/*     { */
-/*         ((LQModbusDataSource*)sp.data())->disconnectReader(this); */
-/*     } */
-/*     mDataName = _dataName; */
-/* } */
+//==============================================================================create
+static void pointerDeleter(LQModbusDataReader* _reader)
+{
+  qDebug() << "LQModbusDataReader  pointerDeleter";
+  _reader->deleteLater();
+}
 
-/* //------------------------------------------------------------------------------ */
-/* void LQModbusDataReader::setDataReadListener( */
-/*         QWeakPointer<LIRemoteDataReadListener> _listener) */
-/* { */
-/*     QSharedPointer<LIRemoteDataReadListener> sp = _listener.lock(); */
-/*     if(!sp.isNull()) mwpReadListener = sp; */
-/* } */
+QSharedPointer<LQModbusDataReader> LQModbusDataReader::create(
+    const QString& _dataName, 
+    QWeakPointer<LIRemoteDataReadListener> _readListener,
+    QWeakPointer<LQModbusDataSource> _dataSource)
+{
+  auto sp = QSharedPointer<LQModbusDataReader>(
+      new LQModbusDataReader( _dataName, _readListener, _dataSource), 
+      pointerDeleter);
+  sp->mwpThis = sp;
+  return sp;
+}
 
-//------------------------------------------------------------------------------readRequest
+//------------------------------------------------------------------------------
 void LQModbusDataReader::readRequest()
 {
-    QSharedPointer<LIRemoteDataSource> sp = mDataSource.lock();
+    auto sp = mwpDataSource.lock();
     if(sp.isNull()) return;
-    ((LQModbusDataSource*)sp.data())->read(mDataName, this);
+    sp.data()->read(mDataName, this);
 }
 
-//------------------------------------------------------------------------------connectToSource
+//------------------------------------------------------------------------------
 void LQModbusDataReader::connectToSource()
 {
     qDebug() << "LCQModbusDataReader::connectToSource:" << mDataName;
-    QSharedPointer<LIRemoteDataSource> sp = mDataSource.lock();
+    auto sp = mwpDataSource.lock();
     if(sp.isNull()) return;
-    ((LQModbusDataSource*)sp.data())->connectReader(mDataName, this);
+    sp.data()->connectReader(mDataName, this);
 }
 
-//------------------------------------------------------------------------------disconnectFromSource
+//------------------------------------------------------------------------------
 void LQModbusDataReader::disconnectFromSource()
 {
     qDebug() << "disconnectFromSource:" << mDataName;
-    QSharedPointer<LIRemoteDataSource> sp = mDataSource.lock();
+    auto sp = mwpDataSource.lock();
     if(sp.isNull()) return;
-    ((LQModbusDataSource*)sp.data())->disconnectReader(this);
+    sp.data()->disconnectReader(this);
 }
 
-//------------------------------------------------------------------------------customEvent
+//------------------------------------------------------------------------------
+void LQModbusDataReader::notifyListener(
+    const QByteArray& _data, LERemoteDataStatus _status)
+{
+  QCoreApplication::postEvent(this, 
+      new CQEventDataIsRead(_data, _status));
+}
+
+//------------------------------------------------------------------------------
+void LQModbusDataReader::notifyListener(LERemoteDataStatus _status)
+{
+  QCoreApplication::postEvent(this, new CQEventDataIsRead(_status));
+}
+
+//------------------------------------------------------------------------------
 void LQModbusDataReader::customEvent(QEvent* _event)
 {
     if(_event->type() != CQEventDataIsRead::msExtendedEventType) return;
@@ -98,7 +112,7 @@ void LQModbusDataReader::customEvent(QEvent* _event)
 
     if(e == nullptr) return;
 
-    QSharedPointer<LIRemoteDataReadListener> listener = mwpReadListener.lock();
+    auto listener = mwpReadListener.lock();
     if(!listener.isNull())
     {
         listener->dataIsRead(e->mData, e->mStatus);

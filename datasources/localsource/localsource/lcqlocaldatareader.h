@@ -30,7 +30,7 @@ public:
 private:
 
   QString mDataName;
-  QSharedPointer<LIRemoteDataReadListener> mspReadListener;
+  QWeakPointer<LIRemoteDataReadListener> mwpReadListener;
   QWeakPointer<LCQLocalSourceHiden> mwpDataSource;
   QWeakPointer<LCQLocalDataReader> mwpThis;
 
@@ -38,8 +38,8 @@ private:
 
   LCQLocalDataReader(
       const QString& _dataName, 
-      QSharedPointer<LIRemoteDataReadListener> _readListener,
-      QSharedPointer<LCQLocalSourceHiden> _dataSource);
+      QWeakPointer<LIRemoteDataReadListener> _readListener,
+      QWeakPointer<LCQLocalSourceHiden> _dataSource);
 
 public:
   virtual ~LCQLocalDataReader();
@@ -47,8 +47,8 @@ public:
   static QSharedPointer<LCQLocalDataReader> 
     create(
         const QString& _dataName, 
-        QSharedPointer<LIRemoteDataReadListener> _readListener,
-        QSharedPointer<LCQLocalSourceHiden> _dataSource);
+        QWeakPointer<LIRemoteDataReadListener> _readListener,
+        QWeakPointer<LCQLocalSourceHiden> _dataSource);
 
   virtual void readRequest() override;
   virtual void connectToSource() override;
