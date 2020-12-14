@@ -126,32 +126,6 @@ const LIApplication& LCXmlMain::getApplicationInterface()
 }
 
 //------------------------------------------------------------------------------
-//------------------------------------------------------------------------------
-//------------------------------------------------------------------------------
-
-class CDataListener: public LIRemoteDataReadListener
-{
-public:
-    CDataListener(){}
-    virtual ~CDataListener(){}
-    virtual void dataIsRead(
-            QSharedPointer<QByteArray> _data, 
-            LERemoteDataStatus status) 
-    {
-      qDebug() << "CDataListener Data is Read : data = " << *_data.data() << " status = " << (quint16)status;
-    }
-};
-
-static void sharedDeleter(CDataListener* _listener)
-{
-  qDebug() << "sharedDeleter";
-  delete _listener;
-}
-//------------------------------------------------------------------------------
-//------------------------------------------------------------------------------
-//------------------------------------------------------------------------------
-
-//------------------------------------------------------------------------------
 int LCXmlMain::exec(int argc, char *argv[])
 {
 
@@ -264,70 +238,6 @@ int LCXmlMain::exec(int argc, char *argv[])
                      [&](){
             qDebug() << "QApplication::aboutToQuit";
     });
-
-
-
-
-    /* QThread* thr = new QThread; */
-    /* QTimer* tmr1 = new QTimer; */
-
-    /* tmr1->moveToThread(thr); */
-
-    /* QObject::connect(thr, &QThread::started, */ 
-    /*     [tmr1]() */
-    /*     { */
-    /*       qDebug() << "Start Timer --------"; */
-    /*       tmr1->start(500); */
-    /*     }); */
-
-
-    /* auto source = __slAppInterface.getDataSource("localsource"); */
-    /* QSharedPointer<CDataListener> listener(new CDataListener, sharedDeleter); */
-    /* QSharedPointer<LIRemoteDataReader> reader; */
-    /* if(!source.isNull()) */
-    /* { */
-    /*   qDebug() << "Timer: source is NULL"; */
-    /*   reader = source->createReader("bytes_uint16", listener); */
-    /* } */
-
-    /* QObject::connect(tmr1, &QTimer::timeout, */ 
-    /*     [source, reader]() */
-    /*     { */
-    /*       qDebug() << "Timeout--------"; */
-    /*       if(source.isNull()) */
-    /*       { */
-    /*         qDebug() << "Timer: source is NULL"; */
-    /*         return; */
-    /*       } */
-    /*       qDebug() << "Timer: get source"; */
-    /*       if(!reader.isNull()) reader->readRequest(); */
-    /*     }); */
-
-    /* /1* QObject::connect(tmr1, &QTimer::timeout, *1/ */ 
-    /* /1*     []() *1/ */
-    /* /1*     { *1/ */
-    /* /1*       qDebug() << "Timeout--------"; *1/ */
-    /* /1*       /2* auto source = __slAppInterface.getDataSource("localsource"); *2/ *1/ */
-    /* /1*       auto source = __slAppInterface.getDataSource("qtslavetcp"); *1/ */
-    /* /1*       if(source.isNull()) *1/ */
-    /* /1*       { *1/ */
-    /* /1*         qDebug() << "Timer: source is NULL"; *1/ */
-    /* /1*         return; *1/ */
-    /* /1*       } *1/ */
-    /* /1*       qDebug() << "Timer: get source"; *1/ */
-
-    /* /1*       QSharedPointer<CDataListener> listener(new CDataListener, sharedDeleter); *1/ */
-    /* /1*       /2* auto reader = source->createReader("bytes_uint16", listener); *2/ *1/ */
-    /* /1*       auto reader = source->createReader("hreg0", listener); *1/ */
-    /* /1*       if(!reader.isNull()) *1/ */ 
-    /* /1*       { *1/ */
-    /* /1*         qDebug() << "Read Request"; *1/ */
-    /* /1*         reader->readRequest(); *1/ */
-    /* /1*       } *1/ */
-    /* /1*     }); *1/ */
-
-/*     thr->start(); */
-
 
     return app.exec();
 }
