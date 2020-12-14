@@ -7,7 +7,6 @@
 
 class QThread;
 
-namespace modbus {
 
 class LQModbusMasterRtu : public LQModbusMasterBase
 {
@@ -47,5 +46,4 @@ protected:
     virtual QModbusClient* getMaster() override;
 };
 
-}//namespace
 #endif // LQMODBUSMASTERRTU_H

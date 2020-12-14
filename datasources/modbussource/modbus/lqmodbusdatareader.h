@@ -5,7 +5,6 @@
 #include "LIRemoteDataSource.h"
 #include "LIRemoteDataReader.h"
 
-namespace modbus {
 
 class LQModbusDataSource;
 
@@ -14,14 +13,15 @@ class LQModbusDataReader : public QObject, public LIRemoteDataReader
   Q_OBJECT;
 private:
 
-  //---------------------------------------------------------------------------------------------------CQEventDataRead
+  //----------------------------------------------------------------------------CQEventDataRead
   class CQEventDataIsRead : public QEvent
   {
     __LQ_EXTENDED_QEVENT_DECLARATION
   public:
       QSharedPointer<QByteArray> mData;
       LERemoteDataStatus mStatus;
-      explicit CQEventDataIsRead(const QByteArray& _data, LERemoteDataStatus _status);
+      explicit CQEventDataIsRead(const QByteArray& _data, 
+          LERemoteDataStatus _status);
       explicit CQEventDataIsRead(LERemoteDataStatus _status);
   };
 
@@ -59,5 +59,4 @@ private:
   virtual void customEvent(QEvent* _event) override;
 };
 
-} //namespace
 #endif // LQMODBUSDATAREADER_H

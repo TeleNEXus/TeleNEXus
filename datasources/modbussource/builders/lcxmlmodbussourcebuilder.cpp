@@ -13,7 +13,6 @@
 #include <QDebug>
 #include <QDomElement>
 
-using namespace modbus;
 
 using LTMastersMap = QMap<QString, QSharedPointer<LQModbusMasterBase>>;
 

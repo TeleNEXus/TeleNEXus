@@ -11,8 +11,6 @@
 #include "lqmodbusmasterbase.h"
 #include "LIRemoteDataSource.h"
 
-namespace modbus
-{
 class LQModbusDataWriter;
 class LQModbusDataReader;
 
@@ -419,5 +417,4 @@ public:
   friend class LQModbusDataWriter;
 };
 
-}
 #endif // LQMODBUSDATASOURCE_H

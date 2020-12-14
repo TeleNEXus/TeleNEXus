@@ -8,7 +8,6 @@
 
 class QThread;
 
-namespace modbus {
 
 class LQModbusMasterTcp : public LQModbusMasterBase
 {
@@ -37,7 +36,5 @@ private:
     virtual QModbusClient* createMaster() override;
     virtual QModbusClient* getMaster() override;
 };
-
-}//namespace
 
 #endif // LQMODBUSMASTERTCP_H

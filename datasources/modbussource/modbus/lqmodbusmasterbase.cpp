@@ -5,7 +5,6 @@
 #include <QCoreApplication>
 #include <QBitArray>
 #include <QThread>
-namespace modbus {
 
     //---------------------------------------------------------------------------------------------CQEventConnectRequest
     class CQEventConnectRequest : public QEvent
@@ -658,4 +657,3 @@ void LQModbusMasterBase::customEvent(QEvent* _event)
 
 }
 
-}//namespace

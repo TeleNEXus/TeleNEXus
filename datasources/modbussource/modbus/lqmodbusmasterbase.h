@@ -6,9 +6,6 @@
 #include <QWaitCondition>
 #include <QTimer>
 
-namespace modbus
-{
-
 class LQModbusMasterBase : public QObject
 {
     Q_OBJECT
@@ -72,7 +69,5 @@ protected:
 private:
     virtual void customEvent(QEvent *event) final;
 };
-
-}// namespace modbus
 
 #endif // LQMODBUSMASTERBASE_H
