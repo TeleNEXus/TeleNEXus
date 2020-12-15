@@ -1,50 +1,9 @@
 ﻿#include "lcqremcombobox.h"
 #include "LIRemoteDataReader.h"
 #include "LIRemoteDataWriter.h"
-#include <QCoreApplication>
-#include <QDebug>
-#include <qcombobox.h>
+
 #include <qglobal.h>
-#include <qnamespace.h>
 #include <QKeyEvent>
-/* //==============================================================================CReadListener */
-/* LCQRemComboBox::CReadListener::CReadListener(LCQRemComboBox& _combobox) : */  
-/*   mOwner(_combobox) */
-/* { */
-/* } */
-
-/* //------------------------------------------------------------------------------ */
-/* void LCQRemComboBox::CReadListener::dataIsRead( */ 
-/*     QSharedPointer<QByteArray>  _data, */ 
-/*     LERemoteDataStatus          _status) */
-/* { */
-/*   switch(_status) */
-/*   { */
-/*   case LERemoteDataStatus::DS_OK: */
-/*     mOwner.setCurrentIndex( */
-/*         mOwner.findData( */ 
-/*           mOwner.mFormatter-> */
-/*           toString( *_data.data())) ); */ 
-/*     mOwner.setEnabled(true); */
-/*     break; */
-
-/*   case LERemoteDataStatus::DS_WRONG: */
-/*     mOwner.setCurrentIndex(-1); */
-/*     mOwner.setEnabled(true); */
-/*     break; */
-
-/*   case LERemoteDataStatus::DS_UNDEF: */
-/*     mOwner.setCurrentIndex(-1); */
-/*     mOwner.setEnabled(false); */
-/*   default: */
-/*     break; */
-/*   } */
-/* } */
-
-//==============================================================================LCQRemComboBox
-//LCQRemComboBox::LCQRemComboBox(QWidget* _parent) : QComboBox(_parent)
-//{
-//}
 
 //------------------------------------------------------------------------------
 LCQRemComboBox::LCQRemComboBox( 
@@ -57,8 +16,6 @@ LCQRemComboBox::LCQRemComboBox(
   mFormatter(_formatter),
   mFlagPopupOn(false)
 {
-
-  /* mDataReadListener = QSharedPointer<CReadListener>(new CReadListener(*this)); */
 
   mDataReader = _dataSource->createReader(_dataNameRead, 
       [this](QSharedPointer<QByteArray> _data, LERemoteDataStatus _status)
@@ -83,22 +40,18 @@ LCQRemComboBox::LCQRemComboBox(
         }
       });
 
-  mDataWriter = _dataSource->createWriter(_dataNameWrite, 
-      [](LERemoteDataStatus _status){ Q_UNUSED(_status); });
+  mDataWriter = _dataSource->createWriter(_dataNameWrite);
 
-  /* mDataWriter = _dataSource->createWriter(_dataNameWrite); */ 
-
-  this->setEnabled(false);
-
-  connect(this, 
-      static_cast <void(LCQRemComboBox::*)(int)> 
+  connect(this, static_cast <void(LCQRemComboBox::*)(int)> 
       (&LCQRemComboBox::activated),
       [&](int index)
       {
-      Q_UNUSED(index);
-      mDataWriter->writeRequest(
-          mFormatter->toBytes(currentData().toString()));
+        Q_UNUSED(index);
+        mDataWriter->writeRequest(
+            mFormatter->toBytes(currentData().toString()));
       });
+
+  setEnabled(false);
 }
 
 //------------------------------------------------------------------------------

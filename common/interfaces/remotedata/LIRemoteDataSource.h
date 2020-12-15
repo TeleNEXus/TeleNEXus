@@ -34,7 +34,7 @@ public:
 
     virtual QSharedPointer<LIRemoteDataWriter> createWriter(
         const QString& _dataName,
-        LTWriteListener _listener) = 0;
+        LTWriteListener _listener = [](LERemoteDataStatus){}) = 0;
 
 
     /* //Блокирующие вызовы. */

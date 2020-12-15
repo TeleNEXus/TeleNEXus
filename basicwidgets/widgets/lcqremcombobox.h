@@ -15,10 +15,9 @@ class LCQRemComboBox : public QComboBox
 {
     Q_OBJECT
 private:
-    QSharedPointer<LIRemoteDataReader>          mDataReader;
-    QSharedPointer<LIRemoteDataWriter>          mDataWriter;
-    QSharedPointer<LIDataFormatter>             mFormatter;
-    QMetaObject::Connection                     mIndexChangeConnection;
+    QSharedPointer<LIRemoteDataReader>   mDataReader;
+    QSharedPointer<LIRemoteDataWriter>   mDataWriter;
+    QSharedPointer<LIDataFormatter>      mFormatter;
     bool mFlagPopupOn; //Флаг состояния всплывающего меню.
 
 public:
