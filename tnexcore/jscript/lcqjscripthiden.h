@@ -72,10 +72,7 @@ private:
   QString     mScriptString;
   QJSEngine   mJSEngin;
   QJSValue    mJSValue;
-
   QThread*    mpThread;
-
-  int         mObjectNumber;
   int         mTimerId;
 
 public:

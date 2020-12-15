@@ -25,18 +25,23 @@
 
 #include <QCoreApplication>
 
-//==============================================================================
+//==============================================================================CQEventDataIsWrite
 __LQ_EXTENDED_QEVENT_IMPLEMENTATION(LQModbusDataWriter::CQEventDataIsWrite);
 
-LQModbusDataWriter::
-CQEventDataIsWrite::
-CQEventDataIsWrite(LERemoteDataStatus _status) : 
+LQModbusDataWriter::CQEventDataIsWrite::CQEventDataIsWrite(
+    LERemoteDataStatus _status) : 
   QEvent(__LQ_EXTENDED_QEVENT_REGISTERED),
   mStatus(_status)
 {
 }
 
-//==============================================================================
+//==============================================================================doDeleteLater
+static void doDeleteLater(LQModbusDataWriter* _writer)
+{
+  _writer->deleteLater();
+}
+
+//==============================================================================LQModbusDataWriter
 LQModbusDataWriter::LQModbusDataWriter(
     const QString& _dataName,
     LTWriteAction _writeAction,
@@ -53,12 +58,6 @@ LQModbusDataWriter::~LQModbusDataWriter()
 {
 }
 
-//==============================================================================create
-static void doDeleteLater(LQModbusDataWriter* _writer)
-{
-  qDebug() << "LQModbusDataWriter  doDeleteLater";
-  _writer->deleteLater();
-}
 //------------------------------------------------------------------------------
 QSharedPointer<LQModbusDataWriter> LQModbusDataWriter::create(
     const QString& _dataName,

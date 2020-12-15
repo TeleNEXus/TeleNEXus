@@ -18,8 +18,8 @@
  * You should have received a copy of the GNU General Public License
  * along with TeleNEXus.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef LCSTRINGDATASTRFORMATTERBASEINT_H
-#define LCSTRINGDATASTRFORMATTERBASEINT_H
+#ifndef LCFORMATTERBASEINT_H
+#define LCFORMATTERBASEINT_H
 
 #include "lcformatterbase.h"
 
@@ -45,4 +45,4 @@ public:
 };
 
 
-#endif // LCSTRINGDATASTRFORMATTERBASEINT_H
+#endif // LCFORMATTERBASEINT_H

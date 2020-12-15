@@ -18,8 +18,8 @@
  * You should have received a copy of the GNU General Public License
  * along with TeleNEXus.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef LCSTRINGDATAFORMATTERINT8_H
-#define LCSTRINGDATAFORMATTERINT8_H
+#ifndef LCFORMATTERINT8_H
+#define LCFORMATTERINT8_H
 
 #include "lcformatterintbase.h"
 #include <QValidator>
@@ -42,4 +42,4 @@ public:
 };
 
 
-#endif // LCSTRINGDATAFORMATTERINT8_H
+#endif // LCFORMATTERINT8_H

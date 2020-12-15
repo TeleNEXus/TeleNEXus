@@ -111,7 +111,7 @@ QVariantList LCQJSAppInterface::testGetByteArray()
     /* vl << QVariant(i); */
   }
   return vl;
-  
+
   /* _retString = "SByteArray LCQJSAppInterface::testGetByteArray(QString& _retString)"; */
   /* return (reinterpret_cast<const char*>(&i), sizeof(int)); */
 }

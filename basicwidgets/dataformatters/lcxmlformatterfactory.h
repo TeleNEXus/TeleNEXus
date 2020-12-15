@@ -29,14 +29,14 @@
 class LCXmlStdDataFormatterFactory final
 {
 private:
-    LCXmlStdDataFormatterFactory();
-    LCXmlStdDataFormatterFactory(const LCXmlStdDataFormatterFactory&) = delete;
-    LCXmlStdDataFormatterFactory& 
-      operator=(const LCXmlStdDataFormatterFactory&) = delete;
+  LCXmlStdDataFormatterFactory();
+  LCXmlStdDataFormatterFactory(const LCXmlStdDataFormatterFactory&) = delete;
+  LCXmlStdDataFormatterFactory& 
+    operator=(const LCXmlStdDataFormatterFactory&) = delete;
 public:
-    static LCXmlStdDataFormatterFactory& instance();
-    QSharedPointer<LIDataFormatter> 
-      createStringFormatter(const QDomNamedNodeMap& _attr);
+  static LCXmlStdDataFormatterFactory& instance();
+  QSharedPointer<LIDataFormatter> 
+    createStringFormatter(const QDomNamedNodeMap& _attr);
 };
 
 #endif // LCXMLSTDDATAFORMATTERFACTORY_H

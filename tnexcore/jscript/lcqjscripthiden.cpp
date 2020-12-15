@@ -44,7 +44,6 @@ LCQJScriptHiden::CEventStart::CEventStart(int _interval) : mInterval(_interval)
 //------------------------------------------------------------------------------
 void LCQJScriptHiden::CEventStart::handle(LCQJScriptHiden* _sender)
 {
-  qDebug() << "LCQJScriptHiden event start handler";
   _sender->scriptEvaluate();
   if(mInterval <= 0) { return; }
   _sender->timerStart(mInterval);
@@ -58,7 +57,6 @@ LCQJScriptHiden::CEventStop::CEventStop()
 //------------------------------------------------------------------------------
 void LCQJScriptHiden::CEventStop::handle(LCQJScriptHiden* _sender)
 {
-  qDebug() << "LCQJScriptHiden event stop handler";
   _sender->timerStop();
 }
 
@@ -70,66 +68,55 @@ LCQJScriptHiden::CEventEvaluate::CEventEvaluate()
 //------------------------------------------------------------------------------
 void LCQJScriptHiden::CEventEvaluate::handle(LCQJScriptHiden* _sender)
 {
-  qDebug() << "LCQJScriptHiden event evaluate handler";
   _sender->scriptEvaluate();
 }
-
-int LCQJScriptHiden::mObjectCounter = 0;
-
 
 //==============================================================================LCQJScriptHiden
 LCQJScriptHiden::LCQJScriptHiden(const QString& _script, QObject* _parent) : 
   QObject(_parent),
   mScriptString(_script),
   mpThread(new QThread),
-  mObjectNumber(0),
   mTimerId(0)
 {
   moveToThread(mpThread);
 
-  /* QJSEngine mJSEngin; */
-  /* QJSValue mJSValue = mJSEngin.newQObject(new LCQJSAppInterface); */
-
   mJSValue = mJSEngin.newQObject(new LCQJSAppInterface);
   mJSEngin.globalObject().setProperty(__slApplicationProp, mJSValue);
 
-  mObjectNumber = mObjectCounter;
-  mObjectCounter++;
   mpThread->start();
 }
 
 //------------------------------------------------------------------------------
 LCQJScriptHiden::~LCQJScriptHiden()
 {
-    mpThread->quit();
-    mpThread->wait();
-    mpThread->deleteLater();
+  mpThread->quit();
+  mpThread->wait();
+  mpThread->deleteLater();
 }
 
 //------------------------------------------------------------------------------
 void LCQJScriptHiden::timerEvent(QTimerEvent* _event)
 {
   Q_UNUSED(_event);
-  qDebug() << "Script timer timeout object" << mObjectNumber;
   scriptEvaluate();
 }
 
 //------------------------------------------------------------------------------
 void LCQJScriptHiden::start(int _interval)
 {
-    QCoreApplication::postEvent(this, new CEventStart(_interval));
+  QCoreApplication::postEvent(this, new CEventStart(_interval));
 }
 
 //------------------------------------------------------------------------------
 void LCQJScriptHiden::stop()
 {
-    QCoreApplication::postEvent(this, new CEventStop());
+  QCoreApplication::postEvent(this, new CEventStop());
 }
 
 //------------------------------------------------------------------------------
 void LCQJScriptHiden::evaluate()
 {
-    QCoreApplication::postEvent(this, new CEventEvaluate());
+  QCoreApplication::postEvent(this, new CEventEvaluate());
 }
 
 //------------------------------------------------------------------------------
@@ -165,14 +152,13 @@ void LCQJScriptHiden::scriptEvaluate()
 //------------------------------------------------------------------------------
 void LCQJScriptHiden::customEvent(QEvent* _event)
 {
-    if(_event->type() == CEventBase::msExtendedEventType)
+  if(_event->type() == CEventBase::msExtendedEventType)
+  {
+    CEventBase* e = dynamic_cast<CEventBase*>(_event);
+    if(e == nullptr)
     {
-      CEventBase* e = dynamic_cast<CEventBase*>(_event);
-      if(e == nullptr)
-      {
-        qDebug() << "LCQJScriptHiden::customEvent dynamic cast err";
-        return;
-      }
-      e->handle(this);
+      return;
     }
+    e->handle(this);
+  }
 }

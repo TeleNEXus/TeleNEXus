@@ -18,8 +18,8 @@
  * You should have received a copy of the GNU General Public License
  * along with TeleNEXus.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef LCSTRINGDATAFORMATTERUINT16_H
-#define LCSTRINGDATAFORMATTERUINT16_H
+#ifndef LCFORMATTERUINT16_H
+#define LCFORMATTERUINT16_H
 
 #include "lcformatterintbase.h"
 #include <QIntValidator>
@@ -41,4 +41,4 @@ public:
   virtual QValidator* validator() override;
 };
 
-#endif // LCSTRINGDATAFORMATTERUINT16_H
+#endif // LCFORMATTERUINT16_H
