@@ -5,22 +5,22 @@
 #include <QCoreApplication>
 #include <QDebug>
 
-//==============================================================================CReadListener
-LCQReadFromSourceReq::CReadListener::CReadListener(LCQReadFromSourceReq* _req) :
-  mpRequest(_req)
-{
-}
+/* //==============================================================================CReadListener */
+/* LCQReadFromSourceReq::CReadListener::CReadListener(LCQReadFromSourceReq* _req) : */
+/*   mpRequest(_req) */
+/* { */
+/* } */
 
-void LCQReadFromSourceReq::CReadListener::dataIsRead(
-    QSharedPointer<QByteArray>  _data, 
-    LERemoteDataStatus          _status)
-{
-  qDebug() << "LCQReadFromSourceReq::CReadListener::dataIsRead 0";
-  if(_status == LERemoteDataStatus::DS_OK) mpRequest->mRetData = *_data.data();
-  qDebug() << "LCQReadFromSourceReq::CReadListener::dataIsRead 1";
-  mpRequest->mWaitCond.wakeOne();
-  qDebug() << "LCQReadFromSourceReq::CReadListener::dataIsRead 2";
-}
+/* void LCQReadFromSourceReq::CReadListener::dataIsRead( */
+/*     QSharedPointer<QByteArray>  _data, */ 
+/*     LERemoteDataStatus          _status) */
+/* { */
+/*   qDebug() << "LCQReadFromSourceReq::CReadListener::dataIsRead 0"; */
+/*   if(_status == LERemoteDataStatus::DS_OK) mpRequest->mRetData = *_data.data(); */
+/*   qDebug() << "LCQReadFromSourceReq::CReadListener::dataIsRead 1"; */
+/*   mpRequest->mWaitCond.wakeOne(); */
+/*   qDebug() << "LCQReadFromSourceReq::CReadListener::dataIsRead 2"; */
+/* } */
 
 //==============================================================================CEventBase
 __LQ_EXTENDED_QEVENT_IMPLEMENTATION(LCQReadFromSourceReq::CEventBase);
@@ -46,8 +46,15 @@ void LCQReadFromSourceReq::CEventRead::handle(LCQReadFromSourceReq* _sender)
     return;
   }
 
-  _sender->mspDataReader = 
-    source->createReader( _sender->mDataId, _sender->mspDataListener);
+  _sender->mspDataReader = source->createReader( _sender->mDataId, 
+      [_sender](QSharedPointer<QByteArray> _data, LERemoteDataStatus _status)
+      {
+        qDebug() << "LCQReadFromSourceReq::CReadListener::dataIsRead 0";
+        if(_status == LERemoteDataStatus::DS_OK) _sender->mRetData = *_data.data();
+        qDebug() << "LCQReadFromSourceReq::CReadListener::dataIsRead 1";
+        _sender->mWaitCond.wakeOne();
+        qDebug() << "LCQReadFromSourceReq::CReadListener::dataIsRead 2";
+      });
 
   _sender->mspDataReader->readRequest();
 }
@@ -64,8 +71,7 @@ LCQReadFromSourceReq::LCQReadFromSourceReq(
     const QString& _dataId) :
   QObject(nullptr),
   mSourceId(_sourceId),
-  mDataId(_dataId),
-  mspDataListener(new CReadListener(this))
+  mDataId(_dataId)
 {
 }
 

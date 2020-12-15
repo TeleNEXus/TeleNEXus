@@ -910,9 +910,9 @@ void LQModbusDataSource::customEvent(QEvent* _event)
 //------------------------------------------------------------------------------
 QSharedPointer<LIRemoteDataReader> LQModbusDataSource::createReader(
     const QString& _dataName,
-    QWeakPointer<LIRemoteDataReadListener> _readListener)
+    LTReadAction _readAction)
 {
-  return LQModbusDataReader::create(_dataName, _readListener, mwpThis);
+  return LQModbusDataReader::create(_dataName, _readAction, mwpThis);
 }
 
 //------------------------------------------------------------------------------

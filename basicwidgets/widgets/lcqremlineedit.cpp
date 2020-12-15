@@ -3,30 +3,30 @@
 #include <QKeyEvent>
 #include <qnamespace.h>
 #include <QKeyEvent>
-//==============================================================================
-LCQRemLineEdit::CReadListener::CReadListener(LCQRemLineEdit& _lineEdit) : 
-  mLineEdit(_lineEdit), mFlagActive(false)
-{
+/* //============================================================================== */
+/* LCQRemLineEdit::CReadListener::CReadListener(LCQRemLineEdit& _lineEdit) : */ 
+/*   mLineEdit(_lineEdit), mFlagActive(false) */
+/* { */
 
-}
+/* } */
 
-void LCQRemLineEdit::CReadListener::dataIsRead(
-    QSharedPointer<QByteArray> _data, LERemoteDataStatus _status)
-{
-  if(mFlagActive)
-  {
-    if(_status != LERemoteDataStatus::DS_OK)
-    {
-      QString str = "Undef";
-      mLineEdit.mFormatter.data()->undefState(str);
-      mLineEdit.setText(str);
-      mLineEdit.setEnabled(false);
-      return;
-      }
-    mLineEdit.setEnabled(true);
-    mLineEdit.setText(mLineEdit.mFormatter.data()->toString(*_data));
-  }
-}
+/* void LCQRemLineEdit::CReadListener::dataIsRead( */
+/*     QSharedPointer<QByteArray> _data, LERemoteDataStatus _status) */
+/* { */
+/*   if(mFlagActive) */
+/*   { */
+/*     if(_status != LERemoteDataStatus::DS_OK) */
+/*     { */
+/*       QString str = "Undef"; */
+/*       mLineEdit.mFormatter.data()->undefState(str); */
+/*       mLineEdit.setText(str); */
+/*       mLineEdit.setEnabled(false); */
+/*       return; */
+/*       } */
+/*     mLineEdit.setEnabled(true); */
+/*     mLineEdit.setText(mLineEdit.mFormatter.data()->toString(*_data)); */
+/*   } */
+/* } */
 
 
 /* LCQRemLineEdit::CWriteListener::CWriteListener(LCQRemLineEdit& _lineEdit) : */ 
@@ -41,29 +41,29 @@ void LCQRemLineEdit::CReadListener::dataIsRead(
 /* } */
 
 //==============================================================================
-LCQRemLineEdit::LCQRemLineEdit(
-    const QString& _dataName,
-    QSharedPointer<LIRemoteDataSource> _dataSource,
-    QSharedPointer<LIDataFormatter> _formatter,
-    QWidget* _parent) :  
-  QLineEdit(_parent),
-  mFormatter(_formatter)
-{
-  QString str = "Undef";
-  mFormatter.data()->undefState(str);
-  setText(str);
-  setValidator(_formatter->validator());
-  setEnabled(false);
+/* LCQRemLineEdit::LCQRemLineEdit( */
+/*     const QString& _dataName, */
+/*     QSharedPointer<LIRemoteDataSource> _dataSource, */
+/*     QSharedPointer<LIDataFormatter> _formatter, */
+/*     QWidget* _parent) : */  
+/*   QLineEdit(_parent), */
+/*   mFormatter(_formatter) */
+/* { */
+/*   QString str = "Undef"; */
+/*   mFormatter.data()->undefState(str); */
+/*   setText(str); */
+/*   setValidator(_formatter->validator()); */
+/*   setEnabled(false); */
 
-  mReadListener = QSharedPointer<CReadListener>(new CReadListener(*this));
-  mDataReader = _dataSource->createReader(_dataName, mReadListener);
+/*   /1* mReadListener = QSharedPointer<CReadListener>(new CReadListener(*this)); *1/ */
+/*   mDataReader = _dataSource->createReader(_dataName, mReadListener); */
 
-  /* mWriteListener = QSharedPointer<CWriteListener>(new CWriteListener(*this)); */
-  /* mDataWriter = _dataSource->createWriter(_dataName, mWriteListener); */
-  /* mWriteListener = QSharedPointer<CWriteListener>(new CWriteListener(*this)); */
-  mDataWriter = _dataSource->createWriter(_dataName, 
-      [](LERemoteDataStatus _status){ Q_UNUSED(_status); });
-}
+/*   /1* mWriteListener = QSharedPointer<CWriteListener>(new CWriteListener(*this)); *1/ */
+/*   /1* mDataWriter = _dataSource->createWriter(_dataName, mWriteListener); *1/ */
+/*   /1* mWriteListener = QSharedPointer<CWriteListener>(new CWriteListener(*this)); *1/ */
+/*   mDataWriter = _dataSource->createWriter(_dataName, */ 
+/*       [](LERemoteDataStatus _status){ Q_UNUSED(_status); }); */
+/* } */
 
 //------------------------------------------------------------------------------
 LCQRemLineEdit::LCQRemLineEdit(
@@ -81,8 +81,24 @@ LCQRemLineEdit::LCQRemLineEdit(
   setValidator(_formatter->validator());
   setEnabled(false);
 
-  mReadListener = QSharedPointer<CReadListener>(new CReadListener(*this));
-  mDataReader = _dataSource->createReader(_dataNameRead, mReadListener);
+  /* mReadListener = QSharedPointer<CReadListener>(new CReadListener(*this)); */
+  mDataReader = _dataSource->createReader(_dataNameRead,
+      [this](QSharedPointer<QByteArray> _data, LERemoteDataStatus _status)
+      {
+        if(mFlagUpdateOn)
+        {
+          if(_status != LERemoteDataStatus::DS_OK)
+          {
+            QString str = "Undef";
+            mFormatter.data()->undefState(str);
+            setText(str);
+            setEnabled(false);
+            return;
+          }
+          setEnabled(true);
+          setText(mFormatter.data()->toString(*_data));
+        }
+      });
 
   /* mWriteListener = QSharedPointer<CWriteListener>(new CWriteListener(*this)); */
   /* mDataWriter = _dataSource->createWriter(_dataNameWrite, mWriteListener); */
@@ -101,12 +117,12 @@ void LCQRemLineEdit::setActive(bool _flag)
   if(_flag)
   {
     mDataReader->connectToSource();
-    mReadListener->setActive(true);
+    mFlagUpdateOn = true;
   }else
   {
+    mFlagUpdateOn = false;
     setEnabled(false);
     mDataReader->disconnectFromSource();
-    mReadListener->setActive(false);
   }
 }
 
@@ -117,24 +133,24 @@ void LCQRemLineEdit::keyPressEvent(QKeyEvent *_ev)
   {
     mDataWriter->writeRequest(mFormatter->toBytes(text()));
     mDataReader->readRequest();
-    mReadListener->setActive(true);
+    mFlagUpdateOn = true;
   }
   else
   {
-    mReadListener->setActive(false);
+    mFlagUpdateOn = false;
   }
   QLineEdit::keyPressEvent(_ev);
 }
 
 void LCQRemLineEdit::focusInEvent(QFocusEvent *_event)
 {
-  mReadListener->setActive(false);
+  mFlagUpdateOn = false;
   QLineEdit::focusInEvent(_event);
 }
 
 void LCQRemLineEdit::focusOutEvent(QFocusEvent *_event)
 {
-  mReadListener->setActive(true);
+  mFlagUpdateOn = true;
   mDataReader->readRequest();
   QLineEdit::focusOutEvent(_event);
 }

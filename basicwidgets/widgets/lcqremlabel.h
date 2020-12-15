@@ -6,7 +6,6 @@
 
 #include "LIDataFormatter.h"
 #include "LIRemoteDataReader.h"
-#include "LIRemoteDataReadListener.h"
 #include "LIRemoteDataSource.h"
 
 #include <QLabel>
@@ -16,23 +15,9 @@ class LCQRemLabel : public QLabel
   Q_OBJECT
 private:
 
-    class CReadListener : public LIRemoteDataReadListener
-  {
-  private:
-    LCQRemLabel& mLabel;
-    bool mFlagActive;
-  public:
-    CReadListener(LCQRemLabel& _label);
-    virtual ~CReadListener(){}
-    virtual void dataIsRead(QSharedPointer<QByteArray> _data, 
-        LERemoteDataStatus status) override;
-    void setActive(bool _flag){mFlagActive = _flag;}
-  };
-
     QString mDataName;
     QSharedPointer<LIRemoteDataReader>  mDataReader;
     QSharedPointer<LIDataFormatter> mFormatter;
-    QSharedPointer<CReadListener> mDataListener;
 
 public:
     explicit LCQRemLabel(QWidget* _parent = nullptr);
@@ -46,8 +31,10 @@ public:
         QWidget* _parent = nullptr);
 
     virtual ~LCQRemLabel();
-    void setActive(bool _flag);
     virtual bool event(QEvent *e) override;
+private:
+    bool mFlagActive;
+    void setActive(bool _flag);
 };
 
 #endif // LCQEXTLABEL_H

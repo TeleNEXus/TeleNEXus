@@ -21,7 +21,6 @@
 #include <QStringList>
 #include <QThread>
 #include <QTimer>
-#include "LIRemoteDataReadListener.h"
 #include "LIRemoteDataReader.h"
 #include "LIRemoteDataSource.h"
 

@@ -66,7 +66,7 @@ QWidget* LCXmlRemLineEditBuilder::buildLocal(
     goto LABEL_WRONG_EXIT;
   }
 
-  ret= new LCQRemLineEdit(data, source, format);
+  ret= new LCQRemLineEdit(data, data, source, format);
 
 LABEL_WRONG_EXIT:
 

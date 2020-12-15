@@ -72,10 +72,8 @@ SOURCES += \
 
 HEADERS += \
     ../../common/interfaces/LIApplication.h \
-    ../../common/interfaces/remotedata/LIRemoteDataReadListener.h \
     ../../common/interfaces/remotedata/LIRemoteDataReader.h \
     ../../common/interfaces/remotedata/LIRemoteDataSource.h \
-    ../../common/interfaces/remotedata/LIRemoteDataWriteListener.h \
     ../../common/interfaces/remotedata/LIRemoteDataWriter.h \
     ../../common/interfaces/xmlbuilders/LIXmlLayoutBuilder.h \
     ../../common/interfaces/xmlbuilders/LIXmlWidgetBuilder.h \

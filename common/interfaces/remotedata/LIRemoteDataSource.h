@@ -2,6 +2,8 @@
 #define LIREMOTEDATASOURCE_H
 
 #include <QSharedPointer>
+#include <QByteArray>
+
 #include <functional>
 
 enum class LERemoteDataStatus
@@ -14,43 +16,26 @@ enum class LERemoteDataStatus
 
 class LIRemoteDataReader;
 class LIRemoteDataWriter;
-class LIRemoteDataReadListener;
-/* class LIRemoteDataWriteListener; */
 
 using LTWriteListener = std::function<void(LERemoteDataStatus)>;
-
+using LTReadAction = std::function<void(QSharedPointer<QByteArray>, LERemoteDataStatus)>; 
 
 class LIRemoteDataSource
 {
 public:
+
+
     LIRemoteDataSource(){}
     virtual ~LIRemoteDataSource(){}
 
     virtual QSharedPointer<LIRemoteDataReader> createReader(
         const QString& _dataName,
-        QWeakPointer<LIRemoteDataReadListener> _readListener) = 0;
+        LTReadAction _readAction) = 0;
 
     virtual QSharedPointer<LIRemoteDataWriter> createWriter(
         const QString& _dataName,
-        LTWriteListener _listener = [](LERemoteDataStatus _status){Q_UNUSED(_status);}) = 0;
+        LTWriteListener _listener) = 0;
 
-
-    /* virtual QSharedPointer<LIRemoteDataReader> createReader( */
-    /*     const QString& _dataName, */
-    /*     QWeakPointer<LIRemoteDataReadListener> _readListener) = 0; */
-
-    /* virtual QSharedPointer<LIRemoteDataWriter> createWriter( */
-    /*     const QString& _dataName, */
-    /*     QWeakPointer<LIRemoteDataWriteListener> _writeListener) = 0; */
-
-    /* virtual QSharedPointer<LIRemoteDataReader> createReader( */
-    /*     const QString& _dataName, */
-    /*     std::function<void( */
-    /*       QSharedPointer<QByteArray>,LERemoteDataStatus)> _listener) = 0; */
-
-    /* virtual QSharedPointer<LIRemoteDataWriter> createWriter( */
-    /*     const QString& _dataName, */
-    /*     std::function<void(LERemoteDataStatus)> _isWrite) = 0; */
 
     /* //Блокирующие вызовы. */
     /* virtual QByteArray read( */

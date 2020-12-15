@@ -3,41 +3,43 @@
 #include <QDebug>
 #include <qnamespace.h>
 
+/* //==============================================================================LCQRemLabel */
+/* LCQRemLabel::CReadListener::CReadListener(LCQRemLabel& _label) : */ 
+/*   mLabel(_label), */
+/*   mFlagActive(false) */
+/* { */
+
+/* } */
+
+/* void LCQRemLabel::CReadListener::dataIsRead(QSharedPointer<QByteArray>  _data, */ 
+/*     LERemoteDataStatus          _status) */
+/* { */
+/*   if(mFlagActive) */
+/*   { */
+/*     if(_status != LERemoteDataStatus::DS_OK) */
+/*     { */
+/*       QString str = "Undef"; */
+/*       mLabel.mFormatter.data()->undefState(str); */
+/*       mLabel.setText(str); */
+/*       mLabel.setEnabled(false); */
+/*       return; */
+/*     } */
+/*     QString str = mLabel.mFormatter.data()->toString(*_data); */
+/*     mLabel.setText(str); */
+/*     mLabel.setEnabled(true); */
+/*   } */
+/* } */
+
 //==============================================================================LCQRemLabel
-LCQRemLabel::CReadListener::CReadListener(LCQRemLabel& _label) : 
-  mLabel(_label),
-  mFlagActive(false)
-{
-
-}
-
-void LCQRemLabel::CReadListener::dataIsRead(QSharedPointer<QByteArray>  _data, 
-    LERemoteDataStatus          _status)
-{
-  if(mFlagActive)
-  {
-    if(_status != LERemoteDataStatus::DS_OK)
-    {
-      QString str = "Undef";
-      mLabel.mFormatter.data()->undefState(str);
-      mLabel.setText(str);
-      mLabel.setEnabled(false);
-      return;
-    }
-    QString str = mLabel.mFormatter.data()->toString(*_data);
-    mLabel.setText(str);
-    mLabel.setEnabled(true);
-  }
-}
-
-//==============================================================================LCQRemLabel
-LCQRemLabel::LCQRemLabel(QWidget* _parent) : QLabel(_parent)
+LCQRemLabel::LCQRemLabel(QWidget* _parent) : QLabel(_parent), mFlagActive(false)
 {
   setText("LCQRemLabel");
   setEnabled(false);
 }
 
-LCQRemLabel::LCQRemLabel(QString _text, QWidget* _parent) : QLabel(_text, _parent)
+LCQRemLabel::LCQRemLabel(QString _text, QWidget* _parent) : 
+  QLabel(_text, _parent),
+  mFlagActive(false)
 {
   setEnabled(false);
 }
@@ -47,14 +49,35 @@ LCQRemLabel::LCQRemLabel(const QString& _dataName,
     QSharedPointer<LIDataFormatter> _formatter,
     QWidget* _parent) :    QLabel(_parent),
   mDataName(_dataName),
-  mFormatter(_formatter)
+  mFormatter(_formatter),
+  mFlagActive(false)
 {
   setEnabled(false);
   QString str = "Undef";
   mFormatter.data()->undefState(str);
   setText(str);
-  mDataListener = QSharedPointer<CReadListener>(new CReadListener(*this));
-  mDataReader = _dataSource->createReader(_dataName, mDataListener);
+  /* mDataListener = QSharedPointer<CReadListener>(new CReadListener(*this)); */
+  mDataReader = _dataSource->createReader( _dataName,
+      [this](
+        QSharedPointer<QByteArray> _data, 
+        LERemoteDataStatus _status)
+      {
+        if(mFlagActive)
+        {
+          if(_status != LERemoteDataStatus::DS_OK)
+          {
+            QString str = "Undef";
+            mFormatter.data()->undefState(str);
+            setText(str);
+            setEnabled(false);
+            return;
+          }
+          QString str = mFormatter.data()->toString(*_data);
+          setText(str);
+          setEnabled(true);
+        }
+      }
+      );
 }
 
 LCQRemLabel::~LCQRemLabel()
@@ -66,12 +89,12 @@ void LCQRemLabel::setActive(bool _flag)
 {
   if(_flag)
   {
-    mDataListener->setActive(true);
+    mFlagActive = true;
     mDataReader->connectToSource();
   }
   else
   {
-    mDataListener->setActive(false);
+    mFlagActive = false;
     setEnabled(false);
     mDataReader->disconnectFromSource();
   }

@@ -28,11 +28,11 @@ LQModbusDataReader:: CQEventDataIsRead:: CQEventDataIsRead(
 //==============================================================================LCQRemoteDataListener
 LQModbusDataReader::LQModbusDataReader(
     const QString& _dataName,
-    QWeakPointer<LIRemoteDataReadListener> _readListener,
+    LTReadAction _readAction,
     QWeakPointer<LQModbusDataSource> _dataSource) :   
   QObject(nullptr),
   mDataName(_dataName),
-  mwpReadListener(_readListener),
+  mReadAction(_readAction),
   mwpDataSource(_dataSource)
 {
 }
@@ -51,11 +51,11 @@ static void doDeleteLater(LQModbusDataReader* _reader)
 
 QSharedPointer<LQModbusDataReader> LQModbusDataReader::create(
     const QString& _dataName, 
-    QWeakPointer<LIRemoteDataReadListener> _readListener,
+    LTReadAction _readAction,
     QWeakPointer<LQModbusDataSource> _dataSource)
 {
   auto sp = QSharedPointer<LQModbusDataReader>(
-      new LQModbusDataReader( _dataName, _readListener, _dataSource), 
+      new LQModbusDataReader( _dataName, _readAction, _dataSource), 
       doDeleteLater);
   sp->mwpThis = sp;
   return sp;
@@ -108,10 +108,6 @@ void LQModbusDataReader::customEvent(QEvent* _event)
     if(_event->type() != CQEventDataIsRead::msExtendedEventType) return;
     CQEventDataIsRead *e = dynamic_cast<CQEventDataIsRead*>(_event);
     if(e == nullptr) return;
-    auto listener = mwpReadListener.lock();
-    if(!listener.isNull())
-    {
-        listener->dataIsRead(e->mData, e->mStatus);
-    }
+    mReadAction(e->mData, e->mStatus);
 }
 

@@ -1,11 +1,6 @@
 #ifndef LIREMOTEDATAREADER_H
 #define LIREMOTEDATAREADER_H
 
-#include <QWeakPointer>
-
-class LIRemoteDataSource;
-class LIRemoteDataReadListener;
-
 class LIRemoteDataReader
 {
 public:

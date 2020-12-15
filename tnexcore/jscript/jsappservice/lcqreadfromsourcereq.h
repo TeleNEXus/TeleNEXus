@@ -9,7 +9,6 @@
 #include <QSharedPointer>
 
 #include "LIRemoteDataReader.h"
-#include "LIRemoteDataReadListener.h"
 #include "LIRemoteDataSource.h"
 
 class QThread;
@@ -18,21 +17,6 @@ class LCQReadFromSourceReq  : public QObject
 {
   Q_OBJECT
 private:
-
-  //----------------------------------------------------------------------------CReadListener
-  class CReadListener : public LIRemoteDataReadListener
-  {
-  private:
-    LCQReadFromSourceReq* mpRequest;
-  public:
-    CReadListener() =  delete;
-    CReadListener(LCQReadFromSourceReq* _req);
-
-    virtual ~CReadListener(){}
-    virtual void dataIsRead(
-        QSharedPointer<QByteArray> _data, 
-        LERemoteDataStatus _status) override;
-  };
 
   //----------------------------------------------------------------------------CEventBase
   class CEventBase : public QEvent
@@ -55,7 +39,7 @@ private:
   QString     mDataId;
   QByteArray  mRetData;
 
-  QSharedPointer<CReadListener>       mspDataListener;
+  /* QSharedPointer<CReadListener>       mspDataListener; */
   QSharedPointer<LIRemoteDataReader>  mspDataReader;
 
   QMutex          mMutexEvent;

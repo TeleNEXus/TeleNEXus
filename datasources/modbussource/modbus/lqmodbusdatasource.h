@@ -423,12 +423,12 @@ public:
 
   virtual QSharedPointer<LIRemoteDataReader> createReader(
       const QString& _dataName,
-      QWeakPointer<LIRemoteDataReadListener> _readListener) override;
+      LTReadAction _readAction) override;
+
 
   virtual QSharedPointer<LIRemoteDataWriter> createWriter(
       const QString& _dataName,
       LTWriteListener _writeListner) override;
-      /* QWeakPointer<LIRemoteDataWriteListener> _writeListener) override; */
 
   friend class LQModbusDataReader;
   friend class LQModbusDataWriter;
