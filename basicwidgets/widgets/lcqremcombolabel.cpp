@@ -18,55 +18,58 @@ struct SOwnData
   SOwnData(): undefItem(nullptr), wrongItem(nullptr){}
 };
 
-//==============================================================================LCQRemComboLabel
-LCQRemComboLabel::
-CReadListener::
-CReadListener(LCQRemComboLabel& _label) : mLabel(_label), mFlagActive(false)
-{
+/* //==============================================================================LCQRemComboLabel */
+/* LCQRemComboLabel:: */
+/* CReadListener:: */
+/* CReadListener(LCQRemComboLabel& _label) : mLabel(_label), mFlagActive(false) */
+/* { */
 
-}
+/* } */
+
+/* //------------------------------------------------------------------------------ */
+/* #define L_LABEL_OWNDATA (static_cast<SOwnData*>(mLabel.mpOwnData)) */
+
+/* //------------------------------------------------------------------------------dataIsRead */
+/* void LCQRemComboLabel::CReadListener::dataIsRead( */ 
+/*     QSharedPointer<QByteArray> _data, LERemoteDataStatus _status) */
+/* { */
+
+/*   if(mFlagActive) */
+/*   { */
+/*     if(_status != LERemoteDataStatus::DS_OK) */
+/*     { */
+/*       if(L_LABEL_OWNDATA->undefItem != nullptr) */
+/*       { */
+/*         if(mLabel.currentWidget() != L_LABEL_OWNDATA->undefItem) */ 
+/*           mLabel.setCurrentWidget(L_LABEL_OWNDATA->undefItem); */
+/*       } */
+/*       mLabel.setEnabled(false); */
+/*       return; */
+/*     } */
+
+/*     mLabel.setEnabled(true); */
+
+/*     auto it = L_LABEL_OWNDATA->normalItemMap.find( mLabel.mspFormatter->toString(*_data)); */
+
+/*     if(it == L_LABEL_OWNDATA->normalItemMap.end()) */
+/*     { */
+/*       if(L_LABEL_OWNDATA->wrongItem != nullptr) */
+/*       { */
+/*         if(mLabel.currentWidget() != L_LABEL_OWNDATA->wrongItem) */ 
+/*           mLabel.setCurrentWidget(L_LABEL_OWNDATA->wrongItem); */
+/*       } */
+/*       return; */
+/*     } */
+
+/*     if(it.value() != mLabel.currentWidget()) */
+/*     { */
+/*       mLabel.setCurrentWidget(it.value()); */
+/*     } */
+/*   } */
+/* } */
 
 //------------------------------------------------------------------------------
-#define L_LABEL_OWNDATA (static_cast<SOwnData*>(mLabel.mpOwnData))
-
-//------------------------------------------------------------------------------dataIsRead
-void LCQRemComboLabel::CReadListener::dataIsRead( 
-    QSharedPointer<QByteArray> _data, LERemoteDataStatus _status)
-{
-
-  if(mFlagActive)
-  {
-    if(_status != LERemoteDataStatus::DS_OK)
-    {
-      if(L_LABEL_OWNDATA->undefItem != nullptr)
-      {
-        if(mLabel.currentWidget() != L_LABEL_OWNDATA->undefItem) 
-          mLabel.setCurrentWidget(L_LABEL_OWNDATA->undefItem);
-      }
-      mLabel.setEnabled(false);
-      return;
-    }
-
-    mLabel.setEnabled(true);
-
-    auto it = L_LABEL_OWNDATA->normalItemMap.find( mLabel.mspFormatter->toString(*_data));
-
-    if(it == L_LABEL_OWNDATA->normalItemMap.end())
-    {
-      if(L_LABEL_OWNDATA->wrongItem != nullptr)
-      {
-        if(mLabel.currentWidget() != L_LABEL_OWNDATA->wrongItem) 
-          mLabel.setCurrentWidget(L_LABEL_OWNDATA->wrongItem);
-      }
-      return;
-    }
-
-    if(it.value() != mLabel.currentWidget())
-    {
-      mLabel.setCurrentWidget(it.value());
-    }
-  }
-}
+#define L_OWNDATA (static_cast<SOwnData*>(mpOwnData))
 
 //==============================================================================LCQRemComboLabel
 LCQRemComboLabel::LCQRemComboLabel(const QString& _dataName,
@@ -86,14 +89,44 @@ LCQRemComboLabel::LCQRemComboLabel(const QString& _dataName,
   _formatter->wrongState(str);
   addItemWrong(new QLabel(str));
 
-  mDataListener = QSharedPointer<CReadListener>(new CReadListener(*this));
-  mDataReader = _dataSource->createReader(_dataName, mDataListener);
+  /* mDataListener = QSharedPointer<CReadListener>(new CReadListener(*this)); */
+
+  mDataReader = _dataSource->createReader(_dataName, 
+      [this](QSharedPointer<QByteArray> _data, LERemoteDataStatus _status)
+      {
+        if(mFlagActive)
+        {
+          if(_status != LERemoteDataStatus::DS_OK)
+          {
+            if(L_OWNDATA->undefItem != nullptr)
+            {
+              if(currentWidget() != L_OWNDATA->undefItem) 
+                setCurrentWidget(L_OWNDATA->undefItem);
+            }
+            setEnabled(false);
+            return;
+          }
+          setEnabled(true);
+          auto it = L_OWNDATA->normalItemMap.find( mspFormatter->toString(*_data));
+          if(it == L_OWNDATA->normalItemMap.end())
+          {
+            if(L_OWNDATA->wrongItem != nullptr)
+            {
+              if(currentWidget() != L_OWNDATA->wrongItem) 
+                setCurrentWidget(L_OWNDATA->wrongItem);
+            }
+            return;
+          }
+          if(it.value() != currentWidget())
+          {
+            setCurrentWidget(it.value());
+          }
+        }
+      });
 
   setEnabled(false);
 }
 
-//------------------------------------------------------------------------------
-#define L_OWNDATA (static_cast<SOwnData*>(mpOwnData))
 
 //------------------------------------------------------------------------------~LCQRemComboLabel
 LCQRemComboLabel::~LCQRemComboLabel()
@@ -107,13 +140,13 @@ void LCQRemComboLabel::setActive(bool _flag)
   if(_flag)
   {
     mDataReader->connectToSource();
-    mDataListener->setActive(true);
+    mFlagActive = true;
   }
   else
   {
     mDataReader->disconnectFromSource();
     setEnabled(false);
-    mDataListener->setActive(false);
+    mFlagActive = false;
   }
 }
 

@@ -61,22 +61,20 @@ void LCLocalDataSource::addBitItem(const QString& _dataName, const QBitArray& _d
 
 QSharedPointer<LIRemoteDataReader> LCLocalDataSource::createReader(
     const QString& _dataName,
-    QWeakPointer<LIRemoteDataReadListener> _readListener)
+    LTReadAction _readAction)
 {
   return mpLocalData->mspLocalSourceHiden->createReader(
       _dataName, 
-      _readListener);
+      _readAction);
 }
 
 QSharedPointer<LIRemoteDataWriter> LCLocalDataSource::createWriter(
     const QString& _dataName,
     LTWriteListener _writeListener)
-    /* QWeakPointer<LIRemoteDataWriteListener> _writeListener) */
 {
   return mpLocalData->mspLocalSourceHiden->createWriter(
       _dataName, 
       _writeListener);
 }
-
 
 

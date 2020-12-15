@@ -7,8 +7,6 @@
 #include "LIDataFormatter.h"
 #include "LIRemoteDataReader.h"
 #include "LIRemoteDataWriter.h"
-#include "LIRemoteDataReadListener.h"
-#include "LIRemoteDataWriteListener.h"
 #include "LIRemoteDataSource.h"
 
 
@@ -18,43 +16,13 @@ class LCQRemLineEdit : public QLineEdit
 
 private:
 
-    class CReadListener : public LIRemoteDataReadListener
-    {
-    private:
-        LCQRemLineEdit& mLineEdit;
-        bool mFlagActive;
-    public:
-        CReadListener(LCQRemLineEdit& _lineEdit);
-        virtual ~CReadListener(){}
-        virtual void dataIsRead(QSharedPointer<QByteArray> _data, LERemoteDataStatus status) override;
-        void setActive(bool _flag){mFlagActive = _flag;}
-    };
-
-    /* class CWriteListener : public LIRemoteDataWriteListener */
-    /* { */
-    /* private: */
-    /*     LCQRemLineEdit& mLineEdit; */
-    /* public: */
-    /*     CWriteListener(LCQRemLineEdit& _lineEdit); */
-    /*     virtual ~CWriteListener(){} */
-    /*     virtual void dataIsWrite(LERemoteDataStatus _status) override; */
-    /* }; */
-
     QString mDataName;
 
     QSharedPointer<LIRemoteDataReader>  mDataReader;
     QSharedPointer<LIRemoteDataWriter>  mDataWriter;
-
-    QSharedPointer<CReadListener>   mReadListener;
-    /* QSharedPointer<CWriteListener>  mWriteListener; */
-
     QSharedPointer<LIDataFormatter> mFormatter;
 
 public:
-    explicit LCQRemLineEdit(const QString& _dataName,
-                            QSharedPointer<LIRemoteDataSource> _dataSource,
-                            QSharedPointer<LIDataFormatter> _formatter,
-                            QWidget* _parent = nullptr);
 
     explicit LCQRemLineEdit(const QString& _dataNameRead,
                             const QString& _dataNameWrite,
@@ -63,8 +31,9 @@ public:
                             QWidget* _parent = nullptr);
 
     virtual ~LCQRemLineEdit();
-    void setActive(bool _flag);
 protected:
+    bool mFlagUpdateOn = false;
+    void setActive(bool _flag);
     virtual void keyPressEvent(QKeyEvent *_ev) override;
     virtual void focusInEvent(QFocusEvent *) override;
     virtual void focusOutEvent(QFocusEvent *) override;

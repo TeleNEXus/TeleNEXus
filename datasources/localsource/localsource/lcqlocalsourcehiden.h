@@ -10,8 +10,6 @@ class LCQLocalDataReader;
 class LCQLocalDataWriter;
 class LIRemoteDataReader;
 class LIRemoteDataWriter;
-class LIRemoteDataReadListener;
-/* class LIRemoteDataWriteListener; */
 
 class LCQLocalSourceHiden final : public QObject 
 {
@@ -89,12 +87,12 @@ public:
 
   QSharedPointer<LCQLocalDataReader> createReader(
       const QString& _dataName, 
-      QSharedPointer<LIRemoteDataReadListener> _listener);
+      LTReadAction _readAction);
+
 
   QSharedPointer<LCQLocalDataWriter> createWriter(
       const QString& _dataName, 
       LTWriteListener _writeListener);
-      /* QSharedPointer<LIRemoteDataWriteListener> _listener); */
 
 private:
   int counter = 0;

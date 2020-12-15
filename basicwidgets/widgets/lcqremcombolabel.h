@@ -8,7 +8,6 @@
 
 #include "LIDataFormatter.h"
 #include "LIRemoteDataReader.h"
-#include "LIRemoteDataReadListener.h"
 #include "LIRemoteDataSource.h"
 class LIMovieAccess;
 
@@ -16,25 +15,10 @@ class LCQRemComboLabel : public QStackedWidget
 {
   Q_OBJECT
 private:
-
-    class CReadListener : public LIRemoteDataReadListener
-  {
-  private:
-    LCQRemComboLabel& mLabel;
-    bool mFlagActive;
-  public:
-    CReadListener(LCQRemComboLabel& _label);
-    virtual ~CReadListener(){}
-    virtual void dataIsRead(QSharedPointer<QByteArray>  _data, 
-        LERemoteDataStatus          _status) override;
-    void setActive(bool _flag){ mFlagActive = _flag;}
-  };
-
     void* mpOwnData;    //Собственные данные.
     QString mDataName;
     QSharedPointer<LIRemoteDataReader>  mDataReader;
     QSharedPointer<LIDataFormatter> mspFormatter;
-    QSharedPointer<CReadListener> mDataListener;
 public:
 
     explicit LCQRemComboLabel(   
@@ -44,12 +28,14 @@ public:
         QWidget* _parent = nullptr);
 
     virtual ~LCQRemComboLabel();
-    void setActive(bool _flag);
-    virtual bool event(QEvent *e) override;
 
     void addItem(QWidget* _widget, const QString&  _val);
     void addItemUndef(QWidget* _widget);
     void addItemWrong(QWidget* _widget);
+private:
+    bool mFlagActive = false;
+    void setActive(bool _flag);
+    virtual bool event(QEvent *e) override;
 };
 
 #endif // LCQREMCOMBOLABEL_H

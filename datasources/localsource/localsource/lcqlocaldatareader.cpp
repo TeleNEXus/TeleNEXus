@@ -1,5 +1,4 @@
 #include "lcqlocaldatareader.h"
-#include "LIRemoteDataReadListener.h"
 
 #include <QCoreApplication>
 #include <QDebug>
@@ -35,11 +34,11 @@ static void pointerDeleter(LCQLocalDataReader* _reader)
 //==============================================================================LCQRemoteDataListener
 LCQLocalDataReader::LCQLocalDataReader(
     const QString& _dataName, 
-    QWeakPointer<LIRemoteDataReadListener> _readListener,
-    QWeakPointer<LCQLocalSourceHiden> _dataSource) :   
+    LTReadAction _readAction,
+    QSharedPointer<LCQLocalSourceHiden> _dataSource) :   
   QObject(nullptr),
   mDataName(_dataName),
-  mwpReadListener(_readListener),
+  mReadAction(_readAction),
   mwpDataSource(_dataSource)
 {
 }
@@ -53,11 +52,11 @@ LCQLocalDataReader::~LCQLocalDataReader()
 //------------------------------------------------------------------------------
 QSharedPointer<LCQLocalDataReader> LCQLocalDataReader::create(
     const QString& _dataName, 
-    QWeakPointer<LIRemoteDataReadListener> _readListener,
-    QWeakPointer<LCQLocalSourceHiden> _dataSource)
+    LTReadAction _readAction,
+    QSharedPointer<LCQLocalSourceHiden> _dataSource)
 {
   auto sp = QSharedPointer<LCQLocalDataReader>(
-      new LCQLocalDataReader( _dataName, _readListener, _dataSource), 
+      new LCQLocalDataReader( _dataName, _readAction, _dataSource), 
       pointerDeleter);
   sp->mwpThis = sp;
   return sp;
@@ -104,16 +103,8 @@ void LCQLocalDataReader::notifyListener(LERemoteDataStatus _status)
 void LCQLocalDataReader::customEvent(QEvent* _event)
 {
   if(_event->type() != CQEventDataIsRead::msExtendedEventType) return;
-
   CQEventDataIsRead *e = dynamic_cast<CQEventDataIsRead*>(_event);
-
   if(e == nullptr) return;
-
-  auto listener = mwpReadListener.lock();
-
-  if(!listener.isNull())
-  {
-    listener->dataIsRead(e->mspData, e->mStatus);
-  }
+  mReadAction(e->mspData, e->mStatus);
 }
 

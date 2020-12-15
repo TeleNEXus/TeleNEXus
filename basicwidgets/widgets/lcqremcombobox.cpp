@@ -7,39 +7,39 @@
 #include <qglobal.h>
 #include <qnamespace.h>
 #include <QKeyEvent>
-//==============================================================================CReadListener
-LCQRemComboBox::CReadListener::CReadListener(LCQRemComboBox& _combobox) :  
-  mOwner(_combobox)
-{
-}
+/* //==============================================================================CReadListener */
+/* LCQRemComboBox::CReadListener::CReadListener(LCQRemComboBox& _combobox) : */  
+/*   mOwner(_combobox) */
+/* { */
+/* } */
 
-//------------------------------------------------------------------------------
-void LCQRemComboBox::CReadListener::dataIsRead( 
-    QSharedPointer<QByteArray>  _data, 
-    LERemoteDataStatus          _status)
-{
-  switch(_status)
-  {
-  case LERemoteDataStatus::DS_OK:
-    mOwner.setCurrentIndex(
-        mOwner.findData( 
-          mOwner.mFormatter->
-          toString( *_data.data())) ); 
-    mOwner.setEnabled(true);
-    break;
+/* //------------------------------------------------------------------------------ */
+/* void LCQRemComboBox::CReadListener::dataIsRead( */ 
+/*     QSharedPointer<QByteArray>  _data, */ 
+/*     LERemoteDataStatus          _status) */
+/* { */
+/*   switch(_status) */
+/*   { */
+/*   case LERemoteDataStatus::DS_OK: */
+/*     mOwner.setCurrentIndex( */
+/*         mOwner.findData( */ 
+/*           mOwner.mFormatter-> */
+/*           toString( *_data.data())) ); */ 
+/*     mOwner.setEnabled(true); */
+/*     break; */
 
-  case LERemoteDataStatus::DS_WRONG:
-    mOwner.setCurrentIndex(-1);
-    mOwner.setEnabled(true);
-    break;
+/*   case LERemoteDataStatus::DS_WRONG: */
+/*     mOwner.setCurrentIndex(-1); */
+/*     mOwner.setEnabled(true); */
+/*     break; */
 
-  case LERemoteDataStatus::DS_UNDEF:
-    mOwner.setCurrentIndex(-1);
-    mOwner.setEnabled(false);
-  default:
-    break;
-  }
-}
+/*   case LERemoteDataStatus::DS_UNDEF: */
+/*     mOwner.setCurrentIndex(-1); */
+/*     mOwner.setEnabled(false); */
+/*   default: */
+/*     break; */
+/*   } */
+/* } */
 
 //==============================================================================LCQRemComboBox
 //LCQRemComboBox::LCQRemComboBox(QWidget* _parent) : QComboBox(_parent)
@@ -48,22 +48,45 @@ void LCQRemComboBox::CReadListener::dataIsRead(
 
 //------------------------------------------------------------------------------
 LCQRemComboBox::LCQRemComboBox( 
-    const QString&                              _dataNameRead, const QString&                              _dataNameWrite,
-    QSharedPointer<LIRemoteDataSource>          _dataSource,
-    QSharedPointer<LIDataFormatter>             _formatter,
-    QWidget* _parent):  QComboBox(_parent),
+    const QString&                       _dataNameRead, 
+    const QString&                       _dataNameWrite,
+    QSharedPointer<LIRemoteDataSource>   _dataSource,
+    QSharedPointer<LIDataFormatter>      _formatter,
+    QWidget* _parent):  
+  QComboBox(_parent),
   mFormatter(_formatter),
   mFlagPopupOn(false)
 {
 
-  mDataReadListener = QSharedPointer<CReadListener>(new CReadListener(*this));
+  /* mDataReadListener = QSharedPointer<CReadListener>(new CReadListener(*this)); */
 
-  mDataReader = _dataSource->createReader(_dataNameRead, mDataReadListener);
+  mDataReader = _dataSource->createReader(_dataNameRead, 
+      [this](QSharedPointer<QByteArray> _data, LERemoteDataStatus _status)
+      {
+        switch(_status)
+        {
+        case LERemoteDataStatus::DS_OK:
+          setCurrentIndex(findData( mFormatter->toString( *_data.data()))); 
+          setEnabled(true);
+          break;
 
-  /* mDataWriter = _dataSource->createWriter(_dataNameWrite, */ 
-  /*     [](LERemoteDataStatus _status){ Q_UNUSED(_status); }); */
+        case LERemoteDataStatus::DS_WRONG:
+          setCurrentIndex(-1);
+          setEnabled(true);
+          break;
 
-  mDataWriter = _dataSource->createWriter(_dataNameWrite); 
+        case LERemoteDataStatus::DS_UNDEF:
+          setCurrentIndex(-1);
+          setEnabled(false);
+        default:
+          break;
+        }
+      });
+
+  mDataWriter = _dataSource->createWriter(_dataNameWrite, 
+      [](LERemoteDataStatus _status){ Q_UNUSED(_status); });
+
+  /* mDataWriter = _dataSource->createWriter(_dataNameWrite); */ 
 
   this->setEnabled(false);
 

@@ -26,17 +26,16 @@ private:
   };
 
   QString mDataName;
-  QWeakPointer<LIRemoteDataReadListener> mwpReadListener;
+  LTReadAction mReadAction;
   QWeakPointer<LQModbusDataSource> mwpDataSource;
   QWeakPointer<LQModbusDataReader> mwpThis;
-  /* std::function<void(QSharedPointer<QByteArray>, LERemoteDataStatus)> mListener; */
 
 private:
   explicit LQModbusDataReader() = delete;
 
   explicit LQModbusDataReader(  
       const QString& _dataName,
-      QWeakPointer<LIRemoteDataReadListener> _readListener,
+      LTReadAction _readAction, 
       QWeakPointer<LQModbusDataSource> _dataSource);
 
 public:
@@ -45,7 +44,7 @@ public:
   static QSharedPointer<LQModbusDataReader> 
     create(
         const QString& _dataName, 
-        QWeakPointer<LIRemoteDataReadListener> _readListener,
+        LTReadAction _readAction,
         QWeakPointer<LQModbusDataSource> _dataSource);
 
   virtual void readRequest() override;

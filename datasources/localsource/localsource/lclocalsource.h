@@ -21,14 +21,11 @@ public:
 
   virtual QSharedPointer<LIRemoteDataReader> createReader(
       const QString& _dataName,
-      QWeakPointer<LIRemoteDataReadListener> _readListener)  override;
+      LTReadAction _readAction) override;
 
   virtual QSharedPointer<LIRemoteDataWriter> createWriter(
       const QString& _dataName,
       LTWriteListener _writeListener) override;
-
-      /* QWeakPointer<LIRemoteDataWriteListener> _writeListener)  override; */
-
 };
 
 #endif //LCLOCALSOURCE_H_

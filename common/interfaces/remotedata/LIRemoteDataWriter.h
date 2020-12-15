@@ -1,9 +1,11 @@
 #ifndef LIREMOTEDATAWRITER_H
 #define LIREMOTEDATAWRITER_H
 
-#include <QWeakPointer>
+/* #include <QWeakPointer> */
 
-class LIRemoteDataSource;
+/* class LIRemoteDataSource; */
+
+#include <QByteArray>
 
 class LIRemoteDataWriter
 {

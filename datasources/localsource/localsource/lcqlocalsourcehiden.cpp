@@ -109,9 +109,9 @@ void LCQLocalSourceHiden::addItem(const QString& _id, const QBitArray& _data)
 //------------------------------------------------------------------------------
 QSharedPointer<LCQLocalDataReader> LCQLocalSourceHiden::createReader(
     const QString& _dataName, 
-    QSharedPointer<LIRemoteDataReadListener> _listener)
+    LTReadAction _readAction)
 {
-  return LCQLocalDataReader::create(_dataName, _listener, mwpThis);
+  return LCQLocalDataReader::create(_dataName, _readAction, mwpThis);
 }
 
 //------------------------------------------------------------------------------
