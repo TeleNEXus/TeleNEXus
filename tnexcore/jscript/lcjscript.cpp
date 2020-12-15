@@ -27,7 +27,6 @@
 #include <QThread>
 
 //==============================================================================
-
 struct SPrivateData
 {
   int mInterval;

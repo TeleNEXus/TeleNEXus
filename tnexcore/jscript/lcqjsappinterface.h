@@ -28,16 +28,16 @@ class LIApplication;
 
 class LCQJSAppInterface : public QObject
 {
-  Q_OBJECT
+  Q_OBJECT;
 private:
-   void* mpData; 
+  void* mpData; 
 public:
   LCQJSAppInterface();
   ~LCQJSAppInterface();
 
-public slots:
+  public slots:
 
-  void debug(const QString& _str);
+    void debug(const QString& _str);
 
   QString getProjectPath();
 

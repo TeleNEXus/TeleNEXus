@@ -64,7 +64,6 @@ LQModbusDataReader::~LQModbusDataReader()
 //==============================================================================create
 static void doDeleteLater(LQModbusDataReader* _reader)
 {
-  qDebug() << "LQModbusDataReader  doDeleteLater";
   _reader->deleteLater();
 }
 
@@ -91,19 +90,18 @@ void LQModbusDataReader::readRequest()
 //------------------------------------------------------------------------------
 void LQModbusDataReader::connectToSource()
 {
-    qDebug() << "//-------------------------------------------------------------";
-    qDebug() << "LCQModbusDataReader::connectToSource:" << mDataName;
     auto sp = mwpDataSource.lock();
     if(sp.isNull()) return;
+    qDebug() << "LCQModbusDataReader::connectToSource:" << mDataName;
     sp.data()->connectReader(mwpThis);
 }
 
 //------------------------------------------------------------------------------
 void LQModbusDataReader::disconnectFromSource()
 {
-    qDebug() << "LQModbusDataReader::disconnectFromSource:" << mDataName;
     auto sp = mwpDataSource.lock();
     if(sp.isNull()) return;
+    qDebug() << "LQModbusDataReader::disconnectFromSource:" << mDataName;
     sp.data()->disconnectReader(mwpThis);
 }
 

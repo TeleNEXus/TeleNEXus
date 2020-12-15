@@ -1,4 +1,4 @@
-﻿/* 
+﻿/*
  * TeleNEXus is a simple SCADA programm
  *
  * Copyright (C) 2020 Sergey S. Kuzmenko
@@ -23,70 +23,73 @@
 #include <QThread>
 
 
-//----------------------------------------------------------------------------------------------------------------------
-LQModbusMasterTcp::LQModbusMasterTcp(QObject *_parent) :  LQModbusMasterBase(_parent),
-                                                            mPort(502),
-                                                            mpMaster(nullptr),
-                                                            mpThread(nullptr)
-{
-
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-LQModbusMasterTcp::~LQModbusMasterTcp()
-{
-    mpThread->quit();
-    mpThread->deleteLater();
-}
-
-//----------------------------------------------------------------------------------------------------------------------
+//==============================================================================deleterLater(
 static void deleterLater(QObject* _obj)
 {
-    _obj->deleteLater();
+  _obj->deleteLater();
 }
 
-//----------------------------------------------------------------------------------------------------------------------
+//==============================================================================LQModbusMasterTcp
+LQModbusMasterTcp::LQModbusMasterTcp(QObject *_parent) :
+  LQModbusMasterBase(_parent),
+  mPort(502),
+  mpMaster(nullptr),
+  mpThread(nullptr)
+{
+}
+
+//------------------------------------------------------------------------------
+LQModbusMasterTcp::~LQModbusMasterTcp()
+{
+  mpThread->quit();
+  mpThread->deleteLater();
+}
+
+//------------------------------------------------------------------------------
 QSharedPointer<LQModbusMasterTcp> LQModbusMasterTcp::create()
 {
-    LQModbusMasterTcp* master = new LQModbusMasterTcp(nullptr);
-    master->mpThread = new QThread;
-    master->moveToThread(master->mpThread);
-    master->mpThread->start();
-    return QSharedPointer<LQModbusMasterTcp>(master, deleterLater);
+  LQModbusMasterTcp* master = new LQModbusMasterTcp(nullptr);
+  master->mpThread = new QThread;
+  master->moveToThread(master->mpThread);
+  master->mpThread->start();
+  return QSharedPointer<LQModbusMasterTcp>(master, deleterLater);
 }
 
-//----------------------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 void LQModbusMasterTcp::connectToHost(const QUrl& _url)
 {
-    mPort = _url.port();
-    mHostName = _url.host();
-    connectRequest();
+  mPort = _url.port();
+  mHostName = _url.host();
+  connectRequest();
 }
 
-//----------------------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 void LQModbusMasterTcp::disconnectFromHost()
 {
-    //TODO: Add Code
+  //TODO: Add Code
 }
 
 QModbusClient* LQModbusMasterTcp::createMaster()
 {
-    if(mpMaster != nullptr)
-    {
-//        mpMaster->disconnectDevice();
-        mpMaster->deleteLater();
-    }
+  if(mpMaster != nullptr)
+  {
+    //        mpMaster->disconnectDevice();
+    mpMaster->deleteLater();
+  }
 
-    mpMaster = new QModbusTcpClient();
+  mpMaster = new QModbusTcpClient();
 
-    mpMaster->setConnectionParameter(QModbusDevice::NetworkPortParameter, mPort);
-    mpMaster->setConnectionParameter(QModbusDevice::NetworkAddressParameter, mHostName);
-    mpMaster->setTimeout(500);
-    return mpMaster;
+  mpMaster->setConnectionParameter(QModbusDevice::NetworkPortParameter, mPort);
+
+  mpMaster->setConnectionParameter(
+      QModbusDevice::NetworkAddressParameter, mHostName);
+
+  mpMaster->setTimeout(500);
+  return mpMaster;
 }
 
 QModbusClient* LQModbusMasterTcp::getMaster()
 {
-    return mpMaster;
+  return mpMaster;
 }
 

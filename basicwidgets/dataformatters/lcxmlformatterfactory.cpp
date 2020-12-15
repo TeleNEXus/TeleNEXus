@@ -70,12 +70,78 @@ QMap < QString,
      std::function<QSharedPointer<LIDataFormatter>(const QDomNamedNodeMap& _attr)>> 
      __formatterCreators;
 
-struct SFormatterCreator1
+     struct SFormatterCreator1
 {
-    SFormatterCreator1(){}
-    QSharedPointer<LIDataFormatter> 
-        operator()(const QDomNamedNodeMap& _attr)
+  SFormatterCreator1(){}
+  QSharedPointer<LIDataFormatter> 
+    operator()(const QDomNamedNodeMap& _attr)
     {
+      QDomNode node;
+
+      bool ok_size = false;
+      int size = 0;
+      QChar separator;
+
+      //Получение значения размера данных в байтах.
+      node = _attr.namedItem(__attributes.datasize);
+      if(!node.isNull())
+      {
+        size = node.toAttr().value().toInt(&ok_size);
+      }
+
+      //Получение значения разделителя.
+      node = _attr.namedItem(__attributes.separator);
+      if(!node.isNull())
+      {
+        separator = node.toAttr().value()[0];
+      }
+      //Проверяем наличие дополнительных параметров.
+      if( ((!ok_size)||(size <= 0)) && (separator.isNull()))
+      {
+        return __formatterBitfield;
+      }
+
+      LCFormatterBitfield *formatter = 
+        new LCFormatterBitfield();
+
+      //Копируем параметры форматтера по умолчанию.
+      *formatter = *(static_cast<LCFormatterBitfield*>
+          (__formatterBitfield.data()));
+
+      //Установка значения размера данных в байтах.
+      if(size > __L_MAX_BITS_SIZE) size = __L_MAX_BITS_SIZE;
+      if(size > 0) 
+      {
+        formatter->setSize(size);
+      }
+
+      //Установка сепаратора.
+      formatter->setSeparator(separator); 
+      return QSharedPointer<LIDataFormatter>(formatter); 
+    }
+};
+
+LCXmlStdDataFormatterFactory::LCXmlStdDataFormatterFactory()
+{
+  __formatterBitfield.reset(    new LCFormatterBitfield());
+  __formatterBits.reset(        new LCFormatterBits());
+  __formatterHex.reset(         new LCFormatterHex());
+  __formatterBool.reset(        new LCFormatterBool());
+  __formatterUint8.reset(       new LCFormatterU8());
+  __formatterInt8.reset(        new LCFormatterS8());
+  __formatterUint16.reset(      new LCFormatterU16());
+  __formatterInt16.reset(       new LCFormatterS16());
+  __formatterUint32.reset(      new LCFormatterU32());
+  __formatterInt32.reset(       new LCFormatterS32());
+  __formatterFloat32.reset(     new LCFormatterF32());
+  __formatterString.reset(      new LCFormatterString());
+
+  //TODO: Добавить подключение сепаратора для форматтеров.
+
+  //--------------------------------------------------------------------------bitfield
+  __formatterCreators.insert("bitfield",
+      [](const QDomNamedNodeMap& _attr)
+      {
         QDomNode node;
 
         bool ok_size = false;
@@ -86,252 +152,186 @@ struct SFormatterCreator1
         node = _attr.namedItem(__attributes.datasize);
         if(!node.isNull())
         {
-            size = node.toAttr().value().toInt(&ok_size);
+          size = node.toAttr().value().toInt(&ok_size);
         }
 
         //Получение значения разделителя.
         node = _attr.namedItem(__attributes.separator);
         if(!node.isNull())
         {
-            separator = node.toAttr().value()[0];
+          separator = node.toAttr().value()[0];
         }
         //Проверяем наличие дополнительных параметров.
         if( ((!ok_size)||(size <= 0)) && (separator.isNull()))
         {
-            return __formatterBitfield;
+          return __formatterBitfield;
         }
 
         LCFormatterBitfield *formatter = 
-            new LCFormatterBitfield();
+          new LCFormatterBitfield();
 
         //Копируем параметры форматтера по умолчанию.
         *formatter = *(static_cast<LCFormatterBitfield*>
-                (__formatterBitfield.data()));
+            (__formatterBitfield.data()));
 
         //Установка значения размера данных в байтах.
         if(size > __L_MAX_BITS_SIZE) size = __L_MAX_BITS_SIZE;
         if(size > 0) 
         {
-            formatter->setSize(size);
+          formatter->setSize(size);
         }
 
         //Установка сепаратора.
         formatter->setSeparator(separator); 
         return QSharedPointer<LIDataFormatter>(formatter); 
-    }
-};
+      });
 
-LCXmlStdDataFormatterFactory::LCXmlStdDataFormatterFactory()
-{
-    __formatterBitfield.reset(    new LCFormatterBitfield());
-    __formatterBits.reset(        new LCFormatterBits());
-    __formatterHex.reset(         new LCFormatterHex());
-    __formatterBool.reset(        new LCFormatterBool());
-    __formatterUint8.reset(       new LCFormatterU8());
-    __formatterInt8.reset(        new LCFormatterS8());
-    __formatterUint16.reset(      new LCFormatterU16());
-    __formatterInt16.reset(       new LCFormatterS16());
-    __formatterUint32.reset(      new LCFormatterU32());
-    __formatterInt32.reset(       new LCFormatterS32());
-    __formatterFloat32.reset(     new LCFormatterF32());
-    __formatterString.reset(      new LCFormatterString());
+  //--------------------------------------------------------------------------bits
+  __formatterCreators.insert("bits",
+      [](const QDomNamedNodeMap& _attr)
+      {
+        QDomNode node;
 
-    //TODO: Добавить подключение сепаратора для форматтеров.
-    
-    //--------------------------------------------------------------------------bitfield
-    __formatterCreators.insert("bitfield",
-            [](const QDomNamedNodeMap& _attr)
-            {
-            QDomNode node;
+        bool ok_size = false;
+        int size = 0;
+        QChar separator;
 
-            bool ok_size = false;
-            int size = 0;
-            QChar separator;
+        //Получение значения размера данных в байтах.
+        node = _attr.namedItem(__attributes.datasize);
+        if(!node.isNull())
+        {
+          size = node.toAttr().value().toInt(&ok_size);
+        }
 
-            //Получение значения размера данных в байтах.
-            node = _attr.namedItem(__attributes.datasize);
-            if(!node.isNull())
-            {
-                size = node.toAttr().value().toInt(&ok_size);
-            }
+        //Получение значения разделителя.
+        node = _attr.namedItem(__attributes.separator);
+        if(!node.isNull())
+        {
+          separator = node.toAttr().value()[0];
+        }
+        //Проверяем наличие дополнительных параметров.
+        if( ((!ok_size)||(size <= 0)) && (separator.isNull()))
+        {
+          return __formatterBits;
+        }
 
-            //Получение значения разделителя.
-            node = _attr.namedItem(__attributes.separator);
-            if(!node.isNull())
-            {
-                separator = node.toAttr().value()[0];
-            }
-            //Проверяем наличие дополнительных параметров.
-            if( ((!ok_size)||(size <= 0)) && (separator.isNull()))
-            {
-                return __formatterBitfield;
-            }
+        LCFormatterBits *formatter = 
+          new LCFormatterBits();
 
-            LCFormatterBitfield *formatter = 
-                new LCFormatterBitfield();
+        //Копируем параметры форматтера по умолчанию.
+        *formatter = *(static_cast<LCFormatterBits*>
+            (__formatterBits.data()));
 
-            //Копируем параметры форматтера по умолчанию.
-            *formatter = *(static_cast<LCFormatterBitfield*>
-                    (__formatterBitfield.data()));
+        //Установка значения размера данных в байтах.
+        if(size > __L_MAX_BITS_SIZE) size = __L_MAX_BITS_SIZE;
+        if(size > 0) 
+        {
+          formatter->setSize(size);
+        }
 
-            //Установка значения размера данных в байтах.
-            if(size > __L_MAX_BITS_SIZE) size = __L_MAX_BITS_SIZE;
-            if(size > 0) 
-            {
-                formatter->setSize(size);
-            }
+        //Установка сепаратора.
+        formatter->setSeparator(separator); 
+        return QSharedPointer<LIDataFormatter>(formatter); 
+      });
 
-            //Установка сепаратора.
-            formatter->setSeparator(separator); 
-            return QSharedPointer<LIDataFormatter>(formatter); 
-            });
+  //--------------------------------------------------------------------------hex
+  __formatterCreators.insert("hex",
+      [](const QDomNamedNodeMap& _attr)
+      {
+        QDomNode node;
+        bool ok_size = false;
+        int size = 0;
+        QChar separator;
 
-    //--------------------------------------------------------------------------bits
-    __formatterCreators.insert("bits",
-            [](const QDomNamedNodeMap& _attr)
-            {
-            QDomNode node;
+        //Получение значения размера данных в байтах.
+        node = _attr.namedItem(__attributes.datasize);
+        if(!node.isNull())
+        {
+          size = node.toAttr().value().toInt(&ok_size);
+        }
 
-            bool ok_size = false;
-            int size = 0;
-            QChar separator;
+        //Получение значения разделителя.
+        node = _attr.namedItem(__attributes.separator);
+        if(!node.isNull())
+        {
+          separator = node.toAttr().value()[0];
+        }
+        //Проверяем наличие дополнительных параметров.
+        if( ((!ok_size)||(size <= 0)) && (separator.isNull()))
+        {
+          return __formatterHex;
+        }
 
-            //Получение значения размера данных в байтах.
-            node = _attr.namedItem(__attributes.datasize);
-            if(!node.isNull())
-            {
-                size = node.toAttr().value().toInt(&ok_size);
-            }
+        LCFormatterHex *formatter = 
+          new LCFormatterHex();
 
-            //Получение значения разделителя.
-            node = _attr.namedItem(__attributes.separator);
-            if(!node.isNull())
-            {
-                separator = node.toAttr().value()[0];
-            }
-            //Проверяем наличие дополнительных параметров.
-            if( ((!ok_size)||(size <= 0)) && (separator.isNull()))
-            {
-                return __formatterBits;
-            }
+        //Копируем параметры форматтера по умолчанию.
+        *formatter = *(static_cast<LCFormatterHex*>
+            (__formatterHex.data()));
 
-            LCFormatterBits *formatter = 
-                new LCFormatterBits();
+        //Установка значения размера данных в байтах.
+        if(size > __L_MAX_BITS_SIZE) size = __L_MAX_BITS_SIZE;
+        if(size > 0) 
+        {
+          formatter->setSize(size);
+        }
 
-            //Копируем параметры форматтера по умолчанию.
-            *formatter = *(static_cast<LCFormatterBits*>
-                    (__formatterBits.data()));
+        //Установка сепаратора.
+        formatter->setSeparator(separator); 
+        return QSharedPointer<LIDataFormatter>(formatter); 
+      });
 
-            //Установка значения размера данных в байтах.
-            if(size > __L_MAX_BITS_SIZE) size = __L_MAX_BITS_SIZE;
-            if(size > 0) 
-            {
-                formatter->setSize(size);
-            }
-
-            //Установка сепаратора.
-            formatter->setSeparator(separator); 
-            return QSharedPointer<LIDataFormatter>(formatter); 
-            });
-
-    //--------------------------------------------------------------------------hex
-    __formatterCreators.insert("hex",
-            [](const QDomNamedNodeMap& _attr)
-            {
-            QDomNode node;
-            bool ok_size = false;
-            int size = 0;
-            QChar separator;
-
-            //Получение значения размера данных в байтах.
-            node = _attr.namedItem(__attributes.datasize);
-            if(!node.isNull())
-            {
-                size = node.toAttr().value().toInt(&ok_size);
-            }
-
-            //Получение значения разделителя.
-            node = _attr.namedItem(__attributes.separator);
-            if(!node.isNull())
-            {
-                separator = node.toAttr().value()[0];
-            }
-            //Проверяем наличие дополнительных параметров.
-            if( ((!ok_size)||(size <= 0)) && (separator.isNull()))
-            {
-                return __formatterHex;
-            }
-
-            LCFormatterHex *formatter = 
-                new LCFormatterHex();
-
-            //Копируем параметры форматтера по умолчанию.
-            *formatter = *(static_cast<LCFormatterHex*>
-                    (__formatterHex.data()));
-
-            //Установка значения размера данных в байтах.
-            if(size > __L_MAX_BITS_SIZE) size = __L_MAX_BITS_SIZE;
-            if(size > 0) 
-            {
-                formatter->setSize(size);
-            }
-
-            //Установка сепаратора.
-            formatter->setSeparator(separator); 
-            return QSharedPointer<LIDataFormatter>(formatter); 
-            });
-     
-    //--------------------------------------------------------------------------bool
-    __formatterCreators.insert("bool",
-            [](const QDomNamedNodeMap& _attr){
-            Q_UNUSED(_attr); return __formatterBool;});
-    __formatterCreators.insert("uint8",
-            [](const QDomNamedNodeMap& _attr){
-            Q_UNUSED(_attr); return __formatterUint8;});
-    __formatterCreators.insert("int8",
-            [](const QDomNamedNodeMap& _attr){
-            Q_UNUSED(_attr); return __formatterInt8;});
-    __formatterCreators.insert("uint16",
-            [](const QDomNamedNodeMap& _attr){
-            Q_UNUSED(_attr); return __formatterUint16;});
-    __formatterCreators.insert("int16",
-            [](const QDomNamedNodeMap& _attr){
-            Q_UNUSED(_attr); return __formatterInt16;});
-    __formatterCreators.insert("uint32",
-            [](const QDomNamedNodeMap& _attr){
-            Q_UNUSED(_attr); return __formatterUint32;});
-    __formatterCreators.insert("int32",
-            [](const QDomNamedNodeMap& _attr){
-            Q_UNUSED(_attr); return __formatterInt32;});
-    __formatterCreators.insert("float32",
-            [](const QDomNamedNodeMap& _attr){
-            Q_UNUSED(_attr); return __formatterFloat32;});
-    __formatterCreators.insert("string",
-            [](const QDomNamedNodeMap& _attr){
-            Q_UNUSED(_attr); return __formatterString;});
+  //--------------------------------------------------------------------------bool
+  __formatterCreators.insert("bool",
+      [](const QDomNamedNodeMap& _attr){
+        Q_UNUSED(_attr); return __formatterBool;});
+  __formatterCreators.insert("uint8",
+      [](const QDomNamedNodeMap& _attr){
+        Q_UNUSED(_attr); return __formatterUint8;});
+  __formatterCreators.insert("int8",
+      [](const QDomNamedNodeMap& _attr){
+        Q_UNUSED(_attr); return __formatterInt8;});
+  __formatterCreators.insert("uint16",
+      [](const QDomNamedNodeMap& _attr){
+        Q_UNUSED(_attr); return __formatterUint16;});
+  __formatterCreators.insert("int16",
+      [](const QDomNamedNodeMap& _attr){
+        Q_UNUSED(_attr); return __formatterInt16;});
+  __formatterCreators.insert("uint32",
+      [](const QDomNamedNodeMap& _attr){
+        Q_UNUSED(_attr); return __formatterUint32;});
+  __formatterCreators.insert("int32",
+      [](const QDomNamedNodeMap& _attr){
+        Q_UNUSED(_attr); return __formatterInt32;});
+  __formatterCreators.insert("float32",
+      [](const QDomNamedNodeMap& _attr){
+        Q_UNUSED(_attr); return __formatterFloat32;});
+  __formatterCreators.insert("string",
+      [](const QDomNamedNodeMap& _attr){
+        Q_UNUSED(_attr); return __formatterString;});
 }
 
 //------------------------------------------------------------------------------
 LCXmlStdDataFormatterFactory& LCXmlStdDataFormatterFactory::instance()
 {
-    static LCXmlStdDataFormatterFactory ins;
-    return ins;
+  static LCXmlStdDataFormatterFactory ins;
+  return ins;
 }
 
 //------------------------------------------------------------------------------
 QSharedPointer<LIDataFormatter> 
-        LCXmlStdDataFormatterFactory::
-                        createStringFormatter( const QDomNamedNodeMap& _attr)
+LCXmlStdDataFormatterFactory::
+createStringFormatter( const QDomNamedNodeMap& _attr)
 {
-    QDomNode node = _attr.namedItem("format");
-    if(node.isNull()) return nullptr;
+  QDomNode node = _attr.namedItem("format");
+  if(node.isNull()) return nullptr;
 
-    QString format = node.toAttr().value();
+  QString format = node.toAttr().value();
 
-    auto it = __formatterCreators.find(format);
-    if(it == __formatterCreators.end())
-    {
-        return __formatterHex;
-    }
-    return it.value()(_attr);
+  auto it = __formatterCreators.find(format);
+  if(it == __formatterCreators.end())
+  {
+    return __formatterHex;
+  }
+  return it.value()(_attr);
 }

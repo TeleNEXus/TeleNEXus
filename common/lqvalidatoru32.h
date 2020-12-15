@@ -25,16 +25,16 @@
 
 class LQValidatorU32 : public QValidator
 {
-    Q_OBJECT
+  Q_OBJECT;
 
-    using MTUint32 = quint32;
-    MTUint32 mMin;
-    MTUint32 mMax;
+  quint32 mMin;
+  quint32 mMax;
+
 public:
-    explicit LQValidatorU32(QObject *parent = nullptr);
-    virtual ~LQValidatorU32();
-    virtual QValidator::State validate(QString &input, int &pos) const override;
-    void setRange(MTUint32 _min, MTUint32 _max);
+  explicit LQValidatorU32(QObject *parent = nullptr);
+  virtual ~LQValidatorU32();
+  virtual QValidator::State validate(QString &input, int &pos) const override;
+  void setRange(quint32 _min, quint32 _max);
 
 };
 

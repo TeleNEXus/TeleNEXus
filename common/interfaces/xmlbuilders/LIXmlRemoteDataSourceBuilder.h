@@ -33,11 +33,11 @@ using LQDataSources = QMap<QString, QSharedPointer<LIRemoteDataSource>>;
 class LIXmlRemoteDataSourceBuilder
 {
 public:
-    LIXmlRemoteDataSourceBuilder(){}
-    virtual ~LIXmlRemoteDataSourceBuilder(){}
-    virtual LQDataSources build(
-            const QDomElement &_element, 
-            const LIApplication& _app) = 0;
+  LIXmlRemoteDataSourceBuilder(){}
+  virtual ~LIXmlRemoteDataSourceBuilder(){}
+  virtual LQDataSources build(
+      const QDomElement &_element, 
+      const LIApplication& _app) = 0;
 };
 
 #endif // LIXMLREMOTEDATASOURCEBUILDER_H

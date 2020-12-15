@@ -32,29 +32,28 @@ class QThread;
 class LQModbusMasterTcp : public LQModbusMasterBase
 {
 private:
-    quint16             mPort;
-    QString             mHostName;
-    QModbusTcpClient*   mpMaster;
-    QThread*            mpThread;
+  quint16             mPort;
+  QString             mHostName;
+  QModbusTcpClient*   mpMaster;
+  QThread*            mpThread;
 
 private:
-    LQModbusMasterTcp() = delete;
-    LQModbusMasterTcp(const LQModbusMasterTcp&) = delete;
-    LQModbusMasterTcp& operator=(const LQModbusMasterTcp&) = delete;
-    explicit LQModbusMasterTcp(QObject *_parent = nullptr);
-    virtual ~LQModbusMasterTcp();
+  LQModbusMasterTcp() = delete;
+  LQModbusMasterTcp(const LQModbusMasterTcp&) = delete;
+  LQModbusMasterTcp& operator=(const LQModbusMasterTcp&) = delete;
+  explicit LQModbusMasterTcp(QObject *_parent = nullptr);
+  virtual ~LQModbusMasterTcp();
 
 public:
-    static QSharedPointer<LQModbusMasterTcp> create();
+  static QSharedPointer<LQModbusMasterTcp> create();
 
 public slots:
-    void connectToHost(const QUrl& _url);
-    void disconnectFromHost();
+  void connectToHost(const QUrl& _url);
+  void disconnectFromHost();
 
 private:
-//--------------------------------------------------------------------------------------------------------------override
-    virtual QModbusClient* createMaster() override;
-    virtual QModbusClient* getMaster() override;
+  virtual QModbusClient* createMaster() override;
+  virtual QModbusClient* getMaster() override;
 };
 
 #endif // LQMODBUSMASTERTCP_H

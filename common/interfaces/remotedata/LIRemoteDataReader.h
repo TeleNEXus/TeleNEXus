@@ -24,11 +24,11 @@
 class LIRemoteDataReader
 {
 public:
-    LIRemoteDataReader(){}
-    ~LIRemoteDataReader(){}
-    virtual void readRequest() = 0;
-    virtual void connectToSource() = 0;
-    virtual void disconnectFromSource() = 0;
+  LIRemoteDataReader(){}
+  ~LIRemoteDataReader(){}
+  virtual void readRequest() = 0;
+  virtual void connectToSource() = 0;
+  virtual void disconnectFromSource() = 0;
 };
 
 #endif // LIREMOTEDATAREADER_H

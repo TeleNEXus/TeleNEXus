@@ -19,7 +19,6 @@
  * along with TeleNEXus.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include "basicwidgets.h"
-
 #include "lcqremwritebutton.h"
 #include "lcxmlwidgetbuilder.h"
 #include "lcxmltextlabelbuilder.h"
@@ -30,52 +29,55 @@
 #include "lcxmltablewidgetbuilder.h"
 #include "lcxmltabwidgetbuilder.h"
 #include "lcxmlbuttonbuilder.h"
+#include "lcxmlswitchwidgetslistbuilder.h"
+#include "lcxmlscrollareabuilder.h"
+
 //------------------------------------------------------------------------------
 void* getWidgetBuilder()
 {
-    return new LCXmlWidgetBuilder;
+  return new LCXmlWidgetBuilder;
 }
 
 //------------------------------------------------------------------------------
 void* getTextLabelBuilder()
 {
-    return new LCXmlTextLabelBuilder;
+  return new LCXmlTextLabelBuilder;
 }
 
 //------------------------------------------------------------------------------
 void* getRemLabelBuilder()
 {
-    return new LCXmlRemLabelBuilder;
+  return new LCXmlRemLabelBuilder;
 }
 
 //------------------------------------------------------------------------------
 void*  getRemLineEditBuilder()
 {
-    return new LCXmlRemLineEditBuilder;
+  return new LCXmlRemLineEditBuilder;
 }
 
 //------------------------------------------------------------------------------
 void*  getRemComboBoxBuilder()
 {
-    return new LCXmlRemComboBoxBuilder;
+  return new LCXmlRemComboBoxBuilder;
 }
 
 //------------------------------------------------------------------------------
 void*  getRemComboLabelBuilder()
 {
-    return new LCXmlRemComboLabelBuilder;
+  return new LCXmlRemComboLabelBuilder;
 }
 
 //------------------------------------------------------------------------------
 void* getTableWidgetBuilder()
 {
-    return new LCXmlTableWidgetBuilder;
+  return new LCXmlTableWidgetBuilder;
 }
 
 //------------------------------------------------------------------------------
 void* getTabWidgetBuilder()
 {
-    return new LCXmlTabWidgetBuilder;
+  return new LCXmlTabWidgetBuilder;
 }
 
 //------------------------------------------------------------------------------
@@ -91,15 +93,13 @@ void* getControlWindowButtonBuilder()
 }
 
 //------------------------------------------------------------------------------
-#include "lcxmlswitchwidgetslistbuilder.h"
 void* getSwitchWidgetsListBuilder()
 {
-    return new LCXmlSwitchWidgetsListBuilder;
+  return new LCXmlSwitchWidgetsListBuilder;
 }
 
 //------------------------------------------------------------------------------
-#include "lcxmlscrollareabuilder.h"
 void* getScrollAreaBuilder()
 {
-    return new LCXmlScrollAreaBuilder;
+  return new LCXmlScrollAreaBuilder;
 }

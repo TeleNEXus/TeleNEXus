@@ -44,7 +44,7 @@ LQModbusDataSource::CQEventStart::CQEventStart(int _updateInterval) :
 {
 }
 
-//------------------------------------------------------------------------------handle
+//------------------------------------------------------------------------------
 void LQModbusDataSource::CQEventStart::handle(LQModbusDataSource* _sender)
 {
   _sender->mUpdateInterval = mUpdateInterval;
@@ -56,7 +56,7 @@ LQModbusDataSource::CQEventStop::CQEventStop()
 {
 }
 
-//------------------------------------------------------------------------------handle
+//------------------------------------------------------------------------------
 void LQModbusDataSource::CQEventStop::handle(LQModbusDataSource* _sender)
 {
   _sender->mTimer.stop();
@@ -69,9 +69,8 @@ LQModbusDataSource::CQEventReqRead::CQEventReqRead(
 {
 }
 
-//------------------------------------------------------------------------------handle
-void LQModbusDataSource::
-CQEventReqRead::handle(LQModbusDataSource* _sender)
+//------------------------------------------------------------------------------
+void LQModbusDataSource::CQEventReqRead::handle(LQModbusDataSource* _sender)
 {
   _sender->mDataMap.read(mspReader);
 }
@@ -88,7 +87,7 @@ CQEventReqWrite(
 
 }
 
-//------------------------------------------------------------------------------handle
+//------------------------------------------------------------------------------
 void LQModbusDataSource::CQEventReqWrite::handle(LQModbusDataSource* _sender)
 {
   _sender->mDataMap.write(mspWriter, mData);
@@ -100,11 +99,10 @@ LQModbusDataSource::CQEventReqConnectReader::CQEventReqConnectReader(
 {
 }
 
-//------------------------------------------------------------------------------handle
+//------------------------------------------------------------------------------
 void LQModbusDataSource::CQEventReqConnectReader::handle(
     LQModbusDataSource* _sender)
 {
-  qDebug() << "LQModbusDataSource::CQEventReqConnectReader::handle: "<< mspReader->getDataName();
   _sender->mDataMap.connectReader(mspReader);
 }
 //==============================================================================CQEventReqDisconnectReader
@@ -114,7 +112,7 @@ CQEventReqDisconnectReader(QSharedPointer<LQModbusDataReader> _reader) :
 {
 }
 
-//------------------------------------------------------------------------------handle
+//------------------------------------------------------------------------------
 void LQModbusDataSource::CQEventReqDisconnectReader::handle(
     LQModbusDataSource* _sender)
 {
@@ -513,9 +511,6 @@ void LQModbusDataSource::CDataMapItemRegsBase::connectReader(
 {
   if(mDataItem.mReadersList.isEmpty()) mController.addReadDataItem(&mDataItem);
   mDataItem.mReadersList << _reader;
-  qDebug() << 
-    "LQModbusDataSource::CDataMapItemRegsBase::connectReader mReadersList size = " 
-    << mDataItem.mReadersList.size();
 }
 
 //------------------------------------------------------------------------------
@@ -769,7 +764,8 @@ void LQModbusDataSource::CDataMap::write(
 }
 
 //------------------------------------------------------------------------------
-void LQModbusDataSource::CDataMap::read(QSharedPointer<LQModbusDataReader> _reader)
+void LQModbusDataSource::CDataMap::read(
+    QSharedPointer<LQModbusDataReader> _reader)
 {
   auto it = mMapItems.find(_reader->getDataName());
   if(it == mMapItems.end())
@@ -800,6 +796,12 @@ void LQModbusDataSource::CDataMap::disconnectReader(
   (*it)->disconnectReader(_reader);
 }
 
+//==============================================================================doDeleteLater
+static void doDeleteLater(QObject* _obj)
+{
+  _obj->deleteLater();
+}
+
 //==============================================================================LCQModbusDataSource
 LQModbusDataSource::LQModbusDataSource(
     quint8 _devId,
@@ -818,12 +820,6 @@ LQModbusDataSource::LQModbusDataSource(
 //------------------------------------------------------------------------------
 LQModbusDataSource::~LQModbusDataSource()
 {
-}
-
-//------------------------------------------------------------------------------
-static void doDeleteLater(QObject* _obj)
-{
-  _obj->deleteLater();
 }
 
 //------------------------------------------------------------------------------
@@ -885,40 +881,40 @@ void LQModbusDataSource::start(
   QCoreApplication::postEvent(this, new CQEventStart(_updateIntervalMs));
 }
 
-//------------------------------------------------------------------------------stop
+//------------------------------------------------------------------------------
 void LQModbusDataSource::stop()
 {
   QCoreApplication::postEvent(this, new CQEventStop);
 }
 
-//------------------------------------------------------------------------------readConnect
+//------------------------------------------------------------------------------
 void LQModbusDataSource::connectReader(
     QSharedPointer<LQModbusDataReader> _reader)
 {
   QCoreApplication::postEvent(this, new CQEventReqConnectReader(_reader));
 }
 
-//------------------------------------------------------------------------------readDisconnect
+//------------------------------------------------------------------------------
 void LQModbusDataSource::disconnectReader(
     QSharedPointer<LQModbusDataReader> _reader)
 {
   QCoreApplication::postEvent(this, new CQEventReqDisconnectReader(_reader));
 }
 
-//------------------------------------------------------------------------------write
+//------------------------------------------------------------------------------
 void LQModbusDataSource::read(QSharedPointer<LQModbusDataReader> _reader)
 {
   QCoreApplication::postEvent(this, new CQEventReqRead(_reader));
 }
 
-//------------------------------------------------------------------------------write
+//------------------------------------------------------------------------------
 void LQModbusDataSource::write(
     QSharedPointer<LQModbusDataWriter> _writer, const QByteArray& _data)
 {
   QCoreApplication::postEvent( this, new CQEventReqWrite(_writer, _data));
 }
 
-//------------------------------------------------------------------------------customEvent
+//------------------------------------------------------------------------------
 void LQModbusDataSource::customEvent(QEvent* _event)
 {
   if(_event->type() == CQEventBase::msExtendedEventType)

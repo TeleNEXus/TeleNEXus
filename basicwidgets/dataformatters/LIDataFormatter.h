@@ -18,30 +18,30 @@
  * You should have received a copy of the GNU General Public License
  * along with TeleNEXus.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef LCSTRINGDATAFORMATTERINTERFACE_H
-#define LCSTRINGDATAFORMATTERINTERFACE_H
+#ifndef LIDATAFORMATTER_H_
+#define LIDATAFORMATTER_H_
 
-#include <qglobal.h>
 
 class QByteArray;
 class QString;
 class QValidator;
-class QChar;
 
 class LIDataFormatter
 {
 
 public:
 
-    LIDataFormatter(){}
-    virtual ~LIDataFormatter(){}
+  LIDataFormatter(){}
+  virtual ~LIDataFormatter(){}
 
-    virtual QString toString(const QByteArray& _data) = 0;
-    virtual QByteArray toBytes(const QString& _str) = 0;
-    virtual QString normalize(const QString& _str) = 0;
-    virtual bool undefState(QString& _string) =0;
-    virtual bool wrongState(QString& _string) = 0;
-    virtual QValidator* validator() = 0;
+  virtual QString toString(const QByteArray& _data) = 0;
+  virtual QByteArray toBytes(const QString& _str) = 0;
+  virtual QString normalize(const QString& _str) = 0;
+  virtual bool undefState(QString& _string) =0;
+  virtual bool wrongState(QString& _string) = 0;
+  virtual QValidator* validator() = 0;
 };
 
-#endif // LCSTRINGDATAFORMATTERINTERFACE_H
+#endif // LIDATAFORMATTER_H_
+
+

@@ -33,7 +33,7 @@ class LQModbusDataWriter : public QObject, public LIRemoteDataWriter
 
 private:
   using LTWriteAction = LIRemoteDataSource::LTWriteAction;
-  //--------------------------------------------------------------------------
+  //----------------------------------------------------------------------------CQEventDataIsWrite
   class CQEventDataIsWrite : public QEvent
   {
     __LQ_EXTENDED_QEVENT_DECLARATION
