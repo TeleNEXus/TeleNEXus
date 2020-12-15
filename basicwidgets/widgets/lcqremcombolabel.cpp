@@ -11,62 +11,13 @@
 //Собственные данные класса.
 struct SOwnData
 {
-  //Карта соответствий прочитанных данных и выводимых строк.
   QWidget* undefItem; //Сущность для неопределенного состояния данных.
   QWidget* wrongItem; //Сущность для данных для которых нет соответствия.
+  //Карта соответствий прочитанных данных и выводимых строк.
   QMap<QString, QWidget*> normalItemMap;
   SOwnData(): undefItem(nullptr), wrongItem(nullptr){}
 };
 
-/* //==============================================================================LCQRemComboLabel */
-/* LCQRemComboLabel:: */
-/* CReadListener:: */
-/* CReadListener(LCQRemComboLabel& _label) : mLabel(_label), mFlagActive(false) */
-/* { */
-
-/* } */
-
-/* //------------------------------------------------------------------------------ */
-/* #define L_LABEL_OWNDATA (static_cast<SOwnData*>(mLabel.mpOwnData)) */
-
-/* //------------------------------------------------------------------------------dataIsRead */
-/* void LCQRemComboLabel::CReadListener::dataIsRead( */ 
-/*     QSharedPointer<QByteArray> _data, LERemoteDataStatus _status) */
-/* { */
-
-/*   if(mFlagActive) */
-/*   { */
-/*     if(_status != LERemoteDataStatus::DS_OK) */
-/*     { */
-/*       if(L_LABEL_OWNDATA->undefItem != nullptr) */
-/*       { */
-/*         if(mLabel.currentWidget() != L_LABEL_OWNDATA->undefItem) */ 
-/*           mLabel.setCurrentWidget(L_LABEL_OWNDATA->undefItem); */
-/*       } */
-/*       mLabel.setEnabled(false); */
-/*       return; */
-/*     } */
-
-/*     mLabel.setEnabled(true); */
-
-/*     auto it = L_LABEL_OWNDATA->normalItemMap.find( mLabel.mspFormatter->toString(*_data)); */
-
-/*     if(it == L_LABEL_OWNDATA->normalItemMap.end()) */
-/*     { */
-/*       if(L_LABEL_OWNDATA->wrongItem != nullptr) */
-/*       { */
-/*         if(mLabel.currentWidget() != L_LABEL_OWNDATA->wrongItem) */ 
-/*           mLabel.setCurrentWidget(L_LABEL_OWNDATA->wrongItem); */
-/*       } */
-/*       return; */
-/*     } */
-
-/*     if(it.value() != mLabel.currentWidget()) */
-/*     { */
-/*       mLabel.setCurrentWidget(it.value()); */
-/*     } */
-/*   } */
-/* } */
 
 //------------------------------------------------------------------------------
 #define L_OWNDATA (static_cast<SOwnData*>(mpOwnData))
@@ -76,7 +27,6 @@ LCQRemComboLabel::LCQRemComboLabel(const QString& _dataName,
     QSharedPointer<LIRemoteDataSource> _dataSource,
     QSharedPointer<LIDataFormatter> _formatter,
     QWidget* _parent) :    QStackedWidget(_parent),
-  mDataName(_dataName),
   mspFormatter(_formatter)
 {
   mpOwnData = new SOwnData();
@@ -88,8 +38,6 @@ LCQRemComboLabel::LCQRemComboLabel(const QString& _dataName,
   str = "Wrong";
   _formatter->wrongState(str);
   addItemWrong(new QLabel(str));
-
-  /* mDataListener = QSharedPointer<CReadListener>(new CReadListener(*this)); */
 
   mDataReader = _dataSource->createReader(_dataName, 
       [this](QSharedPointer<QByteArray> _data, LERemoteDataStatus _status)
@@ -199,12 +147,10 @@ bool LCQRemComboLabel::event(QEvent *_event)
   {
   case QEvent::Type::Show:
     setActive(true);
-    /* mDataReader->connectToSource(); */
     ret = true;
     break;
   case QEvent::Type::Hide:
     setActive(false);
-    /* mDataReader->disconnectFromSource(); */
     ret = true;
     break;
   default:

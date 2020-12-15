@@ -3,7 +3,6 @@
 
 #include <QStackedWidget>
 #include <qnamespace.h>
-#include "lremgui.h"
 #include "lqextendevent.h"
 
 #include "LIDataFormatter.h"
@@ -16,15 +15,14 @@ class LCQRemComboLabel : public QStackedWidget
   Q_OBJECT
 private:
     void* mpOwnData;    //Собственные данные.
-    QString mDataName;
     QSharedPointer<LIRemoteDataReader>  mDataReader;
     QSharedPointer<LIDataFormatter> mspFormatter;
 public:
 
     explicit LCQRemComboLabel(   
-        const QString&                              _dataName,
-        QSharedPointer<LIRemoteDataSource>          _dataSource,
-        QSharedPointer<LIDataFormatter>             _formatter,
+        const QString&                      _dataName,
+        QSharedPointer<LIRemoteDataSource>  _dataSource,
+        QSharedPointer<LIDataFormatter>     _formatter,
         QWidget* _parent = nullptr);
 
     virtual ~LCQRemComboLabel();
