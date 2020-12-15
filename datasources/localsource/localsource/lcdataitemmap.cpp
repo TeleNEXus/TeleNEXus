@@ -1,3 +1,23 @@
+/* 
+ * TeleNEXus is a simple SCADA programm
+ *
+ * Copyright (C) 2020 Sergey S. Kuzmenko
+ *
+ * This file is part of TeleNEXus.
+ *
+ * TeleNEXus is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * TeleNEXus is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with TeleNEXus.  If not, see <https://www.gnu.org/licenses/>.
+ */
 #include "lcdataitemmap.h"
 #include "lcqlocaldatareader.h"
 #include "lcqlocaldatawriter.h"
@@ -32,7 +52,6 @@ void LCDataItemMap::CDataItemBase::connectReader(
 void LCDataItemMap::CDataItemBase::disconnectReader(
     QSharedPointer<LCQLocalDataReader> _sp_reader)
 {
-  qDebug() << "LCDataItemMap::CDataItemBase::disconnectReader";
   mReadersList.removeAll(_sp_reader);
 }
 
@@ -112,13 +131,8 @@ void LCDataItemMap::readData(QSharedPointer<LCQLocalDataReader> _sp_reader)
   if(it ==  mDataMap.end()) 
   {
     _sp_reader->notifyListener(LERemoteDataStatus::DS_UNDEF);
-    qDebug() << "LCDataItemMap::readData 0";
     return;
   }
-  qDebug() << "LCDataItemMap::readData 1";
-
-  /* _sp_reader->notifyListener(QByteArray(2,0xff)); */
-
   _sp_reader->notifyListener(it.value()->getData());
 }
 
