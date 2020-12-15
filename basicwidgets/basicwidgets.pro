@@ -84,7 +84,6 @@ HEADERS += \
     common/LIMovieAccess.h \
     widgets/lcqremlabel.h \
     widgets/lcqremlineedit.h \
-    widgets/lremgui.h \
     widgets/lcqremcombobox.h \
     widgets/lcqremcombolabel.h \
     widgets/lcqremwritebutton.h \

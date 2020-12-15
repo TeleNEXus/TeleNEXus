@@ -1,69 +1,7 @@
 ﻿#include "lcqremlineedit.h"
-#include <QDebug>
 #include <QKeyEvent>
 #include <qnamespace.h>
 #include <QKeyEvent>
-/* //============================================================================== */
-/* LCQRemLineEdit::CReadListener::CReadListener(LCQRemLineEdit& _lineEdit) : */ 
-/*   mLineEdit(_lineEdit), mFlagActive(false) */
-/* { */
-
-/* } */
-
-/* void LCQRemLineEdit::CReadListener::dataIsRead( */
-/*     QSharedPointer<QByteArray> _data, LERemoteDataStatus _status) */
-/* { */
-/*   if(mFlagActive) */
-/*   { */
-/*     if(_status != LERemoteDataStatus::DS_OK) */
-/*     { */
-/*       QString str = "Undef"; */
-/*       mLineEdit.mFormatter.data()->undefState(str); */
-/*       mLineEdit.setText(str); */
-/*       mLineEdit.setEnabled(false); */
-/*       return; */
-/*       } */
-/*     mLineEdit.setEnabled(true); */
-/*     mLineEdit.setText(mLineEdit.mFormatter.data()->toString(*_data)); */
-/*   } */
-/* } */
-
-
-/* LCQRemLineEdit::CWriteListener::CWriteListener(LCQRemLineEdit& _lineEdit) : */ 
-/*   mLineEdit(_lineEdit) */
-/* { */
-
-/* } */
-
-/* void LCQRemLineEdit::CWriteListener::dataIsWrite(LERemoteDataStatus _status) */
-/* { */
-/*   Q_UNUSED(_status); */
-/* } */
-
-//==============================================================================
-/* LCQRemLineEdit::LCQRemLineEdit( */
-/*     const QString& _dataName, */
-/*     QSharedPointer<LIRemoteDataSource> _dataSource, */
-/*     QSharedPointer<LIDataFormatter> _formatter, */
-/*     QWidget* _parent) : */  
-/*   QLineEdit(_parent), */
-/*   mFormatter(_formatter) */
-/* { */
-/*   QString str = "Undef"; */
-/*   mFormatter.data()->undefState(str); */
-/*   setText(str); */
-/*   setValidator(_formatter->validator()); */
-/*   setEnabled(false); */
-
-/*   /1* mReadListener = QSharedPointer<CReadListener>(new CReadListener(*this)); *1/ */
-/*   mDataReader = _dataSource->createReader(_dataName, mReadListener); */
-
-/*   /1* mWriteListener = QSharedPointer<CWriteListener>(new CWriteListener(*this)); *1/ */
-/*   /1* mDataWriter = _dataSource->createWriter(_dataName, mWriteListener); *1/ */
-/*   /1* mWriteListener = QSharedPointer<CWriteListener>(new CWriteListener(*this)); *1/ */
-/*   mDataWriter = _dataSource->createWriter(_dataName, */ 
-/*       [](LERemoteDataStatus _status){ Q_UNUSED(_status); }); */
-/* } */
 
 //------------------------------------------------------------------------------
 LCQRemLineEdit::LCQRemLineEdit(
@@ -81,7 +19,6 @@ LCQRemLineEdit::LCQRemLineEdit(
   setValidator(_formatter->validator());
   setEnabled(false);
 
-  /* mReadListener = QSharedPointer<CReadListener>(new CReadListener(*this)); */
   mDataReader = _dataSource->createReader(_dataNameRead,
       [this](QSharedPointer<QByteArray> _data, LERemoteDataStatus _status)
       {
@@ -100,10 +37,7 @@ LCQRemLineEdit::LCQRemLineEdit(
         }
       });
 
-  /* mWriteListener = QSharedPointer<CWriteListener>(new CWriteListener(*this)); */
-  /* mDataWriter = _dataSource->createWriter(_dataNameWrite, mWriteListener); */
-  mDataWriter = _dataSource->createWriter(_dataNameWrite, 
-      [](LERemoteDataStatus _status){ Q_UNUSED(_status); });
+  mDataWriter = _dataSource->createWriter(_dataNameWrite);
 }
 
 //------------------------------------------------------------------------------
