@@ -19,6 +19,7 @@
  * along with TeleNEXus.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include "lcxmlformatterfactory.h"
 #include "lcformatterbitfield.h"
 #include "lcformatterbits.h"
 #include "lcformatterhex.h"
