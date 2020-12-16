@@ -43,7 +43,7 @@ public:
                                           QChar   _fillChar       = QChar(' '));
     virtual ~LCFormatterF32();
     virtual QString     toString(const QByteArray& _data) override;
-    virtual QString     normalize(const QString& _str) override; 
+    virtual QString     fitting(const QString& _str) override; 
     virtual QByteArray  toBytes(const QString& _str) override;
     virtual QValidator* validator() override;
 

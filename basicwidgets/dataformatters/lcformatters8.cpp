@@ -50,8 +50,8 @@ QString LCFormatterS8::toString(const QByteArray& _data)
   return QString("%1").arg( r, mFieldWidth, mBase, mFillChar);
 }
 
-//------------------------------------------------------------------------------normalize
-QString LCFormatterS8::normalize(const QString& _str)
+//------------------------------------------------------------------------------fitting
+QString LCFormatterS8::fitting(const QString& _str)
 {
   bool    ok  = false;
   qint8   val = _str.toShort(&ok);

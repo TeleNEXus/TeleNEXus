@@ -153,7 +153,7 @@ static void buildCombobox(   const QDomElement& _element,
       name = val;
     }
 
-    val = _format->normalize(val);
+    val = _format->fitting(val);
 
     if(val.isNull())
     {

@@ -117,8 +117,8 @@ QString LCFormatterHex::toString(const QByteArray& _data)
   return str;
 }
 
-//------------------------------------------------------------------------------normalize
-QString LCFormatterHex::normalize(const QString& _instr)
+//------------------------------------------------------------------------------fitting
+QString LCFormatterHex::fitting(const QString& _instr)
 {
   QString out_string = _instr;
 

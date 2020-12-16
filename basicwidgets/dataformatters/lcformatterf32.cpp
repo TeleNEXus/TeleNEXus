@@ -60,7 +60,7 @@ QString LCFormatterF32::toString(const QByteArray& _data)
 }
 
 //------------------------------------------------------------------------------
-QString LCFormatterF32::normalize(const QString& _str)
+QString LCFormatterF32::fitting(const QString& _str)
 {
   bool ok = false;
   float valf = ((float)_str.toFloat(&ok));

@@ -130,8 +130,8 @@ static inline void __l_byte_align(QString& _instr)
     _instr.insert(0, QString(8-remains, '0'));
   }
 }
-//------------------------------------------------------------------------------normalize
-QString LCFormatterBitfield::normalize(const QString& _instr)
+//------------------------------------------------------------------------------fitting
+QString LCFormatterBitfield::fitting(const QString& _instr)
 {
   QString out_string = _instr;
 
