@@ -46,8 +46,8 @@ QString LCFormatterU32::toString(const QByteArray& _data)
       mFieldWidth, mBase, mFillChar);
 }
 
-//------------------------------------------------------------------------------normalize
-QString LCFormatterU32::normalize(const QString& _str)
+//------------------------------------------------------------------------------fitting
+QString LCFormatterU32::fitting(const QString& _str)
 {
   bool    ok  = false;
   qint16  val = _str.toUShort(&ok);

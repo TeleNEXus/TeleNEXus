@@ -31,8 +31,8 @@ QString LCFormatterString::toString(const QByteArray& _data)
   return QString(_data);
 }
 
-//------------------------------------------------------------------------------normalize
-QString LCFormatterString::normalize(const QString& _str)
+//------------------------------------------------------------------------------fitting
+QString LCFormatterString::fitting(const QString& _str)
 {
   return _str;
 }

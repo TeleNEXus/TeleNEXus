@@ -117,8 +117,8 @@ QString LCFormatterBits::toString(const QByteArray& _data)
     return out_str;
 }
 
-//------------------------------------------------------------------------------normalize
-QString LCFormatterBits::normalize(const QString& _str)
+//------------------------------------------------------------------------------fitting
+QString LCFormatterBits::fitting(const QString& _str)
 {
     QString out_str = _str;
 

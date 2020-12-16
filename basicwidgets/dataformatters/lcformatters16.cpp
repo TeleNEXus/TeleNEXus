@@ -48,8 +48,8 @@ QString LCFormatterS16::toString(const QByteArray& _data)
       ((qint16*)_data.constData())[0], mFieldWidth, mBase, mFillChar);
 }
 
-//------------------------------------------------------------------------------normalize
-QString LCFormatterS16::normalize(const QString& _str)
+//------------------------------------------------------------------------------fitting
+QString LCFormatterS16::fitting(const QString& _str)
 {
   bool    ok = false;
   qint16  val = _str.toShort(&ok);
