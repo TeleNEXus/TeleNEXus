@@ -60,6 +60,8 @@ public:
     QString font        = "font";
     QString fontid      = "fontId";
 
+    QString dataformatter = "format";
+
     QString icon        = "icon";
     QString iconsize    = "iconSize";
     QString iconwidth   = "iconWidth";

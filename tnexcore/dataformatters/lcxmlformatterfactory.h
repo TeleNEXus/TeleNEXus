@@ -36,20 +36,5 @@ extern QSharedPointer<LIDataFormatter> createFormatter(
     const QString& _name);
 }
 
-/* class LCXmlStdDataFormatterFactory final */
-/* { */
-/* private: */
-/*   LCXmlStdDataFormatterFactory(); */
-/*   LCXmlStdDataFormatterFactory(const LCXmlStdDataFormatterFactory&) = delete; */
-/*   LCXmlStdDataFormatterFactory& */ 
-/*     operator=(const LCXmlStdDataFormatterFactory&) = delete; */
-/* public: */
-/*   static LCXmlStdDataFormatterFactory& instance(); */
-
-/*   QSharedPointer<LIDataFormatter> */ 
-/*     createFormatter(const QDomNamedNodeMap& _attr); */
-/*   QSharedPointer<LIDataFormatter> */ 
-/*     createFormatter(const QDomNamedNodeMap& _attr); */
-/* }; */
 
 #endif // LCXMLSTDDATAFORMATTERFACTORY_H
