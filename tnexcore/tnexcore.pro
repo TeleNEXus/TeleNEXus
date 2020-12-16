@@ -80,8 +80,7 @@ HEADERS += \
     ../common/interfaces/xmlbuilders/LIXmlRemoteDataSourceBuilder.h \
     ../common/interfaces/xmlbuilders/LIXmlWidgetBuilder.h \
     ../common/interfaces/LIWindow.h \
-    ../common/interfaces/LIJScript.h \
-    dataformatters/LIDataFormatter.h \
+    ../common/interfaces/LIDataFormatter.h \
     dataformatters/lcformatterbase.h \
     dataformatters/lcformatterbitfield.h \
     dataformatters/lcformatterbits.h \
