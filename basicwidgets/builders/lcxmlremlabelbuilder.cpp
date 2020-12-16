@@ -21,7 +21,6 @@
 #include "lcxmlremlabelbuilder.h"
 #include "lcqremlabel.h"
 #include "lcbuilderscommon.h"
-#include "lcxmlformatterfactory.h"
 #include "LIApplication.h"
 
 #include <QDomElement>

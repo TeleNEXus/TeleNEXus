@@ -27,11 +27,27 @@ INCLUDEPATH +=                                  \
         ../common/interfaces/xmlbuilders        \
         ../common/                              \
         xml/                                    \
-        jscript/                                \
-        jscript/jsappservice                    \
+        ./jscript/                              \
+        ./jscript/jsappservice                  \
+        ./dataformatters
 
 SOURCES += \
         ../../common/lqvalidatoru32.cpp \
+        dataformatters/lcformatterbase.cpp \
+        dataformatters/lcformatterbitfield.cpp \
+        dataformatters/lcformatterbits.cpp \
+        dataformatters/lcformatterbool.cpp \
+        dataformatters/lcformatterf32.cpp \
+        dataformatters/lcformatterhex.cpp \
+        dataformatters/lcformatterintbase.cpp \
+        dataformatters/lcformatters16.cpp \
+        dataformatters/lcformatters32.cpp \
+        dataformatters/lcformatters8.cpp \
+        dataformatters/lcformatteru16.cpp \
+        dataformatters/lcformatteru32.cpp \
+        dataformatters/lcformatteru8.cpp \
+        dataformatters/lcformatterstring.cpp \
+        dataformatters/lcxmlformatterfactory.cpp \
         jscript/lcqjsappinterface.cpp \
         jscript/lcjscript.cpp \
         jscript/lcqjscripthiden.cpp \
@@ -65,6 +81,22 @@ HEADERS += \
     ../common/interfaces/xmlbuilders/LIXmlWidgetBuilder.h \
     ../common/interfaces/LIWindow.h \
     ../common/interfaces/LIJScript.h \
+    dataformatters/LIDataFormatter.h \
+    dataformatters/lcformatterbase.h \
+    dataformatters/lcformatterbitfield.h \
+    dataformatters/lcformatterbits.h \
+    dataformatters/lcformatterbool.h \
+    dataformatters/lcformatterf32.h \
+    dataformatters/lcformatterhex.h \
+    dataformatters/lcformatterintbase.h \
+    dataformatters/lcformatters16.h \
+    dataformatters/lcformatters32.h \
+    dataformatters/lcformatters8.h \
+    dataformatters/lcformatteru16.h \
+    dataformatters/lcformatteru32.h \
+    dataformatters/lcformatteru8.h \
+    dataformatters/lcformatterstring.h \
+    dataformatters/lcxmlformatterfactory.h \
     jscript/lcqjsappinterface.h \
     jscript/lcjscript.h \
     jscript/lcqjscripthiden.h \
