@@ -20,7 +20,6 @@
  */
 #include "lcxmlremlineeditbuilder.h"
 #include "lcqremlineedit.h"
-#include "lcxmlformatterfactory.h"
 #include "lcbuilderscommon.h"
 #include "LIApplication.h"
 #include <QDomElement>

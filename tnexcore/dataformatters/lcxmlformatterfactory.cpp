@@ -18,7 +18,6 @@
  * You should have received a copy of the GNU General Public License
  * along with TeleNEXus.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "lcxmlformatterfactory.h"
 
 #include "lcformatterbitfield.h"
 #include "lcformatterbits.h"

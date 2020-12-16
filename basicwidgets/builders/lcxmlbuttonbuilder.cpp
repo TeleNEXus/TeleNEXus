@@ -19,7 +19,6 @@
  * along with TeleNEXus.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include "lcxmlbuttonbuilder.h"
-#include "lcxmlformatterfactory.h"
 #include "lcqremwritebutton.h"
 #include "LIApplication.h"
 #include "LIWindow.h"

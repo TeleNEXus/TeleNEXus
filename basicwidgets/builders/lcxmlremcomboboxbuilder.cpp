@@ -20,7 +20,6 @@
  */
 #include "lcxmlremcomboboxbuilder.h"
 #include "lcqremcombobox.h"
-#include "lcxmlformatterfactory.h"
 #include "lcbuilderscommon.h"
 #include "LIApplication.h"
 #include "LIWindow.h"

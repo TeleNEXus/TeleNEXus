@@ -20,7 +20,6 @@
  */
 #include "lcxmlremcombolabelbuilder.h"
 #include "lcqremcombolabel.h"
-#include "lcxmlformatterfactory.h"
 #include "lcbuilderscommon.h"
 #include "LIApplication.h"
 #include "LIMovieAccess.h"
