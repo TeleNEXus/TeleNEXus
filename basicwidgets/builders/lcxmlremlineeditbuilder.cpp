@@ -42,7 +42,7 @@ const struct
 {
   QString data    = "data";
   QString source  = "source";
-  QString format  = "format";
+  /* QString format  = "format"; */
 } __attrNames;
 
 //------------------------------------------------------------------------------
@@ -77,8 +77,9 @@ QWidget* LCXmlRemLineEditBuilder::buildLocal(
     goto LABEL_WRONG_EXIT;
   }
 
-  format = LCXmlStdDataFormatterFactory::
-    instance().createStringFormatter(element.attributes());
+  attr = element.attribute(LCBuildersCommon::mAttributes.dataformatter);
+  format = _buildData->application.getStdDataFormatter(attr);
+
 
   if(format.isNull())
   {

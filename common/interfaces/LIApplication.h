@@ -31,6 +31,7 @@ class LIXmlLayoutBuilder;
 class LIXmlWidgetBuilder;
 class LIWindow;
 class QDomDocument;
+class LIDataFormatter;
 
 #include "LIRemoteDataSource.h"
 
@@ -82,6 +83,12 @@ public:
      * Возвращает строку стиля шрифта. 
      */
     virtual QString getFontStyle(const QString& _fontId) const = 0;
+
+    virtual QSharedPointer<LIDataFormatter> 
+      getStdDataFormatter(const QString& _name) const = 0;
+
+    virtual QSharedPointer<LIDataFormatter> 
+      getDataFormatter(const QString& _formatterId) const = 0;
 
 };
 

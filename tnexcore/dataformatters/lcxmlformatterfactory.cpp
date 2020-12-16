@@ -37,6 +37,7 @@
 #include <functional>
 #include <QMap>
 #include <QDomElement>
+#include <QDebug>
 
 #define __L_MAX_HEX_SIZE    256
 #define __L_MAX_BITS_SIZE   64
@@ -321,7 +322,7 @@ public:
   QSharedPointer<LIDataFormatter> createFormatter( const QString& _name)
   {
     auto it = __slStdFormattersMap.find(_name);
-    if(it.value().isNull()) return __formatterHex;
+    if(it == __slStdFormattersMap.end()) return nullptr;
     return it.value();
   }
 

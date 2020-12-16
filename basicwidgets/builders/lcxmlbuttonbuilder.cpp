@@ -20,6 +20,7 @@
  */
 #include "lcxmlbuttonbuilder.h"
 #include "lcqremwritebutton.h"
+#include "LIDataFormatter.h"
 #include "LIApplication.h"
 #include "LIWindow.h"
 #include "lcbuilderscommon.h"
@@ -129,7 +130,6 @@ static void setStyleSheet(QPushButton* _button, const QDomElement& _element,
 
   if(!attr_icon.isNull())
   {
-    /* QIcon icon(LCBuildersCommon::getPixmap(attr_icon, _app)); */
     QPixmap pixmap(LCBuildersCommon::getPixmap(attr_icon, _app));
 
     QSize size_pixmap = pixmap.size();
@@ -192,8 +192,10 @@ static QPushButton* buildWriteButton(
     QDomElement el = node.toElement();
     if(el.isNull()) continue;
     if(el.tagName() != __slTags.data) continue;
-    auto format = LCXmlStdDataFormatterFactory::
-      instance().createStringFormatter(el.attributes());
+
+    auto format = _app.getStdDataFormatter(
+        el.attribute(LCBuildersCommon::mAttributes.dataformatter));
+
     if(format.isNull()) continue;
     auto source = _app.getDataSource(
         el.attribute(LCBuildersCommon::mAttributes.source));
