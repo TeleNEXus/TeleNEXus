@@ -18,8 +18,8 @@
  * You should have received a copy of the GNU General Public License
  * along with TeleNEXus.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "lcjscript.h"
-#include "lcqjscripthiden.h"
+#include "lcjscriptservice.h"
+#include "lcqjscriptservicehiden.h"
 #include "lcqjsappinterface.h"
 #include <QJSEngine>
 #include <QTimer>
@@ -45,25 +45,25 @@ struct SPrivateData
 #define mpPrivateData (static_cast<SPrivateData*>(mpData))
 
 //==============================================================================
-LCJScript::LCJScript(const QString& _script, int _interval)  :
+LCJScriptService::LCJScriptService(const QString& _script, int _interval)  :
   mpData( new SPrivateData(_script, _interval) )
 {
 }
 
 //------------------------------------------------------------------------------
-LCJScript::~LCJScript()
+LCJScriptService::~LCJScriptService()
 {
   delete mpPrivateData;
 }
 
 //------------------------------------------------------------------------------
-void LCJScript::start() 
+void LCJScriptService::start() 
 {
   mpPrivateData->mpScriptHiden->start(mpPrivateData->mInterval);
 }
 
 //------------------------------------------------------------------------------
-void LCJScript::stop() 
+void LCJScriptService::stop() 
 {
   mpPrivateData->mpScriptHiden->stop();
 }

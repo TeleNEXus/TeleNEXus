@@ -25,7 +25,7 @@
 
 class QDomElement;
 class LIApplication;
-class LIJScript;
+class LIJScriptService;
 
 class LCXmlJScripts
 {
@@ -40,6 +40,6 @@ public:
         const QDomElement &_element, 
         const LIApplication& _app);
 
-    QSharedPointer<LIJScript> getScript(const QString& _scriptId);
+    QSharedPointer<LIJScriptService> getScript(const QString& _scriptId);
 };
 #endif /* LCXMLWINDOWS_H_ */

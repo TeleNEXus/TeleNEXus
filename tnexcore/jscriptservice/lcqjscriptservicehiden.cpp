@@ -18,7 +18,7 @@
  * You should have received a copy of the GNU General Public License
  * along with TeleNEXus.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "lcqjscripthiden.h"
+#include "lcqjscriptservicehiden.h"
 #include "lcqjsappinterface.h"
 #include <QDebug>
 #include <QThread>

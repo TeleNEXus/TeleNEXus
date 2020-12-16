@@ -6,6 +6,19 @@
   <script file="scripts/writedatatosource1.js" interval="500" state="start"/>
   <script file="scripts/writedatatosource2.js" interval="500" state="start"/>
   <script file="scripts/writedatatosource3.js" interval="500" state="start"/>
+
+
+  <!-- FOR CORRECT -->
+  <add id="serv2" script="scripts/writedatatosource2.js"/>
+  <add id="serv3" script="scripts/writedatatosource3.js"/>
+  <start serviceId="serv2" interval="500"/> 
+
+  <!-- FOR THE FUTURE -->
+  <!-- Добавление сервиса расположенного в библиотеке -->
+  <!-- <add id="serv4" builder="builderService4"/> -->
+  <!-- <start id="serv4" interval="1500"/> -->
+
+
   <!-- <script file="scripts/writedatatosource.js"  interval="10" state="start"/> -->
   <!-- <script file="scripts/writedatatosource1.js" interval="10" state="start"/> -->
   <!-- <script file="scripts/writedatatosource2.js" interval="10" state="start"/> -->
