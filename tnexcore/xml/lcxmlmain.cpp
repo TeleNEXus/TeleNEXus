@@ -43,6 +43,7 @@
 #include <QTimer>
 #include "LIRemoteDataReader.h"
 #include "LIRemoteDataSource.h"
+#include "lcxmlformatterfactory.h"
 
 static QString      __slXmlMainFileName;
 static QString      __slXmlMainFilePath;
@@ -69,7 +70,7 @@ static void addWidgetsBuilders(const QDomElement& _rootElement);
 static void addWindows(const QDomElement& _rootElement);
 static void addScripts(const QDomElement& _rootElement);
 
-//==============================================================================
+//==============================================================================CApplicationInterface
 class CApplicationInterface : public LIApplication
 {
 public:
@@ -121,6 +122,19 @@ public:
   {
     return LCXmlFonts::instance().getFontStyle(_fontId);
   }
+
+  virtual QSharedPointer<LIDataFormatter> 
+    getStdDataFormatter(const QString& _name) const override
+    {
+      return NSXmlStdDataFormatterFactory::createFormatter(_name);
+    }
+
+  virtual QSharedPointer<LIDataFormatter> 
+    getDataFormatter(const QString& _formatterId) const override
+    {
+      //TODO:Изменить возвращаеьое занчение.
+      return NSXmlStdDataFormatterFactory::createFormatter(_formatterId);
+    }
 };
 
 static CApplicationInterface __slAppInterface;

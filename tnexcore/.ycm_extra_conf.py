@@ -70,6 +70,7 @@ flags = [
              '-I', '../common/interfaces/xmlbuilders',
              '-I', '../common',
              '-I', '../tnexcore/xml',
+             '-I', '../tnexcore/dataformatters',
              '-I', '../tnexcore/jscriptservice',
              '-I', '../tnexcore/jscriptservice/jsappservice',
              '-isystem',
