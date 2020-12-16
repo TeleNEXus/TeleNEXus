@@ -26,9 +26,9 @@ INCLUDEPATH +=                                  \
         ../common/interfaces/remotedata         \
         ../common/interfaces/xmlbuilders        \
         ../common/                              \
-        xml/                                    \
-        ./jscript/                              \
-        ./jscript/jsappservice                  \
+        ./xml                                   \
+        ./jscriptservice/                       \
+        ./jscriptservice/jsappservice           \
         ./dataformatters
 
 SOURCES += \
@@ -48,12 +48,12 @@ SOURCES += \
         dataformatters/lcformatteru8.cpp \
         dataformatters/lcformatterstring.cpp \
         dataformatters/lcxmlformatterfactory.cpp \
-        jscript/lcqjsappinterface.cpp \
-        jscript/lcjscript.cpp \
-        jscript/lcqjscripthiden.cpp \
-        jscript/jsappservice/lcqjsappservice.cpp \
-        jscript/jsappservice/lcqreadfromsourcereq.cpp \
-        jscript/jsappservice/lcqwritetosourcereq.cpp \
+        jscriptservice/lcqjsappinterface.cpp \
+        jscriptservice/lcjscriptservice.cpp \
+        jscriptservice/lcqjscriptservicehiden.cpp \
+        jscriptservice/jsappservice/lcqjsappservice.cpp \
+        jscriptservice/jsappservice/lcqreadfromsourcereq.cpp \
+        jscriptservice/jsappservice/lcqwritetosourcereq.cpp \
         xml/lcxmlcommon.cpp \
         xml/lcxmlmain.cpp \
         xml/lcxmlbuildersloader.cpp \
@@ -96,12 +96,12 @@ HEADERS += \
     dataformatters/lcformatteru8.h \
     dataformatters/lcformatterstring.h \
     dataformatters/lcxmlformatterfactory.h \
-    jscript/lcqjsappinterface.h \
-    jscript/lcjscript.h \
-    jscript/lcqjscripthiden.h \
-    jscript/jsappservice/lcqjsappservice.h \
-    jscript/jsappservice/lcqreadfromsourcereq.h \
-    jscript/jsappservice/lcqwritetosourcereq.h \
+    jscriptservice/lcqjsappinterface.h \
+    jscriptservice/lcjscriptservice.h \
+    jscriptservice/lcqjscriptservicehiden.h \
+    jscriptservice/jsappservice/lcqjsappservice.h \
+    jscriptservice/jsappservice/lcqreadfromsourcereq.h \
+    jscriptservice/jsappservice/lcqwritetosourcereq.h \
     xml/lcxmlcommon.h \
     xml/lcxmlmain.h \
     xml/lcxmlbuildersloader.h \

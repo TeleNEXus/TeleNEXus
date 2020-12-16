@@ -9,8 +9,7 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
- * TeleNEXus is distributed in the hope that it will be useful,
+ * * TeleNEXus is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
@@ -18,17 +17,23 @@
  * You should have received a copy of the GNU General Public License
  * along with TeleNEXus.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef LIJSCRIPT_H_
-#define LIJSCRIPT_H_
+#ifndef LCJSCRIPTSERVICE_H_
+#define LCJSCRIPTSERVICE_H_
 
-class LIJScript
+#include "LIJScriptService.h"
+#include <QString>
+
+class LCJScriptService : public LIJScriptService
 {
+private:
+  void* mpData;
 public:
-  LIJScript(){}
-  virtual ~LIJScript(){}
-  virtual void start() = 0;
-  virtual void stop() = 0;
+  LCJScriptService() = delete;
+  explicit LCJScriptService(const QString& _script, int _interval = -1);
+  virtual ~LCJScriptService();
+  virtual void start() override;
+  virtual void stop() override;
 };
 
-#endif
+#endif //LCJSCRIPTSERVICE_H_
 

@@ -20,9 +20,9 @@
  */
 #include "lcxmljsscripts.h"
 #include "lcxmlcommon.h"
-#include "lcjscript.h"
+#include "lcjscriptservice.h"
 
-#include "LIJScript.h"
+#include "LIJScriptService.h"
 #include "LIApplication.h"
 
 #include <QDomElement>
@@ -47,7 +47,7 @@ static const struct
 }__slAttr;
 
 //==============================================================================
-QMap<QString, QSharedPointer<LIJScript>> __slScriptMap;
+QMap<QString, QSharedPointer<LIJScriptService>> __slScriptMap;
 static int __slScriptCounter = 0;
 
 //==============================================================================LCXmlJScripts
@@ -68,7 +68,7 @@ LCXmlJScripts& LCXmlJScripts::instance()
 }
 
 //------------------------------------------------------------------------------
-QSharedPointer<LIJScript> LCXmlJScripts::getScript(const QString& _scriptId)
+QSharedPointer<LIJScriptService> LCXmlJScripts::getScript(const QString& _scriptId)
 {
     return __slScriptMap.find(_scriptId).value();
 }
@@ -117,7 +117,7 @@ void LCXmlJScripts::load(
       continue;
     }
 
-    LCJScript* p_jsscript = nullptr;
+    LCJScriptService* p_jsscript = nullptr;
     int interval = 0;
     attr = el.attribute(LCXmlCommon::mCommonAttributes.interval);
     if(!attr.isNull())
@@ -129,13 +129,13 @@ void LCXmlJScripts::load(
         interval = 0;
       }
     }
-    p_jsscript  = new LCJScript(script, interval);
+    p_jsscript  = new LCJScriptService(script, interval);
     attr = el.attribute(LCXmlCommon::mCommonAttributes.id);
     if(attr.isNull())
     {
       attr = QString("%1").arg(__slScriptCounter);
     }
-    __slScriptMap.insert(attr, QSharedPointer<LIJScript>(p_jsscript));
+    __slScriptMap.insert(attr, QSharedPointer<LIJScriptService>(p_jsscript));
     __slScriptCounter++;
     attr = el.attribute(__slAttr.state.attr);
     if(!attr.isNull())
