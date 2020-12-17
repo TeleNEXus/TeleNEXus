@@ -76,9 +76,7 @@ void LQModbusDataSource::CQEventReqRead::handle(LQModbusDataSource* _sender)
 }
 
 //==============================================================================CQEventReqWrite
-LQModbusDataSource::
-CQEventReqWrite::
-CQEventReqWrite(
+LQModbusDataSource::CQEventReqWrite::CQEventReqWrite(
     QSharedPointer<LQModbusDataWriter> _sp_writer,
     const QByteArray& _data) :
   mspWriter(_sp_writer),
