@@ -391,13 +391,21 @@ static void addFonts(const QDomElement& _rootElement)
 {
   QDomElement el = _rootElement.firstChildElement(
       LCXmlCommon::mBaseTags.fonts);
+
+  if(el.isNull()) return;
+
   LCXmlFonts::instance().create(el, __slAppInterface);
 }
 
 //==============================================================================
 static void addFormatters(const QDomElement& _rootElement)
 {
-  xmldataformatters::create(_rootElement, __slAppInterface);
+  QDomElement el = 
+    _rootElement.firstChildElement(LCXmlCommon::mBaseTags.formatters);
+
+  if(el.isNull()) return;
+
+  xmldataformatters::create(el, __slAppInterface);
 }
 
 //==============================================================================

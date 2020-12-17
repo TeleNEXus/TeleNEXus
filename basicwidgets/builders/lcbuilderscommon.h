@@ -61,6 +61,7 @@ public:
     QString fontid      = "fontId";
 
     QString dataformatter = "format";
+    QString dataformatterid = "formatId";
 
     QString icon        = "icon";
     QString iconsize    = "iconSize";

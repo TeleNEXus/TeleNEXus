@@ -27,13 +27,17 @@
 #include <functional>
 #include <QDomElement>
 #include <QMap>
+#include <QDebug>
 
 static const struct
 {
+
   QString file      = "file";
   QString id        = "id";
   QString stdformat = "stdformat";
   QString script    = "script";
+  QString builder   = "builder";
+
 }__slAttributes;
 
 static const struct
@@ -41,39 +45,66 @@ static const struct
   QString add = "add";
 }__slTags;
 
+static QMap<QString, QSharedPointer<LIDataFormatter>> __slFormattersMap;
+
 static class CCreator
 {
-private:
-  QMap<QString, std::function<QSharedPointer<LIDataFormatter>(const QDomElement&)>> mCreatorsMap;
 
 public:
   //----------------------------------------------------------------------------
   CCreator()
   {
-    mCreatorsMap.insert(__slAttributes.stdformat,
-        [](const QDomElement& _element)
-        {
-          return stddataformatterfactory::createFormatter(
-              __slAttributes.stdformat,
-              _element);
-        });
+  }
 
-    mCreatorsMap.insert(__slAttributes.script,
-        [](const QDomElement& _element)
-        {
-          Q_UNUSED(_element);
-          return nullptr;
-        });
+  //----------------------------------------------------------------------------
+  QSharedPointer<LIDataFormatter> createFromStd(const QDomElement& _element)
+  {
+    QString format = _element.attribute(__slAttributes.stdformat);
+    return stddataformatterfactory::createFormatter(format, _element);
+  }
+
+  //----------------------------------------------------------------------------
+  QSharedPointer<LIDataFormatter>  createFromScript(const QDomElement& _element)
+  {
+    Q_UNUSED(_element);
+    return nullptr;
+  }
+
+  //----------------------------------------------------------------------------
+  QSharedPointer<LIDataFormatter>  createFromBuilder(const QDomElement& _element)
+  {
+    Q_UNUSED(_element);
+    return nullptr;
   }
 
   //----------------------------------------------------------------------------
   void create(const QDomElement& _element)
   {
-    QString attr = _element.attribute(__slAttributes.id);
-    if(attr.isNull()) return;
-    auto it = mCreatorsMap.find(attr);
-    if(it == mCreatorsMap.end()) return;
-    it.value()(_element);
+
+    QString attr_id = _element.attribute(__slAttributes.id);
+    if(attr_id.isNull()) return;
+
+    auto attr_all = _element.attributes();
+
+    QSharedPointer<LIDataFormatter> fsp;
+
+    if(attr_all.contains(__slAttributes.stdformat))
+    {
+      fsp = createFromStd(_element);
+    }
+    else if(attr_all.contains(__slAttributes.script))
+    {
+      fsp = createFromScript(_element);
+    }
+    else if(attr_all.contains(__slAttributes.builder))
+    {
+      fsp = createFromBuilder(_element);
+    }
+
+    if(!fsp.isNull())
+    {
+      __slFormattersMap.insert(attr_id, fsp);
+    }
   }
 
 }__slCreator;
@@ -82,7 +113,6 @@ public:
 namespace xmldataformatters
 {
 
-static QMap<QString, QSharedPointer<LIDataFormatter>> __slFormattersMap;
 
 //------------------------------------------------------------------------------
 void create( const QDomElement &_element, const LIApplication& _app)
