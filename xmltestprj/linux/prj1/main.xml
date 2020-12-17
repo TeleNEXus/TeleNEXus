@@ -35,6 +35,8 @@
     <FONTS file="fonts.xml"/>
 
     <SCRIPTS file="scripts.xml"/>
+
+    <FORMATTERS file="formatters.xml"/>
     
     <!-- <WINDOW id="main window 1" title="MAIN WINDOW 1" file="widgets.xml"/> -->
     <!-- <WINDOW id="main window 2" title="MAIN WINDOW 2" file="widgets.xml"/> -->
