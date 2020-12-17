@@ -65,6 +65,7 @@ static void addPlaginLibPathes(const QDomElement& _rootElement);
 static void addSourceBuilders(const QDomElement& _rootElement);
 static void addSources(const QDomElement& _element);
 static void addFonts(const QDomElement& _rootElement);
+static void addFormatters(const QDomElement& _rootElement);
 static void addLayoutsBuilders(const QDomElement& _rootElement);
 static void addWidgetsBuilders(const QDomElement& _rootElement);
 static void addWindows(const QDomElement& _rootElement);
@@ -258,6 +259,8 @@ int LCXmlMain::exec(int argc, char *argv[])
     //----------------------------------------------------
     addFonts(rootElement);
     //----------------------------------------------------
+    addFormatters(rootElement);
+    //----------------------------------------------------
     addLayoutsBuilders(rootElement);
     //----------------------------------------------------
     addWidgetsBuilders(rootElement);
@@ -388,6 +391,11 @@ static void addFonts(const QDomElement& _rootElement)
   QDomElement el = _rootElement.firstChildElement(
       LCXmlCommon::mBaseTags.fonts);
   LCXmlFonts::instance().create(el, __slAppInterface);
+}
+
+//==============================================================================
+static void addFormatters(const QDomElement& _rootElement)
+{
 }
 
 //==============================================================================
