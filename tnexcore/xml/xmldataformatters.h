@@ -27,12 +27,12 @@ class QDomElement;
 class LIApplication;
 class LIDataFormatter;
 
-namespace xmlformatters
+namespace xmldataformatters
 {
 //------------------------------------------------------------------------------
-void create( const QDomElement &_element, const LIApplication& _app);
+extern void create( const QDomElement &_element, const LIApplication& _app);
 //------------------------------------------------------------------------------
-QSharedPointer<LIDataFormatter> getDataFormatter(const QString& _formatterId);
+extern QSharedPointer<LIDataFormatter> getDataFormatter(const QString& _formatterId);
 }
 
 #endif  //LCXMLFORMATTERS_H_

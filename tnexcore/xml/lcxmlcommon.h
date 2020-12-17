@@ -43,6 +43,7 @@ public:
     QString sources         = "SOURCES";
     QString plaginpath      = "PLAGINPATHS";
     QString scripts         = "SCRIPTS";
+    QString formatters      = "FORMATTERS";
   };
 
   struct SCommonTags

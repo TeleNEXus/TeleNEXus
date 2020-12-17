@@ -21,6 +21,8 @@
 #include <xmldataformatters.h>
 #include "LIApplication.h"
 #include "LIDataFormatter.h"
+#include "lcxmlcommon.h"
+#include "lcxmlformatterfactory.h"
 
 #include <functional>
 #include <QDomElement>
@@ -28,6 +30,7 @@
 
 static const struct
 {
+  QString file      = "file";
   QString id        = "id";
   QString stdformat = "stdformat";
   QString script    = "script";
@@ -41,7 +44,8 @@ static const struct
 static class CCreator
 {
 private:
-  QMap<QString, std::function<void(const QDomElement&)>> mCreatorsMap;
+  QMap<QString, std::function<QSharedPointer<LIDataFormatter>(const QDomElement&)>> mCreatorsMap;
+
 public:
   //----------------------------------------------------------------------------
   CCreator()
@@ -49,13 +53,16 @@ public:
     mCreatorsMap.insert(__slAttributes.stdformat,
         [](const QDomElement& _element)
         {
-          Q_UNUSED(_element);
+          return stddataformatterfactory::createFormatter(
+              __slAttributes.stdformat,
+              _element);
         });
 
     mCreatorsMap.insert(__slAttributes.script,
         [](const QDomElement& _element)
         {
           Q_UNUSED(_element);
+          return nullptr;
         });
   }
 
@@ -71,7 +78,8 @@ public:
 
 }__slCreator;
 
-namespace xmlformatters
+//==============================================================================xmlformatters
+namespace xmldataformatters
 {
 
 static QMap<QString, QSharedPointer<LIDataFormatter>> __slFormattersMap;
@@ -79,7 +87,17 @@ static QMap<QString, QSharedPointer<LIDataFormatter>> __slFormattersMap;
 //------------------------------------------------------------------------------
 void create( const QDomElement &_element, const LIApplication& _app)
 {
-  Q_UNUSED(_app);
+  QString attr_file =  _element.attribute(__slAttributes.file);
+
+  if(!attr_file.isNull())
+  {
+    QDomElement el = _app.getDomDocument(attr_file).documentElement();
+    if(!el.isNull())
+    {
+      if(el.tagName() == LCXmlCommon::mBaseTags.formatters) create(el, _app);
+    }
+    return;
+  }
 
   for(auto node = _element.firstChildElement(__slTags.add);
       !node.isNull();
@@ -87,6 +105,7 @@ void create( const QDomElement &_element, const LIApplication& _app)
   {
     __slCreator.create(node.toElement());
   }
+
 }
 
 //------------------------------------------------------------------------------

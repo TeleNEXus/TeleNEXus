@@ -25,12 +25,12 @@
 #include <QSharedPointer>
 
 class LIDataFormatter;
-class QDomNamedNodeMap;
+class QDomElement;
 
-namespace NSXmlStdDataFormatterFactory
+namespace stddataformatterfactory
 {
 extern QSharedPointer<LIDataFormatter> createFormatter(
-    const QDomNamedNodeMap& _attr);
+    const QString& _format, const QDomElement& _element);
 
 extern QSharedPointer<LIDataFormatter> createFormatter(
     const QString& _name);

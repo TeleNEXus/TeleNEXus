@@ -63,6 +63,7 @@ SOURCES += \
         xml/lcxmlwindows.cpp \
         xml/lcxmlfonts.cpp \
         xml/lcxmljsscripts.cpp \
+        xml/xmldataformatters.cpp \
         main.cpp \
 
 # Default rules for deployment.
@@ -78,9 +79,11 @@ HEADERS += \
     ../common/interfaces/remotedata/LIRemoteDataSource.h \
     ../common/interfaces/remotedata/LIRemoteDataWriter.h \
     ../common/interfaces/xmlbuilders/LIXmlRemoteDataSourceBuilder.h \
+    ../common/interfaces/xmlbuilders/LIXmlLayoutBuilder.h \
     ../common/interfaces/xmlbuilders/LIXmlWidgetBuilder.h \
     ../common/interfaces/LIWindow.h \
     ../common/interfaces/LIDataFormatter.h \
+    ../common/interfaces/LIJScriptService.h \
     dataformatters/lcformatterbase.h \
     dataformatters/lcformatterbitfield.h \
     dataformatters/lcformatterbits.h \
