@@ -44,7 +44,8 @@
 
 static const struct
 {
-  QString format    = "format";
+  QString stdformat = "stdformat";
+  /* QString format    = "format"; */
   QString datasize  = "dataSize";
   QString separator = "separator";
 }__slAttributes;
@@ -81,7 +82,7 @@ static QSharedPointer<LIDataFormatter> __formatterString;
 
 //==============================================================================
 QMap < QString, 
-     std::function<QSharedPointer<LIDataFormatter>(const QDomNamedNodeMap& _attr)>> 
+     std::function<QSharedPointer<LIDataFormatter>(const QDomElement&)>> 
      __formatterCreators;
 
 QMap <QString, QSharedPointer<LIDataFormatter>> __slStdFormattersMap;
@@ -122,27 +123,26 @@ public:
 
     //--------------------------------------------------------------------------bitfield
     __formatterCreators.insert(__slStdFormatterNames.format_bitfield,
-        [](const QDomNamedNodeMap& _attr)
+        [](const QDomElement& _element)
         {
-          QDomNode node;
-
           bool ok_size = false;
           int size = 0;
           QChar separator;
 
           //Получение значения размера данных в байтах.
-          node = _attr.namedItem(__slAttributes.datasize);
-          if(!node.isNull())
+          QString attr = _element.attribute(__slAttributes.datasize);
+          if(!attr.isNull())
           {
-            size = node.toAttr().value().toInt(&ok_size);
+            size = attr.toInt(&ok_size);
           }
 
           //Получение значения разделителя.
-          node = _attr.namedItem(__slAttributes.separator);
-          if(!node.isNull())
+          attr = _element.attribute(__slAttributes.separator);
+          if(!attr.isNull())
           {
-            separator = node.toAttr().value()[0];
+            separator = attr[0];
           }
+
           //Проверяем наличие дополнительных параметров.
           if( ((!ok_size)||(size <= 0)) && (separator.isNull()))
           {
@@ -170,27 +170,27 @@ public:
 
     //--------------------------------------------------------------------------bits
     __formatterCreators.insert(__slStdFormatterNames.format_bits,
-        [](const QDomNamedNodeMap& _attr)
+        [](const QDomElement& _element)
         {
-          QDomNode node;
 
           bool ok_size = false;
           int size = 0;
           QChar separator;
 
           //Получение значения размера данных в байтах.
-          node = _attr.namedItem(__slAttributes.datasize);
-          if(!node.isNull())
+          QString attr = _element.attribute(__slAttributes.datasize);
+          if(!attr.isNull())
           {
-            size = node.toAttr().value().toInt(&ok_size);
+            size = attr.toInt(&ok_size);
           }
 
           //Получение значения разделителя.
-          node = _attr.namedItem(__slAttributes.separator);
-          if(!node.isNull())
+          attr = _element.attribute(__slAttributes.separator);
+          if(!attr.isNull())
           {
-            separator = node.toAttr().value()[0];
+            separator = attr[0];
           }
+
           //Проверяем наличие дополнительных параметров.
           if( ((!ok_size)||(size <= 0)) && (separator.isNull()))
           {
@@ -218,26 +218,26 @@ public:
 
     //--------------------------------------------------------------------------hex
     __formatterCreators.insert(__slStdFormatterNames.format_hex,
-        [](const QDomNamedNodeMap& _attr)
+        [](const QDomElement& _element)
         {
-          QDomNode node;
           bool ok_size = false;
           int size = 0;
           QChar separator;
 
           //Получение значения размера данных в байтах.
-          node = _attr.namedItem(__slAttributes.datasize);
-          if(!node.isNull())
+          QString attr = _element.attribute(__slAttributes.datasize);
+          if(!attr.isNull())
           {
-            size = node.toAttr().value().toInt(&ok_size);
+            size = attr.toInt(&ok_size);
           }
 
           //Получение значения разделителя.
-          node = _attr.namedItem(__slAttributes.separator);
-          if(!node.isNull())
+          attr = _element.attribute(__slAttributes.separator);
+          if(!attr.isNull())
           {
-            separator = node.toAttr().value()[0];
+            separator = attr[0];
           }
+
           //Проверяем наличие дополнительных параметров.
           if( ((!ok_size)||(size <= 0)) && (separator.isNull()))
           {
@@ -265,57 +265,50 @@ public:
 
     //--------------------------------------------------------------------------
     __formatterCreators.insert( __slStdFormatterNames.format_bool, 
-        [](const QDomNamedNodeMap& _attr) { 
-          Q_UNUSED(_attr); return __formatterBool;});
+        [](const QDomElement& _element) { 
+          Q_UNUSED(_element); return __formatterBool;});
 
     __formatterCreators.insert( __slStdFormatterNames.format_uint8, 
-        [](const QDomNamedNodeMap& _attr){ 
-          Q_UNUSED(_attr); return __formatterUint8;});
+        [](const QDomElement& _element){ 
+          Q_UNUSED(_element); return __formatterUint8;});
 
     __formatterCreators.insert( __slStdFormatterNames.format_int8, 
-        [](const QDomNamedNodeMap& _attr){ 
-          Q_UNUSED(_attr); return __formatterInt8;});
+        [](const QDomElement& _element){ 
+          Q_UNUSED(_element); return __formatterInt8;});
 
     __formatterCreators.insert( __slStdFormatterNames.format_uint16, 
-        [](const QDomNamedNodeMap& _attr){ 
-          Q_UNUSED(_attr); return __formatterUint16;});
+        [](const QDomElement& _element){ 
+          Q_UNUSED(_element); return __formatterUint16;});
 
     __formatterCreators.insert( __slStdFormatterNames.format_int16, 
-        [](const QDomNamedNodeMap& _attr){ 
-          Q_UNUSED(_attr); return __formatterInt16;});
+        [](const QDomElement& _element){ 
+          Q_UNUSED(_element); return __formatterInt16;});
 
     __formatterCreators.insert( __slStdFormatterNames.format_uint32, 
-        [](const QDomNamedNodeMap& _attr){ 
-          Q_UNUSED(_attr); return __formatterUint32;});
+        [](const QDomElement& _element){ 
+          Q_UNUSED(_element); return __formatterUint32;});
 
     __formatterCreators.insert( __slStdFormatterNames.format_int32, 
-        [](const QDomNamedNodeMap& _attr){ 
-          Q_UNUSED(_attr); return __formatterInt32;});
+        [](const QDomElement& _element){ 
+          Q_UNUSED(_element); return __formatterInt32;});
 
     __formatterCreators.insert( __slStdFormatterNames.format_float32, 
-        [](const QDomNamedNodeMap& _attr){ 
-          Q_UNUSED(_attr); return __formatterFloat32;});
+        [](const QDomElement& _element){ 
+          Q_UNUSED(_element); return __formatterFloat32;});
 
     __formatterCreators.insert( __slStdFormatterNames.format_string, 
-        [](const QDomNamedNodeMap& _attr){ 
-          Q_UNUSED(_attr); return __formatterString;});
+        [](const QDomElement& _element){ 
+          Q_UNUSED(_element); return __formatterString;});
   }
 
 
   //------------------------------------------------------------------------------
-  QSharedPointer<LIDataFormatter> createFormatter( const QDomNamedNodeMap& _attr)
+  QSharedPointer<LIDataFormatter> createFormatter(
+      const QString& _format, const QDomElement& _element)
   {
-    QDomNode node = _attr.namedItem(__slAttributes.format);
-    if(node.isNull()) return nullptr;
-
-    QString format = node.toAttr().value();
-
-    auto it = __formatterCreators.find(format);
-    if(it == __formatterCreators.end())
-    {
-      return __formatterHex;
-    }
-    return it.value()(_attr);
+    auto it = __formatterCreators.find(_format);
+    if(it == __formatterCreators.end()) {return nullptr;}
+    return it.value()(_element);
   }
 
   //------------------------------------------------------------------------------
@@ -328,13 +321,13 @@ public:
 
 }__slFormattersFactory;
 
-//==============================================================================NSXmlStdDataFormatterFactory
-namespace NSXmlStdDataFormatterFactory
+//==============================================================================stddataformatterfactory
+namespace stddataformatterfactory
 {
 QSharedPointer<LIDataFormatter> createFormatter(
-    const QDomNamedNodeMap& _attr)
+    const QString& _format, const QDomElement& _element)
 {
-  return __slFormattersFactory.createFormatter(_attr);
+  return __slFormattersFactory.createFormatter(_format, _element);
 }
 
 QSharedPointer<LIDataFormatter> createFormatter(
@@ -342,4 +335,5 @@ QSharedPointer<LIDataFormatter> createFormatter(
 {
   return __slFormattersFactory.createFormatter(_name);
 }
+
 }

@@ -29,6 +29,11 @@
 #include "lcxmlfonts.h"
 #include "lcxmljsscripts.h"
 
+#include "LIRemoteDataReader.h"
+#include "LIRemoteDataSource.h"
+#include "lcxmlformatterfactory.h"
+#include "xmldataformatters.h"
+
 #include <QDebug>
 #include <QApplication>
 #include <QFile>
@@ -41,9 +46,6 @@
 #include <QStringList>
 #include <QThread>
 #include <QTimer>
-#include "LIRemoteDataReader.h"
-#include "LIRemoteDataSource.h"
-#include "lcxmlformatterfactory.h"
 
 static QString      __slXmlMainFileName;
 static QString      __slXmlMainFilePath;
@@ -127,14 +129,13 @@ public:
   virtual QSharedPointer<LIDataFormatter> 
     getStdDataFormatter(const QString& _name) const override
     {
-      return NSXmlStdDataFormatterFactory::createFormatter(_name);
+      return stddataformatterfactory::createFormatter(_name);
     }
 
   virtual QSharedPointer<LIDataFormatter> 
     getDataFormatter(const QString& _formatterId) const override
     {
-      //TODO:Изменить возвращаеьое занчение.
-      return NSXmlStdDataFormatterFactory::createFormatter(_formatterId);
+      return xmldataformatters::getDataFormatter(_formatterId);
     }
 };
 
@@ -396,6 +397,7 @@ static void addFonts(const QDomElement& _rootElement)
 //==============================================================================
 static void addFormatters(const QDomElement& _rootElement)
 {
+  xmldataformatters::create(_rootElement, __slAppInterface);
 }
 
 //==============================================================================
