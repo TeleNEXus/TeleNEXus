@@ -83,7 +83,9 @@ QWidget* LCXmlRemLineEditBuilder::buildLocal(
 
   if(format.isNull())
   {
-    goto LABEL_WRONG_EXIT;
+    attr = element.attribute(LCBuildersCommon::mAttributes.dataformatterid);
+    format = _buildData->application.getDataFormatter(attr);
+    if(format.isNull()) goto LABEL_WRONG_EXIT;
   }
 
   ret= new LCQRemLineEdit(data, data, source, format);

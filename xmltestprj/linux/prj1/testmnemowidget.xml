@@ -9,8 +9,8 @@
   bgImage="picture/fon3.png" bgPos="bottom"
   >
   <widgets>
-    <!-- <dataComboLabel  read="hreg0" source="qtslavetcp" format="hex" dataSize="2" > -->
-      <dataComboLabel  read="hreg0" source="qtslavetcp" format="hex" dataSize="2" 
+    <!-- <dataComboLabel  read="hreg0" source="qtslavetcp" format="hex"> -->
+      <dataComboLabel  read="hreg0" source="qtslavetcp" format="hex" 
         bgColor="red" textColor="blue" fontId="mnemo10" 
         posx="250" posy="25"
         align="Right Bottom"
@@ -22,16 +22,16 @@
         <item picture="movies/undef_150_100.gif" mode="undef" fontId="mnemo18" align="Center" bgColor="white"/>
         <item picture="movies/wrong_150_100.gif" mode="wrong" fontId="mnemo18" align="Center" bgColor="black"/>
         <!-- <item text="Test 1"   value="a" bgColor="blue" textColor="red" fontId="mnemo10" align="VCenter Left"/> -->
-        <item text="Test 0"   value="a" textColor="yellow" bgColor="blue" fontId="mnemo18" align="Left VCenter" />
-        <item text="Test 1"   value="b" />
+        <item text="Test 0"   value="000a" textColor="yellow" bgColor="blue" fontId="mnemo18" align="Left VCenter" />
+        <item text="Test 1"   value="000b" />
 
-        <item picture="movies/20_21_22_23.gif"        value="c" align="Center" bgColor="black"/>
-        <item picture="picture/picture_150_100.png"   value="d" bgColor="yellow"/>
-        <item text="Test 4"   value="e"/>
-        <item text="Test 5"   value="f"/>
-        <item text="Test 6"   value="10"/>
-        <item text="Test 7"   value="11"/>
-        <item text="Test 8"   value="12"/>
+        <item picture="movies/20_21_22_23.gif"        value="000c" align="Center" bgColor="black"/>
+        <item picture="picture/picture_150_100.png"   value="000d" bgColor="yellow"/>
+        <item text="Test 4"   value="000e"/>
+        <item text="Test 5"   value="000f"/>
+        <item text="Test 6"   value="0010"/>
+        <item text="Test 7"   value="0011"/>
+        <item text="Test 8"   value="0012"/>
       </dataComboLabel>
 
       <controlWindowButton text="hide win0" posx="10" posy="275"
@@ -43,7 +43,7 @@
         <window id="win0" event="pressed" action="hide"/>
       </controlWindowButton>
 
-      <dataComboBox  read="hreg0" source="qtslavetcp" format="hex" dataSize="2" 
+      <dataComboBox  read="hreg0" source="qtslavetcp" format="hex" 
         posx="110" posy="275"
         fontId="mnemo18"
         textColor="cyan"
@@ -51,39 +51,39 @@
         bgImage="picture/fon1.png"
         minWidth="100"
         >
-        <item text="Test 0"   value="a"/>
-        <item text="Test 1"   value="b"/>
-        <item text="Test 2"   value="c"/>
-        <item text="Test 3"   value="d"/>
-        <item text="Test 4"   value="e"/>
-        <item text="Test 5"   value="f"/>
-        <item text="Test 6"   value="10"/>
-        <item text="Test 7"   value="11"/>
-        <item text="Test 8"   value="12"/>
+        <item text="Test 0"   value="000a"/>
+        <item text="Test 1"   value="000b"/>
+        <item text="Test 2"   value="000c"/>
+        <item text="Test 3"   value="000d"/>
+        <item text="Test 4"   value="000e"/>
+        <item text="Test 5"   value="000f"/>
+        <item text="Test 6"   value="0010"/>
+        <item text="Test 7"   value="0011"/>
+        <item text="Test 8"   value="0012"/>
       </dataComboBox>
 
       <dataComboBox  read="hreg0" source="qtslavetcp" format="hex" dataSize="2" posx="240" posy="275">
-        <item text="Test 0"   value="a"/>
-        <item text="Test 1"   value="b"/>
-        <item text="Test 2"   value="c"/>
-        <item text="Test 3"   value="d"/>
-        <item text="Test 4"   value="e"/>
-        <item text="Test 5"   value="f"/>
-        <item text="Test 6"   value="10"/>
-        <item text="Test 7"   value="11"/>
-        <item text="Test 8"   value="12"/>
+        <item text="Test 0"   value="000a"/>
+        <item text="Test 1"   value="000b"/>
+        <item text="Test 2"   value="000c"/>
+        <item text="Test 3"   value="000d"/>
+        <item text="Test 4"   value="000e"/>
+        <item text="Test 5"   value="000f"/>
+        <item text="Test 6"   value="0010"/>
+        <item text="Test 7"   value="0011"/>
+        <item text="Test 8"   value="0012"/>
       </dataComboBox>
 
       <dataComboBox  read="hreg0" source="qtslavetcp" format="hex" dataSize="2" posx="320" posy="275">
-        <item text="Test 0"   value="a"/>
-        <item text="Test 1"   value="b"/>
-        <item text="Test 2"   value="c"/>
-        <item text="Test 3"   value="d"/>
-        <item text="Test 4"   value="e"/>
-        <item text="Test 5"   value="f"/>
-        <item text="Test 6"   value="10"/>
-        <item text="Test 7"   value="11"/>
-        <item text="Test 8"   value="12"/>
+        <item text="Test 0"   value="000a"/>
+        <item text="Test 1"   value="000b"/>
+        <item text="Test 2"   value="000c"/>
+        <item text="Test 3"   value="000d"/>
+        <item text="Test 4"   value="000e"/>
+        <item text="Test 5"   value="000f"/>
+        <item text="Test 6"   value="0010"/>
+        <item text="Test 7"   value="0011"/>
+        <item text="Test 8"   value="0012"/>
       </dataComboBox>
 
       <label text="Label0" bgColor="rgb(0,255,0)" 
@@ -95,23 +95,25 @@
       <label text="Label 04" posx="100" posy="110" fontId="mnemo13" textColor="blue"/>
       <label text="Label 05" posx="120" posy="130" />
 
-      <dataLineEdit   source="qtslavetcp" data="hreg[0-1]" format="hex" dataSize="4" separator=" " 
+      <dataLineEdit   source="qtslavetcp" data="hreg[0-1]" format="hex" 
         textColor="red"
         bgColor="rgba(0,0,255,128)"
         maxWidth="100"
         fontId="mnemo10"
         posx="120" posy="155" />
 
-      <dataLineEdit   source="qtslavetcp" data="hreg[0-1]" format="hex" dataSize="4" separator=" " 
+      <dataLineEdit   source="qtslavetcp" data="hreg[0-1]" formatId="hex_sparate_size_4" 
+        fontId="mnemo10"
+        maxWidth="100"
         posx="120" posy="180" />
 
-      <dataLineEdit   source="qtslavetcp" data="hreg[0-1]" format="hex" dataSize="4" separator=" " 
+      <dataLineEdit   source="qtslavetcp" data="hreg[0-1]" format="hex" 
         posx="120" posy="205" />
 
-      <dataLabel source="qtslavetcp" data="hreg[0-1]" format="hex" dataSize="4" separator=" " 
+      <dataLabel source="qtslavetcp" data="hreg[0-1]" format="hex" 
         posx="250" posy="180" bgColor="yellow" textColor="red" fontId="mnemo10" minWidth="150" align="Right"/>
 
-      <!-- <dataLabel source="qtslavetcp" data="hreg[0-1]" format="hex" dataSize="4" minWidth="150" separator=" " --> 
+      <!-- <dataLabel source="qtslavetcp" data="hreg[0-1]" format="hex" minWidth="150"  --> 
       <!--   posx="250" posy="205" /> -->
 
     <widget posx="250" posy="205" minWidth="100" 
