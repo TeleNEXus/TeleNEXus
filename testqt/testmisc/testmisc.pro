@@ -28,8 +28,8 @@ DEFINES += QT_DEPRECATED_WARNINGS
 # SOURCES +=  ./testwidget.cpp \
 # SOURCES +=  ./testwidget1.cpp \
 # SOURCES +=  ./testtable.cpp \
-SOURCES +=  ./testjs.cpp \
-  ./jsclass.cpp \
+SOURCES +=  ./testjsfunc.cpp \
+  ./jsclassfunc.cpp \
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
@@ -37,7 +37,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 HEADERS += \
-    ./jsclass.h \
+    ./jsclassfunc.h \
 
 
 
