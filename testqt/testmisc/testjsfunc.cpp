@@ -11,7 +11,7 @@
 
 #include <QList>
 #include <QJSEngine>
-#include "jsclass.h"
+#include "jsclassfunc.h"
 
 int main(int argc, char** argv)
 {
@@ -36,9 +36,23 @@ int main(int argc, char** argv)
 
   LJsClass *appinterface = new LJsClass;
 
+  /* LQValidateStatus* validate_status = new LQValidateStatus(); */
+
+  QString propIntermediate  = "intermediate";
+  QString propAcceptable    = "acceptable";
+  QString propInvalid       = "invalid";
+
   QJSEngine jsengin;
   QJSValue jsappinterface = jsengin.newQObject(appinterface);
+  /* QJSValue jsvalidatestatus = jsengin.newQObject(validate_status); */
   jsengin.globalObject().setProperty("Application", jsappinterface);
+  /* jsengin.globalObject().setProperty("EValidateStatus", jsvalidatestatus); */
+
+  /* jsengin.globalObject().setProperty(propIntermediate, propIntermediate); */
+  /* jsengin.globalObject().setProperty(propAcceptable, propAcceptable); */
+  /* jsengin.globalObject().setProperty(propInvalid, propInvalid); */
+  /* jsengin.globalObject().setProperty("ValidateStatus", ); */
+
 
   QJSValue jsobject = jsengin.evaluate(script);
 
