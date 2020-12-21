@@ -4,6 +4,7 @@
 #include <QVariant>
 #include <QVector>
 #include <QVariantList>
+
 class LJsClass : public QObject
 {
   Q_OBJECT

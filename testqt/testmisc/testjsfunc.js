@@ -1,24 +1,42 @@
-var counter = 0;
-var min = -100;
-var max = 100;
 
 function validate(val)
 {
-  if(typeof val != "string") {return false;}
+  var sign = 1;
+
+  Application.debug("JS Validator valmin = " + attributes.valmin);
+  Application.debug("JS Validator valmax = " + attributes.valmax);
+
+  if(typeof val !== "string") {return Application.Invalid;}
+
+  if(val.length === 0) return Application.Intermediate;
+
+  if(val.charAt(0) === "-"){
+    sign = -1;
+    // val = val.slice(1, val.length);
+    val = val.slice(1);
+    Application.debug("JS Validator val = " + val);
+  }
+
+  if(val.length === 0) return Application.Intermediate;
+
+  if(val === "0x") return Application.Intermediate;
+
+  var regExp = new RegExp("((^(0x){1,1})([a-fA-F0-9]*)$)|(^([0-9]{1,})$)");
+
+  if(regExp.test(val) === false) {
+    Application.debug("JS RegExpt fault.");
+    return Application.Invalid;
+  }
 
   var data = parseInt(val);
-  if(isNaN(data))
-  {
-    Application.debug("function validate() data is NaN");
+  Application.debug("JS Validator parse to int = " + sign*data);
+  if(isNaN(data)) {
+    Application.debug("JS data is NaN!");
+    return Application.Invalid;
   }
-  Application.debug("function validate() val = " + val + "; data = " + data + ";");
-  counter++;
+
+  if((data > attributes.valmax)||(data < attributes.valmin)) return Application.Invalid;
+  return Application.Acceptable;
 }
 
 Application.debug("Jave Script Evaluate");
-// Application.debug("Jave Script Evaluate EValidateStatus intermediate = " + EValidateStatus.intermediate);
-// Application.debug("Jave Script Evaluate EValidateStatus acceptable = " + EValidateStatus.acceptable);
-// Application.debug("Jave Script Evaluate EValidateStatus invalid = " + EValidateStatus.invalid);
-Application.debug("Jave Script Evaluate EValidateStatus intermediate = " + Application.Intermediate);
-Application.debug("Jave Script Evaluate EValidateStatus acceptable = " + Application.Acceptable);
-Application.debug("Jave Script Evaluate EValidateStatus invalid = " + Application.Invalid);
