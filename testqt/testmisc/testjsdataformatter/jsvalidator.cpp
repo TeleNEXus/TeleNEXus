@@ -12,6 +12,7 @@ LCQJsValidator::State LCQJsValidator::validate(QString& _input, int& _pos) const
 {
 
   Q_UNUSED(_pos);
+  State state = State::Intermediate;
 
   QJSValue call = mCallObject;
 
@@ -34,16 +35,19 @@ LCQJsValidator::State LCQJsValidator::validate(QString& _input, int& _pos) const
   {
   case EJSValidateState::acceptable:
     qDebug() << "JS Validator Return = " << "Acceptable";
+    state = State::Acceptable;
     break;
 
   case EJSValidateState::intermediate:
     qDebug() << "JS Validator Return = " << "Intermediate";
+    state = State::Intermediate;
     break;
 
   case EJSValidateState::invalid:
     qDebug() << "JS Validator Return = " << "Invalid";
+    state = State::Invalid;
     break;
   }
 
-  return State::Intermediate;
+  return state;
 }

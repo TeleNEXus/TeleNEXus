@@ -55,7 +55,9 @@ int main(int argc, char** argv)
   /* jsengin.globalObject().setProperty(propAcceptable, propAcceptable); */
   /* jsengin.globalObject().setProperty(propInvalid, propInvalid); */
   /* jsengin.globalObject().setProperty("ValidateStatus", ); */
-  script = QString("var attributes = { valmin: %1, valmax: %2}; \n %3")
+
+  script = QString(
+      "var attributes = { valmin: %1, valmax: %2}; \n %3")
     .arg(-100000)
     .arg(100000)
     .arg(script) ;
@@ -73,6 +75,8 @@ int main(int argc, char** argv)
   QJSValue jsvalidate = jsengin.globalObject().property("validate");
   LCQJsValidator jsvalidator(jsvalidate);
 
+  line_edit1->setValidator(&jsvalidator);
+
 
   QObject::connect(line_edit1, &QLineEdit::textChanged, 
       [label1, &jsvalidate, &jsvalidator](const QString& _text)
@@ -89,7 +93,7 @@ int main(int argc, char** argv)
         /* } */
         QString text = _text;
         int pos = 0;
-        jsvalidator.validate(text, pos);
+        /* jsvalidator.validate(text, pos); */
       });
 
   layout->addWidget(label1);

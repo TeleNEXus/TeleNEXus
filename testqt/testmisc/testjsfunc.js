@@ -1,7 +1,10 @@
 
+var obj1 = { xvalue:0, yvalue:0, zvalue:0};
+
 function validate(val)
 {
   var sign = 1;
+  
 
   Application.debug("JS Validator valmin = " + attributes.valmin);
   Application.debug("JS Validator valmax = " + attributes.valmax);
@@ -29,6 +32,7 @@ function validate(val)
   }
 
   var data = parseInt(val);
+
   Application.debug("JS Validator parse to int = " + sign*data);
   if(isNaN(data)) {
     Application.debug("JS data is NaN!");
