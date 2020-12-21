@@ -1,4 +1,3 @@
-
 #include <QApplication>
 #include <QtWidgets>
 #include <qboxlayout.h>
@@ -12,6 +11,7 @@
 #include <QList>
 #include <QJSEngine>
 #include "jsclassfunc.h"
+#include "jsvalidator.h"
 
 int main(int argc, char** argv)
 {
@@ -47,12 +47,18 @@ int main(int argc, char** argv)
   /* QJSValue jsvalidatestatus = jsengin.newQObject(validate_status); */
   jsengin.globalObject().setProperty("Application", jsappinterface);
   /* jsengin.globalObject().setProperty("EValidateStatus", jsvalidatestatus); */
+  /* QVariantMap attributes; */
+  /* attributes["min"] = QVariant(10); */
+  /* attributes["max"] = QVariant(100); */
 
   /* jsengin.globalObject().setProperty(propIntermediate, propIntermediate); */
   /* jsengin.globalObject().setProperty(propAcceptable, propAcceptable); */
   /* jsengin.globalObject().setProperty(propInvalid, propInvalid); */
   /* jsengin.globalObject().setProperty("ValidateStatus", ); */
-
+  script = QString("var attributes = { valmin: %1, valmax: %2}; \n %3")
+    .arg(-100000)
+    .arg(100000)
+    .arg(script) ;
 
   QJSValue jsobject = jsengin.evaluate(script);
 
@@ -65,12 +71,25 @@ int main(int argc, char** argv)
   }
 
   QJSValue jsvalidate = jsengin.globalObject().property("validate");
+  LCQJsValidator jsvalidator(jsvalidate);
+
 
   QObject::connect(line_edit1, &QLineEdit::textChanged, 
-      [label1, &jsvalidate](const QString& _text)
+      [label1, &jsvalidate, &jsvalidator](const QString& _text)
       {
         label1->setText(_text);
-        jsvalidate.call(QJSValueList() << _text);
+        /* QJSValue jsret = jsvalidate.call(QJSValueList() << _text); */
+
+        /* if(jsret.isError()) */
+        /* { */
+        /*   qDebug() */ 
+        /*     << "Uncaught exception at line" */
+        /*     << jsret.property("lineNumber").toInt() */
+        /*     << ":" << jsret.toString(); */
+        /* } */
+        QString text = _text;
+        int pos = 0;
+        jsvalidator.validate(text, pos);
       });
 
   layout->addWidget(label1);

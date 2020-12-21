@@ -17,6 +17,8 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
     
+INCLUDEPATH +=                                  \
+       ./testjsdataformatter 
 
 # SOURCES += main.cpp \
 # SOURCES +=  ./regexpr.cpp \
@@ -30,6 +32,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 # SOURCES +=  ./testtable.cpp \
 SOURCES +=  ./testjsfunc.cpp \
   ./jsclassfunc.cpp \
+  ./testjsdataformatter/jsvalidator.cpp
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
@@ -38,6 +41,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 HEADERS += \
     ./jsclassfunc.h \
+    ./testjsdataformatter/jsvalidator.h
 
 
 

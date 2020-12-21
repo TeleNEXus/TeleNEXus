@@ -68,6 +68,7 @@ flags = [
              '-I', '../common/interfaces/xmlbuilders',
              '-I', '../common',
              '-I', '../tnexcore/xml',
+             '-I', '../testmisc/testjsdataformatter',
              '-isystem',
              '/usr/include/x86_64-linux-gnu/qt5',
              '-isystem',
