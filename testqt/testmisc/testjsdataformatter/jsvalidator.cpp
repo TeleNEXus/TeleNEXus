@@ -14,9 +14,9 @@ LCQJsValidator::State LCQJsValidator::validate(QString& _input, int& _pos) const
   Q_UNUSED(_pos);
   State state = State::Intermediate;
 
-  QJSValue call = mCallObject;
+  /* QJSValue call = mCallObject; */
 
-  QJSValue jsret = call.call(QJSValueList() << _input);
+  QJSValue jsret = mCallObject.call(QJSValueList() << _input);
 
   if(jsret.isError())
   {

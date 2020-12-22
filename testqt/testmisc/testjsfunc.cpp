@@ -29,6 +29,7 @@ int main(int argc, char** argv)
   else
   {
     qDebug() << "Script file " << script_file_name << " is opened";
+    qDebug() << "Script file " << scriptFile.fileName() << " is opened";
     QTextStream stream(&scriptFile);
     script = stream.readAll();
     scriptFile.close();
@@ -45,7 +46,7 @@ int main(int argc, char** argv)
   QJSEngine jsengin;
   QJSValue jsappinterface = jsengin.newQObject(appinterface);
   /* QJSValue jsvalidatestatus = jsengin.newQObject(validate_status); */
-  jsengin.globalObject().setProperty("Application", jsappinterface);
+  jsengin.globalObject().setProperty("APPLICATIONEXPORT", jsappinterface);
   /* jsengin.globalObject().setProperty("EValidateStatus", jsvalidatestatus); */
   /* QVariantMap attributes; */
   /* attributes["min"] = QVariant(10); */
@@ -57,7 +58,15 @@ int main(int argc, char** argv)
   /* jsengin.globalObject().setProperty("ValidateStatus", ); */
 
   script = QString(
-      "var attributes = { valmin: %1, valmax: %2}; \n %3")
+      "var Attributes = { "
+      "valmin: %1,"
+      "valmax: %2};" 
+      "var Intermediate = APPLICATIONEXPORT.Intermediate;"
+      "var Acceptable   = APPLICATIONEXPORT.Acceptable;"
+      "var Invalid      = APPLICATIONEXPORT.Invalid;"
+      "var DebugOut     = APPLICATIONEXPORT.debug;"
+      "\n %3"
+      )
     .arg(-100000)
     .arg(100000)
     .arg(script) ;
@@ -73,6 +82,8 @@ int main(int argc, char** argv)
   }
 
   QJSValue jsvalidate = jsengin.globalObject().property("validate");
+  /* QJSValue jsvalidate; */
+  /* LCQJsValidator jsvalidator(jsvalidate); */
   LCQJsValidator jsvalidator(jsvalidate);
 
   line_edit1->setValidator(&jsvalidator);

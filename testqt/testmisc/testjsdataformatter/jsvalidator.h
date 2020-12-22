@@ -7,7 +7,7 @@
 class LCQJsValidator : public QValidator
 {
 private:
-  QJSValue mCallObject;
+  mutable QJSValue mCallObject;
 public:
   explicit LCQJsValidator(const QJSValue& _callObject, QObject* _parent = nullptr);
   virtual State validate(QString& _input, int& _pos) const;
