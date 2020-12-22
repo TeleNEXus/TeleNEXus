@@ -18,15 +18,16 @@ static const struct
   QString funcFitting         = "Fitting"; 
 }__slPropNames;
 
-//==============================================================================
-static void emitError(const QJSValue& _value);
-static QString createScriptHeader(const QDomNamedNodeMap& _attributes);
-
 //==============================================================================__slAttributes
 static const struct 
 {
   QString jsfile = "jsfile";
 }__slAttributes;
+
+//==============================================================================
+static void emitError(const QJSValue& _value);
+static QString createScriptHeader(const QDomNamedNodeMap& _attributes);
+
 
 //==============================================================================
 class CJSValidator : public QValidator
@@ -83,10 +84,18 @@ public:
 struct SLocalData
 {
   QJSEngine jsengine;
-  CJSValidator validator;
+  CJSValidator* validator;
   QJSValue callToString;
-  QJSValue callToByte;
+  QJSValue callToBytes;
   QJSValue callFitting;
+  SLocalData() :
+    validator(new CJSValidator())
+  {
+  }
+  ~SLocalData()
+  {
+    validator->deleteLater();
+  }
 };
 
 //==============================================================================
@@ -111,17 +120,21 @@ LCJSFormatter::LCJSFormatter(const QDomElement& _element)
   script = stream.readAll();
   file.close();
 
-  QJSValue jsvalue = mpLocalData->jsengine.evaluate(script);
+  QJSValue jsvalue = mpLocalData->jsengine.evaluate(
+      QString("%1 \n %2")
+      .arg(createScriptHeader(_element.attributes()))
+      .arg(script));
+
   if(jsvalue.isError()) { emitError(jsvalue); }
 
-  mpLocalData->validator.setCallValue(
+  mpLocalData->validator->setCallValue(
       mpLocalData->jsengine.globalObject().property(
         __slPropNames.funcValidate));
 
   mpLocalData->callToString = 
     mpLocalData->jsengine.globalObject().property( __slPropNames.funcToString);
 
-  mpLocalData->callToByte = 
+  mpLocalData->callToBytes = 
     mpLocalData->jsengine.globalObject().property( __slPropNames.funcToBytes);
 
   mpLocalData->callFitting = 
@@ -137,28 +150,53 @@ LCJSFormatter::~LCJSFormatter()
 //------------------------------------------------------------------------------
 QString LCJSFormatter::toString(const QByteArray& _data)
 {
-  Q_UNUSED(_data);
+  QJSValue jsarray = mpLocalData->jsengine.newArray(_data.size());
+  for(int i = 0; i < _data.size(); i++)
+  {
+    jsarray.setProperty(i, _data[i]);
+  }
+  QJSValue jsret = mpLocalData->callToString.call(QJSValueList() << jsarray);
+  if(jsret.isString()) return jsret.toString();
   return QString();
 }
 
 //------------------------------------------------------------------------------
 QByteArray LCJSFormatter::toBytes(const QString& _str)
 {
-  Q_UNUSED(_str);
-  return QByteArray();
+  QByteArray ret_data;
+
+  QJSValue jsret = mpLocalData->callToBytes.call(QJSValueList() << _str);
+
+  if(!jsret.isArray()) return ret_data;
+  if(!jsret.property("length").isNumber()) return ret_data;
+
+  int array_size = jsret.property("length").toUInt();
+
+  if(array_size <= 0) return ret_data;
+
+  ret_data.resize(array_size);
+
+  for(int i = 0; i <  array_size; i++)
+  {
+    QJSValue val = jsret.property(i);
+    if(!val.isNumber()) return QByteArray();
+    ret_data[i] = val.toUInt();
+  }
+  return ret_data;
 }
 
 //------------------------------------------------------------------------------
 QString LCJSFormatter::fitting(const QString& _str)
 {
-  Q_UNUSED(_str);
-  return QString();
+  QJSValue jsret = mpLocalData->callFitting.call(QJSValueList() << _str);
+  if(!jsret.isString()) return QString();
+  return jsret.toString();
 }
 
 //------------------------------------------------------------------------------
 QValidator* LCJSFormatter::validator()
 {
-  return &mpLocalData->validator;
+  return mpLocalData->validator;
 }
 
 //------------------------------------------------------------------------------

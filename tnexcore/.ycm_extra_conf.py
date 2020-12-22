@@ -71,6 +71,7 @@ flags = [
              '-I', '../common',
              '-I', '../tnexcore/xml',
              '-I', '../tnexcore/dataformatters',
+             '-I', '../tnexcore/dataformatters/jsformatter',
              '-I', '../tnexcore/jscriptservice',
              '-I', '../tnexcore/jscriptservice/jsappservice',
              '-isystem',

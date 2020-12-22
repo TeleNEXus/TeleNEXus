@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <FORMATTERS>
-  <add id="hex_sparate_size_4"  stdformat="hex" size="4" separator=" "/>
-  <!-- <add id="int32_xxx.xx"        script="formatters/mormalInt32.js"   format="xxx.xx" /> -->
+  <!-- <add id="hex_sparate_size_4"  stdformat="hex" size="4" separator=" "/> -->
+  <!-- <add id="int32_xxx.xx"        jsfile="formatters/mormalInt32.js"   format="xxx.xx" /> -->
   <!-- <add id="int32_xx.xxxx"       script="formatters/mormalInt32.js"   format="xx.xxxx" /> -->
   <!-- <add id="int16_xx.x"          builder="formattersBuilder"          format="xx.x" /> -->
 
@@ -12,5 +12,14 @@
   <!-- <fromStd      id="hex_sparate_size_4" format="hex"                      size="4" separator=" " /> -->
   <!-- <fromScript   id="int32_xxx.xx"       file="formatters/mormalInt32.js"  format="xxx.xx" /> -->
   <!-- <fromBuilder  id="int16_xx.x"         builder="formattersBuilder"       format="x.xxx" /> -->
+
+  <!-- <addFromStd      id="hex_sparate_size_4" format="hex"                      size="4" separator=" " /> -->
+  <!-- <addFromScript   id="int32_xxx.xx"       file="formatters/mormalInt32.js"  format="xxx.xx" /> -->
+  <!-- <addFromBuilder  id="int16_xx.x"         builder="formattersBuilder"       format="x.xxx" /> -->
+
+  <std      id="hex_sparate_size_4" format="hex"                      size="4" separator=" " />
+  <script   id="int32_xxx.xx"       file="formatters/mormalInt32.js"  format="xxx.xx" />
+  <!-- <builder  id="int16_xx.x"         builder="formattersBuilder"       format="x.xxx" /> -->
+
 </FORMATTERS>
 

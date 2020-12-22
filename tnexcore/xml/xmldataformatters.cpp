@@ -23,6 +23,7 @@
 #include "LIDataFormatter.h"
 #include "lcxmlcommon.h"
 #include "lcxmlformatterfactory.h"
+#include "lcjsformatter.h"
 
 #include <functional>
 #include <QDomElement>
@@ -31,18 +32,16 @@
 
 static const struct
 {
-
   QString file      = "file";
   QString id        = "id";
-  QString stdformat = "stdformat";
-  QString script    = "script";
-  QString builder   = "builder";
-
+  QString format    = "format";
 }__slAttributes;
 
 static const struct
 {
-  QString add = "add";
+  QString stdformat = "std";
+  QString script    = "script";
+  QString builder   = "builder";
 }__slTags;
 
 static QMap<QString, QSharedPointer<LIDataFormatter>> __slFormattersMap;
@@ -59,8 +58,8 @@ public:
   //----------------------------------------------------------------------------
   QSharedPointer<LIDataFormatter> createFromStd(const QDomElement& _element)
   {
-    QString format = _element.attribute(__slAttributes.stdformat);
-    return stddataformatterfactory::createFormatter(format, _element);
+    QString format = _element.attribute(__slAttributes.format);
+    return stddataformatterfactory::createFormatter(_element);
   }
 
   //----------------------------------------------------------------------------
@@ -68,6 +67,7 @@ public:
   {
     Q_UNUSED(_element);
     return nullptr;
+    /* return LCJSFormatter::create(_element); */
   }
 
   //----------------------------------------------------------------------------
@@ -88,15 +88,17 @@ public:
 
     QSharedPointer<LIDataFormatter> fsp;
 
-    if(attr_all.contains(__slAttributes.stdformat))
+    QString tag = _element.tagName();
+
+    if(tag == __slTags.stdformat)
     {
       fsp = createFromStd(_element);
     }
-    else if(attr_all.contains(__slAttributes.script))
+    else if(tag == __slTags.script)
     {
       fsp = createFromScript(_element);
     }
-    else if(attr_all.contains(__slAttributes.builder))
+    else if(tag == __slTags.builder)
     {
       fsp = createFromBuilder(_element);
     }
@@ -129,13 +131,13 @@ void create( const QDomElement &_element, const LIApplication& _app)
     return;
   }
 
-  for(auto node = _element.firstChildElement(__slTags.add);
+  for(auto node = _element.firstChild();
       !node.isNull();
-      node = node.nextSiblingElement(__slTags.add))
+      node = node.nextSibling())
   {
+    if(!node.isElement()) continue;
     __slCreator.create(node.toElement());
   }
-
 }
 
 //------------------------------------------------------------------------------

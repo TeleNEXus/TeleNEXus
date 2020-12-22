@@ -34,20 +34,17 @@ LCQRemLineEdit::LCQRemLineEdit(
   mFormatter(_formatter)
 {
   QString str = "Undef";
-  mFormatter.data()->undefState(str);
   setText(str);
   setValidator(_formatter->validator());
   setEnabled(false);
 
   mDataReader = _dataSource->createReader(_dataNameRead,
-      [this](QSharedPointer<QByteArray> _data, LERemoteDataStatus _status)
+      [this, str](QSharedPointer<QByteArray> _data, LERemoteDataStatus _status)
       {
         if(mFlagUpdateOn)
         {
           if(_status != LERemoteDataStatus::DS_OK)
           {
-            QString str = "Undef";
-            mFormatter.data()->undefState(str);
             setText(str);
             setEnabled(false);
             return;
