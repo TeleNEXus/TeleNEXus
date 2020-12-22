@@ -29,7 +29,9 @@ INCLUDEPATH +=                                  \
         ./xml                                   \
         ./jscriptservice/                       \
         ./jscriptservice/jsappservice           \
-        ./dataformatters
+        ./dataformatters                        \
+        ./dataformatters/jsformatter            \
+
 
 SOURCES += \
         ../../common/lqvalidatoru32.cpp \
@@ -48,6 +50,8 @@ SOURCES += \
         dataformatters/lcformatteru8.cpp \
         dataformatters/lcformatterstring.cpp \
         dataformatters/lcxmlformatterfactory.cpp \
+        dataformatters/jsformatter/lcjsformatter.cpp \
+        dataformatters/jsformatter/lcqjsformatterinterface.cpp \
         jscriptservice/lcqjsappinterface.cpp \
         jscriptservice/lcjscriptservice.cpp \
         jscriptservice/lcqjscriptservicehiden.cpp \
@@ -99,6 +103,8 @@ HEADERS += \
     dataformatters/lcformatteru8.h \
     dataformatters/lcformatterstring.h \
     dataformatters/lcxmlformatterfactory.h \
+    dataformatters/jsformatter/lcjsformatter.h \
+    dataformatters/jsformatter/lcqjsformatterinterface.h \
     jscriptservice/lcqjsappinterface.h \
     jscriptservice/lcjscriptservice.h \
     jscriptservice/lcqjscriptservicehiden.h \

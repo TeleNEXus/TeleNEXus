@@ -46,11 +46,10 @@ LCQRemLabel::LCQRemLabel(const QString& _dataName,
 {
   setEnabled(false);
   QString str = "Undef";
-  mFormatter.data()->undefState(str);
   setText(str);
 
   mDataReader = _dataSource->createReader( _dataName,
-      [this](
+      [this, str](
         QSharedPointer<QByteArray> _data, 
         LERemoteDataStatus _status)
       {
@@ -58,14 +57,11 @@ LCQRemLabel::LCQRemLabel(const QString& _dataName,
         {
           if(_status != LERemoteDataStatus::DS_OK)
           {
-            QString str = "Undef";
-            mFormatter.data()->undefState(str);
             setText(str);
             setEnabled(false);
             return;
           }
-          QString str = mFormatter.data()->toString(*_data);
-          setText(str);
+          setText(mFormatter.data()->toString(*_data));
           setEnabled(true);
         }
       }

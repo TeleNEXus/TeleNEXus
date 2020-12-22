@@ -44,8 +44,7 @@
 
 static const struct
 {
-  QString stdformat = "stdformat";
-  /* QString format    = "format"; */
+  QString format = "format";
   QString datasize  = "dataSize";
   QString separator = "separator";
 }__slAttributes;
@@ -303,10 +302,10 @@ public:
 
 
   //------------------------------------------------------------------------------
-  QSharedPointer<LIDataFormatter> createFormatter(
-      const QString& _format, const QDomElement& _element)
+  QSharedPointer<LIDataFormatter> createFormatter(const QDomElement& _element)
   {
-    auto it = __formatterCreators.find(_format);
+    auto it = __formatterCreators.find(
+        _element.attribute(__slAttributes.format));
     if(it == __formatterCreators.end()) {return nullptr;}
     return it.value()(_element);
   }
@@ -324,10 +323,9 @@ public:
 //==============================================================================stddataformatterfactory
 namespace stddataformatterfactory
 {
-QSharedPointer<LIDataFormatter> createFormatter(
-    const QString& _format, const QDomElement& _element)
+QSharedPointer<LIDataFormatter> createFormatter(const QDomElement& _element)
 {
-  return __slFormattersFactory.createFormatter(_format, _element);
+  return __slFormattersFactory.createFormatter(_element);
 }
 
 QSharedPointer<LIDataFormatter> getFormatter(

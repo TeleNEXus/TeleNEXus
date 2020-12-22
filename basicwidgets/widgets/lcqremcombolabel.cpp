@@ -50,13 +50,8 @@ LCQRemComboLabel::LCQRemComboLabel(const QString& _dataName,
 {
   mpOwnData = new SOwnData();
 
-  QString str = "Undef";
-  _formatter->undefState(str);
-  addItemUndef(new QLabel(str));
-
-  str = "Wrong";
-  _formatter->wrongState(str);
-  addItemWrong(new QLabel(str));
+  addItemUndef(new QLabel("Undef"));
+  addItemWrong(new QLabel("Wrong"));
 
   mDataReader = _dataSource->createReader(_dataName, 
       [this](QSharedPointer<QByteArray> _data, LERemoteDataStatus _status)
