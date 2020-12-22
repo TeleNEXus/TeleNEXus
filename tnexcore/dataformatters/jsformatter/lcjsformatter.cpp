@@ -4,11 +4,19 @@
 #include <QStringList>
 #include <QFile>
 #include <QJSValue>
+#include <QJSEngine>
 #include <QDebug>
 
 //==============================================================================
-const QString __slFormatterInterfacePropName = "FORMATTEREXTERN";
-const QString __slFormatterAttributesPropName = "Attributes";
+static const struct
+{
+  QString formatterInterface  = "FORMATTEREXTERN";
+  QString attributes          = "Attributes";
+  QString funcValidate        = "Validate";
+  QString funcToBytes         = "ToBytes";
+  QString funcToString        = "ToString";
+  QString funcFitting         = "Fitting"; 
+}__slPropNames;
 
 //==============================================================================
 static void emitError(const QJSValue& _value);
@@ -24,21 +32,24 @@ static const struct
 class CJSValidator : public QValidator
 {
 private:
-  mutable QJSValue mCallObject;
+  mutable QJSValue mCallValue;
 
 public:
-  CJSValidator() = delete;
-  CJSValidator(const QJSValue& _callObject) : 
-    QValidator(nullptr),
-    mCallObject(_callObject)
+  CJSValidator() : 
+    QValidator(nullptr)
   {
+  }
+
+  void setCallValue(const QJSValue& _value)
+  {
+    mCallValue = _value;
   }
 
   //----------------------------------------------------------------------------
   virtual State validate(QString& _input, int& _pos) const override
   {
     Q_UNUSED(_pos);
-    QJSValue jsret = mCallObject.call(QJSValueList() << _input);
+    QJSValue jsret = mCallValue.call(QJSValueList() << _input);
 
     if(jsret.isError())
     {
@@ -68,29 +79,59 @@ public:
   }
 };
 
+//==============================================================================SLocalData
+struct SLocalData
+{
+  QJSEngine jsengine;
+  CJSValidator validator;
+  QJSValue callToString;
+  QJSValue callToByte;
+  QJSValue callFitting;
+};
+
+//==============================================================================
+#define mpLocalData (static_cast<SLocalData*>(mpData))
+
 //==============================================================================LCJSFormatter
 LCJSFormatter::LCJSFormatter(const QDomElement& _element)
 {
+  mpData = new SLocalData;
   QString attr = _element.attribute(__slAttributes.jsfile);
-  if(attr.isNull()) return;
 
-  /* QFile scriptFile(attr); */
-  /* QString script; */
+  QFile file(attr);
 
-  /* if (!scriptFile.open(QIODevice::ReadOnly)) return nullptr; */
+  if (!file.open(QIODevice::ReadOnly)) 
+  {
+    qDebug() << "LCJSFormatter can't open file " << file.fileName();
+    return;
+  }
 
-  /* QTextStream stream(&scriptFile); */
-  /* script = stream.readAll(); */
-  /* scriptFile.close(); */
+  QString script;
+  QTextStream stream(&file);
+  script = stream.readAll();
+  file.close();
+
+  QJSValue jsvalue = mpLocalData->jsengine.evaluate(script);
+  if(jsvalue.isError()) { emitError(jsvalue); }
+
+  mpLocalData->validator.setCallValue(
+      mpLocalData->jsengine.globalObject().property(
+        __slPropNames.funcValidate));
+
+  mpLocalData->callToString = 
+    mpLocalData->jsengine.globalObject().property( __slPropNames.funcToString);
+
+  mpLocalData->callToByte = 
+    mpLocalData->jsengine.globalObject().property( __slPropNames.funcToBytes);
+
+  mpLocalData->callFitting = 
+    mpLocalData->jsengine.globalObject().property( __slPropNames.funcFitting);
 }
 
 //------------------------------------------------------------------------------
 LCJSFormatter::~LCJSFormatter()
 {
-  if(mpValidator)
-  {
-    mpValidator->deleteLater();
-  }
+  delete mpLocalData;
 }
 
 //------------------------------------------------------------------------------
@@ -117,7 +158,7 @@ QString LCJSFormatter::fitting(const QString& _str)
 //------------------------------------------------------------------------------
 QValidator* LCJSFormatter::validator()
 {
-  return mpValidator;
+  return &mpLocalData->validator;
 }
 
 //------------------------------------------------------------------------------
@@ -131,7 +172,7 @@ static QString createScriptHeader(const QDomNamedNodeMap& _attributes)
 {
 
   QString obj_attributes = 
-    QString("var %1 = { \n").arg(__slFormatterAttributesPropName);
+    QString("var %1 = { \n").arg(__slPropNames.attributes);
   for(int i = 0; i < _attributes.length(); i++)
   {
     auto node  = _attributes.item(i);
@@ -153,7 +194,7 @@ static QString createScriptHeader(const QDomNamedNodeMap& _attributes)
     .arg(QValidator::State::Intermediate)
     .arg(QValidator::State::Invalid)
     .arg(obj_attributes)
-    .arg(__slFormatterInterfacePropName)
+    .arg(__slPropNames.formatterInterface)
     ;
 }
 
