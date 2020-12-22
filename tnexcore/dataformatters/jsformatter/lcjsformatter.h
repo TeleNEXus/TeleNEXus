@@ -28,8 +28,7 @@ class QDomElement;
 class LCJSFormatter : public LIDataFormatter
 {
 private:
-
-  QValidator* mpValidator = nullptr;
+  void* mpData = nullptr;
 
   LCJSFormatter() = delete;
   LCJSFormatter(const QDomElement& _element);
