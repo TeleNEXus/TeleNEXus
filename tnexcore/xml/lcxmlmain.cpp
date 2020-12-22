@@ -129,7 +129,7 @@ public:
   virtual QSharedPointer<LIDataFormatter> 
     getStdDataFormatter(const QString& _name) const override
     {
-      return stddataformatterfactory::createFormatter(_name);
+      return stddataformatterfactory::getFormatter(_name);
     }
 
   virtual QSharedPointer<LIDataFormatter> 

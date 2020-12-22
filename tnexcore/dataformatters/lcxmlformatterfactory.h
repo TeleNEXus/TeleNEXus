@@ -32,7 +32,7 @@ namespace stddataformatterfactory
 extern QSharedPointer<LIDataFormatter> createFormatter(
     const QString& _format, const QDomElement& _element);
 
-extern QSharedPointer<LIDataFormatter> createFormatter(
+extern QSharedPointer<LIDataFormatter> getFormatter(
     const QString& _name);
 }
 

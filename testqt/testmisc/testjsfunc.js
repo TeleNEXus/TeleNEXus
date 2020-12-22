@@ -1,46 +1,44 @@
 
-var obj1 = { xvalue:0, yvalue:0, zvalue:0};
-
 function validate(val)
 {
   var sign = 1;
   
 
-  Application.debug("JS Validator valmin = " + attributes.valmin);
-  Application.debug("JS Validator valmax = " + attributes.valmax);
+  DebugOut("JS Validator valmin = " + Attributes.valmin);
+  DebugOut("JS Validator valmax = " + Attributes.valmax);
 
-  if(typeof val !== "string") {return Application.Invalid;}
+  if(typeof val !== "string") {return Invalid;}
 
-  if(val.length === 0) return Application.Intermediate;
+  if(val.length === 0) return Intermediate;
 
   if(val.charAt(0) === "-"){
     sign = -1;
     // val = val.slice(1, val.length);
     val = val.slice(1);
-    Application.debug("JS Validator val = " + val);
+    DebugOut("JS Validator val = " + val);
   }
 
-  if(val.length === 0) return Application.Intermediate;
+  if(val.length === 0) return Intermediate;
 
-  if(val === "0x") return Application.Intermediate;
+  if(val === "0x") return Intermediate;
 
-  var regExp = new RegExp("((^(0x){1,1})([a-fA-F0-9]*)$)|(^([0-9]{1,})$)");
+  var regExp = new RegExp("((^(0x){1,1})([a-fA-F0-9]*)$)|(^([0-9]*)$)");
 
   if(regExp.test(val) === false) {
-    Application.debug("JS RegExpt fault.");
-    return Application.Invalid;
+    DebugOut("JS RegExpt fault.");
+    return Invalid;
   }
 
   var data = parseInt(val);
 
-  Application.debug("JS Validator parse to int = " + sign*data);
+  DebugOut("JS Validator parse to int = " + sign*data);
   if(isNaN(data)) {
-    Application.debug("JS data is NaN!");
-    return Application.Invalid;
+    DebugOut("JS data is NaN!");
+    return Invalid;
   }
 
-  if((data > attributes.valmax)||(data < attributes.valmin)) return Application.Invalid;
-  return Application.Acceptable;
+  if((data > Attributes.valmax)||(data < Attributes.valmin)) return Invalid;
+  return Acceptable;
 }
 
-Application.debug("Jave Script Evaluate");
+DebugOut("Jave Script Evaluate");

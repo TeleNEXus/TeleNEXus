@@ -312,7 +312,7 @@ public:
   }
 
   //------------------------------------------------------------------------------
-  QSharedPointer<LIDataFormatter> createFormatter( const QString& _name)
+  QSharedPointer<LIDataFormatter> getFormatter( const QString& _name)
   {
     auto it = __slStdFormattersMap.find(_name);
     if(it == __slStdFormattersMap.end()) return nullptr;
@@ -330,10 +330,10 @@ QSharedPointer<LIDataFormatter> createFormatter(
   return __slFormattersFactory.createFormatter(_format, _element);
 }
 
-QSharedPointer<LIDataFormatter> createFormatter(
+QSharedPointer<LIDataFormatter> getFormatter(
     const QString& _name)
 {
-  return __slFormattersFactory.createFormatter(_name);
+  return __slFormattersFactory.getFormatter(_name);
 }
 
 }
