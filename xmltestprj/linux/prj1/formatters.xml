@@ -2,23 +2,31 @@
 
 <FORMATTERS>
   <!-- <add id="hex_sparate_size_4"  stdformat="hex" size="4" separator=" "/> -->
-  <!-- <add id="int32_xxx.xx"        jsfile="formatters/mormalInt32.js"   format="xxx.xx" /> -->
-  <!-- <add id="int32_xx.xxxx"       script="formatters/mormalInt32.js"   format="xx.xxxx" /> -->
+  <!-- <add id="int32_xxx.xx"        jsfile="formatters/scaledInt32.js"   format="xxx.xx" /> -->
+  <!-- <add id="int32_xx.xxxx"       script="formatters/scaledInt32.js"   format="xx.xxxx" /> -->
   <!-- <add id="int16_xx.x"          builder="formattersBuilder"          format="xx.x" /> -->
 
   <!-- <addStd format="hex" size="4" separator=" " /> -->
-  <!-- <addScript file="formatters/mormalInt32.js" format="xxx.xx" /> -->
+  <!-- <addScript file="formatters/scaledInt32.js" format="xxx.xx" /> -->
 
   <!-- <fromStd      id="hex_sparate_size_4" format="hex"                      size="4" separator=" " /> -->
-  <!-- <fromScript   id="int32_xxx.xx"       file="formatters/mormalInt32.js"  format="xxx.xx" /> -->
+  <!-- <fromScript   id="int32_xxx.xx"       file="formatters/scaledInt32.js"  format="xxx.xx" /> -->
   <!-- <fromBuilder  id="int16_xx.x"         builder="formattersBuilder"       format="x.xxx" /> -->
 
   <!-- <addFromStd      id="hex_sparate_size_4" format="hex"                      size="4" separator=" " /> -->
-  <!-- <addFromScript   id="int32_xxx.xx"       file="formatters/mormalInt32.js"  format="xxx.xx" /> -->
+  <!-- <addFromScript   id="int32_xxx.xx"       file="formatters/scaledInt32.js"  format="xxx.xx" /> -->
   <!-- <addFromBuilder  id="int16_xx.x"         builder="formattersBuilder"       format="x.xxx" /> -->
 
-  <std      id="hex_sparate_size_4" format="hex"                      size="4" separator=" " />
-  <script   id="int32_xxx.xx"       file="formatters/mormalInt32.js"  format="xxx.xx" />
+  <std id="hex_sparate_size_4" format="hex" size="4" separator=" " />
+
+  <script
+    id="scaledInt32_xxx.x"
+    file="scripts/formatters/scaledInt32.js"
+    scale="0.1"
+    min="-100"
+    max="100"
+    format="xxx.x" />
+
   <!-- <builder  id="int16_xx.x"         builder="formattersBuilder"       format="x.xxx" /> -->
 
 </FORMATTERS>

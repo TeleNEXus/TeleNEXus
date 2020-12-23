@@ -1,4 +1,7 @@
 #include "lcjsformatter.h"
+#include "LIApplication.h"
+#include "lcqjsformatterinterface.h"
+
 #include <QValidator>
 #include <QDomElement>
 #include <QStringList>
@@ -7,7 +10,7 @@
 #include <QJSEngine>
 #include <QDebug>
 
-//==============================================================================
+//==============================================================================__slPropNames
 static const struct
 {
   QString formatterInterface  = "FORMATTEREXTERN";
@@ -21,7 +24,7 @@ static const struct
 //==============================================================================__slAttributes
 static const struct 
 {
-  QString jsfile = "jsfile";
+  QString file = "file";
 }__slAttributes;
 
 //==============================================================================
@@ -102,28 +105,43 @@ struct SLocalData
 #define mpLocalData (static_cast<SLocalData*>(mpData))
 
 //==============================================================================LCJSFormatter
-LCJSFormatter::LCJSFormatter(const QDomElement& _element)
+LCJSFormatter::LCJSFormatter(const QDomElement& _element,
+    const QString& _appPath)
 {
   mpData = new SLocalData;
-  QString attr = _element.attribute(__slAttributes.jsfile);
 
-  QFile file(attr);
+  QString file_name = _element.attribute(__slAttributes.file);
+
+  if(file_name.isNull()) return;
+
+  QFile file(QString("%1%2").arg(_appPath).arg(file_name));
 
   if (!file.open(QIODevice::ReadOnly)) 
   {
     qDebug() << "LCJSFormatter can't open file " << file.fileName();
     return;
   }
+  qDebug() << "LCJSFormatter open JavaScript file " << file.fileName();
 
-  QString script;
   QTextStream stream(&file);
-  script = stream.readAll();
+  /* QString script = stream.readAll(); */
+  /* file.close(); */
+  
+  QString script = createScriptHeader(_element.attributes()) + stream.readAll();
   file.close();
+  qDebug() << "Script =======================================";
 
-  QJSValue jsvalue = mpLocalData->jsengine.evaluate(
-      QString("%1 \n %2")
-      .arg(createScriptHeader(_element.attributes()))
-      .arg(script));
+  qDebug(script.toStdString().c_str());
+
+  /* QJSValue jsvalue = mpLocalData->jsengine.evaluate( */
+  /*     QString("%1 \n %2") */
+  /*     .arg(createScriptHeader(_element.attributes())) */
+  /*     .arg(script)); */
+
+  LCQJSFormatterInterface::setProperty(
+      __slPropNames.formatterInterface, mpLocalData->jsengine);
+
+  QJSValue jsvalue = mpLocalData->jsengine.evaluate(script);
 
   if(jsvalue.isError()) { emitError(jsvalue); }
 
@@ -200,9 +218,12 @@ QValidator* LCJSFormatter::validator()
 }
 
 //------------------------------------------------------------------------------
-QSharedPointer<LCJSFormatter> LCJSFormatter::create(const QDomElement& _element)
+QSharedPointer<LCJSFormatter> LCJSFormatter::create(
+    const QDomElement& _element,
+    const LIApplication& _app)
 {
-  return QSharedPointer<LCJSFormatter>(new LCJSFormatter(_element));
+  return QSharedPointer<LCJSFormatter>(
+      new LCJSFormatter(_element, _app.getProjectPath()));
 }
 
 //==============================================================================createScriptHeader
@@ -214,7 +235,7 @@ static QString createScriptHeader(const QDomNamedNodeMap& _attributes)
   for(int i = 0; i < _attributes.length(); i++)
   {
     auto node  = _attributes.item(i);
-    obj_attributes += QString("%1 : %2, \n")
+    obj_attributes += QString("%1 : '%2', \n")
       .arg(node.nodeName())
       .arg(node.nodeValue());
   }
@@ -222,11 +243,16 @@ static QString createScriptHeader(const QDomNamedNodeMap& _attributes)
   obj_attributes += "};\n";
 
   return QString(
-      "var Acceptable   = %1;"
-      "var Intermediate = %2;"
-      "var Invalid      = %3;"
-      "%4;"
-      "var DebugOut = %5.debugOut;"
+      "const Acceptable   = %1;\n"
+      "const Intermediate = %2;\n"
+      "const Invalid      = %3;\n"
+      "%4;\n"
+      "var DebugOut = %5.debugOut;\n"
+      /* "Object.freeze(Acceptable  );\n" */
+      /* "Object.freeze(Intermediate);\n" */
+      /* "Object.freeze(Invalid     );\n" */
+      "Object.freeze(DebugOut    );\n"
+      "Object.freeze(%5          );\n"
       )
     .arg(QValidator::State::Acceptable)
     .arg(QValidator::State::Intermediate)

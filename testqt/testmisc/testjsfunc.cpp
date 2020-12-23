@@ -21,7 +21,8 @@ int main(int argc, char** argv)
   QLabel* label1 = new QLabel("Label 1");
   QLineEdit* line_edit1 = new QLineEdit("0");
 
-  QString script_file_name = "../testjsfunc.js";
+  /* QString script_file_name = "../testjsfunc.js"; */
+  QString script_file_name = "../testjsdataformatter/formatter.js";
   QFile scriptFile(script_file_name);
   QString script;
 
@@ -70,6 +71,7 @@ int main(int argc, char** argv)
     .arg(-100000)
     .arg(100000)
     .arg(script) ;
+  jsengin.installExtensions(QJSEngine::AllExtensions);
 
   QJSValue jsobject = jsengin.evaluate(script);
 

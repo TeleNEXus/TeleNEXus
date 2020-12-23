@@ -25,13 +25,14 @@
 #include <QSharedPointer>
 
 class QDomElement;
+class LIApplication;
 class LCJSFormatter : public LIDataFormatter
 {
 private:
   void* mpData = nullptr;
 
   LCJSFormatter() = delete;
-  LCJSFormatter(const QDomElement& _element);
+  LCJSFormatter(const QDomElement& _element, const QString& _appPath);
 public:
   ~LCJSFormatter();
   virtual QString toString(const QByteArray& _data)override;
@@ -39,6 +40,8 @@ public:
   virtual QString fitting(const QString& _str)override;
   virtual QValidator* validator()override;
 
-  static QSharedPointer<LCJSFormatter> create(const QDomElement& _element);
+  static QSharedPointer<LCJSFormatter> create(
+      const QDomElement& _element, 
+      const LIApplication& _app);
 };
 #endif //LCJSFORMATTER_H_
