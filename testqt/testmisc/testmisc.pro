@@ -1,6 +1,7 @@
 QT += gui
 QT += widgets
 QT += qml 
+QT += script
 
 CONFIG += console c++11
 #CONFIG += c++11

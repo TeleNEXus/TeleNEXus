@@ -63,11 +63,10 @@ public:
   }
 
   //----------------------------------------------------------------------------
-  QSharedPointer<LIDataFormatter>  createFromScript(const QDomElement& _element)
+  QSharedPointer<LIDataFormatter>  createFromScript(
+      const QDomElement& _element, const LIApplication& _app)
   {
-    Q_UNUSED(_element);
-    return nullptr;
-    /* return LCJSFormatter::create(_element); */
+    return LCJSFormatter::create(_element, _app);
   }
 
   //----------------------------------------------------------------------------
@@ -78,7 +77,7 @@ public:
   }
 
   //----------------------------------------------------------------------------
-  void create(const QDomElement& _element)
+  void create(const QDomElement& _element, const LIApplication& _app)
   {
 
     QString attr_id = _element.attribute(__slAttributes.id);
@@ -96,7 +95,7 @@ public:
     }
     else if(tag == __slTags.script)
     {
-      fsp = createFromScript(_element);
+      fsp = createFromScript(_element, _app);
     }
     else if(tag == __slTags.builder)
     {
@@ -136,7 +135,8 @@ void create( const QDomElement &_element, const LIApplication& _app)
       node = node.nextSibling())
   {
     if(!node.isElement()) continue;
-    __slCreator.create(node.toElement());
+    qDebug() << "Create new " << node.nodeName() << "\tformatter";
+    __slCreator.create(node.toElement(), _app);
   }
 }
 
