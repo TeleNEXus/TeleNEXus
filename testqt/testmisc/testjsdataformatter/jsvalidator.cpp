@@ -1,5 +1,4 @@
 #include "jsvalidator.h"
-#include "jsclassfunc.h"
 #include <QDebug>
 
 LCQJsValidator::LCQJsValidator(const QJSValue& _callObject, QObject* _parent) :
@@ -30,22 +29,26 @@ LCQJsValidator::State LCQJsValidator::validate(QString& _input, int& _pos) const
   if(jsret.isNumber()) qDebug() << "JS Validatro Return is number.";
 
   qDebug() << "JS Validator Return = " << jsret.toVariant().toInt();
+  state = static_cast<State>(jsret.toInt());
 
-  switch(*static_cast<const EJSValidateState*>(jsret.toVariant().constData()))
+  switch(state)
   {
-  case EJSValidateState::acceptable:
+  case State::Acceptable:
     qDebug() << "JS Validator Return = " << "Acceptable";
     state = State::Acceptable;
     break;
 
-  case EJSValidateState::intermediate:
+  case State::Intermediate:
     qDebug() << "JS Validator Return = " << "Intermediate";
     state = State::Intermediate;
     break;
 
-  case EJSValidateState::invalid:
+  case State::Invalid:
     qDebug() << "JS Validator Return = " << "Invalid";
     state = State::Invalid;
+    break;
+  default:
+    state = State::Intermediate;
     break;
   }
 

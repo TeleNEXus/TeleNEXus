@@ -1,6 +1,10 @@
 var attributes_keys = Object.keys(Attributes);
 
-DebugOut("All attributes");
+DebugOut("All attributes------");
+DebugOut("Attrib valmin = " + Attributes.valmin);
+var asd = { x:111, y:222};
+DebugOut("asd.x = " + asd.x);
+DebugOut("asd.y = " + asd.y);
 
 for(var i = 0; i < attributes_keys.length; i++)
 {
@@ -10,12 +14,7 @@ for(var i = 0; i < attributes_keys.length; i++)
 function validate(val)
 {
   var sign = 1;
-
-  DebugOut("JS Validator valmin = " + Attributes.valmin);
-  DebugOut("JS Validator valmax = " + Attributes.valmax);
-
   if(typeof val !== "string") {return Invalid;}
-
   if(val.length === 0) return Intermediate;
 
   // var regExp = new RegExp("((^(0x){1,1})([a-fA-F0-9]*)$)|(^([0-9]*)$)");
@@ -27,15 +26,15 @@ function validate(val)
   
   if(val === "-") return Intermediate;
 
-  // var data = parseInt(val);
-  var data = parseFloat(val);
+  var data = parseInt(val);
+  // var data = parseFloat(val);
   // var data = parseDouble(val);
 
   if(isNaN(data)) {
     DebugOut("JS data is NaN!");
     return Invalid;
   }
-  data *= 0.1;
+  // data *= 0.1;
   DebugOut("JS Validator data = " + data);
 
   if((data > Attributes.valmax)||(data < Attributes.valmin)) return Invalid;

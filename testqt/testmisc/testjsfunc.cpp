@@ -37,43 +37,29 @@ int main(int argc, char** argv)
   }
 
   LJsClass *appinterface = new LJsClass;
-
-  /* LQValidateStatus* validate_status = new LQValidateStatus(); */
-
-  QString propIntermediate  = "intermediate";
-  QString propAcceptable    = "acceptable";
-  QString propInvalid       = "invalid";
-
+ 
   QJSEngine jsengin;
   QJSValue jsappinterface = jsengin.newQObject(appinterface);
-  /* QJSValue jsvalidatestatus = jsengin.newQObject(validate_status); */
   jsengin.globalObject().setProperty("APPLICATIONEXPORT", jsappinterface);
-  /* jsengin.globalObject().setProperty("EValidateStatus", jsvalidatestatus); */
-  /* QVariantMap attributes; */
-  /* attributes["min"] = QVariant(10); */
-  /* attributes["max"] = QVariant(100); */
 
-  /* jsengin.globalObject().setProperty(propIntermediate, propIntermediate); */
-  /* jsengin.globalObject().setProperty(propAcceptable, propAcceptable); */
-  /* jsengin.globalObject().setProperty(propInvalid, propInvalid); */
-  /* jsengin.globalObject().setProperty("ValidateStatus", ); */
+  QJSValue jsobject = jsengin.evaluate(QString( 
+        "var Attributes = { "
+        "valmin: %1,"
+        "valmax: %2};" 
+        "var Intermediate = %3;"
+        "var Acceptable   = %4;"
+        "var Invalid      = %5;"
+        "function DebugOut(str) {APPLICATIONEXPORT.debug(str)};"
+        ) 
+      .arg(-100)
+      .arg(100)
+      .arg(QValidator::State::Intermediate)
+      .arg(QValidator::State::Acceptable)
+      .arg(QValidator::State::Invalid));
 
-  script = QString(
-      "var Attributes = { "
-      "valmin: %1,"
-      "valmax: %2};" 
-      "var Intermediate = APPLICATIONEXPORT.Intermediate;"
-      "var Acceptable   = APPLICATIONEXPORT.Acceptable;"
-      "var Invalid      = APPLICATIONEXPORT.Invalid;"
-      "var DebugOut     = APPLICATIONEXPORT.debug;"
-      "\n %3"
-      )
-    .arg(-100000)
-    .arg(100000)
-    .arg(script) ;
-  jsengin.installExtensions(QJSEngine::AllExtensions);
+  jsengin.globalObject().setProperty("GLOBALEXPORT", jsobject);
 
-  QJSValue jsobject = jsengin.evaluate(script);
+  jsobject = jsengin.evaluate(script);
 
   if(jsobject.isError())
   {
