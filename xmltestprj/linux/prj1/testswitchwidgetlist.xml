@@ -11,9 +11,24 @@
   maxWidth="300"
   >
 
-  <item text="Table local source">
-    <table file="testtablelocalsource.xml" />
+  <item text="Test JS Formatter">
+    <widget>
+      <layout>
+        <layoutVBox>
+            <widgets>
+              <dataLabel    source="localsource"  data="bytes_int32" format="int32" />
+              <dataLineEdit source="localsource"  data="bytes_int32" formatId="scaledInt32_xxx.x" />
+              <dataLineEdit source="localsource"  data="bytes_int32" formatId="scaledInt32_xxx.x" />
+            </widgets>
+            <stretch/>
+          </layoutVBox>
+        </layout>
+      </widget>
   </item>
+
+  <!-- <item text="Table local source"> -->
+  <!--   <table file="testtablelocalsource.xml" /> -->
+  <!-- </item> -->
 
   <!-- <item text="Table local source"> -->
   <!--   <table file="testtablelocalsource.xml" /> -->

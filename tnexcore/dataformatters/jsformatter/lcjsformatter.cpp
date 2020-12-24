@@ -8,12 +8,14 @@
 #include <QFile>
 #include <QJSValue>
 #include <QJSEngine>
+#include <QSharedPointer>
 #include <QDebug>
 
 //==============================================================================__slPropNames
 static const struct
 {
-  QString formatterInterface  = "FORMATTEREXTERN";
+  QString formatterInterface  = "FORMATTERINTERFACEEXPORT";
+  QString globalExport        = "GLOBALEXPORT";
   QString attributes          = "Attributes";
   QString funcValidate        = "Validate";
   QString funcToBytes         = "ToBytes";
@@ -53,6 +55,7 @@ public:
   virtual State validate(QString& _input, int& _pos) const override
   {
     Q_UNUSED(_pos);
+
     QJSValue jsret = mCallValue.call(QJSValueList() << _input);
 
     if(jsret.isError())
@@ -61,38 +64,44 @@ public:
       return State::Intermediate;
     }
 
+    State state = static_cast<State>(jsret.toInt());
+
     if(!jsret.isNumber()) return State::Intermediate;
 
-    switch(static_cast<State>(jsret.toInt()))
+    switch(state)
     {
     case State::Acceptable:
-      /* qDebug() << "JS Validator Return = " << "Acceptable"; */
-      return State::Acceptable;
+      qDebug() << "JS Validator Return = " << "Acceptable";
+      break;
 
     case State::Intermediate:
-      /* qDebug() << "JS Validator Return = " << "Intermediate"; */
-      return State::Intermediate;
+      qDebug() << "JS Validator Return = " << "Intermediate";
+      break;
 
     case State::Invalid:
-      /* qDebug() << "JS Validator Return = " << "Invalid"; */
-      return State::Invalid;
+      qDebug() << "JS Validator Return = " << "Invalid";
+      break;
 
     default:
       return State::Intermediate;
     }
+    return state;
   }
 };
 
 //==============================================================================SLocalData
 struct SLocalData
 {
-  QJSEngine jsengine;
   CJSValidator* validator;
+  QSharedPointer<LCQJSFormatterInterface> formatterInterface;
+  QJSEngine jsengine;
   QJSValue callToString;
   QJSValue callToBytes;
   QJSValue callFitting;
-  SLocalData() :
-    validator(new CJSValidator())
+  SLocalData() = delete;
+  SLocalData(QSharedPointer<LCQJSFormatterInterface> _formatterInterface) :
+    validator(new CJSValidator()),
+    formatterInterface(_formatterInterface)
   {
   }
   ~SLocalData()
@@ -106,9 +115,9 @@ struct SLocalData
 
 //==============================================================================LCJSFormatter
 LCJSFormatter::LCJSFormatter(const QDomElement& _element,
-    const QString& _appPath)
+    const QString& _appPath):
+  mpData(new SLocalData(LCQJSFormatterInterface::create()))
 {
-  mpData = new SLocalData;
 
   QString file_name = _element.attribute(__slAttributes.file);
 
@@ -124,25 +133,29 @@ LCJSFormatter::LCJSFormatter(const QDomElement& _element,
   qDebug() << "LCJSFormatter open JavaScript file " << file.fileName();
 
   QTextStream stream(&file);
-  /* QString script = stream.readAll(); */
-  /* file.close(); */
-  
-  QString script = createScriptHeader(_element.attributes()) + stream.readAll();
+  QString script = stream.readAll();
   file.close();
+
   qDebug() << "Script =======================================";
+  auto fi = mpLocalData->formatterInterface;
 
-  qDebug(script.toStdString().c_str());
+  QJSValue jsvalue = 
+    mpLocalData->jsengine.newQObject(
+        mpLocalData->formatterInterface.data());
 
-  /* QJSValue jsvalue = mpLocalData->jsengine.evaluate( */
-  /*     QString("%1 \n %2") */
-  /*     .arg(createScriptHeader(_element.attributes())) */
-  /*     .arg(script)); */
+  mpLocalData->jsengine.globalObject().setProperty(
+      __slPropNames.formatterInterface, jsvalue);
 
-  LCQJSFormatterInterface::setProperty(
-      __slPropNames.formatterInterface, mpLocalData->jsengine);
+  jsvalue = 
+    mpLocalData->jsengine.evaluate(
+        createScriptHeader(_element.attributes()));
 
-  QJSValue jsvalue = mpLocalData->jsengine.evaluate(script);
+  mpLocalData->jsengine.globalObject().setProperty(
+      __slPropNames.globalExport, jsvalue);
 
+  jsvalue= mpLocalData->jsengine.evaluate(script);
+
+  qDebug() << "Evaluate =======================================";
   if(jsvalue.isError()) { emitError(jsvalue); }
 
   mpLocalData->validator->setCallValue(
@@ -231,35 +244,30 @@ static QString createScriptHeader(const QDomNamedNodeMap& _attributes)
 {
 
   QString obj_attributes = 
-    QString("var %1 = { \n").arg(__slPropNames.attributes);
+    QString("var %1 = { ").arg(__slPropNames.attributes);
   for(int i = 0; i < _attributes.length(); i++)
   {
     auto node  = _attributes.item(i);
-    obj_attributes += QString("%1 : '%2', \n")
+    obj_attributes += QString("%1 : '%2', ")
       .arg(node.nodeName())
       .arg(node.nodeValue());
   }
+  obj_attributes += "};";
 
-  obj_attributes += "};\n";
-
-  return QString(
-      "const Acceptable   = %1;\n"
-      "const Intermediate = %2;\n"
-      "const Invalid      = %3;\n"
-      "%4;\n"
-      "var DebugOut = %5.debugOut;\n"
-      /* "Object.freeze(Acceptable  );\n" */
-      /* "Object.freeze(Intermediate);\n" */
-      /* "Object.freeze(Invalid     );\n" */
-      "Object.freeze(DebugOut    );\n"
-      "Object.freeze(%5          );\n"
+  QString out = QString(
+      "%1"
+      "var Acceptable   = %2;"
+      "var Intermediate = %3;"
+      "var Invalid      = %4;"
+      "function DebugOut(str) {%5.debugOut(str)};"
       )
+    .arg(obj_attributes)
     .arg(QValidator::State::Acceptable)
     .arg(QValidator::State::Intermediate)
     .arg(QValidator::State::Invalid)
-    .arg(obj_attributes)
     .arg(__slPropNames.formatterInterface)
     ;
+  return out;
 }
 
 //==============================================================================emitError

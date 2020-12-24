@@ -11,11 +11,10 @@ class LCQJSFormatterInterface final: public QObject
   LCQJSFormatterInterface();
   LCQJSFormatterInterface(const LCQJSFormatterInterface&) = delete;
   LCQJSFormatterInterface& operator=(const LCQJSFormatterInterface&) = delete;
+
 public:
   ~LCQJSFormatterInterface();
-
-  LCQJSFormatterInterface& getInstance();
-  static void setProperty(const QString& _propName, QJSEngine& _jsengine);
+  static QSharedPointer<LCQJSFormatterInterface> create();
 
 public slots:
   void debugOut(const QString&);
