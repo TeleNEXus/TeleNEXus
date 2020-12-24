@@ -1,4 +1,5 @@
 #include "lcqjsformatterinterface.h"
+#include <QSharedPointer>
 #include <QDebug>
 
 
@@ -12,19 +13,28 @@ LCQJSFormatterInterface::~LCQJSFormatterInterface()
 {
 }
 
-//------------------------------------------------------------------------------
-void LCQJSFormatterInterface::setProperty(
-    const QString& _propName, QJSEngine& _jsengine)
+//==============================================================================
+void laterDeleter(QObject* _obj)
 {
+  _obj->deleteLater();
+}
 
-  static LCQJSFormatterInterface instance;
-
-  QJSValue jsappinterface = _jsengine.newQObject(&instance);
-  _jsengine.globalObject().setProperty(_propName, jsappinterface);
+//------------------------------------------------------------------------------
+QSharedPointer<LCQJSFormatterInterface> LCQJSFormatterInterface::create()
+{
+  static QWeakPointer<LCQJSFormatterInterface> wp_instance;
+  auto sp = wp_instance.lock();
+  if(sp.isNull())
+  {
+    sp = QSharedPointer<LCQJSFormatterInterface>(
+        new LCQJSFormatterInterface(),
+        laterDeleter);
+  }
+  return sp;
 }
 
 //------------------------------------------------------------------------------
 void LCQJSFormatterInterface::debugOut(const QString& _str)
 {
-  qDebug() << _str;
+  qDebug("%s", qPrintable(_str));
 }
