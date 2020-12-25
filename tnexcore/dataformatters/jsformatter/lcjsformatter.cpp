@@ -94,19 +94,21 @@ struct SLocalData
 {
   CJSValidator* validator;
   QSharedPointer<LCQJSFormatterInterface> formatterInterface;
-  QJSEngine jsengine;
+  QJSEngine *jsengine;
   QJSValue callToString;
   QJSValue callToBytes;
   QJSValue callFitting;
   SLocalData() = delete;
   SLocalData(QSharedPointer<LCQJSFormatterInterface> _formatterInterface) :
     validator(new CJSValidator()),
-    formatterInterface(_formatterInterface)
+    formatterInterface(_formatterInterface),
+    jsengine(new QJSEngine())
   {
   }
   ~SLocalData()
   {
     validator->deleteLater();
+    jsengine->deleteLater();
   }
 };
 
@@ -140,36 +142,36 @@ LCJSFormatter::LCJSFormatter(const QDomElement& _element,
   auto fi = mpLocalData->formatterInterface;
 
   QJSValue jsvalue = 
-    mpLocalData->jsengine.newQObject(
+    mpLocalData->jsengine->newQObject(
         mpLocalData->formatterInterface.data());
 
-  mpLocalData->jsengine.globalObject().setProperty(
+  mpLocalData->jsengine->globalObject().setProperty(
       __slPropNames.formatterInterface, jsvalue);
 
   jsvalue = 
-    mpLocalData->jsengine.evaluate(
+    mpLocalData->jsengine->evaluate(
         createScriptHeader(_element.attributes()));
 
-  mpLocalData->jsengine.globalObject().setProperty(
+  mpLocalData->jsengine->globalObject().setProperty(
       __slPropNames.globalExport, jsvalue);
 
-  jsvalue= mpLocalData->jsengine.evaluate(script);
+  jsvalue= mpLocalData->jsengine->evaluate(script);
 
   qDebug() << "Evaluate =======================================";
   if(jsvalue.isError()) { emitError(jsvalue); }
 
   mpLocalData->validator->setCallValue(
-      mpLocalData->jsengine.globalObject().property(
+      mpLocalData->jsengine->globalObject().property(
         __slPropNames.funcValidate));
 
   mpLocalData->callToString = 
-    mpLocalData->jsengine.globalObject().property( __slPropNames.funcToString);
+    mpLocalData->jsengine->globalObject().property( __slPropNames.funcToString);
 
   mpLocalData->callToBytes = 
-    mpLocalData->jsengine.globalObject().property( __slPropNames.funcToBytes);
+    mpLocalData->jsengine->globalObject().property( __slPropNames.funcToBytes);
 
   mpLocalData->callFitting = 
-    mpLocalData->jsengine.globalObject().property( __slPropNames.funcFitting);
+    mpLocalData->jsengine->globalObject().property( __slPropNames.funcFitting);
 }
 
 //------------------------------------------------------------------------------
@@ -181,7 +183,7 @@ LCJSFormatter::~LCJSFormatter()
 //------------------------------------------------------------------------------
 QString LCJSFormatter::toString(const QByteArray& _data)
 {
-  QJSValue jsarray = mpLocalData->jsengine.newArray(_data.size());
+  QJSValue jsarray = mpLocalData->jsengine->newArray(_data.size());
   for(int i = 0; i < _data.size(); i++)
   {
     jsarray.setProperty(i, _data[i]);

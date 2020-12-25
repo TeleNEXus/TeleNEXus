@@ -14,7 +14,7 @@ LCQJSFormatterInterface::~LCQJSFormatterInterface()
 }
 
 //==============================================================================
-void laterDeleter(QObject* _obj)
+static void laterDeleter(QObject* _obj)
 {
   _obj->deleteLater();
 }
