@@ -22,13 +22,13 @@
     <!-- min="-10000" -->
     <!-- max="10000" -->
     <!-- format="xxx.x" --> 
+    <!-- format="0000.xx" --> 
   <script
     id="scaledInt32_xxx.x"
     file="scripts/formatters/scaledInt32.js"
-    scale="0.1"
-    min="-10000"
-    max="10000"
-    format="a.a" 
+    min="-999.99"
+    max="999.99"
+    format="xxx.xx" 
     />
 
   <!-- <builder  id="int16_xx.x"         builder="formattersBuilder"       format="x.xxx" /> -->

@@ -16,10 +16,11 @@
       <layout>
         <layoutVBox>
             <widgets>
-              <dataLabel    source="localsource"  data="bytes_int32" format="int32" />
-              <dataLineEdit source="localsource"  data="bytes_int32" formatId="scaledInt32_xxx.x" />
+              <!-- <dataLabel    source="localsource"  data="bytes_int32" format="int32" /> -->
+              <!-- <dataLineEdit source="localsource"  data="bytes_int32" formatId="scaledInt32_xxx.x" /> -->
               <!-- <dataLineEdit source="localsource"  data="bytes_int32" formatId="scaledInt32_xxx.x" /> -->
               <dataLabel    source="qtslavetcp"  data="hreg[0-1]" format="int32" />
+              <dataLineEdit source="qtslavetcp"  data="hreg[0-1]" format="int32" />
               <dataLineEdit source="qtslavetcp"  data="hreg[0-1]" formatId="scaledInt32_xxx.x" />
               <!-- <dataLineEdit source="qtslavetcp"  data="hreg[0-1]" formatId="scaledInt32_xxx.x" /> -->
             </widgets>
