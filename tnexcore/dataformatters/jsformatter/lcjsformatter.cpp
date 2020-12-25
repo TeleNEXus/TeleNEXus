@@ -201,7 +201,7 @@ QByteArray LCJSFormatter::toBytes(const QString& _str)
   QJSValue jsret = mpLocalData->callToBytes.call(QJSValueList() << _str);
 
   if(!jsret.isArray()) return ret_data;
-  if(!jsret.property("length").isNumber()) return ret_data;
+  /* if(!jsret.property("length").isNumber()) return ret_data; */
 
   int array_size = jsret.property("length").toUInt();
 

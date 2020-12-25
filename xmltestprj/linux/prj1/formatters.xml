@@ -19,13 +19,17 @@
 
   <std id="hex_sparate_size_4" format="hex" size="4" separator=" " />
 
+    <!-- min="-10000" -->
+    <!-- max="10000" -->
+    <!-- format="xxx.x" --> 
   <script
     id="scaledInt32_xxx.x"
     file="scripts/formatters/scaledInt32.js"
     scale="0.1"
-    min="-100"
-    max="100"
-    format="xxx.x" />
+    min="-10000"
+    max="10000"
+    format="a.a" 
+    />
 
   <!-- <builder  id="int16_xx.x"         builder="formattersBuilder"       format="x.xxx" /> -->
 
