@@ -34,7 +34,7 @@ static void emitError(const QJSValue& _value);
 static QString createScriptHeader(const QDomNamedNodeMap& _attributes);
 
 
-//==============================================================================
+//==============================================================================CJSValidator
 class CJSValidator : public QValidator
 {
 private:
@@ -112,7 +112,7 @@ struct SLocalData
   }
 };
 
-//==============================================================================
+//==============================================================================mpLocalData
 #define mpLocalData (static_cast<SLocalData*>(mpData))
 
 //==============================================================================LCJSFormatter
@@ -188,6 +188,7 @@ QString LCJSFormatter::toString(const QByteArray& _data)
   {
     jsarray.setProperty(i, _data[i]);
   }
+
   QJSValue jsret = mpLocalData->callToString.call(QJSValueList() << jsarray);
   if(jsret.isString()) return jsret.toString();
   return QString();

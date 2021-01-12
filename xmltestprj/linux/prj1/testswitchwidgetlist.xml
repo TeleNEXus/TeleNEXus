@@ -23,6 +23,30 @@
               <dataLineEdit source="qtslavetcp"  data="hreg[0-1]" format="int32" />
               <dataLineEdit source="qtslavetcp"  data="hreg[0-1]" formatId="scaledInt32_xxx.x" />
               <!-- <dataLineEdit source="qtslavetcp"  data="hreg[0-1]" formatId="scaledInt32_xxx.x" /> -->
+
+            <dataComboBox  source="qtslavetcp" read="hreg[0-1]" formatId="scaledInt32_xxx.x">
+              <item text="On"     value="500.1"/>
+              <item text="Off"    value="500.2"/>
+              <item text="Reset"  value="500.3"/>
+              <item text="Test"   value="500.4"/>
+            </dataComboBox>
+
+            <dataLineEdit source="qtslavetcp"  data="hreg[0-1]" formatId="scaledInt32_xxxxx.xxxx" />
+
+            <dataComboBox  source="qtslavetcp" read="hreg[0-1]" formatId="scaledInt32_xxxxx.xxxx">
+              <item text="On"     value="500.1"/>
+              <item text="Off"    value="500.2"/>
+              <item text="Reset"  value="500.3"/>
+              <item text="Test"   value="500.4"/>
+            </dataComboBox>
+
+            <!-- <dataComboBox  source="qtslavetcp" read="hreg[0-1]" format="int32"> -->
+            <!--   <item text="On"     value="501"/> -->
+            <!--   <item text="Off"    value="502"/> -->
+            <!--   <item text="Reset"  value="503"/> -->
+            <!--   <item text="Test"   value="504"/> -->
+            <!-- </dataComboBox> -->
+
             </widgets>
             <stretch/>
           </layoutVBox>

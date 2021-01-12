@@ -43,11 +43,6 @@
 
 
 
-
-
-
-
-
     <FORMATTERS file="formatters.xml"/>
     
     <!-- <WINDOW id="main window 1" title="MAIN WINDOW 1" file="widgets.xml"/> -->

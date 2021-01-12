@@ -1,6 +1,39 @@
-DebugOut("Start script: scaledInt32");
-DebugOut("All attributes:");
+/* 
+ * Copyright (C) 2020 Sergey S. Kuzmenko
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with This program.  If not, see <https://www.gnu.org/licenses/>.
+ */
 
+/*------------------------------------------------------------------------------
+ * Скрипт форматирования данных типа integer 32 bit с использованием 
+ * заданного шаблона форматирования.
+ *
+ *  Передаваемые атрибуты:
+ * -------------------------------------
+ *  id      - идентификатор скрипта.
+ *  file    - файл скрипта.
+ *  min     - минимальное значение величины.
+ *  max     - максимальное значение величины.
+ *  format  - строка шаблона форматирования в виде "iii.fff" 
+ *            (i - цедая часть, f - дробная часть).
+ */
+
+
+//------------------------------------------------------------------------------
+DebugOut(">>>>>>>>>>>>>>>>>>>>>>>>>>>> Formatter Script " + Attributes.id);
+//------------------------------------------------------------------------------
+//Debug all DOM attributes.
 var attributes_keys = Object.keys(Attributes);
 
 for(var i = 0; i < attributes_keys.length; i++) {
@@ -12,7 +45,9 @@ for(var i = 0; i < attributes_keys.length; i++) {
     + "'");
 }
 
-function initValrange(){
+//------------------------------------------------------------------------------
+//Init range of value.
+var valrange = ( function() { 
   var min = -2147483648;
   var max = 2147483647;
 
@@ -20,19 +55,17 @@ function initValrange(){
   if(!isNaN(buff)){
     min = buff;
   }
+
   buff = parseFloat(Attributes.max);
   if(!isNaN(buff)){
     max = buff;
   }
   return {min : min, max : max};
-}
+})();
 
-var valrange = initValrange();
-
-DebugOut("valrange.min = " + valrange.min);
-DebugOut("valrange.max = " + valrange.max);
-
-function initFormat(){
+//------------------------------------------------------------------------------
+//Init data format.
+var gvFormat = (function () {
 
   var format = {
     intsize   : 0,
@@ -63,16 +96,48 @@ function initFormat(){
   format.scale = Math.pow(10, (-1)*format.fractsize);
   format.pow = format.fractsize;
 
-  DebugOut("scaledInt32 intsize = " + format.intsize);
-  DebugOut("scaledInt32 fractsize = " + format.fractsize);
-  DebugOut("scaledInt32 scale = " + format.scale);
-
   return format;
+})();
+
+
+//------------------------------------------------------------------------------arrayToString
+function arrayToInt(_data) {
+
+  var i = 0;
+  var res = 0;
+  for(i = 0; i < _data.length; i++)
+  {
+    res |= (_data[i]&0xff) << (8*i);
+  }
+  return res;
 }
 
-var gvFormat = initFormat();
+//------------------------------------------------------------------------------formatting
+function formatting(_input){
 
-//------------------------------------------------------------------------------Validate
+  var str = _input.toFixed(gvFormat.fractsize);
+  var len = gvFormat.intsize + gvFormat.fractsize + 1;
+  var minus = "";
+
+  if(str.charAt(0) == "-") {
+    minus = "-";
+  }
+
+  str = str.replace(/(^-){1,1}/,"");
+  if(str.length < len)
+  {
+    var addzero = "";
+    for (var i = 0; i < (len - str.length); i++)
+    {
+      addzero += "0";
+    }
+    str = addzero + str;
+  }
+  
+  return minus + str;
+}
+
+//==============================================================================Validate
 function Validate(_val){
 
   DebugOut("Validate value = " + _val);
@@ -104,78 +169,35 @@ function Validate(_val){
   return Acceptable;
 }
 
-//------------------------------------------------------------------------------ToString
-function arrayToInt(_data) {
-
-  var i = 0;
-  var res = 0;
-  for(i = 0; i < _data.length; i++)
-  {
-    res |= (_data[i]&0xff) << (8*i);
-  }
-  return res;
-}
-
-function formatting(_input){
-
-  var str = _input.toFixed(gvFormat.fractsize);
-
-  var len = gvFormat.intsize + gvFormat.fractsize + 1;
-
-  var minus = "";
-
-  if(str.charAt(0) == "-") {
-    minus = "-";
-  }
-
-  str = str.replace(/(^-){1,1}/,"");
-  if(str.length < len)
-  {
-    var addzero = "";
-    for (var i = 0; i < (len - str.length); i++)
-    {
-      addzero += "0";
-    }
-    str = addzero + str;
-  }
-  
-  return minus + str;
-}
-
-//------------------------------------------------------------------------------ToString
+//==============================================================================ToString
 function ToString(_data) {
 
-  DebugOut("ToString data = " + _data);
-
-  var res_int = arrayToInt(_data);
-
-  DebugOut("arrayToInt() = " + res_int);
-
-  res_int *= gvFormat.scale;
-
+  var res_int = arrayToInt(_data) * gvFormat.scale;
   return formatting(res_int);
 }
 
-function parseToNum(_str)
-{
-  if(gvFormat.scale === 1) return parseInt(_str);
-  return parseFloat(_str) * Math.pow(10, gvFormat.pow);
-}
-
-//------------------------------------------------------------------------------ToBytes
+//==============================================================================ToBytes
 function ToBytes(_str) {
 
   var array = [0,0,0,0];
-  var num_data = parseToNum(_str);
 
-  DebugOut("======================================================ToBytes");
-  DebugOut("int_data = " + num_data);
+  //get numeric data.
+  var num_data = (function(){
+      if(gvFormat.scale === 1) return parseInt(_str);
+      return parseFloat(_str) * Math.pow(10, gvFormat.pow);
+    })();
+
   if(isNaN(num_data)) return [];
   for (var i = 0; i < 4; i++)
   {
     array[i] = 0x000000ff & (num_data >>> (8*i));
   }
-  DebugOut("------------------------------ToBytes" + array);
   return array;
+}
+
+//==============================================================================Fitting
+function Fitting(_str)
+{
+  return ToString(ToBytes(_str));
 }
 
