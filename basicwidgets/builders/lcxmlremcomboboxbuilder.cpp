@@ -47,7 +47,7 @@ const struct
   QString dataread    = "read";
   QString datawrite   = "write";
   /* QString source      = "source"; */
-  QString format      = "format";
+  /* QString format      = "format"; */
   /* QString text        = "text"; */
   QString value       = "value";
 } __attrNames;
@@ -104,10 +104,16 @@ QWidget* LCXmlRemComboBoxBuilder::buildLocal(
   }
 
   attr = element.attribute(LCBuildersCommon::mAttributes.dataformatter);
-  format = _buildData->application.getStdDataFormatter(attr);
 
-  /* format = LCXmlStdDataFormatterFactory::instance(). */
-  /*   createStringFormatter(element.attributes()); */
+  if(attr.isNull())
+  {
+    attr  = element.attribute(LCBuildersCommon::mAttributes.dataformatterid);
+    format = _buildData->application.getDataFormatter(attr);
+  }
+  else
+  {
+    format = _buildData->application.getStdDataFormatter(attr);
+  }
 
   if(format.isNull())
   {
