@@ -31,6 +31,13 @@
     format="xxx.xx" 
     />
 
+  <script
+    id="scaledInt32_xxxxx.xxxx"
+    file="scripts/formatters/scaledInt32.js"
+    min="-999.99"
+    max="999.99"
+    format="xxxxxx.xxxx" 
+    />
   <!-- <builder  id="int16_xx.x"         builder="formattersBuilder"       format="x.xxx" /> -->
 
 </FORMATTERS>
