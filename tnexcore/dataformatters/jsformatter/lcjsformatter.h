@@ -24,7 +24,8 @@
 #include "LIDataFormatter.h"
 #include <QSharedPointer>
 
-class QDomElement;
+/* class QDomElement; */
+class QDomNamedNodeMap;
 class LIApplication;
 class LCJSFormatter : public LIDataFormatter
 {
@@ -32,16 +33,24 @@ private:
   void* mpData = nullptr;
 
   LCJSFormatter() = delete;
-  LCJSFormatter(const QDomElement& _element, const QString& _appPath);
+  LCJSFormatter(
+      const QMap<QString, QString>& _attributes,
+      const QString& _scriptId,
+      const QString& _scriptFile,
+      const QString& _appPath);
+
 public:
   ~LCJSFormatter();
-  virtual QString toString(const QByteArray& _data)override;
-  virtual QByteArray toBytes(const QString& _str)override;
-  virtual QString fitting(const QString& _str)override;
+  virtual QString     toString(const QByteArray& _data)override;
+  virtual QByteArray  toBytes(const QString& _str)override;
+  virtual QString     fitting(const QString& _str)override;
   virtual QValidator* validator()override;
 
   static QSharedPointer<LCJSFormatter> create(
-      const QDomElement& _element, 
+      const QMap<QString, QString>& _attributes,
+      const QString& _scriptId,
+      const QString& _scriptFile,
       const LIApplication& _app);
 };
+
 #endif //LCJSFORMATTER_H_
