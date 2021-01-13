@@ -31,7 +31,8 @@
 
 
 //------------------------------------------------------------------------------
-DebugOut(">>>>>>>>>>>>>>>>>>>>>>>>>>>> Formatter Script " + Attributes.id);
+DebugOut(">>>>>>>>>>>>>>>>>>>>>>>>>>>> Formatter Script " + ScriptId);
+DebugOut(">>>>>>>>>>>>>>>>>>>>>>>>>>>> Formatter Script File = " + ScriptFile);
 //------------------------------------------------------------------------------
 //Debug all DOM attributes.
 var attributes_keys = Object.keys(Attributes);

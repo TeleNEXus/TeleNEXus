@@ -41,7 +41,7 @@ static const struct
 {
   QString stdformat = "std";
   QString script    = "script";
-  QString builder   = "builder";
+  QString attributes = "attributes";
 }__slTags;
 
 static QMap<QString, QSharedPointer<LIDataFormatter>> __slFormattersMap;
@@ -64,16 +64,23 @@ public:
 
   //----------------------------------------------------------------------------
   QSharedPointer<LIDataFormatter>  createFromScript(
-      const QDomElement& _element, const LIApplication& _app)
+      const QDomNodeList& _attributeNodes, 
+      const QString& _scriptId, 
+      const QString& _scriptFile, 
+      const LIApplication& _app)
   {
-    return LCJSFormatter::create(_element, _app);
-  }
+    QMap<QString, QString> attr_map;
 
-  //----------------------------------------------------------------------------
-  QSharedPointer<LIDataFormatter>  createFromBuilder(const QDomElement& _element)
-  {
-    Q_UNUSED(_element);
-    return nullptr;
+    for(int i = 0; i < _attributeNodes.count(); i++)
+    {
+      auto attr_nodes = _attributeNodes.at(i).toElement().attributes();
+      for(int i = 0; i < attr_nodes.count(); i++)
+      {
+        QDomNode node = attr_nodes.item(i);
+        attr_map.insert(node.nodeName(), node.toAttr().value());
+      }
+    }
+    return LCJSFormatter::create(attr_map, _scriptId, _scriptFile, _app);
   }
 
   //----------------------------------------------------------------------------
@@ -82,8 +89,6 @@ public:
 
     QString attr_id = _element.attribute(__slAttributes.id);
     if(attr_id.isNull()) return;
-
-    auto attr_all = _element.attributes();
 
     QSharedPointer<LIDataFormatter> fsp;
 
@@ -95,11 +100,12 @@ public:
     }
     else if(tag == __slTags.script)
     {
-      fsp = createFromScript(_element, _app);
-    }
-    else if(tag == __slTags.builder)
-    {
-      fsp = createFromBuilder(_element);
+      QString script_file = _element.attribute(__slAttributes.file);
+      fsp = createFromScript(
+          _element.elementsByTagName(__slTags.attributes), 
+          attr_id, 
+          _element.attribute(__slAttributes.file), 
+          _app);
     }
 
     if(!fsp.isNull())
@@ -135,7 +141,6 @@ void create( const QDomElement &_element, const LIApplication& _app)
       node = node.nextSibling())
   {
     if(!node.isElement()) continue;
-    qDebug() << "Create new " << node.nodeName() << "\tformatter";
     __slCreator.create(node.toElement(), _app);
   }
 }

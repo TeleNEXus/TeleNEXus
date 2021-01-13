@@ -23,21 +23,15 @@
     <!-- max="10000" -->
     <!-- format="xxx.x" --> 
     <!-- format="0000.xx" --> 
-  <script
-    id="scaledInt32_xxx.x"
-    file="scripts/formatters/scaledInt32.js"
-    min="-999.99"
-    max="999.99"
-    format="xxx.xx" 
-    />
 
-  <script
-    id="scaledInt32_xxxxx.xxxx"
-    file="scripts/formatters/scaledInt32.js"
-    min="-999.99"
-    max="999.99"
-    format="xxxxxx.xxxx" 
-    />
+    <script id="scaledInt32_xxx.x" file="scripts/formatters/scaledInt32.js">
+      <attributes min="-999.99" max="999.99" format="xxx.xx" />
+    </script>
+
+    <script id="scaledInt32_xxxxx.xxxx" file="scripts/formatters/scaledInt32.js">
+      <attributes min="-999.99" max="999.99" format="xxxxxx.xxxx" />
+    </script>
+
   <!-- <builder  id="int16_xx.x"         builder="formattersBuilder"       format="x.xxx" /> -->
 
 </FORMATTERS>

@@ -23,15 +23,13 @@ static const struct
   QString funcFitting         = "Fitting"; 
 }__slPropNames;
 
-//==============================================================================__slAttributes
-static const struct 
-{
-  QString file = "file";
-}__slAttributes;
-
 //==============================================================================
 static void emitError(const QJSValue& _value);
-static QString createScriptHeader(const QDomNamedNodeMap& _attributes);
+
+static QString createScriptHeader(
+    const QMap<QString, QString>& _attributes,
+    const QString& _scriptId,
+    const QString& _scriptFile);
 
 
 //==============================================================================CJSValidator
@@ -116,22 +114,21 @@ struct SLocalData
 #define mpLocalData (static_cast<SLocalData*>(mpData))
 
 //==============================================================================LCJSFormatter
-LCJSFormatter::LCJSFormatter(const QDomElement& _element,
+LCJSFormatter::LCJSFormatter(
+    const QMap<QString, QString>& _attributes,
+    const QString& _scriptId,
+    const QString& _scriptFile,
     const QString& _appPath):
   mpData(new SLocalData(LCQJSFormatterInterface::create()))
 {
-
-  QString file_name = _element.attribute(__slAttributes.file);
-
-  if(file_name.isNull()) return;
-
-  QFile file(QString("%1%2").arg(_appPath).arg(file_name));
+  QFile file(QString("%1%2").arg(_appPath).arg(_scriptFile));
 
   if (!file.open(QIODevice::ReadOnly)) 
   {
     qDebug() << "LCJSFormatter can't open file " << file.fileName();
     return;
   }
+
   qDebug() << "LCJSFormatter open JavaScript file " << file.fileName();
 
   QTextStream stream(&file);
@@ -150,7 +147,7 @@ LCJSFormatter::LCJSFormatter(const QDomElement& _element,
 
   jsvalue = 
     mpLocalData->jsengine->evaluate(
-        createScriptHeader(_element.attributes()));
+        createScriptHeader(_attributes, _scriptId, _scriptFile));
 
   mpLocalData->jsengine->globalObject().setProperty(
       __slPropNames.globalExport, jsvalue);
@@ -235,35 +232,45 @@ QValidator* LCJSFormatter::validator()
 
 //------------------------------------------------------------------------------
 QSharedPointer<LCJSFormatter> LCJSFormatter::create(
-    const QDomElement& _element,
+    const QMap<QString, QString>& _attributes,
+    const QString& _scriptId,
+    const QString& _scriptFile,
     const LIApplication& _app)
 {
   return QSharedPointer<LCJSFormatter>(
-      new LCJSFormatter(_element, _app.getProjectPath()));
+      new LCJSFormatter(
+        _attributes, _scriptId, _scriptFile, _app.getProjectPath()));
 }
 
 //==============================================================================createScriptHeader
-static QString createScriptHeader(const QDomNamedNodeMap& _attributes)
+static QString createScriptHeader(
+    const QMap<QString, QString>& _attributes,
+    const QString& _scriptId,
+    const QString& _scriptFile)
 {
-
   QString obj_attributes = 
     QString("var %1 = { ").arg(__slPropNames.attributes);
-  for(int i = 0; i < _attributes.length(); i++)
+
+  for(auto it = _attributes.begin(); it != _attributes.end(); it++)
   {
-    auto node  = _attributes.item(i);
     obj_attributes += QString("%1 : '%2', ")
-      .arg(node.nodeName())
-      .arg(node.nodeValue());
+      .arg(it.key())
+      .arg(it.value());
   }
+
   obj_attributes += "};";
 
   QString out = QString(
-      "%1"
-      "var Acceptable   = %2;"
-      "var Intermediate = %3;"
-      "var Invalid      = %4;"
-      "function DebugOut(str) {%5.debugOut(str)};"
+      "var ScriptId = \"%1\";"
+      "var ScriptFile = \"%2\";"
+      "%3"
+      "var Acceptable   = %4;"
+      "var Intermediate = %5;"
+      "var Invalid      = %6;"
+      "function DebugOut(str) {%7.debugOut(str)};"
       )
+    .arg(_scriptId)
+    .arg(_scriptFile)
     .arg(obj_attributes)
     .arg(QValidator::State::Acceptable)
     .arg(QValidator::State::Intermediate)
