@@ -46,12 +46,12 @@ static const struct
 
 static QMap<QString, QSharedPointer<LIDataFormatter>> __slFormattersMap;
 
-static class CCreator
+static class CUploader
 {
 
 public:
   //----------------------------------------------------------------------------
-  CCreator()
+  CUploader()
   {
   }
 
@@ -84,7 +84,7 @@ public:
   }
 
   //----------------------------------------------------------------------------
-  void create(const QDomElement& _element, const LIApplication& _app)
+  void upload(const QDomElement& _element, const LIApplication& _app)
   {
 
     QString attr_id = _element.attribute(__slAttributes.id);
@@ -114,7 +114,7 @@ public:
     }
   }
 
-}__slCreator;
+}__slUploader;
 
 //==============================================================================xmlformatters
 namespace xmldataformatters
@@ -122,7 +122,7 @@ namespace xmldataformatters
 
 
 //------------------------------------------------------------------------------
-void create( const QDomElement &_element, const LIApplication& _app)
+void upload( const QDomElement &_element, const LIApplication& _app)
 {
   QString attr_file =  _element.attribute(__slAttributes.file);
 
@@ -131,7 +131,7 @@ void create( const QDomElement &_element, const LIApplication& _app)
     QDomElement el = _app.getDomDocument(attr_file).documentElement();
     if(!el.isNull())
     {
-      if(el.tagName() == LCXmlCommon::mBaseTags.formatters) create(el, _app);
+      if(el.tagName() == LCXmlCommon::mBaseTags.formatters) upload(el, _app);
     }
     return;
   }
@@ -141,7 +141,7 @@ void create( const QDomElement &_element, const LIApplication& _app)
       node = node.nextSibling())
   {
     if(!node.isElement()) continue;
-    __slCreator.create(node.toElement(), _app);
+    __slUploader.upload(node.toElement(), _app);
   }
 }
 

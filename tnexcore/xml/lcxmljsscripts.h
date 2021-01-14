@@ -27,19 +27,10 @@ class QDomElement;
 class LIApplication;
 class LIJScriptService;
 
-class LCXmlJScripts
+namespace xmluploadjsscripts
 {
-private:
-    LCXmlJScripts();
-    ~LCXmlJScripts();
-    LCXmlJScripts(const LCXmlJScripts&) = delete;
-    LCXmlJScripts& operator=(const LCXmlJScripts&) = delete;
-public:
-    static LCXmlJScripts& instance();
-    void load(
-        const QDomElement &_element, 
-        const LIApplication& _app);
+void upload( const QDomElement &_element, const LIApplication& _app);
+QSharedPointer<LIJScriptService> getScript(const QString& _scriptId);
+}
 
-    QSharedPointer<LIJScriptService> getScript(const QString& _scriptId);
-};
 #endif /* LCXMLWINDOWS_H_ */
