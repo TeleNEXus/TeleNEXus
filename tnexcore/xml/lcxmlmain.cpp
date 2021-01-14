@@ -405,7 +405,7 @@ static void addFormatters(const QDomElement& _rootElement)
 
   if(el.isNull()) return;
 
-  xmldataformatters::create(el, __slAppInterface);
+  xmldataformatters::upload(el, __slAppInterface);
 }
 
 //==============================================================================
@@ -458,7 +458,7 @@ static void addWindows(const QDomElement& _rootElement)
 //==============================================================================
 static void addScripts(const QDomElement& _rootElement)
 {
-  LCXmlJScripts::instance().load(
+  xmluploadjsscripts::upload(
       _rootElement.firstChildElement(LCXmlCommon::mBaseTags.scripts), 
       __slAppInterface);
 }

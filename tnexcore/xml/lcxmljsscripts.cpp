@@ -50,32 +50,18 @@ static const struct
 QMap<QString, QSharedPointer<LIJScriptService>> __slScriptMap;
 static int __slScriptCounter = 0;
 
-//==============================================================================LCXmlJScripts
-LCXmlJScripts::LCXmlJScripts()
+//==============================================================================
+namespace xmluploadjsscripts
 {
+
+//------------------------------------------------------------------------------getScript
+QSharedPointer<LIJScriptService> getScript(const QString& _scriptId)
+{
+  return __slScriptMap.find(_scriptId).value();
 }
 
-//------------------------------------------------------------------------------
-LCXmlJScripts::~LCXmlJScripts()
-{
-}
-
-//------------------------------------------------------------------------------
-LCXmlJScripts& LCXmlJScripts::instance()
-{
-    static LCXmlJScripts instance;
-    return instance;
-}
-
-//------------------------------------------------------------------------------
-QSharedPointer<LIJScriptService> LCXmlJScripts::getScript(const QString& _scriptId)
-{
-    return __slScriptMap.find(_scriptId).value();
-}
-
-void LCXmlJScripts::load(
-        const QDomElement &_element, 
-        const LIApplication& _app)
+//------------------------------------------------------------------------------upload
+void upload( const QDomElement &_element, const LIApplication& _app)
 {
   QString attr_file = _element.attribute(LCXmlCommon::mCommonAttributes.file);
   if(!attr_file.isNull())
@@ -85,7 +71,7 @@ void LCXmlJScripts::load(
     {
       if(el.tagName() == _element.tagName())
       {
-        load(el, _app);
+        upload(el, _app);
       }
     }
     return;
@@ -148,5 +134,6 @@ void LCXmlJScripts::load(
   }
 }
 
+}
 
 
