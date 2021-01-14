@@ -37,6 +37,8 @@ static const struct
   QString file = "file";
   QString interval = "interval";
   QString id = "id";
+  QString scriptId = "scriptId";
+
   struct
   {
     QString attr = "state";
@@ -59,8 +61,88 @@ static const struct
 
 //==============================================================================
 QMap<QString, QSharedPointer<LIJScriptService>> __slScriptMap;
-static int __slScriptCounter = 0;
 
+//==============================================================================scriptUpload
+static void scriptUpload(const QDomElement &_element, const LIApplication& _app)
+{
+
+  for(QDomNode node = _element.firstChildElement(__slTags.script);
+      !node.isNull();
+      node = node.nextSiblingElement(__slTags.script))
+  {
+    QDomElement el = node.toElement();
+
+    QString attr_file = el.attribute(__slAttributes.file);
+    if(attr_file.isNull()) continue;
+
+    QString attr_id = el.attribute(__slAttributes.id);
+    if(attr_id.isNull()) continue;
+
+    QString fileName = _app.getProjectPath() + attr_file;
+
+    QFile scriptFile(fileName);
+    if (!scriptFile.open(QIODevice::ReadOnly)) 
+    {
+      qDebug() << "LCXmlJScripts::load message: can't open script file " << fileName;
+      continue;
+    }
+
+    QTextStream stream(&scriptFile);
+    QString script = stream.readAll();
+    scriptFile.close();
+
+    if(script.isNull()) 
+    {
+      qDebug() << "LCXmlJScripts::load message: empty script file " << fileName;
+      continue;
+    }
+
+    auto jscriptservice = LCJScriptService::create(script);
+    __slScriptMap.insert(attr_id, jscriptservice);
+  }
+}
+
+//==============================================================================scriptLaunch
+static void scriptLaunch(const QDomElement &_element)
+{
+  for(auto el = _element.firstChildElement(__slTags.launch);
+      !el.isNull();
+      el = el.nextSiblingElement(__slTags.launch))
+  {
+    QString attr = el.attribute(__slAttributes.interval);
+    if(attr.isNull()) continue;
+
+    bool flag = false;
+    int interval = attr.toInt(&flag);
+
+    if(!flag) continue; 
+
+    attr = el.attribute(__slAttributes.scriptId);
+    if(attr.isNull()) continue;
+    
+    auto it = __slScriptMap.find(attr);
+    if(it == __slScriptMap.end()) continue;
+
+    it.value()->launch(interval);
+  }
+}
+
+//==============================================================================scriptExecute
+static void scriptExecute(const QDomElement &_element)
+{
+  for(auto el = _element.firstChildElement(__slTags.execute);
+      !el.isNull();
+      el = el.nextSiblingElement(__slTags.execute))
+  {
+    QString attr = el.attribute(__slAttributes.scriptId);
+    if(attr.isNull()) continue;
+    
+    auto it = __slScriptMap.find(attr);
+    if(it == __slScriptMap.end()) continue;
+
+    it.value()->execute();
+  }
+}
 //==============================================================================
 namespace xmluploadjsscripts
 {
@@ -88,62 +170,9 @@ void upload( const QDomElement &_element, const LIApplication& _app)
     return;
   }
 
-  for(QDomNode node = _element.firstChildElement(__slTags.script);
-      !node.isNull();
-      node = node.nextSiblingElement(__slTags.script))
-  {
-    QDomElement el = node.toElement();
-    QString attr = el.attribute(__slAttributes.file);
-    if(attr.isNull()) continue;
-
-    QString fileName = _app.getProjectPath() + attr;
-    QFile scriptFile(fileName);
-    if (!scriptFile.open(QIODevice::ReadOnly)) 
-    {
-      qDebug() << "LCXmlJScripts::load message: can't open script file " << fileName;
-      continue;
-    }
-
-    QTextStream stream(&scriptFile);
-    QString script = stream.readAll();
-    scriptFile.close();
-
-    if(script.isNull()) 
-    {
-      qDebug() << "LCXmlJScripts::load message: empty script file " << fileName;
-      continue;
-    }
-
-    int interval = 0;
-    attr = el.attribute(__slAttributes.interval);
-    if(!attr.isNull())
-    {
-      bool flag = false;
-      interval = attr.toInt(&flag);
-      if(!flag)
-      {
-        interval = 0;
-      }
-    }
-
-    auto jscriptservice = LCJScriptService::create(script, _app, interval);
-
-    attr = el.attribute(__slAttributes.id);
-    if(attr.isNull())
-    {
-      attr = QString("%1").arg(__slScriptCounter);
-    }
-    __slScriptMap.insert(attr, jscriptservice);
-    __slScriptCounter++;
-    attr = el.attribute(__slAttributes.state.attr);
-    if(!attr.isNull())
-    {
-      if(attr == __slAttributes.state.vals.start)
-      {
-        jscriptservice->launch();
-      }
-    }
-  }
+  scriptUpload(_element, _app);
+  scriptLaunch(_element);
+  scriptExecute(_element);
 }
 
 }

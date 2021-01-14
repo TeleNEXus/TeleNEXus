@@ -2,17 +2,22 @@
 
 <SCRIPTS>
 
-  <script id="testwrite1" file="scripts/writedatatosource1.js">
-    <attributes message1="Script message 1"/>
-    <attributes message2="Script message 2"/>
-    <attributes message3="Script message 3"/>
-  </script>
+  <script id="testwrite" file="scripts/writedatatosource.js"/>
 
-  <launch scriptId="testwrite1" interval="500"/> 
-  <execute scriptId="testwrite1"/>
+  <launch scriptId="testwrite" interval="500"/> 
+  <execute scriptId="testwrite" /> 
+
+  <!-- <script id="testwrite1" file="scripts/writedatatosource1.js"> -->
+  <!--   <attributes message1="Script message 1"/> -->
+  <!--   <attributes message2="Script message 2"/> -->
+  <!--   <attributes message3="Script message 3"/> -->
+  <!-- </script> -->
+
+  <!-- <execute scriptId="testwrite1"/> -->
+
+
 
   <!-- <script file="scripts/readsourcedata.js" interval="500" state="start"/> -->
-
 
   <!-- <script file="scripts/writedatatosource.js"  interval="500" state="start"/> -->
 

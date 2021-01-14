@@ -31,18 +31,15 @@ class LCJScriptService : public LIJScriptService
 private:
   void* mpData;
   LCJScriptService() = delete;
-  explicit LCJScriptService(const QString& _script, int _interval = -1);
+  explicit LCJScriptService(const QString& _script);
 public:
   virtual ~LCJScriptService();
 
-  static QSharedPointer<LIJScriptService> create(
-      const QString& _script, 
-      const LIApplication& _app,
-      int _interval = -1);
+  static QSharedPointer<LIJScriptService> create(const QString& _script);
 
-  virtual void launch() override;
-  virtual void halt() override;
-  virtual void execute() override {};
+  virtual void launch(int _interval) override;
+  virtual void stop() override;
+  virtual void execute() override;
 };
 
 #endif //LCJSCRIPTSERVICE_H_

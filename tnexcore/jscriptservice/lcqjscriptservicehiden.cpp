@@ -102,7 +102,7 @@ void LCQJScriptHiden::timerEvent(QTimerEvent* _event)
 }
 
 //------------------------------------------------------------------------------
-void LCQJScriptHiden::start(int _interval)
+void LCQJScriptHiden::launch(int _interval)
 {
   QCoreApplication::postEvent(this, new CEventStart(_interval));
 }
