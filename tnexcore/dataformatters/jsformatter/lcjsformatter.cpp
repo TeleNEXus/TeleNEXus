@@ -26,7 +26,7 @@ static const struct
 //==============================================================================
 static void emitError(const QJSValue& _value);
 
-static QString createScriptHeader(
+static QString createScriptGlobal(
     const QMap<QString, QString>& _attributes,
     const QString& _scriptId,
     const QString& _scriptFile);
@@ -147,7 +147,7 @@ LCJSFormatter::LCJSFormatter(
 
   jsvalue = 
     mpLocalData->jsengine->evaluate(
-        createScriptHeader(_attributes, _scriptId, _scriptFile));
+        createScriptGlobal(_attributes, _scriptId, _scriptFile));
 
   mpLocalData->jsengine->globalObject().setProperty(
       __slPropNames.globalExport, jsvalue);
@@ -199,7 +199,6 @@ QByteArray LCJSFormatter::toBytes(const QString& _str)
   QJSValue jsret = mpLocalData->callToBytes.call(QJSValueList() << _str);
 
   if(!jsret.isArray()) return ret_data;
-  /* if(!jsret.property("length").isNumber()) return ret_data; */
 
   int array_size = jsret.property("length").toUInt();
 
@@ -242,8 +241,8 @@ QSharedPointer<LCJSFormatter> LCJSFormatter::create(
         _attributes, _scriptId, _scriptFile, _app.getProjectPath()));
 }
 
-//==============================================================================createScriptHeader
-static QString createScriptHeader(
+//==============================================================================createScriptGlobal
+static QString createScriptGlobal(
     const QMap<QString, QString>& _attributes,
     const QString& _scriptId,
     const QString& _scriptFile)
