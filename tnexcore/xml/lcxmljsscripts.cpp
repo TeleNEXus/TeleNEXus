@@ -18,8 +18,8 @@
  * You should have received a copy of the GNU General Public License
  * along with TeleNEXus.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 #include "lcxmljsscripts.h"
-#include "lcxmlcommon.h"
 #include "lcjscriptservice.h"
 
 #include "LIJScriptService.h"
@@ -32,9 +32,11 @@
 #include <QFile>
 
 
-//==============================================================================
 static const struct
 {
+  QString file = "file";
+  QString interval = "interval";
+  QString id = "id";
   struct
   {
     QString attr = "state";
@@ -44,7 +46,16 @@ static const struct
       QString stop = "stop";
     }vals;
   }state;
-}__slAttr;
+
+}__slAttributes;
+
+static const struct
+{
+  QString script      = "script";
+  QString attributes  = "attributes";
+  QString launch      = "launch";
+  QString execute     = "execute";
+}__slTags;
 
 //==============================================================================
 QMap<QString, QSharedPointer<LIJScriptService>> __slScriptMap;
@@ -63,7 +74,7 @@ QSharedPointer<LIJScriptService> getScript(const QString& _scriptId)
 //------------------------------------------------------------------------------upload
 void upload( const QDomElement &_element, const LIApplication& _app)
 {
-  QString attr_file = _element.attribute(LCXmlCommon::mCommonAttributes.file);
+  QString attr_file = _element.attribute(__slAttributes.file);
   if(!attr_file.isNull())
   {
     QDomElement el = _app.getDomDocument(attr_file).documentElement();
@@ -77,12 +88,12 @@ void upload( const QDomElement &_element, const LIApplication& _app)
     return;
   }
 
-  for(QDomNode node = _element.firstChildElement(LCXmlCommon::mCommonTags.script);
+  for(QDomNode node = _element.firstChildElement(__slTags.script);
       !node.isNull();
-      node = node.nextSiblingElement(LCXmlCommon::mCommonTags.script))
+      node = node.nextSiblingElement(__slTags.script))
   {
     QDomElement el = node.toElement();
-    QString attr = el.attribute(LCXmlCommon::mCommonAttributes.file);
+    QString attr = el.attribute(__slAttributes.file);
     if(attr.isNull()) continue;
 
     QString fileName = _app.getProjectPath() + attr;
@@ -103,9 +114,8 @@ void upload( const QDomElement &_element, const LIApplication& _app)
       continue;
     }
 
-    LCJScriptService* p_jsscript = nullptr;
     int interval = 0;
-    attr = el.attribute(LCXmlCommon::mCommonAttributes.interval);
+    attr = el.attribute(__slAttributes.interval);
     if(!attr.isNull())
     {
       bool flag = false;
@@ -115,20 +125,22 @@ void upload( const QDomElement &_element, const LIApplication& _app)
         interval = 0;
       }
     }
-    p_jsscript  = new LCJScriptService(script, interval);
-    attr = el.attribute(LCXmlCommon::mCommonAttributes.id);
+
+    auto jscriptservice = LCJScriptService::create(script, _app, interval);
+
+    attr = el.attribute(__slAttributes.id);
     if(attr.isNull())
     {
       attr = QString("%1").arg(__slScriptCounter);
     }
-    __slScriptMap.insert(attr, QSharedPointer<LIJScriptService>(p_jsscript));
+    __slScriptMap.insert(attr, jscriptservice);
     __slScriptCounter++;
-    attr = el.attribute(__slAttr.state.attr);
+    attr = el.attribute(__slAttributes.state.attr);
     if(!attr.isNull())
     {
-      if(attr == __slAttr.state.vals.start)
+      if(attr == __slAttributes.state.vals.start)
       {
-        p_jsscript->start();
+        jscriptservice->launch();
       }
     }
   }

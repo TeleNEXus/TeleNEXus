@@ -26,8 +26,12 @@ class LIJScriptService
 public:
   LIJScriptService(){}
   virtual ~LIJScriptService(){}
-  virtual void start() = 0;
-  virtual void stop() = 0;
+  virtual void launch() = 0;
+  virtual void halt() = 0;
+  virtual void execute() = 0;
+
+  /* virtual void start() = 0; */
+  /* virtual void stop() = 0; */
 };
 
 #endif //LIJSCRIPTSERVICE_H_

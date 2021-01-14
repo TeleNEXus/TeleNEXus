@@ -57,13 +57,22 @@ LCJScriptService::~LCJScriptService()
 }
 
 //------------------------------------------------------------------------------
-void LCJScriptService::start() 
+QSharedPointer<LIJScriptService> LCJScriptService::create(
+    const QString& _script, 
+    const LIApplication& _app,
+    int _interval)
+{
+  return QSharedPointer<LCJScriptService>(
+      new LCJScriptService(_script, _interval));
+}
+//------------------------------------------------------------------------------
+void LCJScriptService::launch() 
 {
   mpPrivateData->mpScriptHiden->start(mpPrivateData->mInterval);
 }
 
 //------------------------------------------------------------------------------
-void LCJScriptService::stop() 
+void LCJScriptService::halt() 
 {
   mpPrivateData->mpScriptHiden->stop();
 }
