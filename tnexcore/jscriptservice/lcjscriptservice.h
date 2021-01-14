@@ -22,17 +22,27 @@
 
 #include "LIJScriptService.h"
 #include <QString>
+#include <QSharedPointer>
+
+class LIApplication;
 
 class LCJScriptService : public LIJScriptService
 {
 private:
   void* mpData;
-public:
   LCJScriptService() = delete;
   explicit LCJScriptService(const QString& _script, int _interval = -1);
+public:
   virtual ~LCJScriptService();
-  virtual void start() override;
-  virtual void stop() override;
+
+  static QSharedPointer<LIJScriptService> create(
+      const QString& _script, 
+      const LIApplication& _app,
+      int _interval = -1);
+
+  virtual void launch() override;
+  virtual void halt() override;
+  virtual void execute() override {};
 };
 
 #endif //LCJSCRIPTSERVICE_H_

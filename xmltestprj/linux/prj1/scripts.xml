@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <SCRIPTS>
+
+  <script id="testwrite1" file="scripts/writedatatosource1.js">
+    <attributes message1="Script message 1"/>
+    <attributes message2="Script message 2"/>
+    <attributes message3="Script message 3"/>
+  </script>
+
+  <launch scriptId="testwrite1" interval="500"/> 
+  <execute scriptId="testwrite1"/>
+
   <!-- <script file="scripts/readsourcedata.js" interval="500" state="start"/> -->
 
 
