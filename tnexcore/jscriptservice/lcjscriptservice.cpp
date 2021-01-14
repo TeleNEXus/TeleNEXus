@@ -29,11 +29,9 @@
 //==============================================================================
 struct SPrivateData
 {
-  int mInterval;
   LCQJScriptHiden* mpScriptHiden;
 
-  SPrivateData(const QString& _script, int _interval):
-    mInterval(_interval),
+  SPrivateData(const QString& _script):
     mpScriptHiden(new LCQJScriptHiden(_script)){}
   ~SPrivateData()
   {
@@ -45,8 +43,8 @@ struct SPrivateData
 #define mpPrivateData (static_cast<SPrivateData*>(mpData))
 
 //==============================================================================
-LCJScriptService::LCJScriptService(const QString& _script, int _interval)  :
-  mpData( new SPrivateData(_script, _interval) )
+LCJScriptService::LCJScriptService(const QString& _script)  :
+  mpData( new SPrivateData(_script) )
 {
 }
 
@@ -58,23 +56,25 @@ LCJScriptService::~LCJScriptService()
 
 //------------------------------------------------------------------------------
 QSharedPointer<LIJScriptService> LCJScriptService::create(
-    const QString& _script, 
-    const LIApplication& _app,
-    int _interval)
+    const QString& _script)
 {
-  return QSharedPointer<LCJScriptService>(
-      new LCJScriptService(_script, _interval));
-}
-//------------------------------------------------------------------------------
-void LCJScriptService::launch() 
-{
-  mpPrivateData->mpScriptHiden->start(mpPrivateData->mInterval);
+  return QSharedPointer<LCJScriptService>( new LCJScriptService(_script) );
 }
 
 //------------------------------------------------------------------------------
-void LCJScriptService::halt() 
+void LCJScriptService::launch(int _interval) 
+{
+  mpPrivateData->mpScriptHiden->launch(_interval);
+}
+
+//------------------------------------------------------------------------------
+void LCJScriptService::stop() 
 {
   mpPrivateData->mpScriptHiden->stop();
 }
 
-
+//------------------------------------------------------------------------------
+void LCJScriptService::execute() 
+{
+  mpPrivateData->mpScriptHiden->evaluate();
+}

@@ -84,7 +84,7 @@ public:
   virtual ~LCQJScriptHiden();
   virtual void customEvent(QEvent* _event) override;
   virtual void timerEvent(QTimerEvent*) override;
-  void start(int interval);
+  void launch(int interval);
   void stop();
   void evaluate();
 
