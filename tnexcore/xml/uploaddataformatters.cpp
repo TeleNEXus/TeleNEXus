@@ -18,7 +18,8 @@
  * You should have received a copy of the GNU General Public License
  * along with TeleNEXus.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include <xmldataformatters.h>
+
+#include "uploaddataformatters.h"
 #include "LIApplication.h"
 #include "LIDataFormatter.h"
 #include "lcxmlcommon.h"
@@ -127,8 +128,8 @@ public:
 
 }__slUploader;
 
-//==============================================================================xmlformatters
-namespace xmldataformatters
+//==============================================================================uploaddataformatters
+namespace uploaddataformatters
 {
 
 

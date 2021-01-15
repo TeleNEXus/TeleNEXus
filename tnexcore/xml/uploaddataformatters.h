@@ -18,8 +18,8 @@
  * You should have received a copy of the GNU General Public License
  * along with TeleNEXus.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef XMLFORMATTERS_H_
-#define XMLFORMATTERS_H_
+#ifndef UPLOADDATAFORMATTERS_H_
+#define UPLOADDATAFORMATTERS_H_
 
 #include <QSharedPointer>
 
@@ -27,7 +27,7 @@ class QDomElement;
 class LIApplication;
 class LIDataFormatter;
 
-namespace xmldataformatters
+namespace uploaddataformatters
 {
 //------------------------------------------------------------------------------
 extern void upload( const QDomElement &_element, const LIApplication& _app);
@@ -35,4 +35,4 @@ extern void upload( const QDomElement &_element, const LIApplication& _app);
 extern QSharedPointer<LIDataFormatter> getDataFormatter(const QString& _formatterId);
 }
 
-#endif  //LCXMLFORMATTERS_H_
+#endif  //UPLOADDATAFORMATTERS_H_

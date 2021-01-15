@@ -27,12 +27,12 @@
 #include "lcxmlwidgetbuilders.h"
 #include "lcxmlwindows.h"
 #include "lcxmlfonts.h"
-#include "lcxmljsscripts.h"
 
 #include "LIRemoteDataReader.h"
 #include "LIRemoteDataSource.h"
 #include "lcxmlformatterfactory.h"
-#include "xmldataformatters.h"
+#include "uploaddataformatters.h"
+#include "uploadjscripts.h"
 
 #include <QDebug>
 #include <QApplication>
@@ -135,7 +135,7 @@ public:
   virtual QSharedPointer<LIDataFormatter> 
     getDataFormatter(const QString& _formatterId) const override
     {
-      return xmldataformatters::getDataFormatter(_formatterId);
+      return uploaddataformatters::getDataFormatter(_formatterId);
     }
 };
 
@@ -407,7 +407,7 @@ static void addFormatters(const QDomElement& _rootElement)
 
   if(el.isNull()) return;
 
-  xmldataformatters::upload(el, __slAppInterface);
+  uploaddataformatters::upload(el, __slAppInterface);
 }
 
 //==============================================================================
@@ -460,7 +460,7 @@ static void addWindows(const QDomElement& _rootElement)
 //==============================================================================
 static void addScripts(const QDomElement& _rootElement)
 {
-  xmluploadjsscripts::upload(
+  uploadjscripts::upload(
       _rootElement.firstChildElement(LCXmlCommon::mBaseTags.scripts), 
       __slAppInterface);
 }

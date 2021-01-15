@@ -18,8 +18,8 @@
  * You should have received a copy of the GNU General Public License
  * along with TeleNEXus.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef LCXMLAPPLICATION_H
-#define LCXMLAPPLICATION_H
+#ifndef TELENEXUS_H_
+#define TELENEXUS_H_
 
 #include <QString>
 #include <QDir>
@@ -32,4 +32,4 @@ extern const LIApplication& getApplicationInterface();
 extern int exec(int argc, char *argv[]);
 }
 
-#endif // LCXMLAPPLICATION_H
+#endif // TELENEXUS_H_
