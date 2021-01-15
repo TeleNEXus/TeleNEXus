@@ -26,7 +26,13 @@
 #include <QCoreApplication>
 #include <QSharedPointer>
 
-static const QString __slApplicationProp = "Application";
+//==============================================================================
+static const struct
+{
+  QString applicationGlobalExport = "APPLICATIONGLOBALEXPORT";
+  QString attributes = "Attributes";
+  QString scriptMain = "Main";
+}__slPropNames;
 
 //==============================================================================CEventBase
 __LQ_EXTENDED_QEVENT_IMPLEMENTATION(LCQJScriptHiden::CEventBase);
@@ -44,7 +50,7 @@ LCQJScriptHiden::CEventStart::CEventStart(int _interval) : mInterval(_interval)
 //------------------------------------------------------------------------------
 void LCQJScriptHiden::CEventStart::handle(LCQJScriptHiden* _sender)
 {
-  _sender->scriptEvaluate();
+  _sender->scriptExecute();
   if(mInterval <= 0) { return; }
   _sender->timerStart(mInterval);
 }
@@ -60,28 +66,38 @@ void LCQJScriptHiden::CEventStop::handle(LCQJScriptHiden* _sender)
   _sender->timerStop();
 }
 
-//==============================================================================CEventEvaluate
-LCQJScriptHiden::CEventEvaluate::CEventEvaluate()
+//==============================================================================CEventExecute
+LCQJScriptHiden::CEventExecute::CEventExecute()
 {
 }
 
 //------------------------------------------------------------------------------
-void LCQJScriptHiden::CEventEvaluate::handle(LCQJScriptHiden* _sender)
+void LCQJScriptHiden::CEventExecute::handle(LCQJScriptHiden* _sender)
 {
-  _sender->scriptEvaluate();
+  _sender->scriptExecute();
 }
 
 //==============================================================================LCQJScriptHiden
-LCQJScriptHiden::LCQJScriptHiden(const QString& _script, QObject* _parent) : 
+static QString createScriptGlobal(QMap<QString, QString> _attrMap);
+
+LCQJScriptHiden::LCQJScriptHiden(
+    const QString& _script, 
+    const QMap<QString, QString>& _attributes,
+    QObject* _parent) : 
   QObject(_parent),
   mScriptString(_script),
   mpThread(new QThread),
   mTimerId(0)
 {
   moveToThread(mpThread);
+  QJSValue jsvalue = mJSEngin.newQObject(new LCQJSAppInterface);
+  mJSEngin.globalObject().setProperty(
+      __slPropNames.applicationGlobalExport, jsvalue);
 
-  mJSValue = mJSEngin.newQObject(new LCQJSAppInterface);
-  mJSEngin.globalObject().setProperty(__slApplicationProp, mJSValue);
+  jsvalue = mJSEngin.evaluate( createScriptGlobal(_attributes) );
+
+  mJSEngin.evaluate(_script);
+  mCallScriptMain = mJSEngin.globalObject().property(__slPropNames.scriptMain);
 
   mpThread->start();
 }
@@ -98,7 +114,7 @@ LCQJScriptHiden::~LCQJScriptHiden()
 void LCQJScriptHiden::timerEvent(QTimerEvent* _event)
 {
   Q_UNUSED(_event);
-  scriptEvaluate();
+  scriptExecute();
 }
 
 //------------------------------------------------------------------------------
@@ -114,9 +130,9 @@ void LCQJScriptHiden::stop()
 }
 
 //------------------------------------------------------------------------------
-void LCQJScriptHiden::evaluate()
+void LCQJScriptHiden::execute()
 {
-  QCoreApplication::postEvent(this, new CEventEvaluate());
+  QCoreApplication::postEvent(this, new CEventExecute());
 }
 
 //------------------------------------------------------------------------------
@@ -139,9 +155,11 @@ void LCQJScriptHiden::timerStop()
 }
 
 //------------------------------------------------------------------------------
-void LCQJScriptHiden::scriptEvaluate()
+void LCQJScriptHiden::scriptExecute()
 {
-  QJSValue result = mJSEngin.evaluate(mScriptString);
+  /* QJSValue result = mJSEngin.evaluate(mScriptString); */
+  QJSValue result = mCallScriptMain.call();
+  qDebug() << "LCQJScriptHiden::scriptExecute";
   if (result.isError())
     qDebug()
       << "Script uncaught exception at line"
@@ -161,4 +179,31 @@ void LCQJScriptHiden::customEvent(QEvent* _event)
     }
     e->handle(this);
   }
+}
+
+//==============================================================================
+static QString createScriptGlobal(QMap<QString, QString> _attrMap)
+{
+  QString obj_attributes = 
+    QString("var %1 = { ").arg(__slPropNames.attributes);
+
+  for(auto it = _attrMap.begin(); it != _attrMap.end(); it++)
+  {
+    obj_attributes += QString("%1 : '%2', ")
+      .arg(it.key())
+      .arg(it.value());
+  }
+
+  obj_attributes += "};";
+
+  return QString(
+      "%1"
+      "function DebugOut(str) {%2.debugOut(str)};"
+      "function DataSourceRead(_sourceId, _dataId) {"
+      "return %2.readData(_sourceId, _dataId)};"
+      "function DataSourceWrite(_sourceId, _dataId, _data) {"
+      "return %2.writeData(_sourceId, _dataId, _data)};"
+      )
+    .arg(obj_attributes)
+    .arg(__slPropNames.applicationGlobalExport);
 }
