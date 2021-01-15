@@ -19,7 +19,7 @@
  * along with TeleNEXus.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include "lcqreadfromsourcereq.h"
-#include "lcxmlmain.h"
+#include "tnex.h"
 #include "LIApplication.h"
 
 #include <QCoreApplication>

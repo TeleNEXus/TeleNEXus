@@ -22,7 +22,7 @@
 #include "lcqreadfromsourcereq.h"
 #include "lcqwritetosourcereq.h"
 #include "LIApplication.h"
-#include "lcxmlmain.h"
+#include "tnex.h"
 
 #include <QMutex>
 #include <QThread>
