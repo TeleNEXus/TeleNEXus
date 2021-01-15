@@ -2,6 +2,9 @@
 
 <SCRIPTS>
 
+  <script id="testwrite1" file="scripts/writedatatosource.js">
+  </script>
+
   <script id="testattr1" file="scripts/testattributes.js">
     <attributes 
       message1="Test message 1"
@@ -18,6 +21,7 @@
     <attributes newMessage="testattr2 script new message"/>
   </script>
 
+  <launch scriptId="testwrite1" interval="500"/>
   <launch scriptId="testattr1" interval="500"/> 
   <!-- <launch scriptId="testattr2" interval="500"/> --> 
   <!-- <execute scriptId="testattr" /> --> 
