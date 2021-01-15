@@ -42,7 +42,7 @@ LCQWriteToSource::CEventWrite::CEventWrite()
 void LCQWriteToSource::CEventWrite::handle(LCQWriteToSource* _sender)
 {
   auto source = 
-    LCXmlMain::getApplicationInterface().getDataSource(_sender->mSourceId);
+    tnex::getApplicationInterface().getDataSource(_sender->mSourceId);
   if(source.isNull()) 
   {
     _sender->mWaitCond.wakeOne();

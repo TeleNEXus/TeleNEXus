@@ -22,6 +22,6 @@
 
 int main(int argc, char *argv[])
 {
-    return LCXmlMain::instance().exec(argc, argv);
+    return tnex::exec(argc, argv);
 }
 
