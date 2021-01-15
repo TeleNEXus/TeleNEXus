@@ -18,6 +18,7 @@ public:
 
 public slots:
   void debugOut(const QString&);
+  void exportModule(const QString& _moduleFileName);
 
 };
 #endif  //LCQJSFORMATTERINTERFACE_H_

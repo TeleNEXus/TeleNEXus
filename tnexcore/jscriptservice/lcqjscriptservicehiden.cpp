@@ -31,7 +31,7 @@ static const struct
 {
   QString applicationGlobalExport = "APPLICATIONGLOBALEXPORT";
   QString attributes = "Attributes";
-  QString scriptMain = "Main";
+  QString callScriptMain = "Main";
 }__slPropNames;
 
 //==============================================================================CEventBase
@@ -79,25 +79,30 @@ void LCQJScriptHiden::CEventExecute::handle(LCQJScriptHiden* _sender)
 
 //==============================================================================LCQJScriptHiden
 static QString createScriptGlobal(QMap<QString, QString> _attrMap);
+static void emitError(const QJSValue& _value);
 
 LCQJScriptHiden::LCQJScriptHiden(
     const QString& _script, 
-    const QMap<QString, QString>& _attributes,
-    QObject* _parent) : 
-  QObject(_parent),
-  mScriptString(_script),
+    const QMap<QString, QString>& _attributesMap) : 
+  QObject(nullptr),
   mpThread(new QThread),
   mTimerId(0)
 {
   moveToThread(mpThread);
+
   QJSValue jsvalue = mJSEngin.newQObject(new LCQJSAppInterface);
+
   mJSEngin.globalObject().setProperty(
       __slPropNames.applicationGlobalExport, jsvalue);
 
-  jsvalue = mJSEngin.evaluate( createScriptGlobal(_attributes) );
+  jsvalue = mJSEngin.evaluate( createScriptGlobal(_attributesMap) );
+
+  if(jsvalue.isError()) { emitError(jsvalue);}
 
   mJSEngin.evaluate(_script);
-  mCallScriptMain = mJSEngin.globalObject().property(__slPropNames.scriptMain);
+
+  mCallScriptMain = mJSEngin.globalObject().property(
+      __slPropNames.callScriptMain);
 
   mpThread->start();
 }
@@ -157,14 +162,8 @@ void LCQJScriptHiden::timerStop()
 //------------------------------------------------------------------------------
 void LCQJScriptHiden::scriptExecute()
 {
-  /* QJSValue result = mJSEngin.evaluate(mScriptString); */
   QJSValue result = mCallScriptMain.call();
-  qDebug() << "LCQJScriptHiden::scriptExecute";
-  if (result.isError())
-    qDebug()
-      << "Script uncaught exception at line"
-      << result.property("lineNumber").toInt()
-      << ":" << result.toString();
+  if(result.isError()) { emitError(result);}
 }
 
 //------------------------------------------------------------------------------
@@ -181,7 +180,7 @@ void LCQJScriptHiden::customEvent(QEvent* _event)
   }
 }
 
-//==============================================================================
+//==============================================================================createScriptGlobal
 static QString createScriptGlobal(QMap<QString, QString> _attrMap)
 {
   QString obj_attributes = 
@@ -203,7 +202,20 @@ static QString createScriptGlobal(QMap<QString, QString> _attrMap)
       "return %2.readData(_sourceId, _dataId)};"
       "function DataSourceWrite(_sourceId, _dataId, _data) {"
       "return %2.writeData(_sourceId, _dataId, _data)};"
+      "var ScriptId = \"%3\";"
+      "var ScriptFile = \"%4\";"
       )
     .arg(obj_attributes)
-    .arg(__slPropNames.applicationGlobalExport);
+    .arg(__slPropNames.applicationGlobalExport)
+    .arg(QString())
+    .arg(QString());
+}
+
+//==============================================================================emitError
+static void emitError(const QJSValue& _value)
+{
+  qDebug() 
+    << "Uncaught exception at line"
+    << _value.property("lineNumber").toInt()
+    << ":" << _value.toString();
 }

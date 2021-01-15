@@ -3,6 +3,12 @@
 #include <QDebug>
 
 
+//==============================================================================laterDeleter
+static void laterDeleter(QObject* _obj)
+{
+  _obj->deleteLater();
+}
+
 //==============================================================================LCQJSFormatterInterface
 LCQJSFormatterInterface::LCQJSFormatterInterface()
 {
@@ -13,11 +19,6 @@ LCQJSFormatterInterface::~LCQJSFormatterInterface()
 {
 }
 
-//==============================================================================
-static void laterDeleter(QObject* _obj)
-{
-  _obj->deleteLater();
-}
 
 //------------------------------------------------------------------------------
 QSharedPointer<LCQJSFormatterInterface> LCQJSFormatterInterface::create()
@@ -37,4 +38,9 @@ QSharedPointer<LCQJSFormatterInterface> LCQJSFormatterInterface::create()
 void LCQJSFormatterInterface::debugOut(const QString& _str)
 {
   qDebug("%s", qPrintable(_str));
+}
+
+//------------------------------------------------------------------------------
+void LCQJSFormatterInterface::exportModule(const QString& _moduleFileName)
+{
 }

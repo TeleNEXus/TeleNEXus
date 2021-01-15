@@ -34,10 +34,8 @@ private:
 
   LCJSFormatter() = delete;
   LCJSFormatter(
-      const QMap<QString, QString>& _attributes,
-      const QString& _scriptId,
-      const QString& _scriptFile,
-      const QString& _appPath);
+      const QString& _script,
+      const QMap<QString, QString>& _attributes);
 
 public:
   ~LCJSFormatter();
@@ -47,10 +45,8 @@ public:
   virtual QValidator* validator()override;
 
   static QSharedPointer<LCJSFormatter> create(
-      const QMap<QString, QString>& _attributes,
-      const QString& _scriptId,
-      const QString& _scriptFile,
-      const LIApplication& _app);
+      const QString& _script,
+      const QMap<QString, QString>& _attributes);
 };
 
 #endif //LCJSFORMATTER_H_

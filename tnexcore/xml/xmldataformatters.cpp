@@ -29,6 +29,7 @@
 #include <QDomElement>
 #include <QMap>
 #include <QDebug>
+#include <QFile>
 
 static const struct
 {
@@ -65,10 +66,17 @@ public:
   //----------------------------------------------------------------------------
   QSharedPointer<LIDataFormatter>  createFromScript(
       const QDomNodeList& _attributeNodes, 
-      const QString& _scriptId, 
-      const QString& _scriptFile, 
-      const LIApplication& _app)
+      const QString& _scriptFile)
   {
+
+    QFile file(_scriptFile);
+
+    if (!file.open(QIODevice::ReadOnly)) { return nullptr; }
+
+    QTextStream stream(&file);
+    QString scriptString = stream.readAll();
+    file.close();
+
     QMap<QString, QString> attr_map;
 
     for(int i = 0; i < _attributeNodes.count(); i++)
@@ -80,7 +88,8 @@ public:
         attr_map.insert(node.nodeName(), node.toAttr().value());
       }
     }
-    return LCJSFormatter::create(attr_map, _scriptId, _scriptFile, _app);
+
+    return LCJSFormatter::create(scriptString, attr_map);
   }
 
   //----------------------------------------------------------------------------
@@ -100,12 +109,14 @@ public:
     }
     else if(tag == __slTags.script)
     {
-      QString script_file = _element.attribute(__slAttributes.file);
+
+      QString script_file = QString("%1%2")
+        .arg(_app.getProjectPath())
+        .arg(_element.attribute(__slAttributes.file));
+
       fsp = createFromScript(
           _element.elementsByTagName(__slTags.attributes), 
-          attr_id, 
-          _element.attribute(__slAttributes.file), 
-          _app);
+          script_file);
     }
 
     if(!fsp.isNull())

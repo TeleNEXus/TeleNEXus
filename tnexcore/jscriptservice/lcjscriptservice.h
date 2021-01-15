@@ -37,7 +37,8 @@ public:
   virtual ~LCJScriptService();
 
   static QSharedPointer<LIJScriptService> create(
-      const QString& _script, const QMap<QString, QString>& _attributes);
+      const QString& _script, 
+      const QMap<QString, QString>& _attributes);
 
   virtual void launch(int _interval) override;
   virtual void stop() override;

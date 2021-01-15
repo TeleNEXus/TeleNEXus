@@ -69,7 +69,6 @@ private:
 
   };
 
-  QString     mScriptString;
   QJSEngine   mJSEngin;
   QJSValue    mCallScriptMain;
   QThread*    mpThread;
@@ -80,13 +79,11 @@ public:
 
   explicit LCQJScriptHiden(
       const QString& _script, 
-      const QMap<QString, QString>& _attributes,
-      QObject* _parent = nullptr);
+      const QMap<QString, QString>& _attributesMap);
 
   virtual ~LCQJScriptHiden();
   void launch(int interval);
   void stop();
-  /* void evaluate(); */
   void execute();
 
 private:
