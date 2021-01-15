@@ -66,8 +66,8 @@ SOURCES += \
         xml/lcxmlwidgetbuilders.cpp \
         xml/lcxmlwindows.cpp \
         xml/lcxmlfonts.cpp \
-        xml/lcxmljsscripts.cpp \
-        xml/xmldataformatters.cpp \
+        xml/uploadjscripts.cpp \
+        xml/uploaddataformatters.cpp \
         main.cpp \
 
 # Default rules for deployment.
@@ -119,5 +119,5 @@ HEADERS += \
     xml/lcxmlwidgetbuilders.h \
     xml/lcxmlwindows.h \
     xml/lcxmlfonts.h \
-    xml/lcxmljsscripts.h \
+    xml/uploadjscripts.h \
 

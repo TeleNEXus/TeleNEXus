@@ -19,7 +19,7 @@
  * along with TeleNEXus.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "lcxmljsscripts.h"
+#include "uploadjscripts.h"
 #include "lcjscriptservice.h"
 
 #include "LIJScriptService.h"
@@ -160,7 +160,7 @@ static void scriptExecute(const QDomElement &_element)
   }
 }
 //==============================================================================
-namespace xmluploadjsscripts
+namespace uploadjscripts
 {
 
 //------------------------------------------------------------------------------getScript
