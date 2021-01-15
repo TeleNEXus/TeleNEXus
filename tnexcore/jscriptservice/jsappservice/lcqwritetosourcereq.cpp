@@ -18,8 +18,8 @@
  * You should have received a copy of the GNU General Public License
  * along with TeleNEXus.  If not, see <https://www.gnu.org/licenses/>.
  */
+#include "tnex.h"
 #include "lcqwritetosourcereq.h"
-#include "lcxmlmain.h"
 #include "LIApplication.h"
 
 #include <QCoreApplication>

@@ -59,7 +59,7 @@ SOURCES += \
         jscriptservice/jsappservice/lcqreadfromsourcereq.cpp \
         jscriptservice/jsappservice/lcqwritetosourcereq.cpp \
         xml/lcxmlcommon.cpp \
-        xml/lcxmlmain.cpp \
+        xml/tnex.cpp \
         xml/lcxmlbuildersloader.cpp \
         xml/lcxmllayoutbuilders.cpp \
         xml/lcxmlremotedatasourcebuilders.cpp \
@@ -112,7 +112,7 @@ HEADERS += \
     jscriptservice/jsappservice/lcqreadfromsourcereq.h \
     jscriptservice/jsappservice/lcqwritetosourcereq.h \
     xml/lcxmlcommon.h \
-    xml/lcxmlmain.h \
+    xml/tnex.h \
     xml/lcxmlbuildersloader.h \
     xml/lcxmllayoutbuilders.h \
     xml/lcxmlremotedatasourcebuilders.h \
