@@ -50,7 +50,7 @@ public:
       const QString& _dataId, 
       const QVariantList& _data);
 
-  QVariantList testGetByteArray();
+  /* QVariantList testGetByteArray(); */
 };
 
 #endif

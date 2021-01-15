@@ -2,14 +2,25 @@
 
 <SCRIPTS>
 
-  <script id="testattr" file="scripts/testattributes.js">
-    <attributes message1="Test message 1"/>
-    <attributes message2="Test message 2"/>
-    <attributes message3="Test message 3"/>
+  <script id="testattr1" file="scripts/testattributes.js">
+    <attributes 
+      message1="Test message 1"
+      message2="Test message 2"
+      message3="Test message 3"
+      />
+    <attributes message4="Test message 4"/>
+    <attributes message5="Test message 5"/>
+    <attributes message6="Test message 6"/>
+    <attributes message7="Test message 7"/>
   </script>
 
-  <launch scriptId="testattr" interval="500"/> 
-  <execute scriptId="testattr" /> 
+  <script id="testattr2" file="scripts/testattributes.js">
+    <attributes newMessage="testattr2 script new message"/>
+  </script>
+
+  <launch scriptId="testattr1" interval="500"/> 
+  <!-- <launch scriptId="testattr2" interval="500"/> --> 
+  <!-- <execute scriptId="testattr" /> --> 
 
   <!-- <script id="testwrite" file="scripts/writedatatosource.js"/> -->
 

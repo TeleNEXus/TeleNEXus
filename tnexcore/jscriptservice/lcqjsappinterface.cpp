@@ -52,7 +52,7 @@ LCQJSAppInterface::~LCQJSAppInterface()
 //------------------------------------------------------------------------------
 void LCQJSAppInterface::debugOut(const QString& _str)
 {
-  qDebug() << _str;
+  qDebug("%s", qPrintable(_str));
 }
 
 //------------------------------------------------------------------------------
@@ -99,19 +99,19 @@ int LCQJSAppInterface::writeData(
 }
 
 //------------------------------------------------------------------------------
-QVariantList LCQJSAppInterface::testGetByteArray()
-{
-  /* int data = 0x01020304; */
-  int data = 0x01020304;
-  QVariantList vl;
-  /* QByteArray arr(reinterpret_cast<const char*>(&i), sizeof(int)); */
-  for(int i = 0; i < (int)sizeof(int); i++)
-  {
-    vl << QVariant((reinterpret_cast<char*>(&data))[i]);
-    /* vl << QVariant(i); */
-  }
-  return vl;
+/* QVariantList LCQJSAppInterface::testGetByteArray() */
+/* { */
+/*   /1* int data = 0x01020304; *1/ */
+/*   int data = 0x01020304; */
+/*   QVariantList vl; */
+/*   /1* QByteArray arr(reinterpret_cast<const char*>(&i), sizeof(int)); *1/ */
+/*   for(int i = 0; i < (int)sizeof(int); i++) */
+/*   { */
+/*     vl << QVariant((reinterpret_cast<char*>(&data))[i]); */
+/*     /1* vl << QVariant(i); *1/ */
+/*   } */
+/*   return vl; */
 
-  /* _retString = "SByteArray LCQJSAppInterface::testGetByteArray(QString& _retString)"; */
-  /* return (reinterpret_cast<const char*>(&i), sizeof(int)); */
-}
+/*   /1* _retString = "SByteArray LCQJSAppInterface::testGetByteArray(QString& _retString)"; *1/ */
+/*   /1* return (reinterpret_cast<const char*>(&i), sizeof(int)); *1/ */
+/* } */

@@ -31,8 +31,11 @@ struct SPrivateData
 {
   LCQJScriptHiden* mpScriptHiden;
 
-  SPrivateData(const QString& _script, const QMap<QString, QString> _attributes):
+  SPrivateData(
+      const QString& _script, 
+      const QMap<QString, QString> _attributes):
     mpScriptHiden(new LCQJScriptHiden(_script, _attributes)){}
+
   ~SPrivateData()
   {
     mpScriptHiden->deleteLater();
@@ -58,7 +61,8 @@ LCJScriptService::~LCJScriptService()
 
 //------------------------------------------------------------------------------
 QSharedPointer<LIJScriptService> LCJScriptService::create(
-    const QString& _script, const QMap<QString, QString>& _attributes)
+    const QString& _script, 
+    const QMap<QString, QString>& _attributes)
 {
   return QSharedPointer<LCJScriptService>( 
       new LCJScriptService(_script, _attributes) );

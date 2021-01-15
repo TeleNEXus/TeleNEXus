@@ -23,13 +23,10 @@ static const struct
   QString funcFitting         = "Fitting"; 
 }__slPropNames;
 
-//==============================================================================
+//==============================================================================emitError
 static void emitError(const QJSValue& _value);
-
-static QString createScriptGlobal(
-    const QMap<QString, QString>& _attributes,
-    const QString& _scriptId,
-    const QString& _scriptFile);
+//==============================================================================createScriptGlobal
+static QString createScriptGlobal(const QMap<QString, QString>& _attributes);
 
 
 //==============================================================================CJSValidator
@@ -66,23 +63,6 @@ public:
 
     if(!jsret.isNumber()) return State::Intermediate;
 
-    switch(state)
-    {
-    case State::Acceptable:
-      qDebug() << "JS Validator Return = " << "Acceptable";
-      break;
-
-    case State::Intermediate:
-      qDebug() << "JS Validator Return = " << "Intermediate";
-      break;
-
-    case State::Invalid:
-      qDebug() << "JS Validator Return = " << "Invalid";
-      break;
-
-    default:
-      return State::Intermediate;
-    }
     return state;
   }
 };
@@ -114,28 +94,11 @@ struct SLocalData
 #define mpLocalData (static_cast<SLocalData*>(mpData))
 
 //==============================================================================LCJSFormatter
-LCJSFormatter::LCJSFormatter(
-    const QMap<QString, QString>& _attributes,
-    const QString& _scriptId,
-    const QString& _scriptFile,
-    const QString& _appPath):
+LCJSFormatter::LCJSFormatter( 
+    const QString& _script,
+    const QMap<QString, QString>& _attributes):
   mpData(new SLocalData(LCQJSFormatterInterface::create()))
 {
-  QFile file(QString("%1%2").arg(_appPath).arg(_scriptFile));
-
-  if (!file.open(QIODevice::ReadOnly)) 
-  {
-    qDebug() << "LCJSFormatter can't open file " << file.fileName();
-    return;
-  }
-
-  qDebug() << "LCJSFormatter open JavaScript file " << file.fileName();
-
-  QTextStream stream(&file);
-  QString script = stream.readAll();
-  file.close();
-
-  qDebug() << "Script =======================================";
   auto fi = mpLocalData->formatterInterface;
 
   QJSValue jsvalue = 
@@ -146,11 +109,10 @@ LCJSFormatter::LCJSFormatter(
       __slPropNames.formatterInterface, jsvalue);
 
   mpLocalData->jsengine->evaluate(
-      createScriptGlobal(_attributes, _scriptId, _scriptFile));
+      createScriptGlobal(_attributes));
 
-  jsvalue= mpLocalData->jsengine->evaluate(script);
+  jsvalue= mpLocalData->jsengine->evaluate(_script);
 
-  qDebug() << "Evaluate =======================================";
   if(jsvalue.isError()) { emitError(jsvalue); }
 
   mpLocalData->validator->setCallValue(
@@ -227,21 +189,15 @@ QValidator* LCJSFormatter::validator()
 
 //------------------------------------------------------------------------------
 QSharedPointer<LCJSFormatter> LCJSFormatter::create(
-    const QMap<QString, QString>& _attributes,
-    const QString& _scriptId,
-    const QString& _scriptFile,
-    const LIApplication& _app)
+    const QString& _script,
+    const QMap<QString, QString>& _attributes)
 {
   return QSharedPointer<LCJSFormatter>(
-      new LCJSFormatter(
-        _attributes, _scriptId, _scriptFile, _app.getProjectPath()));
+      new LCJSFormatter(_script,  _attributes));
 }
 
 //==============================================================================createScriptGlobal
-static QString createScriptGlobal(
-    const QMap<QString, QString>& _attributes,
-    const QString& _scriptId,
-    const QString& _scriptFile)
+static QString createScriptGlobal(const QMap<QString, QString>& _attributes)
 {
   QString obj_attributes = 
     QString("var %1 = { ").arg(__slPropNames.attributes);
@@ -256,22 +212,17 @@ static QString createScriptGlobal(
   obj_attributes += "};";
 
   QString out = QString(
-      "var ScriptId = \"%1\";"
-      "var ScriptFile = \"%2\";"
-      "%3"
-      "var Acceptable   = %4;"
-      "var Intermediate = %5;"
-      "var Invalid      = %6;"
-      "function DebugOut(str) {%7.debugOut(str)};"
+      "%1"
+      "var Acceptable   = %2;"
+      "var Intermediate = %3;"
+      "var Invalid      = %4;"
+      "function DebugOut(str) {%5.debugOut(str)};"
       )
-    .arg(_scriptId)
-    .arg(_scriptFile)
     .arg(obj_attributes)
     .arg(QValidator::State::Acceptable)
     .arg(QValidator::State::Intermediate)
     .arg(QValidator::State::Invalid)
-    .arg(__slPropNames.formatterInterface)
-    ;
+    .arg(__slPropNames.formatterInterface);
   return out;
 }
 
