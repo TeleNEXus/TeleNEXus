@@ -1,4 +1,4 @@
-function asf(){Application.debug("Timeout==============1"); }
+function asf(){DebugOut("Timeout==============1"); }
 
 //setTimeout(asf(), 100);
 // setInterval(asf(), 100);
@@ -14,7 +14,7 @@ function sleep(milliseconds) {
 // sleep(2000);
 //
 
-// Application.debug("---- Script writedatatosource.js");
+// DebugOut("---- Script writedatatosource.js");
 
 var sourceId = "qtslavetcp";
 var dataId = "hreg1";
@@ -22,22 +22,22 @@ var dataId = "hreg1";
 // var dataId = "bytes_uint16";
 var read_reg = 0;
 
-var read_data = Application.readData(sourceId, dataId);
-Application.debug("Read Data = " + read_data);
+var read_data = DataSourceRead(sourceId, dataId);
+DebugOut("Read Data = " + read_data);
 for(var i = 0; i < read_data.length; i++)
 {
   read_reg = (read_reg | (read_data[i] << (8 * i)));
 }
 
-// Application.debug("Register = " + read_reg);
+// DebugOut("Register = " + read_reg);
 read_reg++;
 read_reg &= 0xffff;
 
 var write_data = [read_reg & 0x00ff, read_reg >>> 8];
-var write_size = Application.writeData(sourceId, dataId, write_data);
+var write_size = DataSourceWrite(sourceId, dataId, write_data);
 
-// Application.debug("Write Size = " + write_size);
+// DebugOut("Write Size = " + write_size);
 
-// Application.debug("End Script");
+DebugOut("End Script");
 
 

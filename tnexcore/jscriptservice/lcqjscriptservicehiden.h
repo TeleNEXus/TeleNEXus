@@ -60,37 +60,40 @@ private:
     virtual void handle(LCQJScriptHiden* _sender) override;
   };
 
-  //----------------------------------------------------------------------------CEventEvaluate
-  class CEventEvaluate: public CEventBase
+  //----------------------------------------------------------------------------CEventExecute
+  class CEventExecute: public CEventBase
   {
   public:
-    CEventEvaluate();
+    CEventExecute();
     virtual void handle(LCQJScriptHiden* _sender) override;
 
   };
 
   QString     mScriptString;
   QJSEngine   mJSEngin;
-  QJSValue    mJSValue;
+  QJSValue    mCallScriptMain;
   QThread*    mpThread;
   int         mTimerId;
 
 public:
   static int mObjectCounter;
 
-  explicit LCQJScriptHiden(const QString& _script, 
+  explicit LCQJScriptHiden(
+      const QString& _script, 
+      const QMap<QString, QString>& _attributes,
       QObject* _parent = nullptr);
 
   virtual ~LCQJScriptHiden();
-  virtual void customEvent(QEvent* _event) override;
-  virtual void timerEvent(QTimerEvent*) override;
   void launch(int interval);
   void stop();
-  void evaluate();
+  /* void evaluate(); */
+  void execute();
 
 private:
+  virtual void customEvent(QEvent* _event) override;
+  virtual void timerEvent(QTimerEvent*) override;
   void timerStart(int _interval);
   void timerStop();
-  void scriptEvaluate();
+  void scriptExecute();
 };
 #endif

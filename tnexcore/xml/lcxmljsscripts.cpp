@@ -62,6 +62,7 @@ static const struct
 //==============================================================================
 QMap<QString, QSharedPointer<LIJScriptService>> __slScriptMap;
 
+
 //==============================================================================scriptUpload
 static void scriptUpload(const QDomElement &_element, const LIApplication& _app)
 {
@@ -88,16 +89,31 @@ static void scriptUpload(const QDomElement &_element, const LIApplication& _app)
     }
 
     QTextStream stream(&scriptFile);
-    QString script = stream.readAll();
+    QString script_str = stream.readAll();
     scriptFile.close();
 
-    if(script.isNull()) 
+    if(script_str.isNull()) 
     {
       qDebug() << "LCXmlJScripts::load message: empty script file " << fileName;
       continue;
     }
 
-    auto jscriptservice = LCJScriptService::create(script);
+    //upload attributes.
+    QMap<QString, QString> attributes_map;
+    for(QDomNode node = el.firstChildElement(__slTags.attributes);
+       !node.isNull();
+      node = node.nextSiblingElement(__slTags.attributes))
+    {
+      auto attributes = node.toElement().attributes();
+      for(int i = 0; i < attributes.count(); i++)
+      {
+        auto attr = attributes.item(i).toAttr();
+        attributes_map.insert(attr.name(), attr.value());
+      }
+    } 
+
+    //create servece.
+    auto jscriptservice = LCJScriptService::create(script_str, attributes_map);
     __slScriptMap.insert(attr_id, jscriptservice);
   }
 }

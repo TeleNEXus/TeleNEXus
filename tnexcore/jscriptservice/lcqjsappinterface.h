@@ -37,7 +37,7 @@ public:
 
   public slots:
 
-    void debug(const QString& _str);
+    void debugOut(const QString& _str);
 
   QString getProjectPath();
 

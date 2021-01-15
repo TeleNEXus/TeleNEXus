@@ -50,7 +50,7 @@ LCQJSAppInterface::~LCQJSAppInterface()
 }
 
 //------------------------------------------------------------------------------
-void LCQJSAppInterface::debug(const QString& _str)
+void LCQJSAppInterface::debugOut(const QString& _str)
 {
   qDebug() << _str;
 }

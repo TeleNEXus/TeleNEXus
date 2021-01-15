@@ -145,12 +145,8 @@ LCJSFormatter::LCJSFormatter(
   mpLocalData->jsengine->globalObject().setProperty(
       __slPropNames.formatterInterface, jsvalue);
 
-  jsvalue = 
-    mpLocalData->jsengine->evaluate(
-        createScriptGlobal(_attributes, _scriptId, _scriptFile));
-
-  mpLocalData->jsengine->globalObject().setProperty(
-      __slPropNames.globalExport, jsvalue);
+  mpLocalData->jsengine->evaluate(
+      createScriptGlobal(_attributes, _scriptId, _scriptFile));
 
   jsvalue= mpLocalData->jsengine->evaluate(script);
 
