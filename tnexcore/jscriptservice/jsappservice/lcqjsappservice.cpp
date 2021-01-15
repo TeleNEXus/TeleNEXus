@@ -81,7 +81,7 @@ int LCQJSAppService::writeData(
 //------------------------------------------------------------------------------
 QString LCQJSAppService::getProjectPath()
 {
-  return LCXmlMain::getApplicationInterface().getProjectPath();
+  return tnex::getApplicationInterface().getProjectPath();
 }
 
 

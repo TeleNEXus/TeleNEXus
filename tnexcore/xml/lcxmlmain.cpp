@@ -142,26 +142,28 @@ public:
 static CApplicationInterface __slAppInterface;
 
 //==============================================================================
-LCXmlMain::LCXmlMain()
-{
+/* LCXmlMain::LCXmlMain() */
+/* { */
 
-}
+/* } */
+
+/* //------------------------------------------------------------------------------ */
+/* LCXmlMain& LCXmlMain::instance() */
+/* { */
+/*     static LCXmlMain inst; */
+/*     return inst; */
+/* } */
 
 //------------------------------------------------------------------------------
-LCXmlMain& LCXmlMain::instance()
-{
-    static LCXmlMain inst;
-    return inst;
-}
-
-//------------------------------------------------------------------------------
-const LIApplication& LCXmlMain::getApplicationInterface()
+/* const LIApplication& LCXmlMain::getApplicationInterface() */
+const LIApplication& tnex::getApplicationInterface()
 {
   return __slAppInterface;
 }
 
 //------------------------------------------------------------------------------
-int LCXmlMain::exec(int argc, char *argv[])
+/* int LCXmlMain::exec(int argc, char *argv[]) */
+int tnex::exec(int argc, char *argv[])
 {
 
     QApplication app(argc, argv);

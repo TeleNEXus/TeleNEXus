@@ -42,7 +42,7 @@ LCQReadFromSourceReq::CEventRead::CEventRead()
 void LCQReadFromSourceReq::CEventRead::handle(LCQReadFromSourceReq* _sender)
 {
   auto source = 
-    LCXmlMain::getApplicationInterface().getDataSource(_sender->mSourceId);
+    tnex::getApplicationInterface().getDataSource(_sender->mSourceId);
   if(source.isNull()) 
   {
     _sender->mWaitCond.wakeOne();
