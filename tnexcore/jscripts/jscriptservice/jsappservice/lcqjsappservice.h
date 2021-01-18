@@ -53,8 +53,5 @@ public:
       const QString&    _sourceId, 
       const QString&    _dataId, 
       const QByteArray& _data);
-
-  QString getProjectPath();
-
 };
 #endif

@@ -19,12 +19,16 @@
  * along with TeleNEXus.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include "lcqjscriptservicehiden.h"
-#include "lcqjsappinterface.h"
+#include "lcqjsappservice.h"
+#include "tnex.h"
+#include "LIApplication.h"
+
 #include <QDebug>
 #include <QThread>
 #include <QTimer>
 #include <QCoreApplication>
 #include <QSharedPointer>
+
 
 //==============================================================================
 static const struct
@@ -79,18 +83,20 @@ void LCQJScriptHiden::CEventExecute::handle(LCQJScriptHiden* _sender)
 
 //==============================================================================LCQJScriptHiden
 static QString createScriptGlobal(QMap<QString, QString> _attrMap);
-static void emitError(const QJSValue& _value);
 
 LCQJScriptHiden::LCQJScriptHiden(
     const QString& _script, 
-    const QMap<QString, QString>& _attributesMap) : 
+    const QMap<QString, QString>& _attributesMap,
+    const QString& _fileName) : 
   QObject(nullptr),
   mpThread(new QThread),
   mTimerId(0)
 {
+  mspAppService = LCQJSAppService::getService();
+
   moveToThread(mpThread);
 
-  QJSValue jsvalue = mJSEngine.newQObject(new LCQJSAppInterface(mJSEngine));
+  QJSValue jsvalue = mJSEngine.newQObject(this);
 
   mJSEngine.globalObject().setProperty(
       __slPropNames.applicationGlobalExport, jsvalue);
@@ -99,7 +105,7 @@ LCQJScriptHiden::LCQJScriptHiden(
 
   if(jsvalue.isError()) { emitError(jsvalue);}
 
-  mJSEngine.evaluate(_script);
+  mJSEngine.evaluate(_script, _fileName);
 
   mCallScriptMain = mJSEngine.globalObject().property(
       __slPropNames.callScriptMain);
@@ -163,7 +169,10 @@ void LCQJScriptHiden::timerStop()
 void LCQJScriptHiden::scriptExecute()
 {
   QJSValue result = mCallScriptMain.call();
-  if(result.isError()) { emitError(result);}
+  if(result.isError()) { 
+    emitError(result);
+    /* timerStop(); */
+  }
 }
 
 //------------------------------------------------------------------------------
@@ -178,6 +187,93 @@ void LCQJScriptHiden::customEvent(QEvent* _event)
     }
     e->handle(this);
   }
+}
+
+//------------------------------------------------------------------------------
+void LCQJScriptHiden::emitError(const QJSValue& _value)
+{
+  debugOut(QString("Uncaught exception in file %1 at line %2: %3")
+      .arg(_value.property("fileName").toString())
+      .arg(_value.property(QStringLiteral("lineNumber")).toInt())
+      .arg(_value.toString()));
+}
+
+
+
+//------------------------------------------------------------------------------
+void LCQJScriptHiden::debugOut(const QString& _out)
+{
+  qDebug("%s", qPrintable(_out));
+}
+
+//------------------------------------------------------------------------------
+QString LCQJScriptHiden::getProjectPath()
+{
+  return tnex::getApplicationInterface().getProjectPath();
+}
+
+//------------------------------------------------------------------------------
+QVariantList LCQJScriptHiden::readData(
+    const QString& _sourceId, const QString& _dataId)
+{
+  QByteArray data_array = 
+    mspAppService->readData(_sourceId, _dataId); 
+  QVariantList ret;
+  for(int i = 0; i < data_array.size(); i++)
+  {
+    ret << QVariant(static_cast<unsigned char>(data_array.at(i)));
+  }
+  return ret; 
+}
+
+//------------------------------------------------------------------------------
+int LCQJScriptHiden::writeData(
+    const QString& _sourceId, 
+    const QString& _dataId, 
+    const QVariantList& _data)
+{
+
+  QByteArray wd;
+
+  for(int i = 0; i < _data.size(); i++)
+  {
+    bool flag = false;
+    int d = _data.at(i).toUInt(&flag);
+    if(!flag) 
+    {
+      return 0;
+    }
+    wd[i] =  (unsigned char)d;
+  }
+
+  return mspAppService->writeData(_sourceId, _dataId, wd);
+}
+
+//------------------------------------------------------------------------------
+bool LCQJScriptHiden::exportModule(const QString& _fileName)
+{
+  QString full_file_name = 
+        tnex::getApplicationInterface().getProjectPath() + _fileName;
+
+  QFile script_file(full_file_name);
+
+  if(!script_file.open(QFile::OpenModeFlag::ReadOnly)) { 
+    return false;}
+
+  QTextStream stream(&script_file);
+  QString script_str = stream.readAll();
+  script_file.close();
+  if(script_str.isNull()) { return false; }
+
+  QJSValue jsvalue = mJSEngine.evaluate(script_str, _fileName);
+
+  if(jsvalue.isError()) 
+  {
+    emitError(jsvalue);
+    return false;
+  }
+
+  return false;
 }
 
 //==============================================================================createScriptGlobal
@@ -202,6 +298,8 @@ static QString createScriptGlobal(QMap<QString, QString> _attrMap)
       "return %2.readData(_sourceId, _dataId)};"
       "function DataSourceWrite(_sourceId, _dataId, _data) {"
       "return %2.writeData(_sourceId, _dataId, _data)};"
+      "function ExportModule(_fileName) {"
+      "return %2.exportModule(_fileName)};"
       "var ScriptId = \"%3\";"
       "var ScriptFile = \"%4\";"
       )
@@ -209,13 +307,4 @@ static QString createScriptGlobal(QMap<QString, QString> _attrMap)
     .arg(__slPropNames.applicationGlobalExport)
     .arg(QString())
     .arg(QString());
-}
-
-//==============================================================================emitError
-static void emitError(const QJSValue& _value)
-{
-  qDebug() 
-    << "Uncaught exception at line"
-    << _value.property("lineNumber").toInt()
-    << ":" << _value.toString();
 }

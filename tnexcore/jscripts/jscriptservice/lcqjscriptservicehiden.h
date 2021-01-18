@@ -27,6 +27,7 @@
 #include <QDebug>
 
 class QTimer;
+class LCQJSAppService;
 class LCQJScriptHiden : public QObject
 {
   Q_OBJECT
@@ -69,6 +70,7 @@ private:
 
   };
 
+  QSharedPointer<LCQJSAppService> mspAppService;
   QJSEngine   mJSEngine;
   QJSValue    mCallScriptMain;
   QThread*    mpThread;
@@ -79,7 +81,8 @@ public:
 
   explicit LCQJScriptHiden(
       const QString& _script, 
-      const QMap<QString, QString>& _attributesMap);
+      const QMap<QString, QString>& _attributesMap,
+      const QString& _fileName);
 
   virtual ~LCQJScriptHiden();
   void launch(int interval);
@@ -92,5 +95,24 @@ private:
   void timerStart(int _interval);
   void timerStop();
   void scriptExecute();
+  /* void debugOut(const QString& _out); */
+  void emitError(const QJSValue& _jsvalue);
+
+//--------------------------------------------------------jsexports
+public slots:
+  void debugOut(const QString& _out);
+
+  QString getProjectPath();
+
+  QVariantList readData(
+      const QString& _sourceId, 
+      const QString& _dataId);
+
+  int writeData(
+      const QString& _sourceId, 
+      const QString& _dataId, 
+      const QVariantList& _data);
+
+  bool exportModule(const QString& _fileName);
 };
 #endif

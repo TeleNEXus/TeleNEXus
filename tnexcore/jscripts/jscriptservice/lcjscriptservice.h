@@ -32,13 +32,16 @@ private:
   void* mpData;
   LCJScriptService() = delete;
   explicit LCJScriptService(
-      const QString& _script, const QMap<QString, QString>& _attributes);
+      const QString& _script, 
+      const QMap<QString, QString>& _attributes, 
+      const QString& _fileName);
 public:
   virtual ~LCJScriptService();
 
   static QSharedPointer<LIJScriptService> create(
       const QString& _script, 
-      const QMap<QString, QString>& _attributes);
+      const QMap<QString, QString>& _attributes,
+      const QString& _fileName = QString());
 
   virtual void launch(int _interval) override;
   virtual void stop() override;

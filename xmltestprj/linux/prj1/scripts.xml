@@ -2,27 +2,41 @@
 
 <SCRIPTS>
 
-  <script id="testwrite1" file="scripts/writedatatosource.js">
-  </script>
+  <!-- <script id="testwrite1" file="scripts/writedatatosource.js"/> -->
 
-  <script id="testattr1" file="scripts/testattributes.js">
+  <!-- <script id="testattr1" file="scripts/testattributes.js"> -->
+  <!--   <attributes --> 
+  <!--     message1="Test message 1" -->
+  <!--     message2="Test message 2" -->
+  <!--     message3="Test message 3" -->
+  <!--     /> -->
+  <!--   <attributes message4="Test message 4"/> -->
+  <!--   <attributes message5="Test message 5"/> -->
+  <!--   <attributes message6="Test message 6"/> -->
+  <!--   <attributes message7="Test message 7"/> -->
+  <!-- </script> -->
+
+  <!-- <script id="testattr2" file="scripts/testattributes.js"> -->
+  <!--   <attributes newMessage="testattr2 script new message"/> -->
+  <!-- </script> -->
+
+  <!-- <script id="testexportmodules" file="scripts/testexportmodules.js"/> -->
+  <script id="testexportmodules" file="scripts/testexportmodules.js">
     <attributes 
       message1="Test message 1"
       message2="Test message 2"
       message3="Test message 3"
       />
-    <attributes message4="Test message 4"/>
-    <attributes message5="Test message 5"/>
-    <attributes message6="Test message 6"/>
-    <attributes message7="Test message 7"/>
   </script>
 
-  <script id="testattr2" file="scripts/testattributes.js">
-    <attributes newMessage="testattr2 script new message"/>
-  </script>
+  <!-- <launch scriptId="testwrite1" interval="500"/> -->
+  <!-- <launch scriptId="testattr1" interval="500"/> --> 
 
-  <launch scriptId="testwrite1" interval="500"/>
-  <launch scriptId="testattr1" interval="500"/> 
+  <launch scriptId="testexportmodules" interval="500"/>
+
+
+
+
   <!-- <launch scriptId="testattr2" interval="500"/> --> 
   <!-- <execute scriptId="testattr" /> --> 
 
