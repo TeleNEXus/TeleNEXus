@@ -78,10 +78,4 @@ int LCQJSAppService::writeData(
   return req->writeData();
 }
 
-//------------------------------------------------------------------------------
-QString LCQJSAppService::getProjectPath()
-{
-  return tnex::getApplicationInterface().getProjectPath();
-}
-
 

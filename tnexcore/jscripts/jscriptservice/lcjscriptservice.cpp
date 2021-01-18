@@ -20,7 +20,6 @@
  */
 #include "lcjscriptservice.h"
 #include "lcqjscriptservicehiden.h"
-#include "lcqjsappinterface.h"
 #include <QJSEngine>
 #include <QTimer>
 #include <QDebug>
@@ -33,8 +32,9 @@ struct SPrivateData
 
   SPrivateData(
       const QString& _script, 
-      const QMap<QString, QString> _attributes):
-    mpScriptHiden(new LCQJScriptHiden(_script, _attributes)){}
+      const QMap<QString, QString> _attributes,
+      const QString& _fileName):
+    mpScriptHiden(new LCQJScriptHiden(_script, _attributes, _fileName)){}
 
   ~SPrivateData()
   {
@@ -48,8 +48,9 @@ struct SPrivateData
 //==============================================================================
 LCJScriptService::LCJScriptService(
     const QString& _script, 
-    const QMap<QString, QString>& _attributes)  :
-  mpData( new SPrivateData(_script, _attributes) )
+    const QMap<QString, QString>& _attributes,
+    const QString& _fileName)  :
+  mpData( new SPrivateData(_script, _attributes, _fileName) )
 {
 }
 
@@ -62,10 +63,11 @@ LCJScriptService::~LCJScriptService()
 //------------------------------------------------------------------------------
 QSharedPointer<LIJScriptService> LCJScriptService::create(
     const QString& _script, 
-    const QMap<QString, QString>& _attributes)
+    const QMap<QString, QString>& _attributes,
+    const QString& _fileName)
 {
   return QSharedPointer<LCJScriptService>( 
-      new LCJScriptService(_script, _attributes) );
+      new LCJScriptService(_script, _attributes, _fileName) );
 }
 
 //------------------------------------------------------------------------------

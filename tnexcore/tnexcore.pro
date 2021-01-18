@@ -27,10 +27,11 @@ INCLUDEPATH +=                                  \
         ../common/interfaces/xmlbuilders        \
         ../common/                              \
         ./xml                                   \
-        ./jscriptservice/                       \
-        ./jscriptservice/jsappservice           \
         ./dataformatters                        \
-        ./dataformatters/jsformatter            \
+        ./jscripts/jscriptservice               \
+        ./jscripts/jscriptservice/jsappservice  \
+        ./jscripts/jsformatter                  \
+        ./jscripts
 
 
 SOURCES += \
@@ -50,14 +51,13 @@ SOURCES += \
         dataformatters/lcformatteru8.cpp \
         dataformatters/lcformatterstring.cpp \
         dataformatters/lcxmlformatterfactory.cpp \
-        dataformatters/jsformatter/lcjsformatter.cpp \
-        dataformatters/jsformatter/lcqjsformatterinterface.cpp \
-        jscriptservice/lcqjsappinterface.cpp \
-        jscriptservice/lcjscriptservice.cpp \
-        jscriptservice/lcqjscriptservicehiden.cpp \
-        jscriptservice/jsappservice/lcqjsappservice.cpp \
-        jscriptservice/jsappservice/lcqreadfromsourcereq.cpp \
-        jscriptservice/jsappservice/lcqwritetosourcereq.cpp \
+        jscripts/jsformatter/lcjsformatter.cpp \
+        jscripts/jsformatter/lcqjsformatterinterface.cpp \
+        jscripts/jscriptservice/lcjscriptservice.cpp \
+        jscripts/jscriptservice/lcqjscriptservicehiden.cpp \
+        jscripts/jscriptservice/jsappservice/lcqjsappservice.cpp \
+        jscripts/jscriptservice/jsappservice/lcqreadfromsourcereq.cpp \
+        jscripts/jscriptservice/jsappservice/lcqwritetosourcereq.cpp \
         xml/lcxmlcommon.cpp \
         xml/tnex.cpp \
         xml/lcxmlbuildersloader.cpp \
@@ -103,14 +103,13 @@ HEADERS += \
     dataformatters/lcformatteru8.h \
     dataformatters/lcformatterstring.h \
     dataformatters/lcxmlformatterfactory.h \
-    dataformatters/jsformatter/lcjsformatter.h \
-    dataformatters/jsformatter/lcqjsformatterinterface.h \
-    jscriptservice/lcqjsappinterface.h \
-    jscriptservice/lcjscriptservice.h \
-    jscriptservice/lcqjscriptservicehiden.h \
-    jscriptservice/jsappservice/lcqjsappservice.h \
-    jscriptservice/jsappservice/lcqreadfromsourcereq.h \
-    jscriptservice/jsappservice/lcqwritetosourcereq.h \
+    jscripts/jsformatter/lcjsformatter.h \
+    jscripts/jsformatter/lcqjsformatterinterface.h \
+    jscripts/jscriptservice/lcjscriptservice.h \
+    jscripts/jscriptservice/lcqjscriptservicehiden.h \
+    jscripts/jscriptservice/jsappservice/lcqjsappservice.h \
+    jscripts/jscriptservice/jsappservice/lcqreadfromsourcereq.h \
+    jscripts/jscriptservice/jsappservice/lcqwritetosourcereq.h \
     xml/lcxmlcommon.h \
     xml/tnex.h \
     xml/lcxmlbuildersloader.h \
