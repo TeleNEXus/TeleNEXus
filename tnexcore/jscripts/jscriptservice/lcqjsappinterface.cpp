@@ -18,28 +18,35 @@
  * You should have received a copy of the GNU General Public License
  * along with TeleNEXus.  If not, see <https://www.gnu.org/licenses/>.
  */
+#include "tnex.h"
 #include "lcqjsappinterface.h"
 #include "lcqjsappservice.h"
 #include "LIApplication.h"
+
 #include <QDebug>
 #include <QSharedPointer>
 #include <QVariantList>
+#include <QJSEngine>
+#include <QFileInfo>
 
 
 //==============================================================================
 struct SPrivateData
 {
   QSharedPointer<LCQJSAppService> psAppService;
-  SPrivateData() :
-    psAppService(LCQJSAppService::getService()){}
+  QJSEngine& mJSEngine;
+  SPrivateData(QJSEngine& _jsengine) :
+    psAppService(LCQJSAppService::getService()),
+    mJSEngine(_jsengine)
+  {}
 };
 
 //------------------------------------------------------------------------------
 #define mpPrivateData (static_cast<SPrivateData*>(mpData))
 
 //==============================================================================
-LCQJSAppInterface::LCQJSAppInterface() :
-  mpData(new SPrivateData)
+LCQJSAppInterface::LCQJSAppInterface(QJSEngine& _jsengine) :
+  mpData(new SPrivateData(_jsengine))
 {
 }
 
@@ -98,6 +105,31 @@ int LCQJSAppInterface::writeData(
   return mpPrivateData->psAppService->writeData(_sourceId, _dataId, wd);
 }
 
+//------------------------------------------------------------------------------
+bool LCQJSAppInterface::exportModule(const QString& _fileName)
+{
+  QFileInfo script_file_info(_fileName);
+  if(script_file_info.isRelative())
+  {
+    script_file_info.setFile(
+        tnex::getApplicationInterface().getProjectPath() + 
+        script_file_info.canonicalFilePath());
+  }
+  
+  if(!script_file_info.exists()){ return false; }
+  QFile script_file(script_file_info.fileName());
+  if(!script_file.open(QFile::OpenModeFlag::ReadOnly)) { return false;}
+
+  QTextStream stream(&script_file);
+  QString script_str = stream.readAll();
+  script_file.close();
+  if(script_str.isNull()) { return false; }
+  QJSValue jsvalue = mpPrivateData->mJSEngine.evaluate(script_str);
+
+  if(jsvalue.isError()) return false;
+
+  return false;
+}
 //------------------------------------------------------------------------------
 /* QVariantList LCQJSAppInterface::testGetByteArray() */
 /* { */

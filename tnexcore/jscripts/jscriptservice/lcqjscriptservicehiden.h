@@ -69,7 +69,7 @@ private:
 
   };
 
-  QJSEngine   mJSEngin;
+  QJSEngine   mJSEngine;
   QJSValue    mCallScriptMain;
   QThread*    mpThread;
   int         mTimerId;

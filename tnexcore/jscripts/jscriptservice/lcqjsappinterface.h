@@ -25,14 +25,17 @@
 #include <QVariantList>
 
 class LIApplication;
+class QJSEngine;
 
 class LCQJSAppInterface : public QObject
 {
   Q_OBJECT;
 private:
   void* mpData; 
+
 public:
-  LCQJSAppInterface();
+  LCQJSAppInterface() = delete;
+  LCQJSAppInterface(QJSEngine& _jsengine);
   ~LCQJSAppInterface();
 
   public slots:
@@ -49,6 +52,8 @@ public:
       const QString& _sourceId, 
       const QString& _dataId, 
       const QVariantList& _data);
+
+  bool  exportModule(const QString& _fileName);
 
   /* QVariantList testGetByteArray(); */
 };

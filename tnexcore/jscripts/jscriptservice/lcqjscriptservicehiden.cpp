@@ -90,18 +90,18 @@ LCQJScriptHiden::LCQJScriptHiden(
 {
   moveToThread(mpThread);
 
-  QJSValue jsvalue = mJSEngin.newQObject(new LCQJSAppInterface);
+  QJSValue jsvalue = mJSEngine.newQObject(new LCQJSAppInterface(mJSEngine));
 
-  mJSEngin.globalObject().setProperty(
+  mJSEngine.globalObject().setProperty(
       __slPropNames.applicationGlobalExport, jsvalue);
 
-  jsvalue = mJSEngin.evaluate( createScriptGlobal(_attributesMap) );
+  jsvalue = mJSEngine.evaluate( createScriptGlobal(_attributesMap) );
 
   if(jsvalue.isError()) { emitError(jsvalue);}
 
-  mJSEngin.evaluate(_script);
+  mJSEngine.evaluate(_script);
 
-  mCallScriptMain = mJSEngin.globalObject().property(
+  mCallScriptMain = mJSEngine.globalObject().property(
       __slPropNames.callScriptMain);
 
   mpThread->start();
