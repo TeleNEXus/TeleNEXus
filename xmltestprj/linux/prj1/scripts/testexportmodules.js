@@ -1,10 +1,10 @@
-DebugOut(">>>>>>>>>>>>>>>>>>>>>>Begint test export module script");
+console.debug(">>>>>>>>>>>>>>>>>>>>>>Begint test export module script");
 
 var allAttributes = Object.keys(Attributes);
 
 function showAttributes(){
   for(var i = 0; i < allAttributes.length; i++){
-    DebugOut("Attribute " + allAttributes[i] + " = " + Attributes[allAttributes[i]]);
+    console.debug("Attribute " + allAttributes[i] + " = " + Attributes[allAttributes[i]]);
   }
 };
 
@@ -16,11 +16,14 @@ var executeCounter = 0;
 var exportFlag = ExportModule("scripts/testexportmodule1.js");
 
 function Main(){
-  // DebugOut("Execute Test Attributes Script N = " + executeCounter);
-  testExportDebug("Execute test export debug out N = " + executeCounter);
-  DebugOut("DebugOut Main");
+  console.debug("Execute Test Attributes Script N = " + executeCounter);
   executeCounter++;
-  showAttributes();
+  ExJs("asdfasdf");
+  ExJs(function(arg1, arg2){
+    console.debug('callback function arg1 = ' + arg1);
+    console.debug('callback function arg2 = ' + arg2);
+  });
+  // showAttributes();
 }
 
-DebugOut(">>>>>>>>>>>>>>>>>>>>>>End test export module script");
+console.debug(">>>>>>>>>>>>>>>>>>>>>>End test export module script");
