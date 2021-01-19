@@ -114,5 +114,7 @@ public slots:
       const QVariantList& _data);
 
   bool exportModule(const QString& _fileName);
+
+  void exjs(QJSValue _jsvalue);
 };
 #endif

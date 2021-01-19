@@ -96,6 +96,8 @@ LCQJScriptHiden::LCQJScriptHiden(
 
   moveToThread(mpThread);
 
+  mJSEngine.installExtensions(QJSEngine::Extension::AllExtensions);
+
   QJSValue jsvalue = mJSEngine.newQObject(this);
 
   mJSEngine.globalObject().setProperty(
@@ -276,6 +278,21 @@ bool LCQJScriptHiden::exportModule(const QString& _fileName)
   return false;
 }
 
+void LCQJScriptHiden::exjs(QJSValue _jsvalue)
+{
+
+  if(_jsvalue.isString())
+  {
+    qDebug() << "JS Value is String = " << _jsvalue.toString();
+  }
+  if(_jsvalue.isCallable())
+  {
+    qDebug() << "JS Value is callable = " << _jsvalue.toString();
+    _jsvalue.call(QJSValueList() << "String argument 1" << "String argument 2");
+  }
+
+}
+
 //==============================================================================createScriptGlobal
 static QString createScriptGlobal(QMap<QString, QString> _attrMap)
 {
@@ -300,6 +317,8 @@ static QString createScriptGlobal(QMap<QString, QString> _attrMap)
       "return %2.writeData(_sourceId, _dataId, _data)};"
       "function ExportModule(_fileName) {"
       "return %2.exportModule(_fileName)};"
+      "function ExJs(_jsv) {"
+      "return %2.exjs(_jsv)};"
       "var ScriptId = \"%3\";"
       "var ScriptFile = \"%4\";"
       )

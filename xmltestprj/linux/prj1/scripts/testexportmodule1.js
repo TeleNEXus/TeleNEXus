@@ -7,5 +7,5 @@ function testExportDebug(debug_str){
 }
 
 (function (){
-  DebugOut("+++++End Export Module");
+  console.debug("+++++End Export Module");
 })();
