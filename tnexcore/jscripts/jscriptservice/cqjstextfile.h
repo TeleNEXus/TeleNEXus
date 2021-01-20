@@ -38,7 +38,7 @@ public slots:
   QString read(quint64 _maxlen);
   QString readAll();
   QString readLine(quint64 _maxlen = 0);
-  quint64 write(const QString& _str);
+  bool write(const QString& _str);
 };
 
 #endif //CQJSTEXTFILE_H_

@@ -19,6 +19,7 @@
  * along with TeleNEXus.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include "cqjstextfile.h"
+#include <QTextStream>
 
 //==============================================================================
 CQJSTextFile::CQJSTextFile(CQJSFileBase* _parent) : 
@@ -40,7 +41,8 @@ QString CQJSTextFile::read(quint64 _maxlen)
 //------------------------------------------------------------------------------
 QString CQJSTextFile::readAll()
 {
-  return QString("CQJSTextFile return read all string data");
+  if(!mFile.isOpen()) return QString();
+  return QTextStream(&mFile).readAll();
 }
 
 //------------------------------------------------------------------------------
@@ -50,7 +52,14 @@ QString CQJSTextFile::readLine(quint64 _maxlen)
 }
 
 //------------------------------------------------------------------------------
-quint64 CQJSTextFile::write(const QString& _str)
+bool CQJSTextFile::write(const QString& _str)
 {
-  return -1;
+  QTextStream stream(&mFile);
+  if(!mFile.isOpen()) return false;
+  stream << _str;
+  if(stream.status() != QTextStream::Status::Ok) 
+  {
+    return false;
+  }
+  return true;
 }
