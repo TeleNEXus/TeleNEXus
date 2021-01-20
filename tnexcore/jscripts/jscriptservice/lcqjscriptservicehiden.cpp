@@ -20,6 +20,7 @@
  */
 #include "lcqjscriptservicehiden.h"
 #include "lcqjsappservice.h"
+#include "cqjstextfile.h"
 #include "tnex.h"
 #include "LIApplication.h"
 
@@ -37,6 +38,11 @@ static const struct
   QString attributes = "Attributes";
   QString callScriptMain = "Main";
 }__slPropNames;
+
+static const struct
+{
+  QString textFile = "TextFile";
+}__slObjectsNames;
 
 //==============================================================================CEventBase
 __LQ_EXTENDED_QEVENT_IMPLEMENTATION(LCQJScriptHiden::CEventBase);
@@ -98,7 +104,11 @@ LCQJScriptHiden::LCQJScriptHiden(
 
   mJSEngine.installExtensions(QJSEngine::Extension::AllExtensions);
 
-  QJSValue jsvalue = mJSEngine.newQObject(this);
+  QJSValue jsvalue = mJSEngine.newQMetaObject(&CQJSTextFile::staticMetaObject);
+  mJSEngine.globalObject().setProperty(__slObjectsNames.textFile, jsvalue);
+
+
+  jsvalue = mJSEngine.newQObject(this);
 
   mJSEngine.globalObject().setProperty(
       __slPropNames.applicationGlobalExport, jsvalue);
