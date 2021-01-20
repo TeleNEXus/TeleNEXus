@@ -53,6 +53,12 @@ static QDir         __slXmlMainFileDir;
 
 static QStringList  __slPlaginLibPaths;
 
+namespace tnex
+{
+QString projectPath(){ return __slXmlMainFilePath; }
+QDir projectDir(){ return __slXmlMainFileDir; }
+}
+
 static const struct
 {
     QString xmlMainFileName = "xmlfile";
@@ -202,6 +208,8 @@ int tnex::exec(int argc, char *argv[])
             __slXmlMainFileName    = fi.fileName();
             __slXmlMainFilePath    = fi.absolutePath() + "/";
             __slXmlMainFileDir     = fi.absoluteDir();
+            QDir::setCurrent(path);
+            qDebug() << "Project current path = " << QDir::currentPath();
         }
         else
         {

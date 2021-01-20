@@ -55,6 +55,8 @@ SOURCES += \
         jscripts/jsformatter/lcqjsformatterinterface.cpp \
         jscripts/jscriptservice/lcjscriptservice.cpp \
         jscripts/jscriptservice/lcqjscriptservicehiden.cpp \
+        jscripts/jscriptservice/cqjsfilebase.cpp \
+        jscripts/jscriptservice/cqjstextfile.cpp \
         jscripts/jscriptservice/jsappservice/lcqjsappservice.cpp \
         jscripts/jscriptservice/jsappservice/lcqreadfromsourcereq.cpp \
         jscripts/jscriptservice/jsappservice/lcqwritetosourcereq.cpp \
@@ -107,6 +109,8 @@ HEADERS += \
     jscripts/jsformatter/lcqjsformatterinterface.h \
     jscripts/jscriptservice/lcjscriptservice.h \
     jscripts/jscriptservice/lcqjscriptservicehiden.h \
+    jscripts/jscriptservice/cqjsfilebase.h \
+    jscripts/jscriptservice/cqjstextfile.h \
     jscripts/jscriptservice/jsappservice/lcqjsappservice.h \
     jscripts/jscriptservice/jsappservice/lcqreadfromsourcereq.h \
     jscripts/jscriptservice/jsappservice/lcqwritetosourcereq.h \

@@ -30,6 +30,8 @@ namespace tnex
 {
 extern const LIApplication& getApplicationInterface();
 extern int exec(int argc, char *argv[]);
+extern QString projectPath();
+extern QDir projectDir();
 }
 
 #endif // TELENEXUS_H_
