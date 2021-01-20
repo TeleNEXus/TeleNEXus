@@ -42,6 +42,7 @@ public slots:
   QString fileName() const;
   bool setFileName(const QString& _fileName);
   void close();
+  bool isOpen() const;
   bool atEnd() const;
   bool exists() const;
   bool remove();

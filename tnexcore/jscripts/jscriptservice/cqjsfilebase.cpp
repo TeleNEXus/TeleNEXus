@@ -108,6 +108,12 @@ void CQJSFileBase::close()
 }
 
 //------------------------------------------------------------------------------
+bool CQJSFileBase::isOpen() const
+{
+  return mFile.isOpen();
+}
+
+//------------------------------------------------------------------------------
 bool CQJSFileBase::atEnd() const
 {
   return mFile.atEnd();

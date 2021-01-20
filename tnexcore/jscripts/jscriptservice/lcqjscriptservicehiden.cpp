@@ -117,7 +117,12 @@ LCQJScriptHiden::LCQJScriptHiden(
 
   if(jsvalue.isError()) { emitError(jsvalue);}
 
-  mJSEngine.evaluate(_script, _fileName);
+  jsvalue = mJSEngine.evaluate(_script, _fileName);
+
+  if(jsvalue.isError())
+  {
+    emitError(jsvalue);
+  }
 
   mCallScriptMain = mJSEngine.globalObject().property(
       __slPropNames.callScriptMain);
