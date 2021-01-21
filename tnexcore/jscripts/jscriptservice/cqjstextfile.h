@@ -23,9 +23,13 @@
 
 #include "cqjsfilebase.h"
 
+#include <QTextStream>
+
 class CQJSTextFile final : public CQJSFileBase
 {
   Q_OBJECT;
+private:
+  QTextStream mStream;
 
 public:
   Q_INVOKABLE explicit CQJSTextFile(CQJSFileBase* _parent = nullptr);

@@ -23,12 +23,14 @@
 
 //==============================================================================
 CQJSTextFile::CQJSTextFile(CQJSFileBase* _parent) : 
-  CQJSFileBase(_parent)
+  CQJSFileBase(_parent),
+  mStream(&mFile)
 {
 }
 
 CQJSTextFile::CQJSTextFile(const QString& _fileName, CQJSFileBase* _parent ):
-  CQJSFileBase(_fileName, _parent)
+  CQJSFileBase(_fileName, _parent),
+  mStream(&mFile)
 {
 }
 
@@ -42,24 +44,22 @@ QString CQJSTextFile::read(quint64 _maxlen)
 QString CQJSTextFile::readAll()
 {
   if(!mFile.isOpen()) return QString();
-  return QTextStream(&mFile).readAll();
+  return mStream.readAll();
 }
 
 //------------------------------------------------------------------------------
 QString CQJSTextFile::readLine(quint64 _maxlen)
 {
+  if(!mFile.isOpen()) return QString();
   return QString("CQJSTextFile return read line data");
 }
 
 //------------------------------------------------------------------------------
 bool CQJSTextFile::write(const QString& _str)
 {
-  QTextStream stream(&mFile);
-  if(!mFile.isOpen()) return false;
-  stream << _str;
-  if(stream.status() != QTextStream::Status::Ok) 
+  if(mFile.isOpen())
   {
-    return false;
+    mStream << _str;
+    mStream.resetStatus();
   }
-  return true;
 }
