@@ -31,6 +31,7 @@ class CQJSFileBase : public QObject
 
 private:
   QFile mFile;
+  QString mErrorString;
 
 private:
   explicit CQJSFileBase(QObject* _parent = nullptr);
@@ -50,6 +51,9 @@ public slots:
   quint64 pos() const;
   bool seek(quint64 _pos);
   quint64 size() const;
+  int error();
+  QString errorString() const;
+  void resetError();
   friend class CQJSTextFile;
   friend class CQJSBinaryFile;
 };
