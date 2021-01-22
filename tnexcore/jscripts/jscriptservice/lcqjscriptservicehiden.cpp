@@ -32,6 +32,9 @@
 
 
 //==============================================================================
+static QString createScriptGlobal(QMap<QString, QString> _attrMap);
+
+//==============================================================================
 static const struct
 {
   QString applicationGlobalExport = "APPLICATIONGLOBALEXPORT";
@@ -88,7 +91,6 @@ void LCQJScriptHiden::CEventExecute::handle(LCQJScriptHiden* _sender)
 }
 
 //==============================================================================LCQJScriptHiden
-static QString createScriptGlobal(QMap<QString, QString> _attrMap);
 
 LCQJScriptHiden::LCQJScriptHiden(
     const QString& _script, 
@@ -101,6 +103,7 @@ LCQJScriptHiden::LCQJScriptHiden(
   mspAppService = LCQJSAppService::getService();
 
   moveToThread(mpThread);
+  mJSEngine.moveToThread(mpThread);
 
   mJSEngine.installExtensions(QJSEngine::Extension::AllExtensions);
 
@@ -123,6 +126,8 @@ LCQJScriptHiden::LCQJScriptHiden(
   {
     emitError(jsvalue);
   }
+
+  mJSEngine.collectGarbage();
 
   mCallScriptMain = mJSEngine.globalObject().property(
       __slPropNames.callScriptMain);
