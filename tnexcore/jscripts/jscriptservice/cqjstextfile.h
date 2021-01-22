@@ -36,7 +36,8 @@ public:
   Q_INVOKABLE explicit CQJSTextFile(
       const QString& _fileName, 
       CQJSFileBase* _parent = nullptr);
-
+  ~CQJSTextFile();
+  
 public slots:
 
   QString read(quint64 _maxlen);

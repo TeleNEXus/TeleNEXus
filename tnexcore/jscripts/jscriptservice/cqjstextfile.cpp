@@ -20,6 +20,7 @@
  */
 #include "cqjstextfile.h"
 #include <QTextStream>
+#include <QDebug>
 
 //==============================================================================
 CQJSTextFile::CQJSTextFile(CQJSFileBase* _parent) : 
@@ -33,7 +34,10 @@ CQJSTextFile::CQJSTextFile(const QString& _fileName, CQJSFileBase* _parent ):
   mStream(&mFile)
 {
 }
-
+CQJSTextFile::~CQJSTextFile()
+{
+  qDebug() << "------------------CQJSTextFile destructor.";
+}
 //------------------------------------------------------------------------------
 QString CQJSTextFile::read(quint64 _maxlen)
 {
@@ -57,9 +61,18 @@ QString CQJSTextFile::readLine(quint64 _maxlen)
 //------------------------------------------------------------------------------
 bool CQJSTextFile::write(const QString& _str)
 {
-  if(mFile.isOpen())
-  {
-    mStream << _str;
-    mStream.resetStatus();
-  }
+  qDebug() << "CQJSTextFile::write string " << _str;
+  qDebug() << "CQJSTextFile::write TextStream::Status " << mStream.status();
+  qDebug() << "CQJSTextFile::write TextStream::File::name" << static_cast<QFile*>(mStream.device())->fileName();
+
+  QTextStream stream(&mFile);
+
+  /* stream << _str; */
+  if(!mFile.isOpen()) return false;
+
+  stream << _str;
+  stream.resetStatus();
+
+  qDebug() << "CQJSTextFile::write TextStream::Status " << mStream.status();
+  return true;
 }

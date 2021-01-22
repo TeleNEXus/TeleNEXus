@@ -95,11 +95,11 @@ private:
   void timerStart(int _interval);
   void timerStop();
   void scriptExecute();
-  /* void debugOut(const QString& _out); */
   void emitError(const QJSValue& _jsvalue);
 
 //--------------------------------------------------------jsexports
 public slots:
+
   void debugOut(const QString& _out);
 
   QString getProjectPath();
