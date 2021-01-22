@@ -34,10 +34,12 @@ CQJSTextFile::CQJSTextFile(const QString& _fileName, CQJSFileBase* _parent ):
   mStream(&mFile)
 {
 }
+
 CQJSTextFile::~CQJSTextFile()
 {
   qDebug() << "------------------CQJSTextFile destructor.";
 }
+
 //------------------------------------------------------------------------------
 QString CQJSTextFile::read(quint64 _maxlen)
 {
