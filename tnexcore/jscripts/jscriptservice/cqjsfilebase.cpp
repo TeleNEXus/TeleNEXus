@@ -44,6 +44,10 @@ CQJSFileBase::CQJSFileBase(const QString& _fileName, QObject* _parent) :
 {
 }
 
+CQJSFileBase::~CQJSFileBase() 
+{
+}
+
 //------------------------------------------------------------------------------
 bool CQJSFileBase::open(const QString& _openMode)
 {
@@ -153,4 +157,10 @@ bool CQJSFileBase::seek(quint64 _pos)
 quint64 CQJSFileBase::size() const
 {
   return mFile.size();
+}
+
+//------------------------------------------------------------------------------
+bool CQJSFileBase::flush()
+{
+  return mFile.flush();
 }

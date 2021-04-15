@@ -33,6 +33,7 @@
 
 //==============================================================================
 static QString createScriptGlobal(QMap<QString, QString> _attrMap);
+static void addMetaObjects(QJSEngine& _engine);
 
 //==============================================================================
 static const struct
@@ -91,7 +92,6 @@ void LCQJScriptHiden::CEventExecute::handle(LCQJScriptHiden* _sender)
 }
 
 //==============================================================================LCQJScriptHiden
-
 LCQJScriptHiden::LCQJScriptHiden(
     const QString& _script, 
     const QMap<QString, QString>& _attributesMap,
@@ -107,11 +107,9 @@ LCQJScriptHiden::LCQJScriptHiden(
 
   mJSEngine.installExtensions(QJSEngine::Extension::AllExtensions);
 
-  QJSValue jsvalue = mJSEngine.newQMetaObject(&CQJSTextFile::staticMetaObject);
-  mJSEngine.globalObject().setProperty(__slObjectsNames.textFile, jsvalue);
+  addMetaObjects(mJSEngine);
 
-
-  jsvalue = mJSEngine.newQObject(this);
+  QJSValue jsvalue = mJSEngine.newQObject(this);
 
   mJSEngine.globalObject().setProperty(
       __slPropNames.applicationGlobalExport, jsvalue);
@@ -313,7 +311,7 @@ void LCQJScriptHiden::exjs(QJSValue _jsvalue)
 
 }
 
-//==============================================================================createScriptGlobal
+//==============================================================================
 static QString createScriptGlobal(QMap<QString, QString> _attrMap)
 {
   QString obj_attributes = 
@@ -347,3 +345,14 @@ static QString createScriptGlobal(QMap<QString, QString> _attrMap)
     .arg(QString())
     .arg(QString());
 }
+
+//==============================================================================
+static void addMetaObjects(QJSEngine& _engine)
+{
+  QJSValue jsvalue = _engine.newQMetaObject(&CQJSTextFile::staticMetaObject);
+  _engine.globalObject().setProperty(__slObjectsNames.textFile, jsvalue);
+}
+
+
+
+
