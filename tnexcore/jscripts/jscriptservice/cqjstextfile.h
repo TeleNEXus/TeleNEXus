@@ -36,7 +36,8 @@ public:
   Q_INVOKABLE explicit CQJSTextFile(
       const QString& _fileName, 
       CQJSFileBase* _parent = nullptr);
-  ~CQJSTextFile();
+
+  virtual ~CQJSTextFile();
   
 public slots:
 
@@ -44,6 +45,7 @@ public slots:
   QString readAll();
   QString readLine(quint64 _maxlen = 0);
   bool write(const QString& _str);
+  virtual bool seek(quint64 _pos) override;
 };
 
 #endif //CQJSTEXTFILE_H_

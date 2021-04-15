@@ -31,11 +31,12 @@ class CQJSFileBase : public QObject
 
 private:
   QFile mFile;
-  QString mErrorString;
+  /* QString mErrorString; */
 
 private:
   explicit CQJSFileBase(QObject* _parent = nullptr);
   explicit CQJSFileBase(const QString& _fileName, QObject* _parent = nullptr);
+  virtual ~CQJSFileBase();
 
 public slots:
   bool open(const QString& _openMode);
@@ -49,8 +50,9 @@ public slots:
   bool remove();
   bool rename(const QString& _newName);
   quint64 pos() const;
-  bool seek(quint64 _pos);
+  virtual bool seek(quint64 _pos);
   quint64 size() const;
+  bool flush();
   /* int error(); */
   /* QString errorString() const; */
   /* void resetError(); */

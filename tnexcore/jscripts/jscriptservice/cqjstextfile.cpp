@@ -37,13 +37,13 @@ CQJSTextFile::CQJSTextFile(const QString& _fileName, CQJSFileBase* _parent ):
 
 CQJSTextFile::~CQJSTextFile()
 {
-  qDebug() << "------------------CQJSTextFile destructor.";
 }
 
 //------------------------------------------------------------------------------
 QString CQJSTextFile::read(quint64 _maxlen)
 {
-  return QString("QJSTextFile read string data");
+  if(!mFile.isOpen()) return QString();
+  return mStream.read(_maxlen);
 }
 
 //------------------------------------------------------------------------------
@@ -57,24 +57,19 @@ QString CQJSTextFile::readAll()
 QString CQJSTextFile::readLine(quint64 _maxlen)
 {
   if(!mFile.isOpen()) return QString();
-  return QString("CQJSTextFile return read line data");
+  return mStream.readLine(_maxlen);
 }
 
 //------------------------------------------------------------------------------
 bool CQJSTextFile::write(const QString& _str)
 {
-  qDebug() << "CQJSTextFile::write string " << _str;
-  qDebug() << "CQJSTextFile::write TextStream::Status " << mStream.status();
-  qDebug() << "CQJSTextFile::write TextStream::File::name" << static_cast<QFile*>(mStream.device())->fileName();
-
-  QTextStream stream(&mFile);
-
-  /* stream << _str; */
   if(!mFile.isOpen()) return false;
-
-  stream << _str;
-  stream.resetStatus();
-
-  qDebug() << "CQJSTextFile::write TextStream::Status " << mStream.status();
+  mStream << _str;
   return true;
+}
+
+//------------------------------------------------------------------------------
+bool CQJSTextFile::seek(quint64 _pos)
+{
+  return mStream.seek(_pos);
 }
