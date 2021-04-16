@@ -116,5 +116,8 @@ public slots:
   bool exportModule(const QString& _fileName);
 
   void exjs(QJSValue _jsvalue);
+  QJSValue newTextFile(const QString& _name);
+    
+  void collectGarbage();
 };
 #endif

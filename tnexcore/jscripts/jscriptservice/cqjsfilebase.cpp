@@ -21,15 +21,16 @@
 #include "cqjsfilebase.h"
 #include <QString>
 #include <QFileInfo>
+#include <QDebug>
 
 //==============================================================================
 static const struct 
 {
-  QString NotOpen = "no";
-  QString ReadOnly = "r";
-  QString WriteOnly = "w";
-  QString ReadWrite = "rw";
-  QString Append = "a";
+  QString NotOpen     = "no";
+  QString ReadOnly    = "r";
+  QString WriteOnly   = "w";
+  QString ReadWrite   = "rw";
+  QString Append      = "a";
 }__slOpenModes;
 
 //==============================================================================
@@ -46,6 +47,7 @@ CQJSFileBase::CQJSFileBase(const QString& _fileName, QObject* _parent) :
 
 CQJSFileBase::~CQJSFileBase() 
 {
+  qDebug() << "+++++++++++++++++++++++++++++++++++++++CQJSFileBase Destructor";
 }
 
 //------------------------------------------------------------------------------
