@@ -23,20 +23,20 @@
 #include <QDebug>
 
 //==============================================================================
-CQJSTextFile::CQJSTextFile(CQJSFileBase* _parent) : 
-  CQJSFileBase(_parent),
-  mStream(&mFile)
+CQJSTextFile::CQJSTextFile(QObject* _parent) : 
+  CQJSFileBase(_parent)
 {
 }
 
-CQJSTextFile::CQJSTextFile(const QString& _fileName, CQJSFileBase* _parent ):
-  CQJSFileBase(_fileName, _parent),
-  mStream(&mFile)
+CQJSTextFile::CQJSTextFile(const QString& _fileName, QObject* _parent ):
+  CQJSFileBase(_fileName, _parent)
 {
+  qDebug() << "+++++++++++++++++++++++++++CQJSTextFile Constructor";
 }
 
 CQJSTextFile::~CQJSTextFile()
 {
+  qDebug() << "---------------------------CQJSTextFile Destructor";
 }
 
 //------------------------------------------------------------------------------
@@ -64,8 +64,25 @@ QString CQJSTextFile::readLine(quint64 _maxlen)
 bool CQJSTextFile::write(const QString& _str)
 {
   if(!mFile.isOpen()) return false;
+  qDebug() << "Write str " << _str;
   mStream << _str;
+  mStream.flush();
   return true;
+}
+
+//------------------------------------------------------------------------------
+bool CQJSTextFile::open(const QString& _openMode)
+{
+  if(!CQJSFileBase::open(_openMode)) return false;
+  mStream.setDevice(&mFile);
+  return true;
+}
+
+//------------------------------------------------------------------------------
+void CQJSTextFile::close()
+{
+  mStream.flush();
+  CQJSFileBase::close();
 }
 
 //------------------------------------------------------------------------------

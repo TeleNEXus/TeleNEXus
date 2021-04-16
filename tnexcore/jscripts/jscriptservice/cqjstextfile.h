@@ -32,12 +32,12 @@ private:
   QTextStream mStream;
 
 public:
-  Q_INVOKABLE explicit CQJSTextFile(CQJSFileBase* _parent = nullptr);
+  Q_INVOKABLE explicit CQJSTextFile(QObject* _parent = nullptr);
   Q_INVOKABLE explicit CQJSTextFile(
       const QString& _fileName, 
-      CQJSFileBase* _parent = nullptr);
+      QObject* _parent = nullptr);
 
-  virtual ~CQJSTextFile();
+  Q_INVOKABLE virtual ~CQJSTextFile();
   
 public slots:
 
@@ -45,6 +45,8 @@ public slots:
   QString readAll();
   QString readLine(quint64 _maxlen = 0);
   bool write(const QString& _str);
+  virtual bool open(const QString& _openMode) override;
+  virtual void close() override;
   virtual bool seek(quint64 _pos) override;
 };
 

@@ -31,19 +31,18 @@ class CQJSFileBase : public QObject
 
 private:
   QFile mFile;
-  /* QString mErrorString; */
 
 private:
-  explicit CQJSFileBase(QObject* _parent = nullptr);
-  explicit CQJSFileBase(const QString& _fileName, QObject* _parent = nullptr);
-  virtual ~CQJSFileBase();
+  Q_INVOKABLE explicit CQJSFileBase(QObject* _parent = nullptr);
+  Q_INVOKABLE explicit CQJSFileBase(const QString& _fileName, QObject* _parent = nullptr);
+  Q_INVOKABLE virtual ~CQJSFileBase();
 
 public slots:
-  bool open(const QString& _openMode);
+  virtual bool open(const QString& _openMode);
   QString openMode() const;
   QString fileName() const;
   bool setFileName(const QString& _fileName);
-  void close();
+  virtual void close();
   bool isOpen() const;
   bool atEnd() const;
   bool exists() const;
@@ -53,9 +52,7 @@ public slots:
   virtual bool seek(quint64 _pos);
   quint64 size() const;
   bool flush();
-  /* int error(); */
-  /* QString errorString() const; */
-  /* void resetError(); */
+
   friend class CQJSTextFile;
   friend class CQJSBinaryFile;
 };

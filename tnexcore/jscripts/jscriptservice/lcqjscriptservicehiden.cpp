@@ -33,7 +33,12 @@
 
 //==============================================================================
 static QString createScriptGlobal(QMap<QString, QString> _attrMap);
-static void addMetaObjects(QJSEngine& _engine);
+
+/* static void addMetaObjects(QJSEngine& _engine) */
+/* { */
+/*   QJSValue jsvalue = _engine.newQMetaObject(&CQJSTextFile::staticMetaObject); */
+/*   _engine.globalObject().setProperty(__slObjectsNames.textFile, jsvalue); */
+/* } */
 
 //==============================================================================
 static const struct
@@ -47,6 +52,16 @@ static const struct
 {
   QString textFile = "TextFile";
 }__slObjectsNames;
+
+
+
+static void addMetaObjects(QJSEngine& _engine)
+{
+  QJSValue jsvalue = _engine.newQMetaObject(&CQJSTextFile::staticMetaObject);
+  _engine.globalObject().setProperty(__slObjectsNames.textFile, jsvalue);
+}
+
+
 
 //==============================================================================CEventBase
 __LQ_EXTENDED_QEVENT_IMPLEMENTATION(LCQJScriptHiden::CEventBase);
@@ -311,6 +326,20 @@ void LCQJScriptHiden::exjs(QJSValue _jsvalue)
 
 }
 
+QJSValue LCQJScriptHiden::newTextFile(const QString& _name)
+{
+  CQJSTextFile *file = new CQJSTextFile(_name);
+  /* file->moveToThread(mpThread); */
+  /* file->setParent(&mJSEngine); */
+  QJSValue val =  mJSEngine.newQObject(file);
+  return val;
+}
+
+void LCQJScriptHiden::collectGarbage()
+{
+  qDebug() << "Collect Garbage";
+   mJSEngine.collectGarbage();
+}
 //==============================================================================
 static QString createScriptGlobal(QMap<QString, QString> _attrMap)
 {
@@ -337,6 +366,10 @@ static QString createScriptGlobal(QMap<QString, QString> _attrMap)
       "return %2.exportModule(_fileName)};"
       "function ExJs(_jsv) {"
       "return %2.exjs(_jsv)};"
+      "function NewTextFile(_fileName) {"
+      "return %2.newTextFile(_fileName);};"
+      "function CollectGarbage() {"
+      "return %2.collectGarbage()};"
       "var ScriptId = \"%3\";"
       "var ScriptFile = \"%4\";"
       )
@@ -346,12 +379,6 @@ static QString createScriptGlobal(QMap<QString, QString> _attrMap)
     .arg(QString());
 }
 
-//==============================================================================
-static void addMetaObjects(QJSEngine& _engine)
-{
-  QJSValue jsvalue = _engine.newQMetaObject(&CQJSTextFile::staticMetaObject);
-  _engine.globalObject().setProperty(__slObjectsNames.textFile, jsvalue);
-}
 
 
 
