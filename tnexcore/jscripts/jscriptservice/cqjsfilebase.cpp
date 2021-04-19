@@ -33,6 +33,7 @@ static const struct
   QString Append      = "a";
 }__slOpenModes;
 
+
 //==============================================================================
 CQJSFileBase::CQJSFileBase(QObject* _parent) : 
   QObject(_parent) 
@@ -166,3 +167,4 @@ bool CQJSFileBase::flush()
 {
   return mFile.flush();
 }
+

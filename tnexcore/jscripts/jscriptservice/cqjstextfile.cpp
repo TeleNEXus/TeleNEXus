@@ -19,17 +19,24 @@
  * along with TeleNEXus.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include "cqjstextfile.h"
+#include "lcqjscriptservicehiden.h"
 #include <QTextStream>
 #include <QDebug>
 
 //==============================================================================
-CQJSTextFile::CQJSTextFile(QObject* _parent) : 
-  CQJSFileBase(_parent)
+static bool readAllowCheck(const QFile& _file, QJSEngine* _jsengine);
+static bool writeAllowCheck(const QFile& _file, QJSEngine* _jsengine);
+
+//==============================================================================CQJSTextFile
+CQJSTextFile::CQJSTextFile(int _engineId) : 
+  CQJSFileBase(nullptr),
+  mpEngine(LCQJScriptHiden::getJSEngine(_engineId))
 {
 }
 
-CQJSTextFile::CQJSTextFile(const QString& _fileName, QObject* _parent ):
-  CQJSFileBase(_fileName, _parent)
+CQJSTextFile::CQJSTextFile(const QString& _fileName, int _engineId):
+  CQJSFileBase(_fileName, nullptr),
+  mpEngine(LCQJScriptHiden::getJSEngine(_engineId))
 {
   qDebug() << "+++++++++++++++++++++++++++CQJSTextFile Constructor";
 }
@@ -42,29 +49,28 @@ CQJSTextFile::~CQJSTextFile()
 //------------------------------------------------------------------------------
 QString CQJSTextFile::read(quint64 _maxlen)
 {
-  if(!mFile.isOpen()) return QString();
+  if(!readAllowCheck(mFile, mpEngine)) return QString();
   return mStream.read(_maxlen);
 }
 
 //------------------------------------------------------------------------------
 QString CQJSTextFile::readAll()
 {
-  if(!mFile.isOpen()) return QString();
+  if(!readAllowCheck(mFile, mpEngine)) return QString();
   return mStream.readAll();
 }
 
 //------------------------------------------------------------------------------
 QString CQJSTextFile::readLine(quint64 _maxlen)
 {
-  if(!mFile.isOpen()) return QString();
+  if(!readAllowCheck(mFile, mpEngine)) return QString();
   return mStream.readLine(_maxlen);
 }
 
 //------------------------------------------------------------------------------
 bool CQJSTextFile::write(const QString& _str)
 {
-  if(!mFile.isOpen()) return false;
-  qDebug() << "Write str " << _str;
+  if(!writeAllowCheck(mFile, mpEngine)) return false;
   mStream << _str;
   mStream.flush();
   return true;
@@ -73,7 +79,11 @@ bool CQJSTextFile::write(const QString& _str)
 //------------------------------------------------------------------------------
 bool CQJSTextFile::open(const QString& _openMode)
 {
-  if(!CQJSFileBase::open(_openMode)) return false;
+  if(!CQJSFileBase::open(_openMode)) 
+  {
+    mpEngine->throwError(mFile.errorString());
+    return false;
+  }
   mStream.setDevice(&mFile);
   return true;
 }
@@ -90,3 +100,50 @@ bool CQJSTextFile::seek(quint64 _pos)
 {
   return mStream.seek(_pos);
 }
+
+//==============================================================================
+static bool readAllowCheck(const QFile& _file, QJSEngine* _jsengine)
+{
+
+  if(!_file.isOpen())
+  {
+    _jsengine->throwError(QStringLiteral("File is not open"));
+    return false;
+  }
+
+  if(_file.openMode() == QIODevice::OpenModeFlag::WriteOnly)
+  { 
+    _jsengine->throwError(QStringLiteral("File is open for write only"));
+    return false;
+  }
+
+  if (_file.openMode() == QIODevice::OpenModeFlag::Append)
+  {
+    _jsengine->throwError(QStringLiteral("File is open for append"));
+    return false;
+  }
+
+  return true;
+}
+
+//==============================================================================
+static bool writeAllowCheck(const QFile& _file, QJSEngine* _jsengine)
+{
+
+  if(!_file.isOpen())
+  {
+    _jsengine->throwError(QStringLiteral("File is not open"));
+    return false;
+  }
+
+  if(_file.openMode() == QIODevice::OpenModeFlag::ReadOnly)
+  {
+    _jsengine->throwError(QStringLiteral("File is open for read only"));
+    return false;
+  }
+
+  return true;
+}
+
+
+

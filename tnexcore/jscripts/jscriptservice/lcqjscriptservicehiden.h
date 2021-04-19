@@ -70,6 +70,7 @@ private:
 
   };
 
+  int         mId;
   QSharedPointer<LCQJSAppService> mspAppService;
   QJSEngine   mJSEngine;
   QJSValue    mCallScriptMain;
@@ -119,5 +120,10 @@ public slots:
   QJSValue newTextFile(const QString& _name);
     
   void collectGarbage();
+
+private:
+  static QJSEngine* getJSEngine(int _engineId);
+
+  friend class CQJSTextFile;
 };
 #endif

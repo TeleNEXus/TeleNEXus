@@ -29,10 +29,13 @@
 #include <QTimer>
 #include <QCoreApplication>
 #include <QSharedPointer>
+#include <QMap>
 
+static QMap<int, QJSEngine*> __slJSEngines;
+static int __slJSEngineCounter = 0;
 
 //==============================================================================
-static QString createScriptGlobal(QMap<QString, QString> _attrMap);
+static QString createScriptGlobal(QMap<QString, QString> _attrMap, int _engineId);
 
 /* static void addMetaObjects(QJSEngine& _engine) */
 /* { */
@@ -46,19 +49,15 @@ static const struct
   QString applicationGlobalExport = "APPLICATIONGLOBALEXPORT";
   QString attributes = "Attributes";
   QString callScriptMain = "Main";
+  QString textFile = "TextFile";
 }__slPropNames;
 
-static const struct
-{
-  QString textFile = "TextFile";
-}__slObjectsNames;
 
 
-
-static void addMetaObjects(QJSEngine& _engine)
+static void addMetaObjects(QJSEngine& _engine, QJSValue& _globalExport)
 {
   QJSValue jsvalue = _engine.newQMetaObject(&CQJSTextFile::staticMetaObject);
-  _engine.globalObject().setProperty(__slObjectsNames.textFile, jsvalue);
+  _globalExport.setProperty(__slPropNames.textFile, jsvalue);
 }
 
 
@@ -115,6 +114,12 @@ LCQJScriptHiden::LCQJScriptHiden(
   mpThread(new QThread),
   mTimerId(0)
 {
+
+  //Engine registration.
+  mId = __slJSEngineCounter;
+  __slJSEngineCounter++;
+  __slJSEngines.insert(mId, &mJSEngine);
+
   mspAppService = LCQJSAppService::getService();
 
   moveToThread(mpThread);
@@ -122,14 +127,15 @@ LCQJScriptHiden::LCQJScriptHiden(
 
   mJSEngine.installExtensions(QJSEngine::Extension::AllExtensions);
 
-  addMetaObjects(mJSEngine);
 
   QJSValue jsvalue = mJSEngine.newQObject(this);
+
+  addMetaObjects(mJSEngine, jsvalue);
 
   mJSEngine.globalObject().setProperty(
       __slPropNames.applicationGlobalExport, jsvalue);
 
-  jsvalue = mJSEngine.evaluate( createScriptGlobal(_attributesMap) );
+  jsvalue = mJSEngine.evaluate(createScriptGlobal(_attributesMap, mId));
 
   if(jsvalue.isError()) { emitError(jsvalue);}
 
@@ -311,6 +317,7 @@ bool LCQJScriptHiden::exportModule(const QString& _fileName)
   return false;
 }
 
+//------------------------------------------------------------------------------
 void LCQJScriptHiden::exjs(QJSValue _jsvalue)
 {
 
@@ -326,22 +333,31 @@ void LCQJScriptHiden::exjs(QJSValue _jsvalue)
 
 }
 
+//------------------------------------------------------------------------------
 QJSValue LCQJScriptHiden::newTextFile(const QString& _name)
 {
-  CQJSTextFile *file = new CQJSTextFile(_name);
-  /* file->moveToThread(mpThread); */
-  /* file->setParent(&mJSEngine); */
+  CQJSTextFile *file = new CQJSTextFile(_name, mId);
   QJSValue val =  mJSEngine.newQObject(file);
   return val;
 }
 
+//------------------------------------------------------------------------------
 void LCQJScriptHiden::collectGarbage()
 {
   qDebug() << "Collect Garbage";
    mJSEngine.collectGarbage();
 }
+
+//------------------------------------------------------------------------------
+QJSEngine* LCQJScriptHiden::getJSEngine(int _engineId)
+{
+  auto it = __slJSEngines.find(_engineId);
+  if(it == __slJSEngines.end()) return nullptr;
+  return it.value();
+}
+
 //==============================================================================
-static QString createScriptGlobal(QMap<QString, QString> _attrMap)
+static QString createScriptGlobal(QMap<QString, QString> _attrMap, int _engineId)
 {
   QString obj_attributes = 
     QString("var %1 = { ").arg(__slPropNames.attributes);
@@ -367,16 +383,17 @@ static QString createScriptGlobal(QMap<QString, QString> _attrMap)
       "function ExJs(_jsv) {"
       "return %2.exjs(_jsv)};"
       "function NewTextFile(_fileName) {"
-      "return %2.newTextFile(_fileName);};"
+      "return new %2.TextFile(_fileName, %3);};"
       "function CollectGarbage() {"
       "return %2.collectGarbage()};"
-      "var ScriptId = \"%3\";"
-      "var ScriptFile = \"%4\";"
+      "var ScriptId = \"%4\";"
+      "var ScriptFile = \"%5\";"
       )
-    .arg(obj_attributes)
-    .arg(__slPropNames.applicationGlobalExport)
-    .arg(QString())
-    .arg(QString());
+/*1*/ .arg(obj_attributes)
+/*2*/ .arg(__slPropNames.applicationGlobalExport)
+/*3*/ .arg(_engineId)
+/*4*/ .arg(QString())
+/*5*/ .arg(QString());
 }
 
 
