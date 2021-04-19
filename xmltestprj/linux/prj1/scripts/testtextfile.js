@@ -19,8 +19,10 @@ function read_file(){
 
   console.debug("Test text file read");
 
-  let File = NewTextFile('temp/test_text_file_read.txt');
+  let File = NewTextFile();
+  // let File = NewTextFile('temp/test_text_file_read.txt');
   // let File = new TextFile('temp/test_text_file_read.txt');
+  File.setFileName('temp/test_text_file_read.txt');
   File.open('r');
 
   console.debug("\nText file read all 1");
@@ -70,12 +72,16 @@ function read_file(){
   let File = NewTextFile('temp/test_text_file_write.txt');
   // let File = new TextFile('temp/test_text_file_write.txt');
   File.open('w');
+  try {
   File.write("Test text file write: Hellow World!!! 1\n");
   File.write("Test text file write: Hellow World!!! 2\n");
   File.write("Test text file write: Hellow World!!! 3\n");
   File.write("Test text file write: Hellow World!!! 4\n");
   File.write("Test text file write: Hellow World!!! 5\n");
   File.write("Test text file write: Hellow World!!! 6\n");
+  }catch(error){
+    console.warn("In " + error.fileName + ": " + error.lineNumber + ": " + error.message);
+  }
 })();
 
 CollectGarbage();
