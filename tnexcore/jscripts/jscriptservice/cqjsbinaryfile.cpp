@@ -19,15 +19,28 @@
  * along with TeleNEXus.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include "cqjsbinaryfile.h"
+#include "lcqjscriptservicehiden.h"
+#include <QDebug>
 
-CQJSBinaryFile::CQJSBinaryFile(QJSEngine* _jsengine) :
-  CQJSFileBase(_jsengine)
+//==============================================================================
+static bool readAllowCheck(const QFile& _file, QJSEngine* _jsengine);
+static bool writeAllowCheck(const QFile& _file, QJSEngine* _jsengine);
+
+CQJSBinaryFile::CQJSBinaryFile(int _engineId) :
+  CQJSFileBase(LCQJScriptHiden::getJSEngine(_engineId))
 {
+  qDebug() << "++++++++++++++++++++++++++Binary file constructor 1";
 }
 
-CQJSBinaryFile::CQJSBinaryFile(const QString& _fileName, QJSEngine* _jsengine) :
-  CQJSFileBase(_fileName, _jsengine)
+CQJSBinaryFile::CQJSBinaryFile(const QString& _fileName, int _engineId) :
+  CQJSFileBase(_fileName, LCQJScriptHiden::getJSEngine(_engineId))
 {
+  qDebug() << "++++++++++++++++++++++++++Binary file constructor 2";
+}
+
+CQJSBinaryFile::~CQJSBinaryFile()
+{
+  qDebug() << "--------------------------Binary file destructor";
 }
 
 qint64 CQJSBinaryFile::write(const QVariantList& _data)
@@ -36,19 +49,20 @@ qint64 CQJSBinaryFile::write(const QVariantList& _data)
 
   for(int i = 0; i < _data.size(); i++)
   {
-    if(!_data.at(i).canConvert(QVariant::Type::ByteArray))
+    /* if(!_data.at(i).canConvert(QVariant::Type::ByteArray)) */
+    /* { */
+    /*   mpEngine->throwError("Wrong write data"); */
+    /*   return -1; */
+    /* } */
+    /* wd += _data.at(i).toByteArray(); */
+    bool flag = false;
+    int d = _data.at(i).toUInt(&flag);
+    if(!flag) 
     {
       mpEngine->throwError("Wrong write data");
       return -1;
     }
-    /* bool flag = false; */
-    /* int d = _data.at(i).toUInt(&flag); */
-    /* if(!flag) */ 
-    /* { */
-    /*   return 0; */
-    /* } */
-    /* wd[i] =  (unsigned char)d; */
-    wd += _data.at(i).toByteArray();
+    wd[i] =  (unsigned char)d;
   }
   qint64 ret = mFile.write(wd);
   if(ret < 0)
@@ -79,6 +93,8 @@ QVariantList CQJSBinaryFile::read(qint64 _maxSize)
 
 QVariantList CQJSBinaryFile::readAll()
 {
+  if(!readAllowCheck(mFile, mpEngine)) return QVariantList();
+
   QByteArray rd = mFile.readAll();
   if(mFile.error() != QFile::NoError)
   {
@@ -92,6 +108,51 @@ QVariantList CQJSBinaryFile::readAll()
   {
     ret << QVariant(rd[i]);
   }
+  qDebug() << "LCQJSBinaryFile read all data size = " << rd.size();
 
   return ret;
+}
+
+//==============================================================================
+static bool readAllowCheck(const QFile& _file, QJSEngine* _jsengine)
+{
+
+  if(!_file.isOpen())
+  {
+    _jsengine->throwError(QStringLiteral("File is not open"));
+    return false;
+  }
+
+  if(_file.openMode() == QIODevice::OpenModeFlag::WriteOnly)
+  { 
+    _jsengine->throwError(QStringLiteral("File is open for write only"));
+    return false;
+  }
+
+  if (_file.openMode() == QIODevice::OpenModeFlag::Append)
+  {
+    _jsengine->throwError(QStringLiteral("File is open for append"));
+    return false;
+  }
+
+  return true;
+}
+
+//==============================================================================
+static bool writeAllowCheck(const QFile& _file, QJSEngine* _jsengine)
+{
+
+  if(!_file.isOpen())
+  {
+    _jsengine->throwError(QStringLiteral("File is not open"));
+    return false;
+  }
+
+  if(_file.openMode() == QIODevice::OpenModeFlag::ReadOnly)
+  {
+    _jsengine->throwError(QStringLiteral("File is open for read only"));
+    return false;
+  }
+
+  return true;
 }

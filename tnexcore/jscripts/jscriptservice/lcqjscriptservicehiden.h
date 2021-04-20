@@ -118,6 +118,7 @@ public slots:
 
   void exjs(QJSValue _jsvalue);
   QJSValue newTextFile(const QString& _name);
+  QJSValue newBinaryFile(const QString& _name);
     
   void collectGarbage();
 
@@ -125,5 +126,6 @@ private:
   static QJSEngine* getJSEngine(int _engineId);
 
   friend class CQJSTextFile;
+  friend class CQJSBinaryFile;
 };
 #endif

@@ -26,11 +26,14 @@ class QJSEngine;
 
 class CQJSBinaryFile : public CQJSFileBase
 {
+  Q_OBJECT;
+private:
+  CQJSBinaryFile() = delete;
 public:
 
-  CQJSBinaryFile() = delete;
-  Q_INVOKABLE CQJSBinaryFile(QJSEngine* _jsengine);
-  Q_INVOKABLE CQJSBinaryFile(const QString& _fileName, QJSEngine* _jsengine);
+  Q_INVOKABLE CQJSBinaryFile(int _engineId);
+  Q_INVOKABLE CQJSBinaryFile(const QString& _fileName, int _engineId);
+  Q_INVOKABLE virtual ~CQJSBinaryFile();
 public slots:
   qint64 write(const QVariantList& _data);
   QVariantList read(qint64 _maxSize);

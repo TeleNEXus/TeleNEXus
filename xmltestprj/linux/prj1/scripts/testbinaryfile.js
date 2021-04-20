@@ -1,100 +1,112 @@
-console.debug("<<<<<<<<<<<<<<<<Begin Evaluate Script testtextfile.js");
-
-(function(){
-  var textFile = NewTextFile('temp/text_file3.txt');
-  var newFileName = 'temp/text_file2.txt';
-  // var textFile = new TextFile();
-  console.info("TextFile info: " + textFile);
-  console.debug("textFile.fileName = " + textFile.fileName());
-  if(textFile.exists()) console.debug("textFile is exists");
-  else console.debug("textFile is not exists");
-
-  textFile.open('w');
-  if(textFile.isOpen()) console.debug("textFile is open")
-  else console.debug("textFile not opet");
-})();
-
-//test text file read
-function read_file(){
-
-  console.debug("Test text file read");
-
-  let File = NewTextFile();
-  // let File = NewTextFile('temp/test_text_file_read.txt');
-  // let File = new TextFile('temp/test_text_file_read.txt');
-  File.setFileName('temp/test_text_file_read.txt');
-  File.open('r');
-
-  console.debug("\nText file read all 1");
-  console.debug(File.readAll());
-  console.debug("\nText file read all 2");
-  File.seek(0);
-  console.debug(File.readAll());
-  
-  console.debug("\nText file read line 1");
-  File.seek(0);
-  console.debug("read line = " + File.readLine(1));
-  console.debug("read line = " + File.readLine(2));
-  console.debug("read line = " + File.readLine(3));
-  console.debug("read line = " + File.readLine(4));
-  console.debug("read line = " + File.readLine(5));
-  console.debug("read line = " + File.readLine(6));
-  console.debug("read line = " + File.readLine(7));
-  console.debug("read line = " + File.readLine(8));
-  console.debug("read line = " + File.readLine(9));
-  console.debug("read line = " + File.readLine(10));
-
-  console.debug("\nText file read line 2");
-  File.seek(0);
-  console.debug("read line = " + File.readLine());
-  console.debug("read line = " + File.readLine());
-  console.debug("read line = " + File.readLine());
-  console.debug("read line = " + File.readLine());
-  console.debug("read line = " + File.readLine());
-  console.debug("read line = " + File.readLine());
-  console.debug("read line = " + File.readLine());
-  console.debug("read line = " + File.readLine());
-  console.debug("read line = " + File.readLine());
-  console.debug("read line = " + File.readLine());
-};
+console.debug("<<<<<<<<<<<<<<<<Begin Evaluate Script binaryfile.js");
 
 //test text file write
 (function(){
 
-  read_file();
-  read_file();
-  read_file();
-  read_file();
-  read_file();
-  read_file();
-  read_file();
-  console.debug("Test text file write");
-  // let File = NewTextFile('~/test_text_file_write.txt');
-  let File = NewTextFile('/home/serg/test_text_file_write.txt');
-  // let File = NewTextFile('temp/test_text_file_write.txt');
-  // let File = new TextFile('temp/test_text_file_write.txt');
+  console.debug("Test write binary file");
+
+  let File = NewBinaryFile('temp/test_binary_file_write.bin');
+
+  let data = [0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f];
+
   try {
-  File.open('w');
+    File.open('w');
   }catch(error){
     console.warn("In " + error.fileName + ": " + error.lineNumber + ": open file " 
       + File.fileName() + " error: " + error.message);
   }
+
   try {
-  File.write("Test text file write: Hellow World!!! 1\n");
-  File.write("Test text file write: Hellow World!!! 2\n");
-  File.write("Test text file write: Hellow World!!! 3\n");
-  File.write("Test text file write: Hellow World!!! 4\n");
-  File.write("Test text file write: Hellow World!!! 5\n");
-  File.write("Test text file write: Hellow World!!! 6\n");
+    File.write(data);
   }catch(error){
     console.warn("In " + error.fileName + ": " + error.lineNumber + ": " + error.message);
   }
+
+
+
+
+  // File.close();
+
+
+
 })();
+
+CollectGarbage();
+
 (function(){
-  let File = NewTextFile('temp/test_text_file_write.txt');
-  // File.open('r');
-  File.copy('temp/test_text_file_write1.txt');
+  console.debug("Test read binary file");
+  let File = NewBinaryFile('temp/test_binary_file_write.bin');
+  try{
+    File.open('r');
+  }catch(error){
+    console.warn("In " + error.fileName + ": " + error.lineNumber + ": open file " 
+      + File.fileName() + " error: " + error.message);
+  }
+
+  var read_data;
+
+  try{
+    read_data = File.readAll();
+  }catch(error){
+    console.warn("In " + error.fileName + ": " + error.lineNumber + ": open file " 
+      + File.fileName() + " error: " + error.message);
+  }
+
+  console.debug("Read file data = " + read_data);
 })();
+
+
+ 
+
+////test text file read
+//function read_file(){
+
+//  console.debug("Test text file read");
+
+//  let File = NewTextFile();
+//  // let File = NewTextFile('temp/test_text_file_read.txt');
+//  // let File = new TextFile('temp/test_text_file_read.txt');
+//  File.setFileName('temp/test_text_file_read.txt');
+//  File.open('r');
+
+//  console.debug("\nText file read all 1");
+//  console.debug(File.readAll());
+//  console.debug("\nText file read all 2");
+//  File.seek(0);
+//  console.debug(File.readAll());
+  
+//  console.debug("\nText file read line 1");
+//  File.seek(0);
+//  console.debug("read line = " + File.readLine(1));
+//  console.debug("read line = " + File.readLine(2));
+//  console.debug("read line = " + File.readLine(3));
+//  console.debug("read line = " + File.readLine(4));
+//  console.debug("read line = " + File.readLine(5));
+//  console.debug("read line = " + File.readLine(6));
+//  console.debug("read line = " + File.readLine(7));
+//  console.debug("read line = " + File.readLine(8));
+//  console.debug("read line = " + File.readLine(9));
+//  console.debug("read line = " + File.readLine(10));
+
+//  console.debug("\nText file read line 2");
+//  File.seek(0);
+//  console.debug("read line = " + File.readLine());
+//  console.debug("read line = " + File.readLine());
+//  console.debug("read line = " + File.readLine());
+//  console.debug("read line = " + File.readLine());
+//  console.debug("read line = " + File.readLine());
+//  console.debug("read line = " + File.readLine());
+//  console.debug("read line = " + File.readLine());
+//  console.debug("read line = " + File.readLine());
+//  console.debug("read line = " + File.readLine());
+//  console.debug("read line = " + File.readLine());
+//};
+
+//(function(){
+//  let File = NewTextFile('temp/test_text_file_write.txt');
+//  // File.open('r');
+//  File.copy('temp/test_text_file_write1.txt');
+//})();
 
 CollectGarbage();
 // if(textFile.rename(newFileName)) console.debug("textFile is renamed");

@@ -39,7 +39,8 @@
 
 
 
-  <script id="testtextfile" file="scripts/testtextfile.js"/>
+  <!-- <script id="testtextfile" file="scripts/testtextfile.js"/> -->
+  <script id="testtextfile" file="scripts/testbinaryfile.js"/>
   <!-- <execute scriptId="testtextfile" /> -->
 
 
