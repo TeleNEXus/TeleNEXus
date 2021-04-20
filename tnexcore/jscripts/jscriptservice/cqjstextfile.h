@@ -30,13 +30,11 @@ class CQJSTextFile final : public CQJSFileBase
   Q_OBJECT;
 private:
   QTextStream mStream;
-  QJSEngine* mpEngine;
   CQJSTextFile() = delete;
 
 public:
   Q_INVOKABLE explicit CQJSTextFile(int _engineId);
   Q_INVOKABLE explicit CQJSTextFile(const QString& _fileName, int _engineId);
-
   Q_INVOKABLE virtual ~CQJSTextFile();
   
 public slots:

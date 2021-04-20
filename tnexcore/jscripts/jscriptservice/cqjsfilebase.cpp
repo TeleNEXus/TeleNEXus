@@ -24,52 +24,49 @@
 #include <QDebug>
 
 //==============================================================================
-static const struct 
-{
-  QString NotOpen     = "no";
-  QString ReadOnly    = "r";
-  QString WriteOnly   = "w";
-  QString ReadWrite   = "rw";
-  QString Append      = "a";
-}__slOpenModes;
+const CQJSFileBase::SOpenModes CQJSFileBase::mOpenModes;
 
-
-//==============================================================================
-CQJSFileBase::CQJSFileBase(QObject* _parent) : 
-  QObject(_parent) 
+CQJSFileBase::CQJSFileBase(QJSEngine* _jsengine) : 
+  QObject(nullptr),
+  mpEngine(_jsengine)
 {
+  qDebug() << "+++++++++++++++++++++++++++++++++++++++CQJSFileBase Constructor";
 }
 
-CQJSFileBase::CQJSFileBase(const QString& _fileName, QObject* _parent) : 
-  QObject(_parent), 
-  mFile(_fileName)
+CQJSFileBase::CQJSFileBase(const QString& _fileName, QJSEngine* _jsengine) : 
+  QObject(nullptr), 
+  mFile(_fileName),
+  mpEngine(_jsengine)
 {
+  qDebug() << "+++++++++++++++++++++++++++++++++++++++CQJSFileBase Constructor";
 }
 
 CQJSFileBase::~CQJSFileBase() 
 {
-  qDebug() << "+++++++++++++++++++++++++++++++++++++++CQJSFileBase Destructor";
+  qDebug() << "---------------------------------------CQJSFileBase Destructor";
 }
 
 //------------------------------------------------------------------------------
 bool CQJSFileBase::open(const QString& _openMode)
 {
   if(mFile.isOpen()) return true;
-  if(_openMode.isNull()) return false;
-  bool ret = false;
-  if(_openMode == __slOpenModes.ReadOnly){
-    ret = mFile.open(QFile::OpenModeFlag::ReadOnly);
+  bool flag = false;
+  if(_openMode == mOpenModes.ReadOnly){
+     flag = mFile.open(QFile::OpenModeFlag::ReadOnly);
   }
-  else if(_openMode == __slOpenModes.WriteOnly){
-    ret = mFile.open(QFile::OpenModeFlag::WriteOnly);
+  else if(_openMode == mOpenModes.WriteOnly){
+    flag = mFile.open(QFile::OpenModeFlag::WriteOnly);
   }
-  else if(_openMode == __slOpenModes.ReadWrite){
-    ret = mFile.open(QFile::OpenModeFlag::ReadWrite);
+  else if(_openMode == mOpenModes.ReadWrite){
+    flag = mFile.open(QFile::OpenModeFlag::ReadWrite);
   }
-  else if(_openMode == __slOpenModes.Append){
-    ret = mFile.open(QFile::OpenModeFlag::Append);
+  else if(_openMode == mOpenModes.Append){
+    flag = mFile.open(QFile::OpenModeFlag::Append);
   }
-  return ret;
+
+  if(!flag) { mpEngine->throwError(mFile.errorString()); }
+
+  return flag;
 }
 
 //------------------------------------------------------------------------------
@@ -78,19 +75,19 @@ QString CQJSFileBase::openMode() const
   switch(mFile.openMode())
   {
   case QFile::OpenModeFlag::ReadOnly:
-    return __slOpenModes.ReadOnly;
+    return mOpenModes.ReadOnly;
 
   case QFile::OpenModeFlag::WriteOnly:
-    return __slOpenModes.WriteOnly;
+    return mOpenModes.WriteOnly;
 
   case QFile::OpenModeFlag::ReadWrite:
-    return __slOpenModes.ReadWrite;
+    return mOpenModes.ReadWrite;
 
   case QFile::OpenModeFlag::Append:
-    return __slOpenModes.Append;
+    return mOpenModes.Append;
 
   default:
-    return __slOpenModes.NotOpen;
+    return mOpenModes.NotOpen;
   }
 }
 
@@ -101,11 +98,20 @@ QString CQJSFileBase::fileName() const
 }
 
 //------------------------------------------------------------------------------
-bool CQJSFileBase::setFileName(const QString& _fileName) 
+void CQJSFileBase::setFileName(const QString& _fileName) 
 {
-  if(mFile.isOpen()) return false;
+  if(mFile.isOpen()) 
+  {
+    mpEngine->throwError("File is opened");
+  }
+
   mFile.setFileName(_fileName);
-  return true;
+
+  if(mFile.error() != QFile::NoError)
+  {
+    mpEngine->throwError(mFile.errorString());
+    mFile.unsetError();
+  }
 }
 
 //------------------------------------------------------------------------------
@@ -135,13 +141,25 @@ bool CQJSFileBase::exists() const
 //------------------------------------------------------------------------------
 bool CQJSFileBase::remove()
 {
-  return mFile.remove();
+  bool flag = mFile.remove();
+  if((!flag) && (mFile.error() != QFile::NoError))
+  {
+    mpEngine->throwError(mFile.errorString());
+    mFile.unsetError();
+  }
+  return flag;
 }
 
 //------------------------------------------------------------------------------
-bool CQJSFileBase::rename(const QString& _newName)
+bool CQJSFileBase::rename(const QString& _fileName)
 {
-  return mFile.rename(_newName);
+  bool flag = mFile.rename(_fileName);
+  if((!flag) && (mFile.error() != QFile::NoError))
+  {
+    mpEngine->throwError(mFile.errorString());
+    mFile.unsetError();
+  }
+  return flag;
 }
 
 //------------------------------------------------------------------------------
@@ -153,7 +171,13 @@ quint64 CQJSFileBase::pos() const
 //------------------------------------------------------------------------------
 bool CQJSFileBase::seek(quint64 _pos)
 {
-  return mFile.seek(_pos);
+  bool flag = mFile.seek(_pos);
+  if((!flag) && (mFile.error() != QFile::NoError))
+  {
+    mpEngine->throwError(mFile.errorString());
+    mFile.unsetError();
+  }
+  return flag;
 }
 
 //------------------------------------------------------------------------------
@@ -165,6 +189,23 @@ quint64 CQJSFileBase::size() const
 //------------------------------------------------------------------------------
 bool CQJSFileBase::flush()
 {
-  return mFile.flush();
+  bool flag = mFile.flush();
+  if((!flag) && (mFile.error() != QFile::NoError))
+  {
+    mpEngine->throwError(mFile.errorString());
+    mFile.unsetError();
+  }
+  return flag;
 }
 
+//------------------------------------------------------------------------------
+bool CQJSFileBase::copy(const QString& _fileName)
+{
+  bool flag = mFile.copy(_fileName);
+  if((!flag) && (mFile.error() != QFile::NoError))
+  {
+    mpEngine->throwError(mFile.errorString());
+    mFile.unsetError();
+  }
+  return flag;
+}

@@ -31,17 +31,29 @@ class CQJSFileBase : public QObject
 
 private:
   QFile mFile;
+  QJSEngine* mpEngine;
+
+  static const struct SOpenModes
+  {
+    QString NotOpen     = "no";
+    QString ReadOnly    = "r";
+    QString WriteOnly   = "w";
+    QString ReadWrite   = "rw";
+    QString Append      = "a";
+  }mOpenModes;
 
 private:
-  Q_INVOKABLE explicit CQJSFileBase(QObject* _parent = nullptr);
-  Q_INVOKABLE explicit CQJSFileBase(const QString& _fileName, QObject* _parent = nullptr);
+  CQJSFileBase() = delete;
+  explicit CQJSFileBase(QJSEngine* _jsengine);
+  Q_INVOKABLE explicit CQJSFileBase(const QString& _fileName, 
+      QJSEngine* _jsengine);
   Q_INVOKABLE virtual ~CQJSFileBase();
 
 public slots:
   virtual bool open(const QString& _openMode);
   QString openMode() const;
   QString fileName() const;
-  bool setFileName(const QString& _fileName);
+  void  setFileName(const QString& _fileName);
   virtual void close();
   bool isOpen() const;
   bool atEnd() const;
@@ -52,6 +64,7 @@ public slots:
   virtual bool seek(quint64 _pos);
   quint64 size() const;
   bool flush();
+  bool copy(const QString& _fileName);
 
   friend class CQJSTextFile;
   friend class CQJSBinaryFile;

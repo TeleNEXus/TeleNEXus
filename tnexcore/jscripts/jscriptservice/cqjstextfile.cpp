@@ -29,20 +29,19 @@ static bool writeAllowCheck(const QFile& _file, QJSEngine* _jsengine);
 
 //==============================================================================CQJSTextFile
 CQJSTextFile::CQJSTextFile(int _engineId) : 
-  CQJSFileBase(nullptr),
-  mpEngine(LCQJScriptHiden::getJSEngine(_engineId))
+  CQJSFileBase(LCQJScriptHiden::getJSEngine(_engineId))
 {
 }
 
 CQJSTextFile::CQJSTextFile(const QString& _fileName, int _engineId):
-  CQJSFileBase(_fileName, nullptr),
-  mpEngine(LCQJScriptHiden::getJSEngine(_engineId))
+  CQJSFileBase(_fileName, LCQJScriptHiden::getJSEngine(_engineId))
 {
   qDebug() << "+++++++++++++++++++++++++++CQJSTextFile Constructor";
 }
 
 CQJSTextFile::~CQJSTextFile()
 {
+  mStream.flush();
   qDebug() << "---------------------------CQJSTextFile Destructor";
 }
 
@@ -81,7 +80,6 @@ bool CQJSTextFile::open(const QString& _openMode)
 {
   if(!CQJSFileBase::open(_openMode)) 
   {
-    mpEngine->throwError(mFile.errorString());
     return false;
   }
   mStream.setDevice(&mFile);
@@ -98,6 +96,11 @@ void CQJSTextFile::close()
 //------------------------------------------------------------------------------
 bool CQJSTextFile::seek(quint64 _pos)
 {
+  if(!mFile.isOpen()) 
+  {
+    mpEngine->throwError("File is not open");
+    return false;
+  }
   return mStream.seek(_pos);
 }
 
