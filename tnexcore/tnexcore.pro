@@ -57,6 +57,7 @@ SOURCES += \
         jscripts/jscriptservice/lcqjscriptservicehiden.cpp \
         jscripts/jscriptservice/cqjsfilebase.cpp \
         jscripts/jscriptservice/cqjstextfile.cpp \
+        jscripts/jscriptservice/cqjsbinaryfile.cpp \
         jscripts/jscriptservice/jsappservice/lcqjsappservice.cpp \
         jscripts/jscriptservice/jsappservice/lcqreadfromsourcereq.cpp \
         jscripts/jscriptservice/jsappservice/lcqwritetosourcereq.cpp \
@@ -111,6 +112,7 @@ HEADERS += \
     jscripts/jscriptservice/lcqjscriptservicehiden.h \
     jscripts/jscriptservice/cqjsfilebase.h \
     jscripts/jscriptservice/cqjstextfile.h \
+    jscripts/jscriptservice/cqjsbinaryfile.h \
     jscripts/jscriptservice/jsappservice/lcqjsappservice.h \
     jscripts/jscriptservice/jsappservice/lcqreadfromsourcereq.h \
     jscripts/jscriptservice/jsappservice/lcqwritetosourcereq.h \
