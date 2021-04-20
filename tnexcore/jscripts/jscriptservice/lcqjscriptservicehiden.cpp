@@ -21,6 +21,7 @@
 #include "lcqjscriptservicehiden.h"
 #include "lcqjsappservice.h"
 #include "cqjstextfile.h"
+#include "cqjsbinaryfile.h"
 #include "tnex.h"
 #include "LIApplication.h"
 
@@ -36,29 +37,21 @@ static int __slJSEngineCounter = 0;
 
 //==============================================================================
 static QString createScriptGlobal(QMap<QString, QString> _attrMap, int _engineId);
+static void addMetaObjects(QJSEngine& _engine, QJSValue& _globalExport);
 
-/* static void addMetaObjects(QJSEngine& _engine) */
-/* { */
-/*   QJSValue jsvalue = _engine.newQMetaObject(&CQJSTextFile::staticMetaObject); */
-/*   _engine.globalObject().setProperty(__slObjectsNames.textFile, jsvalue); */
-/* } */
 
 //==============================================================================
 static const struct
 {
   QString applicationGlobalExport = "APPLICATIONGLOBALEXPORT";
-  QString attributes = "Attributes";
-  QString callScriptMain = "Main";
-  QString textFile = "TextFile";
+  QString attributes =      "Attributes";
+  QString callScriptMain =  "Main";
+  QString textFile =        "TextFile";
+  QString binaryFile =      "BinaryFile";
 }__slPropNames;
 
 
 
-static void addMetaObjects(QJSEngine& _engine, QJSValue& _globalExport)
-{
-  QJSValue jsvalue = _engine.newQMetaObject(&CQJSTextFile::staticMetaObject);
-  _globalExport.setProperty(__slPropNames.textFile, jsvalue);
-}
 
 
 
@@ -342,6 +335,15 @@ QJSValue LCQJScriptHiden::newTextFile(const QString& _name)
 }
 
 //------------------------------------------------------------------------------
+QJSValue LCQJScriptHiden::newBinaryFile(const QString& _name)
+{
+
+  CQJSBinaryFile *file = new CQJSBinaryFile(_name, mId);
+  QJSValue val =  mJSEngine.newQObject(file);
+  return val;
+}
+
+//------------------------------------------------------------------------------
 void LCQJScriptHiden::collectGarbage()
 {
   qDebug() << "Collect Garbage";
@@ -384,6 +386,8 @@ static QString createScriptGlobal(QMap<QString, QString> _attrMap, int _engineId
       "return %2.exjs(_jsv)};"
       "function NewTextFile(_fileName) {"
       "return new %2.TextFile(_fileName, %3);};"
+      "function NewBinaryFile(_fileName) {"
+      "return new %2.BinaryFile(_fileName, %3);};"
       "function CollectGarbage() {"
       "return %2.collectGarbage()};"
       "var ScriptId = \"%4\";"
@@ -397,6 +401,15 @@ static QString createScriptGlobal(QMap<QString, QString> _attrMap, int _engineId
 }
 
 
+//==============================================================================
+static void addMetaObjects(QJSEngine& _engine, QJSValue& _globalExport)
+{
+  QJSValue jsvalue = _engine.newQMetaObject(&CQJSTextFile::staticMetaObject);
+  _globalExport.setProperty(__slPropNames.textFile, jsvalue);
+
+  jsvalue = _engine.newQMetaObject(&CQJSBinaryFile::staticMetaObject);
+  _globalExport.setProperty(__slPropNames.binaryFile, jsvalue);
+}
 
 
 

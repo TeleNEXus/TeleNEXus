@@ -44,7 +44,7 @@ private:
 
 private:
   CQJSFileBase() = delete;
-  explicit CQJSFileBase(QJSEngine* _jsengine);
+  Q_INVOKABLE explicit CQJSFileBase(QJSEngine* _jsengine);
   Q_INVOKABLE explicit CQJSFileBase(const QString& _fileName, 
       QJSEngine* _jsengine);
   Q_INVOKABLE virtual ~CQJSFileBase();
