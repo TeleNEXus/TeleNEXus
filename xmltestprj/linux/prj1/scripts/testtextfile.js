@@ -69,9 +69,16 @@ function read_file(){
   read_file();
   read_file();
   console.debug("Test text file write");
-  let File = NewTextFile('temp/test_text_file_write.txt');
+  // let File = NewTextFile('~/test_text_file_write.txt');
+  let File = NewTextFile('/home/serg/test_text_file_write.txt');
+  // let File = NewTextFile('temp/test_text_file_write.txt');
   // let File = new TextFile('temp/test_text_file_write.txt');
+  try {
   File.open('w');
+  }catch(error){
+    console.warn("In " + error.fileName + ": " + error.lineNumber + ": open file " 
+      + File.fileName() + " error: " + error.message);
+  }
   try {
   File.write("Test text file write: Hellow World!!! 1\n");
   File.write("Test text file write: Hellow World!!! 2\n");
@@ -82,6 +89,11 @@ function read_file(){
   }catch(error){
     console.warn("In " + error.fileName + ": " + error.lineNumber + ": " + error.message);
   }
+})();
+(function(){
+  let File = NewTextFile('temp/test_text_file_write.txt');
+  // File.open('r');
+  File.copy('temp/test_text_file_write1.txt');
 })();
 
 CollectGarbage();
