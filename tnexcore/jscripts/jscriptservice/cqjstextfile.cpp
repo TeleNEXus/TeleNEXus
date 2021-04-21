@@ -21,11 +21,8 @@
 #include "cqjstextfile.h"
 #include "lcqjscriptservicehiden.h"
 #include <QTextStream>
+#include <QTextCodec>
 #include <QDebug>
-
-//==============================================================================
-static bool readAllowCheck(const QFile& _file, QJSEngine* _jsengine);
-static bool writeAllowCheck(const QFile& _file, QJSEngine* _jsengine);
 
 //==============================================================================CQJSTextFile
 CQJSTextFile::CQJSTextFile(int _engineId) : 
@@ -48,28 +45,28 @@ CQJSTextFile::~CQJSTextFile()
 //------------------------------------------------------------------------------
 QString CQJSTextFile::read(quint64 _maxlen)
 {
-  if(!readAllowCheck(mFile, mpEngine)) return QString();
+  if(!readAllowCheck()) return QString();
   return mStream.read(_maxlen);
 }
 
 //------------------------------------------------------------------------------
 QString CQJSTextFile::readAll()
 {
-  if(!readAllowCheck(mFile, mpEngine)) return QString();
+  if(!readAllowCheck()) return QString();
   return mStream.readAll();
 }
 
 //------------------------------------------------------------------------------
 QString CQJSTextFile::readLine(quint64 _maxlen)
 {
-  if(!readAllowCheck(mFile, mpEngine)) return QString();
+  if(!readAllowCheck()) return QString();
   return mStream.readLine(_maxlen);
 }
 
 //------------------------------------------------------------------------------
 bool CQJSTextFile::write(const QString& _str)
 {
-  if(!writeAllowCheck(mFile, mpEngine)) return false;
+  if(!writeAllowCheck()) return false;
   mStream << _str;
   mStream.flush();
   return true;
@@ -104,49 +101,12 @@ bool CQJSTextFile::seek(quint64 _pos)
   return mStream.seek(_pos);
 }
 
-//==============================================================================
-static bool readAllowCheck(const QFile& _file, QJSEngine* _jsengine)
+//------------------------------------------------------------------------------
+bool CQJSTextFile::setEncoding(const QString& _encodingName)
 {
-
-  if(!_file.isOpen())
-  {
-    _jsengine->throwError(QStringLiteral("File is not open"));
-    return false;
-  }
-
-  if(_file.openMode() == QIODevice::OpenModeFlag::WriteOnly)
-  { 
-    _jsengine->throwError(QStringLiteral("File is open for write only"));
-    return false;
-  }
-
-  if (_file.openMode() == QIODevice::OpenModeFlag::Append)
-  {
-    _jsengine->throwError(QStringLiteral("File is open for append"));
-    return false;
-  }
-
+  QTextCodec* codec = QTextCodec::codecForName(_encodingName.toLocal8Bit());
+  if(!codec) return false;
+  mStream.setCodec(codec);
   return true;
 }
-
-//==============================================================================
-static bool writeAllowCheck(const QFile& _file, QJSEngine* _jsengine)
-{
-
-  if(!_file.isOpen())
-  {
-    _jsengine->throwError(QStringLiteral("File is not open"));
-    return false;
-  }
-
-  if(_file.openMode() == QIODevice::OpenModeFlag::ReadOnly)
-  {
-    _jsengine->throwError(QStringLiteral("File is open for read only"));
-    return false;
-  }
-
-  return true;
-}
-
-
 

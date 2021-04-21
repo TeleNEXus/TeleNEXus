@@ -29,8 +29,8 @@ class CQJSBinaryFile : public CQJSFileBase
   Q_OBJECT;
 private:
   CQJSBinaryFile() = delete;
-public:
 
+public:
   Q_INVOKABLE CQJSBinaryFile(int _engineId);
   Q_INVOKABLE CQJSBinaryFile(const QString& _fileName, int _engineId);
   Q_INVOKABLE virtual ~CQJSBinaryFile();

@@ -346,7 +346,7 @@ QJSValue LCQJScriptHiden::newBinaryFile(const QString& _name)
 //------------------------------------------------------------------------------
 void LCQJScriptHiden::collectGarbage()
 {
-  qDebug() << "Collect Garbage";
+  qDebug() << "Qt: Collect Garbage";
    mJSEngine.collectGarbage();
 }
 

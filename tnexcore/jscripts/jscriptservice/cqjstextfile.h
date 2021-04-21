@@ -46,6 +46,7 @@ public slots:
   virtual bool open(const QString& _openMode) override;
   virtual void close() override;
   virtual bool seek(quint64 _pos) override;
+  bool setEncoding(const QString& _encodingName);
 };
 
 #endif //CQJSTEXTFILE_H_
