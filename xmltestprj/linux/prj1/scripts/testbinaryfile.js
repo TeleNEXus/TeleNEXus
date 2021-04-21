@@ -22,32 +22,22 @@ function testWrite(i){
     console.warn("In " + error.fileName + ": " + error.lineNumber + ": " + error.message);
   }
 
-
-
-
   File.close();
-
-
 
 };
 
 
 (
   function Main(){
-    // console.debug("Test write binary file");
 
     testWrite(1);
     testWrite(2);
-    testWrite(3);
-    testWrite(4);
-    testWrite(5);
-    testWrite(6);
-    testWrite(7);
 
     console.debug("Test read binary file");
     let File = NewBinaryFile('temp/test_binary_file_write.bin');
     try{
       File.open('r');
+      console.debug("Read file size = " + File.size());
     }catch(error){
       console.warn("In " + error.fileName + ": " + error.lineNumber + ": open file " 
         + File.fileName() + " error: " + error.message);
@@ -57,15 +47,18 @@ function testWrite(i){
 
     try{
       File.seek(10);
-      read_data = File.read(100);
+      read_data = File.read(1);
     console.debug("Read file data = " + read_data);
       File.seek(0);
-      read_data = File.read(100);
+      read_data = File.read(1);
     console.debug("Read file data = " + read_data);
     }catch(error){
       console.warn("In " + error.fileName + ": " + error.lineNumber + ": open file " 
         + File.fileName() + " error: " + error.message);
     }
+
+    if(File.atEnd()) console.debug("End the file");
+    else console.debug("File not at end");
 
     // console.debug("Read file data = " + read_data);
   }
