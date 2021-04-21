@@ -127,5 +127,6 @@ private:
 
   friend class CQJSTextFile;
   friend class CQJSBinaryFile;
+  friend class CQJSProcess;
 };
 #endif
