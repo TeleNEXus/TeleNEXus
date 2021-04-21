@@ -1,13 +1,13 @@
 console.debug("<<<<<<<<<<<<<<<<Begin Evaluate Script binaryfile.js");
 
 //test text file write
-(function(){
+function testWrite(i){
 
-  console.debug("Test write binary file");
+  console.debug("Test write binary file #" + i);
 
-  let File = NewBinaryFile('temp/test_binary_file_write.bin');
+  var File = NewBinaryFile("temp/test_binary_file_write.bin");
 
-  let data = [0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f];
+  var data = [0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f];
 
   try {
     File.open('w');
@@ -25,35 +25,51 @@ console.debug("<<<<<<<<<<<<<<<<Begin Evaluate Script binaryfile.js");
 
 
 
-  // File.close();
+  File.close();
 
 
 
-})();
+};
 
-CollectGarbage();
 
-(function(){
-  console.debug("Test read binary file");
-  let File = NewBinaryFile('temp/test_binary_file_write.bin');
-  try{
-    File.open('r');
-  }catch(error){
-    console.warn("In " + error.fileName + ": " + error.lineNumber + ": open file " 
-      + File.fileName() + " error: " + error.message);
+(
+  function Main(){
+    // console.debug("Test write binary file");
+
+    testWrite(1);
+    testWrite(2);
+    testWrite(3);
+    testWrite(4);
+    testWrite(5);
+    testWrite(6);
+    testWrite(7);
+
+    console.debug("Test read binary file");
+    let File = NewBinaryFile('temp/test_binary_file_write.bin');
+    try{
+      File.open('r');
+    }catch(error){
+      console.warn("In " + error.fileName + ": " + error.lineNumber + ": open file " 
+        + File.fileName() + " error: " + error.message);
+    }
+
+    var read_data;
+
+    try{
+      File.seek(10);
+      read_data = File.read(100);
+    console.debug("Read file data = " + read_data);
+      File.seek(0);
+      read_data = File.read(100);
+    console.debug("Read file data = " + read_data);
+    }catch(error){
+      console.warn("In " + error.fileName + ": " + error.lineNumber + ": open file " 
+        + File.fileName() + " error: " + error.message);
+    }
+
+    // console.debug("Read file data = " + read_data);
   }
-
-  var read_data;
-
-  try{
-    read_data = File.readAll();
-  }catch(error){
-    console.warn("In " + error.fileName + ": " + error.lineNumber + ": open file " 
-      + File.fileName() + " error: " + error.message);
-  }
-
-  console.debug("Read file data = " + read_data);
-})();
+)();
 
 
  

@@ -209,3 +209,47 @@ bool CQJSFileBase::copy(const QString& _fileName)
   }
   return flag;
 }
+
+//==============================================================================
+bool CQJSFileBase::readAllowCheck()
+{
+
+  if(!mFile.isOpen())
+  {
+    mpEngine->throwError(QStringLiteral("File is not open"));
+    return false;
+  }
+
+  if(mFile.openMode() == QIODevice::OpenModeFlag::WriteOnly)
+  { 
+    mpEngine->throwError(QStringLiteral("File is open for write only"));
+    return false;
+  }
+
+  if (mFile.openMode() == QIODevice::OpenModeFlag::Append)
+  {
+    mpEngine->throwError(QStringLiteral("File is open for append"));
+    return false;
+  }
+
+  return true;
+}
+
+//==============================================================================
+bool CQJSFileBase::writeAllowCheck()
+{
+
+  if(!mFile.isOpen())
+  {
+    mpEngine->throwError(QStringLiteral("File is not open"));
+    return false;
+  }
+
+  if(mFile.openMode() == QIODevice::OpenModeFlag::ReadOnly)
+  {
+    mpEngine->throwError(QStringLiteral("File is open for read only"));
+    return false;
+  }
+
+  return true;
+}

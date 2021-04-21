@@ -39,8 +39,11 @@
 
 
 
-  <!-- <script id="testtextfile" file="scripts/testtextfile.js"/> -->
-  <script id="testtextfile" file="scripts/testbinaryfile.js"/>
+  <script id="testtextfile" file="scripts/testtextfile.js"/>
+
+  <!-- <script id="testtextfile" file="scripts/testbinaryfile.js"/> -->
+  <!-- <launch scriptId="testtextfile" interval="1000"/> -->
+
   <!-- <execute scriptId="testtextfile" /> -->
 
 

@@ -22,9 +22,6 @@
 #include "lcqjscriptservicehiden.h"
 #include <QDebug>
 
-//==============================================================================
-static bool readAllowCheck(const QFile& _file, QJSEngine* _jsengine);
-static bool writeAllowCheck(const QFile& _file, QJSEngine* _jsengine);
 
 CQJSBinaryFile::CQJSBinaryFile(int _engineId) :
   CQJSFileBase(LCQJScriptHiden::getJSEngine(_engineId))
@@ -47,14 +44,10 @@ qint64 CQJSBinaryFile::write(const QVariantList& _data)
 {
   QByteArray wd;
 
+  if(!writeAllowCheck()) return -1;
+
   for(int i = 0; i < _data.size(); i++)
   {
-    /* if(!_data.at(i).canConvert(QVariant::Type::ByteArray)) */
-    /* { */
-    /*   mpEngine->throwError("Wrong write data"); */
-    /*   return -1; */
-    /* } */
-    /* wd += _data.at(i).toByteArray(); */
     bool flag = false;
     int d = _data.at(i).toUInt(&flag);
     if(!flag) 
@@ -74,7 +67,10 @@ qint64 CQJSBinaryFile::write(const QVariantList& _data)
 
 QVariantList CQJSBinaryFile::read(qint64 _maxSize)
 {
+  if(!readAllowCheck()) return QVariantList();
+
   QByteArray rd = mFile.read(_maxSize);
+
   if(mFile.error() != QFile::NoError)
   {
     mpEngine->throwError(mFile.errorString());
@@ -93,9 +89,10 @@ QVariantList CQJSBinaryFile::read(qint64 _maxSize)
 
 QVariantList CQJSBinaryFile::readAll()
 {
-  if(!readAllowCheck(mFile, mpEngine)) return QVariantList();
+  if(!readAllowCheck()) return QVariantList();
 
   QByteArray rd = mFile.readAll();
+
   if(mFile.error() != QFile::NoError)
   {
     mpEngine->throwError(mFile.errorString());
@@ -113,46 +110,3 @@ QVariantList CQJSBinaryFile::readAll()
   return ret;
 }
 
-//==============================================================================
-static bool readAllowCheck(const QFile& _file, QJSEngine* _jsengine)
-{
-
-  if(!_file.isOpen())
-  {
-    _jsengine->throwError(QStringLiteral("File is not open"));
-    return false;
-  }
-
-  if(_file.openMode() == QIODevice::OpenModeFlag::WriteOnly)
-  { 
-    _jsengine->throwError(QStringLiteral("File is open for write only"));
-    return false;
-  }
-
-  if (_file.openMode() == QIODevice::OpenModeFlag::Append)
-  {
-    _jsengine->throwError(QStringLiteral("File is open for append"));
-    return false;
-  }
-
-  return true;
-}
-
-//==============================================================================
-static bool writeAllowCheck(const QFile& _file, QJSEngine* _jsengine)
-{
-
-  if(!_file.isOpen())
-  {
-    _jsengine->throwError(QStringLiteral("File is not open"));
-    return false;
-  }
-
-  if(_file.openMode() == QIODevice::OpenModeFlag::ReadOnly)
-  {
-    _jsengine->throwError(QStringLiteral("File is open for read only"));
-    return false;
-  }
-
-  return true;
-}
