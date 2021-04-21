@@ -22,6 +22,7 @@
 #include "lcqjsappservice.h"
 #include "cqjstextfile.h"
 #include "cqjsbinaryfile.h"
+#include "cqjsprocess.h"
 #include "tnex.h"
 #include "LIApplication.h"
 
@@ -48,6 +49,7 @@ static const struct
   QString callScriptMain =  "Main";
   QString textFile =        "TextFile";
   QString binaryFile =      "BinaryFile";
+  QString process =         "Process";
 }__slPropNames;
 
 
@@ -388,6 +390,8 @@ static QString createScriptGlobal(QMap<QString, QString> _attrMap, int _engineId
       "return new %2.TextFile(_fileName, %3);};"
       "function NewBinaryFile(_fileName) {"
       "return new %2.BinaryFile(_fileName, %3);};"
+      "function NewProcess() {"
+      "return new %2.Process(%3);};"
       "function CollectGarbage() {"
       "return %2.collectGarbage()};"
       "var ScriptId = \"%4\";"
@@ -409,6 +413,8 @@ static void addMetaObjects(QJSEngine& _engine, QJSValue& _globalExport)
 
   jsvalue = _engine.newQMetaObject(&CQJSBinaryFile::staticMetaObject);
   _globalExport.setProperty(__slPropNames.binaryFile, jsvalue);
+
+  CQJSProcess::addQMetaObject(_engine, _globalExport, __slPropNames.process);
 }
 
 
