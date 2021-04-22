@@ -414,7 +414,10 @@ static void addMetaObjects(QJSEngine& _engine, QJSValue& _globalExport)
   jsvalue = _engine.newQMetaObject(&CQJSBinaryFile::staticMetaObject);
   _globalExport.setProperty(__slPropNames.binaryFile, jsvalue);
 
-  CQJSProcess::addQMetaObject(_engine, _globalExport, __slPropNames.process);
+  jsvalue = _engine.newQMetaObject(&CQJSProcess::staticMetaObject);
+  _globalExport.setProperty(__slPropNames.process, jsvalue);
+
+  /* CQJSProcess::addQMetaObject(_engine, _globalExport, __slPropNames.process); */
 }
 
 

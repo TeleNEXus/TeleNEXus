@@ -33,31 +33,47 @@ private:
 public:
   CQJSProcess() = delete;
   Q_INVOKABLE CQJSProcess(int _engineId);
+  Q_INVOKABLE virtual ~CQJSProcess();
 
-  static void addQMetaObject(
-      QJSEngine& _jsengine, 
-      QJSValue& _jsvalue, 
-      const QString& _objectName);
+  /* static void addQMetaObject( */
+  /*     QJSEngine& _jsengine, */ 
+  /*     QJSValue& _jsvalue, */ 
+  /*     const QString& _objectName); */
 
 public slots:
   void start(const QString& _command);
   void kill();
   void terminate();
-  bool waitForStarted(int msec = 30000);
-  bool waitForFinished(int msec = 30000);
-  int exitCode();
-  int stateCode();
-  int errorCode();
 
-  void closeReadChannel(int _channel);
+  void waitForStarted(int msec = 30000);
+  void waitForFinished(int msec = 30000);
+  void waitForBytesWritten(int msecs = 30000);
+  void waitForReadyRead(int msecs = 30000);
+
+  bool isRunning();
+  bool isStarting();
+  bool isCrashed();
+  int exitCode();
+
+
+  void setReadChannelStdOut();
+  void setReadChannelStdErr();
+  bool isReadChannelStdOut();
+  bool isReadCnannelStdErr();
+  void closeReadChannelStdOut();
+  void closeReadChannelStdErr();
   void closeWriteChannel();
-  int readChannel();
-  void setReadChannel(int _channel);
+
   QVariantList read(qint64 _maxSize);
   QVariantList readAll();
   qint64 write(const QVariantList& _data);
-  bool waitForBytesWritten(int msecs = 30000);
-  bool waitForReadyRead(int msecs = 30000);
+  /* QString errorString(); */
+
+
+  /* void setReadChannel(int _channel); */
+  /* int readChannel(); */
+  /* int stateCode(); */
+  /* int errorCode(); */
 
 private slots:
   friend class QProcess;

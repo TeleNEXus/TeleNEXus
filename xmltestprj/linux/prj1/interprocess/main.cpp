@@ -24,16 +24,23 @@ int main(int argc, char** argv)
   /* instream >> instr; */
   /* outstream << "Std input data = " << instr << endl; */
 
-  qDebug() << "==========================================";
-  qDebug() << "Input arguments";
 
-  for(int i = 0; i < argc; i++)
-  {
-    qDebug() << "Argument " << i << " = " << QString(argv[i]);
-  }
+
+
+  /* qDebug() << "=========================================="; */
+  /* qDebug() << "Input arguments"; */
+
+  /* for(int i = 0; i < argc; i++) */
+  /* { */
+  /*   qDebug() << "Argument " << i << " = " << QString(argv[i]); */
+  /* } */
+
   instream >> instr;
 
-  qDebug() << "Input data = " << instr;
+  /* qDebug() << "Input data = " << instr; */
+  /* outstream << "Input data = " << instr; */
+  outstream << "Interprocess input data: " << instr;
+  return 0;
 
   /* return app.exec(); */
 }
