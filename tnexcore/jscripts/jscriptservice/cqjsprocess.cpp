@@ -21,8 +21,8 @@
 
 #include "cqjsprocess.h"
 #include "lcqjscriptservicehiden.h"
-#include <QJSValue>
 #include <QProcess>
+#include <QVariant>
 
 CQJSProcess::CQJSProcess(int _engineId) : 
   QObject(nullptr),
@@ -64,6 +64,13 @@ void CQJSProcess::addQMetaObject(
       QStringLiteral("Running"),   QJSValue((int)(QProcess::ProcessState::Running)));
   jsobject.setProperty(QStringLiteral("State"), jsaddvalue);
 
+
+  jsaddvalue = _jsengine.newObject();
+  jsaddvalue.setProperty(
+      QStringLiteral("StandartOutput"),   QJSValue((int)(QProcess::ProcessChannel::StandardOutput)));
+  jsaddvalue.setProperty(
+      QStringLiteral("StandartError"),   QJSValue((int)(QProcess::ProcessChannel::StandardError)));
+  jsobject.setProperty(QStringLiteral("Channel"), jsaddvalue);
 
   _jsvalue.setProperty(_objectName, jsobject);
 }
@@ -115,11 +122,97 @@ int CQJSProcess::errorCode()
 {
   return mProcess.error();
 }
-
-//------------------------------------------------------------------------------
-QString CQJSProcess::errorString()
-{
-  return mProcess.errorString();
-}
         
          
+//------------------------------------------------------------------------------
+void CQJSProcess::closeReadChannel(int _channel)
+{
+  if(_channel == 0)
+    mProcess.closeReadChannel(QProcess::ProcessChannel::StandardOutput);
+  else
+    mProcess.closeReadChannel(QProcess::ProcessChannel::StandardError);
+}
+
+//------------------------------------------------------------------------------
+void CQJSProcess::closeWriteChannel()
+{
+  mProcess.closeWriteChannel();
+}
+
+//------------------------------------------------------------------------------
+int CQJSProcess::readChannel()
+{
+  return mProcess.readChannel();
+}
+
+//------------------------------------------------------------------------------
+void CQJSProcess::setReadChannel(int _channel)
+{
+  if(_channel == 0)
+    mProcess.setReadChannel(QProcess::ProcessChannel::StandardOutput);
+  else
+    mProcess.setReadChannel(QProcess::ProcessChannel::StandardError);
+}
+
+//------------------------------------------------------------------------------
+QVariantList CQJSProcess::read(qint64 _maxSize)
+{
+  QByteArray rd = mProcess.read(_maxSize);
+  QVariantList ret;
+  for (qint32 i = 0; i < rd.size(); i++)
+  {
+    ret << QVariant(rd[i]);
+  }
+  return ret;
+}
+
+//------------------------------------------------------------------------------
+QVariantList CQJSProcess::readAll()
+{
+  QByteArray rd = mProcess.readAll();
+  QVariantList ret;
+  for (qint32 i = 0; i < rd.size(); i++)
+  {
+    ret << QVariant(rd[i]);
+  }
+  return ret;
+}
+
+//------------------------------------------------------------------------------
+qint64 CQJSProcess::write(const QVariantList& _data)
+{
+  QByteArray wd;
+
+  for(int i = 0; i < _data.size(); i++)
+  {
+    bool flag = false;
+    int d = _data.at(i).toUInt(&flag);
+    if(!flag) 
+    {
+      mpEngine->throwError("Wrong write data");
+      return -1;
+    }
+    wd[i] =  (unsigned char)d;
+  }
+  qint64 ret = mProcess.write(wd);
+  if(ret < 0)
+  {
+    mpEngine->throwError(mProcess.errorString());
+  }
+  return ret;
+}
+
+//------------------------------------------------------------------------------
+bool CQJSProcess::waitForBytesWritten(int msecs)
+{
+  return mProcess.waitForBytesWritten(msecs);
+}
+
+//------------------------------------------------------------------------------
+bool CQJSProcess::waitForReadyRead(int msecs)
+{
+  return mProcess.waitForReadyRead(msecs);
+}
+
+
+
