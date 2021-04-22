@@ -3,9 +3,9 @@
 # QT += qml 
 # QT += script
 
-CONFIG += console c++11
-# CONFIG += c++11
-CONFIG -= app_bundle
+# CONFIG += console c++11
+CONFIG += c++11
+# CONFIG -= app_bundle
 
 # The following define makes your compiler emit warnings if you use
 # any Qt feature that has been marked deprecated (the exact warnings
