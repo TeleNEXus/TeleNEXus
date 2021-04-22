@@ -22,8 +22,7 @@
 #define CQJSPROCESS_H_
 
 #include <QProcess>
-class QJSValue;
-class QJSEngine;
+#include <QJSEngine>
 
 class CQJSProcess : public QObject
 {
@@ -49,7 +48,16 @@ public slots:
   int exitCode();
   int stateCode();
   int errorCode();
-  QString errorString();
+
+  void closeReadChannel(int _channel);
+  void closeWriteChannel();
+  int readChannel();
+  void setReadChannel(int _channel);
+  QVariantList read(qint64 _maxSize);
+  QVariantList readAll();
+  qint64 write(const QVariantList& _data);
+  bool waitForBytesWritten(int msecs = 30000);
+  bool waitForReadyRead(int msecs = 30000);
 
 private slots:
   friend class QProcess;
