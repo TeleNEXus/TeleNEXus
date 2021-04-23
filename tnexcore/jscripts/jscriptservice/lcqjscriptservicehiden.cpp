@@ -286,30 +286,37 @@ int LCQJScriptHiden::writeData(
 }
 
 //------------------------------------------------------------------------------
-bool LCQJScriptHiden::exportModule(const QString& _fileName)
+void LCQJScriptHiden::importModule(const QString& _fileName)
 {
   QString full_file_name = 
         tnex::getApplicationInterface().getProjectPath() + _fileName;
 
   QFile script_file(full_file_name);
 
-  if(!script_file.open(QFile::OpenModeFlag::ReadOnly)) { 
-    return false;}
+  if(!script_file.open(QFile::OpenModeFlag::ReadOnly))
+  {
+    mJSEngine.throwError(
+        QString("Import js module error: %1").arg(script_file.errorString()));
+    return;
+  }
 
   QTextStream stream(&script_file);
   QString script_str = stream.readAll();
   script_file.close();
-  if(script_str.isNull()) { return false; }
+
+  if(script_str.isNull()) 
+  { 
+    mJSEngine.throwError(
+        QString("Import js module error: %1").arg(script_file.errorString()));
+  }
 
   QJSValue jsvalue = mJSEngine.evaluate(script_str, _fileName);
 
   if(jsvalue.isError()) 
   {
     emitError(jsvalue);
-    return false;
+    return;
   }
-
-  return false;
 }
 
 //------------------------------------------------------------------------------
@@ -382,8 +389,8 @@ static QString createScriptGlobal(QMap<QString, QString> _attrMap, int _engineId
       "return %2.readData(_sourceId, _dataId)};"
       "function DataSourceWrite(_sourceId, _dataId, _data) {"
       "return %2.writeData(_sourceId, _dataId, _data)};"
-      "function ExportModule(_fileName) {"
-      "return %2.exportModule(_fileName)};"
+      "function ImportModule(_fileName) {"
+      "return %2.importModule(_fileName)};"
       "function ExJs(_jsv) {"
       "return %2.exjs(_jsv)};"
       "function NewTextFile(_fileName) {"
