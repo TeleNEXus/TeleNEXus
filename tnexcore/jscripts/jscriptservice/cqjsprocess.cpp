@@ -23,63 +23,16 @@
 #include "lcqjscriptservicehiden.h"
 #include <QProcess>
 #include <QVariant>
-
+//==============================================================================
 CQJSProcess::CQJSProcess(int _engineId) : 
   QObject(nullptr),
   mpEngine(LCQJScriptHiden::getJSEngine(_engineId))
 {
-  qDebug() << "++++++++++++++++++++CQJSProcess Constructor";
 }
 
 CQJSProcess::~CQJSProcess()
 {
-  qDebug() << "--------------------CQJSProcess Destructor";
 }
-
-//------------------------------------------------------------------------------
-/* void CQJSProcess::addQMetaObject( */
-/*     QJSEngine& _jsengine, */ 
-/*     QJSValue& _jsvalue, */ 
-/*     const QString& _objectName) */
-/* { */
-  /* QJSValue jsobject = _jsengine.newQMetaObject(&CQJSProcess::staticMetaObject); */
-
-  /* QJSValue jsaddvalue = _jsengine.newObject(); */
-
-  /* jsaddvalue.setProperty( */
-  /*     QStringLiteral("FailedToStart"),   QJSValue((int)(QProcess::ProcessError::FailedToStart))); */
-  /* jsaddvalue.setProperty( */
-  /*   QStringLiteral("Crashed"),         QJSValue((int)(QProcess::ProcessError::Crashed))); */
-  /* jsaddvalue.setProperty( */
-  /*   QStringLiteral("Timedout"),        QJSValue((int)(QProcess::ProcessError::Timedout))); */
-  /* jsaddvalue.setProperty( */
-  /*   QStringLiteral("WriteError"),      QJSValue((int)(QProcess::ProcessError::WriteError))); */
-  /* jsaddvalue.setProperty( */
-  /*   QStringLiteral("ReadError"),       QJSValue((int)(QProcess::ProcessError::ReadError))); */
-  /* jsaddvalue.setProperty( */
-  /*   QStringLiteral("UnknownError"),    QJSValue((int)(QProcess::ProcessError::UnknownError))); */
-  /* jsobject.setProperty(QStringLiteral("EnumError"), jsaddvalue); */
-
-
-  /* jsaddvalue = _jsengine.newObject(); */
-  /* jsaddvalue.setProperty( */
-  /*     QStringLiteral("NotRunning"),   QJSValue((int)(QProcess::ProcessState::NotRunning))); */
-  /* jsaddvalue.setProperty( */
-  /*     QStringLiteral("Starting"),   QJSValue((int)(QProcess::ProcessState::Starting))); */
-  /* jsaddvalue.setProperty( */
-  /*     QStringLiteral("Running"),   QJSValue((int)(QProcess::ProcessState::Running))); */
-  /* jsobject.setProperty(QStringLiteral("EnumState"), jsaddvalue); */
-
-
-  /* jsaddvalue = _jsengine.newObject(); */
-  /* jsaddvalue.setProperty( */
-  /*     QStringLiteral("StandartOutput"),   QJSValue((int)(QProcess::ProcessChannel::StandardOutput))); */
-  /* jsaddvalue.setProperty( */
-  /*     QStringLiteral("StandartError"),   QJSValue((int)(QProcess::ProcessChannel::StandardError))); */
-  /* jsobject.setProperty(QStringLiteral("EnumChannel"), jsaddvalue); */
-
-  /* _jsvalue.setProperty(_objectName, jsobject); */
-/* } */
 
 //------------------------------------------------------------------------------
 void CQJSProcess::start(const QString& _command)
@@ -127,6 +80,18 @@ void CQJSProcess::waitForReadyRead(int msecs)
 {
   if(!mProcess.waitForReadyRead(msecs))
     mpEngine->throwError(mProcess.errorString());
+}
+
+//------------------------------------------------------------------------------
+void CQJSProcess::setWorkingDirectory(const QString& _dir)
+{
+  mProcess.setWorkingDirectory(_dir);
+}
+
+//------------------------------------------------------------------------------
+QString CQJSProcess::workingDirecory()
+{
+  return mProcess.workingDirectory();
 }
 
 //------------------------------------------------------------------------------
@@ -208,12 +173,11 @@ QVariantList CQJSProcess::read(qint64 _maxSize)
 QVariantList CQJSProcess::readAll()
 {
   QByteArray rd = mProcess.readAll();
-  qDebug() << "mProcess.readAll = " << rd;
 
   QVariantList ret;
   for (qint32 i = 0; i < rd.size(); i++)
   {
-    ret << QVariant(rd[i]);
+    ret << QVariant(static_cast<quint8>(rd[i]));
   }
   return ret;
 }
@@ -221,32 +185,18 @@ QVariantList CQJSProcess::readAll()
 //------------------------------------------------------------------------------
 qint64 CQJSProcess::write(const QVariantList& _data)
 {
-  /* QByteArray wd; */
-
-  /* for(int i = 0; i < _data.size(); i++) */
-  /* { */
-  /*   QByteArray d = _data.at(i).toByteArray(); */
-  /*   qDebug() << "CQJSProcess::write d = " << d; */
-  /*   wd.append(d); */
-  /* } */
-  /* qint64 ret = mProcess.write(wd); */
-  /* if(ret < 0) */
-  /* { */
-  /*   mpEngine->throwError(mProcess.errorString()); */
-  /* } */
-
-  /* return ret; */
-
   QByteArray wd;
 
   for(int i = 0; i < _data.size(); i++)
   {
     bool flag = false;
-    /* int d = _data.at(i).toUInt(&flag); */
-    QChar d = _data.at(i).toChar();
-    /* if(!flag) { continue; } */
-    /* wd[i] =  (unsigned char)d; */
-    wd[i] =  d.toC;
+    unsigned char d = _data.at(i).toUInt(&flag);
+    if(!flag) 
+    { 
+      mpEngine->throwError("Wrong data to write"); 
+      return -1;
+    }
+    wd[i] = static_cast<quint8>(d);
   }
   qint64 ret = mProcess.write(wd);
   if(ret < 0)

@@ -30,7 +30,6 @@ CQJSFileBase::CQJSFileBase(QJSEngine* _jsengine) :
   QObject(nullptr),
   mpEngine(_jsengine)
 {
-  qDebug() << "+++++++++++++++++++++++++++++++++++++++CQJSFileBase Constructor";
 }
 
 CQJSFileBase::CQJSFileBase(const QString& _fileName, QJSEngine* _jsengine) : 
@@ -38,12 +37,10 @@ CQJSFileBase::CQJSFileBase(const QString& _fileName, QJSEngine* _jsengine) :
   mFile(_fileName),
   mpEngine(_jsengine)
 {
-  qDebug() << "+++++++++++++++++++++++++++++++++++++++CQJSFileBase Constructor";
 }
 
 CQJSFileBase::~CQJSFileBase() 
 {
-  qDebug() << "---------------------------------------CQJSFileBase Destructor";
 }
 
 //------------------------------------------------------------------------------

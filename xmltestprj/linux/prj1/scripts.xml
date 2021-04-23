@@ -46,8 +46,8 @@
 
   <!-- <execute scriptId="testtextfile" /> -->
 
-  <script id="testtextfile" file="scripts/interprocess.js"/>
-
+  <script id="interprocess" file="scripts/interprocess.js"/>
+  <execute scriptId="interprocess" />
 
 
 

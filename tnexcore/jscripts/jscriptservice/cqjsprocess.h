@@ -31,14 +31,10 @@ private:
   QProcess mProcess;
   QJSEngine* mpEngine;
 public:
+
   CQJSProcess() = delete;
   Q_INVOKABLE CQJSProcess(int _engineId);
   Q_INVOKABLE virtual ~CQJSProcess();
-
-  /* static void addQMetaObject( */
-  /*     QJSEngine& _jsengine, */ 
-  /*     QJSValue& _jsvalue, */ 
-  /*     const QString& _objectName); */
 
 public slots:
   void start(const QString& _command);
@@ -50,11 +46,13 @@ public slots:
   void waitForBytesWritten(int msecs = 30000);
   void waitForReadyRead(int msecs = 30000);
 
+  void setWorkingDirectory(const QString& _dir);
+  QString workingDirecory();
+
   bool isRunning();
   bool isStarting();
   bool isCrashed();
   int exitCode();
-
 
   void setReadChannelStdOut();
   void setReadChannelStdErr();
@@ -67,13 +65,6 @@ public slots:
   QVariantList read(qint64 _maxSize);
   QVariantList readAll();
   qint64 write(const QVariantList& _data);
-  /* QString errorString(); */
-
-
-  /* void setReadChannel(int _channel); */
-  /* int readChannel(); */
-  /* int stateCode(); */
-  /* int errorCode(); */
 
 private slots:
   friend class QProcess;
