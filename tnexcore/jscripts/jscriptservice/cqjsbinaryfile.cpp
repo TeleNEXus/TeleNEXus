@@ -26,41 +26,37 @@
 CQJSBinaryFile::CQJSBinaryFile(int _engineId) :
   CQJSFileBase(LCQJScriptHiden::getJSEngine(_engineId))
 {
-  qDebug() << "++++++++++++++++++++++++++Binary file constructor 1";
 }
 
 CQJSBinaryFile::CQJSBinaryFile(const QString& _fileName, int _engineId) :
   CQJSFileBase(_fileName, LCQJScriptHiden::getJSEngine(_engineId))
 {
-  qDebug() << "++++++++++++++++++++++++++Binary file constructor 2";
 }
 
 CQJSBinaryFile::~CQJSBinaryFile()
 {
-  qDebug() << "--------------------------Binary file destructor";
 }
 
 qint64 CQJSBinaryFile::write(const QVariantList& _data)
 {
   QByteArray wd;
 
-  if(!writeAllowCheck()) return -1;
-
   for(int i = 0; i < _data.size(); i++)
   {
     bool flag = false;
-    int d = _data.at(i).toUInt(&flag);
+    unsigned char d = _data.at(i).toUInt(&flag);
     if(!flag) 
-    {
-      mpEngine->throwError("Wrong write data");
+    { 
+      mpEngine->throwError("Wrong data to write"); 
       return -1;
     }
-    wd[i] =  (unsigned char)d;
+    wd[i] = static_cast<quint8>(d);
   }
   qint64 ret = mFile.write(wd);
   if(ret < 0)
   {
     mpEngine->throwError(mFile.errorString());
+    mFile.unsetError();
   }
   return ret;
 }
@@ -81,7 +77,7 @@ QVariantList CQJSBinaryFile::read(qint64 _maxSize)
   QVariantList ret;
   for (qint32 i = 0; i < rd.size(); i++)
   {
-    ret << QVariant(rd[i]);
+    ret << QVariant(static_cast<quint8>(rd[i]));
   }
 
   return ret;
@@ -103,10 +99,8 @@ QVariantList CQJSBinaryFile::readAll()
   QVariantList ret;
   for (qint32 i = 0; i < rd.size(); i++)
   {
-    ret << QVariant(rd[i]);
+    ret << QVariant(static_cast<quint8>(rd[i]));
   }
-  qDebug() << "LCQJSBinaryFile read all data size = " << rd.size();
-
   return ret;
 }
 

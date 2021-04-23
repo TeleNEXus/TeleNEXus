@@ -33,13 +33,11 @@ CQJSTextFile::CQJSTextFile(int _engineId) :
 CQJSTextFile::CQJSTextFile(const QString& _fileName, int _engineId):
   CQJSFileBase(_fileName, LCQJScriptHiden::getJSEngine(_engineId))
 {
-  qDebug() << "+++++++++++++++++++++++++++CQJSTextFile Constructor";
 }
 
 CQJSTextFile::~CQJSTextFile()
 {
   mStream.flush();
-  qDebug() << "---------------------------CQJSTextFile Destructor";
 }
 
 //------------------------------------------------------------------------------
