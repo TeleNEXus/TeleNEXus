@@ -2,20 +2,21 @@ console.debug(">>>>>>>>>>>>>>>>>>>>>>Begint test export module script");
 
 var allAttributes = Object.keys(Attributes);
 
-function showAttributes(){
-  for(var i = 0; i < allAttributes.length; i++){
-    console.debug("Attribute " + allAttributes[i] + " = " + Attributes[allAttributes[i]]);
+//show attributes
+( function ()
+  {
+    for(var i = 0; i < allAttributes.length; i++)
+    {
+      console.debug("Attribute " + allAttributes[i] + " = " + Attributes[allAttributes[i]]);
+    }
   }
-};
+)()
 
-showAttributes();
-
-var executeCounter = 0;
-
-// var exportFlag = ImportModule("/home/serg/pprj/tnex/xmltestprj/linux/prj1/scripts/testexportmodule1.js");
 try
 {
-  var exportFlag = ImportModule("scripts/testexportmodule1.js");
+  // ImportModule("scripts/testexportmodule1.js", "testImportDebug");
+  // ImportModule("scripts/testexportmodule1.js", "importObject");
+  ImportModule("scripts/testexportmodule1.js");
 }
 catch(error)
 {
@@ -24,17 +25,20 @@ catch(error)
 
 (
   function Main(){
+
     testImportDebug("---------------Test Import Debug");
     console.debug("Test import object importObject.field1 = " + importObject.field1);
     console.debug("Test import object importObject.field2 = " + importObject.field2);
-    // console.debug("Execute Test Attributes Script N = " + executeCounter);
-    // executeCounter++;
-    // ExJs("asdfasdf");
-    // ExJs(function(arg1, arg2){
-    //   console.debug('callback function arg1 = ' + arg1);
-    //   console.debug('callback function arg2 = ' + arg2);
-    // });
-    // // showAttributes();
+
+    try
+    {
+    console.debug("Test import object localObject.field1 = " + localObject.field1);
+    console.debug("Test import object localObject.field2 = " + localObject.field2);
+    }
+    catch(error)
+    {
+      console.debug(error);
+    }
   }
 )();
 

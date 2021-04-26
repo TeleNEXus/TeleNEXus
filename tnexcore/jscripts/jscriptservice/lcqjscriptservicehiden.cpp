@@ -32,12 +32,14 @@
 #include <QCoreApplication>
 #include <QSharedPointer>
 #include <QMap>
+#include <QJSValueIterator>
 
 static QMap<int, QJSEngine*> __slJSEngines;
 static int __slJSEngineCounter = 0;
 
 //==============================================================================
-static QString createScriptGlobal(QMap<QString, QString> _attrMap, int _engineId);
+static QString createScriptGlobal(QMap<QString, QString> _attrMap, 
+    int _engineId);
 static void addMetaObjects(QJSEngine& _engine, QJSValue& _globalExport);
 
 
@@ -207,7 +209,6 @@ void LCQJScriptHiden::scriptExecute()
   QJSValue result = mCallScriptMain.call();
   if(result.isError()) { 
     emitError(result);
-    /* timerStop(); */
   }
 }
 
@@ -286,53 +287,39 @@ int LCQJScriptHiden::writeData(
 }
 
 //------------------------------------------------------------------------------
-void LCQJScriptHiden::importModule(const QString& _fileName)
+void LCQJScriptHiden::importModule(const QString& _fileName, 
+    const QString& _propertyName)
 {
-  QString full_file_name = 
-        tnex::getApplicationInterface().getProjectPath() + _fileName;
+  QJSValue jsmodule = mJSEngine.importModule(_fileName);
 
-  QFile script_file(full_file_name);
-
-  if(!script_file.open(QFile::OpenModeFlag::ReadOnly))
+  if(jsmodule.isError())
   {
-    mJSEngine.throwError(
-        QString("Import js module error: %1").arg(script_file.errorString()));
+    mJSEngine.throwError(QString("Can't import from file \"%1\" ").
+        arg(_fileName));
     return;
   }
 
-  QTextStream stream(&script_file);
-  QString script_str = stream.readAll();
-  script_file.close();
-
-  if(script_str.isNull()) 
-  { 
-    mJSEngine.throwError(
-        QString("Import js module error: %1").arg(script_file.errorString()));
-  }
-
-  QJSValue jsvalue = mJSEngine.evaluate(script_str, _fileName);
-
-  if(jsvalue.isError()) 
+  if(_propertyName != QString())
   {
-    emitError(jsvalue);
+    QJSValue jsval = jsmodule.property(_propertyName);
+    if(jsval.isUndefined())
+    {
+      mJSEngine.throwError(
+          QString("Can't import property \"%1\" from file \"%2\" ").
+          arg(_propertyName).
+          arg(_fileName));
+      return;
+    }
+    mJSEngine.globalObject().setProperty(_propertyName, jsval);
     return;
   }
-}
 
-//------------------------------------------------------------------------------
-void LCQJScriptHiden::exjs(QJSValue _jsvalue)
-{
-
-  if(_jsvalue.isString())
+  QJSValueIterator it(jsmodule);
+  while(it.hasNext())
   {
-    qDebug() << "JS Value is String = " << _jsvalue.toString();
+    it.next();
+    mJSEngine.globalObject().setProperty(it.name(), it.value());
   }
-  if(_jsvalue.isCallable())
-  {
-    qDebug() << "JS Value is callable = " << _jsvalue.toString();
-    _jsvalue.call(QJSValueList() << "String argument 1" << "String argument 2");
-  }
-
 }
 
 //------------------------------------------------------------------------------
@@ -368,7 +355,8 @@ QJSEngine* LCQJScriptHiden::getJSEngine(int _engineId)
 }
 
 //==============================================================================
-static QString createScriptGlobal(QMap<QString, QString> _attrMap, int _engineId)
+static QString createScriptGlobal(QMap<QString, QString> _attrMap, 
+    int _engineId)
 {
   QString obj_attributes = 
     QString("var %1 = { ").arg(__slPropNames.attributes);
@@ -389,10 +377,8 @@ static QString createScriptGlobal(QMap<QString, QString> _attrMap, int _engineId
       "return %2.readData(_sourceId, _dataId)};"
       "function DataSourceWrite(_sourceId, _dataId, _data) {"
       "return %2.writeData(_sourceId, _dataId, _data)};"
-      "function ImportModule(_fileName) {"
-      "return %2.importModule(_fileName)};"
-      "function ExJs(_jsv) {"
-      "return %2.exjs(_jsv)};"
+      "function ImportModule(_fileName, _property) {"
+      "return %2.importModule(_fileName, _property)};"
       "function NewTextFile(_fileName) {"
       "return new %2.TextFile(_fileName, %3);};"
       "function NewBinaryFile(_fileName) {"
@@ -423,8 +409,6 @@ static void addMetaObjects(QJSEngine& _engine, QJSValue& _globalExport)
 
   jsvalue = _engine.newQMetaObject(&CQJSProcess::staticMetaObject);
   _globalExport.setProperty(__slPropNames.process, jsvalue);
-
-  /* CQJSProcess::addQMetaObject(_engine, _globalExport, __slPropNames.process); */
 }
 
 

@@ -21,13 +21,13 @@
   <!-- </script> -->
 
   <!-- <script id="testexportmodules" file="scripts/testexportmodules.js"/> -->
-  <!-- <script id="testexportmodules" file="scripts/testexportmodules.js"> -->
-  <!--   <attributes --> 
-  <!--     message1="Test message 1" -->
-  <!--     message2="Test message 2" -->
-  <!--     message3="Test message 3" -->
-  <!--     /> -->
-  <!-- </script> -->
+  <script id="testexportmodules" file="scripts/testexportmodules.js">
+    <attributes 
+      message1="Test message 1"
+      message2="Test message 2"
+      message3="Test message 3"
+      />
+  </script>
 
   <!-- <launch scriptId="testwrite1" interval="500"/> -->
   <!-- <launch scriptId="testattr1" interval="500"/> --> 
@@ -46,7 +46,7 @@
 
   <!-- <execute scriptId="testtextfile" /> -->
 
-  <script id="interprocess" file="scripts/interprocess.js"/>
+  <!-- <script id="interprocess" file="scripts/interprocess.js"/> -->
   <!-- <execute scriptId="interprocess" /> -->
 
 

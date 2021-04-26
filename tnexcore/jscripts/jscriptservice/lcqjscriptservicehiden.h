@@ -114,9 +114,9 @@ public slots:
       const QString& _dataId, 
       const QVariantList& _data);
 
-  void importModule(const QString& _fileName);
+  void importModule(const QString& _fileName, 
+      const QString& _propertyName = QString());
 
-  void exjs(QJSValue _jsvalue);
   QJSValue newTextFile(const QString& _name);
   QJSValue newBinaryFile(const QString& _name);
     
