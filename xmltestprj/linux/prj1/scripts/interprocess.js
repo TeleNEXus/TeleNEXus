@@ -91,34 +91,64 @@ function transferData(process)
   }
 }
 
-function Main() {
-
-  let process = NewProcess();
-  process.start("interprocess/__build/interprocess");
-
-  try{
-    process.waitForStarted(1000);
-    console.debug("Process start normal");
-  }catch(error){
-    console.warn("In " + error.fileName + ": " + error.lineNumber + ": " + error.message);
-  }
-
-  console.debug("Start transfer data");
-  var counter = 0;
-  while(true)
+var processEnvironment = 
   {
-    console.debug("Next data transfer " + counter);
-    transferData(process);
+    TESTENVIROMENT_1 : "testenviroment1",
+    TESTENVIROMENT_2 : "testenviroment2"
+  };
+
+(
+  function Main() {
+
+    let process = NewProcess();
+    let sysenv = process.systemEnvironment();
+    console.debug("===================================System Evironments");
+    for( prop in sysenv)
+    {
+      console.debug(prop + " : " + sysenv[prop]);
+    }
+
+    let procenv = process.environment();
+    console.debug("===================================Process Evironments Before add");
+    for( prop in procenv)
+    {
+      console.debug(prop + " : " + procenv[prop]);
+    }
+
+    process.setEnvironment(processEnvironment);
+    procenv = process.environment();
+    console.debug("===================================Process Evironments After add");
+    for( prop in procenv)
+    {
+      console.debug(prop + " : " + procenv[prop]);
+    }
+
+    process.start("interprocess/__build/interprocess");
 
     try{
-      process.waitForFinished(500);
-      console.debug("Process finished normal");
-      break;
+      process.waitForStarted(1000);
+      console.debug("Process start normal");
     }catch(error){
-      // console.warn("In " + error.fileName + ": " + error.lineNumber + ": " + error.message);
+      console.warn("In " + error.fileName + ": " + error.lineNumber + ": " + error.message);
     }
-    counter++;
+
+    console.debug("Start transfer data");
+    var counter = 0;
+    while(true)
+    {
+      console.debug("Next data transfer " + counter);
+      transferData(process);
+
+      try{
+        process.waitForFinished(500);
+        console.debug("Process finished normal");
+        break;
+      }catch(error){
+        // console.warn("In " + error.fileName + ": " + error.lineNumber + ": " + error.message);
+      }
+      counter++;
+    }
   }
-};
+)();
 
 console.debug("<<<<<<<<<<<<<<<<<<<<<<<< Stop test interprc.interaction");

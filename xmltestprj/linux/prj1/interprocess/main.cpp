@@ -89,25 +89,25 @@ int main(int argc, char** argv)
   fout.open(stdout,QFile::OpenModeFlag::WriteOnly);
 
 
-  for(int i = 0; i < 30; i++)
+  for(int i = 0; i < 3; i++)
   {
 
-  inarr = fin.read(5000000);
-  /* fin.close(); */
+    inarr = fin.read(5000000);
+    /* fin.close(); */
 
-  instr = QString::fromLocal8Bit(inarr);
-  instr = instr.toUpper();
+    instr = QString::fromLocal8Bit(inarr);
+    instr = instr.toUpper();
 
-  fout.write(instr.toLocal8Bit());
-  fout.flush();
+    fout.write(instr.toLocal8Bit());
+    fout.flush();
 
-  /* inarr = fin.read(5000000); */
+    /* inarr = fin.read(5000000); */
 
-  /* instr = QString::fromLocal8Bit(inarr); */
-  /* instr = instr.toUpper(); */
+    /* instr = QString::fromLocal8Bit(inarr); */
+    /* instr = instr.toUpper(); */
 
-  /* fout.write(instr.toLocal8Bit()); */
-  /* fout.flush(); */
+    /* fout.write(instr.toLocal8Bit()); */
+    /* fout.flush(); */
 
   }
 //--------------------------------------------------------------

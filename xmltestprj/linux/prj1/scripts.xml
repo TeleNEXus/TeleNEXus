@@ -20,7 +20,7 @@
   <!--   <attributes newMessage="testattr2 script new message"/> -->
   <!-- </script> -->
 
-  <script id="testexportmodules" file="scripts/testexportmodules.js"/>
+  <!-- <script id="testexportmodules" file="scripts/testexportmodules.js"/> -->
   <!-- <script id="testexportmodules" file="scripts/testexportmodules.js"> -->
   <!--   <attributes --> 
   <!--     message1="Test message 1" -->
@@ -46,7 +46,7 @@
 
   <!-- <execute scriptId="testtextfile" /> -->
 
-  <!-- <script id="interprocess" file="scripts/interprocess.js"/> -->
+  <script id="interprocess" file="scripts/interprocess.js"/>
   <!-- <execute scriptId="interprocess" /> -->
 
 
