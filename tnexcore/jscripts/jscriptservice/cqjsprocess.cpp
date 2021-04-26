@@ -206,3 +206,45 @@ qint64 CQJSProcess::write(const QVariantList& _data)
   return ret;
 }
 
+//------------------------------------------------------------------------------
+void CQJSProcess::setEnvironment(const QVariantMap& _envmap)
+{
+  QProcessEnvironment env;
+  for(auto it = _envmap.begin(); it != _envmap.end(); it++)
+  {
+    env.insert(it.key(), it.value().toString());
+  }
+  mProcess.setProcessEnvironment(env);
+}
+
+//------------------------------------------------------------------------------
+QVariantMap CQJSProcess::environment()
+{
+  QVariantMap ret;
+  QProcessEnvironment env = mProcess.processEnvironment();
+  QStringList keys = env.keys();
+  for(auto it = keys.begin(); it != keys.end(); it++)
+  {
+    QString val = env.value(*it);
+    ret.insert(*it, QVariant(val));
+  }
+  return ret;
+}
+
+//------------------------------------------------------------------------------
+QVariantMap CQJSProcess::systemEnvironment()
+{
+  QVariantMap ret;
+  QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
+  QStringList keys = env.keys();
+
+  for(auto it = keys.begin(); it != keys.end(); it++)
+  {
+    ret.insert(*it, env.value(*it));
+  }
+  return ret;
+}
+
+
+
+

@@ -66,6 +66,13 @@ public slots:
   QVariantList readAll();
   qint64 write(const QVariantList& _data);
 
+  /* void setEnvironment(const QStringList& _env); */
+  /* QStringList getSystemEnvironment(); */
+  void setEnvironment(const QVariantMap& _envmap);
+  QVariantMap environment();
+  /* void Environment(const QVariantMap& _envmap); */
+  QVariantMap systemEnvironment();
+
 private slots:
   friend class QProcess;
 };
