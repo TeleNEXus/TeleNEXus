@@ -116,6 +116,7 @@ LCBuildersCommon::LCBuildersCommon()
     __slStdColors.insert( "color0"     , Qt::GlobalColor::color0);
     __slStdColors.insert( "color1"     , Qt::GlobalColor::color1);
 }
+
 //------------------------------------------------------------------------------
 void LCBuildersCommon::initPosition(const QDomElement& _element, 
         QWidget& _widget)
