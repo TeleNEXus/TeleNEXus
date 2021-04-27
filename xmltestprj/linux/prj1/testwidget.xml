@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <!-- <widget fixwidth="300" fixheight="100"> -->
-<widget width="500" height="100" posx="100" posy="100">
+<widget width="500" height="100" posx="300" posy="300">
+
+  <!-- <control> -->
+  <!--   <display source="ds" data="ds" show="3"/> -->
+  <!--   <position source="ds" posx="posx" posy="posy"/> -->
+  <!-- </control> -->
+
 <!-- <widget > -->
     <!-- <layout> -->
     <!--     <layoutHBox> -->

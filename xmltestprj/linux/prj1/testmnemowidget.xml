@@ -10,9 +10,15 @@
   >
   <widgets>
     <!-- <dataComboLabel  read="hreg0" source="qtslavetcp" format="hex"> -->
-      <dataComboLabel  read="hreg0" source="qtslavetcp" format="hex" 
-        bgColor="red" textColor="blue" fontId="mnemo10" 
-        posx="250" posy="25"
+      <dataComboLabel  
+        read="hreg0" 
+        source="qtslavetcp" 
+        format="hex" 
+        bgColor="red" 
+        textColor="blue" 
+        fontId="mnemo10" 
+        posx="250" 
+        posy="25"
         align="Right Bottom"
         >
         <!-- bgColor="red" textColor="blue" font="bold italic 25pt DejaVu Sans Mono" --> 
@@ -119,21 +125,19 @@
     <widget posx="250" posy="205" minWidth="100" 
       bgImage="picture/fon1.png" bgPos="bottom">
       <widgets>
-        <dataLabel source="qtslavetcp" data="hreg[0-1]" format="hex" dataSize="4" fontId="mnemo10" separator=" " 
-          />
+        <dataLabel source="qtslavetcp" data="hreg[0-1]" format="hex" dataSize="4" fontId="mnemo10" separator=" " />
       </widgets>
     </widget>
 
 
-      <dataWriteButton text="write 1" posx="10" posy="120"
-        bgColor="green"
-        fontId="mnemo10"
-        >
-        <data source="qtslavetcp" dataName="hreg0" format="uint16" value="0"/>
-        <data source="qtslavetcp" dataName="hreg1" format="uint16" value="1"/>
-        <data source="qtslavetcp" dataName="hreg2" format="uint16" value="2"/>
-        <data source="qtslavetcp" dataName="hreg3" format="uint16" value="3"/>
-      </dataWriteButton>
+    <dataWriteButton text="write 1" posx="10" posy="120" bgColor="green" fontId="mnemo10">
+
+      <data source="qtslavetcp" dataName="hreg0" format="uint16" value="0"/>
+      <data source="qtslavetcp" dataName="hreg1" format="uint16" value="1"/>
+      <data source="qtslavetcp" dataName="hreg2" format="uint16" value="2"/>
+      <data source="qtslavetcp" dataName="hreg3" format="uint16" value="3"/>
+
+    </dataWriteButton>
 
       <!-- minWidth = "220" -->
       <!-- minHeight= "220" -->
