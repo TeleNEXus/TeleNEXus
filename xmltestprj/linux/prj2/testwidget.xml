@@ -1,8 +1,24 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <!-- <widget fixwidth="300" fixheight="100"> -->
-<widget width="500" height="100" posx="300" posy="300">
+  <widget 
+    width="500" 
+    height="100" 
+    posx="300" 
+    posy="300"
 
+    visibleControlSource = "vcs"
+    visibleControlData = "vcd"
+    visibleControlShow = "3"
+    visibleControlHide = "4"
+
+    <!-- showControl -->
+    <!-- displayControlSource = "dcs"kk -->
+    <!-- displayControlData = "dcd" -->
+    <!-- displayControlShow = "2" -->
+    <!-- displayControlHide = "2" -->
+
+    >
   <!-- <control> -->
   <!--   <display source="ds" data="ds" show="3"/> -->
   <!--   <position source="ds" posx="posx" posy="posy"/> -->
