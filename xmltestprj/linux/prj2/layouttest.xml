@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<widget title="TITLE CHECK">
+    <!-- <layoutHBox dir="reverse"> -->
+    <!-- <layoutHBox spacing="25"> -->
+    <layoutHBox>
+        <stretch/>
+        <widgets>
+
+            <label text="Label02" /> 
+            <label text="Label02" /> 
+            <label text="Label03" /> 
+            <label text="Label04" /> 
+
+            <widget>
+                <layoutVBox dir="forward" spacing="25">
+                <!-- <layoutVBox dir="reverse" spacing="25"> -->
+                <!-- <layoutVBox dir="reverse" > -->
+                    <!-- <spacing value="100"/> -->
+                    <widgets>
+                        <label text="Label11" /> 
+                        <label text="Label12" /> 
+                        <label text="Label13" /> 
+                        <label text="Label14" /> 
+                        <label text="Label15" /> 
+                    </widgets>
+                    <stretch/>
+                </layoutVBox>
+            </widget>
+            <!-- <label text="Label05" /> --> 
+            <!-- <label text="Label06" /> --> 
+            <!-- <label text="Label07" /> --> 
+            <!-- <label text="Label08" /> --> 
+
+        </widgets>
+
+        <spacing value="100"/>
+
+        <widgets>
+            <label text="Label05" /> 
+            <label text="Label06" /> 
+            <label text="Label07" /> 
+            <label text="Label08" /> 
+        </widgets>
+    </layoutHBox>
+</widget>
+
+<!-- <widget title="TITLE CHECK"> -->
+<!--     <layoutGrid> -->
+
+<!--         <col> -->
+<!--             <label text="Label01" /> -->
+<!--             <label text="Label02" /> -->
+<!--             <label text="Label03" /> -->
+<!--         </col> -->
+
+<!--         <col> -->
+<!--             <label text="Label11" /> -->
+<!--             <label text="Label12" /> -->
+<!--             <label text="Label13" /> -->
+<!--         </col> -->
+
+<!--         <col> -->
+<!--             <label text="Label21" /> -->
+<!--             <label text="Label22" /> -->
+<!--             <label text="Label23" /> -->
+<!--         </col> -->
+
+<!--         <col> -->
+<!--             <widgets> -->
+<!--                 <label text="Label31" /> -->
+<!--                 <label text="Label32" /> -->
+<!--                 <label text="Label33" /> -->
+<!--             </widgets> -->
+<!--         </col> -->
+<!--         <col> -->
+<!--             <widgets> -->
+<!--                 <label text="Label1" /> --> 
+<!--                 <label text="Label2" /> --> 
+<!--                 <label text="Label3" /> --> 
+<!--                 <label text="Label4" /> --> 
+<!--                 <label text="Label5" /> --> 
+
+<!--                 <widget> -->
+<!--                     <layoutHBox dir="reverse"> -->
+<!--                         <widgets> -->
+<!--                             <label text="Label1" /> --> 
+<!--                             <label text="Label2" /> --> 
+<!--                             <label text="Label3" /> --> 
+<!--                             <label text="Label4" /> --> 
+<!--                             <label text="Label5" /> --> 
+<!--                         </widgets> -->
+
+<!--                         <layout> --> 
+<!--                             <layoutBox spacing="20"> -->
+<!--                                 <spacing value="50"/> -->
+<!--                                 <widgets> -->
+<!--                                     <label text="Label1" /> --> 
+<!--                                     <label text="Label2" /> --> 
+<!--                                     <label text="Label3" /> --> 
+<!--                                     <label text="Label4" /> --> 
+<!--                                     <label text="Label5" /> --> 
+<!--                                 </widgets> -->
+<!--                                 <stretch value="0"/> -->
+<!--                                 <widgets> -->
+<!--                                     <label text="Label1" /> --> 
+<!--                                     <label text="Label2" /> --> 
+<!--                                     <label text="Label3" /> --> 
+<!--                                     <label text="Label4" /> --> 
+<!--                                     <label text="Label5" /> --> 
+<!--                                 </widgets> -->
+<!--                             </layoutBox> --> 
+<!--                         </layout> -->
+<!--                     </layoutHBox> -->
+<!--                 </widget> -->
+
+<!--                 <widget> -->
+<!--                     <layoutHBox dir="reverse"> -->
+<!--                         <layout> --> 
+<!--                             <layoutBox> -->
+<!--                                 <widgets> -->
+<!--                                     <label text="Label1" /> --> 
+<!--                                     <label text="Label2" /> --> 
+<!--                                     <label text="Label3" /> --> 
+<!--                                     <label text="Label4" /> --> 
+<!--                                     <label text="Label5" /> --> 
+<!--                                 </widgets> -->
+<!--                             </layoutBox> --> 
+<!--                         </layout> -->
+<!--                     </layoutHBox> -->
+<!--                 </widget> -->
+<!--             </widgets> -->
+<!--         </col> -->
+<!--         <col> -->
+<!--             <widget> -->
+<!--                 <layoutBox direction="BottomToTop"> -->
+<!--                     <label text="Label1" /> -->
+<!--                     <label text="Label2" /> -->
+<!--                     <label text="Label3" /> -->
+<!--                 </layoutBox> -->
+<!--             </widget> -->
+<!--         </col> -->
+
+<!--     </layoutGrid> -->
+<!-- </widget> -->
+

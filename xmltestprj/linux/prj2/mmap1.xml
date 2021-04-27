@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<memorymap>
+    <!--coil       name="coil0"    addr="0" size="1"/>
+    <discin     name="din0"     addr="0" size="1"/>
+    <inreg      name="inreg0"   addr="0" size="1"/>
+    <holdreg    name="inreg0"   addr="0" size="1"/-->
+    
+    <coil       name="coil0"    addr="0" size="1" />
+    <coil       name="coil1"    addr="1" size="1" />
+    <coil       name="coil2"    addr="2" size="1" />
+
+    <coil       name="coil[0-2]"    addr="0" size="3" />
+    <coil       name="coil[0-3]"    addr="0" size="4" />
+    
+    <discin     name="din0"     addr="0" size="1" />
+    <discin     name="din1"     addr="1" size="1" />
+    <discin     name="din2"     addr="2" size="1" />
+    
+    <holdreg    name="hreg0"        addr="0" size="1"/>
+    <holdreg    name="hreg1"        addr="1" size="1"/>
+    <holdreg    name="hreg2"        addr="2" size="1"/>
+    <holdreg    name="hreg3"        addr="3" size="1"/>
+    <holdreg    name="hreg4"        addr="4" size="1"/>
+    <holdreg    name="hreg5"        addr="5" size="1"/>
+
+    <holdreg    name="hflt"         addr="0" size="2"/>
+
+    <holdreg    name="hreg[0-1]"    addr="0" size="2"/>
+    
+    <inreg      name="inreg0"   addr="0" size="1"/>
+    <inreg      name="inreg1"   addr="1" size="1"/>
+    <inreg      name="inflt"    addr="0" size="2"/>
+    
+    
+    
+</memorymap>
