@@ -11,11 +11,11 @@
 
 
     <!-- <widget file="testcontrolbutton.xml"/> -->
-    <widget file="testwidget.xml"/>
+    <!-- <widget file="testwidget.xml"/> -->
     <!-- <scrollArea file="testscrollarea.xml"/> -->
     <!-- <scrollArea file="testcombolabel.xml"/> -->
 
-    <!-- <switchWidgetsList file="testswitchwidgetlist.xml"/> -->
+    <switchWidgetsList file="testswitchwidgetlist.xml"/>
 
     <!-- <widget file="testcombolabel.xml"/> -->
     <!-- <widget file="testmnemowidget.xml"/> -->

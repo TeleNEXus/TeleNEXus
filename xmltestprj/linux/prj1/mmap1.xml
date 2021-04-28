@@ -16,6 +16,9 @@
     <discin     name="din0"     addr="0" size="1" />
     <discin     name="din1"     addr="1" size="1" />
     <discin     name="din2"     addr="2" size="1" />
+    <discin     name="din3"     addr="3" size="1" />
+    <discin     name="din4"     addr="4" size="1" />
+    <discin     name="din5"     addr="5" size="1" />
     
     <holdreg    name="hreg0"        addr="0" size="1"/>
     <holdreg    name="hreg1"        addr="1" size="1"/>

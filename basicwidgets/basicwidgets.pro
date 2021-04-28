@@ -52,7 +52,7 @@ SOURCES += \
     builders/lcxmlscrollareabuilder.cpp \
     builders/lcxmlbuttonbuilder.cpp \
     builders/lcbuilderscommon.cpp \
-
+    builders/lcqwidgetvisiblecontrol.cpp \
 
 HEADERS += \
     ../../common/interfaces/LIApplication.h \
@@ -86,6 +86,7 @@ HEADERS += \
     builders/lcxmlscrollareabuilder.h \
     builders/lcxmlbuttonbuilder.h \
     builders/lcbuilderscommon.h \
+    builders/lcqwidgetvisiblecontrol.h \
 
 # Default rules for deployment.
 unix {

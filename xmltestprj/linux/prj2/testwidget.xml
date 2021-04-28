@@ -11,14 +11,20 @@
     visibleControlData = "vcd"
     visibleControlShow = "3"
     visibleControlHide = "4"
+    visibleControlFormat = "" 
 
+    vcSource = "vcs"
+    vcData = "vcd"
+    vcShow = "3"
+    vcHide = "4"
+    vcFormat = "" 
+    >
     <!-- showControl -->
     <!-- displayControlSource = "dcs"kk -->
     <!-- displayControlData = "dcd" -->
     <!-- displayControlShow = "2" -->
     <!-- displayControlHide = "2" -->
 
-    >
   <!-- <control> -->
   <!--   <display source="ds" data="ds" show="3"/> -->
   <!--   <position source="ds" posx="posx" posy="posy"/> -->
@@ -35,12 +41,43 @@
     <!--         </widgets> -->
     <!--     </layoutHBox> -->
     <!-- </layout> -->
-    <widgets> 
-       <label text="Label0" posx="20" posy="20"/>
-       <label text="Label1" posx="40" posy="40"/>
-       <label text="Label2" posx="60" posy="60"/>
-       <label text="Label3" posx="80" posy="80"/>
-       <label text="Label4" posx="100" posy="100"/>
-       <label text="Label5" posx="120" posy="120"/>
-    </widgets>
+    <!-- <widgets> --> 
+    <!--    <label text="Label0" posx="20" posy="20"/> -->
+    <!--    <label text="Label1" posx="40" posy="40"/> -->
+    <!--    <label text="Label2" posx="60" posy="60"/> -->
+    <!--    <label text="Label3" posx="80" posy="80"/> -->
+    <!--    <label text="Label4" posx="100" posy="100"/> -->
+    <!--    <label text="Label5" posx="120" posy="120"/> -->
+    <!-- </widgets> -->
+    <layout>
+        <layoutVBox>
+            <widgets>
+
+                <label text="label_1_00000" />
+                <label text="label_1_00001" />
+                <label text="label_1_00002" />
+                <label text="label_1_00003" />
+
+                <dataWriteButton text="write 1">
+                    <data sourceName="qtslavetcp" dataName="hreg0" format="uint16" value="0"/>
+                    <data sourceName="qtslavetcp" dataName="hreg1" format="uint16" value="1"/>
+                    <data sourceName="qtslavetcp" dataName="hreg2" format="uint16" value="2"/>
+                    <data sourceName="qtslavetcp" dataName="hreg3" format="uint16" value="3"/>
+                </dataWriteButton>
+
+                <dataWriteButton text="write 2">
+                    <data sourceName="qtslavetcp" dataName="hreg0" format="uint16" value="4"/>
+                    <data sourceName="qtslavetcp" dataName="hreg1" format="uint16" value="5"/>
+                    <data sourceName="qtslavetcp" dataName="hreg2" format="uint16" value="6"/>
+                    <data sourceName="qtslavetcp" dataName="hreg3" format="uint16" value="7"/>
+                </dataWriteButton>
+
+                <!-- <dataWriteButton text="write 1"> -->
+                    <!--     <write targetSource="qtslavetcp" targetData="hreg0" targetValue="0" format="uint16" /> -->
+                    <!--     <write reciveSource="qtslavetcp" resiveData="hreg0" value="0" format="uint16" /> -->
+                    <!-- </dataWriteButton> -->
+
+            </widgets>
+        </layoutVBox>
+    </layout>
 </widget>
