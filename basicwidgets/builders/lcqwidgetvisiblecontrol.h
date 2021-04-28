@@ -18,26 +18,29 @@
  * You should have received a copy of the GNU General Public License
  * along with TeleNEXus.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef LCQWIDGETDISPLAYCONTROL_H_
-#define LCQWIDGETDISPLAYCONTROL_H_
+#ifndef LCQWIDGETVISIBLECONTROL_H_
+#define LCQWIDGETVISIBLECONTROL_H_
 
 #include <QObject>
-#include <QSharedPointer>
 
 class QWidget;
-class LIRemoteDataReader;
 class QDomElement;
+class LIApplication;
 
-class LCQWidgetDisplayControl : public QObject
+class LCQWidgetVisibleControl : public QObject
 {
+  Q_OBJECT;
 private:
-  QWidget* mpWidget;
-  QSharedPointer<LIRemoteDataReader>  mDataReader;
+  void* mpLocal = nullptr;
 public:
-  static bool build(const QDomElement& _element, QWidget* _widget);
+  static bool build(const QDomElement& _element, 
+      QWidget* _widget, 
+      const LIApplication& _app);
+  virtual ~LCQWidgetVisibleControl();
 private:
-  LCQWidgetDisplayControl() = delete;
-  LCQWidgetDisplayControl(QWidget* _widget);
+  LCQWidgetVisibleControl() = delete;
+  LCQWidgetVisibleControl(QWidget* _widget);
+
 };
 
-#endif /* LCQWIDGETDISPLAYCONTROL_H_ */
+#endif /* LCQWIDGETVISIBLECONTROL_H_ */

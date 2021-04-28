@@ -45,6 +45,10 @@
         fontId="mnemo10"
         textColor="red"
         minHeight="50"
+        vcSource = "qtslavetcp"
+        vcData = "din2"
+        vcHide = "true"
+        vcFormat = "bool" 
         >
         <window id="win0" event="pressed" action="hide"/>
       </controlWindowButton>
@@ -130,8 +134,27 @@
     </widget>
 
 
-    <dataWriteButton text="write 1" posx="10" posy="120" bgColor="green" fontId="mnemo10">
+    <dataWriteButton 
+      text="write 1" 
+      posx="10" 
+      posy="120" 
+      bgColor="green" 
+      fontId="mnemo10"
 
+      vcSource = "qtslavetcp"
+      vcData = "hreg0"
+      vcHide = "0005"
+      vcFormat = "uint16" 
+      >
+      <!-- vcSource = "qtslavetcp" -->
+      <!-- vcData = "din0" -->
+      <!-- vcHide = "true" -->
+      <!-- vcFormat = "bool" --> 
+      <!-- vcSource = "qtslavetcp" -->
+      <!-- vcData = "hreg0" -->
+      <!-- vcShow = "0" -->
+      <!-- vcFormat = "uint16" --> 
+      <!-- vcHide = "4" -->
       <data source="qtslavetcp" dataName="hreg0" format="uint16" value="0"/>
       <data source="qtslavetcp" dataName="hreg1" format="uint16" value="1"/>
       <data source="qtslavetcp" dataName="hreg2" format="uint16" value="2"/>
@@ -151,6 +174,11 @@
         textColor="red"
         icon="picture/icon1.png"
         iconScale="1.5"
+
+        vcSource = "qtslavetcp"
+        vcData = "din0"
+        vcHide = "true"
+        vcFormat = "bool" 
         >
         <data source="qtslavetcp" dataName="hreg0" format="uint16" value="4"/>
         <data source="qtslavetcp" dataName="hreg1" format="uint16" value="5"/>
@@ -164,6 +192,11 @@
         textColor="red"
         icon="picture/icon1.png"
         iconScale="2"
+
+        vcSource = "qtslavetcp"
+        vcData = "din1"
+        vcHide = "true"
+        vcFormat = "bool" 
         >
         <data source="qtslavetcp" dataName="hreg0" format="uint16" value="255"/>
       </dataWriteButton>
