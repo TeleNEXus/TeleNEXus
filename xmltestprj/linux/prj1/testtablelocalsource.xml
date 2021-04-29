@@ -74,37 +74,37 @@
       <item text="bits 0"  value="0"/>
       <item text="bits 1"  value="1"/>
     </dataComboBox>
-    <dataComboBox  read="bits_size(2)" source="localsource" format="bits">
-      <item text="bits 00" value="00"/>
-      <item text="bits 01" value="01"/>
-      <item text="bits 10" value="10"/>
-      <item text="bits 11" value="11"/>
-    </dataComboBox>
-    <dataComboBox  read="bits_size(3)" source="localsource" format="bits">
-      <item text="bits 000" value="000"/>
-      <item text="bits 001" value="001"/>
-      <item text="bits 010" value="010"/>
-      <item text="bits 011" value="011"/>
-      <item text="bits 100" value="100"/>
-      <item text="bits 101" value="101"/>
-      <item text="bits 110" value="110"/>
-      <item text="bits 111" value="111"/>
-    </dataComboBox>
-    <dataComboBox  read="bits_defs_1" source="localsource" format="bits">
-      <item  text="bits 00" value="00"/>
-      <item  text="bits 01" value="01"/>
-      <item  text="bits 10" value="10"/>
-      <item  text="bits 11" value="11"/>
-    </dataComboBox>
-    <dataComboBox  read="bits_defs_2" source="localsource" format="bits">
-      <item  text="bits 000" value="000"/>
-      <item  text="bits 001" value="001"/>
-      <item  text="bits 010" value="010"/>
-      <item  text="bits 011" value="011"/>
-      <item  text="bits 100" value="100"/>
-      <item  text="bits 101" value="101"/>
-      <item  text="bits 110" value="110"/>
-      <item  text="bits 111" value="111"/>
-    </dataComboBox>
+    <!-- <dataComboBox  read="bits_size(2)" source="localsource" format="bits"> -->
+    <!--   <item text="bits 00" value="00"/> -->
+    <!--   <item text="bits 01" value="01"/> -->
+    <!--   <item text="bits 10" value="10"/> -->
+    <!--   <item text="bits 11" value="11"/> -->
+    <!-- </dataComboBox> -->
+    <!-- <dataComboBox  read="bits_size(3)" source="localsource" format="bits"> -->
+    <!--   <item text="bits 000" value="000"/> -->
+    <!--   <item text="bits 001" value="001"/> -->
+    <!--   <item text="bits 010" value="010"/> -->
+    <!--   <item text="bits 011" value="011"/> -->
+    <!--   <item text="bits 100" value="100"/> -->
+    <!--   <item text="bits 101" value="101"/> -->
+    <!--   <item text="bits 110" value="110"/> -->
+    <!--   <item text="bits 111" value="111"/> -->
+    <!-- </dataComboBox> -->
+    <!-- <dataComboBox  read="bits_defs_1" source="localsource" format="bits"> -->
+    <!--   <item  text="bits 00" value="00"/> -->
+    <!--   <item  text="bits 01" value="01"/> -->
+    <!--   <item  text="bits 10" value="10"/> -->
+    <!--   <item  text="bits 11" value="11"/> -->
+    <!-- </dataComboBox> -->
+    <!-- <dataComboBox  read="bits_defs_2" source="localsource" format="bits"> -->
+    <!--   <item  text="bits 000" value="000"/> -->
+    <!--   <item  text="bits 001" value="001"/> -->
+    <!--   <item  text="bits 010" value="010"/> -->
+    <!--   <item  text="bits 011" value="011"/> -->
+    <!--   <item  text="bits 100" value="100"/> -->
+    <!--   <item  text="bits 101" value="101"/> -->
+    <!--   <item  text="bits 110" value="110"/> -->
+    <!--   <item  text="bits 111" value="111"/> -->
+    <!-- </dataComboBox> -->
   </col>
 </table>

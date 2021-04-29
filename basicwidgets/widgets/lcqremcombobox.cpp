@@ -24,6 +24,7 @@
 
 #include <qglobal.h>
 #include <QKeyEvent>
+#include <QDebug>
 
 //------------------------------------------------------------------------------
 LCQRemComboBox::LCQRemComboBox( 
@@ -83,16 +84,19 @@ LCQRemComboBox::~LCQRemComboBox()
 bool LCQRemComboBox::event(QEvent *_event)
 {
   int key;
+  bool ret = false;
   switch(_event->type())
   {
   case QEvent::Type::Show:
     mDataReader->connectToSource();
     setCurrentIndex(-1);
-    return false;
+    ret = true;
+    break;
 
   case QEvent::Type::Hide:
     mDataReader->disconnectFromSource();
-    return false;
+    ret = true;
+    break;
 
   case QEvent::Type::KeyPress:
     //Очиска фокуса видета при нажатии клавиши Escape.
@@ -111,12 +115,14 @@ bool LCQRemComboBox::event(QEvent *_event)
         clearFocus();
       }
     }
-    return false;
+    ret = true;
+    break;
 
   default:
+  ret = QComboBox::event(_event);
     break;
   }
-  return QComboBox::event(_event);
+  return ret;
 }
 
 //------------------------------------------------------------------------------

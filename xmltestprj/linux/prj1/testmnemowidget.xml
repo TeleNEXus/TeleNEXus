@@ -25,7 +25,9 @@
         vcData = "bit0"
         vcHide = "true"
         vcFormat = "bool" 
+
         >
+        <!-- vcUndef="hide" -->
         <!-- bgColor="red" textColor="blue" font="bold italic 25pt DejaVu Sans Mono" --> 
         <!-- minWidth="150" minHeight="150" -->
         <!-- <item text="UNDEFINED" mode="undef" fontId="mnemo18" align="Center"/> -->
@@ -179,6 +181,7 @@
       vcData = "hreg0"
       vcHide = "0005"
       vcFormat = "uint16" 
+      vcUndef="hide"
       >
       <!-- vcSource = "qtslavetcp" -->
       <!-- vcData = "din0" -->
