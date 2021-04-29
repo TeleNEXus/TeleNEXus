@@ -23,12 +23,22 @@
               <!-- <dataLabel    source="localsource"  data="bytes_int32" format="int32" /> -->
               <!-- <dataLineEdit source="localsource"  data="bytes_int32" formatId="scaledInt32_xxx.x" /> -->
               <!-- <dataLineEdit source="localsource"  data="bytes_int32" formatId="scaledInt32_xxx.x" /> -->
-              <dataLabel    source="qtslavetcp"  data="hreg[0-1]" format="int32" />
+              <dataLabel    
+        vcSource = "localsource"
+        vcData = "bit0"
+        vcHide = "true"
+        vcFormat = "bool" 
+                source="qtslavetcp"  data="hreg[0-1]" format="int32" />
               <dataLineEdit source="qtslavetcp"  data="hreg[0-1]" format="int32" />
               <dataLineEdit source="qtslavetcp"  data="hreg[0-1]" formatId="scaledInt32_xxx.x" />
               <!-- <dataLineEdit source="qtslavetcp"  data="hreg[0-1]" formatId="scaledInt32_xxx.x" /> -->
 
-            <dataComboBox  source="qtslavetcp" read="hreg[0-1]" formatId="scaledInt32_xxx.x">
+              <dataComboBox  
+        vcSource = "localsource"
+        vcData = "bit0"
+        vcHide = "true"
+        vcFormat = "bool" 
+                source="qtslavetcp" read="hreg[0-1]" formatId="scaledInt32_xxx.x">
               <item text="On"     value="500.1"/>
               <item text="Off"    value="500.2"/>
               <item text="Reset"  value="500.3"/>

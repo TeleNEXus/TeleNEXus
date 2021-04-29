@@ -35,11 +35,26 @@ static const struct
     QString vcFormat  = "vcFormat";
     QString vcShow    = "vcShow";
     QString vcHide    = "vcHide";
+    QString vcUndef   = "vcUndef";
 }__slAttributes;
+
+static const struct
+{
+  //vcUndef
+  QString show = "show";
+  QString hide = "hide";
+}__slAttributesVals;
 
 //==============================================================================
 struct SLocalData
 {
+  enum class EUndefMode
+  {
+    show,
+    hide
+  };
+  EUndefMode mUndefMode = EUndefMode::hide;
+  bool mShowStatus = false;
   QWidget* mpWidget = nullptr;
   QSharedPointer<LIRemoteDataReader>  mDataReader;
   QSharedPointer<LIDataFormatter>     mFormatter;
@@ -112,13 +127,61 @@ bool LCQWidgetVisibleControl::build(const QDomElement& _element,
 
   ctrl = new LCQWidgetVisibleControl(_widget);
 
+
+  QString attr_undef = _element.attribute(__slAttributes.vcUndef);
+  if(!attr_undef.isNull())
+  {
+    if(attr_undef == __slAttributesVals.show) 
+      toLocalData(ctrl->mpLocal)->mUndefMode = SLocalData::EUndefMode::show;
+    else if(attr_undef == __slAttributesVals.hide) 
+      toLocalData(ctrl->mpLocal)->mUndefMode = SLocalData::EUndefMode::hide;
+  }
+
+  auto status_string = [](LERemoteDataStatus _status)
+  {
+    QString str;
+    switch(_status)
+    {
+    case LERemoteDataStatus::DS_OK:
+      str = QStringLiteral("DS_OK");
+      break;
+    case LERemoteDataStatus::DS_WRONG:
+      str = QStringLiteral("DS_WRONG");
+      break;
+    case LERemoteDataStatus::DS_UNDEF:
+    default:
+      str = QStringLiteral("DS_UNDEF");
+      break;
+    }
+    return str;
+  };
+
   //--------------------------------------------
-  auto action_show = [ctrl](
+  auto read_status_ctrl = [ctrl](LERemoteDataStatus _status)
+  {
+    if(_status == LERemoteDataStatus::DS_OK) return true;
+    switch(toLocalData(ctrl->mpLocal)->mUndefMode)
+    {
+    case SLocalData::EUndefMode::show:
+      toLocalData(ctrl->mpLocal)->mpWidget->show();
+      break;
+
+    case SLocalData::EUndefMode::hide:
+      toLocalData(ctrl->mpLocal)->mpWidget->hide();
+    default:
+      break;
+    }
+    return false;
+  };
+
+  //--------------------------------------------action_show
+  auto action_show = [ctrl, status_string, read_status_ctrl](
       QSharedPointer<QByteArray> _data, 
       LERemoteDataStatus _status)
   {
-    if(_status != LERemoteDataStatus::DS_OK)
-      toLocalData(ctrl->mpLocal)->mpWidget->hide();
+    qDebug() << "action hide data status = " << status_string(_status);
+
+    if(!read_status_ctrl(_status)) return;
 
     if(toLocalData(ctrl->mpLocal)->mCompareData ==
         toLocalData(ctrl->mpLocal)->mFormatter->toString(*_data))
@@ -127,13 +190,15 @@ bool LCQWidgetVisibleControl::build(const QDomElement& _element,
       toLocalData(ctrl->mpLocal)->mpWidget->hide();
   };
 
-  //--------------------------------------------
-  auto action_hide = [ctrl](
+
+  //--------------------------------------------action_hide
+  auto action_hide = [ctrl, status_string, read_status_ctrl](
       QSharedPointer<QByteArray> _data, 
       LERemoteDataStatus _status)
   {
-    if(_status != LERemoteDataStatus::DS_OK)
-      toLocalData(ctrl->mpLocal)->mpWidget->hide();
+    qDebug() << "action hide data status = " << status_string(_status);
+
+    if(!read_status_ctrl(_status)) return;
 
     if(toLocalData(ctrl->mpLocal)->mCompareData == 
         toLocalData(ctrl->mpLocal)->mFormatter->toString(*_data))
@@ -155,18 +220,30 @@ bool LCQWidgetVisibleControl::build(const QDomElement& _element,
     toLocalData(ctrl->mpLocal)->mfAction = action_hide;
   }
 
-  auto action = [ctrl](
+  //--------------------------------------------action_read_data
+  auto action_read_data = [ctrl](
       QSharedPointer<QByteArray> _data, 
       LERemoteDataStatus _status)
   {
     toLocalData(ctrl->mpLocal)->mfAction(_data, _status);
   };
 
+
   toLocalData(ctrl->mpLocal)->mDataReader = 
-    source->createReader(attr_data, action);
+    source->createReader(attr_data, action_read_data);
 
   toLocalData(ctrl->mpLocal)->mFormatter = format;
   toLocalData(ctrl->mpLocal)->mDataReader->connectToSource();
 
   return ret_ok();
 }
+
+bool LCQWidgetVisibleControl::eventFilter(QObject* _opbj, QEvent* _event)
+{
+
+}
+
+
+
+
+

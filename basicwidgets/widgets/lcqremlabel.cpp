@@ -98,14 +98,16 @@ bool LCQRemLabel::event(QEvent *_event)
     setActive(true);
     ret = true;
     break;
+
   case QEvent::Type::Hide:
     setActive(false);
     ret = true;
     break;
+
   default:
+    ret = QLabel::event(_event);
     break;
   }
-  QLabel::event(_event);
   return ret;
 }
 
