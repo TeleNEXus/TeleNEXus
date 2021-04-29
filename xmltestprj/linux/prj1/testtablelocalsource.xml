@@ -2,104 +2,109 @@
 
 <table>
 
-  <!-- <col label="Data name"> -->
-  <!--   <label text="bits_size(1)" /> --> 
-  <!--   <label text="bits_size(2)" /> --> 
-  <!--   <label text="bits_size(3)" /> --> 
+  <col label="Data name">
+    <label text="bits_size(1)" /> 
+    <label text="bits_size(2)" /> 
+    <label text="bits_size(3)" /> 
 
-  <!--   <label text="bits_defs_1" /> --> 
-  <!--   <label text="bits_defs_2" /> --> 
-  <!--   <label text="bits_defs_3" /> --> 
-  <!--   <label text="bits_defs_4" /> --> 
+    <label text="bits_defs_1" /> 
+    <label text="bits_defs_2" /> 
+    <label text="bits_defs_3" /> 
+    <label text="bits_defs_4" /> 
 
-  <!--   <label text="bytes_uint8"   /> --> 
-  <!--   <label text="bytes_int8"    /> --> 
-  <!--   <label text="bytes_uint16"  /> --> 
-  <!--   <label text="bytes_int16"   /> --> 
-  <!--   <label text="bytes_uint32"  /> --> 
-  <!--   <label text="bytes_int32"   /> --> 
-  <!--   <label text="bytes_float32" /> --> 
-  <!--   <label text="bytes_string"  /> --> 
+    <label text="bytes_uint8"   /> 
+    <label text="bytes_int8"    /> 
+    <label text="bytes_uint16"  /> 
+    <label text="bytes_int16"   /> 
+    <label text="bytes_uint32"  /> 
+    <label text="bytes_int32"   /> 
+    <label text="bytes_float32" /> 
+    <label text="bytes_string"  /> 
 
-  <!-- </col> -->
+  </col>
 
-  <!-- <col label="Data labels"> -->
-  <!--   <dataLabel      source="localsource"  data="bits_size(1)" format="bits"/> -->
-  <!--   <dataLabel      source="localsource"  data="bits_size(2)" format="bits"/> -->
-  <!--   <dataLabel      source="localsource"  data="bits_size(3)" format="bits"/> -->
+  <col label="Data labels">
+    <dataLabel      source="localsource"  data="bits_size(1)" format="bits"/>
+    <dataLabel      source="localsource"  data="bits_size(2)" format="bits"/>
+    <dataLabel      source="localsource"  data="bits_size(3)" format="bits"/>
 
-  <!--   <dataLabel      source="localsource"  data="bits_defs_1" format="bits"/> -->
-  <!--   <dataLabel      source="localsource"  data="bits_defs_2" format="bits"/> -->
-  <!--   <dataLabel      source="localsource"  data="bits_defs_3" format="bits"/> -->
-  <!--   <dataLabel      source="localsource"  data="bits_defs_4" format="bits"/> -->
+    <dataLabel      source="localsource"  data="bits_defs_1" format="bits"/>
+    <dataLabel      source="localsource"  data="bits_defs_2" format="bits"/>
+    <dataLabel      source="localsource"  data="bits_defs_3" format="bits"/>
+    <dataLabel      source="localsource"  data="bits_defs_4" format="bits"/>
 
-  <!--   <dataLabel      source="localsource"  data="bytes_uint8"   format="uint8"    /> -->
-  <!--   <dataLabel      source="localsource"  data="bytes_int8"    format="int8"     /> -->
-  <!--   <dataLabel      source="localsource"  data="bytes_uint16"  format="uint16"   /> -->
-  <!--   <dataLabel      source="localsource"  data="bytes_int16"   format="int16"    /> -->
-  <!--   <dataLabel      source="localsource"  data="bytes_uint32"  format="uint32"   /> -->
-  <!--   <dataLabel      source="localsource"  data="bytes_int32"   format="int32"    /> -->
-  <!--   <dataLabel      source="localsource"  data="bytes_float32" format="float32"  /> -->
-  <!--   <dataLabel      source="localsource"  data="bytes_string"  format="string"   /> -->
-  <!-- </col> -->
+    <dataLabel      source="localsource"  data="bytes_uint8"   format="uint8"    />
+    <dataLabel      source="localsource"  data="bytes_int8"    format="int8"     />
+    <dataLabel      source="localsource"  data="bytes_uint16"  format="uint16"   />
+    <dataLabel      source="localsource"  data="bytes_int16"   format="int16"    />
+    <dataLabel      source="localsource"  data="bytes_uint32"  format="uint32"   />
+    <dataLabel      source="localsource"  data="bytes_int32"   format="int32"    />
+    <dataLabel      source="localsource"  data="bytes_float32" format="float32"  />
+    <dataLabel      source="localsource"  data="bytes_string"  format="string"   />
+  </col>
 
-  <!-- <col label="Data edit"> -->
-  <!--   <!-1- <dataLineEdit   source="localsource"  data="bits_size(1)" format="bits" dataSize="3" separator=" " /> -1-> -->
-  <!--   <dataLineEdit   source="localsource"  data="bits_size(1)" format="bits" /> -->
-  <!--   <dataLineEdit   source="localsource"  data="bits_size(2)" format="bits" /> -->
-  <!--   <dataLineEdit   source="localsource"  data="bits_size(3)" format="bits" /> -->
+  <col label="Data edit">
+    <!-- <dataLineEdit   source="localsource"  data="bits_size(1)" format="bits" dataSize="3" separator=" " /> -->
+    <dataLineEdit   source="localsource"  data="bits_size(1)" format="bits" />
+    <dataLineEdit   source="localsource"  data="bits_size(2)" format="bits" />
+    <dataLineEdit   source="localsource"  data="bits_size(3)" format="bits" />
 
-  <!--   <dataLineEdit   source="localsource"  data="bits_defs_1" format="bits" /> -->
-  <!--   <dataLineEdit   source="localsource"  data="bits_defs_2" format="bits" /> -->
-  <!--   <dataLineEdit   source="localsource"  data="bits_defs_3" format="bits" /> -->
-  <!--   <dataLineEdit   source="localsource"  data="bits_defs_4" format="bits" /> -->
+    <dataLineEdit   source="localsource"  data="bits_defs_1" format="bits" />
+    <dataLineEdit   source="localsource"  data="bits_defs_2" format="bits" />
+    <dataLineEdit   source="localsource"  data="bits_defs_3" format="bits" />
+    <dataLineEdit   source="localsource"  data="bits_defs_4" format="bits" />
 
-  <!--   <dataLineEdit   source="localsource"  data="bytes_uint8"   format="uint8"    /> -->
-  <!--   <dataLineEdit   source="localsource"  data="bytes_int8"    format="int8"     /> -->
-  <!--   <dataLineEdit   source="localsource"  data="bytes_uint16"  format="uint16"   /> -->
-  <!--   <dataLineEdit   source="localsource"  data="bytes_int16"   format="int16"    /> -->
-  <!--   <dataLineEdit   source="localsource"  data="bytes_uint32"  format="uint32"   /> -->
-  <!--   <dataLineEdit   source="localsource"  data="bytes_int32"   format="int32"    /> -->
-  <!--   <dataLineEdit   source="localsource"  data="bytes_float32" format="float32"  /> -->
+    <dataLineEdit   source="localsource"  data="bytes_uint8"   format="uint8"    />
+    <dataLineEdit   source="localsource"  data="bytes_int8"    format="int8"     />
+    <dataLineEdit   source="localsource"  data="bytes_uint16"  format="uint16"   />
+    <dataLineEdit   source="localsource"  data="bytes_int16"   format="int16"    />
+    <dataLineEdit   source="localsource"  data="bytes_uint32"  format="uint32"   />
+    <dataLineEdit   source="localsource"  data="bytes_int32"   format="int32"    />
+    <dataLineEdit   source="localsource"  data="bytes_float32" format="float32"  />
 
-  <!-- </col> -->
+  </col>
   
-  <!-- <col label="Data combobox"> -->
-  <!--   <dataComboBox  read="bits_size(1)" source="localsource" format="bits"> -->
-  <!--     <item text="bits 0"  value="0"/> -->
-  <!--     <item text="bits 1"  value="1"/> -->
-  <!--   </dataComboBox> -->
-  <!--   <dataComboBox  read="bits_size(2)" source="localsource" format="bits"> -->
-  <!--     <item text="bits 00" value="00"/> -->
-  <!--     <item text="bits 01" value="01"/> -->
-  <!--     <item text="bits 10" value="10"/> -->
-  <!--     <item text="bits 11" value="11"/> -->
-  <!--   </dataComboBox> -->
-  <!--   <dataComboBox  read="bits_size(3)" source="localsource" format="bits"> -->
-  <!--     <item text="bits 000" value="000"/> -->
-  <!--     <item text="bits 001" value="001"/> -->
-  <!--     <item text="bits 010" value="010"/> -->
-  <!--     <item text="bits 011" value="011"/> -->
-  <!--     <item text="bits 100" value="100"/> -->
-  <!--     <item text="bits 101" value="101"/> -->
-  <!--     <item text="bits 110" value="110"/> -->
-  <!--     <item text="bits 111" value="111"/> -->
-  <!--   </dataComboBox> -->
-  <!--   <dataComboBox  read="bits_defs_1" source="localsource" format="bits"> -->
-  <!--     <item  text="bits 00" value="00"/> -->
-  <!--     <item  text="bits 01" value="01"/> -->
-  <!--     <item  text="bits 10" value="10"/> -->
-  <!--     <item  text="bits 11" value="11"/> -->
-  <!--   </dataComboBox> -->
-  <!--   <dataComboBox  read="bits_defs_2" source="localsource" format="bits"> -->
-  <!--     <item  text="bits 000" value="000"/> -->
-  <!--     <item  text="bits 001" value="001"/> -->
-  <!--     <item  text="bits 010" value="010"/> -->
-  <!--     <item  text="bits 011" value="011"/> -->
-  <!--     <item  text="bits 100" value="100"/> -->
-  <!--     <item  text="bits 101" value="101"/> -->
-  <!--     <item  text="bits 110" value="110"/> -->
-  <!--     <item  text="bits 111" value="111"/> -->
-  <!--   </dataComboBox> -->
-  <!-- </col> -->
+  <col label="Data combobox">
+    <dataComboBox  
+        vcSource = "localsource"
+        vcData = "bits_size(1)"
+        vcHide = "true"
+        vcFormat = "bool" 
+      read="bits_size(1)" source="localsource" format="bits">
+      <item text="bits 0"  value="0"/>
+      <item text="bits 1"  value="1"/>
+    </dataComboBox>
+    <dataComboBox  read="bits_size(2)" source="localsource" format="bits">
+      <item text="bits 00" value="00"/>
+      <item text="bits 01" value="01"/>
+      <item text="bits 10" value="10"/>
+      <item text="bits 11" value="11"/>
+    </dataComboBox>
+    <dataComboBox  read="bits_size(3)" source="localsource" format="bits">
+      <item text="bits 000" value="000"/>
+      <item text="bits 001" value="001"/>
+      <item text="bits 010" value="010"/>
+      <item text="bits 011" value="011"/>
+      <item text="bits 100" value="100"/>
+      <item text="bits 101" value="101"/>
+      <item text="bits 110" value="110"/>
+      <item text="bits 111" value="111"/>
+    </dataComboBox>
+    <dataComboBox  read="bits_defs_1" source="localsource" format="bits">
+      <item  text="bits 00" value="00"/>
+      <item  text="bits 01" value="01"/>
+      <item  text="bits 10" value="10"/>
+      <item  text="bits 11" value="11"/>
+    </dataComboBox>
+    <dataComboBox  read="bits_defs_2" source="localsource" format="bits">
+      <item  text="bits 000" value="000"/>
+      <item  text="bits 001" value="001"/>
+      <item  text="bits 010" value="010"/>
+      <item  text="bits 011" value="011"/>
+      <item  text="bits 100" value="100"/>
+      <item  text="bits 101" value="101"/>
+      <item  text="bits 110" value="110"/>
+      <item  text="bits 111" value="111"/>
+    </dataComboBox>
+  </col>
 </table>

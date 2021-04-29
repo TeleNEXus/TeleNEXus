@@ -24,7 +24,7 @@
 #include "LIApplication.h"
 #include "LIWindow.h"
 #include "lcbuilderscommon.h"
-#include "lcqwidgetvisiblecontrol.h"
+/* #include "lcqwidgetvisiblecontrol.h" */
 #include <QPushButton>
 #include <QDomElement>
 #include <qicon.h>
@@ -187,7 +187,7 @@ static QPushButton* buildWriteButton(
     new LCQRemWriteButton(
         _element.attribute(LCBuildersCommon::mAttributes.text));
 
-  LCQWidgetVisibleControl::build(_element, button, _app);
+  /* LCQWidgetVisibleControl::build(_element, button, _app); */
 
   for(    QDomNode node = _element.firstChild(); 
       !node.isNull(); 
@@ -241,7 +241,7 @@ static QPushButton* buildControllWindowButton(
   QPushButton* button = new QPushButton(
       _element.attribute(LCBuildersCommon::mAttributes.text));
 
-  LCQWidgetVisibleControl::build(_element, button, _app);
+  /* LCQWidgetVisibleControl::build(_element, button, _app); */
 
   QList<SAction> pressActions;
   QList<SAction> releaseActions;

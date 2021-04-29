@@ -20,6 +20,11 @@
         posx="250" 
         posy="25"
         align="Right Bottom"
+
+        vcSource = "localsource"
+        vcData = "bit0"
+        vcHide = "true"
+        vcFormat = "bool" 
         >
         <!-- bgColor="red" textColor="blue" font="bold italic 25pt DejaVu Sans Mono" --> 
         <!-- minWidth="150" minHeight="150" -->
@@ -40,18 +45,6 @@
         <item text="Test 8"   value="0012"/>
       </dataComboLabel>
 
-      <controlWindowButton text="hide win0" posx="10" posy="275"
-        bgColor="yellow"
-        fontId="mnemo10"
-        textColor="red"
-        minHeight="50"
-        vcSource = "qtslavetcp"
-        vcData = "din2"
-        vcHide = "true"
-        vcFormat = "bool" 
-        >
-        <window id="win0" event="pressed" action="hide"/>
-      </controlWindowButton>
 
       <dataComboBox  read="hreg0" source="qtslavetcp" format="hex" 
         posx="110" posy="275"
@@ -60,6 +53,11 @@
         bgColor="darkgreen"
         bgImage="picture/fon1.png"
         minWidth="100"
+
+        vcSource = "localsource"
+        vcData = "bit0"
+        vcHide = "true"
+        vcFormat = "bool" 
         >
         <item text="Test 0"   value="000a"/>
         <item text="Test 1"   value="000b"/>
@@ -96,16 +94,29 @@
         <item text="Test 8"   value="0012"/>
       </dataComboBox>
 
-      <label text="Label0" bgColor="rgb(0,255,0)" 
+      <label 
+        vcSource = "localsource"
+        vcData = "bit0"
+        vcHide = "true"
+        vcFormat = "bool" 
+
+        text="Label0" bgColor="rgb(0,255,0)" 
         textColor="red" font="bold italic 20pt DejaVu Sans Mono" posx="10" posy="10" />
 
-      <label text="Label 01" posx="40"  posy="50"  fontId="mnemo10" textColor="white" bgColor="red"/>
-      <label text="Label 02" posx="60"  posy="70"  fontId="mnemo11" textColor="red" bgColor="blue"/>
-      <label text="Label 03" posx="80"  posy="90"  fontId="mnemo12" textColor="green"/>
-      <label text="Label 04" posx="100" posy="110" fontId="mnemo13" textColor="blue"/>
-      <label text="Label 05" posx="120" posy="130" />
+      <label text="Label 01" posx="90"  posy="50"  fontId="mnemo10" textColor="white" bgColor="red"/>
+      <label text="Label 02" posx="110"  posy="70"  fontId="mnemo11" textColor="red" bgColor="blue"/>
+      <label text="Label 03" posx="130"  posy="90"  fontId="mnemo12" textColor="green"/>
+      <label text="Label 04" posx="150" posy="110" fontId="mnemo13" textColor="blue"/>
+      <label text="Label 05" posx="170" posy="130" />
 
-      <dataLineEdit   source="qtslavetcp" data="hreg[0-1]" format="hex" 
+      <dataLineEdit   
+
+        vcSource = "localsource"
+        vcData = "bit0"
+        vcHide = "true"
+        vcFormat = "bool" 
+
+        source="qtslavetcp" data="hreg[0-1]" format="hex" 
         textColor="red"
         bgColor="rgba(0,0,255,128)"
         maxWidth="100"
@@ -133,9 +144,32 @@
       </widgets>
     </widget>
 
+            <dataWriteButton 
+              text="write local 1" 
+              posx="10" 
+              posy="60" 
+              bgColor="grey" 
+              fontId="mnemo10"
+              >
+            <data source="localsource" dataName="bit0" format="bits" value="1"/>
+            <data source="localsource" dataName="bit1" format="bits" value="1"/>
+            <data source="localsource" dataName="bit2" format="bits" value="1"/>
+          </dataWriteButton>
+
+            <dataWriteButton 
+              text="write local 0" 
+              posx="10" 
+              posy="90" 
+              bgColor="grey" 
+              fontId="mnemo10"
+              >
+            <data source="localsource" dataName="bit0" format="bits" value="0"/>
+            <data source="localsource" dataName="bit1" format="bits" value="0"/>
+            <data source="localsource" dataName="bit2" format="bits" value="0"/>
+          </dataWriteButton>
 
     <dataWriteButton 
-      text="write 1" 
+      text="write remote" 
       posx="10" 
       posy="120" 
       bgColor="green" 
@@ -193,13 +227,32 @@
         icon="picture/icon1.png"
         iconScale="2"
 
-        vcSource = "qtslavetcp"
-        vcData = "din1"
+        vcSource = "localsource"
+        vcData = "bit1"
+        vcHide = "true"
+        vcFormat = "bool" 
+
+        >
+        <!-- vcSource = "qtslavetcp" -->
+        <!-- vcData = "din1" -->
+        <!-- vcHide = "true" -->
+        <!-- vcFormat = "bool" --> 
+        <data source="qtslavetcp" dataName="hreg0" format="uint16" value="255"/>
+      </dataWriteButton>
+
+      <controlWindowButton text="hide win0" posx="10" posy="275"
+        bgColor="yellow"
+        fontId="mnemo10"
+        textColor="red"
+        minHeight="50"
+
+        vcSource = "localsource"
+        vcData = "bit2"
         vcHide = "true"
         vcFormat = "bool" 
         >
-        <data source="qtslavetcp" dataName="hreg0" format="uint16" value="255"/>
-      </dataWriteButton>
+        <window id="win0" event="pressed" action="hide"/>
+      </controlWindowButton>
 
     </widgets>
   </widget>

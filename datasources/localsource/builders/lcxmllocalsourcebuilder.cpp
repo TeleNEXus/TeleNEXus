@@ -203,11 +203,11 @@ static void addItemBits(
 
   //Формирование массива.
   QBitArray bits(attr.size(), false);
-  for(int i = 0; i < attr.size(); i++)
+  for(int i = 1; i <= attr.size(); i++)
   {
     if(attr.at(attr.size() - i) == QStringLiteral("1"))
     {
-      bits[i] = true;
+      bits[i-1] = true;
     }
   } 
 
