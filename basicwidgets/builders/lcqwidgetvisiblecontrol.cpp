@@ -46,35 +46,56 @@ static const struct
 }__slAttributesVals;
 
 //==============================================================================
-struct SLocalData
+class CLocalData
 {
+private:
+  QWidget* mpWidget = nullptr;
+public:
   enum class EUndefMode
   {
     show,
     hide
   };
   EUndefMode mUndefMode = EUndefMode::hide;
-  bool mShowStatus = false;
-  QWidget* mpWidget = nullptr;
+  bool mShowAllowFlag = false;
   QSharedPointer<LIRemoteDataReader>  mDataReader;
   QSharedPointer<LIDataFormatter>     mFormatter;
   QString mCompareData;
   std::function<void(QSharedPointer<QByteArray>, LERemoteDataStatus)> mfAction;
+
+  CLocalData(){}
+
+  void showWidget()
+  {
+    mpWidget->show();
+    mShowAllowFlag = true;
+  }
+  void hideWidget()
+  {
+    mpWidget->hide();
+    mShowAllowFlag = false;
+  }
+
+  void setWidget(QWidget* _widget)
+  {
+    mpWidget = _widget;
+  }
 };
 
+
 //==============================================================================
-#define toLocalData(p) (reinterpret_cast<SLocalData*>(p))
+#define toLocalData(p) (reinterpret_cast<CLocalData*>(p))
 
 LCQWidgetVisibleControl::LCQWidgetVisibleControl(QWidget* _widget) : 
   QObject(_widget)
 {
-  mpLocal = new SLocalData;
-  toLocalData(mpLocal)->mpWidget = _widget;
+  mpLocal = new CLocalData;
+  toLocalData(mpLocal)->setWidget(_widget);
 }
 
 LCQWidgetVisibleControl::~LCQWidgetVisibleControl()
 {
-  delete reinterpret_cast<SLocalData*>(mpLocal);
+  delete reinterpret_cast<CLocalData*>(mpLocal);
 }
 
 //------------------------------------------------------------------------------
@@ -132,9 +153,9 @@ bool LCQWidgetVisibleControl::build(const QDomElement& _element,
   if(!attr_undef.isNull())
   {
     if(attr_undef == __slAttributesVals.show) 
-      toLocalData(ctrl->mpLocal)->mUndefMode = SLocalData::EUndefMode::show;
+      toLocalData(ctrl->mpLocal)->mUndefMode = CLocalData::EUndefMode::show;
     else if(attr_undef == __slAttributesVals.hide) 
-      toLocalData(ctrl->mpLocal)->mUndefMode = SLocalData::EUndefMode::hide;
+      toLocalData(ctrl->mpLocal)->mUndefMode = CLocalData::EUndefMode::hide;
   }
 
   auto status_string = [](LERemoteDataStatus _status)
@@ -162,12 +183,12 @@ bool LCQWidgetVisibleControl::build(const QDomElement& _element,
     if(_status == LERemoteDataStatus::DS_OK) return true;
     switch(toLocalData(ctrl->mpLocal)->mUndefMode)
     {
-    case SLocalData::EUndefMode::show:
-      toLocalData(ctrl->mpLocal)->mpWidget->show();
+    case CLocalData::EUndefMode::show:
+      toLocalData(ctrl->mpLocal)->showWidget();
       break;
 
-    case SLocalData::EUndefMode::hide:
-      toLocalData(ctrl->mpLocal)->mpWidget->hide();
+    case CLocalData::EUndefMode::hide:
+      toLocalData(ctrl->mpLocal)->hideWidget();
     default:
       break;
     }
@@ -185,9 +206,13 @@ bool LCQWidgetVisibleControl::build(const QDomElement& _element,
 
     if(toLocalData(ctrl->mpLocal)->mCompareData ==
         toLocalData(ctrl->mpLocal)->mFormatter->toString(*_data))
-      toLocalData(ctrl->mpLocal)->mpWidget->show();
+    {
+      toLocalData(ctrl->mpLocal)->showWidget();
+    }
     else
-      toLocalData(ctrl->mpLocal)->mpWidget->hide();
+    {
+      toLocalData(ctrl->mpLocal)->hideWidget();
+    }
   };
 
 
@@ -202,9 +227,9 @@ bool LCQWidgetVisibleControl::build(const QDomElement& _element,
 
     if(toLocalData(ctrl->mpLocal)->mCompareData == 
         toLocalData(ctrl->mpLocal)->mFormatter->toString(*_data))
-      toLocalData(ctrl->mpLocal)->mpWidget->hide();
+      toLocalData(ctrl->mpLocal)->hideWidget();
     else
-      toLocalData(ctrl->mpLocal)->mpWidget->show();
+      toLocalData(ctrl->mpLocal)->showWidget();
   };
   
   if(!attr_show.isNull())
