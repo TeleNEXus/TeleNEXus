@@ -42,7 +42,7 @@ private:
   LCQWidgetVisibleControl(QWidget* _widget);
 
 protected:
-  virtual bool eventFilter(QObject* _opbj, QEvent* _event) override;
+  /* virtual bool eventFilter(QObject* _opbj, QEvent* _event) override; */
 
 };
 

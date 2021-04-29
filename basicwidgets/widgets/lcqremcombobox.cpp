@@ -119,7 +119,7 @@ bool LCQRemComboBox::event(QEvent *_event)
     break;
 
   default:
-  ret = QComboBox::event(_event);
+    ret = QComboBox::event(_event);
     break;
   }
   return ret;
