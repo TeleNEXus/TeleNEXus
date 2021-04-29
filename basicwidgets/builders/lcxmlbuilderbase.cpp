@@ -22,6 +22,7 @@
 #include "lcbuilderscommon.h"
 
 #include "LIApplication.h"
+#include "lcqwidgetvisiblecontrol.h"
 #include <QWidget>
 
 #include <QDomElement>
@@ -41,6 +42,11 @@ LCXmlBuilderBase::~LCXmlBuilderBase()
 QWidget* LCXmlBuilderBase::build( const QDomElement& _element, 
     const LIApplication&    _app)
 {
+  auto ret = [&_element, &_app](QWidget* _w)
+  {
+    LCQWidgetVisibleControl::build(_element, _w, _app);
+    return _w;
+  };
 
   QString attr_file = _element.attribute(LCBuildersCommon::mAttributes.file);
   if(!attr_file.isNull())
@@ -48,10 +54,10 @@ QWidget* LCXmlBuilderBase::build( const QDomElement& _element,
     QDomElement el = _app.getDomDocument(attr_file).documentElement();
     if(el.isNull()) return nullptr;
     if(el.tagName() != _element.tagName()) return nullptr;
-    return build(el, _app);
+    return ret(build(el, _app));
   }
 
-  return buildLocal(
-      QSharedPointer<SBuildData>(new SBuildData{QPoint(), _element, _app}));
+  return ret(buildLocal(
+      QSharedPointer<SBuildData>(new SBuildData{QPoint(), _element, _app})));
 }
 

@@ -1,13 +1,21 @@
 <localsourcemap>
 
+  <!-- <bits id="bit0" size="1"/> -->
+  <!-- <bits id="bit1" size="1"/> -->
+  <!-- <bits id="bit2" size="1"/> -->
+
+  <bits id="bit0" defval="1"/>
+  <bits id="bit1" defval="1"/>
+  <bits id="bit2" defval="1"/>
+
   <bits id="bits_size(1)" size="1"/>
   <bits id="bits_size(2)" size="2"/>
   <bits id="bits_size(3)" size="3"/>
 
   <bits id="bits_defs_1" defval="     01"/>
-  <bits id="bits_defs_2" defval="    101"/>
+  <bits id="bits_defs_2" defval="    111"/>
   <bits id="bits_defs_3" defval="  10101"/>
-  <bits id="bits_defs_4" defval="1010101"/>
+  <bits id="bits_defs_4" defval="1111111"/>
 
   <bytes id="bytes_n1" size="1"/>
   <bytes id="bytes_n2" size="2"/>

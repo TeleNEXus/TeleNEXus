@@ -11,6 +11,10 @@
   maxWidth="300"
   >
 
+<item text="Table Localsource">
+      <table file="testtablelocalsource.xml"/>
+</item>
+
   <item text="Test JS Formatter">
     <widget>
       <layout>
@@ -40,6 +44,30 @@
               <item text="Test"   value="500.4"/>
             </dataComboBox>
 
+            <dataWriteButton 
+              text="write 1" 
+              posx="10" 
+              posy="120" 
+              bgColor="grey" 
+              fontId="mnemo10"
+              >
+            <data source="localsource" dataName="bit0" format="bits" value="1"/>
+            <data source="localsource" dataName="bit1" format="bits" value="1"/>
+            <data source="localsource" dataName="bit2" format="bits" value="1"/>
+          </dataWriteButton>
+
+            <dataWriteButton 
+              text="write 0" 
+              posx="10" 
+              posy="120" 
+              bgColor="grey" 
+              fontId="mnemo10"
+              >
+            <data source="localsource" dataName="bit0" format="bits" value="0"/>
+            <data source="localsource" dataName="bit1" format="bits" value="0"/>
+            <data source="localsource" dataName="bit2" format="bits" value="0"/>
+          </dataWriteButton>
+
             <!-- <dataComboBox  source="qtslavetcp" read="hreg[0-1]" format="int32"> -->
             <!--   <item text="On"     value="501"/> -->
             <!--   <item text="Off"    value="502"/> -->
@@ -47,11 +75,26 @@
             <!--   <item text="Test"   value="504"/> -->
             <!-- </dataComboBox> -->
 
+        </widgets>
+
+        <layout>
+          <layoutHBox>
+            <widgets>
+
+              <!-- <dataLabel source="qtslavetcp" data="hreg[0-1]" format="hex" /> -->
+
+              <dataLabel    source="localsource"  data="bit0" format="bits" />
+              <dataLabel    source="localsource"  data="bit1" format="bits" />
+              <dataLabel    source="localsource"  data="bit2" format="bits" />
             </widgets>
             <stretch/>
-          </layoutVBox>
+          </layoutHBox>
         </layout>
-      </widget>
+
+          <stretch/>
+      </layoutVBox>
+    </layout>
+  </widget>
   </item>
 
   <!-- <item text="Table local source"> -->
