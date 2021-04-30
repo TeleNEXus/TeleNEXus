@@ -34,6 +34,7 @@ class LCQRemComboBox : public QComboBox
 {
   Q_OBJECT;
 private:
+  bool mIsVisibleFlag = false;
   QSharedPointer<LIRemoteDataReader>   mDataReader;
   QSharedPointer<LIRemoteDataWriter>   mDataWriter;
   QSharedPointer<LIDataFormatter>      mFormatter;

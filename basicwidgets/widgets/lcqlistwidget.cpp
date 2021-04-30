@@ -18,33 +18,12 @@
  * You should have received a copy of the GNU General Public License
  * along with TeleNEXus.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef LCQWIDGETVISIBLECONTROL_H_
-#define LCQWIDGETVISIBLECONTROL_H_
 
-#include <QObject>
+#include "lcqlistwidget.h"
 
-class QWidget;
-class QDomElement;
-class LIApplication;
-
-class LCQWidgetVisibleControl : public QObject
-{
-  Q_OBJECT;
-private:
-  void* mpLocal = nullptr;
-
-public:
-  static bool build(const QDomElement& _element, 
-      QWidget* _widget, 
-      const LIApplication& _app);
-  virtual ~LCQWidgetVisibleControl();
-private:
-  LCQWidgetVisibleControl() = delete;
-  LCQWidgetVisibleControl(QWidget* _widget);
-
-protected:
-  virtual bool eventFilter(QObject* _opbj, QEvent* _event) override;
-
-};
-
-#endif /* LCQWIDGETVISIBLECONTROL_H_ */
+LCQListWidget::LCQListWidget(
+    QSharedPointer<LIRemoteDataSource> _source,
+    QString _data,
+    QWidget* _parent) :
+  QListWidget(_parent)
+{}
