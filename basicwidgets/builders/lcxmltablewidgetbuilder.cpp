@@ -95,7 +95,7 @@ struct SLocalData
   SLocalData() : mpTable(new QTableWidget)
   {
     mpTable->setSelectionMode(QTableWidget::SelectionMode::NoSelection);
-    mpTable->installEventFilter(new CQEventFilter);
+    mpTable->installEventFilter(new CQEventFilter(mpTable));
     mpTable->setEditTriggers(QTableWidget::EditTrigger::NoEditTriggers);
     mpTable->setObjectName(QString("XmlTableWidget_%1").arg(__slObjectCounter));
     __slObjectCounter++;

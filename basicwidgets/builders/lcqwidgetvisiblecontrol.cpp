@@ -76,14 +76,12 @@ public:
   {
     if( mVisibleStatus == EVisibleStatus::show) return;
     mVisibleStatus = EVisibleStatus::show;
-    qDebug() << "showWidget";
     mpWidget->show();
   }
   void hideWidget()
   {
     if( mVisibleStatus == EVisibleStatus::hide) return;
     mVisibleStatus = EVisibleStatus::hide;
-    qDebug() << "hideWidget";
     mpWidget->hide();
   }
 
@@ -93,59 +91,7 @@ public:
   }
 };
 
-
 #define toLocalData(p) (reinterpret_cast<CLocalData*>(p))
-
-class CQEventFilter : public QObject
-{
-public:
-
-  CLocalData* mpLocal;
-  explicit CQEventFilter(CLocalData* _localData, QObject* _parent = nullptr) : 
-    QObject(_parent),
-    mpLocal(_localData)
-  {}
-  virtual bool eventFilter(QObject* _obj, QEvent* _event) override
-  {
-      Q_UNUSED(_obj);
-
-
-      bool ret = false;
-
-      qDebug() <<"event = " << _event->type();
-      switch(toLocalData(mpLocal)->mVisibleStatus)
-      {
-      case CLocalData::EVisibleStatus::show:
-        qDebug() <<"CLocalData::EVisibleStatus::show event = " << _event->type();
-        /* if( */
-        /*     (_event->type() == QEvent::Type::Show) */
-        /*   ) ret = true; */
-        break;
-      case CLocalData::EVisibleStatus::hide:
-        qDebug() <<"CLocalData::EVisibleStatus::hide event = " << _event->type();
-        /* ret = true; */
-        if(
-            (_event->type() == QEvent::Type::MouseButtonPress) ||
-            (_event->type() == QEvent::Type::FocusIn) ||
-            (_event->type() == QEvent::Type::Resize) ||
-            (_event->type() == QEvent::Type::Paint) ||
-            (_event->type() == QEvent::Type::Move) ||
-            (_event->type() == QEvent::Type::UpdateLater) ||
-            (_event->type() == QEvent::Type::ShowToParent) ||
-            (_event->type() == QEvent::Type::HideToParent) ||
-            (_event->type() == QEvent::Type::Show)
-          ) 
-        {
-          ret = true;
-        }
-
-        break;
-      default:
-        break;
-      }
-      return ret;
-  }
-};
 
 //==============================================================================
 
@@ -155,7 +101,7 @@ LCQWidgetVisibleControl::LCQWidgetVisibleControl(QWidget* _widget) :
   mpLocal = new CLocalData;
   toLocalData(mpLocal)->setWidget(_widget);
 
-  _widget->installEventFilter(new CQEventFilter(toLocalData(mpLocal)));
+  _widget->installEventFilter(this);
 
 }
 
@@ -223,25 +169,6 @@ bool LCQWidgetVisibleControl::build(const QDomElement& _element,
     else if(attr_undef == __slAttributesVals.hide) 
       toLocalData(ctrl->mpLocal)->mUndefMode = CLocalData::EUndefMode::hide;
   }
-
-  /* auto status_string = [](LERemoteDataStatus _status) */
-  /* { */
-  /*   QString str; */
-  /*   switch(_status) */
-  /*   { */
-  /*   case LERemoteDataStatus::DS_OK: */
-  /*     str = QStringLiteral("DS_OK"); */
-  /*     break; */
-  /*   case LERemoteDataStatus::DS_WRONG: */
-  /*     str = QStringLiteral("DS_WRONG"); */
-  /*     break; */
-  /*   case LERemoteDataStatus::DS_UNDEF: */
-  /*   default: */
-  /*     str = QStringLiteral("DS_UNDEF"); */
-  /*     break; */
-  /*   } */
-  /*   return str; */
-  /* }; */
 
   //--------------------------------------------
   auto read_status_ctrl = [ctrl](LERemoteDataStatus _status)
@@ -327,49 +254,31 @@ bool LCQWidgetVisibleControl::build(const QDomElement& _element,
   return ret_ok();
 }
 
-/* bool LCQWidgetVisibleControl::eventFilter(QObject* _obj, QEvent* _event) */
-/* { */
-/*   Q_UNUSED(_obj); */
+//------------------------------------------------------------------------------
+bool LCQWidgetVisibleControl::eventFilter(QObject* _obj, QEvent* _event)
+{
+  bool ret = false;
+  switch(toLocalData(mpLocal)->mVisibleStatus)
+  {
+  case CLocalData::EVisibleStatus::hide:
+    if(
+        (_event->type() == QEvent::Type::MouseButtonPress) ||
+        (_event->type() == QEvent::Type::Paint) ||
+        (_event->type() == QEvent::Type::ShowToParent) ||
+        (_event->type() == QEvent::Type::Show)
+      ) 
+    {
+      dynamic_cast<QWidget*>(_obj)->hide();
+      ret = true;
+    }
+    break;
 
-
-/*   bool ret = false; */
-
-/*   qDebug() <<"event = " << _event->type(); */
-/*   switch(toLocalData(mpLocal)->mVisibleStatus) */
-/*   { */
-/*   case CLocalData::EVisibleStatus::show: */
-/*   qDebug() <<"CLocalData::EVisibleStatus::show event = " << _event->type(); */
-/*     /1* if( *1/ */
-/*     /1*     (_event->type() == QEvent::Type::Show) *1/ */
-/*     /1*   ) ret = true; *1/ */
-/*     break; */
-/*   case CLocalData::EVisibleStatus::hide: */
-/*   qDebug() <<"CLocalData::EVisibleStatus::hide event = " << _event->type(); */
-/*   /1* ret = true; *1/ */
-/*     if( */
-/*         (_event->type() == QEvent::Type::MouseButtonPress) || */
-/*         (_event->type() == QEvent::Type::FocusIn) || */
-/*         (_event->type() == QEvent::Type::Resize) || */
-/*         (_event->type() == QEvent::Type::Paint) || */
-/*         (_event->type() == QEvent::Type::Move) || */
-/*         (_event->type() == QEvent::Type::UpdateLater) || */
-/*         (_event->type() == QEvent::Type::ShowToParent) || */
-/*         (_event->type() == QEvent::Type::HideToParent) || */
-/*         (_event->type() == QEvent::Type::Show) */
-/*       ) */ 
-/*     { */
-/*       _event->ignore(); */
-/*       ret = true; */
-/*     } */
-    
-/*     break; */
-/*   default: */
-/*     break; */
-/*   } */
-/*   return ret; */
-/* } */
-
-
+  case CLocalData::EVisibleStatus::show:
+  default:
+    break;
+  }
+  return ret;
+}
 
 
 

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<listWidget 
+
+  textColor="yellow"
+  bgColor="green"
+  bgImage="picture/fon1.png"
+  iconSize="60"
+  font="bold 18pt"
+  minWidth="200"
+  maxWidth="300"
+
+  soutce="localsource" data="listwidget" format="uint16">
+  <item text="Item 1" icon="picture/picture_1.png" val="0"/>
+  <item text="Item 2" icon="picture/picture_1.png" val="1"/>
+  <item text="Item 3" icon="picture/picture_1.png" val="2"/>
+  <item text="Item 4" icon="picture/picture_1.png" val="3"/>
+</listWidget>

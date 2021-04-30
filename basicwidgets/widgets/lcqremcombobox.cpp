@@ -88,14 +88,22 @@ bool LCQRemComboBox::event(QEvent *_event)
   switch(_event->type())
   {
   case QEvent::Type::Show:
-    mDataReader->connectToSource();
-    setCurrentIndex(-1);
-    ret = true;
+    if(!mIsVisibleFlag)
+    {
+      mIsVisibleFlag = true;
+      mDataReader->connectToSource();
+      setCurrentIndex(-1);
+      ret = true;
+    }
     break;
 
   case QEvent::Type::Hide:
-    mDataReader->disconnectFromSource();
-    ret = true;
+    if(mIsVisibleFlag)
+    {
+      mIsVisibleFlag = false;
+      mDataReader->disconnectFromSource();
+      ret = true;
+    }
     break;
 
   case QEvent::Type::KeyPress:
@@ -119,7 +127,7 @@ bool LCQRemComboBox::event(QEvent *_event)
     break;
 
   default:
-    ret = QComboBox::event(_event);
+  ret = QComboBox::event(_event);
     break;
   }
   return ret;
