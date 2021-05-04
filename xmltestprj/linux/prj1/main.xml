@@ -37,6 +37,7 @@
         <scrollArea             lib="basicwidgets" libhandler="getScrollAreaBuilder"            />
         <dataWriteButton        lib="basicwidgets" libhandler="getRemWriteButtonBuilder"        />
         <listWidget             lib="basicwidgets" libhandler="getListWidgetBuilder"            />
+        <stackedWidget          lib="basicwidgets" libhandler="getStackedWidgetBuilder"         />
     </WIDGETBUILDERS>
 
     <FONTS file="fonts.xml"/>

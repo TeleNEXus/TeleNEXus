@@ -19,17 +19,16 @@
  * along with TeleNEXus.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "lcxmllistwidgetbuilder.h"
-#include "lcqlistwidget.h"
+#include "lcxmlstackedwidgetbuilder.h"
+#include "lcqstackedwidget.h"
 #include "LIApplication.h"
 #include "lcbuilderscommon.h"
-#include "lcqlistwidget.h"
 #include <QDomElement>
+#include <QDebug>
 
 //------------------------------------------------------------------------------
 static const struct
 {
-  QString text = "text";
   QString id = "id";
 }__slAttributes;
 
@@ -39,20 +38,20 @@ static const struct
 } __slTags;
 
 //==============================================================================
-LCXmlListWidgetBuilder::LCXmlListWidgetBuilder()
+LCXmlStackedWidgetBuilder::LCXmlStackedWidgetBuilder()
 {
 }
 
-LCXmlListWidgetBuilder::~LCXmlListWidgetBuilder()
+LCXmlStackedWidgetBuilder::~LCXmlStackedWidgetBuilder()
 {
 }
 
 //------------------------------------------------------------------------------
-QWidget* LCXmlListWidgetBuilder::buildLocal( 
+QWidget* LCXmlStackedWidgetBuilder::buildLocal( 
     QSharedPointer<SBuildData> _buildData)
 {
 
-  auto ret_wrong = [](){return new QListWidget;};
+  auto ret_wrong = [](){return new QStackedWidget;};
 
   const QDomElement& element = _buildData->element;
   const LIApplication& app = _buildData->application;
@@ -83,76 +82,41 @@ QWidget* LCXmlListWidgetBuilder::buildLocal(
 
   if(format.isNull()) return ret_wrong();
 
-  auto list_widget = new LCQListWidget(source, data, format);
+  auto stacked_widget = new LCQStackedWidget(source, data, format); 
 
-  int icon_size = -1;
-
-  QString attr = element.attribute(LCBuildersCommon::mAttributes.iconsize);
-  if(!attr.isNull())
-  {
-    bool flag = 0;
-    icon_size = attr.toInt(&flag);
-    if(flag)
+  auto add_item = 
+    [&app, &stacked_widget](const QDomNode& _node)
     {
-      list_widget->setIconSize(QSize(icon_size, icon_size));
-    }
-    else
-    {
-      icon_size = -1;
-    }
-  }
 
-  QString style_sheet = 
-    LCBuildersCommon::getBaseStyleSheet(element, app);
+      if(!_node.isElement()) return;
+      QDomElement el = _node.toElement();
 
-  list_widget->setStyleSheet(style_sheet);
+      QString attr_id = el.attribute(__slAttributes.id);
+      if(attr_id.isNull()) return;
 
-  auto add_item = [&app, &list_widget](const QDomNode& _node, int _iconSize)
-  {
-
-    if(!_node.isElement()) return;
-    QDomElement el = _node.toElement();
-
-    QString attr_text = el.attribute(__slAttributes.text);
-    if(attr_text.isNull()) return;
-
-    QString attr_val = el.attribute(__slAttributes.id);
-    if(attr_val.isNull()) return;
-
-
-    QListWidgetItem *item = new QListWidgetItem;
-    item->setText(attr_text);
-
-    QString attr = el.attribute(LCBuildersCommon::mAttributes.icon);
-    if(!attr.isNull()) 
-    {
-      QPixmap pixmap = LCBuildersCommon::getPixmap(attr, app);
-      if(_iconSize >= 0)
+      for(QDomNode node = el.firstChild(); 
+          !node.isNull(); 
+          node = node.nextSibling())
       {
-        int maxsize = (pixmap.width() > pixmap.height()) ? 
-          (pixmap.width()) : (pixmap.height());
-
-        float scale = 1;
-
-        if(maxsize > 0)
+        auto we = node.toElement();
+        if(!we.isElement()) continue;
+        auto builder = app.getWidgetBuilder(we.tagName());
+        if(builder.isNull()) continue;
+        QWidget* widget = builder->build(we, app);
+        if(widget)
         {
-          scale = (float) _iconSize /(float)  maxsize;
+          stacked_widget->addWidget(widget, attr_id);
+          break;
         }
-
-        pixmap = pixmap.scaled(
-            pixmap.width() * scale, pixmap.height() * scale);
       }
-      item->setIcon(pixmap);
-    }
-    list_widget->addItem(item, attr_val);
-  };
+    };
 
   for(QDomNode node = element.firstChildElement(__slTags.item);
       !node.isNull();
       node = node.nextSiblingElement(__slTags.item))
   {
-    add_item(node, icon_size);
+    add_item(node);
   }
 
-  return list_widget;
+  return stacked_widget;
 }

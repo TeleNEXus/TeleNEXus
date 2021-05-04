@@ -40,6 +40,7 @@ SOURCES += \
     widgets/lcqremcombolabel.cpp \
     widgets/lcqremlineedit.cpp \
     widgets/lcqremwritebutton.cpp \
+    widgets/lcqstackedwidget.cpp \
     builders/lcxmlbuilderbase.cpp \
     builders/lcxmlremlabelbuilder.cpp \
     builders/lcxmlremlineeditbuilder.cpp \
@@ -55,6 +56,7 @@ SOURCES += \
     builders/lcxmllistwidgetbuilder.cpp \
     builders/lcbuilderscommon.cpp \
     builders/lcqwidgetvisiblecontrol.cpp \
+    builders/lcxmlstackedwidgetbuilder.cpp \
 
 HEADERS += \
     ../../common/interfaces/LIApplication.h \
@@ -75,6 +77,7 @@ HEADERS += \
     widgets/lcqremlabel.h \
     widgets/lcqremlineedit.h \
     widgets/lcqremwritebutton.h \
+    widgets/lcqstackedwidget.h \
     builders/lcxmlbuilderbase.h \
     builders/lcxmlremlineeditbuilder.h \
     builders/lcxmlremlabelbuilder.h \
@@ -91,6 +94,7 @@ HEADERS += \
     builders/lcxmllistwidgetbuilder.h \
     builders/lcbuilderscommon.h \
     builders/lcqwidgetvisiblecontrol.h \
+    builders/lcxmlstackedwidgetbuilder.h \
 
 # Default rules for deployment.
 unix {

@@ -32,6 +32,7 @@
 #include "lcxmlswitchwidgetslistbuilder.h"
 #include "lcxmlscrollareabuilder.h"
 #include "lcxmllistwidgetbuilder.h"
+#include "lcxmlstackedwidgetbuilder.h"
 
 //------------------------------------------------------------------------------
 void* getWidgetBuilder()
@@ -111,4 +112,9 @@ void* getListWidgetBuilder()
   return new LCXmlListWidgetBuilder;
 }
 
+//------------------------------------------------------------------------------
+void* getStackedWidgetBuilder()
+{
+  return new LCXmlStackedWidgetBuilder();
+}
 

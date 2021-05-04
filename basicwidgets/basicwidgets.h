@@ -37,5 +37,6 @@ extern "C" void* getSwitchWidgetsListBuilder();
 extern "C" void* getControlWindowButtonBuilder();
 extern "C" void* getScrollAreaBuilder();
 extern "C" void* getListWidgetBuilder();
+extern "C" void* getStackedWidgetBuilder();
 
 #endif // BASICWIDGETS_H

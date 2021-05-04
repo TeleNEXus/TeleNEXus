@@ -16,10 +16,10 @@
 
           source="localsource" data="listwidgetitem" format="string">
 
-        <item text="Item 1" icon="picture/picture_1.png" dataValue="item0"/>
-        <item text="Item 2" icon="picture/picture_1.png" dataValue="item1"/>
-        <item text="Item 3" icon="picture/picture_1.png" dataValue="item2"/>
-        <item text="Item 4" icon="picture/picture_1.png" dataValue="item3"/>
+        <item text="Item 1" icon="picture/picture_1.png" id="item0"/>
+        <item text="Item 2" icon="picture/picture_1.png" id="item1"/>
+        <item text="Item 3" icon="picture/picture_1.png" id="item2"/>
+        <item text="Item 4" icon="picture/picture_1.png" id="item3"/>
 
       </listWidget>
 

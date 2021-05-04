@@ -41,8 +41,7 @@ public:
   CLocalData(){}
 };
 
-#define told(p) (reinterpret_cast<CLocalData*>(p))
-#define ld  (*told(mpLocal))
+#define ld  (*(reinterpret_cast<CLocalData*>(mpLocal)))
 
 //==============================================================================
 LCQListWidget::LCQListWidget(
@@ -84,15 +83,15 @@ LCQListWidget::LCQListWidget(
 
 LCQListWidget::~LCQListWidget()
 {
-  delete told(mpLocal);
+  delete &ld;
 }
 
 //------------------------------------------------------------------------------
-void LCQListWidget::addItem(QListWidgetItem* _item, const QString& _itemKey)
+void LCQListWidget::addItem(QListWidgetItem* _item, const QString& _id)
 {
   QListWidget::addItem(_item);
   int r = row(_item);
-  QByteArray value = ld.mFormatter->toBytes(_itemKey);
+  QByteArray value = ld.mFormatter->toBytes(_id);
   ld.mRowValue.insert(r, value);
   ld.mValueRow.insert(value, r);
 }
