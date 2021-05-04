@@ -31,6 +31,7 @@
 #include "lcxmlbuttonbuilder.h"
 #include "lcxmlswitchwidgetslistbuilder.h"
 #include "lcxmlscrollareabuilder.h"
+#include "lcxmllistwidgetbuilder.h"
 
 //------------------------------------------------------------------------------
 void* getWidgetBuilder()
@@ -103,3 +104,11 @@ void* getScrollAreaBuilder()
 {
   return new LCXmlScrollAreaBuilder;
 }
+
+//------------------------------------------------------------------------------
+void* getListWidgetBuilder()
+{
+  return new LCXmlListWidgetBuilder;
+}
+
+

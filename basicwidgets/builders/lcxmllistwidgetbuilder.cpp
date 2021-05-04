@@ -1,14 +1,15 @@
 #include "lcxmllistwidgetbuilder.h"
+#include "lcqlistwidget.h"
 #include "LIApplication.h"
 #include "lcbuilderscommon.h"
-#include <QListWidget>
+#include "lcqlistwidget.h"
 #include <QDomElement>
 
 //------------------------------------------------------------------------------
 static const struct
 {
   QString text = "text";
-  QString value = "value";
+  QString dataValue = "dataValue";
 }__slAttributes;
 
 static const struct
@@ -30,7 +31,8 @@ QWidget* LCXmlListWidgetBuilder::buildLocal(
     QSharedPointer<SBuildData> _buildData)
 {
 
-  auto ret_wrong = [](){return nullptr;};
+  auto ret_wrong = [](){return new QListWidget;};
+
   const QDomElement& element = _buildData->element;
   const LIApplication& app = _buildData->application;
 
@@ -48,7 +50,8 @@ QWidget* LCXmlListWidgetBuilder::buildLocal(
 
   auto format = [&element, &app]() 
   {
-    QString attr = element.attribute(LCBuildersCommon::mAttributes.dataformatter);
+    QString attr = element.attribute(
+        LCBuildersCommon::mAttributes.dataformatter);
     auto ret = app.getStdDataFormatter(attr);
     if(ret.isNull())
     {
@@ -56,35 +59,53 @@ QWidget* LCXmlListWidgetBuilder::buildLocal(
     }
     return ret;
   }();
+
   if(format.isNull()) return ret_wrong();
 
-  auto list_widget = new QListWidget();
+  auto list_widget = new LCQListWidget(source, data, format);
 
-  //load items
-  auto add_item = [list_widget](const QDomNode& _node)
+  int icon_size = -1;
+
+  QString attr = element.attribute(LCBuildersCommon::mAttributes.iconsize);
+  if(!attr.isNull())
   {
+    bool flag = 0;
+    icon_size = attr.toInt(&flag);
+    if(flag)
+    {
+      list_widget->setIconSize(QSize(icon_size, icon_size));
+    }
+    else
+    {
+      icon_size = -1;
+    }
+  }
+
+  QString style_sheet = 
+    LCBuildersCommon::getBaseStyleSheet(element, app);
+
+  list_widget->setStyleSheet(style_sheet);
+
+  auto add_item = [&app, &list_widget](const QDomNode& _node, int _iconSize)
+  {
+
     if(!_node.isElement()) return;
     QDomElement el = _node.toElement();
 
     QString attr_text = el.attribute(__slAttributes.text);
     if(attr_text.isNull()) return;
 
-    QString attr_val = el.attribute(__slAttributes.value);
+    QString attr_val = el.attribute(__slAttributes.dataValue);
     if(attr_val.isNull()) return;
 
 
-
-
     QListWidgetItem *item = new QListWidgetItem;
+    item->setText(attr_text);
 
-
-
-
-
-    attr = _element.attribute(LCBuildersCommon::mAttributes.icon);
+    QString attr = el.attribute(LCBuildersCommon::mAttributes.icon);
     if(!attr.isNull()) 
     {
-      QPixmap pixmap = LCBuildersCommon::getPixmap(attr, _app);
+      QPixmap pixmap = LCBuildersCommon::getPixmap(attr, app);
       if(_iconSize >= 0)
       {
         int maxsize = (pixmap.width() > pixmap.height()) ? 
@@ -102,15 +123,15 @@ QWidget* LCXmlListWidgetBuilder::buildLocal(
       }
       item->setIcon(pixmap);
     }
-    return item;
+    list_widget->addItem(item, attr_val);
   };
 
   for(QDomNode node = element.firstChildElement(__slTags.item);
       !node.isNull();
       node = node.nextSiblingElement(__slTags.item))
   {
-    add_item(node);
+    add_item(node, icon_size);
   }
 
-  return nullptr;
+  return list_widget;
 }

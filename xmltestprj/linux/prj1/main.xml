@@ -36,6 +36,7 @@
         <controlWindowButton    lib="basicwidgets" libhandler="getControlWindowButtonBuilder"   />
         <scrollArea             lib="basicwidgets" libhandler="getScrollAreaBuilder"            />
         <dataWriteButton        lib="basicwidgets" libhandler="getRemWriteButtonBuilder"        />
+        <listWidget             lib="basicwidgets" libhandler="getListWidgetBuilder"            />
     </WIDGETBUILDERS>
 
     <FONTS file="fonts.xml"/>
