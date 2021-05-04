@@ -34,10 +34,11 @@ INCLUDEPATH +=                          \
 SOURCES += \
     ../../common/lqvalidatoru32.cpp \
     basicwidgets.cpp \
-    widgets/lcqremlabel.cpp \
-    widgets/lcqremlineedit.cpp \
+    widgets/lcqlistwidget.cpp \
     widgets/lcqremcombobox.cpp \
+    widgets/lcqremlabel.cpp \
     widgets/lcqremcombolabel.cpp \
+    widgets/lcqremlineedit.cpp \
     widgets/lcqremwritebutton.cpp \
     builders/lcxmlbuilderbase.cpp \
     builders/lcxmlremlabelbuilder.cpp \
@@ -51,6 +52,7 @@ SOURCES += \
     builders/lcxmlswitchwidgetslistbuilder.cpp \
     builders/lcxmlscrollareabuilder.cpp \
     builders/lcxmlbuttonbuilder.cpp \
+    builders/lcxmllistwidgetbuilder.cpp \
     builders/lcbuilderscommon.cpp \
     builders/lcqwidgetvisiblecontrol.cpp \
 
@@ -67,10 +69,11 @@ HEADERS += \
     basicwidgets_global.h \
     basicwidgets.h \
     common/LIMovieAccess.h \
-    widgets/lcqremlabel.h \
-    widgets/lcqremlineedit.h \
+    widgets/lcqlistwidget.h \
     widgets/lcqremcombobox.h \
     widgets/lcqremcombolabel.h \
+    widgets/lcqremlabel.h \
+    widgets/lcqremlineedit.h \
     widgets/lcqremwritebutton.h \
     builders/lcxmlbuilderbase.h \
     builders/lcxmlremlineeditbuilder.h \
@@ -85,6 +88,7 @@ HEADERS += \
     builders/lcxmlswitchwidgetslistbuilder.h \
     builders/lcxmlscrollareabuilder.h \
     builders/lcxmlbuttonbuilder.h \
+    builders/lcxmllistwidgetbuilder.h \
     builders/lcbuilderscommon.h \
     builders/lcqwidgetvisiblecontrol.h \
 

@@ -15,7 +15,8 @@
     <!-- <scrollArea file="testscrollarea.xml"/> -->
     <!-- <scrollArea file="testcombolabel.xml"/> -->
 
-    <switchWidgetsList file="testswitchwidgetlist.xml"/>
+    <!-- <switchWidgetsList file="testswitchwidgetlist.xml"/> -->
+    <widget file="testlistwidget.xml"/>
 
     <!-- <widget file="testcombolabel.xml"/> -->
     <!-- <widget file="testmnemowidget.xml"/> -->

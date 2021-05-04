@@ -28,6 +28,7 @@
 class LIRemoteDataSource;
 class LIRemoteDataReader;
 class LIRemoteDataWriter;
+class LIDataFormatter;
 
 class LCQListWidget : public QListWidget
 {
@@ -35,17 +36,15 @@ class LCQListWidget : public QListWidget
 
 private:
   void* mpLocal = nullptr;
-  QSharedPointer<LIRemoteDataReader> mDataReader;
-  QSharedPointer<LIRemoteDataWriter> mDataWriter;
 
 public:
 
   explicit LCQListWidget() = delete;
 
-
   explicit LCQListWidget(
       QSharedPointer<LIRemoteDataSource> _source,
       QString _data,
+      QSharedPointer<LIDataFormatter> _formatter,
       QWidget* _parent = nullptr);
 
   virtual ~LCQListWidget();
