@@ -38,5 +38,7 @@ extern "C" void* getControlWindowButtonBuilder();
 extern "C" void* getScrollAreaBuilder();
 extern "C" void* getListWidgetBuilder();
 extern "C" void* getStackedWidgetBuilder();
+extern "C" void* getHorizontalSplitterBuilder();
+extern "C" void* getVerticalSplitterBuilder();
 
 #endif // BASICWIDGETS_H

@@ -33,6 +33,8 @@
 #include "lcxmlscrollareabuilder.h"
 #include "lcxmllistwidgetbuilder.h"
 #include "lcxmlstackedwidgetbuilder.h"
+#include "lcxmlsplitterbuilder.h"
+#include <qnamespace.h>
 
 //------------------------------------------------------------------------------
 void* getWidgetBuilder()
@@ -116,5 +118,17 @@ void* getListWidgetBuilder()
 void* getStackedWidgetBuilder()
 {
   return new LCXmlStackedWidgetBuilder();
+}
+
+//------------------------------------------------------------------------------
+void* getHorizontalSplitterBuilder()
+{
+  return new LCXmlSplitterBuilder(Qt::Horizontal);
+}
+
+//------------------------------------------------------------------------------
+void* getVerticalSplitterBuilder()
+{
+  return new LCXmlSplitterBuilder(Qt::Vertical);
 }
 
