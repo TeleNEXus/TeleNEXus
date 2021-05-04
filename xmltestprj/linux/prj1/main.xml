@@ -38,6 +38,8 @@
         <dataWriteButton        lib="basicwidgets" libhandler="getRemWriteButtonBuilder"        />
         <listWidget             lib="basicwidgets" libhandler="getListWidgetBuilder"            />
         <stackedWidget          lib="basicwidgets" libhandler="getStackedWidgetBuilder"         />
+        <splitterVertical       lib="basicwidgets" libhandler="getVerticalSplitterBuilder"      />
+        <splitterHorizontal     lib="basicwidgets" libhandler="getHorizontalSplitterBuilder"    />
     </WIDGETBUILDERS>
 
     <FONTS file="fonts.xml"/>
