@@ -49,5 +49,7 @@ public:
       QWidget* _parent = nullptr);
 
   virtual ~LCQStackedWidget();
+
+  void addWidget(QWidget* _widget, const QString& _id);
 };
 #endif /*LCQSTACKEDWIDGET_H_ */

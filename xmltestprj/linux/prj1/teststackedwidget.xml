@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<widget>
+  <layout>
+    <layoutHBox>
+
+      <widgets>
+        <stackedWidget source="localsource" data="listwidgetitem" format="string">
+
+          <item id="item0">
+            <label text="Widget[ item0 ]" /> 
+          </item>
+
+          <item id="item1">
+            <label text="Widget[ item1 ]" /> 
+          </item>
+
+          <item id="item2">
+            <label text="Widget[ item2 ]" /> 
+          </item>
+
+          <item id="item3">
+            <label text="Widget[ item3 ]" /> 
+          </item>
+
+      </stackedWidget>
+
+      <widget>
+        <layout>
+          <layoutVBox>
+            <widgets>
+              <dataLineEdit source="localsource" data="listwidgetitem" format="string"/>
+            </widgets>
+          </layoutVBox>
+        </layout>
+      </widget>
+
+    </widgets>
+  </layoutHBox>
+
+</layout>
+</widget>
