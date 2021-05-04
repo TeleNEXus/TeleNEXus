@@ -57,6 +57,7 @@ SOURCES += \
     builders/lcbuilderscommon.cpp \
     builders/lcqwidgetvisiblecontrol.cpp \
     builders/lcxmlstackedwidgetbuilder.cpp \
+    builders/lcxmlsplitterbuilder.cpp \
 
 HEADERS += \
     ../../common/interfaces/LIApplication.h \
@@ -95,6 +96,7 @@ HEADERS += \
     builders/lcbuilderscommon.h \
     builders/lcqwidgetvisiblecontrol.h \
     builders/lcxmlstackedwidgetbuilder.h \
+    builders/lcxmlsplitterbuilder.h \
 
 # Default rules for deployment.
 unix {
