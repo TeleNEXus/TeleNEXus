@@ -1,7 +1,7 @@
 QT += gui
 QT += widgets
 QT += qml 
-QT += script
+# QT += script
 
 CONFIG += console c++11
 #CONFIG += c++11
@@ -22,7 +22,7 @@ INCLUDEPATH +=                                  \
        ./testjsdataformatter 
 
 # SOURCES += main.cpp \
-# SOURCES +=  ./regexpr.cpp \
+SOURCES +=  ./regexpr.cpp \
 # SOURCES +=  ./bitfield.cpp \
 # SOURCES +=  ./tab.cpp \
 # SOURCES +=  ./testlayout.cpp \
@@ -31,9 +31,10 @@ INCLUDEPATH +=                                  \
 # SOURCES +=  ./testwidget.cpp \
 # SOURCES +=  ./testwidget1.cpp \
 # SOURCES +=  ./testtable.cpp \
-SOURCES +=  ./testjsfunc.cpp \
-  ./jsclassfunc.cpp \
-  ./testjsdataformatter/jsvalidator.cpp
+#
+# SOURCES +=  ./testjsfunc.cpp \
+#   ./jsclassfunc.cpp \
+#   ./testjsdataformatter/jsvalidator.cpp
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
@@ -41,8 +42,9 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 HEADERS += \
-    ./jsclassfunc.h \
-    ./testjsdataformatter/jsvalidator.h
+
+    # ./jsclassfunc.h \
+    # ./testjsdataformatter/jsvalidator.h
 
 
 
