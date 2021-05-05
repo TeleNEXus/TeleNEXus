@@ -28,7 +28,8 @@ LCFormatterString::LCFormatterString()
 //------------------------------------------------------------------------------toString
 QString LCFormatterString::toString(const QByteArray& _data)
 {
-  return QString(_data);
+  return QString::fromUtf8(_data);
+  /* return QString(_data); */
 }
 
 //------------------------------------------------------------------------------fitting
@@ -40,7 +41,8 @@ QString LCFormatterString::fitting(const QString& _str)
 //------------------------------------------------------------------------------toBytes
 QByteArray LCFormatterString::toBytes(const QString& _str)
 {
-  return _str.toLatin1();
+  /* return _str.toLatin1(); */
+  return _str.toUtf8();
 }
 
 

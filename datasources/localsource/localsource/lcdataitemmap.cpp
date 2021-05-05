@@ -102,6 +102,15 @@ QByteArray LCDataItemMap::CDataItemBits::getData()
 }
 
 //==============================================================================
+int LCDataItemMap::CDataItemString::setData(const QByteArray& _data)
+{
+  if(_data.isNull()) return 0;
+  mData = _data;
+  notifyReaders(_data);
+  return mData.size();
+}
+
+//==============================================================================
 LCDataItemMap::LCDataItemMap()
 {
 }
@@ -121,6 +130,15 @@ void LCDataItemMap::addItem(const QString& _id, const QBitArray& _data)
   if(_data.isNull()) return;
   auto item  = 
     QSharedPointer<CDataItemBase>(new CDataItemBits(_data));
+  mDataMap.insert(_id, item);
+}
+
+//------------------------------------------------------------------------------
+void LCDataItemMap::addItem(const QString& _id, const QString& _data)
+{
+  if(_data.isNull()) return;
+  auto item = 
+    QSharedPointer<CDataItemBase>(new CDataItemString(_data));
   mDataMap.insert(_id, item);
 }
 

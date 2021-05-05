@@ -75,6 +75,18 @@ private:
     virtual int setData(const QByteArray& _data) override;
   };
 
+  class CDataItemString: public CDataItemBase
+  {
+  private:
+    QByteArray mData;
+  public:
+    CDataItemString() = delete;
+    CDataItemString(const QString& _data):
+      mData(_data.toUtf8()){}
+    virtual QByteArray getData() override { return mData; }
+    virtual int setData(const QByteArray& _data) override;
+  };
+
   QMap<QString, QSharedPointer<CDataItemBase>> mDataMap;
   
 public:
@@ -83,6 +95,7 @@ public:
 
   void addItem(const QString& _id, const QByteArray& _data);
   void addItem(const QString& _id, const QBitArray& _data);
+  void addItem(const QString& _id, const QString& _data);
 
   void readData(QSharedPointer<LCQLocalDataReader> _sp_reader);
   void writeData(
