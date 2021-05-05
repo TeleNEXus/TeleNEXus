@@ -28,7 +28,7 @@ LCFormatterStream::LCFormatterStream()
 //------------------------------------------------------------------------------toString
 QString LCFormatterStream::toString(const QByteArray& _data)
 {
-  return QString(_data);
+  return QString::fromUtf8(_data);
 }
 
 //------------------------------------------------------------------------------fitting
@@ -40,7 +40,19 @@ QString LCFormatterStream::fitting(const QString& _str)
 //------------------------------------------------------------------------------toBytes
 QByteArray LCFormatterStream::toBytes(const QString& _str)
 {
-  return _str.toLatin1();
+  QString outstr = _str;
+  outstr.replace(QRegExp("\\\\[0]{1,1}"), QChar(0));
+  outstr.replace(QRegExp("\\\\[b]{1,1}"), QStringLiteral("\b"));
+  outstr.replace(QRegExp("\\\\[n]{1,1}"), QStringLiteral("\n"));
+  outstr.replace(QRegExp("\\\\[r]{1,1}"), QStringLiteral("\r"));
+  outstr.replace(QRegExp("\\\\[t]{1,1}"), QStringLiteral("\t"));
+  outstr.replace(QRegExp("\\\\[v]{1,1}"), QStringLiteral("\v"));
+  outstr.replace(QRegExp("\\\\[b]{1,1}"), QStringLiteral("\b"));
+  outstr.replace(QRegExp("\\\\[n]{1,1}"), QStringLiteral("\n"));
+  outstr.replace(QRegExp("\\\\[r]{1,1}"), QStringLiteral("\r"));
+  outstr.replace(QRegExp("\\\\[t]{1,1}"), QStringLiteral("\t"));
+  outstr.replace(QRegExp("\\\\[v]{1,1}"), QStringLiteral("\v"));
+  return outstr.toUtf8();
 }
 
 
