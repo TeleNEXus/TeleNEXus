@@ -81,6 +81,13 @@ void LCLocalDataSource::addBitItem(
   mpLocalData->mspLocalSourceHiden->addItem(_dataName, _data);
 }
 
+//------------------------------------------------------------------------------
+void LCLocalDataSource::addStringItem(
+    const QString& _dataName, const QString& _data)
+{
+  mpLocalData->mspLocalSourceHiden->addItem(_dataName, _data);
+}
+
 QSharedPointer<LIRemoteDataReader> LCLocalDataSource::createReader(
     const QString& _dataName,
     LTReadAction _readAction)

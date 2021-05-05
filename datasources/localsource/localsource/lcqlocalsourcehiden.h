@@ -106,6 +106,7 @@ public:
 
   void addItem(const QString& _id, const QByteArray& _data); 
   void addItem(const QString& _id, const QBitArray& _data); 
+  void addItem(const QString& _id, const QString& _data); 
 
   QSharedPointer<LCQLocalDataReader> createReader(
       const QString& _dataName, 

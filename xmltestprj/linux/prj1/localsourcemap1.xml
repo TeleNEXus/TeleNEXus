@@ -34,8 +34,8 @@
   <!-- <bytes id="bytes_hex2"      type="hex"        defval="a fd 43 20"/> -->
   <!-- <bytes id="bytes_string"    type="string"     defval="TestString"/> -->
   <!-- <bytes id="bytes_string16"  type="string16"   defval="TestStringβαΩ¥₦16"/> -->
-  <bytes id="bytes_string"    type="string"     defval="TestStringПроверка"/>
-  <bytes id="bytes_string"    type="string"     defval="TestStringПроверка"/>
+  <bytes id="bytes_string"    type="string"     defval="Bytes String Test"/>
+  <string id="test_string" defval="Проверка TβαΩ¥₦16est String"/>
 
   <!-- <bytes id="listwidgetitem"    type="uint16"     defval="3"/> -->
   <bytes id="listwidgetitem"    type="string"     defval="item0"/>

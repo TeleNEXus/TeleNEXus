@@ -38,6 +38,7 @@ public:
 
   void addByteItem(const QString& _dataName, const QByteArray& _data); 
   void addBitItem(const QString& _dataName, const QBitArray& _data); 
+  void addStringItem(const QString& _dataName, const QString& _data); 
 
   virtual QSharedPointer<LIRemoteDataReader> createReader(
       const QString& _dataName,

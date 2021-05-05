@@ -42,6 +42,7 @@ static const struct
   QString localsourcemap  = "localsourcemap";
   QString bits            = "bits";
   QString bytes           = "bytes";
+  QString string          = "string";
 }__slTags;
 
 static const struct
@@ -143,6 +144,11 @@ static void addItemBytes(
     LCLocalDataSource& _source, 
     const QDomElement& _item_element, 
     const LIApplication& _app);
+
+static void addItemString(
+    LCLocalDataSource& _source, 
+    const QDomElement& _item_element, 
+    const LIApplication& _app);
 //------------------------------------------------------------------------------
 static void loadMap(
     LCLocalDataSource& _source, 
@@ -163,6 +169,10 @@ static void loadMap(
     else if(el.tagName() == __slTags.bytes)
     {
       addItemBytes(_source, el, _app);
+    }
+    else if(el.tagName() == __slTags.string)
+    {
+      addItemString(_source, el, _app);
     }
   } 
 }
@@ -187,8 +197,7 @@ static void addItemBits(
   {
     int size = 0;
     size = attr.toInt();
-    if(size <= 0) return;
-    _source.addBitItem(attr_id, QBitArray(size, false));
+    if(size > 0) _source.addBitItem(attr_id, QBitArray(size, false));
     return;
   }
 
@@ -399,7 +408,7 @@ public:
           if(!_defVal.isNull())
           {
             if(_defVal.size() == 0) return;
-            _source.addByteItem(_dataName, _defVal.toLatin1());
+            _source.addByteItem(_dataName, _defVal.toUtf8());
           }
         });
 
@@ -424,8 +433,8 @@ static void addItemBytes(
   {
     int size = 0;
     size = attr.toInt();
-    if(size <= 0) return;
-    _source.addByteItem(attr_id, QByteArray(size, 0)); 
+    if(size > 0) _source.addByteItem(attr_id, QByteArray(size, 0)); 
+    return;
   }
 
   attr = _item_element.attribute(__slAttributes.type);
@@ -440,4 +449,14 @@ static void addItemBytes(
       _item_element.attribute(__slAttributes.defval));
 }
 
-
+//------------------------------------------------------------------------------
+static void addItemString(
+    LCLocalDataSource& _source, 
+    const QDomElement& _item_element, 
+    const LIApplication& _app)
+{
+  Q_UNUSED(_app);
+  QString attr_id = _item_element.attribute(__slAttributes.id);
+  if(attr_id.isNull()) return;
+  _source.addStringItem(attr_id, _item_element.attribute(__slAttributes.defval));
+}
