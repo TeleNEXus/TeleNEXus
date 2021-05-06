@@ -78,8 +78,8 @@ public:
 
 public:
 
-  void notifyListener(const QByteArray& _data);
-  void notifyListener(LERemoteDataStatus _status);
+  void notify(const QByteArray& _data);
+  void notify(LERemoteDataStatus _status);
   QString getDataName(){ return mDataName; }
 
 private:

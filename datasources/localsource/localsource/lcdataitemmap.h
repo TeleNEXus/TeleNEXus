@@ -39,7 +39,7 @@ private:
   {
   protected:
     QList<QWeakPointer<LCQLocalDataReader>> mReadersList;
-    void notifyReaders(const QByteArray& _data);
+    void notifyAll(const QByteArray& _data);
 
   public:
     CDataItemBase(){}
@@ -47,7 +47,7 @@ private:
     void connectReader(QSharedPointer<LCQLocalDataReader> _sw_reader);
     void disconnectReader(QSharedPointer<LCQLocalDataReader> _sw_reader);
 
-    virtual QByteArray getData() = 0;
+    virtual void notify(QSharedPointer<LCQLocalDataReader> _sp_reader) = 0;
     virtual int setData(const QByteArray& _data) = 0;
   }; 
 
@@ -59,7 +59,7 @@ private:
     CDataItemBytes() = delete;
     CDataItemBytes(const QByteArray& _data):
       mData(_data){}
-    virtual QByteArray getData() override { return mData; }
+    virtual void notify(QSharedPointer<LCQLocalDataReader> _sp_reader) override;
     virtual int setData(const QByteArray& _data) override;
   };
 
@@ -71,7 +71,7 @@ private:
     CDataItemBits() = delete;
     CDataItemBits(const QBitArray& _data) :
       mData(_data){}
-    virtual QByteArray getData() override;
+    virtual void notify(QSharedPointer<LCQLocalDataReader> _sp_reader) override;
     virtual int setData(const QByteArray& _data) override;
   };
 
@@ -83,7 +83,17 @@ private:
     CDataItemString() = delete;
     CDataItemString(const QString& _data):
       mData(_data.toUtf8()){}
-    virtual QByteArray getData() override { return mData; }
+    virtual void notify(QSharedPointer<LCQLocalDataReader> _sp_reader) override;
+    virtual int setData(const QByteArray& _data) override;
+  };
+
+  class CDataItemStream: public CDataItemBase
+  {
+  private:
+    QList<QWeakPointer<LCQLocalDataReader>> mWaitingList;
+  public:
+    CDataItemStream(){};
+    virtual void notify(QSharedPointer<LCQLocalDataReader> _sp_reader) override;
     virtual int setData(const QByteArray& _data) override;
   };
 
@@ -93,9 +103,9 @@ public:
 
   LCDataItemMap();
 
-  void addItem(const QString& _id, const QByteArray& _data);
-  void addItem(const QString& _id, const QBitArray& _data);
-  void addItem(const QString& _id, const QString& _data);
+  void addDataItem(const QString& _id, const QByteArray& _data);
+  void addDataItem(const QString& _id, const QBitArray& _data);
+  void addDataItem(const QString& _id, const QString& _data);
 
   void readData(QSharedPointer<LCQLocalDataReader> _sp_reader);
   void writeData(

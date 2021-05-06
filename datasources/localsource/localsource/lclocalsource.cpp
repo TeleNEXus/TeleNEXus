@@ -71,21 +71,21 @@ QSharedPointer<LCLocalDataSource> LCLocalDataSource::create()
 void LCLocalDataSource::addByteItem(
     const QString& _dataName, const QByteArray& _data)
 {
-  mpLocalData->mspLocalSourceHiden->addItem(_dataName, _data);
+  mpLocalData->mspLocalSourceHiden->addDataItem(_dataName, _data);
 }
 
 //------------------------------------------------------------------------------
 void LCLocalDataSource::addBitItem(
     const QString& _dataName, const QBitArray& _data)
 {
-  mpLocalData->mspLocalSourceHiden->addItem(_dataName, _data);
+  mpLocalData->mspLocalSourceHiden->addDataItem(_dataName, _data);
 }
 
 //------------------------------------------------------------------------------
 void LCLocalDataSource::addStringItem(
     const QString& _dataName, const QString& _data)
 {
-  mpLocalData->mspLocalSourceHiden->addItem(_dataName, _data);
+  mpLocalData->mspLocalSourceHiden->addDataItem(_dataName, _data);
 }
 
 QSharedPointer<LIRemoteDataReader> LCLocalDataSource::createReader(

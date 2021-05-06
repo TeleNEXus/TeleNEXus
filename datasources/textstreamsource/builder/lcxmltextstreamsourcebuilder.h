@@ -27,6 +27,7 @@ class LCXmlTextStreamSourceBuilder : public LIXmlRemoteDataSourceBuilder
 {
 public:
   LCXmlTextStreamSourceBuilder();
+
   virtual ~LCXmlTextStreamSourceBuilder();
   virtual LQDataSources build(
       const QDomElement &_element, 

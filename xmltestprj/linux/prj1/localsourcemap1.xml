@@ -40,4 +40,6 @@
   <!-- <bytes id="listwidgetitem"    type="uint16"     defval="3"/> -->
   <bytes id="listwidgetitem"    type="string"     defval="item0"/>
 
+  <stream id="test_stream"/>
+
 </localsourcemap>
