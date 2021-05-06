@@ -115,21 +115,21 @@ QSharedPointer<LCQLocalSourceHiden> LCQLocalSourceHiden::create()
 }
 
 //------------------------------------------------------------------------------
-void LCQLocalSourceHiden::addItem(const QString& _id, const QByteArray& _data)
+void LCQLocalSourceHiden::addDataItem(const QString& _id, const QByteArray& _data)
 {
-  mDataMap.addItem(_id, _data);
+  mDataMap.addDataItem(_id, _data);
 }
 
 //------------------------------------------------------------------------------
-void LCQLocalSourceHiden::addItem(const QString& _id, const QBitArray& _data)
+void LCQLocalSourceHiden::addDataItem(const QString& _id, const QBitArray& _data)
 {
-  mDataMap.addItem(_id, _data);
+  mDataMap.addDataItem(_id, _data);
 }
 
 //------------------------------------------------------------------------------
-void LCQLocalSourceHiden::addItem(const QString& _id, const QString& _data)
+void LCQLocalSourceHiden::addDataItem(const QString& _id, const QString& _data)
 {
-  mDataMap.addItem(_id, _data);
+  mDataMap.addDataItem(_id, _data);
 }
 
 //------------------------------------------------------------------------------

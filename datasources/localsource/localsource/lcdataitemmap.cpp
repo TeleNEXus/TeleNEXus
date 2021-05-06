@@ -25,19 +25,20 @@
 #include <QDebug>
 
 //==============================================================================
-void LCDataItemMap::CDataItemBase::notifyReaders(const QByteArray& _data)
+void LCDataItemMap::CDataItemBase::notifyAll(const QByteArray& _data)
 {
-  for(auto it = mReadersList.begin(); 
-      it != mReadersList.end();
-      it++)
+  auto it = mReadersList.begin();
+
+  while(it != mReadersList.end())
   {
     auto sp = it->lock();
     if(sp.isNull()) 
     {
-      mReadersList.erase(it);
+      it = mReadersList.erase(it);
       continue;
     }
-    sp->notifyListener(_data);
+    sp->notify(_data);
+    it++;
   }
 }
 
@@ -61,9 +62,17 @@ int LCDataItemMap::CDataItemBytes::setData(const QByteArray& _data)
   if(_data.isNull()) return 0;
   if(_data.size() != mData.size()) return 0;
   mData = _data;
-  notifyReaders(_data);
+  notifyAll(_data);
   return mData.size();
 }
+
+//------------------------------------------------------------------------------
+void LCDataItemMap::CDataItemBytes::notify(
+    QSharedPointer<LCQLocalDataReader> _sp_reader)
+{
+  _sp_reader->notify(mData);
+}
+
 
 //==============================================================================
 int LCDataItemMap::CDataItemBits::setData(const QByteArray& _data)
@@ -85,20 +94,21 @@ int LCDataItemMap::CDataItemBits::setData(const QByteArray& _data)
     }
   }
 
-  notifyReaders(notify_data);
+  notifyAll(notify_data);
 
   return mData.size();
 }
 
 //------------------------------------------------------------------------------
-QByteArray LCDataItemMap::CDataItemBits::getData()
+void LCDataItemMap::CDataItemBits::notify(
+    QSharedPointer<LCQLocalDataReader> _sp_reader)
 {
   QByteArray ret_data;
   for(int i = 0; i < mData.size(); i++)
   {
     ret_data[i] = (mData.at(i) == false) ? (0):(1);
   }
-  return ret_data;
+  _sp_reader->notify(ret_data);
 }
 
 //==============================================================================
@@ -106,8 +116,44 @@ int LCDataItemMap::CDataItemString::setData(const QByteArray& _data)
 {
   if(_data.isNull()) return 0;
   mData = _data;
-  notifyReaders(_data);
+  notifyAll(_data);
   return mData.size();
+}
+
+//------------------------------------------------------------------------------
+void LCDataItemMap::CDataItemString::notify(
+    QSharedPointer<LCQLocalDataReader> _sp_reader)
+{
+  _sp_reader->notify(mData);
+}
+
+//==============================================================================
+int LCDataItemMap::CDataItemStream::setData(const QByteArray& _data)
+{
+  if(_data.isNull()) return 0;
+  notifyAll(_data);
+
+  if(mWaitingList.isEmpty()) return _data.size();
+  for(auto it = mWaitingList.begin(); 
+      it != mWaitingList.end();
+      it++)
+  {
+    auto sp = it->lock();
+    if(sp.isNull()) 
+    {
+      continue;
+    }
+    sp->notify(_data);
+  }
+  mWaitingList.clear();
+  return _data.size();
+}
+
+//------------------------------------------------------------------------------
+void LCDataItemMap::CDataItemStream::notify(
+    QSharedPointer<LCQLocalDataReader> _sp_reader)
+{
+  mWaitingList.append(_sp_reader);
 }
 
 //==============================================================================
@@ -116,7 +162,7 @@ LCDataItemMap::LCDataItemMap()
 }
 
 //------------------------------------------------------------------------------
-void LCDataItemMap::addItem(const QString& _id, const QByteArray& _data)
+void LCDataItemMap::addDataItem(const QString& _id, const QByteArray& _data)
 {
   if(_data.isNull()) return;
   auto item = 
@@ -125,7 +171,7 @@ void LCDataItemMap::addItem(const QString& _id, const QByteArray& _data)
 }
 
 //------------------------------------------------------------------------------
-void LCDataItemMap::addItem(const QString& _id, const QBitArray& _data)
+void LCDataItemMap::addDataItem(const QString& _id, const QBitArray& _data)
 {
   if(_data.isNull()) return;
   auto item  = 
@@ -134,7 +180,7 @@ void LCDataItemMap::addItem(const QString& _id, const QBitArray& _data)
 }
 
 //------------------------------------------------------------------------------
-void LCDataItemMap::addItem(const QString& _id, const QString& _data)
+void LCDataItemMap::addDataItem(const QString& _id, const QString& _data)
 {
   if(_data.isNull()) return;
   auto item = 
@@ -148,10 +194,10 @@ void LCDataItemMap::readData(QSharedPointer<LCQLocalDataReader> _sp_reader)
   auto it = mDataMap.find(_sp_reader->getDataName());
   if(it ==  mDataMap.end()) 
   {
-    _sp_reader->notifyListener(LERemoteDataStatus::DS_UNDEF);
+    _sp_reader->notify(LERemoteDataStatus::DS_UNDEF);
     return;
   }
-  _sp_reader->notifyListener(it.value()->getData());
+  it.value()->notify(_sp_reader);
 }
 
 //------------------------------------------------------------------------------
@@ -168,7 +214,7 @@ void LCDataItemMap::writeData(
   {
     ret_status = LERemoteDataStatus::DS_WRONG;
   }
-  _sp_writer->notifyListener(ret_status);
+  _sp_writer->notify(ret_status);
 }
 
 //------------------------------------------------------------------------------
@@ -177,11 +223,12 @@ void LCDataItemMap::connectReader(QSharedPointer<LCQLocalDataReader> _sp_reader)
   auto it = mDataMap.find(_sp_reader->getDataName());
   if(it == mDataMap.end()) 
   {
-    _sp_reader->notifyListener(LERemoteDataStatus::DS_UNDEF);
+    _sp_reader->notify(LERemoteDataStatus::DS_UNDEF);
     return;
   }
   it.value()->connectReader(_sp_reader);
-  _sp_reader->notifyListener(it->data()->getData());
+
+  it->data()->notify(_sp_reader);
 }
 
 //------------------------------------------------------------------------------

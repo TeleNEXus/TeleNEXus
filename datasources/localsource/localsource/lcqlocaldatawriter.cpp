@@ -84,7 +84,7 @@ void LCQLocalDataWriter::writeRequest(const QByteArray& _data)
 }
 
 //------------------------------------------------------------------------------
-void LCQLocalDataWriter::notifyListener(LERemoteDataStatus _status)
+void LCQLocalDataWriter::notify(LERemoteDataStatus _status)
 {
   QCoreApplication::postEvent(this, new CQEventDataIsWrite(_status));
 }

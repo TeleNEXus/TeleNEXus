@@ -104,9 +104,11 @@ public:
 
   static QSharedPointer<LCQLocalSourceHiden> create();
 
-  void addItem(const QString& _id, const QByteArray& _data); 
-  void addItem(const QString& _id, const QBitArray& _data); 
-  void addItem(const QString& _id, const QString& _data); 
+  void addDataItem(const QString& _id, const QByteArray& _data); 
+  void addDataItem(const QString& _id, const QBitArray& _data); 
+  void addDataItem(const QString& _id, const QString& _data); 
+
+//TODO: Добавление сущности потока данных.
 
   QSharedPointer<LCQLocalDataReader> createReader(
       const QString& _dataName, 

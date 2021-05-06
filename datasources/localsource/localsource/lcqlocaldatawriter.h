@@ -64,7 +64,7 @@ public:
   virtual void writeRequest(const QByteArray& _data) override;
 
   QString getDataName(){ return mDataName; }
-  void notifyListener(LERemoteDataStatus _status);
+  void notify(LERemoteDataStatus _status);
 
 private:
   virtual void customEvent(QEvent *_event) override;
