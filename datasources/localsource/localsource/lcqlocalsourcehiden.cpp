@@ -133,6 +133,12 @@ void LCQLocalSourceHiden::addDataItem(const QString& _id, const QString& _data)
 }
 
 //------------------------------------------------------------------------------
+void LCQLocalSourceHiden::addStreamItem(const QString& _id)
+{
+  mDataMap.addStreamItem(_id);
+}
+
+//------------------------------------------------------------------------------
 QSharedPointer<LCQLocalDataReader> LCQLocalSourceHiden::createReader(
     const QString& _dataName, 
     LTReadAction _readAction)

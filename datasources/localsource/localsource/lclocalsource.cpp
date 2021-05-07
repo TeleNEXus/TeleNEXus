@@ -88,6 +88,13 @@ void LCLocalDataSource::addStringItem(
   mpLocalData->mspLocalSourceHiden->addDataItem(_dataName, _data);
 }
 
+//------------------------------------------------------------------------------
+void LCLocalDataSource::addStreamItem(const QString& _dataName)
+{
+  mpLocalData->mspLocalSourceHiden->addStreamItem(_dataName);
+}
+
+//------------------------------------------------------------------------------
 QSharedPointer<LIRemoteDataReader> LCLocalDataSource::createReader(
     const QString& _dataName,
     LTReadAction _readAction)
@@ -97,6 +104,7 @@ QSharedPointer<LIRemoteDataReader> LCLocalDataSource::createReader(
       _readAction);
 }
 
+//------------------------------------------------------------------------------
 QSharedPointer<LIRemoteDataWriter> LCLocalDataSource::createWriter(
     const QString& _dataName,
     LTWriteAction _writeAction)
