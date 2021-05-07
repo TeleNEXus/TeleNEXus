@@ -20,19 +20,19 @@
  */
 #include "lcformattertextstream.h"
 
-//==============================================================================LCFormatterStream
-LCFormatterStream::LCFormatterStream() 
+//==============================================================================LCFormatterTextStream
+LCFormatterTextStream::LCFormatterTextStream() 
 {
 }
 
 //------------------------------------------------------------------------------toString
-QString LCFormatterStream::toString(const QByteArray& _data)
+QString LCFormatterTextStream::toString(const QByteArray& _data)
 {
   return QString::fromUtf8(_data);
 }
 
 //------------------------------------------------------------------------------fitting
-QString LCFormatterStream::fitting(const QString& _str)
+QString LCFormatterTextStream::fitting(const QString& _str)
 {
   using QRE = QRegularExpression;
 
@@ -69,7 +69,7 @@ QString LCFormatterStream::fitting(const QString& _str)
   //Удаление одиночных обратных черт.
   outstr.replace(single_slash, QStringLiteral(""));
   //Замена двойной обратной черты на одинарную.
-  outstr.replace(double_slash, QString("[\\]"));
+  outstr.replace(double_slash, QString("\\"));
 
   //Замена hex кодов.
   {
@@ -94,14 +94,14 @@ QString LCFormatterStream::fitting(const QString& _str)
 }
 
 //------------------------------------------------------------------------------toBytes
-QByteArray LCFormatterStream::toBytes(const QString& _str)
+QByteArray LCFormatterTextStream::toBytes(const QString& _str)
 {
   return fitting(_str).toUtf8();
 }
 
 
 //------------------------------------------------------------------------------validator
-QValidator* LCFormatterStream::validator()
+QValidator* LCFormatterTextStream::validator()
 {
   return nullptr;
 }
