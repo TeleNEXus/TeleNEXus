@@ -21,6 +21,7 @@
 #include "lcxmlwindows.h"
 #include "lcxmlcommon.h"
 #include "LIWindow.h"
+#include "LIKeyboard.h"
 #include "LIApplication.h"
 
 #include <QDomElement>
@@ -68,7 +69,7 @@ public:
 };
 
 //==============================================================================LCXmlKeyboard
-class LCXmlKeyboard : public LCXmlWindow
+class LCXmlKeyboard : public LIKeyboard 
 {
 
 private:
@@ -93,14 +94,18 @@ private:
     }
   };
 
-  const QDomElement& mElement;
   QSharedPointer<LIRemoteDataWriter> mDataWriter;
+  QWeakPointer<LIRemoteDataSource> mwpStreamSource;
+  QString mStreamName;
+  
+public:
+  static QMap<QString, QSharedPointer<LIKeyboard>> smKeyboardsMap;
+  QWidget* mpWidget;
 public:
   LCXmlKeyboard() = delete;
 
   LCXmlKeyboard(QWidget* _widget, const QDomElement& _element, const LIApplication& _app): 
-    LCXmlWindow(_widget),
-    mElement(_element)
+    mpWidget(_widget)
   {
     QString attr_source = _element.attribute(__slAttributes.streamSource);
     qDebug() << "LCXmlKeyboard costructor 0";
@@ -117,10 +122,36 @@ public:
   }
 
   virtual ~LCXmlKeyboard(){}
+
+  //--------------------------------------------------------------------------
+  virtual void show() override
+  {
+    mpWidget->show();
+  }
+
+  //--------------------------------------------------------------------------
+  virtual void hide() override
+  {
+    mpWidget->close();
+  }
+
+  //--------------------------------------------------------------------------
+  virtual QWeakPointer<LIRemoteDataSource> getStreamSource() const override
+  {
+    return mwpStreamSource;
+  }
+
+  //--------------------------------------------------------------------------
+  virtual QString getStreamName() const override
+  {
+    return mStreamName;
+  }
+
 };
 
 //------------------------------------------------------------------------------
 QMap<QString, QSharedPointer<LIWindow>> LCXmlWindow::smWindowsMap;
+QMap<QString, QSharedPointer<LIKeyboard>> LCXmlKeyboard::smKeyboardsMap;
 
 //==============================================================================LCXmlWindows
 LCXmlWindows::LCXmlWindows()
@@ -151,17 +182,18 @@ QSharedPointer<LIWindow> LCXmlWindows::getWindow(const QString& _windowId)
 static QWidget* buildWidget(const QDomElement& _element, 
     const LIApplication& _app);
 
-static LCXmlWindow* buildLocal(const QDomElement& _element, EWindowType _wt,
+static LIWindow* buildLocal(const QDomElement& _element, EWindowType _wt,
     const LIApplication& _app);
 
-static void buildCommon(LCXmlWindow* _win, const QDomElement& _element);
+static void initWindow(LCXmlWindow* _win, const QDomElement& _element);
+static void initKeyboard(LCXmlKeyboard* _win, const QDomElement& _element);
 //------------------------------------------------------------------------------
 void LCXmlWindows::buildWindow(
     const QDomElement &_element, 
     const LIApplication& _app)
 {
   auto window = buildLocal(_element, EWindowType::NORMAL, _app); 
-  buildCommon(window, _element);
+  initWindow(window, _element);
 }
 
 //------------------------------------------------------------------------------
@@ -170,11 +202,38 @@ void LCXmlWindows::buildKeyboard(
     const LIApplication& _app)
 {
   auto window = buildLocal(_element, EWindowType::KEYBOARD, _app); 
-  buildCommon(window, _element);
+  initKeyboard(window, _element);
 }
 
 //------------------------------------------------------------------------------
-static void buildCommon(LCXmlWindow* _win, const QDomElement& _element)
+static void initKeyboard(LCXmlKeyboard* _win, const QDomElement& _element)
+{
+  if(_win == nullptr) return;
+
+  QString attr_id = _element.attribute(
+      LCXmlCommon::mCommonAttributes.id);
+  QString attr_title = _element.attribute(
+      LCXmlCommon::mCommonAttributes.title);
+  QString attr_show = _element.attribute(
+      LCXmlCommon::mCommonAttributes.show.tag);
+
+  if(!attr_id.isNull()) 
+  {
+    LCXmlKeyboard::smKeyboardsMap.insert(attr_id, QSharedPointer<LIKeyboard>(_win));
+    if(attr_title.isNull()) attr_title = attr_id;
+  }
+
+  if(!attr_title.isNull())
+  {
+    _win->mpWidget->setWindowTitle(attr_title);
+  }
+
+  if(!attr_show.isNull())
+    _win->mpWidget->show();
+}
+
+//------------------------------------------------------------------------------
+static void initWindow(LCXmlWindow* _win, const QDomElement& _element)
 {
   if(_win == nullptr) return;
 
@@ -201,11 +260,10 @@ static void buildCommon(LCXmlWindow* _win, const QDomElement& _element)
     _win->mpWidget->show();
 }
 
-
 //------------------------------------------------------------------------------
 static void widgetAttr(QWidget* _widget, const QDomElement& _element);
 
-static LCXmlWindow* buildLocal(const QDomElement& _element, EWindowType _wt,
+static LIWindow* buildLocal(const QDomElement& _element, EWindowType _wt,
     const LIApplication& _app)
 {
   QString attr_file =  _element.attribute(
@@ -227,7 +285,7 @@ static LCXmlWindow* buildLocal(const QDomElement& _element, EWindowType _wt,
     return nullptr;
   }
 
-  LCXmlWindow* window = nullptr;
+  LIWindow* window = nullptr;
 
   qDebug() << "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++";
   switch(_wt)
