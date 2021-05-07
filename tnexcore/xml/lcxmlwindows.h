@@ -36,7 +36,12 @@ private:
     LCXmlWindows& operator=(const LCXmlWindows&) = delete;
 public:
     static LCXmlWindows& instance();
-    void create(
+
+    void buildWindow(
+        const QDomElement &_element, 
+        const LIApplication& _app);
+
+    void buildKeyboard(
         const QDomElement &_element, 
         const LIApplication& _app);
 

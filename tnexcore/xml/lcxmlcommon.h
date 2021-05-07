@@ -36,6 +36,7 @@ public:
   {
     QString rootTag         = "APPLICATION";
     QString window          = "WINDOW";
+    QString keyboard        = "KEYBOARD";
     QString sourceBuilders  = "SOURCEBUILDERS";
     QString widgetBuilders  = "WIDGETBUILDERS";
     QString layoutBuilders  = "LAYOUTBUILDERS";
