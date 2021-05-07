@@ -32,6 +32,7 @@
 #include "lcformatters32.h"
 #include "lcformatterf32.h"
 #include "lcformatterstring.h"
+#include "lcformattertextstream.h"
 
 #include <QSharedPointer>
 #include <functional>
@@ -63,21 +64,8 @@ static const struct
   QString format_int32      = "int32";
   QString format_float32    = "float32";
   QString format_string     = "string";
+  QString format_textstream = "textstream";
 }__slStdFormatterNames;
-
-//------------------------------------------------------------------------------
-static QSharedPointer<LIDataFormatter> __formatterBitfield;
-static QSharedPointer<LIDataFormatter> __formatterBits;
-static QSharedPointer<LIDataFormatter> __formatterHex;
-static QSharedPointer<LIDataFormatter> __formatterBool;
-static QSharedPointer<LIDataFormatter> __formatterUint8;
-static QSharedPointer<LIDataFormatter> __formatterInt8;
-static QSharedPointer<LIDataFormatter> __formatterUint16;
-static QSharedPointer<LIDataFormatter> __formatterInt16;
-static QSharedPointer<LIDataFormatter> __formatterUint32;
-static QSharedPointer<LIDataFormatter> __formatterInt32;
-static QSharedPointer<LIDataFormatter> __formatterFloat32;
-static QSharedPointer<LIDataFormatter> __formatterString;
 
 //==============================================================================
 QMap < QString, 
@@ -88,35 +76,25 @@ QMap <QString, QSharedPointer<LIDataFormatter>> __slStdFormattersMap;
 
 static class CXmlStdDataFormatterFactory final
 {
-
+private:
+  using TFormatter = QSharedPointer<LIDataFormatter>;
 public:
   CXmlStdDataFormatterFactory()
   {
-    __formatterBitfield.reset(    new LCFormatterBitfield());
-    __formatterBits.reset(        new LCFormatterBits());
-    __formatterHex.reset(         new LCFormatterHex());
-    __formatterBool.reset(        new LCFormatterBool());
-    __formatterUint8.reset(       new LCFormatterU8());
-    __formatterInt8.reset(        new LCFormatterS8());
-    __formatterUint16.reset(      new LCFormatterU16());
-    __formatterInt16.reset(       new LCFormatterS16());
-    __formatterUint32.reset(      new LCFormatterU32());
-    __formatterInt32.reset(       new LCFormatterS32());
-    __formatterFloat32.reset(     new LCFormatterF32());
-    __formatterString.reset(      new LCFormatterString());
 
-    __slStdFormattersMap.insert(__slStdFormatterNames.format_bitfield, __formatterBitfield);
-    __slStdFormattersMap.insert(__slStdFormatterNames.format_bits    , __formatterBits    );
-    __slStdFormattersMap.insert(__slStdFormatterNames.format_hex     , __formatterHex     );
-    __slStdFormattersMap.insert(__slStdFormatterNames.format_bool    , __formatterBool    );
-    __slStdFormattersMap.insert(__slStdFormatterNames.format_uint8   , __formatterUint8   );
-    __slStdFormattersMap.insert(__slStdFormatterNames.format_int8    , __formatterInt8    );
-    __slStdFormattersMap.insert(__slStdFormatterNames.format_uint16  , __formatterUint16  );
-    __slStdFormattersMap.insert(__slStdFormatterNames.format_int16   , __formatterInt16   );
-    __slStdFormattersMap.insert(__slStdFormatterNames.format_uint32  , __formatterUint32  );
-    __slStdFormattersMap.insert(__slStdFormatterNames.format_int32   , __formatterInt32   );
-    __slStdFormattersMap.insert(__slStdFormatterNames.format_float32 , __formatterFloat32 );
-    __slStdFormattersMap.insert(__slStdFormatterNames.format_string  , __formatterString  );
+    __slStdFormattersMap.insert(__slStdFormatterNames.format_bitfield,   TFormatter( new LCFormatterBitfield()));
+    __slStdFormattersMap.insert(__slStdFormatterNames.format_bits    ,   TFormatter( new LCFormatterBits()));
+    __slStdFormattersMap.insert(__slStdFormatterNames.format_hex     ,   TFormatter( new LCFormatterHex()));
+    __slStdFormattersMap.insert(__slStdFormatterNames.format_bool    ,   TFormatter( new LCFormatterBool()));
+    __slStdFormattersMap.insert(__slStdFormatterNames.format_uint8   ,   TFormatter( new LCFormatterU8()));
+    __slStdFormattersMap.insert(__slStdFormatterNames.format_int8    ,   TFormatter( new LCFormatterS8()));
+    __slStdFormattersMap.insert(__slStdFormatterNames.format_uint16  ,   TFormatter( new LCFormatterU16()));
+    __slStdFormattersMap.insert(__slStdFormatterNames.format_int16   ,   TFormatter( new LCFormatterS16()));
+    __slStdFormattersMap.insert(__slStdFormatterNames.format_uint32  ,   TFormatter( new LCFormatterU32()));
+    __slStdFormattersMap.insert(__slStdFormatterNames.format_int32   ,   TFormatter( new LCFormatterS32()));
+    __slStdFormattersMap.insert(__slStdFormatterNames.format_float32 ,   TFormatter( new LCFormatterF32()));
+    __slStdFormattersMap.insert(__slStdFormatterNames.format_string  ,   TFormatter( new LCFormatterString()));
+    __slStdFormattersMap.insert(__slStdFormatterNames.format_textstream, TFormatter( new LCFormatterTextStream()));
 
     //TODO: Добавить подключение сепаратора для форматтеров.
 
@@ -124,6 +102,7 @@ public:
     __formatterCreators.insert(__slStdFormatterNames.format_bitfield,
         [](const QDomElement& _element)
         {
+          TFormatter std_bitfield = __slStdFormattersMap.value(__slStdFormatterNames.format_bitfield); 
           bool ok_size = false;
           int size = 0;
           QChar separator;
@@ -145,7 +124,7 @@ public:
           //Проверяем наличие дополнительных параметров.
           if( ((!ok_size)||(size <= 0)) && (separator.isNull()))
           {
-            return __formatterBitfield;
+            return std_bitfield;
           }
 
           LCFormatterBitfield *formatter = 
@@ -153,7 +132,7 @@ public:
 
           //Копируем параметры форматтера по умолчанию.
           *formatter = *(static_cast<LCFormatterBitfield*>
-              (__formatterBitfield.data()));
+              (std_bitfield.data()));
 
           //Установка значения размера данных в байтах.
           if(size > __L_MAX_BITS_SIZE) size = __L_MAX_BITS_SIZE;
@@ -172,6 +151,7 @@ public:
         [](const QDomElement& _element)
         {
 
+          TFormatter std_bits = __slStdFormattersMap.value(__slStdFormatterNames.format_bits); 
           bool ok_size = false;
           int size = 0;
           QChar separator;
@@ -193,7 +173,7 @@ public:
           //Проверяем наличие дополнительных параметров.
           if( ((!ok_size)||(size <= 0)) && (separator.isNull()))
           {
-            return __formatterBits;
+            return std_bits;
           }
 
           LCFormatterBits *formatter = 
@@ -201,7 +181,7 @@ public:
 
           //Копируем параметры форматтера по умолчанию.
           *formatter = *(static_cast<LCFormatterBits*>
-              (__formatterBits.data()));
+              (std_bits.data()));
 
           //Установка значения размера данных в байтах.
           if(size > __L_MAX_BITS_SIZE) size = __L_MAX_BITS_SIZE;
@@ -219,6 +199,7 @@ public:
     __formatterCreators.insert(__slStdFormatterNames.format_hex,
         [](const QDomElement& _element)
         {
+          const TFormatter& std_hex = __slStdFormattersMap.value(__slStdFormatterNames.format_hex); 
           bool ok_size = false;
           int size = 0;
           QChar separator;
@@ -240,7 +221,7 @@ public:
           //Проверяем наличие дополнительных параметров.
           if( ((!ok_size)||(size <= 0)) && (separator.isNull()))
           {
-            return __formatterHex;
+            return std_hex;
           }
 
           LCFormatterHex *formatter = 
@@ -248,7 +229,7 @@ public:
 
           //Копируем параметры форматтера по умолчанию.
           *formatter = *(static_cast<LCFormatterHex*>
-              (__formatterHex.data()));
+              (std_hex.data()));
 
           //Установка значения размера данных в байтах.
           if(size > __L_MAX_BITS_SIZE) size = __L_MAX_BITS_SIZE;
@@ -264,40 +245,74 @@ public:
 
     //--------------------------------------------------------------------------
     __formatterCreators.insert( __slStdFormatterNames.format_bool, 
-        [](const QDomElement& _element) { 
-          Q_UNUSED(_element); return __formatterBool;});
+        [](const QDomElement& _element) 
+        { 
+          Q_UNUSED(_element); 
+          return __slStdFormattersMap.value(__slStdFormatterNames.format_bool);
+        });
 
     __formatterCreators.insert( __slStdFormatterNames.format_uint8, 
-        [](const QDomElement& _element){ 
-          Q_UNUSED(_element); return __formatterUint8;});
+        [](const QDomElement& _element)
+        { 
+          Q_UNUSED(_element); 
+          return __slStdFormattersMap.value(__slStdFormatterNames.format_uint8);
+        });
 
     __formatterCreators.insert( __slStdFormatterNames.format_int8, 
-        [](const QDomElement& _element){ 
-          Q_UNUSED(_element); return __formatterInt8;});
+        [](const QDomElement& _element)
+        { 
+          Q_UNUSED(_element); 
+          return __slStdFormattersMap.value(__slStdFormatterNames.format_int8);
+        });
 
     __formatterCreators.insert( __slStdFormatterNames.format_uint16, 
-        [](const QDomElement& _element){ 
-          Q_UNUSED(_element); return __formatterUint16;});
+        [](const QDomElement& _element)
+        { 
+          Q_UNUSED(_element); 
+          return __slStdFormattersMap.value(__slStdFormatterNames.format_uint16);
+        });
 
     __formatterCreators.insert( __slStdFormatterNames.format_int16, 
-        [](const QDomElement& _element){ 
-          Q_UNUSED(_element); return __formatterInt16;});
+        [](const QDomElement& _element)
+        { 
+          Q_UNUSED(_element); 
+          return __slStdFormattersMap.value(__slStdFormatterNames.format_int16);
+        });
 
     __formatterCreators.insert( __slStdFormatterNames.format_uint32, 
-        [](const QDomElement& _element){ 
-          Q_UNUSED(_element); return __formatterUint32;});
+        [](const QDomElement& _element)
+        { 
+          Q_UNUSED(_element); 
+          return __slStdFormattersMap.value(__slStdFormatterNames.format_uint32);
+        });
 
     __formatterCreators.insert( __slStdFormatterNames.format_int32, 
-        [](const QDomElement& _element){ 
-          Q_UNUSED(_element); return __formatterInt32;});
+        [](const QDomElement& _element)
+        { 
+          Q_UNUSED(_element); 
+          return __slStdFormattersMap.value(__slStdFormatterNames.format_int32);
+        });
 
     __formatterCreators.insert( __slStdFormatterNames.format_float32, 
-        [](const QDomElement& _element){ 
-          Q_UNUSED(_element); return __formatterFloat32;});
+        [](const QDomElement& _element)
+        { 
+          Q_UNUSED(_element); 
+          return __slStdFormattersMap.value(__slStdFormatterNames.format_float32);
+        });
 
     __formatterCreators.insert( __slStdFormatterNames.format_string, 
-        [](const QDomElement& _element){ 
-          Q_UNUSED(_element); return __formatterString;});
+        [](const QDomElement& _element)
+        { 
+          Q_UNUSED(_element); 
+          return __slStdFormattersMap.value(__slStdFormatterNames.format_string);
+        });
+
+    __formatterCreators.insert( __slStdFormatterNames.format_textstream, 
+        [](const QDomElement& _element)
+        { 
+          Q_UNUSED(_element); 
+          return __slStdFormattersMap.value(__slStdFormatterNames.format_textstream);
+        });
   }
 
 

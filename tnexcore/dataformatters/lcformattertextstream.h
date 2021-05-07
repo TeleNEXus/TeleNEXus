@@ -18,16 +18,16 @@
  * You should have received a copy of the GNU General Public License
  * along with TeleNEXus.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef LCFORMATTERSTREAM_H_
-#define LCFORMATTERSTREAM_H_
+#ifndef LCFORMATTERTEXTSTREAM_H_
+#define LCFORMATTERTEXTSTREAM_H_
 
 #include "lcformatterbase.h"
 #include <QValidator>
 
-class LCFormatterStream : public LCFormatterBase
+class LCFormatterTextStream : public LCFormatterBase
 {
 public:
-  explicit LCFormatterStream();
+  explicit LCFormatterTextStream();
 
   virtual QString     toString(const QByteArray& _data) override;
   virtual QString     fitting(const QString& _str) override;
@@ -35,4 +35,4 @@ public:
   virtual QValidator* validator() override;
 };
 
-#endif // LCFORMATTERSTREAM_H_
+#endif // LCFORMATTERTEXTSTREAM_H_
