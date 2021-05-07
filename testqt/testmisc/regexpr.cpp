@@ -1,6 +1,7 @@
 #include <QApplication>
 #include <QtWidgets>
 #include <cmath>
+#include <ostream>
 #include <qboxlayout.h>
 #include <qcombobox.h>
 #include <QIntValidator>
@@ -11,6 +12,7 @@
 #include <QPushButton>
 #include <QDebug>
 #include <QTextStream>
+#include <iostream>
 
 int main(int argc, char** argv)
 {
@@ -88,14 +90,29 @@ int main(int argc, char** argv)
       /* QString test_string = "Aasdf \\02 dddf \\0 safsdf \n"; */
       /* QString test_string = "\\x65 \\x041f Привет \\x433 \\xf4\\xA5\\x46 \\ Av Aasdf \\v dddf \\\\v \\b aaa \\ \\\\ eee"; */
       /* QString test_string = "\\x65 \\x66\\x67 Привет \\x433 \\xf4\\xA5\\x46 \\ Av Aasdf \\v dddf \\\\v \\b aaa \\ \\\\ eee"; */
-      QString test_string = "Test: \\x041f \\x65\\v \\\\v \\\\ \\";
+      /* QString test_string = "Test: \\x041f \\0 \\x65\\v   \\\\v \\\\ \\"; */
+      QString test_string = "Test:\\x65\\v  \\0 \\\\v \\\\ \\";
         test_string = QString::fromUtf8(test_string.toUtf8());
       out << "Test string         = " << test_string << endl;
 
+      auto list = test_string.split(QRegularExpression("(?<!\\\\)(\\\\0)"));
+      if(list.length() > 1)
+      {
+        test_string = list.first();
+        test_string.append(QStringLiteral("\0"));
+      }
 
-      test_string.replace(QRegularExpression("(?<!\\\\)(\\\\v)"), QString("[v]"));
-      test_string.replace(QRegularExpression("(?<!\\\\)(\\\\)(?!x)"), QString(""));
-      test_string.replace(QRegularExpression("(\\\\)(?!x)"), QString("[\\]"));
+      /* if(test_string.contains(QRegularExpression("(?<!\\\\)(\\\\0)"))) */
+      /* { */
+      /*   test_string = test_string.split(QRegularExpression("(?<!\\\\)(\\\\0)")).first(); */
+      /*   test_string.append(QStringLiteral("\0")); */
+      /* } */
+
+
+      /* test_string.replace(QRegularExpression("(?<!\\\\)(\\\\0)"), QStringLiteral("\0")); */
+      test_string.replace(QRegularExpression("(?<!\\\\)(\\\\v)"), QStringLiteral("[v]"));
+      test_string.replace(QRegularExpression("(?<!\\\\)(\\\\)(?!x)"), QStringLiteral(""));
+      test_string.replace(QRegularExpression("(\\\\)(?!x)"), QStringLiteral("[\\]"));
 
       QRegularExpression re("\\\\x[0-9a-fA-F]{1,4}");
 
@@ -126,12 +143,24 @@ int main(int argc, char** argv)
 
       /* test_string.replace(QRegExp("\\\\[0]{1,1}"),QChar(0)); */
 
-      out << "Test string replace = " << test_string << endl;
+      out << "Test string \0 replace = " << test_string << endl;
+
+      std::cout << "Test \0 string replace std = " << test_string.toStdString() << std::endl;
 
       /* QByteArray arrutf8 = test_string.toUtf8(); */
       QByteArray arr = test_string.toUtf8();
       out << "Byte array = " << arr.toHex(' ') << endl;
-      out << "String from byte array = " << QString::fromUtf8(arr) << endl;
+      QString from_utf = QString::fromUtf8(arr);
+      out << "String from byte array = " << from_utf << endl;
+
+      for(int i = 0; i < test_string.length(); i++)
+      {
+        out << QString("Before Char[%1] : ").arg(i) << test_string.at(i) << 
+          "\t code " << test_string.at(i).unicode() <<
+          QString("\t After Char[%1] : ").arg(i) << from_utf.at(i) << 
+          "\t code " << from_utf.at(i).unicode() <<
+          endl;
+      }
 
     };
 
