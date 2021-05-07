@@ -435,20 +435,36 @@ static void addWidgetsBuilders(const QDomElement& _rootElement)
 //==============================================================================
 static void addWindows(const QDomElement& _rootElement)
 {
-    for(auto node = 
-            _rootElement.firstChildElement(
-                LCXmlCommon::mBaseTags.window); 
+  //simple windows
+  for(auto node = 
+      _rootElement.firstChildElement(
+        LCXmlCommon::mBaseTags.window); 
 
-            !node.isNull(); 
+      !node.isNull(); 
 
-            node = node.nextSiblingElement(
-                LCXmlCommon::mBaseTags.window))
-    {
-        QDomElement el = node.toElement();
+      node = node.nextSiblingElement(
+        LCXmlCommon::mBaseTags.window))
+  {
+    QDomElement el = node.toElement();
 
-        if(el.isNull()) continue;
-        LCXmlWindows::instance().create(el, __slAppInterface);
-    }
+    if(el.isNull()) continue;
+    LCXmlWindows::instance().buildWindow(el, __slAppInterface);
+  }
+  //keyboards
+  for(auto node = 
+      _rootElement.firstChildElement(
+        LCXmlCommon::mBaseTags.keyboard); 
+
+      !node.isNull(); 
+
+      node = node.nextSiblingElement(
+        LCXmlCommon::mBaseTags.keyboard))
+  {
+    QDomElement el = node.toElement();
+
+    if(el.isNull()) continue;
+    LCXmlWindows::instance().buildWindow(el, __slAppInterface);
+  }
 }
 
 //==============================================================================

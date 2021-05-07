@@ -33,4 +33,4 @@ void upload( const QDomElement &_element, const LIApplication& _app);
 QSharedPointer<LIJScriptService> getScript(const QString& _scriptId);
 }
 
-#endif /* LCXMLWINDOWS_H_ */
+#endif /* UPLOADJSCRIPT_H_ */
