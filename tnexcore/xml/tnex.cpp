@@ -463,7 +463,7 @@ static void addWindows(const QDomElement& _rootElement)
     QDomElement el = node.toElement();
 
     if(el.isNull()) continue;
-    LCXmlWindows::instance().buildWindow(el, __slAppInterface);
+    LCXmlWindows::instance().buildKeyboard(el, __slAppInterface);
   }
 }
 
