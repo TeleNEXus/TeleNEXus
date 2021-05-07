@@ -21,16 +21,17 @@
 #ifndef LIKEYBOARD_H_ 
 #define LIKEYBOARD_H_
 
-#include <QSharedPointer>
+#include "LIWindow.h"
 #include "LIRemoteDataSource.h"
+#include <QWeakPointer>
 
-class LIKeyboard
+class LIKeyboard : public LIWindow
 {
 public:
     LIKeyboard(){}
     virtual ~LIKeyboard(){}
-    virtual QSharedPointer<LIRemoteDataSource> getStreamSource() = 0;
-    virtual QString getStreamName() = 0;
+    virtual QWeakPointer<LIRemoteDataSource> getStreamSource()const = 0;
+    virtual QString getStreamName()const = 0;
 };
 
 #endif // LIKEYBOARD_H_
