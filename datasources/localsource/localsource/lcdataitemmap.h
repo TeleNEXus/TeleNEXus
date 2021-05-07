@@ -106,6 +106,7 @@ public:
   void addDataItem(const QString& _id, const QByteArray& _data);
   void addDataItem(const QString& _id, const QBitArray& _data);
   void addDataItem(const QString& _id, const QString& _data);
+  void addStreamItem(const QString& _id);
 
   void readData(QSharedPointer<LCQLocalDataReader> _sp_reader);
   void writeData(

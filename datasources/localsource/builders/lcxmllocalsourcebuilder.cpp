@@ -43,6 +43,7 @@ static const struct
   QString bits            = "bits";
   QString bytes           = "bytes";
   QString string          = "string";
+  QString stream          = "stream";
 }__slTags;
 
 static const struct
@@ -137,24 +138,27 @@ static void buildSource(
 //==============================================================================loadMap
 static void addItemBits(
     LCLocalDataSource& _source, 
-    const QDomElement& _item_element, 
-    const LIApplication& _app);
+    const QDomElement& _item_element);
 
 static void addItemBytes(
     LCLocalDataSource& _source, 
-    const QDomElement& _item_element, 
-    const LIApplication& _app);
+    const QDomElement& _item_element);
 
 static void addItemString(
     LCLocalDataSource& _source, 
-    const QDomElement& _item_element, 
-    const LIApplication& _app);
+    const QDomElement& _item_element);
+
+static void addItemStream(
+    LCLocalDataSource& _source, 
+    const QDomElement& _item_element);
+
 //------------------------------------------------------------------------------
 static void loadMap(
     LCLocalDataSource& _source, 
     const QDomElement& _map_element, 
     const LIApplication& _app)
 {
+  Q_UNUSED(_app);
   for(auto node =_map_element.firstChild();
      !node.isNull();
     node = node.nextSibling())
@@ -164,15 +168,19 @@ static void loadMap(
 
     if(el.tagName() == __slTags.bits)
     {
-      addItemBits(_source, el, _app);
+      addItemBits(_source, el);
     }
     else if(el.tagName() == __slTags.bytes)
     {
-      addItemBytes(_source, el, _app);
+      addItemBytes(_source, el);
     }
     else if(el.tagName() == __slTags.string)
     {
-      addItemString(_source, el, _app);
+      addItemString(_source, el);
+    }
+    else if(el.tagName() == __slTags.stream)
+    {
+      addItemStream(_source, el);
     }
   } 
 }
@@ -181,11 +189,9 @@ static void loadMap(
 //==============================================================================addItemBits
 static void addItemBits(
     LCLocalDataSource& _source, 
-    const QDomElement& _item_element, 
-    const LIApplication& _app)
+    const QDomElement& _item_element)
 {
 
-  Q_UNUSED(_app);
   qDebug() << "Local source builder: add item bits";
   
   QString attr_id= _item_element.attribute(__slAttributes.id);
@@ -418,10 +424,8 @@ public:
 //------------------------------------------------------------------------------
 static void addItemBytes(
     LCLocalDataSource& _source, 
-    const QDomElement& _item_element, 
-    const LIApplication& _app)
+    const QDomElement& _item_element)
 {
-  Q_UNUSED(_app);
 
   QString attr_id = _item_element.attribute(__slAttributes.id);
 
@@ -452,11 +456,21 @@ static void addItemBytes(
 //------------------------------------------------------------------------------
 static void addItemString(
     LCLocalDataSource& _source, 
-    const QDomElement& _item_element, 
-    const LIApplication& _app)
+    const QDomElement& _item_element)
 {
-  Q_UNUSED(_app);
   QString attr_id = _item_element.attribute(__slAttributes.id);
   if(attr_id.isNull()) return;
   _source.addStringItem(attr_id, _item_element.attribute(__slAttributes.defval));
 }
+
+//------------------------------------------------------------------------------
+static void addItemStream(
+    LCLocalDataSource& _source, 
+    const QDomElement& _item_element)
+{
+  QString attr_id = _item_element.attribute(__slAttributes.id);
+  if(attr_id.isNull()) return;
+  _source.addStreamItem(attr_id);
+}
+
+

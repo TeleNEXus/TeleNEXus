@@ -189,6 +189,14 @@ void LCDataItemMap::addDataItem(const QString& _id, const QString& _data)
 }
 
 //------------------------------------------------------------------------------
+void LCDataItemMap::addStreamItem(const QString& _id)
+{
+  auto item = 
+    QSharedPointer<CDataItemBase>(new CDataItemStream());
+  mDataMap.insert(_id, item);
+}
+
+//------------------------------------------------------------------------------
 void LCDataItemMap::readData(QSharedPointer<LCQLocalDataReader> _sp_reader)
 {
   auto it = mDataMap.find(_sp_reader->getDataName());
