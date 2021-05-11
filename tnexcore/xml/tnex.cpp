@@ -33,6 +33,7 @@
 #include "lcxmlformatterfactory.h"
 #include "uploaddataformatters.h"
 #include "uploadjscripts.h"
+#include "uploadkeyboards.h"
 
 #include <QDebug>
 #include <QApplication>
@@ -77,6 +78,7 @@ static void addFormatters(const QDomElement& _rootElement);
 static void addLayoutsBuilders(const QDomElement& _rootElement);
 static void addWidgetsBuilders(const QDomElement& _rootElement);
 static void addWindows(const QDomElement& _rootElement);
+static void addKeyboards(const QDomElement& _rootElement);
 static void addScripts(const QDomElement& _rootElement);
 
 //==============================================================================CApplicationInterface
@@ -264,6 +266,8 @@ int tnex::exec(int argc, char *argv[])
     //----------------------------------------------------
     addWindows(rootElement);
     //----------------------------------------------------
+    addKeyboards(rootElement);
+    //----------------------------------------------------
     addScripts(rootElement);
 
 
@@ -450,7 +454,11 @@ static void addWindows(const QDomElement& _rootElement)
     if(el.isNull()) continue;
     LCXmlWindows::instance().buildWindow(el, __slAppInterface);
   }
-  //keyboards
+}
+
+//==============================================================================
+static void addKeyboards(const QDomElement& _rootElement)
+{
   for(auto node = 
       _rootElement.firstChildElement(
         LCXmlCommon::mBaseTags.keyboard); 
@@ -461,12 +469,10 @@ static void addWindows(const QDomElement& _rootElement)
         LCXmlCommon::mBaseTags.keyboard))
   {
     QDomElement el = node.toElement();
-
     if(el.isNull()) continue;
-    LCXmlWindows::instance().buildKeyboard(el, __slAppInterface);
+    uploadkeyboards::upload(el,__slAppInterface);
   }
 }
-
 //==============================================================================
 static void addScripts(const QDomElement& _rootElement)
 {

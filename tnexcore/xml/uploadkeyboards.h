@@ -18,21 +18,20 @@
  * You should have received a copy of the GNU General Public License
  * along with TeleNEXus.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef LIKEYBOARD_H_ 
-#define LIKEYBOARD_H_
+#ifndef UPLOADKEYBOARD_H_
+#define UPLOADKEYBOARD_H_
 
-#include "LIWindow.h"
-#include "LIRemoteDataSource.h"
 #include <QSharedPointer>
 
-class LIKeyboard : public LIWindow
-{
-public:
-    LIKeyboard(){}
-    virtual ~LIKeyboard(){}
-    virtual QSharedPointer<LIRemoteDataSource> getStreamSource()const = 0;
-    virtual QString getStreamName()const = 0;
-};
+class QDomElement;
+class LIApplication;
+class LIKeyboard;
 
-#endif // LIKEYBOARD_H_
+namespace uploadkeyboards 
+{
+void upload( const QDomElement &_element, const LIApplication& _app);
+QSharedPointer<LIKeyboard> getKeyboard(const QString& _scriptId);
+}
+
+#endif /* UPLOADKEYBOARD_H_ */
 
