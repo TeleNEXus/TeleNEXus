@@ -73,6 +73,7 @@ xml/lcxmlwindows.cpp \
 xml/lcxmlfonts.cpp \
 xml/uploadjscripts.cpp \
 xml/uploaddataformatters.cpp \
+xml/uploadkeyboards.cpp \
 main.cpp \
 
 # Default rules for deployment.
@@ -129,4 +130,6 @@ xml/lcxmlwidgetbuilders.h \
 xml/lcxmlwindows.h \
 xml/lcxmlfonts.h \
 xml/uploadjscripts.h \
+xml/uploadkeyboards.h \
+
 

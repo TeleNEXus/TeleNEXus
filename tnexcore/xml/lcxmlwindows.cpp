@@ -31,17 +31,6 @@
 #include <LIRemoteDataWriter.h>
 #include <QEvent>
 
-enum class EWindowType 
-{
-  NORMAL,
-  KEYBOARD
-};
-
-static const struct
-{
-  QString streamSource = "streamSource";
-  QString streamName = "streamName";
-}__slAttributes;
 
 //==============================================================================LCXmlWindow
 class LCXmlWindow : public LIWindow
@@ -68,90 +57,9 @@ public:
   }
 };
 
-//==============================================================================LCXmlKeyboard
-class LCXmlKeyboard : public LIKeyboard 
-{
-
-private:
-  class CEventFilter : public QObject
-  {
-  private:
-    LCXmlKeyboard* mpOwner;
-  public:
-    CEventFilter() = delete;
-    CEventFilter(LCXmlKeyboard* _owner) : 
-      QObject(_owner->mpWidget), mpOwner(_owner) {}
-
-    virtual bool eventFilter(QObject* _obj, QEvent* _event) override
-    {
-      Q_UNUSED(_obj);
-      if(_event->type() == QEvent::Type::Hide)
-      {
-        /* mpOwner->mDataWriter->writeRequest(QStringLiteral("\0").toUtf8()); */
-        mpOwner->mDataWriter->writeRequest(QStringLiteral("hellow for keyboard").toUtf8());
-      }
-      return false;
-    }
-  };
-
-  QSharedPointer<LIRemoteDataWriter> mDataWriter;
-  QWeakPointer<LIRemoteDataSource> mwpStreamSource;
-  QString mStreamName;
-  
-public:
-  static QMap<QString, QSharedPointer<LIKeyboard>> smKeyboardsMap;
-  QWidget* mpWidget;
-public:
-  LCXmlKeyboard() = delete;
-
-  LCXmlKeyboard(QWidget* _widget, const QDomElement& _element, const LIApplication& _app): 
-    mpWidget(_widget)
-  {
-    QString attr_source = _element.attribute(__slAttributes.streamSource);
-    qDebug() << "LCXmlKeyboard costructor 0";
-    if(attr_source.isNull()) return;
-    qDebug() << "LCXmlKeyboard costructor 1";
-    QString attr_stream_name = _element.attribute(__slAttributes.streamName);
-    if(attr_stream_name.isNull()) return;
-    qDebug() << "LCXmlKeyboard costructor 2";
-    auto source = _app.getDataSource(attr_source);
-    if(source.isNull())return;
-    qDebug() << "LCXmlKeyboard costructor 3";
-    mDataWriter = source->createWriter(attr_stream_name);
-    mpWidget->installEventFilter(new CEventFilter(this));
-  }
-
-  virtual ~LCXmlKeyboard(){}
-
-  //--------------------------------------------------------------------------
-  virtual void show() override
-  {
-    mpWidget->show();
-  }
-
-  //--------------------------------------------------------------------------
-  virtual void hide() override
-  {
-    mpWidget->close();
-  }
-
-  //--------------------------------------------------------------------------
-  virtual QWeakPointer<LIRemoteDataSource> getStreamSource() const override
-  {
-    return mwpStreamSource;
-  }
-
-  //--------------------------------------------------------------------------
-  virtual QString getStreamName() const override
-  {
-    return mStreamName;
-  }
-
-};
 
 //------------------------------------------------------------------------------
 QMap<QString, QSharedPointer<LIWindow>> LCXmlWindow::smWindowsMap;
-QMap<QString, QSharedPointer<LIKeyboard>> LCXmlKeyboard::smKeyboardsMap;
 
 //==============================================================================LCXmlWindows
 LCXmlWindows::LCXmlWindows()
@@ -182,54 +90,18 @@ QSharedPointer<LIWindow> LCXmlWindows::getWindow(const QString& _windowId)
 static QWidget* buildWidget(const QDomElement& _element, 
     const LIApplication& _app);
 
-static LIWindow* buildLocal(const QDomElement& _element, EWindowType _wt,
+static LCXmlWindow* buildLocal(const QDomElement& _element,
     const LIApplication& _app);
 
 static void initWindow(LCXmlWindow* _win, const QDomElement& _element);
-static void initKeyboard(LCXmlKeyboard* _win, const QDomElement& _element);
+
 //------------------------------------------------------------------------------
 void LCXmlWindows::buildWindow(
     const QDomElement &_element, 
     const LIApplication& _app)
 {
-  auto window = buildLocal(_element, EWindowType::NORMAL, _app); 
+  auto window = buildLocal(_element, _app); 
   initWindow(window, _element);
-}
-
-//------------------------------------------------------------------------------
-void LCXmlWindows::buildKeyboard(
-    const QDomElement &_element, 
-    const LIApplication& _app)
-{
-  auto window = buildLocal(_element, EWindowType::KEYBOARD, _app); 
-  initKeyboard(window, _element);
-}
-
-//------------------------------------------------------------------------------
-static void initKeyboard(LCXmlKeyboard* _win, const QDomElement& _element)
-{
-  if(_win == nullptr) return;
-
-  QString attr_id = _element.attribute(
-      LCXmlCommon::mCommonAttributes.id);
-  QString attr_title = _element.attribute(
-      LCXmlCommon::mCommonAttributes.title);
-  QString attr_show = _element.attribute(
-      LCXmlCommon::mCommonAttributes.show.tag);
-
-  if(!attr_id.isNull()) 
-  {
-    LCXmlKeyboard::smKeyboardsMap.insert(attr_id, QSharedPointer<LIKeyboard>(_win));
-    if(attr_title.isNull()) attr_title = attr_id;
-  }
-
-  if(!attr_title.isNull())
-  {
-    _win->mpWidget->setWindowTitle(attr_title);
-  }
-
-  if(!attr_show.isNull())
-    _win->mpWidget->show();
 }
 
 //------------------------------------------------------------------------------
@@ -263,7 +135,7 @@ static void initWindow(LCXmlWindow* _win, const QDomElement& _element)
 //------------------------------------------------------------------------------
 static void widgetAttr(QWidget* _widget, const QDomElement& _element);
 
-static LIWindow* buildLocal(const QDomElement& _element, EWindowType _wt,
+static LCXmlWindow* buildLocal(const QDomElement& _element,
     const LIApplication& _app)
 {
   QString attr_file =  _element.attribute(
@@ -273,7 +145,7 @@ static LIWindow* buildLocal(const QDomElement& _element, EWindowType _wt,
     QDomElement el = _app.getDomDocument(attr_file).documentElement();
     if(!el.isNull())
     {
-      return buildLocal(el, _wt, _app);
+      return buildLocal(el, _app);
     }
     return nullptr;
   }
@@ -285,20 +157,7 @@ static LIWindow* buildLocal(const QDomElement& _element, EWindowType _wt,
     return nullptr;
   }
 
-  LIWindow* window = nullptr;
-
-  qDebug() << "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++";
-  switch(_wt)
-  {
-  case EWindowType::NORMAL:
-  qDebug() << "Create window normal";
-    window = new LCXmlWindow(widget);
-    break;
-  case EWindowType::KEYBOARD:
-  qDebug() << "Create keyboard";
-    window = new LCXmlKeyboard(widget, _element, _app);
-    break;
-  }
+  LCXmlWindow*  window = new LCXmlWindow(widget);
 
   widgetAttr(widget, _element);
 
