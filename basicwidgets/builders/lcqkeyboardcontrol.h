@@ -18,26 +18,34 @@
  * You should have received a copy of the GNU General Public License
  * along with TeleNEXus.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef LIKEYBOARD_H_ 
-#define LIKEYBOARD_H_
+#ifndef LCQKEYBOARDCONTROL_H_
+#define LCQKEYBOARDCONTROL_H_
 
-#include "LIWindow.h"
-#include "LIRemoteDataSource.h"
-#include "LIDataFormatter.h"
-#include <QSharedPointer>
+#include <QObject>
 
-class LIKeyboard : public LIWindow
+class QWidget;
+class QDomElement;
+class LIApplication;
+
+class LCQKeyboardControl : public QObject
 {
+  Q_OBJECT;
+private:
+  void* mpLocal = nullptr;
+
 public:
-    LIKeyboard(){}
-    virtual ~LIKeyboard(){}
-    /* virtual QSharedPointer<LIRemoteDataSource> getStreamSource()const = 0; */
-    /* virtual QString getStreamName()const = 0; */
-    /* virtual QSharedPointer<LIDataFormatter> getDataFormatter() const = 0; */
-    virtual void connectWidget(QWidget* _widget) = 0;
-    virtual void disconnectWidget(QWidget* _widget) = 0;
-    virtual void setData(const QString& _data) = 0;
+  static bool build(const QDomElement& _element, 
+      QWidget* _widget, 
+      const LIApplication& _app);
+  virtual ~LCQKeyboardControl();
+private:
+  LCQKeyboardControl() = delete;
+  LCQKeyboardControl(void* _localData);
+
+protected:
+  virtual bool eventFilter(QObject* _opbj, QEvent* _event) override;
+
 };
 
-#endif // LIKEYBOARD_H_
+#endif /* LCQKEYBOARDCONTROL_H_ */
 

@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<KEYBOARD streamSource="localsource" streamName="test_stream"> 
+<KEYBOARD streamSource="localsource" streamName="test_stream"
+  dataSource="localsource" dataName="keyboard_data"
+  > 
   <widget> 
     <layout>
       <layoutVBox>
@@ -8,12 +10,15 @@
 
           <dataLineEdit source="localsource" data="test_stream" format="textstream"/>
           <dataLineEdit source="localsource" data="test_stream" format="textstream"/>
+
           <dataWriteButton text="write a">
             <data source="localsource" dataName="test_stream" format="string" value="a"/>
           </dataWriteButton>
+
           <dataWriteButton text="write b">
             <data source="localsource" dataName="test_stream" format="string" value="b"/>
           </dataWriteButton>
+
           <dataWriteButton text="write c">
             <data source="localsource" dataName="test_stream" format="string" value="c"/>
           </dataWriteButton>

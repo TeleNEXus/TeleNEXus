@@ -30,7 +30,7 @@ class LIKeyboard;
 namespace uploadkeyboards 
 {
 void upload( const QDomElement &_element, const LIApplication& _app);
-QSharedPointer<LIKeyboard> getKeyboard(const QString& _scriptId);
+QSharedPointer<LIKeyboard> getKeyboard(const QString& _keyboardId);
 }
 
 #endif /* UPLOADKEYBOARD_H_ */

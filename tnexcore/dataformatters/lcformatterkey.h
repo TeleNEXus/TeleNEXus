@@ -18,26 +18,22 @@
  * You should have received a copy of the GNU General Public License
  * along with TeleNEXus.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef LIKEYBOARD_H_ 
-#define LIKEYBOARD_H_
+#ifndef LCFORMATTERKEY_H_
+#define LCFORMATTERKEY_H_
 
-#include "LIWindow.h"
-#include "LIRemoteDataSource.h"
-#include "LIDataFormatter.h"
-#include <QSharedPointer>
+#include "lcformatterbase.h"
 
-class LIKeyboard : public LIWindow
+class LCFormatterKey : public LCFormatterBase
 {
 public:
-    LIKeyboard(){}
-    virtual ~LIKeyboard(){}
-    /* virtual QSharedPointer<LIRemoteDataSource> getStreamSource()const = 0; */
-    /* virtual QString getStreamName()const = 0; */
-    /* virtual QSharedPointer<LIDataFormatter> getDataFormatter() const = 0; */
-    virtual void connectWidget(QWidget* _widget) = 0;
-    virtual void disconnectWidget(QWidget* _widget) = 0;
-    virtual void setData(const QString& _data) = 0;
+  LCFormatterKey();
+  ~LCFormatterKey();
+  virtual QString     toString(const QByteArray& _data) override;
+  virtual QString     fitting(const QString& _str) override;
+  virtual QByteArray  toBytes(const QString& _str) override;
+  virtual QValidator* validator() override;
 };
 
-#endif // LIKEYBOARD_H_
+
+#endif // LCFORMATTERKEY_H_
 

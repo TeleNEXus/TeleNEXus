@@ -24,11 +24,17 @@
 #include "LIApplication.h" 
 #include "LIKeyboard.h"
 #include "LIXmlWidgetBuilder.h"
+#include "lcformattertextstream.h"
+#include "LIRemoteDataWriter.h"
+#include "lcformattertextstream.h"
 
+#include <QKeyEvent>
+#include <QApplication>
 #include <QMap>
 #include <QDomElement>
 #include <QWidget>
 #include <QDebug>
+#include <qnamespace.h>
 
 static const struct
 {
@@ -39,45 +45,71 @@ static const struct
 
 class LCKeyboard : public LIKeyboard
 {
+private:
+
+  QList<QWidget*> mWidgets;
+  QSharedPointer<LIRemoteDataReader> mspStreamReader;
+  QSharedPointer<LIRemoteDataWriter> mspDataWriter;
+
 public:
-  QWidget* mpWidget;
-  QSharedPointer<LIRemoteDataSource> mspStreamSource;
-  QString mStreamName;
+  QWidget* mpKeyboardWidget;
 public:
   LCKeyboard() = delete;
 
   LCKeyboard(QWidget* _widget, 
       QSharedPointer<LIRemoteDataSource> _streamSource, 
-      const QString& _streamName) : 
-    mpWidget(_widget),
-    mspStreamSource(_streamSource),
-    mStreamName(_streamName)
+      const QString& _streamName,
+      QSharedPointer<LIRemoteDataSource> _dataSource, 
+      const QString& _dataName
+      ) : 
+    mpKeyboardWidget(_widget)
   {
+    mspStreamReader = _streamSource->createReader(_streamName,
+        [this](QSharedPointer<QByteArray> _data, LERemoteDataStatus _status)
+        {
+          QKeyEvent ke(QEvent::Type::KeyPress, Qt::KeyboardModifier::NoModifier);
+          for(auto it = mWidgets.begin(); it != mWidgets.end(); it++)
+          {
+            QApplication::sendEvent
+            /* (*it)->emi */
+          }
+        });
+
+    mspDataWriter = _dataSource->createWriter(_dataName,
+        [](LERemoteDataStatus _status)
+        {
+          Q_UNUSED(_status);
+        });
   }
 
   ~LCKeyboard()
   {
-    mpWidget->deleteLater();
+    mpKeyboardWidget->deleteLater();
   }
 
-  virtual QSharedPointer<LIRemoteDataSource> getStreamSource()const override
+  virtual void connectWidget(QWidget* _widget) override
   {
-    return mspStreamSource;
+    mWidgets << _widget;
   }
 
-  virtual QString getStreamName()const override
+  virtual void disconnectWidget(QWidget* _widget) override
   {
-    return mStreamName;
+    mWidgets.removeAll(_widget);
+  }
+
+  virtual void setData(const QString& _data) override
+  {
+    mspDataWriter->writeRequest(_data.toUtf8());
   }
 
   virtual void show() override
   {
-    mpWidget->show();
+    mpKeyboardWidget->show();
   } 
 
   virtual void hide() override
   {
-    mpWidget->hide();
+    mpKeyboardWidget->hide();
   }
 };
 
