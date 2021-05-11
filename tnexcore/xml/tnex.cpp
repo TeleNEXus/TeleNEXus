@@ -129,6 +129,13 @@ public:
     return LCXmlWindows::instance().getWindow(_windowId);
   }
 
+  virtual QSharedPointer<LIKeyboard> getKeyboard(
+      const QString& _keyboardId) const override
+  {
+    return uploadkeyboards::getKeyboard(_keyboardId);
+    
+  }
+
   virtual QString getFontStyle(const QString& _fontId) const override
   {
     return LCXmlFonts::instance().getFontStyle(_fontId);

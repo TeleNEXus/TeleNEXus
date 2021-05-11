@@ -30,6 +30,7 @@ class LIXmlRemoteDataSourceBuilder;
 class LIXmlLayoutBuilder;
 class LIXmlWidgetBuilder;
 class LIWindow;
+class LIKeyboard;
 class QDomDocument;
 class LIDataFormatter;
 
@@ -78,6 +79,12 @@ public:
      */
     virtual QSharedPointer<LIWindow> 
         getWindow(const QString& _windowId) const = 0;
+
+    /*
+     * Возвращает указатель на окно с заданным именем. 
+     */
+    virtual QSharedPointer<LIKeyboard> 
+        getKeyboard(const QString& _keyboardId) const = 0;
     
     /*
      * Возвращает строку стиля шрифта. 
