@@ -49,57 +49,60 @@ const struct
 QWidget* LCXmlRemLineEditBuilder::buildLocal(
       QSharedPointer<SBuildData> _buildData)
 {
-  const QDomElement& element = _buildData->element;
-  const LIApplication& app = _buildData->application;
-  QLineEdit* ret = nullptr;
+  /* const QDomElement& element = _buildData->element; */
+  /* const LIApplication& app = _buildData->application; */
+  /* QLineEdit* ret = nullptr; */
 
-  QString data;
-  QString attr = element.attribute(__attrNames.source);
-  QSharedPointer<LIRemoteDataSource> source;
-  QSharedPointer<LIDataFormatter> format;
+  /* QString data; */
+  /* QString attr = element.attribute(__attrNames.source); */
+  /* QSharedPointer<LIRemoteDataSource> source; */
+  /* QSharedPointer<LIDataFormatter> format; */
 
-  if(attr.isNull())
-  {
-    goto LABEL_WRONG_EXIT;
-  }
-
-  source = app.getDataSource(attr);
-
-  if(source.isNull())
-  {
-    goto LABEL_WRONG_EXIT;
-  }
-
-  data = element.attribute(__attrNames.data);
-
-  if(data.isNull())
-  {
-    goto LABEL_WRONG_EXIT;
-  }
-
-  attr = element.attribute(LCBuildersCommon::mAttributes.dataformatter);
-  format = _buildData->application.getStdDataFormatter(attr);
+  /* auto ret_widget = */ 
+  /*   [_buildData](QLineEdit* _le = nullptr) */
+  /*   { */
+  /*     if(_le == nullptr) _le = new QLineEdit(_buildData->element.tagName()); */
+  /*     QString style = LCBuildersCommon::getBaseStyleSheet(_buildData->element, _buildData->application); */
+  /*     _le->setStyleSheet(style); */
+  /*     LCBuildersCommon::initPosition(_buildData->element, *_le); */
+  /*     return _le; */
+  /*   }; */
 
 
-  if(format.isNull())
-  {
-    attr = element.attribute(LCBuildersCommon::mAttributes.dataformatterid);
-    format = _buildData->application.getDataFormatter(attr);
-    if(format.isNull()) goto LABEL_WRONG_EXIT;
-  }
 
-  ret= new LCQRemLineEdit(data, data, source, format);
+  /* if(attr.isNull()) */
+  /* { */
+  /*   return ret_widget(); */
+  /* } */
 
-LABEL_WRONG_EXIT:
+  /* source = app.getDataSource(attr); */
 
-  if(ret == nullptr) ret = new QLineEdit(element.tagName());
+  /* if(source.isNull()) */
+  /* { */
+  /*   return ret_widget(); */
+  /* } */
 
-  QString style = LCBuildersCommon::getBaseStyleSheet(element, app);
-  
-  ret->setStyleSheet(style);
-  
-  LCBuildersCommon::initPosition(element, *ret);
-  return ret;
+  /* data = element.attribute(__attrNames.data); */
+
+  /* if(data.isNull()) */
+  /* { */
+  /*   return ret_widget(); */
+  /* } */
+
+  /* attr = element.attribute(LCBuildersCommon::mAttributes.dataformatter); */
+  /* format = _buildData->application.getStdDataFormatter(attr); */
+
+
+  /* if(format.isNull()) */
+  /* { */
+  /*   attr = element.attribute(LCBuildersCommon::mAttributes.dataformatterid); */
+  /*   format = _buildData->application.getDataFormatter(attr); */
+  /*   if(format.isNull()) return ret_widget(); */
+  /* } */
+
+  /* /1* return ret_widget(new LCQRemLineEdit(data, data, source, format)); *1/ */
+  /* return ret_widget(); */
+  return new QLineEdit("LineEdit");
 }
 
 
