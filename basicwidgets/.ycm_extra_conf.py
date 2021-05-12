@@ -70,6 +70,7 @@ flags = [
              '-I', '../common/interfaces',
              '-I', '../common/interfaces/remotedata',
              '-I', '../common/interfaces/xmlbuilders',
+             '-I', '../common/interfaces/keyboard',
              '-I', '../common',
              '-isystem',
              '/usr/include/x86_64-linux-gnu/qt5',

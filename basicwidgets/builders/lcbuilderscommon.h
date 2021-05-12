@@ -75,6 +75,7 @@ public:
     QString imageheight  = "imageHeight";
     QString imagescale   = "imageScale";
 
+    QString keyboard     = "keyboard";
 
     //Атрибута выравнивания.
     struct
