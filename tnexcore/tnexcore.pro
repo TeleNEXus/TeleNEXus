@@ -32,7 +32,8 @@ INCLUDEPATH +=                          \
 ./jscripts/jscriptservice               \
 ./jscripts/jscriptservice/jsappservice  \
 ./jscripts/jsformatter                  \
-./jscripts
+./jscripts                              \
+./keyboard
 
 
 SOURCES += \
@@ -75,6 +76,7 @@ xml/lcxmlfonts.cpp \
 xml/uploadjscripts.cpp \
 xml/uploaddataformatters.cpp \
 xml/uploadkeyboards.cpp \
+keyboard/lckeyboard.cpp \
 main.cpp \
 
 # Default rules for deployment.
@@ -134,5 +136,6 @@ xml/lcxmlwindows.h \
 xml/lcxmlfonts.h \
 xml/uploadjscripts.h \
 xml/uploadkeyboards.h \
+keyboard/lckeyboard.h \
 
 

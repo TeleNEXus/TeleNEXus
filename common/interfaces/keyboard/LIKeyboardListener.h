@@ -29,9 +29,7 @@ class LIKeyboardListener
 public:
   LIKeyboardListener(){};
   virtual ~LIKeyboardListener(){};
-  virtual void change(const QString& _data) = 0;
-  virtual void enter() = 0;
-
+  virtual bool connect(const QString& _currentData) = 0;
 };
 
 #endif /*LIKEYBOARDLISTENER_H_*/

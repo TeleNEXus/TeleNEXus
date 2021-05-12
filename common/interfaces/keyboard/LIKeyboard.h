@@ -21,27 +21,26 @@
 #ifndef LIKEYBOARD_H_ 
 #define LIKEYBOARD_H_
 
-#include "LIWindow.h"
-#include "LIRemoteDataSource.h"
-#include "LIDataFormatter.h"
 #include <QSharedPointer>
-#include <QMap>
+#include <functional>
 
-class LIKeyboard : public LIWindow
+class LIKeyboardListener;
+
+class LIKeyboard 
 {
 public:
-  enum class EControlKey
-  {
-    Enter,
-    Backspace
-  };
+
+  using LTChangeAction  = std::function<void(const QString&)>;
+  using LTControlAction = std::function<void(void)>;
+
 public:
     LIKeyboard(){}
     virtual ~LIKeyboard(){}
-    virtual QSharedPointer<LIRemoteDataSource> getStreamSource()const = 0;
-    virtual QString getStreamName()const = 0;
-    virtual QSharedPointer<LIDataFormatter> getDataFormatter() const = 0;
-    virtual const QMap<QString, EControlKey>& getControlKeyMap() const = 0;
+    virtual QSharedPointer<LIKeyboardListener> 
+      createListener( 
+          LTChangeAction  _change, 
+          LTControlAction _enter, 
+          LTControlAction _disconnect) = 0;
 };
 
 #endif // LIKEYBOARD_H_
