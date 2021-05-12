@@ -25,18 +25,23 @@
 #include "LIRemoteDataSource.h"
 #include "LIDataFormatter.h"
 #include <QSharedPointer>
+#include <QMap>
 
 class LIKeyboard : public LIWindow
 {
 public:
+  enum class EControlKey
+  {
+    Enter,
+    Backspace
+  };
+public:
     LIKeyboard(){}
     virtual ~LIKeyboard(){}
-    /* virtual QSharedPointer<LIRemoteDataSource> getStreamSource()const = 0; */
-    /* virtual QString getStreamName()const = 0; */
-    /* virtual QSharedPointer<LIDataFormatter> getDataFormatter() const = 0; */
-    virtual void connectWidget(QWidget* _widget) = 0;
-    virtual void disconnectWidget(QWidget* _widget) = 0;
-    virtual void setData(const QString& _data) = 0;
+    virtual QSharedPointer<LIRemoteDataSource> getStreamSource()const = 0;
+    virtual QString getStreamName()const = 0;
+    virtual QSharedPointer<LIDataFormatter> getDataFormatter() const = 0;
+    virtual const QMap<QString, EControlKey>& getControlKeyMap() const = 0;
 };
 
 #endif // LIKEYBOARD_H_

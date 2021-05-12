@@ -21,10 +21,11 @@ DEFINES += QT_DEPRECATED_WARNINGS
 # You can also select to disable deprecated APIs only up to a certain version of Qt.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
-INCLUDEPATH +=                                  \
+INCLUDEPATH +=                          \
 ../common/interfaces                    \
 ../common/interfaces/remotedata         \
 ../common/interfaces/xmlbuilders        \
+../common/interfaces/keyboard           \
 ../common/                              \
 ./xml                                   \
 ./dataformatters                        \
@@ -94,6 +95,8 @@ HEADERS += \
 ../common/interfaces/LIWindow.h \
 ../common/interfaces/LIDataFormatter.h \
 ../common/interfaces/LIJScriptService.h \
+../common/interfaces/keyboard/LIKeyboard.h \
+../common/interfaces/keyboard/LIKeyboardListener.h \
 dataformatters/lcformatterbase.h \
 dataformatters/lcformatterbitfield.h \
 dataformatters/lcformatterbits.h \

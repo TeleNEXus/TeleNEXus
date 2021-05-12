@@ -50,6 +50,7 @@ private:
   QList<QWidget*> mWidgets;
   QSharedPointer<LIRemoteDataReader> mspStreamReader;
   QSharedPointer<LIRemoteDataWriter> mspDataWriter;
+  QString mCurrentData;
 
 public:
   QWidget* mpKeyboardWidget;
@@ -67,12 +68,6 @@ public:
     mspStreamReader = _streamSource->createReader(_streamName,
         [this](QSharedPointer<QByteArray> _data, LERemoteDataStatus _status)
         {
-          QKeyEvent ke(QEvent::Type::KeyPress, Qt::KeyboardModifier::NoModifier);
-          for(auto it = mWidgets.begin(); it != mWidgets.end(); it++)
-          {
-            QApplication::sendEvent
-            /* (*it)->emi */
-          }
         });
 
     mspDataWriter = _dataSource->createWriter(_dataName,
@@ -85,21 +80,6 @@ public:
   ~LCKeyboard()
   {
     mpKeyboardWidget->deleteLater();
-  }
-
-  virtual void connectWidget(QWidget* _widget) override
-  {
-    mWidgets << _widget;
-  }
-
-  virtual void disconnectWidget(QWidget* _widget) override
-  {
-    mWidgets.removeAll(_widget);
-  }
-
-  virtual void setData(const QString& _data) override
-  {
-    mspDataWriter->writeRequest(_data.toUtf8());
   }
 
   virtual void show() override
