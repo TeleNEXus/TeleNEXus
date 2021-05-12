@@ -22,12 +22,16 @@
 #define LIWINDOW_H_
 
 #include <QSharedPointer>
+#include <functional>
 
 class LIApplication;
 
 class LIWindow
 {
 public:
+  using TAction = std::function<void(void)>;
+public:
+
     LIWindow(){}
     virtual ~LIWindow(){}
 
@@ -40,6 +44,16 @@ public:
      * Скрывает окно.
      */
     virtual void hide() = 0;
+
+    /*
+     * Добавляет действие при открытии окна.
+     */
+    virtual void addActionShow(TAction _action) = 0;
+
+    /*
+     * Добавляет действие при закрытии окна.
+     */
+    virtual void addActionHide(TAction _action) = 0;
 };
 
 #endif // LIWINDOW_H_

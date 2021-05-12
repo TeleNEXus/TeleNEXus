@@ -26,6 +26,7 @@
 
 #include <QDomElement>
 #include <QMap>
+#include <QList>
 #include <QWidget>
 #include <QDebug>
 #include <LIRemoteDataWriter.h>
@@ -35,15 +36,69 @@
 //==============================================================================LCXmlWindow
 class LCXmlWindow : public LIWindow
 {
+private:
+  using TActionList = QList<TAction>;
+  TActionList mShowActions;
+  TActionList mHideActions;
+
+  class CQEventFilter : public QObject
+  {
+  private:
+    LCXmlWindow& mOwner;
+  public:
+    CQEventFilter() = delete;
+
+    CQEventFilter(LCXmlWindow& _owner) : QObject(nullptr), mOwner(_owner)
+    {
+    }
+
+    virtual bool eventFilter(QObject* _obj, QEvent* _event) override
+    {
+      Q_UNUSED(_obj);
+
+      auto action_process = 
+        [](const TActionList& _al)
+        {
+          for(auto it = _al.begin(); it != _al.end(); it++)
+          {
+            (*it)();
+          }
+        };
+
+      switch(_event->type())
+      {
+      case QEvent::Type::Show:
+        action_process(mOwner.mShowActions);
+        break;
+
+      case QEvent::Type::Hide:
+        action_process(mOwner.mHideActions);
+        break;
+
+      default:
+        break;
+      }
+
+      return false;
+    }
+  };
+
+
 public:
   static QMap<QString, QSharedPointer<LIWindow>> smWindowsMap;
   QWidget* mpWidget;
+private:
+  CQEventFilter mEventFilter;
 public:
   LCXmlWindow() = delete;
-  LCXmlWindow(QWidget* _widget): mpWidget(_widget){}
+  LCXmlWindow(QWidget* _widget): mpWidget(_widget), mEventFilter(*this)
+  {
+    mpWidget->installEventFilter(&mEventFilter);
+  }
   virtual ~LCXmlWindow()
   {
   }
+
   //--------------------------------------------------------------------------
   virtual void show() override
   {
@@ -55,6 +110,19 @@ public:
   {
     mpWidget->close();
   }
+
+  //--------------------------------------------------------------------------
+  virtual void addActionShow(TAction _action) override
+  {
+    mShowActions << _action;
+  }
+
+  //--------------------------------------------------------------------------
+  virtual void addActionHide(TAction _action) override
+  {
+    mHideActions << _action;
+  }
+
 };
 
 

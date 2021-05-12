@@ -21,31 +21,14 @@
 #ifndef LCQKEYBOARDCONTROL_H_
 #define LCQKEYBOARDCONTROL_H_
 
-#include <QObject>
-
 class QWidget;
 class QDomElement;
 class LIApplication;
 
-class LCQKeyboardControl : public QObject
-{
-  Q_OBJECT;
-private:
-  void* mpLocal = nullptr;
-
-public:
-  static bool build(const QDomElement& _element, 
-      QWidget* _widget, 
-      const LIApplication& _app);
-  virtual ~LCQKeyboardControl();
-private:
-  LCQKeyboardControl() = delete;
-  LCQKeyboardControl(void* _localData);
-
-protected:
-  virtual bool eventFilter(QObject* _opbj, QEvent* _event) override;
-
-};
+extern bool connectKeyboard(
+    QWidget* _widget, 
+    const QDomElement& _element,  
+    const LIApplication& _app);
 
 #endif /* LCQKEYBOARDCONTROL_H_ */
 
