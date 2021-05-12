@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
+<WINDOW height="450" posx="100" posy="100">
 <widget>
   <layout>
     <layoutVBox>
@@ -26,3 +27,4 @@
     </layoutVBox>
   </layout>
 </widget>
+</WINDOW>

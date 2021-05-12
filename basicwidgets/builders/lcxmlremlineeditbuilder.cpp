@@ -49,60 +49,57 @@ const struct
 QWidget* LCXmlRemLineEditBuilder::buildLocal(
       QSharedPointer<SBuildData> _buildData)
 {
-  /* const QDomElement& element = _buildData->element; */
-  /* const LIApplication& app = _buildData->application; */
-  /* QLineEdit* ret = nullptr; */
+  const QDomElement& element = _buildData->element;
+  const LIApplication& app = _buildData->application;
 
-  /* QString data; */
-  /* QString attr = element.attribute(__attrNames.source); */
-  /* QSharedPointer<LIRemoteDataSource> source; */
-  /* QSharedPointer<LIDataFormatter> format; */
+  QString data;
+  QString attr = element.attribute(__attrNames.source);
+  QSharedPointer<LIRemoteDataSource> source;
+  QSharedPointer<LIDataFormatter> format;
 
-  /* auto ret_widget = */ 
-  /*   [_buildData](QLineEdit* _le = nullptr) */
-  /*   { */
-  /*     if(_le == nullptr) _le = new QLineEdit(_buildData->element.tagName()); */
-  /*     QString style = LCBuildersCommon::getBaseStyleSheet(_buildData->element, _buildData->application); */
-  /*     _le->setStyleSheet(style); */
-  /*     LCBuildersCommon::initPosition(_buildData->element, *_le); */
-  /*     return _le; */
-  /*   }; */
-
+  auto ret_widget = 
+    [_buildData](QLineEdit* _le = nullptr)
+    {
+      if(_le == nullptr) _le = new QLineEdit(_buildData->element.tagName());
+      QString style = LCBuildersCommon::getBaseStyleSheet(_buildData->element, _buildData->application);
+      _le->setStyleSheet(style);
+      LCBuildersCommon::initPosition(_buildData->element, *_le);
+      return _le;
+    };
 
 
-  /* if(attr.isNull()) */
-  /* { */
-  /*   return ret_widget(); */
-  /* } */
 
-  /* source = app.getDataSource(attr); */
+  if(attr.isNull())
+  {
+    return ret_widget();
+  }
 
-  /* if(source.isNull()) */
-  /* { */
-  /*   return ret_widget(); */
-  /* } */
+  source = app.getDataSource(attr);
 
-  /* data = element.attribute(__attrNames.data); */
+  if(source.isNull())
+  {
+    return ret_widget();
+  }
 
-  /* if(data.isNull()) */
-  /* { */
-  /*   return ret_widget(); */
-  /* } */
+  data = element.attribute(__attrNames.data);
 
-  /* attr = element.attribute(LCBuildersCommon::mAttributes.dataformatter); */
-  /* format = _buildData->application.getStdDataFormatter(attr); */
+  if(data.isNull())
+  {
+    return ret_widget();
+  }
+
+  attr = element.attribute(LCBuildersCommon::mAttributes.dataformatter);
+  format = _buildData->application.getStdDataFormatter(attr);
 
 
-  /* if(format.isNull()) */
-  /* { */
-  /*   attr = element.attribute(LCBuildersCommon::mAttributes.dataformatterid); */
-  /*   format = _buildData->application.getDataFormatter(attr); */
-  /*   if(format.isNull()) return ret_widget(); */
-  /* } */
+  if(format.isNull())
+  {
+    attr = element.attribute(LCBuildersCommon::mAttributes.dataformatterid);
+    format = _buildData->application.getDataFormatter(attr);
+    if(format.isNull()) return ret_widget();
+  }
 
-  /* /1* return ret_widget(new LCQRemLineEdit(data, data, source, format)); *1/ */
-  /* return ret_widget(); */
-  return new QLineEdit("LineEdit");
+  return ret_widget(new LCQRemLineEdit(data, data, source, format));
 }
 
 

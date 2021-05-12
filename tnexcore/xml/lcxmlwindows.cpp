@@ -149,7 +149,12 @@ LCXmlWindows& LCXmlWindows::instance()
 //------------------------------------------------------------------------------
 QSharedPointer<LIWindow> LCXmlWindows::getWindow(const QString& _windowId)
 {
-  return LCXmlWindow::smWindowsMap.find(_windowId).value();
+  auto it = LCXmlWindow::smWindowsMap.find(_windowId); 
+  if(it == LCXmlWindow::smWindowsMap.end()) 
+  {
+    return nullptr;
+  }
+  return it.value();
 }
 
 //------------------------------------------------------------------------------

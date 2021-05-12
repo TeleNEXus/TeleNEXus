@@ -66,8 +66,14 @@ void upload( const QDomElement &_element, const LIApplication& _app)
 
   QString attr_window = _element.attribute(__slAttribubes.window);
   if(attr_window.isNull()) return;
+
+
+
   auto window = _app.getWindow(attr_window);
   if(window.isNull()) return;
+
+
+
 
   auto keyboard = LCKeyboard::create(
       window, 
