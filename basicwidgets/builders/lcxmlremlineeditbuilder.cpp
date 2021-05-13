@@ -26,6 +26,230 @@
 #include "LIKeyboardListener.h"
 #include <QDomElement>
 #include <QDebug>
+#include <QKeyEvent>
+#include <QMap>
+#include <functional>
+#include <qnamespace.h>
+
+//==============================================================================
+class CQControlBase : public QObject
+{
+protected:
+  QSharedPointer<LIRemoteDataReader>  mDataReader;
+  QSharedPointer<LIRemoteDataWriter>  mDataWriter;
+  QSharedPointer<LIDataFormatter>     mFormatter;
+  QLineEdit* mpLineEdit;
+  bool mFlagUpdateOn = false;
+
+  QMap<QEvent::Type, std::function<bool(QEvent*)>> mEventsMap;
+
+
+  CQControlBase() = delete;
+
+  CQControlBase(
+    const QString& _dataNameRead,
+    const QString& _dataNameWrite,
+    QSharedPointer<LIRemoteDataSource> _dataSource,
+    QSharedPointer<LIDataFormatter> _formatter,
+    QLineEdit* _lineEdit) :  
+    QObject(_lineEdit), mFormatter(_formatter), mpLineEdit(_lineEdit)
+  {
+    QString str = "Undef";
+    mpLineEdit->setText(str);
+    mpLineEdit->setValidator(_formatter->validator());
+    mpLineEdit->setEnabled(false);
+
+    mDataReader = _dataSource->createReader(_dataNameRead,
+        [this, str](QSharedPointer<QByteArray> _data, LERemoteDataStatus _status)
+        {
+          if(mFlagUpdateOn)
+          {
+            if(_status != LERemoteDataStatus::DS_OK)
+            {
+              mpLineEdit->setText(str);
+              mpLineEdit->setEnabled(false);
+              return;
+            }
+            mpLineEdit->setEnabled(true);
+            mpLineEdit->setText(mFormatter.data()->toString(*_data));
+          }
+        });
+    mDataWriter = _dataSource->createWriter(_dataNameWrite);
+
+
+    //init events map
+    mEventsMap.insert(QEvent::Type::Show,
+        [this](QEvent* _event)
+        {
+          Q_UNUSED(_event);
+          setActive(true);
+          return false;
+        });
+
+    mEventsMap.insert(QEvent::Type::Hide,
+        [this](QEvent* _event)
+        {
+          Q_UNUSED(_event);
+          setActive(false);
+          return false;
+        });
+
+    mEventsMap.insert(QEvent::Type::KeyPress,
+        [this](QEvent* _event)
+        {
+          QKeyEvent* ke = dynamic_cast<QKeyEvent*>(_event);
+
+          if(ke == nullptr) return false;
+
+          switch(ke->key())
+          {
+          case Qt::Key::Key_Enter:
+          case Qt::Key::Key_Return:
+            mDataWriter->writeRequest(mFormatter->toBytes(mpLineEdit->text()));
+            mDataReader->readRequest();
+            mFlagUpdateOn = true;
+          break;
+
+          case Qt::Key::Key_Escape:
+            mpLineEdit->clearFocus();
+
+          default:
+            mFlagUpdateOn = false;
+            break;
+          }
+          return false;
+        });
+
+    mEventsMap.insert(QEvent::Type::FocusIn,
+        [this](QEvent* _event)
+        {
+          Q_UNUSED(_event);
+          mFlagUpdateOn = false;
+          return false;
+        });
+
+    mEventsMap.insert(QEvent::Type::FocusOut,
+        [this](QEvent* _event)
+        {
+          Q_UNUSED(_event);
+          mFlagUpdateOn = true;
+          mDataReader->readRequest();
+          return false;
+        });
+  }
+
+  void  setActive(bool _flag)
+  {
+    if(_flag)
+    {
+      mDataReader->connectToSource();
+      mFlagUpdateOn = true;
+    }else
+    {
+      mFlagUpdateOn = false;
+      mpLineEdit->setEnabled(false);
+      mDataReader->disconnectFromSource();
+    }
+  }
+
+public:
+
+  virtual bool eventFilter(QObject* _obj, QEvent* _event) override
+  {
+    Q_UNUSED(_obj);
+    auto it = mEventsMap.find(_event->type());
+    if(it == mEventsMap.end()) return false;
+    return it.value()(_event);
+  }
+
+  static void install(
+    const QString& _dataNameRead,
+    const QString& _dataNameWrite,
+    QSharedPointer<LIRemoteDataSource> _dataSource,
+    QSharedPointer<LIDataFormatter> _formatter,
+    QLineEdit* _lineEdit)
+  {
+    auto ctrl = new CQControlBase( 
+        _dataNameRead, _dataNameWrite, _dataSource, _formatter, _lineEdit);
+    _lineEdit->installEventFilter(ctrl);
+  }
+
+};
+
+//==============================================================================
+class CQControlKeyboard : public CQControlBase
+{
+private:
+  QSharedPointer<LIKeyboardListener> mKeyboardListener;
+  CQControlKeyboard() = delete;
+  CQControlKeyboard(
+    const QString& _dataNameRead,
+    const QString& _dataNameWrite,
+    QSharedPointer<LIRemoteDataSource> _dataSource,
+    QSharedPointer<LIDataFormatter> _formatter,
+    QLineEdit* _lineEdit,
+    QSharedPointer<LIKeyboard> _keyboard) :  
+    CQControlBase(
+        _dataNameRead, _dataNameWrite, _dataSource, _formatter, _lineEdit)
+  {
+
+    //-----------------------------keyboard
+
+    auto action_change =
+      [_lineEdit](const QString& _str)
+      {
+        _lineEdit->setText(_str);
+      };
+
+    auto action_enter =
+      [_lineEdit,this](const QString& _str)
+      {
+        mDataWriter->writeRequest(mFormatter->toBytes(_str));
+      };
+
+    auto action_disconnect =
+      [this](const QString& _str)
+      {
+        setActive(true);
+      };
+
+
+    mKeyboardListener = _keyboard->createListener(action_change, action_enter, action_disconnect);
+
+
+
+    mEventsMap.insert(QEvent::Type::FocusIn,
+        [this](QEvent* _event)
+        {
+          Q_UNUSED(_event);
+          mpLineEdit->clearFocus();
+          return true;
+        });
+
+    mEventsMap.insert(QEvent::Type::MouseButtonPress,
+        [this](QEvent* _event)
+        {
+          Q_UNUSED(_event);
+          mKeyboardListener->connect(mpLineEdit->text());
+          setActive(false);
+          return true;
+        });
+  }
+public:
+  static void install(
+    const QString& _dataNameRead,
+    const QString& _dataNameWrite,
+    QSharedPointer<LIRemoteDataSource> _dataSource,
+    QSharedPointer<LIDataFormatter> _formatter,
+    QLineEdit* _lineEdit,
+    QSharedPointer<LIKeyboard> _keyboard)
+  {
+    auto ctrl = new CQControlKeyboard( 
+        _dataNameRead, _dataNameWrite, _dataSource, _formatter, _lineEdit, _keyboard);
+    _lineEdit->installEventFilter(ctrl);
+  }
+};
+
 
 //==============================================================================
 class CQEventFilter : public QObject
@@ -37,20 +261,31 @@ private:
 public:
   virtual bool eventFilter(QObject* _obj, QEvent* _event) override
   {
-    if(_event->type() == QEvent::Type::MouseButtonPress)
+    bool ret = false;
+    auto line_edit = dynamic_cast<QLineEdit*>(_obj);
+    if(line_edit == nullptr) return ret;
+
+    switch(_event->type())
     {
-      auto line_edit = dynamic_cast<QLineEdit*>(_obj);
-      if(line_edit == nullptr) return false;
-      mListener->connect(line_edit->text());
-      qDebug() << "Remote Line Edit mouse button press";
+    case QEvent::Type::MouseButtonPress:
+        mListener->connect(line_edit->text());
+        ret = true;
+      break;
+
+    case QEvent::Type::FocusIn:
+      line_edit->clearFocus();
+      ret = true;
+      break;
+
+    default:
+      break;
     }
-    return false;
+    return ret;
   }
 
   static void install(
       QSharedPointer<LIKeyboardListener> _listener, QLineEdit* _lineEdit)
   {
-    qDebug() << "+++++++++++++++++++RemLineEdit install event filter";
     auto filter = new CQEventFilter();
     filter->mListener = _listener;
     filter->setParent(_lineEdit);
@@ -64,8 +299,8 @@ const struct
   QString data    = "data";
   QString source  = "source";
   QString keyboard = "keyboard";
-  /* QString format  = "format"; */
 } __slAttributes;
+
 //==============================================================================
 LCXmlRemLineEditBuilder::LCXmlRemLineEditBuilder()
 {
@@ -83,6 +318,9 @@ LCXmlRemLineEditBuilder::~LCXmlRemLineEditBuilder()
 QWidget* LCXmlRemLineEditBuilder::buildLocal(
       QSharedPointer<SBuildData> _buildData)
 {
+
+  QLineEdit* line_edit = new QLineEdit(_buildData->element.tagName());
+
   const QDomElement& element = _buildData->element;
   const LIApplication& app = _buildData->application;
 
@@ -92,50 +330,39 @@ QWidget* LCXmlRemLineEditBuilder::buildLocal(
   QSharedPointer<LIDataFormatter> format;
 
   auto ret_widget = 
-    [_buildData](QLineEdit* _le = nullptr)
+    [_buildData, line_edit]()
     {
-      qDebug() << "+++++++++++++++++++ Build RemLineEdit 0";
-      if(_le == nullptr) _le = new QLineEdit(_buildData->element.tagName());
-      qDebug() << "+++++++++++++++++++ Build RemLineEdit 1";
       QString style = LCBuildersCommon::getBaseStyleSheet(_buildData->element, _buildData->application);
-      _le->setStyleSheet(style);
-      LCBuildersCommon::initPosition(_buildData->element, *_le);
+      line_edit->setStyleSheet(style);
+      LCBuildersCommon::initPosition(_buildData->element, *line_edit);
 
-      //-----------------------------keyboard
-      QString keyboard_id = _buildData->element.attribute(__slAttributes.keyboard);
-      if(keyboard_id.isNull()) return _le;
-      qDebug() << "+++++++++++++++++++ Build RemLineEdit 2 keyboard id = "<< keyboard_id;
-      auto keyboard = _buildData->application.getKeyboard(keyboard_id);
-      if(keyboard.isNull()) return _le;
+      /* //-----------------------------keyboard */
+      /* QString keyboard_id = _buildData->element.attribute(__slAttributes.keyboard); */
+      /* if(keyboard_id.isNull()) return _le; */
+      /* auto keyboard = _buildData->application.getKeyboard(keyboard_id); */
+      /* if(keyboard.isNull()) return _le; */
 
-      qDebug() << "+++++++++++++++++++ Build RemLineEdit 3";
+      /* auto action_change = */
+      /*   [_le](const QString& _str) */
+      /*   { */
+      /*   }; */
 
+      /* auto action_enter = */
+      /*   [_le](const QString& _str) */
+      /*   { */
+      /*     _le->setText(_str); */
+      /*   }; */
 
-      /* QObject::connect(_le, QLineEdit:: */
+      /* auto action_disconnect = */
+      /*   [](const QString& _str) */
+      /*   { */
+      /*   }; */
 
+      /* auto listener = keyboard->createListener(action_change, action_enter, action_disconnect); */
 
+      /* CQEventFilter::install(listener, _le); */
 
-
-
-      auto action_change =
-        [_le](const QString& _str)
-        {
-        };
-
-      auto action_enter =
-        [_le](const QString& _str)
-        {
-          _le->setText(_str);
-        };
-
-      auto action_disconnect =
-        [](const QString& _str)
-        {
-        };
-
-      auto listener = keyboard->createListener(action_change, action_enter, action_disconnect);
-      CQEventFilter::install(listener, _le);
-      return _le;
+      return line_edit;
     };
 
   if(attr.isNull())
@@ -168,7 +395,26 @@ QWidget* LCXmlRemLineEditBuilder::buildLocal(
     if(format.isNull()) return ret_widget();
   }
 
-  return ret_widget(new LCQRemLineEdit(data, data, source, format));
+  auto get_keyboard = 
+    [&_buildData]()
+  {
+    QString keyboard_id = _buildData->element.attribute(__slAttributes.keyboard);
+    if(keyboard_id.isNull()) return QSharedPointer<LIKeyboard>();
+    return  _buildData->application.getKeyboard(keyboard_id);
+  };
+
+  auto keyboard = get_keyboard();
+
+  if(keyboard.isNull())
+  {
+    CQControlBase::install(data,data,source,format,line_edit);
+  }
+  else
+  {
+    CQControlKeyboard::install(data,data,source,format,line_edit,keyboard);
+  }
+
+  return ret_widget();
 }
 
 

@@ -243,14 +243,6 @@ void LCDataItemMap::connectReader(QSharedPointer<LCQLocalDataReader> _sp_reader)
     return;
   }
   it.value()->connectReader(_sp_reader);
-
-
-//todo:
-
-  /* it.value()->notify(_sp_reader); */
-
-
-
 }
 
 //------------------------------------------------------------------------------

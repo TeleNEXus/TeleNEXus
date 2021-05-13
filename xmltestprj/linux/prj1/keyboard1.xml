@@ -25,6 +25,18 @@
             <data source="localsource" dataName="test_stream" format="string" value="c"/>
           </dataWriteButton>
 
+          <dataWriteButton text="write 0">
+            <data source="localsource" dataName="test_stream" format="string" value="0"/>
+          </dataWriteButton>
+
+          <dataWriteButton text="write 1">
+            <data source="localsource" dataName="test_stream" format="string" value="1"/>
+          </dataWriteButton>
+
+          <dataWriteButton text="write 2">
+            <data source="localsource" dataName="test_stream" format="string" value="2"/>
+          </dataWriteButton>
+
           <dataWriteButton text="write [Enter]">
             <data source="localsource" dataName="test_stream" format="string" value="[Enter]"/>
           </dataWriteButton>
