@@ -47,7 +47,7 @@
 
     <WINDOW id="win0" title="WINDOW 0" file="window.xml" show="yes"/>
 
-    <WINDOW id="keyboard 1" title="keyboard 1" file="testkeyboard.xml"/>
+    <WINDOW id="keyboard 1" title="keyboard 1" file="keyboard1.xml"/>
       
     <!-- <KEYBOARD id="keyboard" title="keyboard" file="keyboard1.xml"/> -->
     <!-- <WINDOW id="win1" title="WINDOW 1" file="window.xml" show="yes"/> -->

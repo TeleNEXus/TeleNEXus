@@ -271,9 +271,9 @@ int tnex::exec(int argc, char *argv[])
     //----------------------------------------------------
     addWidgetsBuilders(rootElement);
     //----------------------------------------------------
-    addWindows(rootElement);
-    //----------------------------------------------------
     addKeyboards(rootElement);
+    //----------------------------------------------------
+    addWindows(rootElement);
     //----------------------------------------------------
     addScripts(rootElement);
 

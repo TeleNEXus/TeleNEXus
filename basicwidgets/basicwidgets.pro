@@ -25,6 +25,7 @@ INCLUDEPATH +=                          \
     ../../common                        \
     ../../common/interfaces/xmlbuilders \
     ../../common/interfaces/remotedata  \
+    ../../common/interfaces/keyboard    \
     ../../common/interfaces             \
     ./common                            \
     ./builders                          \
@@ -67,6 +68,8 @@ HEADERS += \
     ../../common/interfaces/remotedata/LIRemoteDataWriter.h \
     ../../common/interfaces/xmlbuilders/LIXmlLayoutBuilder.h \
     ../../common/interfaces/xmlbuilders/LIXmlWidgetBuilder.h \
+    ../../common/interfaces/keyboard/LIKeyboard.h \
+    ../../common/interfaces/keyboard/LIKeyboardListener.h \
     ../../common/lqextendevent.h \
     ../../common/lqvalidatoru32.h \
     basicwidgets_global.h \

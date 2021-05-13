@@ -8,8 +8,10 @@
       <layoutVBox>
         <widgets>
 
-          <dataLineEdit source="localsource" data="test_stream" format="textstream"/>
-          <dataLineEdit source="localsource" data="test_stream" format="textstream"/>
+          <!-- <dataLineEdit source="localsource" data="test_stream" format="textstream"/> -->
+          <!-- <dataLineEdit source="localsource" data="test_stream" format="textstream"/> -->
+
+          <dataLabel      source="localsource"  data="keyboard_data" format="string"/>
 
           <dataWriteButton text="write a">
             <data source="localsource" dataName="test_stream" format="string" value="a"/>
@@ -23,7 +25,16 @@
             <data source="localsource" dataName="test_stream" format="string" value="c"/>
           </dataWriteButton>
 
+          <dataWriteButton text="write [Enter]">
+            <data source="localsource" dataName="test_stream" format="string" value="[Enter]"/>
+          </dataWriteButton>
+
+          <dataWriteButton text="write [Backspace]">
+            <data source="localsource" dataName="test_stream" format="string" value="[Backspace]"/>
+          </dataWriteButton>
+
         </widgets>
+        <stretch/>
       </layoutVBox>
     </layout>
   </widget> 

@@ -24,7 +24,6 @@
     <!-- <widget file="testcombolabel.xml"/> -->
     <!-- <widget file="testmnemowidget.xml"/> -->
     <widget file="teststream.xml"/>
-    <widget file="testkeyboard.xml"/>
 </WINDOW>
 
 <!--<!-1-widget title="TITLE CHECK">-->
