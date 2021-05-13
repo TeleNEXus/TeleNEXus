@@ -30,17 +30,16 @@ class LIKeyboard
 {
 public:
 
-  using LTChangeAction  = std::function<void(const QString&)>;
-  using LTControlAction = std::function<void(void)>;
+  using LTAction  = std::function<void(const QString&)>;
 
 public:
     LIKeyboard(){}
     virtual ~LIKeyboard(){}
     virtual QSharedPointer<LIKeyboardListener> 
       createListener( 
-          LTChangeAction  _change, 
-          LTControlAction _enter, 
-          LTControlAction _disconnect) = 0;
+          LTAction  _change, 
+          LTAction _enter, 
+          LTAction _disconnect) = 0;
 };
 
 #endif // LIKEYBOARD_H_

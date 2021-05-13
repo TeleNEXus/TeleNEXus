@@ -44,14 +44,21 @@ private:
   public:
     CDataItemBase(){}
 
-    void connectReader(QSharedPointer<LCQLocalDataReader> _sw_reader);
+    virtual void connectReader(QSharedPointer<LCQLocalDataReader> _sw_reader);
     void disconnectReader(QSharedPointer<LCQLocalDataReader> _sw_reader);
 
     virtual void notify(QSharedPointer<LCQLocalDataReader> _sp_reader) = 0;
     virtual int setData(const QByteArray& _data) = 0;
   }; 
 
-  class CDataItemBytes : public CDataItemBase
+  class CDataItemStorageBase : public CDataItemBase
+  {
+  public:
+    CDataItemStorageBase(){}
+    virtual void connectReader(QSharedPointer<LCQLocalDataReader> _sw_reader) override;
+  };
+
+  class CDataItemBytes : public CDataItemStorageBase
   {
   private:
     QByteArray mData;
@@ -63,7 +70,7 @@ private:
     virtual int setData(const QByteArray& _data) override;
   };
 
-  class CDataItemBits : public CDataItemBase
+  class CDataItemBits : public CDataItemStorageBase
   {
   private:
     QBitArray mData;
@@ -75,7 +82,7 @@ private:
     virtual int setData(const QByteArray& _data) override;
   };
 
-  class CDataItemString: public CDataItemBase
+  class CDataItemString: public CDataItemStorageBase
   {
   private:
     QByteArray mData;

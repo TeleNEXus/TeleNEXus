@@ -57,6 +57,14 @@ void LCDataItemMap::CDataItemBase::disconnectReader(
 }
 
 //==============================================================================
+void LCDataItemMap::CDataItemStorageBase::connectReader(
+    QSharedPointer<LCQLocalDataReader> _sp_reader)
+{
+  mReadersList << _sp_reader;
+  notify(_sp_reader);
+}
+
+//==============================================================================
 int LCDataItemMap::CDataItemBytes::setData(const QByteArray& _data)
 {
   if(_data.isNull()) return 0;
@@ -236,7 +244,13 @@ void LCDataItemMap::connectReader(QSharedPointer<LCQLocalDataReader> _sp_reader)
   }
   it.value()->connectReader(_sp_reader);
 
-  it->data()->notify(_sp_reader);
+
+//todo:
+
+  /* it.value()->notify(_sp_reader); */
+
+
+
 }
 
 //------------------------------------------------------------------------------

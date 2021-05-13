@@ -5,7 +5,9 @@
     <layoutVBox>
       <widgets>
 
-        <dataLineEdit source="localsource" data="test_stream" format="textstream"/>
+        <dataLineEdit source="localsource" data="test_string" format="string" keyboard="keyboard"/>
+
+
         <dataLineEdit source="localsource" data="test_stream" format="textstream"/>
 
         <dataWriteButton text="write hellow">

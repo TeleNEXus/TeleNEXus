@@ -8,11 +8,6 @@
 
 
 
-        <dataLineEdit keyboard="keyboard"
-          source="localsource" data="test_stream" format="textstream"/>
-
-
-
         <dataLineEdit source="localsource" data="test_stream" format="textstream"/>
 
 
