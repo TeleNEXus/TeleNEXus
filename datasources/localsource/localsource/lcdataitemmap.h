@@ -96,8 +96,6 @@ private:
 
   class CDataItemStream: public CDataItemBase
   {
-  private:
-    QList<QWeakPointer<LCQLocalDataReader>> mWaitingList;
   public:
     CDataItemStream(){};
     virtual void notify(QSharedPointer<LCQLocalDataReader> _sp_reader) override;

@@ -277,6 +277,9 @@ int tnex::exec(int argc, char *argv[])
     //----------------------------------------------------
     addScripts(rootElement);
 
+    //----------------------------------------------------
+    uploadkeyboards::init();
+
 
     QObject::connect(&app, &QApplication::aboutToQuit,
                      [&](){
