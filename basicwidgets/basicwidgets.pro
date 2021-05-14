@@ -39,7 +39,6 @@ SOURCES += \
     widgets/lcqremcombobox.cpp \
     widgets/lcqremlabel.cpp \
     widgets/lcqremcombolabel.cpp \
-    widgets/lcqremlineedit.cpp \
     widgets/lcqremwritebutton.cpp \
     widgets/lcqstackedwidget.cpp \
     builders/lcxmlbuilderbase.cpp \
@@ -79,7 +78,6 @@ HEADERS += \
     widgets/lcqremcombobox.h \
     widgets/lcqremcombolabel.h \
     widgets/lcqremlabel.h \
-    widgets/lcqremlineedit.h \
     widgets/lcqremwritebutton.h \
     widgets/lcqstackedwidget.h \
     builders/lcxmlbuilderbase.h \

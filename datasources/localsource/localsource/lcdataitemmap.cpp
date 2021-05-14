@@ -46,8 +46,6 @@ void LCDataItemMap::CDataItemBase::notifyAll(const QByteArray& _data)
 void LCDataItemMap::CDataItemBase::connectReader(
     QSharedPointer<LCQLocalDataReader> _sp_reader)
 {
-  //TODO:
-  /* if(mReadersList.contains(_sp_reader)) return; */
   mReadersList << _sp_reader;
 }
 
@@ -141,8 +139,6 @@ void LCDataItemMap::CDataItemString::notify(
 int LCDataItemMap::CDataItemStream::setData(const QByteArray& _data)
 {
   if(_data.isNull()) return 0;
-  qDebug() << "++++++++++++++++++++CDataItemStream::setData";
-  qDebug() << "mReaderList.length = " << mReadersList.length();
   notifyAll(_data);
   return _data.size();
 }

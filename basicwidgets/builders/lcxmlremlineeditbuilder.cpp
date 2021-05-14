@@ -19,11 +19,15 @@
  * along with TeleNEXus.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include "lcxmlremlineeditbuilder.h"
-#include "lcqremlineedit.h"
 #include "lcbuilderscommon.h"
 #include "LIApplication.h"
 #include "LIKeyboard.h"
 #include "LIKeyboardListener.h"
+#include "LIDataFormatter.h"
+#include "LIRemoteDataWriter.h"
+#include "LIRemoteDataReader.h"
+
+#include <QLineEdit>
 #include <QDomElement>
 #include <QDebug>
 #include <QKeyEvent>
