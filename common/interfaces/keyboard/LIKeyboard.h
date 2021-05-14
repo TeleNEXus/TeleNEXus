@@ -25,21 +25,23 @@
 #include <functional>
 
 class LIKeyboardListener;
+class QValidator;
 
 class LIKeyboard 
 {
 public:
 
-  using LTAction  = std::function<void(const QString&)>;
+  using LTAction = std::function<void(const QString&)>;
 
 public:
     LIKeyboard(){}
     virtual ~LIKeyboard(){}
     virtual QSharedPointer<LIKeyboardListener> 
       createListener( 
-          LTAction  _change, 
+          LTAction _change, 
           LTAction _enter, 
-          LTAction _disconnect) = 0;
+          LTAction _disconnect,
+          const QValidator* _validator = nullptr) = 0;
 };
 
 #endif // LIKEYBOARD_H_

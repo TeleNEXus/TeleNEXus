@@ -112,6 +112,8 @@ protected:
 
           case Qt::Key::Key_Escape:
             mpLineEdit->clearFocus();
+            mFlagUpdateOn = false;
+            break;
 
           default:
             mFlagUpdateOn = false;
@@ -202,7 +204,7 @@ private:
       };
 
     auto action_enter =
-      [_lineEdit,this](const QString& _str)
+      [this](const QString& _str)
       {
         mDataWriter->writeRequest(mFormatter->toBytes(_str));
       };
@@ -210,12 +212,18 @@ private:
     auto action_disconnect =
       [this](const QString& _str)
       {
+        Q_UNUSED(_str);
         setActive(true);
       };
 
+    QValidator* validator = nullptr; 
+    if(!mFormatter.isNull())
+    {
+      validator = mFormatter->validator();
+    }
 
-    mKeyboardListener = _keyboard->createListener(action_change, action_enter, action_disconnect);
-
+    mKeyboardListener = _keyboard->createListener(
+        action_change, action_enter, action_disconnect, validator);
 
 
     mEventsMap.insert(QEvent::Type::FocusIn,
@@ -230,8 +238,7 @@ private:
         [this](QEvent* _event)
         {
           Q_UNUSED(_event);
-          mKeyboardListener->connect(mpLineEdit->text());
-          setActive(false);
+          if(mKeyboardListener->connect(mpLineEdit->text())) setActive(false);
           return true;
         });
   }

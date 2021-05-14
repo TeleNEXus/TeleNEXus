@@ -25,6 +25,22 @@
             <data source="localsource" dataName="test_stream" format="string" value="c"/>
           </dataWriteButton>
 
+          <dataWriteButton text="write d">
+            <data source="localsource" dataName="test_stream" format="string" value="d"/>
+          </dataWriteButton>
+
+          <dataWriteButton text="write e">
+            <data source="localsource" dataName="test_stream" format="string" value="e"/>
+          </dataWriteButton>
+
+          <dataWriteButton text="write f">
+            <data source="localsource" dataName="test_stream" format="string" value="f"/>
+          </dataWriteButton>
+
+          <dataWriteButton text="write g">
+            <data source="localsource" dataName="test_stream" format="string" value="g"/>
+          </dataWriteButton>
+
           <dataWriteButton text="write 0">
             <data source="localsource" dataName="test_stream" format="string" value="0"/>
           </dataWriteButton>
@@ -37,12 +53,16 @@
             <data source="localsource" dataName="test_stream" format="string" value="2"/>
           </dataWriteButton>
 
-          <dataWriteButton text="write [Enter]">
-            <data source="localsource" dataName="test_stream" format="string" value="[Enter]"/>
+          <dataWriteButton text="[Clear]">
+            <data source="localsource" dataName="test_stream" format="string" value="[Clear]"/>
           </dataWriteButton>
 
-          <dataWriteButton text="write [Backspace]">
+          <dataWriteButton text="[Backspace]">
             <data source="localsource" dataName="test_stream" format="string" value="[Backspace]"/>
+          </dataWriteButton>
+
+          <dataWriteButton text="[Enter]">
+            <data source="localsource" dataName="test_stream" format="string" value="[Enter]"/>
           </dataWriteButton>
 
         </widgets>
