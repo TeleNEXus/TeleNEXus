@@ -42,7 +42,52 @@ static const struct
 {
   QString actions = "actions";
   QString mainWidget = "mainWidget";
+  QString scriptExecute = "scriptExecute";
+  QString scriptLaunch  = "scriptLaunch";
+  QString scriptStop    = "scriptStop";
+
 }__slTags;
+
+//==============================================================================ActionLoader
+class CActionLoader
+{
+private:
+  QMap<QString, 
+    std::function<void(const QDomNamedNodeMap&, const LIApplication&, LIWindow*)>> mLoaders;
+private:
+  CActionLoader(const CActionLoader&) = delete;
+  CActionLoader& operator=(const CActionLoader&) = delete;
+  CActionLoader()
+  {
+    mLoaders.insert(__slTags.scriptExecute,
+        [](const QDomNamedNodeMap& _el, const LIApplication& _app, LIWindow* _win)
+        {
+        });
+
+    mLoaders.insert(__slTags.scriptLaunch,
+        [](const QDomNamedNodeMap& _el, const LIApplication& _app, LIWindow* _win)
+        {
+        });
+
+    mLoaders.insert(__slTags.scriptStop,
+        [](const QDomNamedNodeMap& _el, const LIApplication& _app, LIWindow* _win)
+        {
+        });
+  };
+public:
+
+  static CActionLoader& getInstance()
+  {
+    static CActionLoader instance;
+    return instance;
+  }
+
+  void load(const QDomElement& _el, const LIApplication& _app, LIWindow* _win)
+  {
+    //TODO: continue.
+    /* if(_el.tagName() != __slTags.actions) return; */
+  };
+};
 
 //==============================================================================LCXmlWindow
 class LCXmlWindow : public LIWindow
@@ -241,6 +286,9 @@ static LCXmlWindow* buildLocal(const QDomElement& _element,
   LCXmlWindow*  window = new LCXmlWindow(widget);
 
   widgetAttr(widget, _element);
+
+
+
 
   return window;
 }
