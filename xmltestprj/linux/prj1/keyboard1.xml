@@ -1,73 +1,70 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<KEYBOARD streamSource="localsource" streamName="test_stream"
-  dataSource="localsource" dataName="keyboard_data"
-  > 
-  <widget> 
-    <layout>
-      <layoutVBox>
-        <widgets>
+<WINDOW posx="300" posy="150"> 
+  <mainWidget>
+    <widget> 
+      <layout>
+        <layoutVBox>
+          <widgets>
 
-          <!-- <dataLineEdit source="localsource" data="test_stream" format="textstream"/> -->
-          <!-- <dataLineEdit source="localsource" data="test_stream" format="textstream"/> -->
+            <dataLabel      source="localsource"  data="keyboard_data" format="string"/>
 
-          <dataLabel      source="localsource"  data="keyboard_data" format="string"/>
+            <dataWriteButton text="write a">
+              <data source="localsource" dataName="test_stream" format="string" value="a"/>
+            </dataWriteButton>
 
-          <dataWriteButton text="write a">
-            <data source="localsource" dataName="test_stream" format="string" value="a"/>
-          </dataWriteButton>
+            <dataWriteButton text="write b">
+              <data source="localsource" dataName="test_stream" format="string" value="b"/>
+            </dataWriteButton>
 
-          <dataWriteButton text="write b">
-            <data source="localsource" dataName="test_stream" format="string" value="b"/>
-          </dataWriteButton>
+            <dataWriteButton text="write c">
+              <data source="localsource" dataName="test_stream" format="string" value="c"/>
+            </dataWriteButton>
 
-          <dataWriteButton text="write c">
-            <data source="localsource" dataName="test_stream" format="string" value="c"/>
-          </dataWriteButton>
+            <dataWriteButton text="write d">
+              <data source="localsource" dataName="test_stream" format="string" value="d"/>
+            </dataWriteButton>
 
-          <dataWriteButton text="write d">
-            <data source="localsource" dataName="test_stream" format="string" value="d"/>
-          </dataWriteButton>
+            <dataWriteButton text="write e">
+              <data source="localsource" dataName="test_stream" format="string" value="e"/>
+            </dataWriteButton>
 
-          <dataWriteButton text="write e">
-            <data source="localsource" dataName="test_stream" format="string" value="e"/>
-          </dataWriteButton>
+            <dataWriteButton text="write f">
+              <data source="localsource" dataName="test_stream" format="string" value="f"/>
+            </dataWriteButton>
 
-          <dataWriteButton text="write f">
-            <data source="localsource" dataName="test_stream" format="string" value="f"/>
-          </dataWriteButton>
+            <dataWriteButton text="write g">
+              <data source="localsource" dataName="test_stream" format="string" value="g"/>
+            </dataWriteButton>
 
-          <dataWriteButton text="write g">
-            <data source="localsource" dataName="test_stream" format="string" value="g"/>
-          </dataWriteButton>
+            <dataWriteButton text="write 0">
+              <data source="localsource" dataName="test_stream" format="string" value="0"/>
+            </dataWriteButton>
 
-          <dataWriteButton text="write 0">
-            <data source="localsource" dataName="test_stream" format="string" value="0"/>
-          </dataWriteButton>
+            <dataWriteButton text="write 1">
+              <data source="localsource" dataName="test_stream" format="string" value="1"/>
+            </dataWriteButton>
 
-          <dataWriteButton text="write 1">
-            <data source="localsource" dataName="test_stream" format="string" value="1"/>
-          </dataWriteButton>
+            <dataWriteButton text="write 2">
+              <data source="localsource" dataName="test_stream" format="string" value="2"/>
+            </dataWriteButton>
 
-          <dataWriteButton text="write 2">
-            <data source="localsource" dataName="test_stream" format="string" value="2"/>
-          </dataWriteButton>
+            <dataWriteButton text="[Clear]">
+              <data source="localsource" dataName="test_stream" format="string" value="[Clear]"/>
+            </dataWriteButton>
 
-          <dataWriteButton text="[Clear]">
-            <data source="localsource" dataName="test_stream" format="string" value="[Clear]"/>
-          </dataWriteButton>
+            <dataWriteButton text="[Backspace]">
+              <data source="localsource" dataName="test_stream" format="string" value="[Backspace]"/>
+            </dataWriteButton>
 
-          <dataWriteButton text="[Backspace]">
-            <data source="localsource" dataName="test_stream" format="string" value="[Backspace]"/>
-          </dataWriteButton>
+            <dataWriteButton text="[Enter]">
+              <data source="localsource" dataName="test_stream" format="string" value="[Enter]"/>
+            </dataWriteButton>
 
-          <dataWriteButton text="[Enter]">
-            <data source="localsource" dataName="test_stream" format="string" value="[Enter]"/>
-          </dataWriteButton>
-
-        </widgets>
-        <stretch/>
-      </layoutVBox>
-    </layout>
-  </widget> 
-</KEYBOARD>
+          </widgets>
+          <stretch/>
+        </layoutVBox>
+      </layout>
+    </widget> 
+  </mainWidget>
+</WINDOW>

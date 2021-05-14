@@ -3,27 +3,45 @@
 <!-- <WINDOW width="50" height="50" posx="50" posy="50"> -->
 <WINDOW height="450" posx="100" posy="100">
 
-<!-- <WINDOW> -->
-    <!-- <tabs file="tabtestwidget.xml"/> -->
-    <!-- <widget file="testboxlayout.xml"/> -->
-    <!-- <widget file="testgridlayout.xml"/> -->
-    <!-- <widget file="testwritebutton.xml"/> -->
+  <!-- <WINDOW> -->
+  <!-- <tabs file="tabtestwidget.xml"/> -->
+  <!-- <widget file="testboxlayout.xml"/> -->
+  <!-- <widget file="testgridlayout.xml"/> -->
+  <!-- <widget file="testwritebutton.xml"/> -->
 
 
-    <!-- <widget file="testcontrolbutton.xml"/> -->
-    <!-- <widget file="testwidget.xml"/> -->
-    <!-- <scrollArea file="testscrollarea.xml"/> -->
-    <!-- <scrollArea file="testcombolabel.xml"/> -->
+  <!-- <widget file="testcontrolbutton.xml"/> -->
+  <!-- <widget file="testwidget.xml"/> -->
+  <!-- <scrollArea file="testscrollarea.xml"/> -->
+  <!-- <scrollArea file="testcombolabel.xml"/> -->
 
-    <!-- <switchWidgetsList file="testswitchwidgetlist.xml"/> -->
-    <!-- <widget file="testlistwidget.xml"/> -->
-    <!-- <widget file="teststackedwidget.xml"/> -->
-    <!-- <splitterVertical file="testsplittervertical.xml"/> -->
-    <!-- <splitterHorizontal file="testsplitterhorizontal.xml"/> -->
+  <!-- <switchWidgetsList file="testswitchwidgetlist.xml"/> -->
+  <!-- <widget file="testlistwidget.xml"/> -->
+  <!-- <widget file="teststackedwidget.xml"/> -->
+  <!-- <splitterVertical file="testsplittervertical.xml"/> -->
+  <!-- <splitterHorizontal file="testsplitterhorizontal.xml"/> -->
 
-    <!-- <widget file="testcombolabel.xml"/> -->
-    <!-- <widget file="testmnemowidget.xml"/> -->
+  <!-- <widget file="testcombolabel.xml"/> -->
+  <!-- <widget file="testmnemowidget.xml"/> -->
+
+  <!-- <widget file="teststream.xml"/> -->
+
+  <actions>
+
+    <scriptExecute event="show" id="windows_script_1"/>
+    <scriptLaunch  event="show" id="windows_script_2"/>
+    <scriptStop    event="show" id="windows_script_3"/>
+
+    <scriptExecute event="hide" id="windows_script_4"/>
+    <scriptLaunch  event="hide" id="windows_script_5"/>
+    <scriptStop    event="hide" id="windows_script_6"/>
+
+  </actions>
+
+  <mainWidget>
     <widget file="teststream.xml"/>
+  </mainWidget>
+
 </WINDOW>
 
 <!--<!-1-widget title="TITLE CHECK">-->

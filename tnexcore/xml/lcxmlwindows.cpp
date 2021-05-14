@@ -20,6 +20,7 @@
  */
 #include "lcxmlwindows.h"
 #include "lcxmlcommon.h"
+#include "LIXmlWidgetBuilder.h"
 #include "LIWindow.h"
 #include "LIKeyboard.h"
 #include "LIApplication.h"
@@ -32,6 +33,16 @@
 #include <LIRemoteDataWriter.h>
 #include <QEvent>
 
+//==============================================================================
+static const struct
+{
+}__slAttributes;
+
+static const struct
+{
+  QString actions = "actions";
+  QString mainWidget = "mainWidget";
+}__slTags;
 
 //==============================================================================LCXmlWindow
 class LCXmlWindow : public LIWindow
@@ -158,7 +169,6 @@ QSharedPointer<LIWindow> LCXmlWindows::getWindow(const QString& _windowId)
 }
 
 //------------------------------------------------------------------------------
-#include "LIXmlWidgetBuilder.h"
 
 static QWidget* buildWidget(const QDomElement& _element, 
     const LIApplication& _app);
@@ -216,11 +226,9 @@ static LCXmlWindow* buildLocal(const QDomElement& _element,
   if(!attr_file.isNull())
   {
     QDomElement el = _app.getDomDocument(attr_file).documentElement();
-    if(!el.isNull())
-    {
-      return buildLocal(el, _app);
-    }
-    return nullptr;
+    if(el.isNull()) return nullptr;
+    if(el.tagName() != LCXmlCommon::mBaseTags.window) return nullptr;
+    return buildLocal(el, _app);
   }
 
 
@@ -295,7 +303,10 @@ static void widgetAttr(QWidget* _widget, const QDomElement& _element)
 static QWidget* buildWidget(const QDomElement& _element, 
     const LIApplication& _app)
 {
-  for(auto node = _element.firstChild(); 
+  auto main_widget_element = _element.firstChildElement(__slTags.mainWidget);
+  if(main_widget_element.isNull()) return nullptr;
+
+  for(auto node = main_widget_element.firstChild(); 
       !node.isNull(); 
       node = node.nextSibling())
   {
