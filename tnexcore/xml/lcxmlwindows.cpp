@@ -33,6 +33,7 @@
 #include <QDebug>
 #include <LIRemoteDataWriter.h>
 #include <QEvent>
+#include <qnamespace.h>
 
 //==============================================================================
 static const struct
@@ -156,17 +157,12 @@ public:
 
   void load(const QDomElement& _el, const LIApplication& _app, LIWindow* _win)
   {
-
-    qDebug() << "+++++++++++++ CAction loader 0";
-
     for(auto act_el = _el.firstChildElement(__slTags.actions); 
         !act_el.isNull();
         act_el = act_el.nextSiblingElement(__slTags.actions))
     {
-    qDebug() << "+++++++++++++ CAction loader 1";
       for(auto node = act_el.firstChild(); !node.isNull(); node = node.nextSibling())
       {
-    qDebug() << "+++++++++++++ CAction loader 2";
         auto el = node.toElement();
         if(el.isNull()) continue;
         auto loader = mLoaders.find(el.tagName());
@@ -191,6 +187,8 @@ private:
   private:
     LCXmlWindow& mOwner;
   public:
+    bool mCloseFlag = false;
+  public:
     CQEventFilter() = delete;
 
     CQEventFilter(LCXmlWindow& _owner) : QObject(nullptr), mOwner(_owner)
@@ -200,6 +198,8 @@ private:
     virtual bool eventFilter(QObject* _obj, QEvent* _event) override
     {
       Q_UNUSED(_obj);
+      QWidget* w = dynamic_cast<QWidget*>(_obj);
+      if(!w) return false;
 
       auto action_process = 
         [](const TActionList& _al)
@@ -212,11 +212,49 @@ private:
 
       switch(_event->type())
       {
+
+      case QEvent::Type::WindowStateChange:
+        switch(w->windowState())
+        {
+        case Qt::WindowState::WindowNoState:
+          qDebug() << "Qt::WindowState::WindowNoState";
+        break;
+
+        case Qt::WindowState::WindowMinimized:
+          qDebug() << "Qt::WindowState::WindowMinimized";
+        break;
+
+        case Qt::WindowState::WindowMaximized:
+          qDebug() << " Qt::WindowState::WindowMaximized";
+        break;
+
+        case Qt::WindowState::WindowFullScreen:
+          qDebug() << " Qt::WindowState::WindowFullScreen";
+        break;
+
+        case Qt::WindowState::WindowActive:
+          qDebug() << " Qt::WindowState::WindowActive";
+        break;
+        }
+        break;
+
       case QEvent::Type::Show:
         action_process(mOwner.mShowActions);
         break;
 
+      case QEvent::Type::Close:
+        mCloseFlag = true;
+        qDebug() << "eventFilter [close]";
+
+        break;
+
       case QEvent::Type::Hide:
+        qDebug() << "eventFilter [hide]";
+        if(mCloseFlag) 
+        {
+          mCloseFlag = false;
+          break;
+        }
         action_process(mOwner.mHideActions);
         break;
 
@@ -253,7 +291,7 @@ public:
   //--------------------------------------------------------------------------
   virtual void hide() override
   {
-    mpWidget->close();
+    mpWidget->hide();
   }
 
   //--------------------------------------------------------------------------
@@ -317,7 +355,6 @@ void LCXmlWindows::buildWindow(
     const QDomElement &_element, 
     const LIApplication& _app)
 {
-  qDebug() << "++++++++++++++++++++LCXmlWindow::buildWindow 0";
   auto window = buildLocal(_element, _app); 
   if(window == nullptr) return;
   initWindow(window, _element);
