@@ -2,6 +2,12 @@
 
 <SCRIPTS>
 
+  <script id="window_event_script_1" file="scripts/windoweventscripts/script_1.js"/>
+  <script id="window_event_script_2" file="scripts/windoweventscripts/script_2.js"/>
+  <script id="window_event_script_3" file="scripts/windoweventscripts/script_3.js"/>
+  <script id="window_event_script_4" file="scripts/windoweventscripts/script_4.js"/>
+  <script id="window_event_script_5" file="scripts/windoweventscripts/script_5.js"/>
+  <script id="window_event_script_6" file="scripts/windoweventscripts/script_6.js"/>
   <!-- <script id="testwrite1" file="scripts/writedatatosource.js"/> -->
 
   <!-- <script id="testattr1" file="scripts/testattributes.js"> -->

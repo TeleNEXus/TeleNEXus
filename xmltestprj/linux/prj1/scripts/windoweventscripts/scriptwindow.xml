@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<WINDOW height="450" posx="100" posy="100">
+  <actions>
+    <scriptExecute event="show" scriptId="window_event_script_1"/>
+    <scriptExecute event="hide" scriptId="window_event_script_4"/>
+  </actions>
+
+  <mainWidget>
+    <label text="Script window"/>
+  </mainWidget>
+
+</WINDOW>
+
+

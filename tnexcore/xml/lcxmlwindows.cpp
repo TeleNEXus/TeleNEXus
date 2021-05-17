@@ -24,6 +24,7 @@
 #include "LIWindow.h"
 #include "LIKeyboard.h"
 #include "LIApplication.h"
+#include  "LIJScriptService.h"
 
 #include <QDomElement>
 #include <QMap>
@@ -36,6 +37,17 @@
 //==============================================================================
 static const struct
 {
+  QString interval = "interval";
+  QString scriptId = "scriptId";
+  struct 
+  {
+    QString attribute = "event";
+    struct 
+    {
+      QString show = "show";
+      QString hide = "hide";
+    }vals;
+  }event;
 }__slAttributes;
 
 static const struct
@@ -53,27 +65,87 @@ class CActionLoader
 {
 private:
   QMap<QString, 
-    std::function<void(const QDomNamedNodeMap&, const LIApplication&, LIWindow*)>> mLoaders;
+    std::function<
+      void(const QDomElement&, const LIApplication&, LIWindow*)>> mLoaders;
+  QMap<QString,
+    std::function<void(LIWindow*, LIWindow::TAction)>> mEventAdder;
 private:
   CActionLoader(const CActionLoader&) = delete;
   CActionLoader& operator=(const CActionLoader&) = delete;
   CActionLoader()
   {
-    mLoaders.insert(__slTags.scriptExecute,
-        [](const QDomNamedNodeMap& _el, const LIApplication& _app, LIWindow* _win)
+
+    mEventAdder.insert(__slAttributes.event.vals.show,
+        [](LIWindow* _win, LIWindow::TAction _act)
         {
+          _win->addActionShow(_act);
         });
 
-    mLoaders.insert(__slTags.scriptLaunch,
-        [](const QDomNamedNodeMap& _el, const LIApplication& _app, LIWindow* _win)
+    mEventAdder.insert(__slAttributes.event.vals.hide,
+        [](LIWindow* _win, LIWindow::TAction _act)
         {
+          _win->addActionHide(_act);
+        });
+
+    auto add_script_action = 
+      [this](const QDomElement& _el, const LIApplication& _app, LIWindow* _win, 
+          std::function<void(QSharedPointer<LIJScriptService>)> _scriptAct)
+      {
+        QString attr_script_id = _el.attribute(__slAttributes.scriptId);
+        QString event = _el.attribute(__slAttributes.event.attribute);
+        if(event.isNull()) return;
+        auto event_adder = mEventAdder.find(event);
+        if(event_adder == mEventAdder.end()) return;
+        event_adder.value()(_win,
+            [&_app, attr_script_id, _scriptAct]()
+            {
+              auto script = _app.getScriptService(attr_script_id);
+              if(script.isNull()) return;
+              _scriptAct(script);
+            });
+      };
+
+    mLoaders.insert(__slTags.scriptExecute,
+        [add_script_action](
+          const QDomElement& _el, const LIApplication& _app, LIWindow* _win)
+        {
+          add_script_action( _el, _app, _win,
+              [](QSharedPointer<LIJScriptService> _script)
+              {
+                _script->execute();
+              });
+        });
+
+
+    mLoaders.insert(__slTags.scriptLaunch,
+        [add_script_action](
+          const QDomElement& _el, const LIApplication& _app, LIWindow* _win)
+        {
+          QString attr_interval = _el.attribute(__slAttributes.interval);
+          if(attr_interval.isNull()) return;
+          bool flag = false;
+          int interval = attr_interval.toInt(&flag);
+          if(!flag) return;
+          
+          add_script_action( _el, _app, _win,
+              [interval](QSharedPointer<LIJScriptService> _script)
+              {
+                _script->launch(interval);
+              });
         });
 
     mLoaders.insert(__slTags.scriptStop,
-        [](const QDomNamedNodeMap& _el, const LIApplication& _app, LIWindow* _win)
+        [add_script_action](
+          const QDomElement& _el, const LIApplication& _app, LIWindow* _win)
         {
+          add_script_action( _el, _app, _win,
+              [](QSharedPointer<LIJScriptService> _script)
+              {
+                _script->stop();
+              });
         });
   };
+
 public:
 
   static CActionLoader& getInstance()
@@ -84,8 +156,25 @@ public:
 
   void load(const QDomElement& _el, const LIApplication& _app, LIWindow* _win)
   {
-    //TODO: continue.
-    /* if(_el.tagName() != __slTags.actions) return; */
+
+    qDebug() << "+++++++++++++ CAction loader 0";
+
+    for(auto act_el = _el.firstChildElement(__slTags.actions); 
+        !act_el.isNull();
+        act_el = act_el.nextSiblingElement(__slTags.actions))
+    {
+    qDebug() << "+++++++++++++ CAction loader 1";
+      for(auto node = act_el.firstChild(); !node.isNull(); node = node.nextSibling())
+      {
+    qDebug() << "+++++++++++++ CAction loader 2";
+        auto el = node.toElement();
+        if(el.isNull()) continue;
+        auto loader = mLoaders.find(el.tagName());
+        if(loader == mLoaders.end()) continue;
+        loader.value()(el, _app, _win);
+      }
+    }
+
   };
 };
 
@@ -228,15 +317,15 @@ void LCXmlWindows::buildWindow(
     const QDomElement &_element, 
     const LIApplication& _app)
 {
+  qDebug() << "++++++++++++++++++++LCXmlWindow::buildWindow 0";
   auto window = buildLocal(_element, _app); 
+  if(window == nullptr) return;
   initWindow(window, _element);
 }
 
 //------------------------------------------------------------------------------
 static void initWindow(LCXmlWindow* _win, const QDomElement& _element)
 {
-  if(_win == nullptr) return;
-
   QString attr_id = _element.attribute(
       LCXmlCommon::mCommonAttributes.id);
   QString attr_title = _element.attribute(
@@ -287,8 +376,7 @@ static LCXmlWindow* buildLocal(const QDomElement& _element,
 
   widgetAttr(widget, _element);
 
-
-
+  CActionLoader::getInstance().load(_element, _app, window);
 
   return window;
 }

@@ -28,13 +28,13 @@
 
   <actions>
 
-    <scriptExecute event="show" id="windows_script_1"/>
-    <scriptLaunch  event="show" id="windows_script_2"/>
-    <scriptStop    event="show" id="windows_script_3"/>
+    <scriptExecute event="show" scriptId="windows_script_1"/>
+    <!-- <scriptLaunch  event="show" scriptId="windows_script_2" interval="500"/> -->
+    <!-- <scriptStop    event="show" scriptId="windows_script_3"/> -->
 
-    <scriptExecute event="hide" id="windows_script_4"/>
-    <scriptLaunch  event="hide" id="windows_script_5"/>
-    <scriptStop    event="hide" id="windows_script_6"/>
+    <scriptExecute event="hide" scriptId="windows_script_4"/>
+    <!-- <scriptLaunch  event="hide" scriptId="windows_script_5" interval="500"/> -->
+    <!-- <scriptStop    event="hide" scriptId="windows_script_6"/> -->
 
   </actions>
 

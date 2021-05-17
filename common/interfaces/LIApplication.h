@@ -33,6 +33,7 @@ class LIWindow;
 class LIKeyboard;
 class QDomDocument;
 class LIDataFormatter;
+class LIJScriptService;
 
 #include "LIRemoteDataSource.h"
 
@@ -98,6 +99,8 @@ public:
     virtual QSharedPointer<LIDataFormatter> 
       getDataFormatter(const QString& _formatterId) const = 0;
 
+    virtual QSharedPointer<LIJScriptService> 
+      getScriptService(const QString& _scriptId) const = 0;
 };
 
 #endif // LIAPPLICATION_H

@@ -166,7 +166,9 @@ namespace uploadjscripts
 //------------------------------------------------------------------------------getScript
 QSharedPointer<LIJScriptService> getScript(const QString& _scriptId)
 {
-  return __slScriptMap.find(_scriptId).value();
+  auto it = __slScriptMap.find(_scriptId);
+  if(it == __slScriptMap.end()) return nullptr;
+  return it.value();
 }
 
 //------------------------------------------------------------------------------upload
