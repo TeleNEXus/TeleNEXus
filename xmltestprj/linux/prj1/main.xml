@@ -42,20 +42,23 @@
 
     <FORMATTERS file="formatters.xml"/>
     
-    <!-- <WINDOW id="main window 1" title="MAIN WINDOW 1" file="widgets.xml"/> -->
-    <!-- <WINDOW id="main window 2" title="MAIN WINDOW 2" file="widgets.xml"/> -->
 
-    <WINDOW id="win0" title="WINDOW 0" file="window.xml" show="yes"/>
-
-    <WINDOW id="keyboard 1" title="keyboard 1" file="keyboard1.xml"/>
+    <!-- <WINDOW id="win0" title="WINDOW 0" file="window.xml" show="yes"/> -->
+    <!-- <WINDOW id="keyboard 1" title="keyboard 1" file="keyboard1.xml"/> -->
       
-    <!-- <KEYBOARD id="keyboard" title="keyboard" file="keyboard1.xml"/> -->
-    <!-- <WINDOW id="win1" title="WINDOW 1" file="window.xml" show="yes"/> -->
-    <!-- <WINDOW id="win2" title="WINDOW 2" file="window.xml" show="yes"/> -->
+    <!-- <KEYBOARD --> 
+    <!--   id="keyboard" window="keyboard 1" -->
+    <!--   streamSource="localsource" streamName="test_stream" -->
+    <!--   dataSource="localsource" dataName="keyboard_data" /> -->
 
-    <KEYBOARD 
-      id="keyboard" window="keyboard 1"
-      streamSource="localsource" streamName="test_stream"
-      dataSource="localsource" dataName="keyboard_data" />
+
+    <WINDOW id="testEventWindow" title="Test Event Window" 
+      file="scripts/windoweventscripts/testeventwindow.xml"
+      show="yes"/>
+
+    <WINDOW id="scriptWindow" 
+      title="Script Window" 
+      file="scripts/windoweventscripts/scriptwindow.xml"/>
+
         
 </APPLICATION>

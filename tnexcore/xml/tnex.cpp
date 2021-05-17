@@ -152,6 +152,11 @@ public:
     {
       return uploaddataformatters::getDataFormatter(_formatterId);
     }
+
+  virtual QSharedPointer<LIJScriptService> getScriptService(const QString& _scriptId) const override
+  {
+    return uploadjscripts::getScript(_scriptId);
+  }
 };
 
 static CApplicationInterface __slAppInterface;
