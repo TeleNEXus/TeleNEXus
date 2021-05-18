@@ -185,84 +185,177 @@ private:
   class CQEventFilter : public QObject
   {
   private:
-    LCXmlWindow& mOwner;
-  public:
-    bool mCloseFlag = false;
+
+    class CStateBase
+    {
+    protected:
+      using TAction = std::function<void(void)>;
+    public:
+      CStateBase(){}
+      virtual CStateBase* operator()(QObject* _obj, QEvent* _event) = 0;
+    };
+
+    class CStateHidden : public CStateBase
+    {
+    private:
+      TAction mActionShow;
+      CStateBase* mpStateShow;
+    public:
+      CStateHidden(){}
+
+      void init(CStateBase* _stateShow, const TAction& _showAction)
+      {
+        mActionShow = _showAction;
+        mpStateShow = _stateShow;
+      }
+
+      virtual CStateBase* operator()(QObject* _obj, QEvent* _event) override
+      {
+        Q_UNUSED(_obj);
+        if(_event->type() != QEvent::Show) return this;
+        mActionShow();
+        return mpStateShow;
+      }
+    };
+
+    class CStateMinimized: public CStateBase
+    {
+    private:
+      CStateBase* mpStateShow;
+      CStateBase* mpStateHidden;
+      TAction mHideAction;
+    public:
+      CStateMinimized(){}
+      void init(CStateBase* _stateShow, CStateBase* _stateHidden, const TAction& _hideAction)
+      {
+        mpStateShow   = _stateShow;
+        mpStateHidden = _stateHidden;
+        mHideAction   = _hideAction;
+      }
+
+      virtual CStateBase* operator()(QObject* _obj, QEvent* _event) override
+      {
+        Q_UNUSED(_obj);
+        CStateBase* ret = this;
+
+        QWidget* w = dynamic_cast<QWidget*>(_obj);
+        if(!w) return ret;
+
+        switch(_event->type())
+        {
+        case QEvent::Type::Show:
+          ret = mpStateShow;
+          break;
+        case QEvent::Type::Hide:
+          mHideAction();
+          ret = mpStateHidden;
+          break;
+        default:
+          break;
+        }
+
+        return ret;
+      }
+    };
+
+    class CStateShow: public CStateBase
+    {
+    private:
+      TAction mActionHide;
+      CStateBase* mpStateHidden;
+      CStateBase* mpStateMinimized;
+      
+    public:
+      CStateShow(){}
+      void init(
+          CStateBase*     _stateHidden, 
+          CStateBase*     _stateMinimized, 
+          const TAction&  _hideAction) 
+      { 
+        mActionHide       = _hideAction;
+        mpStateHidden     = _stateHidden;
+        mpStateMinimized  = _stateMinimized;
+      }
+
+      virtual CStateBase* operator()(QObject* _obj, QEvent* _event) override
+      {
+        Q_UNUSED(_obj);
+        CStateBase* ret = this;
+
+        QWidget* w = dynamic_cast<QWidget*>(_obj);
+
+        if(!w) return ret;
+
+        switch(_event->type())
+        {
+        case QEvent::Type::Close:
+          mActionHide();
+          ret = mpStateHidden;
+          break;
+
+        case QEvent::Type::Hide:
+          if(w->windowState() == Qt::WindowState::WindowMinimized)
+          {
+            ret = mpStateMinimized;
+          }
+          else
+          {
+            mActionHide();
+            ret = mpStateHidden;
+          }
+          break;
+
+        default:
+          break;
+        }
+        return ret;
+      }
+    };
+
+    LCXmlWindow& edWindow;
+
+    CStateHidden    mStateHidden;
+    CStateMinimized mStateMinimized;
+    CStateShow      mStateShow;
+    CStateBase*     mpCurrentState = &mStateHidden;
+
   public:
     CQEventFilter() = delete;
 
-    CQEventFilter(LCXmlWindow& _owner) : QObject(nullptr), mOwner(_owner)
+    CQEventFilter(LCXmlWindow& _window) : QObject(nullptr), edWindow(_window)
     {
+      auto actions_show = 
+       [this]()
+       {
+         for(auto it = edWindow.mShowActions.begin();
+             it != edWindow.mShowActions.end();
+             it++)
+         {
+           (*it)();
+         }
+       }; 
+
+      auto actions_hide = 
+       [this]()
+       {
+         for(auto it = edWindow.mHideActions.begin();
+             it != edWindow.mHideActions.end();
+             it++)
+         {
+           (*it)();
+         }
+       }; 
+      mStateHidden.init(&mStateShow, actions_show);
+      mStateMinimized.init(&mStateShow, &mStateHidden, actions_hide);
+      mStateShow.init(&mStateHidden, &mStateMinimized, actions_hide);
     }
 
     virtual bool eventFilter(QObject* _obj, QEvent* _event) override
     {
-      Q_UNUSED(_obj);
-      QWidget* w = dynamic_cast<QWidget*>(_obj);
-      if(!w) return false;
-
-      auto action_process = 
-        [](const TActionList& _al)
-        {
-          for(auto it = _al.begin(); it != _al.end(); it++)
-          {
-            (*it)();
-          }
-        };
-
-      switch(_event->type())
-      {
-
-      case QEvent::Type::WindowStateChange:
-        switch(w->windowState())
-        {
-        case Qt::WindowState::WindowNoState:
-          qDebug() << "Qt::WindowState::WindowNoState";
-        break;
-
-        case Qt::WindowState::WindowMinimized:
-          qDebug() << "Qt::WindowState::WindowMinimized";
-        break;
-
-        case Qt::WindowState::WindowMaximized:
-          qDebug() << " Qt::WindowState::WindowMaximized";
-        break;
-
-        case Qt::WindowState::WindowFullScreen:
-          qDebug() << " Qt::WindowState::WindowFullScreen";
-        break;
-
-        case Qt::WindowState::WindowActive:
-          qDebug() << " Qt::WindowState::WindowActive";
-        break;
-        }
-        break;
-
-      case QEvent::Type::Show:
-        action_process(mOwner.mShowActions);
-        break;
-
-      case QEvent::Type::Close:
-        mCloseFlag = true;
-        qDebug() << "eventFilter [close]";
-
-        break;
-
-      case QEvent::Type::Hide:
-        qDebug() << "eventFilter [hide]";
-        if(mCloseFlag) 
-        {
-          mCloseFlag = false;
-          break;
-        }
-        action_process(mOwner.mHideActions);
-        break;
-
-      default:
-        break;
-      }
-
-      return false;
+      auto ret_state = (*mpCurrentState)(_obj, _event);
+      if(ret_state == mpCurrentState) return false;
+      mpCurrentState = ret_state;
+      return true;
     }
   };
 
