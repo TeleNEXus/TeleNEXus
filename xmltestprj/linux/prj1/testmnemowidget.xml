@@ -254,7 +254,8 @@
         vcHide = "true"
         vcFormat = "bool" 
         >
-        <window id="win0" event="pressed" action="hide"/>
+        <!-- <window id="win0" event="pressed" action="hide"/> -->
+        <window id="scriptWindow" event="pressed" action="hide"/>
       </controlWindowButton>
 
     </widgets>

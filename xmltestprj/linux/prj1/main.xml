@@ -43,21 +43,29 @@
     <FORMATTERS file="formatters.xml"/>
     
 
-    <!-- <WINDOW id="win0" title="WINDOW 0" file="window.xml" show="yes"/> -->
-    <!-- <WINDOW id="keyboard 1" title="keyboard 1" file="keyboard1.xml"/> -->
-    <!-- <KEYBOARD --> 
-    <!--   id="keyboard" window="keyboard 1" -->
-    <!--   streamSource="localsource" streamName="test_stream" -->
-    <!--   dataSource="localsource" dataName="keyboard_data" /> -->
+    <WINDOW id="win0" title="WINDOW 0" file="window.xml" show="normal"/>
+    <WINDOW id="keyboard 1" title="keyboard 1" file="keyboard1.xml" 
+      modality="yes"
+      modeSet="stay on top | frameless"
+      modeReset="stay on top | frameless"
+      />
+    <KEYBOARD 
+      id="keyboard" window="keyboard 1"
+      streamSource="localsource" streamName="test_stream"
+      dataSource="localsource" dataName="keyboard_data" />
 
 
-    <WINDOW id="testEventWindow" title="Test Event Window" 
-      file="scripts/windoweventscripts/testeventwindow.xml"
-      show="yes"/>
+    <!-- <WINDOW id="testEventWindow" title="Test Event Window" --> 
+    <!--   file="scripts/windoweventscripts/testeventwindow.xml" -->
+    <!--   show="FullScreen" -->
+    <!--   /> -->
+    <!--   <!-1- show="Normal" -1-> -->
 
-    <WINDOW id="scriptWindow" 
-      title="Script Window" 
-      file="scripts/windoweventscripts/scriptwindow.xml"/>
+    <!-- <WINDOW id="scriptWindow" --> 
+    <!--   title="Script Window" --> 
+    <!--   file="scripts/windoweventscripts/scriptwindow.xml" -->
+    <!--   show="fullscreen" -->
+    <!--   /> -->
 
         
 </APPLICATION>

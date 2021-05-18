@@ -40,6 +40,9 @@ static const struct
 {
   QString interval = "interval";
   QString scriptId = "scriptId";
+  QString modality = "modality";
+  QString state = "state";
+
   struct 
   {
     QString attribute = "event";
@@ -53,8 +56,8 @@ static const struct
 
 static const struct
 {
-  QString actions = "actions";
-  QString mainWidget = "mainWidget";
+  QString actions       = "actions";
+  QString mainWidget    = "mainWidget";
   QString scriptExecute = "scriptExecute";
   QString scriptLaunch  = "scriptLaunch";
   QString scriptStop    = "scriptStop";
@@ -195,6 +198,7 @@ private:
       virtual CStateBase* operator()(QObject* _obj, QEvent* _event) = 0;
     };
 
+    //--------------------------------------------------------------------
     class CStateHidden : public CStateBase
     {
     private:
@@ -361,7 +365,9 @@ private:
 
 
 public:
+  using TShowList = QList<std::function<void(void)>>;
   static QMap<QString, QSharedPointer<LIWindow>> smWindowsMap;
+  static TShowList smShowList;
   QWidget* mpWidget;
 private:
   CQEventFilter mEventFilter;
@@ -384,7 +390,14 @@ public:
   //--------------------------------------------------------------------------
   virtual void hide() override
   {
-    mpWidget->hide();
+    if(mpWidget->windowState() == Qt::WindowState::WindowFullScreen)
+    {
+      mpWidget->close();
+    }
+    else
+    {
+      mpWidget->hide();
+    }
   }
 
   //--------------------------------------------------------------------------
@@ -404,6 +417,7 @@ public:
 
 //------------------------------------------------------------------------------
 QMap<QString, QSharedPointer<LIWindow>> LCXmlWindow::smWindowsMap;
+LCXmlWindow::TShowList LCXmlWindow::smShowList;
 
 //==============================================================================LCXmlWindows
 LCXmlWindows::LCXmlWindows()
@@ -434,6 +448,16 @@ QSharedPointer<LIWindow> LCXmlWindows::getWindow(const QString& _windowId)
 }
 
 //------------------------------------------------------------------------------
+void LCXmlWindows::show()
+{
+  for(auto it = LCXmlWindow::smShowList.begin(); it != LCXmlWindow::smShowList.end();
+      it++)
+  {
+    (*it)();
+  }
+}
+
+//------------------------------------------------------------------------------
 
 static QWidget* buildWidget(const QDomElement& _element, 
     const LIApplication& _app);
@@ -458,10 +482,15 @@ static void initWindow(LCXmlWindow* _win, const QDomElement& _element)
 {
   QString attr_id = _element.attribute(
       LCXmlCommon::mCommonAttributes.id);
+
   QString attr_title = _element.attribute(
       LCXmlCommon::mCommonAttributes.title);
+
   QString attr_show = _element.attribute(
       LCXmlCommon::mCommonAttributes.show.tag);
+  QString attr_state = _element.attribute(__slAttributes.state);
+
+  QString attr_modality = _element.attribute(__slAttributes.modality);
 
   if(!attr_id.isNull()) 
   {
@@ -475,8 +504,30 @@ static void initWindow(LCXmlWindow* _win, const QDomElement& _element)
     _win->mpWidget->setWindowTitle(attr_title);
   }
 
-  if(!attr_show.isNull())
-    _win->mpWidget->show();
+  if(attr_modality == QStringLiteral("yes"))
+  {
+    qDebug() << "initWindow set modality";
+    _win->mpWidget->setWindowModality(Qt::WindowModality::ApplicationModal);
+  }
+
+  auto show = [attr_show, _win] () mutable
+  {
+    attr_show = attr_show.remove(" ");
+    attr_show = attr_show.toLower();
+    /* _win->mpWidget->setWindowFlag(Qt::WindowType::WindowStaysOnTopHint); */
+    _win->mpWidget->setWindowFlag(Qt::WindowType::FramelessWindowHint, true);
+
+    if(attr_show == QStringLiteral("normal"))
+      _win->mpWidget->show();
+    else if(attr_show == QStringLiteral("fullscreen"))
+    {
+      qDebug() << "initWindow set full screen state";
+      _win->mpWidget->show();
+      _win->mpWidget->setWindowState(Qt::WindowState::WindowFullScreen);
+    }
+  };
+
+  LCXmlWindow::smShowList << show;
 }
 
 //------------------------------------------------------------------------------
