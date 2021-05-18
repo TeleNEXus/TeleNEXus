@@ -285,6 +285,8 @@ int tnex::exec(int argc, char *argv[])
     //----------------------------------------------------
     uploadkeyboards::init();
 
+    LCXmlWindows::instance().show();
+
 
     QObject::connect(&app, &QApplication::aboutToQuit,
                      [&](){

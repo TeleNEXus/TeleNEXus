@@ -42,5 +42,7 @@ public:
         const LIApplication& _app);
 
     QSharedPointer<LIWindow> getWindow(const QString& _windowId);
+    void show();
 };
+
 #endif /* LCXMLWINDOWS_H_ */
