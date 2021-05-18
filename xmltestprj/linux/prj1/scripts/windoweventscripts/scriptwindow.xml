@@ -3,19 +3,20 @@
 <WINDOW height="450" posx="100" posy="100">
   <actions>
     <scriptExecute  event="show" scriptId="window_event_script_1"/>
-    <scriptLaunch   event="show" scriptId="window_event_script_2" interval="500"/>
+    <!-- <scriptLaunch   event="show" scriptId="window_event_script_2" interval="500"/> -->
     <!-- <scriptExecute event="show" scriptId="window_event_script_3"/> -->
 
 
     <scriptExecute event="hide" scriptId="window_event_script_4"/>
-    <scriptStop     event="hide" scriptId="window_event_script_2"/>
+    <!-- <scriptStop     event="hide" scriptId="window_event_script_2"/> -->
     <!-- <scriptExecute event="hide" scriptId="window_event_script_6"/> -->
   </actions>
 
   <mainWidget>
     <!-- <label text="Script window"/> -->
-    <widget>
-    </widget>
+    <widget file="testmnemowidget.xml"/>
+    <!-- <table file="testtablelocalsource.xml"/> -->
+    <!-- <widget></widget> -->
   </mainWidget>
 
 </WINDOW>

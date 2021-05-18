@@ -45,7 +45,6 @@
 
     <!-- <WINDOW id="win0" title="WINDOW 0" file="window.xml" show="yes"/> -->
     <!-- <WINDOW id="keyboard 1" title="keyboard 1" file="keyboard1.xml"/> -->
-      
     <!-- <KEYBOARD --> 
     <!--   id="keyboard" window="keyboard 1" -->
     <!--   streamSource="localsource" streamName="test_stream" -->
