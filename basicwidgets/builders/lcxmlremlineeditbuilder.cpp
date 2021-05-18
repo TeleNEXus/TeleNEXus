@@ -45,7 +45,7 @@ protected:
   QLineEdit* mpLineEdit;
   bool mFlagUpdateOn = false;
 
-  QMap<QEvent::Type, std::function<bool(QEvent*)>> mEventsMap;
+  QMap<QEvent::Type, std::function<bool(QObject*, QEvent*)>> mEventsMap;
 
 
   CQControlBase() = delete;
@@ -83,24 +83,27 @@ protected:
 
     //init events map
     mEventsMap.insert(QEvent::Type::Show,
-        [this](QEvent* _event)
+        [this](QObject* _obj, QEvent* _event)
         {
+          Q_UNUSED(_obj);
           Q_UNUSED(_event);
           setActive(true);
           return false;
         });
 
     mEventsMap.insert(QEvent::Type::Hide,
-        [this](QEvent* _event)
+        [this](QObject* _obj, QEvent* _event)
         {
+          Q_UNUSED(_obj);
           Q_UNUSED(_event);
           setActive(false);
           return false;
         });
 
     mEventsMap.insert(QEvent::Type::KeyPress,
-        [this](QEvent* _event)
+        [this](QObject* _obj, QEvent* _event)
         {
+          Q_UNUSED(_obj);
           QKeyEvent* ke = dynamic_cast<QKeyEvent*>(_event);
 
           if(ke == nullptr) return false;
@@ -127,16 +130,18 @@ protected:
         });
 
     mEventsMap.insert(QEvent::Type::FocusIn,
-        [this](QEvent* _event)
+        [this](QObject* _obj, QEvent* _event)
         {
+          Q_UNUSED(_obj);
           Q_UNUSED(_event);
           mFlagUpdateOn = false;
           return false;
         });
 
     mEventsMap.insert(QEvent::Type::FocusOut,
-        [this](QEvent* _event)
+        [this](QObject* _obj, QEvent* _event)
         {
+          Q_UNUSED(_obj);
           Q_UNUSED(_event);
           mFlagUpdateOn = true;
           mDataReader->readRequest();
@@ -165,7 +170,7 @@ public:
     Q_UNUSED(_obj);
     auto it = mEventsMap.find(_event->type());
     if(it == mEventsMap.end()) return false;
-    return it.value()(_event);
+    return it.value()(_obj, _event);
   }
 
   static void install(
@@ -231,16 +236,18 @@ private:
 
 
     mEventsMap.insert(QEvent::Type::FocusIn,
-        [this](QEvent* _event)
+        [this](QObject* _obj, QEvent* _event)
         {
+          Q_UNUSED(_obj);
           Q_UNUSED(_event);
           mpLineEdit->clearFocus();
           return true;
         });
 
     mEventsMap.insert(QEvent::Type::MouseButtonPress,
-        [this](QEvent* _event)
+        [this](QObject* _obj, QEvent* _event)
         {
+          Q_UNUSED(_obj);
           Q_UNUSED(_event);
           if(mKeyboardListener->connect(mpLineEdit->text())) setActive(false);
           return true;
