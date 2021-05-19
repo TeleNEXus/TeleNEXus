@@ -41,14 +41,15 @@
     <SCRIPTS file="scripts.xml"/>
 
     <FORMATTERS file="formatters.xml"/>
-    
 
-    <WINDOW id="win0" title="WINDOW 0" file="window.xml" show="normal"/>
+    <WINDOW id="win0" title="WINDOW 0" file="window.xml" show="fullScreen"
+      modes="stayOnTop=off; frameless=on" />
+      <!-- modes="stayOnTop=off; frameless=on" -->
+
     <WINDOW id="keyboard 1" title="keyboard 1" file="keyboard1.xml" 
       modality="yes"
-      modeSet="stay on top | frameless"
-      modeReset="stay on top | frameless"
-      />
+      modes="stayOnTop=on; frameless=on" />
+
     <KEYBOARD 
       id="keyboard" window="keyboard 1"
       streamSource="localsource" streamName="test_stream"

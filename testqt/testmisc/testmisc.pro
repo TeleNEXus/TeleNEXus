@@ -23,7 +23,8 @@ INCLUDEPATH +=                                  \
 
 # SOURCES += main.cpp \
 # SOURCES +=  ./regexpr.cpp \
-SOURCES +=  ./testevents.cpp \
+SOURCES +=  ./multipleattr.cpp \
+# SOURCES +=  ./testevents.cpp \
 # SOURCES +=  ./bitfield.cpp \
 # SOURCES +=  ./tab.cpp \
 # SOURCES +=  ./testlayout.cpp \

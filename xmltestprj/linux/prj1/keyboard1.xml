@@ -5,8 +5,19 @@
     <widget> 
       <layout>
         <layoutVBox>
-          <widgets>
 
+          <layout>
+            <layoutHBox>
+              <stretch/>
+              <widgets>
+                <controlWindowButton text="close">
+                    <window id="keyboard 1" event="pressed" action="hide"/>
+                </controlWindowButton>
+              </widgets>
+            </layoutHBox>
+          </layout>
+
+          <widgets>
             <dataLabel      source="localsource"  data="keyboard_data" format="string"/>
 
             <dataWriteButton text="write a">

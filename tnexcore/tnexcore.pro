@@ -38,6 +38,7 @@ INCLUDEPATH +=                          \
 
 SOURCES += \
 ../../common/lqvalidatoru32.cpp \
+../../common/tnexcommon.cpp \
 dataformatters/lcformatterbase.cpp \
 dataformatters/lcformatterbitfield.cpp \
 dataformatters/lcformatterbits.cpp \
@@ -87,6 +88,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 HEADERS += \
 ../common/lqextendevent.h \
 ../common/lqvalidatoru32.h \
+../common/tnexcommon.h \
 ../common/interfaces/LIApplication.h \
 ../common/interfaces/remotedata/LIRemoteDataReader.h \
 ../common/interfaces/remotedata/LIRemoteDataSource.h \
