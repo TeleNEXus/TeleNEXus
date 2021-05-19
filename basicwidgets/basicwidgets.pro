@@ -71,6 +71,7 @@ HEADERS += \
     ../../common/interfaces/keyboard/LIKeyboardListener.h \
     ../../common/lqextendevent.h \
     ../../common/lqvalidatoru32.h \
+    ../../common/tnexcommon.h \
     basicwidgets_global.h \
     basicwidgets.h \
     common/LIMovieAccess.h \

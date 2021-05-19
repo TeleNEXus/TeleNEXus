@@ -133,16 +133,8 @@ int main(int argc, char** argv)
 
       }
 
-
-
-
-
       /* test_string.replace(re, QString("[char code]")); */
-
-
-
       /* test_string.replace(QRegExp("\\\\[0]{1,1}"),QChar(0)); */
-
       out << "Test string \0 replace = " << test_string << endl;
 
       std::cout << "Test \0 string replace std = " << test_string.toStdString() << std::endl;

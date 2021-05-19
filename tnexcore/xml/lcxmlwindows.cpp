@@ -25,6 +25,7 @@
 #include "LIKeyboard.h"
 #include "LIApplication.h"
 #include  "LIJScriptService.h"
+#include "tnexcommon.h"
 
 #include <QDomElement>
 #include <QMap>
@@ -42,6 +43,8 @@ static const struct
   QString scriptId = "scriptId";
   QString modality = "modality";
   QString state = "state";
+
+  QString modes = "modes";
 
   struct 
   {
@@ -510,12 +513,52 @@ static void initWindow(LCXmlWindow* _win, const QDomElement& _element)
     _win->mpWidget->setWindowModality(Qt::WindowModality::ApplicationModal);
   }
 
+
+  QString attr_modes = _element.attribute(__slAttributes.modes);
+
+
+  auto get_mode_setters = [_win]() mutable
+  {
+    QMap<QString, std::function<void(const QString&)>> setters_map;
+
+    setters_map.insert(QStringLiteral("stayOnTop"),
+        [_win](const QString& _val)
+        {
+          if(_val == QStringLiteral("on"))
+          {
+            _win->mpWidget->setWindowFlag(Qt::WindowType::WindowStaysOnTopHint, true);
+          }
+          else if(_val == QStringLiteral("off"))
+          {
+            _win->mpWidget->setWindowFlag(Qt::WindowType::WindowStaysOnTopHint, false);
+          }
+        });
+
+    setters_map.insert(QStringLiteral("frameless"),
+        [_win](const QString& _val)
+        {
+          if(_val == QStringLiteral("on"))
+          {
+            _win->mpWidget->setWindowFlag(Qt::WindowType::FramelessWindowHint, true);
+          }
+          else if(_val == QStringLiteral("off"))
+          {
+            _win->mpWidget->setWindowFlag(Qt::WindowType::FramelessWindowHint, false);
+          }
+        });
+    return setters_map;
+  };
+
+  if(!attr_modes.isNull())
+  {
+    tnexcommon::setMultipleAttributes(get_mode_setters(), attr_modes);
+  }
+
+
   auto show = [attr_show, _win] () mutable
   {
     attr_show = attr_show.remove(" ");
     attr_show = attr_show.toLower();
-    /* _win->mpWidget->setWindowFlag(Qt::WindowType::WindowStaysOnTopHint); */
-    _win->mpWidget->setWindowFlag(Qt::WindowType::FramelessWindowHint, true);
 
     if(attr_show == QStringLiteral("normal"))
       _win->mpWidget->show();
