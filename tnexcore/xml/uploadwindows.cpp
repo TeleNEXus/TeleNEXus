@@ -27,6 +27,8 @@
 #include  "LIJScriptService.h"
 #include "tnexcommon.h"
 
+#include "cwindow.h"
+
 #include <QDomElement>
 #include <QMap>
 #include <QList>
@@ -35,6 +37,10 @@
 #include <LIRemoteDataWriter.h>
 #include <QEvent>
 #include <qnamespace.h>
+
+//==============================================================================
+QMap<QString, QSharedPointer<LIWindow>> __slWindowsMap;
+QList<std::function<void(void)>> __slShowList;
 
 //==============================================================================
 static const struct
@@ -181,246 +187,9 @@ public:
 };
 
 //==============================================================================LCXmlWindow
-class LCXmlWindow : public LIWindow
-{
-private:
-  using TActionList = QList<TAction>;
-  TActionList mShowActions;
-  TActionList mHideActions;
-
-  class CQEventFilter : public QObject
-  {
-  private:
-
-    class CStateBase
-    {
-    protected:
-      using TAction = std::function<void(void)>;
-    public:
-      CStateBase(){}
-      virtual CStateBase* operator()(QObject* _obj, QEvent* _event) = 0;
-    };
-
-    //--------------------------------------------------------------------
-    class CStateHidden : public CStateBase
-    {
-    private:
-      TAction mActionShow;
-      CStateBase* mpStateShow;
-    public:
-      CStateHidden(){}
-
-      void init(CStateBase* _stateShow, const TAction& _showAction)
-      {
-        mActionShow = _showAction;
-        mpStateShow = _stateShow;
-      }
-
-      virtual CStateBase* operator()(QObject* _obj, QEvent* _event) override
-      {
-        Q_UNUSED(_obj);
-        if(_event->type() != QEvent::Show) return this;
-        mActionShow();
-        return mpStateShow;
-      }
-    };
-
-    class CStateMinimized: public CStateBase
-    {
-    private:
-      CStateBase* mpStateShow;
-      CStateBase* mpStateHidden;
-      TAction mHideAction;
-    public:
-      CStateMinimized(){}
-      void init(CStateBase* _stateShow, CStateBase* _stateHidden, const TAction& _hideAction)
-      {
-        mpStateShow   = _stateShow;
-        mpStateHidden = _stateHidden;
-        mHideAction   = _hideAction;
-      }
-
-      virtual CStateBase* operator()(QObject* _obj, QEvent* _event) override
-      {
-        Q_UNUSED(_obj);
-        CStateBase* ret = this;
-
-        QWidget* w = dynamic_cast<QWidget*>(_obj);
-        if(!w) return ret;
-
-        switch(_event->type())
-        {
-        case QEvent::Type::Show:
-          ret = mpStateShow;
-          break;
-        case QEvent::Type::Hide:
-          mHideAction();
-          ret = mpStateHidden;
-          break;
-        default:
-          break;
-        }
-
-        return ret;
-      }
-    };
-
-    class CStateShow: public CStateBase
-    {
-    private:
-      TAction mActionHide;
-      CStateBase* mpStateHidden;
-      CStateBase* mpStateMinimized;
-      
-    public:
-      CStateShow(){}
-      void init(
-          CStateBase*     _stateHidden, 
-          CStateBase*     _stateMinimized, 
-          const TAction&  _hideAction) 
-      { 
-        mActionHide       = _hideAction;
-        mpStateHidden     = _stateHidden;
-        mpStateMinimized  = _stateMinimized;
-      }
-
-      virtual CStateBase* operator()(QObject* _obj, QEvent* _event) override
-      {
-        Q_UNUSED(_obj);
-        CStateBase* ret = this;
-
-        QWidget* w = dynamic_cast<QWidget*>(_obj);
-
-        if(!w) return ret;
-
-        switch(_event->type())
-        {
-        case QEvent::Type::Close:
-          mActionHide();
-          ret = mpStateHidden;
-          break;
-
-        case QEvent::Type::Hide:
-          if(w->windowState() == Qt::WindowState::WindowMinimized)
-          {
-            ret = mpStateMinimized;
-          }
-          else
-          {
-            mActionHide();
-            ret = mpStateHidden;
-          }
-          break;
-
-        default:
-          break;
-        }
-        return ret;
-      }
-    };
-
-    LCXmlWindow& edWindow;
-
-    CStateHidden    mStateHidden;
-    CStateMinimized mStateMinimized;
-    CStateShow      mStateShow;
-    CStateBase*     mpCurrentState = &mStateHidden;
-
-  public:
-    CQEventFilter() = delete;
-
-    CQEventFilter(LCXmlWindow& _window) : QObject(nullptr), edWindow(_window)
-    {
-      auto actions_show = 
-       [this]()
-       {
-         for(auto it = edWindow.mShowActions.begin();
-             it != edWindow.mShowActions.end();
-             it++)
-         {
-           (*it)();
-         }
-       }; 
-
-      auto actions_hide = 
-       [this]()
-       {
-         for(auto it = edWindow.mHideActions.begin();
-             it != edWindow.mHideActions.end();
-             it++)
-         {
-           (*it)();
-         }
-       }; 
-      mStateHidden.init(&mStateShow, actions_show);
-      mStateMinimized.init(&mStateShow, &mStateHidden, actions_hide);
-      mStateShow.init(&mStateHidden, &mStateMinimized, actions_hide);
-    }
-
-    virtual bool eventFilter(QObject* _obj, QEvent* _event) override
-    {
-      auto ret_state = (*mpCurrentState)(_obj, _event);
-      if(ret_state == mpCurrentState) return false;
-      mpCurrentState = ret_state;
-      return true;
-    }
-  };
 
 
-public:
-  using TShowList = QList<std::function<void(void)>>;
-  static QMap<QString, QSharedPointer<LIWindow>> smWindowsMap;
-  static TShowList smShowList;
-  QWidget* mpWidget;
-private:
-  CQEventFilter mEventFilter;
-public:
-  LCXmlWindow() = delete;
-  LCXmlWindow(QWidget* _widget): mpWidget(_widget), mEventFilter(*this)
-  {
-    mpWidget->installEventFilter(&mEventFilter);
-  }
-  virtual ~LCXmlWindow()
-  {
-  }
 
-  //--------------------------------------------------------------------------
-  virtual void show() override
-  {
-    mpWidget->show();
-  }
-
-  //--------------------------------------------------------------------------
-  virtual void hide() override
-  {
-    if(mpWidget->windowState() == Qt::WindowState::WindowFullScreen)
-    {
-      mpWidget->close();
-    }
-    else
-    {
-      mpWidget->hide();
-    }
-  }
-
-  //--------------------------------------------------------------------------
-  virtual void addActionShow(TAction _action) override
-  {
-    mShowActions << _action;
-  }
-
-  //--------------------------------------------------------------------------
-  virtual void addActionHide(TAction _action) override
-  {
-    mHideActions << _action;
-  }
-
-};
-
-
-//------------------------------------------------------------------------------
-QMap<QString, QSharedPointer<LIWindow>> LCXmlWindow::smWindowsMap;
-LCXmlWindow::TShowList LCXmlWindow::smShowList;
 
 //==============================================================================LCXmlWindows
 LCXmlWindows::LCXmlWindows()
@@ -442,8 +211,8 @@ LCXmlWindows& LCXmlWindows::instance()
 //------------------------------------------------------------------------------
 QSharedPointer<LIWindow> LCXmlWindows::getWindow(const QString& _windowId)
 {
-  auto it = LCXmlWindow::smWindowsMap.find(_windowId); 
-  if(it == LCXmlWindow::smWindowsMap.end()) 
+  auto it = __slWindowsMap.find(_windowId); 
+  if(it == __slWindowsMap.end()) 
   {
     return nullptr;
   }
@@ -453,7 +222,7 @@ QSharedPointer<LIWindow> LCXmlWindows::getWindow(const QString& _windowId)
 //------------------------------------------------------------------------------
 void LCXmlWindows::show()
 {
-  for(auto it = LCXmlWindow::smShowList.begin(); it != LCXmlWindow::smShowList.end();
+  for(auto it = __slShowList.begin(); it != __slShowList.end();
       it++)
   {
     (*it)();
@@ -497,7 +266,7 @@ static void initWindow(LCXmlWindow* _win, const QDomElement& _element)
 
   if(!attr_id.isNull()) 
   {
-    LCXmlWindow::smWindowsMap.insert(attr_id, 
+    __slWindowsMap.insert(attr_id, 
         QSharedPointer<LIWindow>(_win));
     if(attr_title.isNull()) attr_title = attr_id;
   }

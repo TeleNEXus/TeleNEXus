@@ -20,4 +20,23 @@
  */
 #ifndef CWINDOW_H_
 #define CWINDOW_H_
+
+#include "LIWindow.h"
+
+class QWidget;
+class LCXmlWindow : public LIWindow
+{
+private:
+  void* mpLocal;
+public:
+  LCXmlWindow() = delete;
+  LCXmlWindow(QWidget* _widget);
+  virtual ~LCXmlWindow();
+  virtual void show() override;
+  virtual void hide() override;
+  virtual void addActionShow(TAction _action) override;
+  virtual void addActionHide(TAction _action) override;
+};
+
+
 #endif /* CWINDOW_H_ */
