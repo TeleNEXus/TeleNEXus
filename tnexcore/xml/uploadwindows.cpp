@@ -18,7 +18,7 @@
  * You should have received a copy of the GNU General Public License
  * along with TeleNEXus.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "lcxmlwindows.h"
+#include "uploadwindows.h"
 #include "lcxmlcommon.h"
 #include "LIXmlWidgetBuilder.h"
 #include "LIWindow.h"

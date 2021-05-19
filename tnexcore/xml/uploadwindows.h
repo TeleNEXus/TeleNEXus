@@ -18,8 +18,8 @@
  * You should have received a copy of the GNU General Public License
  * along with TeleNEXus.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef LCXMLWINDOWS_H_
-#define LCXMLWINDOWS_H_
+#ifndef UPLOADWINDOWS_H_
+#define UPLOADWINDOWS_H_
 
 #include <QSharedPointer>
 
@@ -47,4 +47,4 @@ public:
     void show();
 };
 
-#endif /* LCXMLWINDOWS_H_ */
+#endif /* UPLOADWINDOWS_H_ */
