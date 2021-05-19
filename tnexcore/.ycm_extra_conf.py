@@ -70,6 +70,7 @@ flags = [
              '-I', '../common/interfaces/remotedata',
              '-I', '../common/interfaces/xmlbuilders',
              '-I', '../common',
+             '-I', '../tnexcore/window',
              '-I', '../tnexcore/keyboard',
              '-I', '../tnexcore/xml',
              '-I', '../tnexcore/dataformatters',
