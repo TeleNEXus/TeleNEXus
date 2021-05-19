@@ -72,7 +72,7 @@ xml/lcxmlbuildersloader.cpp \
 xml/lcxmllayoutbuilders.cpp \
 xml/lcxmlremotedatasourcebuilders.cpp \
 xml/lcxmlwidgetbuilders.cpp \
-xml/lcxmlwindows.cpp \
+xml/uploadwindows.cpp \
 xml/lcxmlfonts.cpp \
 xml/uploadjscripts.cpp \
 xml/uploaddataformatters.cpp \
@@ -134,7 +134,7 @@ xml/lcxmlbuildersloader.h \
 xml/lcxmllayoutbuilders.h \
 xml/lcxmlremotedatasourcebuilders.h \
 xml/lcxmlwidgetbuilders.h \
-xml/lcxmlwindows.h \
+xml/uploadwindows.h \
 xml/lcxmlfonts.h \
 xml/uploadjscripts.h \
 xml/uploadkeyboards.h \
