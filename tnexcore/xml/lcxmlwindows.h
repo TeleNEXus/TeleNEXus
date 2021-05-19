@@ -27,6 +27,8 @@ class QDomElement;
 class LIApplication;
 class LIWindow;
 
+
+
 class LCXmlWindows
 {
 private:
