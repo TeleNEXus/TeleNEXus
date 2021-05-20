@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<WINDOW posx="300" posy="150"> 
+<WINDOW posx="300" posy="150" title="keyboard 2" 
+    modes="stayOnTop=on; frameless=on">
   <mainWidget>
     <widget> 
       <layout>

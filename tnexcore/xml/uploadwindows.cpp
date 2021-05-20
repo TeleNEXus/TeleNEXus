@@ -40,6 +40,8 @@
 
 //==============================================================================
 QMap<QString, QSharedPointer<LIWindow>> __slWindowsMap;
+QList<QSharedPointer<LIWindow>> __slNoNameWindows;
+
 QList<std::function<void(void)>> __slShowList;
 
 //==============================================================================
@@ -72,6 +74,14 @@ static const struct
   QString scriptStop    = "scriptStop";
 
 }__slTags;
+
+static const struct
+{
+  QString valueOn = "on";
+  QString valueOff = "valueOff";
+  QString stayOnTop = "stayOnTop";
+  QString frameless = "frameless";
+}__slModes;
 
 //==============================================================================ActionLoader
 class CActionLoader
@@ -186,10 +196,6 @@ public:
   };
 };
 
-//==============================================================================LCXmlWindow
-
-
-
 
 //==============================================================================LCXmlWindows
 LCXmlWindows::LCXmlWindows()
@@ -229,211 +235,229 @@ void LCXmlWindows::show()
   }
 }
 
+
 //------------------------------------------------------------------------------
+QDomElement endElement(
+    const QDomElement& _element,
+    const LIApplication& _app);
 
 static QWidget* buildWidget(const QDomElement& _element, 
     const LIApplication& _app);
 
-static LCXmlWindow* buildLocal(const QDomElement& _element,
-    const LIApplication& _app);
-
-static void initWindow(LCXmlWindow* _win, const QDomElement& _element);
+static void setWidgetAttr(QWidget* _widget, const QDomElement& _element);
 
 //------------------------------------------------------------------------------
 void LCXmlWindows::buildWindow(
     const QDomElement &_element, 
     const LIApplication& _app)
 {
-  auto window = buildLocal(_element, _app); 
-  if(window == nullptr) return;
-  initWindow(window, _element);
-}
-
-//------------------------------------------------------------------------------
-static void initWindow(LCXmlWindow* _win, const QDomElement& _element)
-{
-  QString attr_id = _element.attribute(
-      LCXmlCommon::mCommonAttributes.id);
-
-  QString attr_title = _element.attribute(
-      LCXmlCommon::mCommonAttributes.title);
-
-  QString attr_show = _element.attribute(
-      LCXmlCommon::mCommonAttributes.show.tag);
-  QString attr_state = _element.attribute(__slAttributes.state);
-
-  QString attr_modality = _element.attribute(__slAttributes.modality);
-
-  if(!attr_id.isNull()) 
-  {
-    __slWindowsMap.insert(attr_id, 
-        QSharedPointer<LIWindow>(_win));
-    if(attr_title.isNull()) attr_title = attr_id;
-  }
-
-  if(!attr_title.isNull())
-  {
-    _win->mpWidget->setWindowTitle(attr_title);
-  }
-
-  if(attr_modality == QStringLiteral("yes"))
-  {
-    qDebug() << "initWindow set modality";
-    _win->mpWidget->setWindowModality(Qt::WindowModality::ApplicationModal);
-  }
-
-
-  QString attr_modes = _element.attribute(__slAttributes.modes);
-
-
-  auto get_mode_setters = [_win]() mutable
-  {
-    QMap<QString, std::function<void(const QString&)>> setters_map;
-
-    setters_map.insert(QStringLiteral("stayOnTop"),
-        [_win](const QString& _val)
-        {
-          if(_val == QStringLiteral("on"))
-          {
-            _win->mpWidget->setWindowFlag(Qt::WindowType::WindowStaysOnTopHint, true);
-          }
-          else if(_val == QStringLiteral("off"))
-          {
-            _win->mpWidget->setWindowFlag(Qt::WindowType::WindowStaysOnTopHint, false);
-          }
-        });
-
-    setters_map.insert(QStringLiteral("frameless"),
-        [_win](const QString& _val)
-        {
-          if(_val == QStringLiteral("on"))
-          {
-            _win->mpWidget->setWindowFlag(Qt::WindowType::FramelessWindowHint, true);
-          }
-          else if(_val == QStringLiteral("off"))
-          {
-            _win->mpWidget->setWindowFlag(Qt::WindowType::FramelessWindowHint, false);
-          }
-        });
-    return setters_map;
-  };
-
-  if(!attr_modes.isNull())
-  {
-    tnexcommon::setMultipleAttributes(get_mode_setters(), attr_modes);
-  }
-
-
-  auto show = [attr_show, _win] () mutable
-  {
-    attr_show = attr_show.remove(" ");
-    attr_show = attr_show.toLower();
-
-    if(attr_show == QStringLiteral("normal"))
-      _win->mpWidget->show();
-    else if(attr_show == QStringLiteral("fullscreen"))
-    {
-      qDebug() << "initWindow set full screen state";
-      _win->mpWidget->show();
-      _win->mpWidget->setWindowState(Qt::WindowState::WindowFullScreen);
-    }
-  };
-
-  LCXmlWindow::smShowList << show;
-}
-
-//------------------------------------------------------------------------------
-static void widgetAttr(QWidget* _widget, const QDomElement& _element);
-
-static LCXmlWindow* buildLocal(const QDomElement& _element,
-    const LIApplication& _app)
-{
-  QString attr_file =  _element.attribute(
-      LCXmlCommon::mCommonAttributes.file);
-  if(!attr_file.isNull())
-  {
-    QDomElement el = _app.getDomDocument(attr_file).documentElement();
-    if(el.isNull()) return nullptr;
-    if(el.tagName() != LCXmlCommon::mBaseTags.window) return nullptr;
-    return buildLocal(el, _app);
-  }
-
-
-  QWidget* widget = buildWidget(_element, _app);
-  if(widget == nullptr) 
-  {
-    return nullptr;
-  }
+  QDomElement el = endElement(_element, _app);
+  QWidget* widget = buildWidget(el, _app);
+  if(widget == nullptr) return;
 
   LCXmlWindow*  window = new LCXmlWindow(widget);
 
-  widgetAttr(widget, _element);
+  CActionLoader::getInstance().load(el, _app, window);
 
-  CActionLoader::getInstance().load(_element, _app, window);
+  QString attr_id = _element.attribute(
+      LCXmlCommon::mCommonAttributes.id);
 
-  return window;
+  auto sp_win = QSharedPointer<LIWindow>(window);
+  if(!attr_id.isNull()) 
+  {
+    __slWindowsMap.insert(attr_id, sp_win);
+  }
+  else
+  {
+    __slNoNameWindows << sp_win; 
+  }
+
+
+  //Show controll
+  {
+    QString attr_show = _element.attribute(
+        LCXmlCommon::mCommonAttributes.show.tag);
+    auto show = [attr_show, widget] () mutable
+    {
+      attr_show = attr_show.remove(" ");
+      attr_show = attr_show.toLower();
+
+      if(attr_show == QStringLiteral("normal"))
+        widget->show();
+      else if(attr_show == QStringLiteral("fullscreen"))
+      {
+        widget->show();
+        widget->setWindowState(Qt::WindowState::WindowFullScreen);
+      }
+    };
+    __slShowList << show;
+  }
+
 }
 
 //------------------------------------------------------------------------------
-static void widgetAttr(QWidget* _widget, const QDomElement& _element)
+QDomElement endElement(
+    const QDomElement& _element,
+    const LIApplication& _app)
 {
-  //Получение атрибутов.
-  QString attr_width = _element.attribute(
-      LCXmlCommon::mCommonAttributes.widht);
 
-  QString attr_height = _element.attribute(
-      LCXmlCommon::mCommonAttributes.height);
+  QString attr_file =  _element.attribute(
+      LCXmlCommon::mCommonAttributes.file);
 
-  //Переопределение размеров окна.
-  QSize s = _widget->geometry().size();
-
-  if(!attr_width.isNull())
-  {
-    bool flag = false;
-    int width = attr_width.toInt(&flag);
-
-    if(flag) 
+  auto set_attr = 
+    [](const QDomElement& _elf, QDomElement _els)
     {
-      s.setWidth(width);
-    }
+      auto attrs = _elf.attributes();
+      for(int i = 0; i < attrs.length(); i++)
+      {
+        auto att = attrs.item(i).toAttr();
+        if(att.name() != LCXmlCommon::mCommonAttributes.file)
+        {
+          _els.setAttribute(att.name(), att.value());
+        }
+      }
+    };
+
+  if(!attr_file.isNull())
+  {
+    QDomElement el = _app.getDomDocument(attr_file).documentElement();
+    if(el.isNull()) return el;
+    if(el.tagName() != LCXmlCommon::mBaseTags.window) return QDomElement();
+    set_attr(_element, el);
+    return endElement(el, _app);
+  }
+  return _element;
+}
+
+//------------------------------------------------------------------------------
+static void setWidgetAttr(QWidget* _widget, const QDomElement& _element)
+{
+  if(!_widget) return;
+
+  QString attr = _element.attribute(LCXmlCommon::mCommonAttributes.title);
+  if(!attr.isNull()) { _widget->setWindowTitle(attr); }
+
+  attr = _element.attribute(__slAttributes.modality);
+  if(attr == QStringLiteral("yes"))
+  {
+    _widget->setWindowModality(Qt::WindowModality::ApplicationModal);
   }
 
-  if(!attr_height.isNull())
+
+  //----------------------------------------------------set_modes[]
+  auto set_modes = [&_element, _widget]()
   {
-    bool flag = false;
-    int height = attr_height.toInt(&flag);
-    if(flag) 
+    QString attr_modes = _element.attribute(__slAttributes.modes);
+
+    auto get_mode_setters = [_widget]() mutable
     {
-      s.setHeight(height);
+      QMap<QString, std::function<void(const QString&)>> setters_map;
+
+      setters_map.insert(QStringLiteral("stayOnTop"),
+          [_widget](const QString& _val)
+          {
+            if(_val == QStringLiteral("on"))
+            {
+              _widget->setWindowFlag(Qt::WindowType::WindowStaysOnTopHint, true);
+            }
+            else if(_val == QStringLiteral("off"))
+            {
+              _widget->setWindowFlag(Qt::WindowType::WindowStaysOnTopHint, false);
+            }
+          });
+
+      setters_map.insert(QStringLiteral("frameless"),
+          [_widget](const QString& _val)
+          {
+            if(_val == QStringLiteral("on"))
+            {
+              _widget->setWindowFlag(Qt::WindowType::FramelessWindowHint, true);
+            }
+            else if(_val == QStringLiteral("off"))
+            {
+              _widget->setWindowFlag(Qt::WindowType::FramelessWindowHint, false);
+            }
+          });
+      return setters_map;
+    };
+
+    if(!attr_modes.isNull())
+    {
+      tnexcommon::setMultipleAttributes(get_mode_setters(), attr_modes);
     }
-  }
+  };
 
-  bool flag_posx = false;
-  bool flag_posy = false;
-  int posx;
-  int posy;
 
-  QString attr = _element.attribute(
-      LCXmlCommon::mCommonAttributes.posx);
-  posx = attr.toInt(&flag_posx);
-
-  attr = _element.attribute(
-      LCXmlCommon::mCommonAttributes.posy);
-  posy = attr.toInt(&flag_posy);
-
-  if(flag_posx && flag_posy)
+  //----------------------------------------------------widget_size[]
+  auto widget_size = [&_element, _widget]()
   {
-    _widget->move(posx, posy);
-  }
-  _widget->resize(s);
+    //Переопределение размеров окна.
+    QSize size = _widget->geometry().size();
+
+    QString attr_width = _element.attribute(
+        LCXmlCommon::mCommonAttributes.widht);
+
+    QString attr_height = _element.attribute(
+        LCXmlCommon::mCommonAttributes.height);
+
+    if(!attr_width.isNull())
+    {
+      bool flag = false;
+      int width = attr_width.toInt(&flag);
+
+      if(flag) 
+      {
+        size.setWidth(width);
+      }
+    }
+
+    if(!attr_height.isNull())
+    {
+      bool flag = false;
+      int height = attr_height.toInt(&flag);
+      if(flag) 
+      {
+        size.setHeight(height);
+      }
+    }
+    return size;
+  };
+
+  //----------------------------------------------------set_position[]
+  auto set_position = [&_element, _widget]()
+  {
+    bool flag_posx = false;
+    bool flag_posy = false;
+    int posx;
+    int posy;
+
+    QString attr = _element.attribute(
+        LCXmlCommon::mCommonAttributes.posx);
+    posx = attr.toInt(&flag_posx);
+
+    attr = _element.attribute(
+        LCXmlCommon::mCommonAttributes.posy);
+    posy = attr.toInt(&flag_posy);
+
+    if(flag_posx && flag_posy)
+    {
+      _widget->move(posx, posy);
+    }
+  };
+
+  set_modes();
+  set_position();
+  _widget->resize(widget_size());
 }
 
 //------------------------------------------------------------------------------
 static QWidget* buildWidget(const QDomElement& _element, 
     const LIApplication& _app)
 {
+
+  QWidget* widget = nullptr;
+
   auto main_widget_element = _element.firstChildElement(__slTags.mainWidget);
-  if(main_widget_element.isNull()) return nullptr;
 
   for(auto node = main_widget_element.firstChild(); 
       !node.isNull(); 
@@ -445,10 +469,12 @@ static QWidget* buildWidget(const QDomElement& _element,
       auto builder = _app.getWidgetBuilder(el.tagName());
       if(!builder.isNull())
       {
-        auto widget = builder->build(el, _app);
-        if(widget) return widget;
+        widget = builder->build(el, _app);
+        if(!widget) continue;
+        break;
       }
     }
   }
-  return nullptr;
+  setWidgetAttr(widget, _element);
+  return widget;
 }
