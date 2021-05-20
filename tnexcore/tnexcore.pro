@@ -27,6 +27,7 @@ INCLUDEPATH +=                          \
 ../common/interfaces/xmlbuilders        \
 ../common/interfaces/keyboard           \
 ../common/                              \
+./window                                \
 ./xml                                   \
 ./dataformatters                        \
 ./jscripts/jscriptservice               \
@@ -78,6 +79,7 @@ xml/uploadjscripts.cpp \
 xml/uploaddataformatters.cpp \
 xml/uploadkeyboards.cpp \
 keyboard/lckeyboard.cpp \
+window/cwindow.cpp \
 main.cpp \
 
 # Default rules for deployment.
@@ -139,5 +141,8 @@ xml/lcxmlfonts.h \
 xml/uploadjscripts.h \
 xml/uploadkeyboards.h \
 keyboard/lckeyboard.h \
+window/cwindow.h \
+
+
 
 

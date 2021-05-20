@@ -226,6 +226,7 @@ struct SLocalData
 //==============================================================================LCXmlWindow
 LCXmlWindow::LCXmlWindow(QWidget* _widget)
 {
+  mpLocal = new SLocalData;
   ld.pWidget = _widget;
   ld.pWidget->installEventFilter(&(ld.eventFilter));
 }
