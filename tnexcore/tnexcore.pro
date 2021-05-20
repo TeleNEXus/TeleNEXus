@@ -73,11 +73,11 @@ xml/lcxmlbuildersloader.cpp \
 xml/lcxmllayoutbuilders.cpp \
 xml/lcxmlremotedatasourcebuilders.cpp \
 xml/lcxmlwidgetbuilders.cpp \
-xml/uploadwindows.cpp \
 xml/lcxmlfonts.cpp \
 xml/uploadjscripts.cpp \
 xml/uploaddataformatters.cpp \
 xml/uploadkeyboards.cpp \
+xml/uploadwindows.cpp \
 keyboard/lckeyboard.cpp \
 window/cwindow.cpp \
 main.cpp \
@@ -136,10 +136,10 @@ xml/lcxmlbuildersloader.h \
 xml/lcxmllayoutbuilders.h \
 xml/lcxmlremotedatasourcebuilders.h \
 xml/lcxmlwidgetbuilders.h \
-xml/uploadwindows.h \
 xml/lcxmlfonts.h \
 xml/uploadjscripts.h \
 xml/uploadkeyboards.h \
+xml/uploadwindows.h \
 keyboard/lckeyboard.h \
 window/cwindow.h \
 
