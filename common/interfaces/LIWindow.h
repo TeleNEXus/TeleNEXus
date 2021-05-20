@@ -44,6 +44,8 @@ public:
      * Скрывает окно.
      */
     virtual void hide() = 0;
+    //???????????????????
+    //virtual void action(const QString& _action);
 
     /*
      * Добавляет действие при открытии окна.
