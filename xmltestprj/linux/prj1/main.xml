@@ -6,7 +6,6 @@
         <item path="./libs"/>
     </PLAGINPATHS>
 
-
     <SOURCEBUILDERS file="sourcebuilders.xml"/>
     
     <SOURCES file="sources.xml"/>

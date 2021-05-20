@@ -28,23 +28,11 @@ class LIApplication;
 class LIWindow;
 
 
-
-class LCXmlWindows
+namespace uploadwindows
 {
-private:
-    LCXmlWindows();
-    ~LCXmlWindows();
-    LCXmlWindows(const LCXmlWindows&) = delete;
-    LCXmlWindows& operator=(const LCXmlWindows&) = delete;
-public:
-    static LCXmlWindows& instance();
-
-    void buildWindow(
-        const QDomElement &_element, 
-        const LIApplication& _app);
-
-    QSharedPointer<LIWindow> getWindow(const QString& _windowId);
-    void show();
-};
+void upload( const QDomElement &_element, const LIApplication& _app);
+void show();
+QSharedPointer<LIWindow> getWindow(const QString& _windowId);
+}
 
 #endif /* UPLOADWINDOWS_H_ */

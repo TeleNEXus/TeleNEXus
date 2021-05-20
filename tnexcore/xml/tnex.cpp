@@ -25,12 +25,12 @@
 #include "lcxmlremotedatasourcebuilders.h"
 #include "lcxmllayoutbuilders.h"
 #include "lcxmlwidgetbuilders.h"
-#include "lcxmlwindows.h"
 #include "lcxmlfonts.h"
 
 #include "LIRemoteDataReader.h"
 #include "LIRemoteDataSource.h"
 #include "lcxmlformatterfactory.h"
+#include "uploadwindows.h"
 #include "uploaddataformatters.h"
 #include "uploadjscripts.h"
 #include "uploadkeyboards.h"
@@ -126,7 +126,7 @@ public:
   virtual QSharedPointer<LIWindow> getWindow(
       const QString& _windowId) const override
   {
-    return LCXmlWindows::instance().getWindow(_windowId);
+    return uploadwindows::getWindow(_windowId);
   }
 
   virtual QSharedPointer<LIKeyboard> getKeyboard(
@@ -285,7 +285,7 @@ int tnex::exec(int argc, char *argv[])
     //----------------------------------------------------
     uploadkeyboards::init();
 
-    LCXmlWindows::instance().show();
+    uploadwindows::show();
 
 
     QObject::connect(&app, &QApplication::aboutToQuit,
@@ -456,7 +456,6 @@ static void addWidgetsBuilders(const QDomElement& _rootElement)
 //==============================================================================
 static void addWindows(const QDomElement& _rootElement)
 {
-  //simple windows
   for(auto node = 
       _rootElement.firstChildElement(
         LCXmlCommon::mBaseTags.window); 
@@ -469,7 +468,8 @@ static void addWindows(const QDomElement& _rootElement)
     QDomElement el = node.toElement();
 
     if(el.isNull()) continue;
-    LCXmlWindows::instance().buildWindow(el, __slAppInterface);
+
+    uploadwindows::upload(el, __slAppInterface);
   }
 }
 
