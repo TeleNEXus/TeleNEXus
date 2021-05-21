@@ -32,9 +32,10 @@ extern "C" void* getRemComboBoxBuilder();
 extern "C" void* getRemComboLabelBuilder();
 extern "C" void* getTableWidgetBuilder();
 extern "C" void* getTabWidgetBuilder();
-extern "C" void* getRemWriteButtonBuilder();
 extern "C" void* getSwitchWidgetsListBuilder();
-extern "C" void* getControlWindowButtonBuilder();
+/* extern "C" void* getRemWriteButtonBuilder(); */
+/* extern "C" void* getControlWindowButtonBuilder(); */
+extern "C" void* getButtonBuilder();
 extern "C" void* getScrollAreaBuilder();
 extern "C" void* getListWidgetBuilder();
 extern "C" void* getStackedWidgetBuilder();

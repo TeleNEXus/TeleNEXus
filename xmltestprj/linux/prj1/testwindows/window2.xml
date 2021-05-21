@@ -1,0 +1,8 @@
+<WINDOW id="testwindow2" title="test window 2" height="100" width="100">
+  <mainWidget>
+    <widget>
+    </widget>
+  </mainWidget>
+</WINDOW>
+
+

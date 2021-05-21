@@ -14,27 +14,28 @@
 
 
 
-                <controlWindowButton text="close">
-                    <window id="keyboard 1" event="pressed" action="hide"/>
-                </controlWindowButton>
-
                 <button text="close">
-
                   <press>
-                    <writeData sourceId="sourceId" dataId="dataId" format="string" value="asdf" />
-                    <writeData data="sourceId = sourceId; dataId = dataId; format = string; value = asdf" />
-                    <controlWindow widnowId="keyboard 1" action="show"/>
-                    <controlScript scriptId="pushButtonScriptExecute" action="execute"/>
-                    <controlScript scriptId="pushButtonScriptLaunch" action="launch(500)"/>
                   </press>
-
-                  <release>
-                    <controlWindow widnowId="keyboard 1" windowAction="hide"/>
-                    <controlScript scriptId="releaseButtonScriptExecute" scriptAction="execute"/>
-                    <controlScript scriptId="releaseButtonScriptLaunch" scriptAction="launch" interval="500"/>
-                  </release>
-
                 </button>
+
+
+                <!-- <button> -->
+
+                <!--   <press> -->
+                <!--     <writeData sourceId="sourceId" dataId="dataId" format="string" value="asdf" /> -->
+                <!--     <controlWindow widnowId="keyboard 1" action="show"/> -->
+                <!--     <controlScript scriptId="pushButtonScriptExecute" action="execute"/> -->
+                <!--     <controlScript scriptId="pushButtonScriptLaunch" action="launch(500)"/> -->
+                <!--   </press> -->
+
+                <!--   <release> -->
+                <!--     <controlWindow widnowId="keyboard 1" windowAction="hide"/> -->
+                <!--     <controlScript scriptId="releaseButtonScriptExecute" scriptAction="execute"/> -->
+                <!--     <controlScript scriptId="releaseButtonScriptLaunch" scriptAction="launch" interval="500"/> -->
+                <!--   </release> -->
+
+                <!-- </button> -->
 
 
 

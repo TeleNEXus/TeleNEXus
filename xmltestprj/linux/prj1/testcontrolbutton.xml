@@ -3,20 +3,25 @@
     <layout>
         <layoutVBox>
             <widgets>
-
-                <controlWindowButton label="hide win0">
+                <button text="hide win0">
+                  <press>
                     <window id="win0" event="pressed" action="hide"/>
-                </controlWindowButton>
+                  </press>
+                </button>
 
-                <controlWindowButton label="hide win1 win2">
+                <button text="hide win1 win2">
+                  <press>
                     <window id="win1" event="pressed" action="hide"/>
                     <window id="win2" event="released" action="hide"/>
-                </controlWindowButton>
+                  </press>
+                </button>
 
-                <controlWindowButton label="show win1 win2">
+                <button text="show win1 win2">
+                  <press>
                     <window id="win1" event="pressed" action="show"/>
                     <window id="win2" event="released" action="show"/>
-                </controlWindowButton>
+                  </press>
+                </button>
 
                 <label text="Label01" /> 
                 <label text="Label02" /> 
