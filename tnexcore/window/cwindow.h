@@ -24,16 +24,19 @@
 #include "LIWindow.h"
 
 class QWidget;
-class LCXmlWindow : public LIWindow
+class LCWindow : public LIWindow
 {
 private:
   void* mpLocal;
 public:
-  LCXmlWindow() = delete;
-  LCXmlWindow(QWidget* _widget);
-  virtual ~LCXmlWindow();
+  LCWindow() = delete;
+  LCWindow(QWidget* _widget);
+  virtual ~LCWindow();
   virtual void show() override;
   virtual void hide() override;
+  virtual void action(const QString& _action) override;
+  virtual bool validateAction(
+      const QString& _action, QString* msg = nullptr) override;
   virtual void addActionShow(TAction _action) override;
   virtual void addActionHide(TAction _action) override;
 };

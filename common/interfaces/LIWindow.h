@@ -32,30 +32,21 @@ public:
   using TAction = std::function<void(void)>;
 public:
 
-    LIWindow(){}
-    virtual ~LIWindow(){}
-
-    /*
-     * Показывает окно.
-     */
-    virtual void show() = 0;
-
-    /*
-     * Скрывает окно.
-     */
-    virtual void hide() = 0;
-    //???????????????????
-    //virtual void action(const QString& _action);
-
-    /*
-     * Добавляет действие при открытии окна.
-     */
-    virtual void addActionShow(TAction _action) = 0;
-
-    /*
-     * Добавляет действие при закрытии окна.
-     */
-    virtual void addActionHide(TAction _action) = 0;
+  LIWindow(){}
+  virtual ~LIWindow(){}
+  //show window
+  virtual void show() = 0;
+  //hide window
+  virtual void hide() = 0;
+  //execute action
+  virtual void action(const QString& _action) = 0;
+  //check action code for correct
+  virtual bool validateAction(
+      const QString& _action, QString* msg = nullptr) = 0;
+  //add action when window showed 
+  virtual void addActionShow(TAction _action) = 0;
+  //add action when window hided
+  virtual void addActionHide(TAction _action) = 0;
 };
 
 #endif // LIWINDOW_H_

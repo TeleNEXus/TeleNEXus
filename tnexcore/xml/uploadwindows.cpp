@@ -415,7 +415,7 @@ void upload(
   QWidget* widget = buildWidget(el, _app);
   if(widget == nullptr) return;
 
-  LCXmlWindow*  window = new LCXmlWindow(widget);
+  LCWindow*  window = new LCWindow(widget);
 
   CActionLoader::getInstance().load(el, _app, window);
 
