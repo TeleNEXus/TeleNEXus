@@ -21,6 +21,8 @@
 #include "cwindow.h"
 #include <QWidget>
 #include <QEvent>
+#include <QMap>
+#include <functional>
 
 class CQEventFilter : public QObject
 {
@@ -216,6 +218,7 @@ public:
 //==============================================================================SLocalData
 struct SLocalData
 {
+  QMap<QString, std::function<void(void)>> actions;
   QWidget* pWidget;
   CQEventFilter eventFilter;
 };
@@ -223,27 +226,39 @@ struct SLocalData
 #define toLocalData(p) (reinterpret_cast<SLocalData*>(p))
 #define ld (*(toLocalData(mpLocal)))
 
-//==============================================================================LCXmlWindow
-LCXmlWindow::LCXmlWindow(QWidget* _widget)
+//==============================================================================LCWindow
+LCWindow::LCWindow(QWidget* _widget)
 {
   mpLocal = new SLocalData;
   ld.pWidget = _widget;
   ld.pWidget->installEventFilter(&(ld.eventFilter));
+
+  ld.actions.insert(QStringLiteral("show"),
+      [this]()
+      {
+        show();
+      });
+
+  ld.actions.insert(QStringLiteral("hide"),
+      [this]()
+      {
+        hide();
+      });
 }
 
-LCXmlWindow::~LCXmlWindow()
+LCWindow::~LCWindow()
 {
   delete toLocalData(mpLocal);
 }
 
 //--------------------------------------------------------------------------
-void LCXmlWindow::show()
+void LCWindow::show()
 {
   ld.pWidget->show();
 }
 
 //--------------------------------------------------------------------------
-void LCXmlWindow::hide()
+void LCWindow::hide()
 {
   if(ld.pWidget->windowState() == Qt::WindowState::WindowFullScreen)
   {
@@ -256,13 +271,35 @@ void LCXmlWindow::hide()
 }
 
 //--------------------------------------------------------------------------
-void LCXmlWindow::addActionShow(TAction _action)
+void LCWindow::action(const QString& _action)
+{
+  auto it = ld.actions.find(_action);
+  if(it == ld.actions.end()) return;
+  it.value()();
+}
+
+//--------------------------------------------------------------------------
+bool LCWindow::validateAction(
+    const QString& _action, QString* msg)
+{
+  auto it = ld.actions.find(_action);
+  if(it != ld.actions.end()) { return true; }
+  if(msg)
+  {
+    *msg = QStringLiteral(
+        "Window: can't recognize action \"%1\"").arg(_action);
+  }
+  return false;
+}
+
+//--------------------------------------------------------------------------
+void LCWindow::addActionShow(TAction _action)
 {
   ld.eventFilter.addActionShow(_action);
 }
 
 //--------------------------------------------------------------------------
-void LCXmlWindow::addActionHide(TAction _action)
+void LCWindow::addActionHide(TAction _action)
 {
   ld.eventFilter.addActionHide(_action);
 }

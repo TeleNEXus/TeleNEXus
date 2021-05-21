@@ -18,7 +18,6 @@
                     <window id="keyboard 1" event="pressed" action="hide"/>
                 </controlWindowButton>
 
-
                 <button text="close">
 
                   <press>
