@@ -84,16 +84,22 @@ void* getTabWidgetBuilder()
   return new LCXmlTabWidgetBuilder;
 }
 
-//------------------------------------------------------------------------------
-void* getRemWriteButtonBuilder()
-{
-  return new LCXmlButtonBuilder(LCXmlButtonBuilder::EType::writeData);
-}
+/* //------------------------------------------------------------------------------ */
+/* void* getRemWriteButtonBuilder() */
+/* { */
+/*   return new LCXmlButtonBuilder(LCXmlButtonBuilder::EType::writeData); */
+/* } */
+
+/* //------------------------------------------------------------------------------ */
+/* void* getControlWindowButtonBuilder() */
+/* { */
+/*   return new LCXmlButtonBuilder(LCXmlButtonBuilder::EType::controlWindows); */
+/* } */
 
 //------------------------------------------------------------------------------
-void* getControlWindowButtonBuilder()
+void* getButtonBuilder()
 {
-  return new LCXmlButtonBuilder(LCXmlButtonBuilder::EType::controlWindows);
+  return new LCXmlButtonBuilder();
 }
 
 //------------------------------------------------------------------------------

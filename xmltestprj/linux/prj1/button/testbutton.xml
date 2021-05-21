@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<WINDOW height="150" width="150">
+  <mainWidget>
+    <widget>
+      <layout>
+        <layoutVBox>
+          <widgets>
+
+            <button text="push write string 1">
+              <press>
+                <writeData sourceId="localsource" dataId="test_string" format="string" value="push write string 1"/>
+              </press>
+            </button>
+
+            <button text="release write string 2">
+              <release>
+                <writeData sourceId="localsource" dataId="test_string" format="string" value="release write string 2"/>
+              </release>
+            </button>
+
+            <button text="press show window 1">
+              <press>
+                <controlWindow windowId="testwindow1" action="show"/>
+              </press>
+            </button>
+
+            <button text="release hide window 1">
+
+              <release>
+                <controlWindow windowId="testwindow1" action="hide"/>
+              </release>
+            </button>
+
+            <label text="Label01" /> 
+            <label text="Label02" /> 
+            <label text="Label03" /> 
+            <label text="Label04" /> 
+
+          </widgets>
+        </layoutVBox> 
+      </layout>
+    </widget>
+  </mainWidget>
+</WINDOW>
+

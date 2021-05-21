@@ -10,7 +10,6 @@
   <!-- <widget file="testwritebutton.xml"/> -->
 
 
-  <!-- <widget file="testcontrolbutton.xml"/> -->
   <!-- <widget file="testwidget.xml"/> -->
   <!-- <scrollArea file="testscrollarea.xml"/> -->
   <!-- <scrollArea file="testcombolabel.xml"/> -->
@@ -39,7 +38,8 @@
   </actions>
 
   <mainWidget>
-    <widget file="teststream.xml"/>
+    <!-- <widget file="teststream.xml"/> -->
+    <widget file="testcontrolbutton.xml"/>
   </mainWidget>
 
 </WINDOW>

@@ -27,9 +27,8 @@
         <dataComboLabel         lib="basicwidgets" libhandler="getRemComboLabelBuilder"         />
         <tabs                   lib="basicwidgets" libhandler="getTabWidgetBuilder"             />
         <switchWidgetsList      lib="basicwidgets" libhandler="getSwitchWidgetsListBuilder"     />
-        <controlWindowButton    lib="basicwidgets" libhandler="getControlWindowButtonBuilder"   />
         <scrollArea             lib="basicwidgets" libhandler="getScrollAreaBuilder"            />
-        <dataWriteButton        lib="basicwidgets" libhandler="getRemWriteButtonBuilder"        />
+        <button                 lib="basicwidgets" libhandler="getButtonBuilder"                />
         <listWidget             lib="basicwidgets" libhandler="getListWidgetBuilder"            />
         <stackedWidget          lib="basicwidgets" libhandler="getStackedWidgetBuilder"         />
         <splitterVertical       lib="basicwidgets" libhandler="getVerticalSplitterBuilder"      />
@@ -41,19 +40,34 @@
 
     <FORMATTERS file="formatters.xml"/>
 
-    <WINDOW id="win0" title="WINDOW 0" file="window.xml" show="fullScreen"
-      modes="stayOnTop=off; frameless=on" />
-      <!-- modes="stayOnTop=off; frameless=on" -->
 
-    <WINDOW id="keyboard 1" title="keyboard 1" file="keyboard1.xml" 
-      modality="yes"
-      modes="stayOnTop=on; frameless=on" />
 
-    <KEYBOARD 
-      id="keyboard" window="keyboard 1"
-      streamSource="localsource" streamName="test_stream"
-      dataSource="localsource" dataName="keyboard_data" />
+<!--     <WINDOW id="win0" title="WINDOW 0" file="window.xml" show="fullScreen" -->
+<!--       modes="stayOnTop=off; frameless=on" /> -->
+<!--       <!-1- modes="stayOnTop=off; frameless=on" -1-> -->
 
+<!--     <WINDOW id="keyboard 1" title="keyboard 1" file="keyboard1.xml" --> 
+<!--       modality="yes" -->
+<!--       modes="stayOnTop=on; frameless=on" /> -->
+
+<!--     <KEYBOARD --> 
+<!--       id="keyboard" window="keyboard 1" -->
+<!--       streamSource="localsource" streamName="test_stream" -->
+<!--       dataSource="localsource" dataName="keyboard_data" /> -->
+
+
+
+    <WINDOW id="testwindow1" file="testwindows/window1.xml" />
+    <WINDOW id="testwindow2" file="testwindows/window2.xml" />
+    <WINDOW id="testbutton" file="button/testbutton.xml" show="normal"/>
+
+    <WINDOW id="tablelocalsource" title="table local source" 
+      posx="200" posy="0" height="600"
+      show="normal">
+      <mainWidget>
+        <table file="testtablelocalsource.xml"/>
+      </mainWidget>
+    </WINDOW>
 
     <!-- <WINDOW id="testEventWindow" title="Test Event Window" --> 
     <!--   file="scripts/windoweventscripts/testeventwindow.xml" -->
