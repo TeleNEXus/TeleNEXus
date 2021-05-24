@@ -29,7 +29,7 @@ class LIApplication;
 class LCJScriptService : public LIJScriptService
 {
 private:
-  void* mpData;
+  void* mpLocal;
   LCJScriptService() = delete;
   explicit LCJScriptService(
       const QString& _script, 
@@ -46,6 +46,7 @@ public:
   virtual void launch(int _interval) override;
   virtual void stop() override;
   virtual void execute() override;
+  virtual void action(const QString& _action) override;
 };
 
 #endif //LCJSCRIPTSERVICE_H_

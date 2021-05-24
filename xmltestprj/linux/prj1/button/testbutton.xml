@@ -32,6 +32,25 @@
               </release>
             </button>
 
+            <button text="execute script">
+              <press>
+                <controlScript scriptId="window_event_script_1" scriptAction="execute"/>
+              </press>
+              <release>
+                <controlScript scriptId="window_event_script_2" scriptAction="execute"/>
+              </release>
+            </button>
+
+            <button text="launch script">
+              <press>
+                <controlScript scriptId="window_event_script_1" scriptAction="launch(500)"/>
+              </press>
+              <release>
+                <controlScript scriptId="window_event_script_1" scriptAction="stop"/>
+              </release>
+            </button>
+
+
             <label text="Label01" /> 
             <label text="Label02" /> 
             <label text="Label03" /> 

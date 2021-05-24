@@ -57,7 +57,7 @@
 
 
 
-    <WINDOW id="testwindow1" file="testwindows/window1.xml" />
+    <WINDOW id="testwindow1" file="testwindows/window1.xml" posx="300" posy="300"/>
     <WINDOW id="testwindow2" file="testwindows/window2.xml" />
     <WINDOW id="testbutton" file="button/testbutton.xml" show="normal"/>
 

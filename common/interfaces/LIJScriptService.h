@@ -21,6 +21,8 @@
 #ifndef LIJSCRIPTSERVICE_H_
 #define LIJSCRIPTSERVICE_H_
 
+class QString;
+
 class LIJScriptService
 {
 public:
@@ -29,6 +31,7 @@ public:
   virtual void launch(int _interval) = 0;
   virtual void stop() = 0;
   virtual void execute() = 0;
+  virtual void action(const QString& _action) = 0;
 };
 
 #endif //LIJSCRIPTSERVICE_H_
