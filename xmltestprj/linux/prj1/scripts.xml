@@ -2,7 +2,8 @@
 
 <SCRIPTS>
 
-  <script id="window_event_script_1" file="scripts/windoweventscripts/script_1.js"/>
+  <script id="window_event_script_11" file="scripts/windoweventscripts/script_1.js"/>
+  <script id="window_event_script_12" file="scripts/windoweventscripts/script_1.js"/>
   <script id="window_event_script_2" file="scripts/windoweventscripts/script_2.js"/>
   <script id="window_event_script_3" file="scripts/windoweventscripts/script_3.js"/>
   <script id="window_event_script_4" file="scripts/windoweventscripts/script_4.js"/>

@@ -14,6 +14,14 @@
 #include <QTextStream>
 #include <iostream>
 
+void foo(QString& str)
+{
+  auto ret = [&str]()
+  {
+    str = "Hello!!!";
+  };
+  return ret();
+}
 int main(int argc, char** argv)
 {
     QApplication app(argc, argv);
@@ -163,6 +171,9 @@ int main(int argc, char** argv)
       qDebug() << "paraml   : " << str.split("(")[1].remove(")").split(",");
 
 
+      QString test;
+      foo(test);
+      qDebug() << "Test : " << test;
 
     };
 
