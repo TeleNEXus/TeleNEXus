@@ -76,6 +76,7 @@ public:
 
   void execute()
   {
+    qDebug() << "LCJScriptService script execute";
     mpScriptHiden->execute();
   }
 

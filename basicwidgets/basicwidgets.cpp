@@ -19,7 +19,6 @@
  * along with TeleNEXus.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include "basicwidgets.h"
-#include "lcqremwritebutton.h"
 #include "lcxmlwidgetbuilder.h"
 #include "lcxmltextlabelbuilder.h"
 #include "lcxmlremlabelbuilder.h"

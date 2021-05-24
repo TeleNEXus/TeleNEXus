@@ -32,22 +32,29 @@
               </release>
             </button>
 
-            <button text="execute script">
+            <button text="execute script 11">
               <press>
-                <controlScript scriptId="window_event_script_1" scriptAction="execute"/>
+                <controlScript scriptId="window_event_script_11" scriptAction="execute"/>
               </press>
-              <release>
-                <controlScript scriptId="window_event_script_2" scriptAction="execute"/>
-              </release>
             </button>
 
-            <button text="launch script">
+            <button text="stop script 11">
               <press>
-                <controlScript scriptId="window_event_script_1" scriptAction="launch(500)"/>
+                <controlScript scriptId="window_event_script_11" scriptAction="stop"/>
               </press>
-              <release>
-                <controlScript scriptId="window_event_script_1" scriptAction="stop"/>
-              </release>
+            </button>
+
+            <button text="execute script 12">
+              <press>
+                <controlScript scriptId="window_event_script_12" scriptAction="execute"/>
+              </press>
+            </button>
+
+            <button text="stop script 12">
+              <press>
+                <!-- <controlScript scriptId="window_event_script_1" scriptAction="launch(500)"/> -->
+                <controlScript scriptId="window_event_script_12" scriptAction="stop"/>
+              </press>
             </button>
 
 

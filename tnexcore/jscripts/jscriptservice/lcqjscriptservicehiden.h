@@ -25,6 +25,7 @@
 #include <QObject>
 #include <QJSEngine>
 #include <QDebug>
+#include <QMutex>
 
 class QTimer;
 class LCQJSAppService;
@@ -73,9 +74,10 @@ private:
   int         mId;
   QSharedPointer<LCQJSAppService> mspAppService;
   QJSEngine   mJSEngine;
-  QJSValue    mCallScriptMain;
+  /* QJSValue    mCallScriptMain; */
   QThread*    mpThread;
   int         mTimerId;
+  QMutex      mMutex;
 
 public:
   static int mObjectCounter;
@@ -87,8 +89,9 @@ public:
 
   virtual ~LCQJScriptHiden();
   void launch(int interval);
-  void stop();
+  void stop(unsigned long time = ULONG_MAX);
   void execute();
+  QMetaObject::Connection mQuitConnection;
 
 private:
   virtual void customEvent(QEvent* _event) override;
@@ -120,6 +123,11 @@ public slots:
   QJSValue newTextFile(const QString& _name);
   QJSValue newBinaryFile(const QString& _name);
     
+
+  /* void delay(int msec); */
+
+
+
   void collectGarbage();
 
 private:
