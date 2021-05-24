@@ -26,38 +26,99 @@
 #include <QThread>
 
 //==============================================================================
-struct SPrivateData
+class CLocalData
 {
+private:
   LCQJScriptHiden* mpScriptHiden;
-
-  SPrivateData(
+  QMap<QString, std::function<void(const QStringList&)>> mActions;
+public:
+  CLocalData() = delete;
+  CLocalData(
       const QString& _script, 
       const QMap<QString, QString> _attributes,
       const QString& _fileName):
-    mpScriptHiden(new LCQJScriptHiden(_script, _attributes, _fileName)){}
+    mpScriptHiden(new LCQJScriptHiden(_script, _attributes, _fileName))
+  {
+    mActions.insert(QStringLiteral("launch"),
+        [this](const QStringList& _param)
+        {
+          if(_param.isEmpty()) return;
+          bool flag = false;
+          int interval = _param[0].toInt(&flag);
+          if(!flag) return;
+          launch(interval);
+        });
 
-  ~SPrivateData()
+    mActions.insert(QStringLiteral("execute"),
+        [this](const QStringList& _param)
+        {
+          Q_UNUSED(_param);
+          execute();
+        });
+
+    mActions.insert(QStringLiteral("stop"),
+        [this](const QStringList& _param)
+        {
+          Q_UNUSED(_param);
+          stop();
+        });
+  }
+
+  ~CLocalData()
   {
     mpScriptHiden->deleteLater();
+  }
+
+  void launch(int _interval)
+  {
+    mpScriptHiden->launch(_interval);
+  }
+
+  void execute()
+  {
+    mpScriptHiden->execute();
+  }
+
+  void stop()
+  {
+    mpScriptHiden->stop();
+  }
+
+  void action(QString _expression)
+  {
+    if(_expression.isNull()) return;
+    auto action_list = _expression.remove(" ").split("(");
+    if(action_list.isEmpty()) return;
+    auto it = mActions.find(action_list[0]);
+    if(it == mActions.end()) return;
+    if(action_list.size() > 1)
+    {
+      it.value()(action_list[1].remove(")").split(","));
+    }
+    else
+    {
+      it.value()(QStringList());
+    }
   }
 };
 
 //==============================================================================
-#define mpPrivateData (static_cast<SPrivateData*>(mpData))
+#define mpLocalData(p) (static_cast<CLocalData*>(p))
+#define ld (*(mpLocalData(mpLocal)))
 
 //==============================================================================
 LCJScriptService::LCJScriptService(
     const QString& _script, 
     const QMap<QString, QString>& _attributes,
     const QString& _fileName)  :
-  mpData( new SPrivateData(_script, _attributes, _fileName) )
+  mpLocal( new CLocalData(_script, _attributes, _fileName) )
 {
 }
 
 //------------------------------------------------------------------------------
 LCJScriptService::~LCJScriptService()
 {
-  delete mpPrivateData;
+  delete &ld;
 }
 
 //------------------------------------------------------------------------------
@@ -73,17 +134,23 @@ QSharedPointer<LIJScriptService> LCJScriptService::create(
 //------------------------------------------------------------------------------
 void LCJScriptService::launch(int _interval) 
 {
-  mpPrivateData->mpScriptHiden->launch(_interval);
+  ld.launch(_interval);
 }
 
 //------------------------------------------------------------------------------
 void LCJScriptService::stop() 
 {
-  mpPrivateData->mpScriptHiden->stop();
+  ld.stop();
 }
 
 //------------------------------------------------------------------------------
 void LCJScriptService::execute() 
 {
-  mpPrivateData->mpScriptHiden->execute();
+  ld.execute();
+}
+
+//------------------------------------------------------------------------------
+void LCJScriptService::action(const QString& _action)
+{
+  ld.action(_action);
 }
