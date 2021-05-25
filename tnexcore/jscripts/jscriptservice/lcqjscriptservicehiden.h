@@ -122,12 +122,9 @@ public slots:
 
   QJSValue newTextFile(const QString& _name);
   QJSValue newBinaryFile(const QString& _name);
+
+  void sleepMSec(unsigned long _timems);
     
-
-  /* void delay(int msec); */
-
-
-
   void collectGarbage();
 
 private:
