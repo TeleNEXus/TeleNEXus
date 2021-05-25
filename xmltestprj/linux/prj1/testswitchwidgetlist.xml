@@ -24,20 +24,16 @@
               <!-- <dataLineEdit source="localsource"  data="bytes_int32" formatId="scaledInt32_xxx.x" /> -->
               <!-- <dataLineEdit source="localsource"  data="bytes_int32" formatId="scaledInt32_xxx.x" /> -->
               <dataLabel    
-        vcSource = "localsource"
-        vcData = "bit0"
-        vcHide = "true"
-        vcFormat = "bool" 
+                visibleControl="sourceId = localsource; dataId = bit0; hideValue = true; format = bool"
                 source="qtslavetcp"  data="hreg[0-1]" format="int32" />
               <dataLineEdit source="qtslavetcp"  data="hreg[0-1]" format="int32" />
               <dataLineEdit source="qtslavetcp"  data="hreg[0-1]" formatId="scaledInt32_xxx.x" />
               <!-- <dataLineEdit source="qtslavetcp"  data="hreg[0-1]" formatId="scaledInt32_xxx.x" /> -->
 
               <dataComboBox  
-        vcSource = "localsource"
-        vcData = "bit0"
-        vcHide = "true"
-        vcFormat = "bool" 
+
+                visibleControl="sourceId = localsource; dataId = bit0; hideValue = true; format = bool"
+
                 source="qtslavetcp" read="hreg[0-1]" formatId="scaledInt32_xxx.x">
               <item text="On"     value="500.1"/>
               <item text="Off"    value="500.2"/>
@@ -54,29 +50,33 @@
               <item text="Test"   value="500.4"/>
             </dataComboBox>
 
-            <dataWriteButton 
+            <button 
               text="write 1" 
               posx="10" 
               posy="120" 
               bgColor="grey" 
               fontId="mnemo10"
               >
-            <data source="localsource" dataName="bit0" format="bits" value="1"/>
-            <data source="localsource" dataName="bit1" format="bits" value="1"/>
-            <data source="localsource" dataName="bit2" format="bits" value="1"/>
-          </dataWriteButton>
+            <release>
+              <writeData sourceId="localsource" dataId="bit0" format="bits" value="1"/>
+              <writeData sourceId="localsource" dataId="bit1" format="bits" value="1"/>
+              <writeData sourceId="localsource" dataId="bit2" format="bits" value="1"/>
+            </release>
+          </button>
 
-            <dataWriteButton 
+            <button 
               text="write 0" 
               posx="10" 
               posy="120" 
               bgColor="grey" 
               fontId="mnemo10"
               >
-            <data source="localsource" dataName="bit0" format="bits" value="0"/>
-            <data source="localsource" dataName="bit1" format="bits" value="0"/>
-            <data source="localsource" dataName="bit2" format="bits" value="0"/>
-          </dataWriteButton>
+            <release>
+              <writeData sourceId="localsource" dataId="bit0" format="bits" value="0"/>
+              <writeData sourceId="localsource" dataId="bit1" format="bits" value="0"/>
+              <writeData sourceId="localsource" dataId="bit2" format="bits" value="0"/>
+            </release>
+          </button>
 
             <!-- <dataComboBox  source="qtslavetcp" read="hreg[0-1]" format="int32"> -->
             <!--   <item text="On"     value="501"/> -->

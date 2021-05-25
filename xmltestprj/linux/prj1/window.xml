@@ -39,7 +39,8 @@
 
   <mainWidget>
     <!-- <widget file="teststream.xml"/> -->
-    <widget file="testcontrolbutton.xml"/>
+    <!-- <widget file="testcontrolbutton.xml"/> -->
+    <switchWidgetsList file="testswitchwidgetlist.xml"/>
   </mainWidget>
 
 </WINDOW>

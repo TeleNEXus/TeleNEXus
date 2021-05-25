@@ -32,6 +32,19 @@
               </release>
             </button>
 
+            <button text="press show win0">
+              <press>
+                <controlWindow windowId="win0" action="show"/>
+              </press>
+            </button>
+
+            <button text="release hide win0">
+
+              <release>
+                <controlWindow windowId="win0" action="hide"/>
+              </release>
+            </button>
+
             <button text="launch script 11">
               <press>
                 <controlScript scriptId="window_event_script_11" scriptAction="launch(500)"/>

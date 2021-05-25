@@ -23,6 +23,7 @@
 #include "LIRemoteDataSource.h"
 #include "LIApplication.h"
 #include "LIDataFormatter.h"
+#include "tnexcommon.h"
 #include <QDomElement>
 #include <QWidget>
 #include <QByteArray>
@@ -31,12 +32,7 @@
 
 static const struct
 {
-    QString vcSource  = "vcSource";
-    QString vcData    = "vcData";
-    QString vcFormat  = "vcFormat";
-    QString vcShow    = "vcShow";
-    QString vcHide    = "vcHide";
-    QString vcUndef   = "vcUndef";
+  QString visibleControl = "visibleControl";
 }__slAttributes;
 
 static const struct
@@ -46,23 +42,30 @@ static const struct
   QString hide = "hide";
 }__slAttributesVals;
 
+
+
+
+
 //==============================================================================
 class CLocalData
 {
 private:
   QWidget* mpWidget = nullptr;
 public:
+
   enum class EVisibleStatus
   {
     show,
     hide,
     undef
   };
+
   enum class EUndefMode
   {
     show,
     hide
   };
+
   EUndefMode mUndefMode = EUndefMode::hide;
   EVisibleStatus mVisibleStatus = EVisibleStatus::undef;
   QSharedPointer<LIRemoteDataReader>  mDataReader;
@@ -91,10 +94,72 @@ public:
   }
 };
 
+//==============================================================================
+class CAttributeGetter
+{
+private:
+  QMap<QString, std::function<void(const QString& _val)>> mAssignActions;
+  QString mSourceId;
+  QString mDataId;
+  QString mFormat;
+  QString mShowValue;
+  QString mHideValue;
+  QString mUndefMode;
+
+public:
+  CAttributeGetter() = delete;
+
+  CAttributeGetter(const QString& _attributes)
+  {
+    mAssignActions.insert(QStringLiteral("sourceId"),
+          [this](const QString& _val)
+          {
+            mSourceId = _val;
+          });
+
+    mAssignActions.insert(QStringLiteral("dataId"),
+          [this](const QString& _val)
+          {
+            mDataId = _val;
+          });
+
+    mAssignActions.insert(QStringLiteral("format"),
+          [this](const QString& _val)
+          {
+            mFormat = _val;
+          });
+
+    mAssignActions.insert(QStringLiteral("showValue"),
+          [this](const QString& _val)
+          {
+            mShowValue = _val;
+          });
+
+    mAssignActions.insert(QStringLiteral("hideValue"),
+          [this](const QString& _val)
+          {
+            mHideValue = _val;
+          });
+
+    mAssignActions.insert(QStringLiteral("undefState"),
+          [this](const QString& _val)
+          {
+            mUndefMode = _val;
+          });
+    tnexcommon::setMultipleAttributes(mAssignActions, _attributes);
+  }
+
+  QString getSourceId(){ return mSourceId; }
+  QString getDataId(){ return mDataId; }
+  QString getFormat(){ return mFormat; }
+  QString getShowValue(){ return mShowValue;}
+  QString getHideValue(){ return mHideValue;}
+  QString getUndefMode(){ return mUndefMode;}
+};
+
 #define toLocalData(p) (reinterpret_cast<CLocalData*>(p))
 
 //==============================================================================
-
 LCQWidgetVisibleControl::LCQWidgetVisibleControl(QWidget* _widget) : 
   QObject(_widget)
 {
@@ -131,11 +196,16 @@ bool LCQWidgetVisibleControl::build(const QDomElement& _element,
 
   if(_widget == nullptr) return ret_wrong();
 
-  QString attr_source = _element.attribute(__slAttributes.vcSource);
-  QString attr_data   = _element.attribute(__slAttributes.vcData);
-  QString attr_format = _element.attribute(__slAttributes.vcFormat);
-  QString attr_show   = _element.attribute(__slAttributes.vcShow);
-  QString attr_hide   = _element.attribute(__slAttributes.vcHide);
+  QString attr = _element.attribute(__slAttributes.visibleControl);
+  if(attr.isNull()) return ret_wrong();
+
+  CAttributeGetter attr_getter(attr);
+
+  QString attr_source = attr_getter.getSourceId(); 
+  QString attr_data   = attr_getter.getDataId(); 
+  QString attr_format = attr_getter.getFormat(); 
+  QString attr_show   = attr_getter.getShowValue(); 
+  QString attr_hide   = attr_getter.getHideValue(); 
 
   if( attr_source.isNull() || 
       attr_data.isNull() || 
@@ -147,7 +217,8 @@ bool LCQWidgetVisibleControl::build(const QDomElement& _element,
 
   if(source.isNull()) return ret_wrong();
 
-  auto format = [&_app, &attr_format]() {
+  auto format = [&_app, &attr_format]() 
+  {
     auto ret = _app.getStdDataFormatter(attr_format);
     if(ret.isNull())
     {
@@ -160,8 +231,7 @@ bool LCQWidgetVisibleControl::build(const QDomElement& _element,
 
   ctrl = new LCQWidgetVisibleControl(_widget);
 
-
-  QString attr_undef = _element.attribute(__slAttributes.vcUndef);
+  QString attr_undef = attr_getter.getUndefMode();
   if(!attr_undef.isNull())
   {
     if(attr_undef == __slAttributesVals.show) 

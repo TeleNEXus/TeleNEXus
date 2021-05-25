@@ -24,13 +24,16 @@ INCLUDEPATH +=                          \
     ../../common/interfaces/xmlbuilders \
     ../../common/interfaces/remotedata  \
     ../../common/interfaces             \
+    ../../common                        \
     builders                            \
 
 SOURCES += \
     basiclayouts.cpp \
     builders/common.cpp \
-    builders/lcxmlboxlayoutbuilder.cpp \
+    builders/lcxmlboxlayoutbuilder.cpp  \
     builders/lcxmlgridlayoutbuilder.cpp \
+    ../../common/tnexcommon.cpp         \
+
 
 HEADERS += \
     ../../common/interfaces/LIApplication.h \
@@ -41,8 +44,9 @@ HEADERS += \
     basiclayouts_global.h \
     basiclayouts.h \
     builders/common.h \
-    builders/lcxmlboxlayoutbuilder.h \
-    builders/lcxmlgridlayoutbuilder.h \
+    builders/lcxmlboxlayoutbuilder.h    \
+    builders/lcxmlgridlayoutbuilder.h   \
+    ../../common/tnexcommon.h           \
 
 # Default rules for deployment.
 unix {

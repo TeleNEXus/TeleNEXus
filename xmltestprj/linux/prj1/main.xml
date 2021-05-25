@@ -42,10 +42,12 @@
 
 
 
-<!--     <WINDOW id="win0" title="WINDOW 0" file="window.xml" show="fullScreen" -->
-<!--       modes="stayOnTop=off; frameless=on" /> -->
-<!--       <!-1- modes="stayOnTop=off; frameless=on" -1-> -->
+  <!--===================================================================== -->
+    <WINDOW id="win0" title="WINDOW 0" file="window.xml" show="normal"
+      modes="stayOnTop=off; frameless=off" />
+      <!-- modes="stayOnTop=off; frameless=on" -->
 
+  <!--===================================================================== -->
 <!--     <WINDOW id="keyboard 1" title="keyboard 1" file="keyboard1.xml" --> 
 <!--       modality="yes" -->
 <!--       modes="stayOnTop=on; frameless=on" /> -->
@@ -55,19 +57,19 @@
 <!--       streamSource="localsource" streamName="test_stream" -->
 <!--       dataSource="localsource" dataName="keyboard_data" /> -->
 
+  <!--===================================================================== -->
+    <!-- <WINDOW id="testwindow1" file="testwindows/window1.xml" posx="300" posy="300"/> -->
+    <!-- <WINDOW id="testwindow2" file="testwindows/window2.xml" /> -->
+    <!-- <WINDOW id="testbutton" file="button/testbutton.xml" show="normal"/> -->
 
-
-    <WINDOW id="testwindow1" file="testwindows/window1.xml" posx="300" posy="300"/>
-    <WINDOW id="testwindow2" file="testwindows/window2.xml" />
-    <WINDOW id="testbutton" file="button/testbutton.xml" show="normal"/>
-
-    <WINDOW id="tablelocalsource" title="table local source" 
-      posx="200" posy="0" height="600"
-      show="normal">
-      <mainWidget>
-        <table file="testtablelocalsource.xml"/>
-      </mainWidget>
-    </WINDOW>
+    <!-- <WINDOW id="tablelocalsource" title="table local source" --> 
+    <!--   posx="200" posy="0" height="600" -->
+    <!--   show="normal"> -->
+    <!--   <mainWidget> -->
+    <!--     <table file="testtablelocalsource.xml"/> -->
+    <!--   </mainWidget> -->
+    <!-- </WINDOW> -->
+  <!--===================================================================== -->
 
     <!-- <WINDOW id="testEventWindow" title="Test Event Window" --> 
     <!--   file="scripts/windoweventscripts/testeventwindow.xml" -->
