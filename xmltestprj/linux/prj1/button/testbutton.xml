@@ -32,6 +32,18 @@
               </release>
             </button>
 
+            <button text="launch script 11">
+              <press>
+                <controlScript scriptId="window_event_script_11" scriptAction="launch(500)"/>
+              </press>
+            </button>
+
+            <button text="stop script 11">
+              <press>
+                <controlScript scriptId="window_event_script_11" scriptAction="stop"/>
+              </press>
+            </button>
+
             <button text="execute script 11">
               <press>
                 <controlScript scriptId="window_event_script_11" scriptAction="execute"/>

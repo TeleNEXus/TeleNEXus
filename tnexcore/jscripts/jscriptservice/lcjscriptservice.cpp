@@ -24,6 +24,7 @@
 #include <QTimer>
 #include <QDebug>
 #include <QThread>
+#include <QWaitCondition>
 
 //==============================================================================
 class CLocalData

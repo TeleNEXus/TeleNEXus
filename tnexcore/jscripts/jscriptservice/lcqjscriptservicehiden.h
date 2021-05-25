@@ -25,7 +25,8 @@
 #include <QObject>
 #include <QJSEngine>
 #include <QDebug>
-#include <QMutex>
+/* #include <QMutex> */
+#include <QEventLoop>
 
 class QTimer;
 class LCQJSAppService;
@@ -43,14 +44,14 @@ private:
       virtual void handle(LCQJScriptHiden* _sender) = 0;
   };
 
-  //----------------------------------------------------------------------------CEventStart
-  class CEventStart: public CEventBase
+  //----------------------------------------------------------------------------CEventLaunch
+  class CEventLaunch: public CEventBase
   {
   private:
     int mInterval;
   public:
-    CEventStart() = delete;
-    CEventStart(int _interval);
+    CEventLaunch() = delete;
+    CEventLaunch(int _interval);
     virtual void handle(LCQJScriptHiden* _sender) override;
   };
 
@@ -74,11 +75,10 @@ private:
   int         mId;
   QSharedPointer<LCQJSAppService> mspAppService;
   QJSEngine   mJSEngine;
-  /* QJSValue    mCallScriptMain; */
   QThread*    mpThread;
   int         mTimerId;
-  QMutex      mMutex;
-
+  QEventLoop  mEventLoop;
+  QJSValue    mCallScriptMain;
 public:
   static int mObjectCounter;
 
@@ -89,7 +89,7 @@ public:
 
   virtual ~LCQJScriptHiden();
   void launch(int interval);
-  void stop(unsigned long time = ULONG_MAX);
+  void stop();
   void execute();
   QMetaObject::Connection mQuitConnection;
 

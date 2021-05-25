@@ -58,10 +58,6 @@ static const struct
 }__slPropNames;
 
 
-
-
-
-
 //==============================================================================CEventBase
 __LQ_EXTENDED_QEVENT_IMPLEMENTATION(LCQJScriptHiden::CEventBase);
 
@@ -70,13 +66,13 @@ LCQJScriptHiden::CEventBase::CEventBase() :
 {
 }
 
-//==============================================================================CEventStart
-LCQJScriptHiden::CEventStart::CEventStart(int _interval) : mInterval(_interval)
+//==============================================================================CEventLaunch
+LCQJScriptHiden::CEventLaunch::CEventLaunch(int _interval) : mInterval(_interval)
 {
 }
 
 //------------------------------------------------------------------------------
-void LCQJScriptHiden::CEventStart::handle(LCQJScriptHiden* _sender)
+void LCQJScriptHiden::CEventLaunch::handle(LCQJScriptHiden* _sender)
 {
   _sender->scriptExecute();
   if(mInterval <= 0) { return; }
@@ -102,26 +98,7 @@ LCQJScriptHiden::CEventExecute::CEventExecute()
 //------------------------------------------------------------------------------
 void LCQJScriptHiden::CEventExecute::handle(LCQJScriptHiden* _sender)
 {
-  qDebug() << "script execute";
-  QEventLoop loop;
-  QJSValue call = _sender->mJSEngine.globalObject().property(__slPropNames.callScriptMain);
-
-  auto ret = [_sender]()
-  {
-    _sender->mpThread->quit();
-    qDebug()<< "return CEventExecute::handle ";
-  };
-
-  if(call.isNull()) return ret();
-  if(!call.isCallable()) return ret();
-
-  QJSValue result = call.call();
-  loop.exec();
-  if(result.isError()) 
-  { 
-    _sender->emitError(result);
-  }
-  return ret();
+  _sender->scriptExecute();
 }
 
 //==============================================================================LCQJScriptHiden
@@ -130,8 +107,7 @@ LCQJScriptHiden::LCQJScriptHiden(
     const QMap<QString, QString>& _attributesMap,
     const QString& _fileName) : 
   QObject(nullptr),
-  /* mpThread(new QThread), */
-  mpThread(nullptr),
+  mpThread(new QThread),
   mTimerId(0)
 {
 
@@ -142,8 +118,8 @@ LCQJScriptHiden::LCQJScriptHiden(
 
   mspAppService = LCQJSAppService::getService();
 
-  /* moveToThread(mpThread); */
-  /* mJSEngine.moveToThread(mpThread); */
+  moveToThread(mpThread);
+  mJSEngine.moveToThread(mpThread);
 
   mJSEngine.installExtensions(QJSEngine::Extension::AllExtensions);
 
@@ -165,12 +141,12 @@ LCQJScriptHiden::LCQJScriptHiden(
     emitError(jsvalue);
   }
 
-  /* mJSEngine.collectGarbage(); */
+  mJSEngine.collectGarbage();
 
-  /* mCallScriptMain = mJSEngine.globalObject().property( */
-  /*     __slPropNames.callScriptMain); */
+  mCallScriptMain = mJSEngine.globalObject().property(
+      __slPropNames.callScriptMain);
 
-  /* mpThread->start(); */
+  mpThread->start();
 }
 
 //------------------------------------------------------------------------------
@@ -191,51 +167,18 @@ void LCQJScriptHiden::timerEvent(QTimerEvent* _event)
 //------------------------------------------------------------------------------
 void LCQJScriptHiden::launch(int _interval)
 {
-  /* QCoreApplication::postEvent(this, new CEventStart(_interval)); */
+  QCoreApplication::postEvent(this, new CEventLaunch(_interval));
 }
 
 //------------------------------------------------------------------------------
-void LCQJScriptHiden::stop(unsigned long time)
+void LCQJScriptHiden::stop()
 {
-  QMutexLocker locker(&mMutex);
-  if(!mpThread) return;
-  mpThread->quit();
-  if(!mpThread->wait(1000))
-  {
-    /* mpThread->terminate(); */
-    /* mpThread->wait(1000); */
-    /* disconnect(mQuitConnection); */
-    /* moveToThread(QApplication::instance()->thread()); */
-    /* mpThread->deleteLater(); */
-    /* mpThread = nullptr; */
-  }
+  QCoreApplication::postEvent(this, new CEventStop());
 }
 
 //------------------------------------------------------------------------------
 void LCQJScriptHiden::execute()
 {
-  qDebug() << "     LCQJScriptHiden::execute 0";
-  QMutexLocker locker(&mMutex);
-
-  if(mpThread) return;
-  qDebug() << "     LCQJScriptHiden::execute 1";
-  mpThread = new QThread();
-  qDebug() << "     LCQJScriptHiden::execute 2";
-  this->moveToThread(mpThread);
-  qDebug() << "     LCQJScriptHiden::execute 3";
-  mQuitConnection = connect(mpThread, &QThread::finished, 
-      [this]()
-      {
-        qDebug() << "LCQJScriptHiden thread deleter 0";
-        QMutexLocker locker(&mMutex);
-        moveToThread(QApplication::instance()->thread());
-        mpThread->deleteLater();
-        mpThread = nullptr;
-        qDebug() << "LCQJScriptHiden thread deleter 1";
-      });
-
-  qDebug() << "     LCQJScriptHiden::execute 4";
-  mpThread->start();
   QCoreApplication::postEvent(this, new CEventExecute());
 }
 
@@ -258,13 +201,13 @@ void LCQJScriptHiden::timerStop()
   }
 }
 
-//------------------------------------------------------------------------------
+/* //------------------------------------------------------------------------------ */
 void LCQJScriptHiden::scriptExecute()
 {
-  /* QJSValue result = mCallScriptMain.call(); */
-  /* if(result.isError()) { */ 
-  /*   emitError(result); */
-  /* } */
+  QJSValue result = mCallScriptMain.call();
+  if(result.isError()) { 
+    emitError(result);
+  }
 }
 
 //------------------------------------------------------------------------------
