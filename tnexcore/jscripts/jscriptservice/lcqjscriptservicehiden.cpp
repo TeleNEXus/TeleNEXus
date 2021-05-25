@@ -338,6 +338,12 @@ QJSValue LCQJScriptHiden::newBinaryFile(const QString& _name)
 }
 
 //------------------------------------------------------------------------------
+void LCQJScriptHiden::sleepMSec(unsigned long _timems)
+{
+  QThread::msleep(_timems);
+}
+
+//------------------------------------------------------------------------------
 void LCQJScriptHiden::collectGarbage()
 {
   qDebug() << "Qt: Collect Garbage";
@@ -385,6 +391,8 @@ static QString createScriptGlobal(QMap<QString, QString> _attrMap,
       "return new %2.Process(%3);};"
       "function CollectGarbage() {"
       "return %2.collectGarbage()};"
+      "function SleepMSec(msec) {"
+      "return %2.sleepMSec(msec)};"
       "var ScriptId = \"%4\";"
       "var ScriptFile = \"%5\";"
       )
