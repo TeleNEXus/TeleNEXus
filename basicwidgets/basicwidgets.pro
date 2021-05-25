@@ -34,12 +34,12 @@ INCLUDEPATH +=                          \
 
 SOURCES += \
     ../../common/lqvalidatoru32.cpp \
+    ../../common/tnexcommon.cpp \
     basicwidgets.cpp \
     widgets/lcqlistwidget.cpp \
     widgets/lcqremcombobox.cpp \
     widgets/lcqremlabel.cpp \
     widgets/lcqremcombolabel.cpp \
-    widgets/lcqremwritebutton.cpp \
     widgets/lcqstackedwidget.cpp \
     builders/lcxmlbuilderbase.cpp \
     builders/lcxmlremlabelbuilder.cpp \
@@ -79,7 +79,6 @@ HEADERS += \
     widgets/lcqremcombobox.h \
     widgets/lcqremcombolabel.h \
     widgets/lcqremlabel.h \
-    widgets/lcqremwritebutton.h \
     widgets/lcqstackedwidget.h \
     builders/lcxmlbuilderbase.h \
     builders/lcxmlremlineeditbuilder.h \

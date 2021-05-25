@@ -130,11 +130,10 @@ private:
               attr_action.isNull())
             return;
 
-          auto window = _app.getWindow(attr_window);
-          if(window.isNull()) return;
-
-          _actions << [window, attr_action]()
+          _actions << [attr_action, attr_window, &_app]()
           {
+            auto window = _app.getWindow(attr_window);
+            if(window.isNull()) return;
             window->action(attr_action);
           };
         });
