@@ -45,9 +45,43 @@
       show="normal"
       modes= 
       "stayOnTop=true;              
-      frameless=true" 
+      frameless=false" 
       size="300;50"
       position="300;600"
       />
 
+    <WINDOW 
+      id="Label" 
+      title="Label" 
+      show="normal"
+      modes= "stayOnTop=true; frameless=false" 
+      size="300;50"
+      position="100;100">
+    <mainWidget>
+      <widget>
+        <layout>
+          <layoutHBox>
+            <widgets>
+              <dataLabel      source="localsource"  data="test_string"  format="string"   />
+            </widgets>
+          </layoutHBox>
+        </layout>
+      </widget>
+      <!-- <dataLabel source="localsource" data="test_string" format="string"/> -->
+      <!-- <dataLabel      source="localsource"  data="bits_size(1)" format="bits"/> -->
+      <!-- <dataLabel      source="localsource"  data="test_string"  format="string"   /> -->
+    </mainWidget>
+  </WINDOW>
+
+    <!-- <WINDOW --> 
+    <!--   id="table local source" --> 
+    <!--   title="table local source" --> 
+    <!--   show="normal" -->
+    <!--   modes= "stayOnTop=true;frameless=false" --> 
+    <!--   size="500;600" -->
+    <!--   position="300;100"> -->
+    <!-- <mainWidget> -->
+    <!--   <table file="../prj1/testtablelocalsource.xml"/> -->
+    <!-- </mainWidget> -->
+  <!-- </WINDOW> -->
 </APPLICATION>

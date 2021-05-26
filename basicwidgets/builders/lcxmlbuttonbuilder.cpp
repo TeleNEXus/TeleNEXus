@@ -26,6 +26,7 @@
 #include "LIRemoteDataWriter.h"
 #include "LIJScriptService.h"
 #include "lcbuilderscommon.h"
+#include "tnexcommon.h"
 #include <QPushButton>
 #include <QDomElement>
 #include <qicon.h>
@@ -44,10 +45,12 @@ static const struct
 
 static const struct
 {
-  QString sourceId = "sourceId";
-  QString dataId = "dataId";
-  QString format = "format";
+  /* QString sourceId = "sourceId"; */
+  /* QString dataId = "dataId"; */
+  /* QString format = "format"; */
   QString value = "value";
+  QString dataSpec = "dataSpec";
+
 }__slAttributesWriteData;
 
 static const struct
@@ -87,27 +90,42 @@ private:
           const QDomElement& _element,
           const LIApplication& _app)
         {
-          QString attr_source = _element.attribute(__slAttributesWriteData.sourceId);
-          QString attr_data = _element.attribute(__slAttributesWriteData.dataId);
-          QString attr_format = _element.attribute(__slAttributesWriteData.format);
+
+          QList<std::function<void(const QString&)>> dataspec_assigns;
+          QSharedPointer<LIRemoteDataSource> source;
+          QString data_id;
+          QSharedPointer<LIDataFormatter> format;
+
+          QString attr_dataspec = _element.attribute(__slAttributesWriteData.dataSpec);
+          if(attr_dataspec.isNull()) return;
           QString attr_value = _element.attribute(__slAttributesWriteData.value);
+          if(attr_value.isNull()) return;
 
-          if(attr_source.isNull()||
-              attr_data.isNull()||
-              attr_format.isNull()||
-              attr_value.isNull())
-            return;
-
-          auto source = _app.getDataSource(attr_source);
-          if(source.isNull()) return;
-          auto format = _app.getStdDataFormatter(attr_format);
-          if(format.isNull())
+          dataspec_assigns << [&_app, &source](const QString& _val) 
           {
-            format = _app.getDataFormatter(attr_format);
-          }
-          if(format.isNull()) return;
+            source = _app.getDataSource(_val);
+          };
 
-          auto writer = source->createWriter(attr_data);
+          dataspec_assigns << [&data_id](const QString& _val) 
+          {
+            data_id = _val;
+          };
+
+          dataspec_assigns << [&_app, &format](const QString& _val) 
+          {
+            format = _app.getStdDataFormatter(_val);
+            if(format.isNull())
+            {
+              format = _app.getDataFormatter(_val);
+            }
+          };
+
+          tnexcommon::setMultipleValues(dataspec_assigns, attr_dataspec, QStringLiteral(":"));
+
+          if(source.isNull()||data_id.isNull()||format.isNull()) return;
+
+          auto writer = source->createWriter(data_id);
+          if(writer.isNull()) return;
 
           QByteArray data = format->toBytes(attr_value);
 
@@ -115,6 +133,35 @@ private:
           {
             writer->writeRequest(data);
           };
+
+          /* QString attr_source = _element.attribute(__slAttributesWriteData.sourceId); */
+          /* QString attr_data = _element.attribute(__slAttributesWriteData.dataId); */
+          /* QString attr_format = _element.attribute(__slAttributesWriteData.format); */
+          /* QString attr_value = _element.attribute(__slAttributesWriteData.value); */
+
+          /* if(attr_source.isNull()|| */
+          /*     attr_data.isNull()|| */
+          /*     attr_format.isNull()|| */
+          /*     attr_value.isNull()) */
+          /*   return; */
+
+          /* auto source = _app.getDataSource(attr_source); */
+          /* if(source.isNull()) return; */
+          /* auto format = _app.getStdDataFormatter(attr_format); */
+          /* if(format.isNull()) */
+          /* { */
+          /*   format = _app.getDataFormatter(attr_format); */
+          /* } */
+          /* if(format.isNull()) return; */
+
+          /* auto writer = source->createWriter(attr_data); */
+
+          /* QByteArray data = format->toBytes(attr_value); */
+
+          /* _actions << [writer, data]() */
+          /* { */
+          /*   writer->writeRequest(data); */
+          /* }; */
         });
 
     //------------------------------------------------controlWindow[]
