@@ -128,10 +128,10 @@ public:
   /*
    * Возвращает пиксельное изображение.
    * --------------------------
-   *  _pixmap - отнисительный путь к файлу фрагметна.
+   *  _file - отнисительный путь к файлу фрагметна.
    *  _app - интерфейс доступа к функциям приложения.
    */
-  static QPixmap getPixmap(const QString& _pixmap, const LIApplication& _app);
+  static QPixmap getPixmap(const QString& _file, const LIApplication& _app);
   /*
    * Преозразует атрибут в флаг выравнивания.
    * Возвращает true при успешном преобразовании, и false при неуспешном.

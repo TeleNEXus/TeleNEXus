@@ -5,10 +5,6 @@
     <PLAGINPATHS>
         <item path="./libs"/>
     </PLAGINPATHS>
-    
-
-
-
 
 
 
@@ -21,7 +17,6 @@
         <layoutVBox     lib="basiclayouts" libhandler="getVBoxLayoutBuilder" />
         <layoutHBox     lib="basiclayouts" libhandler="getHBoxLayoutBuilder" />
     </LAYOUTBUILDERS>
-    
     
     <WIDGETBUILDERS>
         <widget                 lib="basicwidgets" libhandler="getWidgetBuilder"                />
@@ -40,15 +35,9 @@
 
     <FONTS file="fonts.xml"/>
     <SCRIPTS file="scripts.xml"/>
-
-
-
     <FORMATTERS file="formatters.xml"/>
-    
-    <!-- <WINDOW id="main window 1" title="MAIN WINDOW 1" file="widgets.xml"/> -->
-    <!-- <WINDOW id="main window 2" title="MAIN WINDOW 2" file="widgets.xml"/> -->
-    <WINDOW id="win0" title="WINDOW 0" file="window.xml" show="yes"/>
-    <!-- <WINDOW id="win1" title="WINDOW 1" file="window.xml" show="yes"/> -->
-    <!-- <WINDOW id="win2" title="WINDOW 2" file="window.xml" show="yes"/> -->
         
+    <WINDOW id="win0" title="WINDOW 0" file="window.xml" show="normal"
+      modes="stayOnTop=off; frameless=off" />
+
 </APPLICATION>
