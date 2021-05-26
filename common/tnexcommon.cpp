@@ -25,6 +25,8 @@
 namespace tnexcommon
 {
 
+static const QRegularExpression __slAttributeCleanExpr(QStringLiteral(" |\\r|\\n"));
+
 void setMultipleAttributes(
     const QMap<QString, std::function<void(const QString& _val)>>& _assignActions,
     const QString& _attributes,
@@ -33,7 +35,7 @@ void setMultipleAttributes(
 {
   QString attrs = _attributes;
 
-  if(_attrSeparator != QStringLiteral(" ")) {attrs.remove(QString(" "));}
+  attrs.remove(__slAttributeCleanExpr);
   attrs.remove(QRegularExpression(QString("^%1{1,}|%1{1,}$").arg(_attrSeparator)));
 
   auto attr_list = attrs.split(_attrSeparator);
@@ -55,7 +57,7 @@ void setMultipleValues(
 {
   QString values = _values;
 
-  if(_valuesSeparator != QStringLiteral(" ")) {values.remove(QString(" "));}
+  values.remove(__slAttributeCleanExpr);
 
   values.remove(QRegularExpression(QString("^%1{1,}|%1{1,}$").arg(_valuesSeparator)));
 

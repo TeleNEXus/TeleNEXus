@@ -43,7 +43,9 @@
       id="Test Button" 
       title="Test Button" 
       show="normal"
-      modes="stayOnTop=false; frameless=false" 
+      modes= 
+      "stayOnTop=true;              
+      frameless=true" 
       size="300;50"
       position="300;600"
       />

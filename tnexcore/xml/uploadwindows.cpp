@@ -258,6 +258,7 @@ static QWidget* buildWidget(const QDomElement& _element,
     auto set_modes = [&_element, _widget]()
     {
       QString attr_modes = _element.attribute(__slAttributes.modes);
+      qDebug() << "++++++++++++++++++modes = " << attr_modes;
 
       auto get_mode_setters = [_widget]() mutable
       {
