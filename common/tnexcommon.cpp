@@ -48,4 +48,33 @@ void setMultipleAttributes(
   } 
 }
 
+void setMultipleValues(
+    const QList<std::function<void(const QString& _val)>>& _assigns,
+    const QString& _values,
+    const QString _valuesSeparator)
+{
+  QString values = _values;
+
+  if(_valuesSeparator != QStringLiteral(" ")) {values.remove(QString(" "));}
+
+  values.remove(QRegularExpression(QString("^%1{1,}|%1{1,}$").arg(_valuesSeparator)));
+
+  auto values_list = values.split(_valuesSeparator);
+
+  auto it_value = values_list.begin();
+  for(auto it_assign = _assigns.begin(); 
+      it_assign != _assigns.end(); 
+      it_assign++)
+  {
+    if(it_value != values_list.end())
+    {
+      (*it_assign)((*it_value));
+    }
+    else
+    {
+      (*it_assign)(QString());
+    }
+    it_value++;
+  }
+}
 }

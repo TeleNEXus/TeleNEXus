@@ -6,8 +6,6 @@
         <item path="./libs"/>
     </PLAGINPATHS>
 
-
-
     <SOURCEBUILDERS file="sourcebuilders.xml"/>
     
     <SOURCES file="sources.xml"/>
@@ -28,16 +26,26 @@
         <dataComboLabel         lib="basicwidgets" libhandler="getRemComboLabelBuilder"         />
         <tabs                   lib="basicwidgets" libhandler="getTabWidgetBuilder"             />
         <switchWidgetsList      lib="basicwidgets" libhandler="getSwitchWidgetsListBuilder"     />
-        <controlWindowButton    lib="basicwidgets" libhandler="getControlWindowButtonBuilder"   />
         <scrollArea             lib="basicwidgets" libhandler="getScrollAreaBuilder"            />
-        <dataWriteButton        lib="basicwidgets" libhandler="getRemWriteButtonBuilder"        />
+        <button                 lib="basicwidgets" libhandler="getButtonBuilder"                />
+        <listWidget             lib="basicwidgets" libhandler="getListWidgetBuilder"            />
+        <stackedWidget          lib="basicwidgets" libhandler="getStackedWidgetBuilder"         />
+        <splitterVertical       lib="basicwidgets" libhandler="getVerticalSplitterBuilder"      />
+        <splitterHorizontal     lib="basicwidgets" libhandler="getHorizontalSplitterBuilder"    />
     </WIDGETBUILDERS>
 
     <FONTS file="fonts.xml"/>
     <SCRIPTS file="scripts.xml"/>
     <FORMATTERS file="formatters.xml"/>
         
-    <WINDOW id="win0" title="WINDOW 0" file="window.xml" show="normal"
-      modes="stayOnTop=off; frameless=off" />
+    <WINDOW 
+      file="testbutton/testbutton.xml" 
+      id="Test Button" 
+      title="Test Button" 
+      show="normal"
+      modes="stayOnTop=false; frameless=false" 
+      size="300;50"
+      position="300;600"
+      />
 
 </APPLICATION>
