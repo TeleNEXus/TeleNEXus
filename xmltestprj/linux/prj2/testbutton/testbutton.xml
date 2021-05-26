@@ -12,8 +12,15 @@
   </actions>
 
   <mainWidget>
-    <widget>
-    </widget>
+    <button>
+      <press>
+        <writeData sourceId="localsource" dataId="test_string" format="string" value="release write string 2"/>
+        <!-- <controlScript scriptId="window_event_script_11" scriptAction="launch(500)"/> -->
+        <!-- <controlWindow windowId="win0" action="show"/> -->
+      </press>
+      <release>
+      </release>
+    </button>
   </mainWidget>
 </WINDOW>
 
