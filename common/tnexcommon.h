@@ -60,5 +60,34 @@ extern void setMultipleAttributes(
     const QString& _attributes,
     const QString _attrSeparator = QString(";"), 
     const QString _attrEqSign = QString("="));
+
+/*
+ * ENG>
+ *  Decodes a string with multiple values and executes 
+ *  assign actions
+ *  --------------------------------
+ *  Parameters:
+ *  _assigns          - assign actions list;
+ *  _values           - string with values
+ *                      "val1;val2;val3";
+ *  _valuesSeparator  - values separator;
+ *
+ * RU>
+ * Дeкодирует строку с множественными значениями и выполняет 
+ *  и выполняет действия назначения.
+ * Формат строки:
+ *  "attribute1 = val1; attribute2 = val2; attribure3 = val3"
+ *  --------------------------------
+ *  Параметры:
+ *  _assigns          - список действий назначения;
+ *  _values           - строка со значениями "val1;val2;val3";
+ *  _valuesSeparator  - разделитель значений;
+ *
+ */
+extern void setMultipleValues(
+    const QList<std::function<void(const QString& _val)>>& _assigns,
+    const QString& _values,
+    const QString _valuesSeparator = QString(";"));
 }
+
 #endif /* TNEXCOMMON_H_ */
