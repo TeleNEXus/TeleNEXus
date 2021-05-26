@@ -93,7 +93,7 @@ int main(int argc, char** argv)
 
     auto reg_debug = []()
     {
-      /* QTextStream out(stdout); */
+      QTextStream out(stdout);
 
       /* /1* QString test_string = "Aasdf \\02 dddf \\0 safsdf \n"; *1/ */
       /* /1* QString test_string = "\\x65 \\x041f Привет \\x433 \\xf4\\xA5\\x46 \\ Av Aasdf \\v dddf \\\\v \\b aaa \\ \\\\ eee"; *1/ */
@@ -162,19 +162,12 @@ int main(int argc, char** argv)
       /*     endl; */
       /* } */
 
-      QString str = QStringLiteral("function(params, p1, p2)");
+      QRegularExpression rex = QRegularExpression("('[^']*'\\s+)");
+      QString str = QString("j,___    ,,,,jk kd jkdk  k ' test aaaa  '");
 
-      qDebug() << "base     : " << str;
-      qDebug() << "clear    : " << str.remove(" ");
-      qDebug() << "split    : " << str.split("(");
-      qDebug() << "function : " << str.split("(")[0];
-      qDebug() << "paraml   : " << str.split("(")[1].remove(")").split(",");
+      out << str << endl;
 
-
-      QString test;
-      foo(test);
-      qDebug() << "Test : " << test;
-
+      out << str << endl;
     };
 
     /* printf("asdfsdf \\sdf \? \n"); */

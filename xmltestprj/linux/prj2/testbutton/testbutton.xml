@@ -14,7 +14,14 @@
   <mainWidget>
     <button>
       <press>
-        <writeData sourceId="localsource" dataId="test_string" format="string" value="release write string 2"/>
+        <!-- <writeData sourceId="localsource" dataId="test_string" format="string" value="'\release write string 2'"/> -->
+
+        <!-- <writeData dataSpec = " sourceId = localsource; dataId = test_string; format = string" value = "release write string 2" -->
+        <!--   /> -->
+
+        <writeData dataSpec="localsource:test_string:string" value="release write string 2"/>
+
+
         <!-- <controlScript scriptId="window_event_script_11" scriptAction="launch(500)"/> -->
         <!-- <controlWindow windowId="win0" action="show"/> -->
       </press>

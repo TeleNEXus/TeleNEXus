@@ -25,7 +25,7 @@
 namespace tnexcommon
 {
 
-static const QRegularExpression __slAttributeCleanExpr(QStringLiteral(" |\\r|\\n"));
+static const QRegularExpression __slAttributeCleanExpr(QStringLiteral("(\\s+)|(\\r+)|(\\n+)"));
 
 void setMultipleAttributes(
     const QMap<QString, std::function<void(const QString& _val)>>& _assignActions,
