@@ -39,6 +39,7 @@
 #include <functional>
 #include <qnamespace.h>
 #include <QRegularExpression>
+#include <QCoreApplication>
 
 //==============================================================================
 QMap<QString, QSharedPointer<LIWindow>> __slWindowsMap;
@@ -87,6 +88,7 @@ static const struct
 {
   QString stayOnTop = "stayOnTop";
   QString frameless = "frameless";
+  QString showMode = "showMode";
 }__slModes;
 
 //==============================================================================ActionLoader
@@ -237,11 +239,170 @@ static QDomElement endElement(
 
 //==============================================================================buildWidget
 static QWidget* buildWidget(const QDomElement& _element, 
-    const LIApplication& _app)
+    const LIApplication& _app, LIWindow::EShowMode* _defShowMode)
 {
+  //----------------------------------------------------set_modes[]
+  auto set_modes = [&_defShowMode](const QDomElement& _element, QWidget* _widget)
+  {
+    QString attr_modes = _element.attribute(__slAttributes.modes);
+
+    auto get_mode_setters = [_widget, &_defShowMode]()
+    {
+      QMap<QString, std::function<void(const QString&)>> setters_map;
+
+      setters_map.insert(__slModes.stayOnTop,
+          [_widget](const QString& _val)
+          {
+            if(_val == QStringLiteral("true"))
+            {
+              _widget->setWindowFlag(Qt::WindowType::WindowStaysOnTopHint, true);
+            }
+            else if(_val == QStringLiteral("false"))
+            {
+              _widget->setWindowFlag(Qt::WindowType::WindowStaysOnTopHint, false);
+            }
+          });
+
+      setters_map.insert(__slModes.frameless,
+          [_widget](const QString& _val)
+          {
+            if(_val == QStringLiteral("true"))
+            {
+              _widget->setWindowFlag(Qt::WindowType::FramelessWindowHint, true);
+            }
+            else if(_val == QStringLiteral("false"))
+            {
+              _widget->setWindowFlag(Qt::WindowType::FramelessWindowHint, false);
+            }
+          });
+
+      setters_map.insert(__slModes.showMode,
+          [&_defShowMode](const QString& _val)
+          {
+            qDebug() << "default show mode = " << _val;
+            (*_defShowMode) =  LCWindow::stringToShowMode(_val);
+          });
+      return setters_map;
+    };
+
+    if(!attr_modes.isNull())
+    {
+      tnexcommon::setMultipleAttributes(get_mode_setters(), attr_modes);
+    }
+  };
+
+    //----------------------------------------------------widget_size[]
+  auto widget_size = [](const QDomElement& _element, QWidget* _widget)
+  {
+    QSize size = _widget->geometry().size();
+
+    QString attr_size = _element.attribute(__slAttributes.size);
+
+    if(attr_size.isNull()) return size;
+
+    auto get_assigns = [&size]()
+    {
+      QList<std::function<void(const QString&)>> assigns_list;
+
+      assigns_list << [&size](const QString& _value)
+      {
+        if(_value.isNull()) return;
+        QString value = _value;
+        value.remove(QRegularExpression(QStringLiteral("[^0-9]")));
+
+        bool flag = false;
+        int width = value.toInt(&flag);
+        if(flag)
+        {
+          size.setWidth(width);
+        }
+      };
+
+      assigns_list << [&size](const QString& _value)
+      {
+        if(_value.isNull()) return;
+        QString value = _value;
+        value.remove(QRegularExpression(QStringLiteral("[^0-9]")));
+        bool flag = false;
+        int height = value.toInt(&flag);
+        if(flag)
+        {
+          size.setHeight(height);
+        }
+      };
+      return assigns_list;
+    };
+
+    tnexcommon::setMultipleValues(get_assigns(), attr_size);
+    return size;
+  };
+
+  //----------------------------------------------------set_position[]
+  auto set_position = [](const QDomElement& _element, QWidget* _widget)
+  {
+
+    QPoint pos = QPoint(0, 0);
+
+    auto ret = [&pos, _widget]()
+    {
+      _widget->move(pos);
+    };
+
+    QString attr_position = _element.attribute(__slAttributes.position);
+
+    if(attr_position.isNull()) return ret();
+
+    auto get_assigns = [&pos]()
+    {
+      QList<std::function<void(const QString&)>> assigns_list;
+
+      assigns_list << [&pos](const QString& _value)
+      {
+        if(_value.isNull()) return;
+        QString value = _value;
+        value.remove(QRegularExpression(QStringLiteral("[^0-9]")));
+
+        bool flag = false;
+        int posx = value.toInt(&flag);
+        if(flag)
+        {
+          pos.setX(posx);
+        }
+      };
+
+      assigns_list << [&pos](const QString& _value)
+      {
+        if(_value.isNull()) return;
+        QString value = _value;
+        value.remove(QRegularExpression(QStringLiteral("[^0-9]")));
+        bool flag = false;
+        int posy = value.toInt(&flag);
+        if(flag)
+        {
+          pos.setY(posy);
+        }
+      };
+      return assigns_list;
+    };
+
+    tnexcommon::setMultipleValues(get_assigns(), attr_position);
+
+    return ret();
+  };
+
+
+  //--------------------------------------------------set_modality
+  auto set_modality = [](const QDomElement& _element, QWidget* _widget)
+  {
+    QString attr = _element.attribute(__slAttributes.modality);
+    if(attr == QStringLiteral("true"))
+    {
+      _widget->setWindowModality(Qt::WindowModality::ApplicationModal);
+    }
+  };
 
   //--------------------------------------------------init_widget[]
-  auto init_widget = [&_element](QWidget* _widget)
+  auto set_title= [](const QDomElement& _element, QWidget* _widget)
   {
 
     QString attr = _element.attribute(LCXmlCommon::mCommonAttributes.title);
@@ -252,154 +413,6 @@ static QWidget* buildWidget(const QDomElement& _element,
     {
       _widget->setWindowModality(Qt::WindowModality::ApplicationModal);
     }
-
-
-    //----------------------------------------------------set_modes[]
-    auto set_modes = [&_element, _widget]()
-    {
-      QString attr_modes = _element.attribute(__slAttributes.modes);
-
-      auto get_mode_setters = [_widget]() mutable
-      {
-        QMap<QString, std::function<void(const QString&)>> setters_map;
-
-        setters_map.insert(__slModes.stayOnTop,
-            [_widget](const QString& _val)
-            {
-              if(_val == QStringLiteral("true"))
-              {
-                _widget->setWindowFlag(Qt::WindowType::WindowStaysOnTopHint, true);
-              }
-              else if(_val == QStringLiteral("false"))
-              {
-                _widget->setWindowFlag(Qt::WindowType::WindowStaysOnTopHint, false);
-              }
-            });
-
-        setters_map.insert(__slModes.frameless,
-            [_widget](const QString& _val)
-            {
-              if(_val == QStringLiteral("true"))
-              {
-                _widget->setWindowFlag(Qt::WindowType::FramelessWindowHint, true);
-              }
-              else if(_val == QStringLiteral("false"))
-              {
-                _widget->setWindowFlag(Qt::WindowType::FramelessWindowHint, false);
-              }
-            });
-        return setters_map;
-      };
-
-      if(!attr_modes.isNull())
-      {
-        tnexcommon::setMultipleAttributes(get_mode_setters(), attr_modes);
-      }
-    };
-
-    //----------------------------------------------------widget_size[]
-    auto widget_size = [&_element, _widget]()
-    {
-      QSize size = _widget->geometry().size();
-
-      QString attr_size = _element.attribute(__slAttributes.size);
-
-      if(attr_size.isNull()) return size;
-
-      auto get_assigns = [&size]()
-      {
-        QList<std::function<void(const QString&)>> assigns_list;
-
-        assigns_list << [&size](const QString& _value)
-        {
-          if(_value.isNull()) return;
-          QString value = _value;
-          value.remove(QRegularExpression(QStringLiteral("[^0-9]")));
-
-          bool flag = false;
-          int width = value.toInt(&flag);
-          if(flag)
-          {
-            size.setWidth(width);
-          }
-        };
-
-        assigns_list << [&size](const QString& _value)
-        {
-          if(_value.isNull()) return;
-          QString value = _value;
-          value.remove(QRegularExpression(QStringLiteral("[^0-9]")));
-          bool flag = false;
-          int height = value.toInt(&flag);
-          if(flag)
-          {
-            size.setHeight(height);
-          }
-        };
-        return assigns_list;
-      };
-
-      tnexcommon::setMultipleValues(get_assigns(), attr_size);
-
-      return size;
-    };
-
-    //----------------------------------------------------set_position[]
-    auto set_position = [&_element, _widget]()
-    {
-
-      QPoint pos = QPoint(0, 0);
-
-      auto ret = [&pos, _widget]()
-      {
-        _widget->move(pos);
-      };
-
-      QString attr_position = _element.attribute(__slAttributes.position);
-
-      if(attr_position.isNull()) return ret();
-
-      auto get_assigns = [&pos]()
-      {
-        QList<std::function<void(const QString&)>> assigns_list;
-
-        assigns_list << [&pos](const QString& _value)
-        {
-          if(_value.isNull()) return;
-          QString value = _value;
-          value.remove(QRegularExpression(QStringLiteral("[^0-9]")));
-
-          bool flag = false;
-          int posx = value.toInt(&flag);
-          if(flag)
-          {
-            pos.setX(posx);
-          }
-        };
-
-        assigns_list << [&pos](const QString& _value)
-        {
-          if(_value.isNull()) return;
-          QString value = _value;
-          value.remove(QRegularExpression(QStringLiteral("[^0-9]")));
-          bool flag = false;
-          int posy = value.toInt(&flag);
-          if(flag)
-          {
-            pos.setY(posy);
-          }
-        };
-        return assigns_list;
-      };
-
-      tnexcommon::setMultipleValues(get_assigns(), attr_position);
-
-      return ret();
-    };
-
-    set_modes();
-    set_position();
-    _widget->resize(widget_size());
   };
 
   //--------------------------------------------------------
@@ -421,7 +434,11 @@ static QWidget* buildWidget(const QDomElement& _element,
         widget = builder->build(el, _app);
         if(widget) 
         {
-          init_widget(widget);
+          set_title(_element, widget);
+          set_modes(_element, widget);
+          set_position(_element, widget);
+          set_modality(_element, widget);
+          widget->resize(widget_size(_element, widget));
           break;
         }
       }
@@ -462,10 +479,13 @@ void upload(
     const LIApplication& _app)
 {
   QDomElement el = endElement(_element, _app);
-  QWidget* widget = buildWidget(el, _app);
+  LIWindow::EShowMode show_mode = LIWindow::EShowMode::normal;
+
+  QWidget* widget = buildWidget(el, _app, &show_mode);
+
   if(widget == nullptr) return;
 
-  LCWindow*  window = new LCWindow(widget);
+  LCWindow*  window = new LCWindow(widget, show_mode);
 
   CActionLoader::getInstance().load(el, _app, window);
 
@@ -487,19 +507,14 @@ void upload(
   {
     QString attr_show = _element.attribute(
         LCXmlCommon::mCommonAttributes.show.tag);
-    auto show = [attr_show, widget] () mutable
-    {
-      attr_show = attr_show.remove(" ");
-      attr_show = attr_show.toLower();
 
-      if(attr_show == QStringLiteral("normal"))
-        widget->show();
-      else if(attr_show == QStringLiteral("fullscreen"))
-      {
-        widget->show();
-        widget->setWindowState(Qt::WindowState::WindowFullScreen);
-      }
+    auto show = [attr_show, window, widget]() 
+    {
+      if(attr_show.isNull()) return;
+      window->action(QString("show(%1)").arg(attr_show));
+      QCoreApplication::sendEvent(widget, new QShowEvent());
     };
+
     __slShowList << show;
   }
 

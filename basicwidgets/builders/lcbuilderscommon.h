@@ -36,6 +36,12 @@ class LIMovieAccess;
 class LCBuildersCommon
 {
 public:
+  struct SDataSpec
+  {
+    QString sourceId;
+    QString dataId;
+    QString formagId;
+  };
   //Общие атрибуты построителей виджетов.
   struct SAttributes
   {
@@ -62,7 +68,6 @@ public:
     QString fontid      = "fontId";
 
     QString dataformatter = "format";
-    QString dataformatterid = "formatId";
 
     QString icon        = "icon";
     QString iconsize    = "iconSize";

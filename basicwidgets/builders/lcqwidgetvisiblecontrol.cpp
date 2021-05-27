@@ -217,15 +217,7 @@ bool LCQWidgetVisibleControl::build(const QDomElement& _element,
 
   if(source.isNull()) return ret_wrong();
 
-  auto format = [&_app, &attr_format]() 
-  {
-    auto ret = _app.getStdDataFormatter(attr_format);
-    if(ret.isNull())
-    {
-      ret = _app.getDataFormatter(attr_format);
-    }
-    return ret;
-  }();
+  auto format = _app.getDataFormatter(attr_format);
 
   if(format.isNull()) return ret_wrong();
 

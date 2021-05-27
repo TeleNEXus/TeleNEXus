@@ -336,7 +336,6 @@ LCXmlRemLineEditBuilder::~LCXmlRemLineEditBuilder()
 QWidget* LCXmlRemLineEditBuilder::buildLocal(
       QSharedPointer<SBuildData> _buildData)
 {
-
   QLineEdit* line_edit = new QLineEdit(_buildData->element.tagName());
 
   const QDomElement& element = _buildData->element;
@@ -353,33 +352,6 @@ QWidget* LCXmlRemLineEditBuilder::buildLocal(
       QString style = LCBuildersCommon::getBaseStyleSheet(_buildData->element, _buildData->application);
       line_edit->setStyleSheet(style);
       LCBuildersCommon::initPosition(_buildData->element, *line_edit);
-
-      /* //-----------------------------keyboard */
-      /* QString keyboard_id = _buildData->element.attribute(__slAttributes.keyboard); */
-      /* if(keyboard_id.isNull()) return _le; */
-      /* auto keyboard = _buildData->application.getKeyboard(keyboard_id); */
-      /* if(keyboard.isNull()) return _le; */
-
-      /* auto action_change = */
-      /*   [_le](const QString& _str) */
-      /*   { */
-      /*   }; */
-
-      /* auto action_enter = */
-      /*   [_le](const QString& _str) */
-      /*   { */
-      /*     _le->setText(_str); */
-      /*   }; */
-
-      /* auto action_disconnect = */
-      /*   [](const QString& _str) */
-      /*   { */
-      /*   }; */
-
-      /* auto listener = keyboard->createListener(action_change, action_enter, action_disconnect); */
-
-      /* CQEventFilter::install(listener, _le); */
-
       return line_edit;
     };
 
@@ -403,18 +375,10 @@ QWidget* LCXmlRemLineEditBuilder::buildLocal(
   }
 
   attr = element.attribute(LCBuildersCommon::mAttributes.dataformatter);
-  format = _buildData->application.getStdDataFormatter(attr);
+  format = _buildData->application.getDataFormatter(attr);
+  if(format.isNull()) return ret_widget();
 
-
-  if(format.isNull())
-  {
-    attr = element.attribute(LCBuildersCommon::mAttributes.dataformatterid);
-    format = _buildData->application.getDataFormatter(attr);
-    if(format.isNull()) return ret_widget();
-  }
-
-  auto get_keyboard = 
-    [&_buildData]()
+  auto get_keyboard = [&_buildData]()
   {
     QString keyboard_id = _buildData->element.attribute(__slAttributes.keyboard);
     if(keyboard_id.isNull()) return QSharedPointer<LIKeyboard>();

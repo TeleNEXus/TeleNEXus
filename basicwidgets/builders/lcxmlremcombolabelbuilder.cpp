@@ -141,12 +141,8 @@ QWidget* LCXmlRemComboLabelBuilder::buildLocal(
     goto LABEL_WRONG_EXIT;
   }
 
-  attr = element.attribute(LCBuildersCommon::mAttributes.dataformatter);
-  format = _buildData->application.getStdDataFormatter(attr);
-
-  /* format = LCXmlStdDataFormatterFactory::instance(). */
-  /*   createStringFormatter(element.attributes()); */
-
+  format = _buildData->application.getDataFormatter(
+      element.attribute(LCBuildersCommon::mAttributes.dataformatter));
   if(format.isNull())
   {
     goto LABEL_WRONG_EXIT;

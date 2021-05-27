@@ -12,24 +12,61 @@
   </actions>
 
   <mainWidget>
-    <button>
-      <press>
-        <!-- <writeData sourceId="localsource" dataId="test_string" format="string" value="'\release write string 2'"/> -->
+    <widget>
+      <layout>
+        <layoutVBox>
+          <widgets>
 
-        <!-- <writeData dataSpec = " sourceId = localsource; dataId = test_string; format = string" value = "release write string 2" -->
-        <!--   /> -->
+            <button test="write data">
+              <press>
+                <writeData dataSpec="localsource:test_string:string" value="release write string 2"/>
+              </press>
+            </button>
 
-        <writeData dataSpec="localsource:test_string:string" value="release write string 2"/>
+            <button text="show window 1">
+              <press>
+                <controlWindow windowId="TestWindow1" action="show"/>
+              </press>
+            </button>
+
+            <button text="hide window 1">
+              <press>
+                <controlWindow windowId="TestWindow1" action="hide"/>
+              </press>
+            </button>
+
+            <button text="show window 2">
+              <press>
+                <controlWindow windowId="TestWindow2" action="show"/>
+              </press>
+            </button>
+
+            <button text="show window 2">
+              <press>
+                <controlWindow windowId="TestWindow2" action="hide"/>
+              </press>
+            </button>
+
+          </widgets>
+        </layoutVBox>
+      </layout>
+    </widget>
+    <!-- <button> -->
+    <!--   <press> -->
+    <!--     <!-1- <writeData sourceId="localsource" dataId="test_string" format="string" value="'\release write string 2'"/> -1-> -->
+    <!--     <!-1- <writeData dataSpec = " sourceId = localsource; dataId = test_string; format = string" value = "release write string 2" -1-> -->
+    <!--     <!-1-   /> -1-> -->
+
+    <!--     <writeData dataSpec="localsource:test_string:string" value="release write string 2"/> -->
 
 
-        <!-- <controlScript scriptId="window_event_script_11" scriptAction="launch(500)"/> -->
-        <!-- <controlWindow windowId="win0" action="show"/> -->
-      </press>
-      <release>
-      </release>
-    </button>
+    <!--     <!-1- <controlScript scriptId="window_event_script_11" scriptAction="launch(500)"/> -1-> -->
+    <!--     <!-1- <controlWindow windowId="win0" action="show"/> -1-> -->
+    <!--   </press> -->
+    <!--   <release> -->
+    <!--   </release> -->
+    <!-- </button> -->
   </mainWidget>
 </WINDOW>
-
 
 

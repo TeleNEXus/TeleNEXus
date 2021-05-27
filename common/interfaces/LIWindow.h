@@ -30,12 +30,19 @@ class LIWindow
 {
 public:
   using TAction = std::function<void(void)>;
+  enum class EShowMode
+  {
+    normal,
+    fullScreen,
+    minimized,
+    maximized
+  };
 public:
 
   LIWindow(){}
   virtual ~LIWindow(){}
   //show window
-  virtual void show() = 0;
+  virtual void show(EShowMode _mode = EShowMode::normal) = 0;
   //hide window
   virtual void hide() = 0;
   //execute action

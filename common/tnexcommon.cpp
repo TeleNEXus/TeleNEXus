@@ -79,4 +79,40 @@ void setMultipleValues(
     it_value++;
   }
 }
+
+void performParamActions(
+    const QString& _action, 
+    const QMap<QString, std::function<void(const QStringList& _actionsMap)>>& _actionsMap)
+{
+  //TODO: add debug message group
+  QString act = _action;
+  auto al = act.split("(");
+
+  auto it = al.begin();
+
+  auto perform = [&_actionsMap](const QString& _action, const QStringList& _params)
+  {
+    auto actit = _actionsMap.find(_action);
+    if(actit == _actionsMap.end()) return;
+    actit.value()(_params);
+  };
+
+  if(it == al.end()) return;
+  auto action_name = (*it).remove(" ");
+  if(al.size() > 1)
+  {
+    it++;
+    (*it).remove(" ");
+    if(!(*it).contains(QRegularExpression("\\)$")))return;
+    (*it).remove(")");
+    auto params = (*it).split(",");
+    perform(action_name, params);
+  }
+  else
+  {
+    perform(action_name, QStringList());
+  }
 }
+
+} /* namespace tnexcommon */
+

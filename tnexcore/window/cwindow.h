@@ -30,15 +30,17 @@ private:
   void* mpLocal;
 public:
   LCWindow() = delete;
-  LCWindow(QWidget* _widget);
+  explicit LCWindow(QWidget* _widget, EShowMode _showMode);
   virtual ~LCWindow();
-  virtual void show() override;
+  virtual void show(EShowMode _mode) override;
   virtual void hide() override;
   virtual void action(const QString& _action) override;
   virtual bool validateAction(
       const QString& _action, QString* msg = nullptr) override;
   virtual void addActionShow(TAction _action) override;
   virtual void addActionHide(TAction _action) override;
+
+  static EShowMode stringToShowMode(const QString& _modeString, bool* _flag = nullptr);
 };
 
 

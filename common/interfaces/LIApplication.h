@@ -92,12 +92,8 @@ public:
      */
     virtual QString getFontStyle(const QString& _fontId) const = 0;
 
-    //TODO: оставить только один метод получения форматтера данных.
     virtual QSharedPointer<LIDataFormatter> 
-      getStdDataFormatter(const QString& _name) const = 0;
-
-    virtual QSharedPointer<LIDataFormatter> 
-      getDataFormatter(const QString& _formatterId) const = 0;
+      getDataFormatter(const QString& _formatter) const = 0;
 
     virtual QSharedPointer<LIJScriptService> 
       getScriptService(const QString& _scriptId) const = 0;

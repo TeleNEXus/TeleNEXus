@@ -19,15 +19,17 @@
  * along with TeleNEXus.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include "cwindow.h"
+#include "tnexcommon.h"
 #include <QWidget>
 #include <QEvent>
 #include <QMap>
 #include <functional>
+#include <qnamespace.h>
+#include <QDebug>
 
 class CQEventFilter : public QObject
 {
 private:
-
 
   class CStateBase
   {
@@ -215,32 +217,95 @@ public:
   }
 };
 
+//==============================================================================
+class CShowParameterValues
+{
+private:
+  QMap<QString, LIWindow::EShowMode> mParametersMap;
+public:
+  static const QString normal;
+  static const QString fullScreen;
+  static const QString minimized;
+  static const QString maximized;
+private:
+  CShowParameterValues()
+  {
+    mParametersMap.insert(normal,     LIWindow::EShowMode::normal);
+    mParametersMap.insert(fullScreen, LIWindow::EShowMode::fullScreen);
+    mParametersMap.insert(minimized,  LIWindow::EShowMode::minimized);
+    mParametersMap.insert(maximized,  LIWindow::EShowMode::maximized);
+  }
+  CShowParameterValues(const CShowParameterValues&) = delete;
+  CShowParameterValues& operator=(const CShowParameterValues&) = delete;
+public:
+  static CShowParameterValues& instance()
+  {
+    static CShowParameterValues instance;
+    return instance;
+  }
+
+  LIWindow::EShowMode stringToShowMode(const QString& _stringMode, bool* _flag)
+  {
+    auto ret = [&_flag](LIWindow::EShowMode _retMode, bool _retFlag)
+    {
+      if(_flag) *_flag = _retFlag;
+      return _retMode;
+    };
+
+    auto it = mParametersMap.find(_stringMode);
+
+    if(it == mParametersMap.end()) 
+    {
+      return ret(LIWindow::EShowMode::normal, false);
+    }
+    return ret(it.value(), true);
+  }
+};
+
+const QString CShowParameterValues::normal      = "normal";
+const QString CShowParameterValues::fullScreen  = "fullScreen";
+const QString CShowParameterValues::minimized   = "minimized";
+const QString CShowParameterValues::maximized   = "maximized";
+
 //==============================================================================SLocalData
 struct SLocalData
 {
-  QMap<QString, std::function<void(void)>> actions;
+  QMap<QString, std::function<void(const QStringList&)>> actions;
   QWidget* pWidget;
   CQEventFilter eventFilter;
+  LIWindow::EShowMode defaultShowMode = LIWindow::EShowMode::normal;
 };
 
 #define toLocalData(p) (reinterpret_cast<SLocalData*>(p))
 #define ld (*(toLocalData(mpLocal)))
 
 //==============================================================================LCWindow
-LCWindow::LCWindow(QWidget* _widget)
+LCWindow::LCWindow(QWidget* _widget, EShowMode _showMode)
 {
   mpLocal = new SLocalData;
   ld.pWidget = _widget;
+  ld.defaultShowMode = _showMode;
   ld.pWidget->installEventFilter(&(ld.eventFilter));
 
   ld.actions.insert(QStringLiteral("show"),
-      [this]()
+      [this](const QStringList& _param)
       {
-        show();
+        QString mode_string;
+        if(_param.size() != 0) mode_string = _param[0];
+        bool flag = false;
+        EShowMode mode = stringToShowMode(mode_string, &flag);
+        if(flag)
+        {
+          show(mode);
+        }
+        else
+        {
+          show(ld.defaultShowMode);
+        };
       });
 
   ld.actions.insert(QStringLiteral("hide"),
-      [this]()
+      [this](const QStringList&)
       {
         hide();
       });
@@ -252,9 +317,27 @@ LCWindow::~LCWindow()
 }
 
 //--------------------------------------------------------------------------
-void LCWindow::show()
+void LCWindow::show(EShowMode _mode)
 {
-  ld.pWidget->show();
+  switch(_mode)
+  {
+  case EShowMode::normal:
+    ld.pWidget->showNormal();
+    break;
+
+  case EShowMode::fullScreen:
+    ld.pWidget->showFullScreen();
+    break;
+
+  case EShowMode::minimized:
+    ld.pWidget->showMinimized();
+    break;
+
+  case EShowMode::maximized:
+    qDebug() << "LCWindow::show maximized";
+    ld.pWidget->showMaximized();
+    break;
+  }
 }
 
 //--------------------------------------------------------------------------
@@ -273,9 +356,7 @@ void LCWindow::hide()
 //--------------------------------------------------------------------------
 void LCWindow::action(const QString& _action)
 {
-  auto it = ld.actions.find(_action);
-  if(it == ld.actions.end()) return;
-  it.value()();
+  tnexcommon::performParamActions(_action, ld.actions);
 }
 
 //--------------------------------------------------------------------------
@@ -302,6 +383,14 @@ void LCWindow::addActionShow(TAction _action)
 void LCWindow::addActionHide(TAction _action)
 {
   ld.eventFilter.addActionHide(_action);
+}
+
+//--------------------------------------------------------------------------
+LIWindow::EShowMode LCWindow::stringToShowMode(const QString& _modeString,
+    bool* _flag)
+{
+  return 
+    CShowParameterValues::instance().stringToShowMode(_modeString, _flag);
 }
 
 

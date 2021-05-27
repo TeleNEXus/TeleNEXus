@@ -142,15 +142,14 @@ public:
   }
 
   virtual QSharedPointer<LIDataFormatter> 
-    getStdDataFormatter(const QString& _name) const override
+    getDataFormatter(const QString& _formatter) const override
     {
-      return stddataformatterfactory::getFormatter(_name);
-    }
-
-  virtual QSharedPointer<LIDataFormatter> 
-    getDataFormatter(const QString& _formatterId) const override
-    {
-      return uploaddataformatters::getDataFormatter(_formatterId);
+      auto format = stddataformatterfactory::getFormatter(_formatter);
+      if(format.isNull())
+      {
+        format  = uploaddataformatters::getDataFormatter(_formatter);
+      }
+      return format;
     }
 
   virtual QSharedPointer<LIJScriptService> getScriptService(const QString& _scriptId) const override

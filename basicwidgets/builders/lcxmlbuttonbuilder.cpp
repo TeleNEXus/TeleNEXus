@@ -90,7 +90,6 @@ private:
           const QDomElement& _element,
           const LIApplication& _app)
         {
-
           QList<std::function<void(const QString&)>> dataspec_assigns;
           QSharedPointer<LIRemoteDataSource> source;
           QString data_id;
@@ -113,11 +112,7 @@ private:
 
           dataspec_assigns << [&_app, &format](const QString& _val) 
           {
-            format = _app.getStdDataFormatter(_val);
-            if(format.isNull())
-            {
-              format = _app.getDataFormatter(_val);
-            }
+            format = _app.getDataFormatter(_val);
           };
 
           tnexcommon::setMultipleValues(dataspec_assigns, attr_dataspec, QStringLiteral(":"));
@@ -133,35 +128,6 @@ private:
           {
             writer->writeRequest(data);
           };
-
-          /* QString attr_source = _element.attribute(__slAttributesWriteData.sourceId); */
-          /* QString attr_data = _element.attribute(__slAttributesWriteData.dataId); */
-          /* QString attr_format = _element.attribute(__slAttributesWriteData.format); */
-          /* QString attr_value = _element.attribute(__slAttributesWriteData.value); */
-
-          /* if(attr_source.isNull()|| */
-          /*     attr_data.isNull()|| */
-          /*     attr_format.isNull()|| */
-          /*     attr_value.isNull()) */
-          /*   return; */
-
-          /* auto source = _app.getDataSource(attr_source); */
-          /* if(source.isNull()) return; */
-          /* auto format = _app.getStdDataFormatter(attr_format); */
-          /* if(format.isNull()) */
-          /* { */
-          /*   format = _app.getDataFormatter(attr_format); */
-          /* } */
-          /* if(format.isNull()) return; */
-
-          /* auto writer = source->createWriter(attr_data); */
-
-          /* QByteArray data = format->toBytes(attr_value); */
-
-          /* _actions << [writer, data]() */
-          /* { */
-          /*   writer->writeRequest(data); */
-          /* }; */
         });
 
     //------------------------------------------------controlWindow[]
