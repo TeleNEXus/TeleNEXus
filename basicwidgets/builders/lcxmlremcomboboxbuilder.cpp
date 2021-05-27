@@ -103,16 +103,11 @@ QWidget* LCXmlRemComboBoxBuilder::buildLocal(
     datawrite = dataread;
   }
 
-  attr = element.attribute(LCBuildersCommon::mAttributes.dataformatter);
-
-  if(attr.isNull())
+  format = _buildData->application.getDataFormatter(
+      element.attribute(LCBuildersCommon::mAttributes.dataformatter));
+  if(format.isNull())
   {
-    attr  = element.attribute(LCBuildersCommon::mAttributes.dataformatterid);
-    format = _buildData->application.getDataFormatter(attr);
-  }
-  else
-  {
-    format = _buildData->application.getStdDataFormatter(attr);
+    goto LABEL_WRONG_EXIT;
   }
 
   if(format.isNull())

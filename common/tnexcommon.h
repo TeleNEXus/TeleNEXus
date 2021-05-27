@@ -88,6 +88,20 @@ extern void setMultipleValues(
     const QList<std::function<void(const QString& _val)>>& _assigns,
     const QString& _values,
     const QString _valuesSeparator = QString(";"));
+
+/* RU>
+ * Выполняет параметризированное действие (формата: action(p1, p2, ..., pN)),
+ * выбирая их из переданной карты и передавая параметры через список строк.
+ *
+ * EN>
+ * Performs a parameterized action (format: action (p1, p2,..., pN)),
+ * selecting them from the passed map and passing the 
+ * parameters through a list of strings.
+ *
+ */
+extern void performParamActions(
+    const QString& _action, 
+    const QMap<QString, std::function<void(const QStringList& _actionsMap)>>& _actionsMap);
 }
 
 #endif /* TNEXCOMMON_H_ */

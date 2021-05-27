@@ -68,17 +68,8 @@ QWidget* LCXmlStackedWidgetBuilder::buildLocal(
   QString data = element.attribute(LCBuildersCommon::mAttributes.data);
   if(data.isNull()) return ret_wrong();
 
-  auto format = [&element, &app]() 
-  {
-    QString attr = element.attribute(
-        LCBuildersCommon::mAttributes.dataformatter);
-    auto ret = app.getStdDataFormatter(attr);
-    if(ret.isNull())
-    {
-      ret = app.getDataFormatter(attr);
-    }
-    return ret;
-  }();
+  auto format = _buildData->application.getDataFormatter(element.attribute(
+        LCBuildersCommon::mAttributes.dataformatter));
 
   if(format.isNull()) return ret_wrong();
 

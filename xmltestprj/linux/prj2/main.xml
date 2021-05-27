@@ -54,22 +54,43 @@
       id="Label" 
       title="Label" 
       show="normal"
-      modes= "stayOnTop=true; frameless=false" 
+      modality="false"
+      modes= "stayOnTop=false; frameless=true" 
       size="300;50"
       position="100;100">
     <mainWidget>
-      <widget>
-        <layout>
-          <layoutHBox>
-            <widgets>
-              <dataLabel      source="localsource"  data="test_string"  format="string"   />
-            </widgets>
-          </layoutHBox>
-        </layout>
-      </widget>
+
+      <!-- <widget> -->
+      <!--   <layout> -->
+      <!--     <layoutHBox> -->
+      <!--       <widgets> -->
+      <!--         <dataLabel      source="localsource"  data="test_string"  format="string"   /> -->
+      <!--       </widgets> -->
+      <!--     </layoutHBox> -->
+      <!--   </layout> -->
+      <!-- </widget> -->
+
       <!-- <dataLabel source="localsource" data="test_string" format="string"/> -->
       <!-- <dataLabel      source="localsource"  data="bits_size(1)" format="bits"/> -->
       <!-- <dataLabel      source="localsource"  data="test_string"  format="string"   /> -->
+              <dataLabel      source="localsource"  data="test_string"  format="string"   />
+    <!-- <dataLineEdit   source="localsource"  data="bytes_uint8"   format="uint8"    /> -->
+    </mainWidget>
+  </WINDOW>
+
+  <WINDOW
+
+      id="TestWindow1" 
+      title="TestWindow1" 
+      show="normal"
+      modality="false"
+      modes= "stayOnTop=true; frameless=false; showMode=fullScreen" 
+      size="200;50"
+      position="300;100">
+
+    <mainWidget>
+      <widget>
+      </widget>
     </mainWidget>
   </WINDOW>
 
@@ -84,4 +105,5 @@
     <!--   <table file="../prj1/testtablelocalsource.xml"/> -->
     <!-- </mainWidget> -->
   <!-- </WINDOW> -->
+
 </APPLICATION>

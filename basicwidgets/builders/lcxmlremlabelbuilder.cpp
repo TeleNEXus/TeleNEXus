@@ -72,10 +72,7 @@ QWidget* LCXmlRemLabelBuilder::buildLocal(
   
   attr = element.attribute(LCBuildersCommon::mAttributes.dataformatter);
 
-  format = _buildData->application.getStdDataFormatter(attr);
-
-  /* format = LCXmlStdDataFormatterFactory:: */
-  /*   instance().createStringFormatter(element.attributes()); */
+  format = _buildData->application.getDataFormatter(attr);
 
   if(format.isNull())
   {
