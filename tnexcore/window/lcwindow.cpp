@@ -27,8 +27,6 @@
 #include <qnamespace.h>
 #include <QDebug>
 
-#define Debug(_msg) TNEXDEBUG("LCWindow", _msg)
-
 class CQEventFilter : public QObject
 {
 private:
@@ -335,7 +333,6 @@ void LCWindow::show(EShowMode _mode)
     break;
 
   case EShowMode::maximized:
-    Debug("show maximized");
     ld.pWidget->showMaximized();
     break;
   }
@@ -357,7 +354,7 @@ void LCWindow::hide()
 //--------------------------------------------------------------------------
 void LCWindow::action(const QString& _action)
 {
-  tnexcommon::performParamActions(_action, ld.actions);
+  tnexcommon::performParamAction(_action, ld.actions);
 }
 
 //--------------------------------------------------------------------------
