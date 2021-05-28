@@ -162,12 +162,29 @@ int main(int argc, char** argv)
       /*     endl; */
       /* } */
 
-      QRegularExpression rex = QRegularExpression("('[^']*'\\s+)");
-      QString str = QString("j,___    ,,,,jk kd jkdk  k ' test aaaa  '");
+      struct asdf
+      {
+        QString fname;
+        QStringList params;
+      }action_struct;
 
-      out << str << endl;
+      /* QString action_string = "  function  (p1() , p2)"; */
+      QString action_string = "  function  (p1() , p2)()";
+      /* QString action_string = "  function  "; */
+      action_string.remove(" ");
+      action_struct.fname = action_string;
+      action_struct.fname.remove(QRegularExpression("\\(.*"));
+      action_string.remove(QRegularExpression("^[^\\(\\)]+"));
+      action_string.remove(QRegularExpression("(^\\()|(\\)$)"));
+      action_struct.params = action_string.split(",");
+      qDebug() << "action function = " << action_struct.fname;
+      qDebug() << "action params   = " << action_struct.params;
 
-      out << str << endl;
+
+
+      /* split = split.split(","); */
+      /* qDebug() << "split param = " << split; */
+
     };
 
     /* printf("asdfsdf \\sdf \? \n"); */
@@ -183,5 +200,5 @@ int main(int argc, char** argv)
 
 
 
-    return app.exec();
+    /* return app.exec(); */
 }

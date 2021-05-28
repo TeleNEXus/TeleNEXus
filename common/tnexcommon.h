@@ -25,15 +25,6 @@
 #include <QMap>
 #include <functional>
 
-#define TNEXDEBUG_ON
-
-#ifdef TNEXDEBUG_ON
-#define TNEXDEBUG(_description, _message) \
-  qDebug() << (_description) << \
-  QStringLiteral(" : ") << (_message) 
-#else
-  #define TNEXDEBUG(_description, _message) 
-#endif
 
 namespace tnexcommon
 {
@@ -86,7 +77,7 @@ extern void setMultipleAttributes(
  * Дeкодирует строку с множественными значениями и выполняет 
  *  и выполняет действия назначения.
  * Формат строки:
- *  "attribute1 = val1; attribute2 = val2; attribure3 = val3"
+ *  "val1;val2;val3"
  *  --------------------------------
  *  Параметры:
  *  _assigns          - список действий назначения;
@@ -109,9 +100,13 @@ extern void setMultipleValues(
  * parameters through a list of strings.
  *
  */
-extern void performParamActions(
-    const QString& _action, 
-    const QMap<QString, std::function<void(const QStringList& _actionsMap)>>& _actionsMap);
+extern void performParamAction(
+    const QString& _actionString, 
+    const QMap<QString, std::function<void(const QStringList& _actionsMap)>>& _functors);
+
+extern void performParamAction(
+    const QString& _actionString, 
+    const std::function<void(const QStringList&)>& _functor);
 }
 
 #endif /* TNEXCOMMON_H_ */

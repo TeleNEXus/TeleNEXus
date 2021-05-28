@@ -43,7 +43,7 @@
       id="testbutton" 
       visible="true"
       title="Test Buttons" 
-      showMode="maximized"
+      showMode="normal"
       modality="false"
       flags="" 
       size="300;50"
@@ -61,29 +61,24 @@
       position="100;100">
     <mainWidget>
 
-      <!-- <widget> -->
-      <!--   <layout> -->
-      <!--     <layoutHBox> -->
-      <!--       <widgets> -->
-      <!--         <dataLabel      source="localsource"  data="test_string"  format="string"   /> -->
-      <!--       </widgets> -->
-      <!--     </layoutHBox> -->
-      <!--   </layout> -->
-      <!-- </widget> -->
-
-      <!-- <dataLabel source="localsource" data="test_string" format="string"/> -->
-      <!-- <dataLabel      source="localsource"  data="bits_size(1)" format="bits"/> -->
-      <!-- <dataLabel      source="localsource"  data="test_string"  format="string"   /> -->
+      <widget>
+        <layout>
+          <layoutVBox>
+            <widgets>
               <dataLabel      source="localsource"  data="test_string"  format="string"   />
-    <!-- <dataLineEdit   source="localsource"  data="bytes_uint8"   format="uint8"    /> -->
+              <dataLabel      source="localsource"  data="test_string"  format="string"   />
+            </widgets>
+          </layoutVBox>
+        </layout>
+      </widget>
     </mainWidget>
   </WINDOW>
 
   <WINDOW
     id="TestWindow1" 
     title="TestWindow1" 
-    visible="true"
-    showMode="minimized"
+    visible="false"
+    showMode="normal"
     modality="false"
     flags="" 
     size="200;50"
@@ -97,7 +92,7 @@
   <WINDOW
     id="TestWindow2" 
     title="TestWindow2" 
-    visible="true"
+    visible="false"
     showMode="normal"
     modality="false"
     flags="" 

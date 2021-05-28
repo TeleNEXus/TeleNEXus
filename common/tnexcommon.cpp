@@ -84,20 +84,82 @@ void setMultipleValues(
   }
 }
 
-void performParamActions(
-    const QString& _action, 
-    const QMap<QString, std::function<void(const QStringList& _actionsMap)>>& _actionsMap)
+//------------------------------------------------------------------------------
+static struct SAction
+{
+  QString name;
+  QStringList params;
+};
+
+static SAction parseAction(const QString& _actionString)
+{
+  SAction action;
+
+  QString act = _actionString;
+  act.remove(" ");
+  auto al = act.split("(");
+  auto it = al.begin();
+  if(it == al.end()) return action;
+  action.name = (*it);
+
+  if(al.size() > 1)
+  {
+    it++;
+    (*it).remove(")");
+    action.params = (*it).split(",");
+  }
+
+  return action;
+}
+
+void performParamAction(
+    const QString& _actionString, 
+    const QMap<QString, std::function<void(const QStringList&)>>& _functors)
 {
   //TODO: add debug message group
-  QString act = _action;
+  QString act = _actionString;
   auto al = act.split("(");
 
   auto it = al.begin();
 
-  auto perform = [&_actionsMap](const QString& _action, const QStringList& _params)
+  auto perform = [&_functors](const QString& _actionString, const QStringList& _params)
   {
-    auto actit = _actionsMap.find(_action);
-    if(actit == _actionsMap.end()) return;
+    auto actit = _functors.find(_actionString);
+    if(actit == _functors.end()) return;
+    actit.value()(_params);
+  };
+
+  if(it == al.end()) return;
+  auto action_name = (*it).remove(" ");
+  if(al.size() > 1)
+  {
+    it++;
+    (*it).remove(" ");
+    if(!(*it).contains(QRegularExpression("\\)$")))return;
+    (*it).remove(")");
+    auto params = (*it).split(",");
+    perform(action_name, params);
+  }
+  else
+  {
+    perform(action_name, QStringList());
+  }
+}
+
+void performParamAction(
+    const QString& _actionString, 
+    const std::function<void(const QStringList&)>& _functor)
+{
+  //TODO: add debug message group
+  QString act = _actionString;
+  auto al = act.split("(");
+
+  auto it = al.begin();
+
+  auto perform = [&_functors](const QString& _actionString, const QStringList& _params)
+  {
+    auto actit = _functors.find(_actionString);
+    if(actit == _functors.end()) return;
     actit.value()(_params);
   };
 
