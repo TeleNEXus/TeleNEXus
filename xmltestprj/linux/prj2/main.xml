@@ -40,22 +40,23 @@
         
     <WINDOW 
       file="testbutton/testbutton.xml" 
-      id="Test Button" 
-      title="Test Button" 
-      show="normal"
-      modes= 
-      "stayOnTop=true;              
-      frameless=false" 
+      id="testbutton" 
+      visible="true"
+      title="Test Buttons" 
+      showMode="maximized"
+      modality="false"
+      flags="" 
       size="300;50"
       position="300;600"
       />
 
     <WINDOW 
       id="Label" 
+      visible="true"
       title="Label" 
-      show="normal"
+      showMode="normal"
       modality="false"
-      modes= "stayOnTop=false; frameless=true" 
+      flags="stayOnTop; frameless" 
       size="300;50"
       position="100;100">
     <mainWidget>
@@ -79,21 +80,34 @@
   </WINDOW>
 
   <WINDOW
-
-      id="TestWindow1" 
-      title="TestWindow1" 
-      show="normal"
-      modality="false"
-      modes= "stayOnTop=true; frameless=false; showMode=fullScreen" 
-      size="200;50"
-      position="300;100">
-
+    id="TestWindow1" 
+    title="TestWindow1" 
+    visible="true"
+    showMode="minimized"
+    modality="false"
+    flags="" 
+    size="200;50"
+    position="300;100">
     <mainWidget>
       <widget>
       </widget>
     </mainWidget>
   </WINDOW>
 
+  <WINDOW
+    id="TestWindow2" 
+    title="TestWindow2" 
+    visible="true"
+    showMode="normal"
+    modality="false"
+    flags="" 
+    size="200;50"
+    position="500;100">
+    <mainWidget>
+      <widget>
+      </widget>
+    </mainWidget>
+  </WINDOW>
     <!-- <WINDOW --> 
     <!--   id="table local source" --> 
     <!--   title="table local source" --> 

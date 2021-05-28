@@ -42,11 +42,15 @@ void setMultipleAttributes(
 
   for(auto lit = attr_list.begin(); lit != attr_list.end(); lit++)
   {
+    QString value;
     auto record_list = (*lit).split(_attrEqSign);
-    if(record_list.size() != 2) continue;
+    if(record_list.size() == 2) 
+    {
+      value = record_list[1];
+    }
     auto it = _assignActions.find(record_list[0]);
     if(it == _assignActions.end()) continue;
-    (*it)(record_list[1]);
+    (*it)(value);
   } 
 }
 

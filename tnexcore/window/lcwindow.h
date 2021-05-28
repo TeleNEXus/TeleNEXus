@@ -18,10 +18,11 @@
  * You should have received a copy of the GNU General Public License
  * along with TeleNEXus.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef CWINDOW_H_
-#define CWINDOW_H_
+#ifndef LCWINDOW_H_
+#define LCWINDOW_H_
 
 #include "LIWindow.h"
+#include <qnamespace.h>
 
 class QWidget;
 class LCWindow : public LIWindow
@@ -30,7 +31,7 @@ private:
   void* mpLocal;
 public:
   LCWindow() = delete;
-  explicit LCWindow(QWidget* _widget, EShowMode _showMode);
+  explicit LCWindow(QWidget* _widget);
   virtual ~LCWindow();
   virtual void show(EShowMode _mode) override;
   virtual void hide() override;
@@ -40,8 +41,17 @@ public:
   virtual void addActionShow(TAction _action) override;
   virtual void addActionHide(TAction _action) override;
 
+  void setTitle(const QString& _title);
+  void setShowMode(EShowMode _showMode);
+  void setModality(bool _flag);
+  void setFlags(Qt::WindowFlags _flags);
+  void setSize(const QSize& _size);
+  void setPosition(const QPoint& _pos);
+  QSize getSize();
+
   static EShowMode stringToShowMode(const QString& _modeString, bool* _flag = nullptr);
+
 };
 
 
-#endif /* CWINDOW_H_ */
+#endif /* LCWINDOW_H_ */
