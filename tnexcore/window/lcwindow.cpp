@@ -18,7 +18,7 @@
  * You should have received a copy of the GNU General Public License
  * along with TeleNEXus.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "cwindow.h"
+#include "lcwindow.h"
 #include "tnexcommon.h"
 #include <QWidget>
 #include <QEvent>
@@ -26,6 +26,8 @@
 #include <functional>
 #include <qnamespace.h>
 #include <QDebug>
+
+#define Debug(_msg) TNEXDEBUG("LCWindow", _msg)
 
 class CQEventFilter : public QObject
 {
@@ -280,11 +282,10 @@ struct SLocalData
 #define ld (*(toLocalData(mpLocal)))
 
 //==============================================================================LCWindow
-LCWindow::LCWindow(QWidget* _widget, EShowMode _showMode)
+LCWindow::LCWindow(QWidget* _widget)
 {
   mpLocal = new SLocalData;
   ld.pWidget = _widget;
-  ld.defaultShowMode = _showMode;
   ld.pWidget->installEventFilter(&(ld.eventFilter));
 
   ld.actions.insert(QStringLiteral("show"),
@@ -334,7 +335,7 @@ void LCWindow::show(EShowMode _mode)
     break;
 
   case EShowMode::maximized:
-    qDebug() << "LCWindow::show maximized";
+    Debug("show maximized");
     ld.pWidget->showMaximized();
     break;
   }
@@ -373,19 +374,67 @@ bool LCWindow::validateAction(
   return false;
 }
 
-//--------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 void LCWindow::addActionShow(TAction _action)
 {
   ld.eventFilter.addActionShow(_action);
 }
 
-//--------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 void LCWindow::addActionHide(TAction _action)
 {
   ld.eventFilter.addActionHide(_action);
 }
 
-//--------------------------------------------------------------------------
+//------------------------------------------------------------------------------
+void LCWindow::setTitle(const QString& _title)
+{
+  ld.pWidget->setWindowTitle(_title);
+}
+
+//------------------------------------------------------------------------------
+void LCWindow::setShowMode(EShowMode _showMode)
+{
+  ld.defaultShowMode = _showMode;
+}
+
+//------------------------------------------------------------------------------
+void LCWindow::setModality(bool _flag)
+{
+  if(_flag)
+  {
+    ld.pWidget->setWindowModality(Qt::WindowModality::ApplicationModal);
+  }
+  else
+  {
+    ld.pWidget->setWindowModality(Qt::WindowModality::NonModal);
+  }
+}
+
+//------------------------------------------------------------------------------
+void LCWindow::setFlags(Qt::WindowFlags _flags)
+{
+  ld.pWidget->setWindowFlags(_flags);
+}
+
+//------------------------------------------------------------------------------
+void LCWindow::setSize(const QSize& _size)
+{
+  ld.pWidget->resize(_size);
+}
+
+//------------------------------------------------------------------------------
+void LCWindow::setPosition(const QPoint& _pos)
+{
+  ld.pWidget->move(_pos);
+}
+
+QSize LCWindow::getSize()
+{
+  return ld.pWidget->size();
+}
+
+//------------------------------------------------------------------------------
 LIWindow::EShowMode LCWindow::stringToShowMode(const QString& _modeString,
     bool* _flag)
 {

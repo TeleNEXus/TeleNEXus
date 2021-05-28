@@ -25,6 +25,16 @@
 #include <QMap>
 #include <functional>
 
+#define TNEXDEBUG_ON
+
+#ifdef TNEXDEBUG_ON
+#define TNEXDEBUG(_description, _message) \
+  qDebug() << (_description) << \
+  QStringLiteral(" : ") << (_message) 
+#else
+  #define TNEXDEBUG(_description, _message) 
+#endif
+
 namespace tnexcommon
 {
 

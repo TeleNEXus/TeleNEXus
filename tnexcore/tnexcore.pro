@@ -79,7 +79,7 @@ xml/uploaddataformatters.cpp \
 xml/uploadkeyboards.cpp \
 xml/uploadwindows.cpp \
 keyboard/lckeyboard.cpp \
-window/cwindow.cpp \
+window/lcwindow.cpp \
 main.cpp \
 
 # Default rules for deployment.
@@ -141,7 +141,7 @@ xml/uploadjscripts.h \
 xml/uploadkeyboards.h \
 xml/uploadwindows.h \
 keyboard/lckeyboard.h \
-window/cwindow.h \
+window/lcwindow.h \
 
 
 

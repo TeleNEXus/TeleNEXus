@@ -27,7 +27,7 @@
 #include  "LIJScriptService.h"
 #include "tnexcommon.h"
 
-#include "cwindow.h"
+#include "lcwindow.h"
 
 #include <QDomElement>
 #include <QMap>
@@ -50,13 +50,17 @@ QList<std::function<void(void)>> __slShowList;
 //==============================================================================
 static const struct
 {
+
+  QString file = "file";
+  QString title = "title";
+  QString id = "id";
+  QString visible = "visible";
+
   QString interval = "interval";
   QString scriptId = "scriptId";
   QString modality = "modality";
-  QString state = "state";
-
-  QString modes = "modes";
-
+  QString showMode = "showMode";
+  QString flags = "flags";
   struct 
   {
     QString attribute = "event";
@@ -66,9 +70,6 @@ static const struct
       QString hide = "hide";
     }vals;
   }event;
-
-
-
   QString size = "size";
   QString position = "position";
 
@@ -81,15 +82,13 @@ static const struct
   QString scriptExecute = "scriptExecute";
   QString scriptLaunch  = "scriptLaunch";
   QString scriptStop    = "scriptStop";
-
 }__slTags;
 
 static const struct
 {
   QString stayOnTop = "stayOnTop";
   QString frameless = "frameless";
-  QString showMode = "showMode";
-}__slModes;
+}__slWindowFlags;
 
 //==============================================================================ActionLoader
 class CActionLoader
@@ -209,8 +208,7 @@ static QDomElement endElement(
     const QDomElement& _element,
     const LIApplication& _app)
 {
-  QString attr_file =  _element.attribute(
-      LCXmlCommon::mCommonAttributes.file);
+  QString attr_file =  _element.attribute(__slAttributes.file);
 
   auto set_attr = 
     [](const QDomElement& _elf, QDomElement _els)
@@ -219,7 +217,7 @@ static QDomElement endElement(
       for(int i = 0; i < attrs.length(); i++)
       {
         auto att = attrs.item(i).toAttr();
-        if(att.name() != LCXmlCommon::mCommonAttributes.file)
+        if(att.name() != __slAttributes.file)
         {
           _els.setAttribute(att.name(), att.value());
         }
@@ -237,64 +235,88 @@ static QDomElement endElement(
   return _element;
 }
 
-//==============================================================================buildWidget
-static QWidget* buildWidget(const QDomElement& _element, 
-    const LIApplication& _app, LIWindow::EShowMode* _defShowMode)
+//==============================================================================uploadWidget
+static QWidget* uploadWidget(
+    const QDomElement& _element, const LIApplication& _app)
 {
-  //----------------------------------------------------set_modes[]
-  auto set_modes = [&_defShowMode](const QDomElement& _element, QWidget* _widget)
-  {
-    QString attr_modes = _element.attribute(__slAttributes.modes);
+  QWidget* widget = nullptr;
 
-    auto get_mode_setters = [_widget, &_defShowMode]()
+  auto main_widget_element = _element.firstChildElement(__slTags.mainWidget);
+
+  for(auto node = main_widget_element.firstChild(); 
+      !node.isNull(); 
+      node = node.nextSibling())
+  {
+    if(node.isElement())
+    {
+      auto el = node.toElement();
+      auto builder = _app.getWidgetBuilder(el.tagName());
+      if(!builder.isNull())
+      {
+        widget = builder->build(el, _app);
+        if(widget) { break; }
+      }
+    }
+  }
+
+  return widget;
+}
+
+//==============================================================================uploadWindow
+static LCWindow* uploadWindow(QWidget* _widget, const QDomElement& _element)
+{
+  LCWindow* window = new LCWindow(_widget);
+
+  //--------------------------------------------------init_widget[]
+  auto get_title = [](const QDomElement& _element)
+  {
+    return _element.attribute(__slAttributes.title);
+  };
+
+  auto get_show_mode = [](const QDomElement& _element)
+  {
+    return 
+      LCWindow::stringToShowMode(_element.attribute(__slAttributes.showMode));
+  };
+
+  //----------------------------------------------------get_flags[]
+  auto get_flags = [](const QDomElement& _element)
+  {
+    QString attr_modes = _element.attribute(__slAttributes.flags);
+
+    Qt::WindowFlags flags = Qt::WindowType::Window;
+
+    auto get_flags_setters = [&flags]()
     {
       QMap<QString, std::function<void(const QString&)>> setters_map;
 
-      setters_map.insert(__slModes.stayOnTop,
-          [_widget](const QString& _val)
+      setters_map.insert(__slWindowFlags.stayOnTop,
+          [&flags](const QString&) mutable
           {
-            if(_val == QStringLiteral("true"))
-            {
-              _widget->setWindowFlag(Qt::WindowType::WindowStaysOnTopHint, true);
-            }
-            else if(_val == QStringLiteral("false"))
-            {
-              _widget->setWindowFlag(Qt::WindowType::WindowStaysOnTopHint, false);
-            }
+            flags |= Qt::WindowType::WindowStaysOnTopHint;
           });
 
-      setters_map.insert(__slModes.frameless,
-          [_widget](const QString& _val)
+      setters_map.insert(__slWindowFlags.frameless,
+          [&flags](const QString&) mutable
           {
-            if(_val == QStringLiteral("true"))
-            {
-              _widget->setWindowFlag(Qt::WindowType::FramelessWindowHint, true);
-            }
-            else if(_val == QStringLiteral("false"))
-            {
-              _widget->setWindowFlag(Qt::WindowType::FramelessWindowHint, false);
-            }
+            flags |= Qt::WindowType::FramelessWindowHint;
           });
 
-      setters_map.insert(__slModes.showMode,
-          [&_defShowMode](const QString& _val)
-          {
-            qDebug() << "default show mode = " << _val;
-            (*_defShowMode) =  LCWindow::stringToShowMode(_val);
-          });
       return setters_map;
     };
 
     if(!attr_modes.isNull())
     {
-      tnexcommon::setMultipleAttributes(get_mode_setters(), attr_modes);
+      tnexcommon::setMultipleAttributes(get_flags_setters(), attr_modes);
     }
+
+    return flags;
   };
 
     //----------------------------------------------------widget_size[]
-  auto widget_size = [](const QDomElement& _element, QWidget* _widget)
+  auto get_size = [](const QDomElement& _element, const QSize _oldSize)
   {
-    QSize size = _widget->geometry().size();
+    QSize size = _oldSize;
 
     QString attr_size = _element.attribute(__slAttributes.size);
 
@@ -338,14 +360,14 @@ static QWidget* buildWidget(const QDomElement& _element,
   };
 
   //----------------------------------------------------set_position[]
-  auto set_position = [](const QDomElement& _element, QWidget* _widget)
+  auto get_position = [](const QDomElement& _element)
   {
 
     QPoint pos = QPoint(0, 0);
 
-    auto ret = [&pos, _widget]()
+    auto ret = [&pos]()
     {
-      _widget->move(pos);
+      return pos;
     };
 
     QString attr_position = _element.attribute(__slAttributes.position);
@@ -392,60 +414,24 @@ static QWidget* buildWidget(const QDomElement& _element,
 
 
   //--------------------------------------------------set_modality
-  auto set_modality = [](const QDomElement& _element, QWidget* _widget)
+  auto get_modality = [](const QDomElement& _element)
   {
     QString attr = _element.attribute(__slAttributes.modality);
     if(attr == QStringLiteral("true"))
     {
-      _widget->setWindowModality(Qt::WindowModality::ApplicationModal);
+      return true;
     }
+    return false;
   };
+  
+  window->setTitle(get_title(_element));
+  window->setShowMode(get_show_mode(_element));
+  window->setModality(get_modality(_element));
+  window->setFlags(get_flags(_element));
+  window->setSize(get_size(_element, window->getSize()));
+  window->setPosition(get_position(_element));
 
-  //--------------------------------------------------init_widget[]
-  auto set_title= [](const QDomElement& _element, QWidget* _widget)
-  {
-
-    QString attr = _element.attribute(LCXmlCommon::mCommonAttributes.title);
-    if(!attr.isNull()) { _widget->setWindowTitle(attr); }
-
-    attr = _element.attribute(__slAttributes.modality);
-    if(attr == QStringLiteral("yes"))
-    {
-      _widget->setWindowModality(Qt::WindowModality::ApplicationModal);
-    }
-  };
-
-  //--------------------------------------------------------
-
-  QWidget* widget = nullptr;
-
-  auto main_widget_element = _element.firstChildElement(__slTags.mainWidget);
-
-  for(auto node = main_widget_element.firstChild(); 
-      !node.isNull(); 
-      node = node.nextSibling())
-  {
-    if(node.isElement())
-    {
-      auto el = node.toElement();
-      auto builder = _app.getWidgetBuilder(el.tagName());
-      if(!builder.isNull())
-      {
-        widget = builder->build(el, _app);
-        if(widget) 
-        {
-          set_title(_element, widget);
-          set_modes(_element, widget);
-          set_position(_element, widget);
-          set_modality(_element, widget);
-          widget->resize(widget_size(_element, widget));
-          break;
-        }
-      }
-    }
-  }
-
-  return widget;
+  return window;
 }
 
 //==============================================================================uploadwindow
@@ -479,20 +465,18 @@ void upload(
     const LIApplication& _app)
 {
   QDomElement el = endElement(_element, _app);
-  LIWindow::EShowMode show_mode = LIWindow::EShowMode::normal;
-
-  QWidget* widget = buildWidget(el, _app, &show_mode);
+  QWidget* widget = uploadWidget(el, _app);
 
   if(widget == nullptr) return;
 
-  LCWindow*  window = new LCWindow(widget, show_mode);
+  LCWindow*  window = uploadWindow(widget, _element);
 
   CActionLoader::getInstance().load(el, _app, window);
 
-  QString attr_id = _element.attribute(
-      LCXmlCommon::mCommonAttributes.id);
+  QString attr_id = _element.attribute(__slAttributes.id);
 
   auto sp_win = QSharedPointer<LIWindow>(window);
+
   if(!attr_id.isNull()) 
   {
     __slWindowsMap.insert(attr_id, sp_win);
@@ -502,21 +486,19 @@ void upload(
     __slNoNameWindows << sp_win; 
   }
 
-
   //Show controll
   {
-    QString attr_show = _element.attribute(
-        LCXmlCommon::mCommonAttributes.show.tag);
+    QString attr = _element.attribute(__slAttributes.visible);
 
-    auto show = [attr_show, window, widget]() 
+    if(attr == QStringLiteral("true"))
     {
-      if(attr_show.isNull()) return;
-      window->action(QString("show(%1)").arg(attr_show));
-      QCoreApplication::sendEvent(widget, new QShowEvent());
-    };
-
-    __slShowList << show;
+      auto show = [window, widget]() 
+      {
+        window->action(QString("show()"));
+        QCoreApplication::sendEvent(widget, new QShowEvent());
+      };
+      __slShowList << show;
+    }
   }
-
 }
 } //namespace
