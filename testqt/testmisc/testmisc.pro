@@ -22,7 +22,8 @@ INCLUDEPATH +=                                  \
        ./testjsdataformatter 
 
 # SOURCES += main.cpp \
-SOURCES +=  ./regexpr.cpp \
+# SOURCES +=  ./regexpr.cpp \
+SOURCES +=  ./testparsing.cpp \
 # SOURCES +=  ./multipleattr.cpp \
 # SOURCES +=  ./testevents.cpp \
 # SOURCES +=  ./bitfield.cpp \
