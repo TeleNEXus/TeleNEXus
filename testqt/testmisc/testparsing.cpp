@@ -19,10 +19,11 @@ int main(int, char**)
 
   const QString ps1 = QStringLiteral("func (p1,p2, p3)");
   const QString ps2 = QStringLiteral("f unc (p1(p11(p111, p112()), p12), p2, p3(p31,    p32) )()");
-  const QString ps3 = QStringLiteral("func ");
+  const QString ps3 = QStringLiteral("func (p1(,p2(, p3");
+  const QString ps4 = QStringLiteral("func ");
 
 
-  auto pars = [](const QString& _input)
+  auto pars = [](const QString& _input, std::function<void(const QString& _error)> _fr = [](const QString&){})
   {
     QString localin = _input;
 
@@ -60,7 +61,6 @@ int main(int, char**)
     localin.remove(0, func.size());
     qDebug() << "pars 3 : " << localin;
 
-
     auto get_params = [](const QString& _in)
     {
       int bc = 0;
@@ -69,18 +69,18 @@ int main(int, char**)
 
       for(int i=0; i < _in.size(); i++)
       {
-        if(_in.at(i) == QStringLiteral("("))
+        QChar ch = _in.at(i);
+        if(ch == QStringLiteral("("))
         {
           bc++;
           if(bc > 1)
           {
-            param.append(_in.at(i));
+            param.append(ch);
           }
           continue;
         }
 
-
-        if(_in.at(i) == QStringLiteral(")"))
+        if(ch == QStringLiteral(")"))
         {
           bc--;
           if(bc == 0)
@@ -93,16 +93,16 @@ int main(int, char**)
           }
           else
           {
-            param.append(_in.at(i));
+            param.append(ch);
             continue;
           }
         }
 
-        if(_in.at(i) == QStringLiteral(","))
+        if(ch == QStringLiteral(","))
         {
           if(bc > 1)
           {
-            param.append(_in.at(i));
+            param.append(ch);
           }
           else
           {
@@ -112,10 +112,16 @@ int main(int, char**)
         }
         else
         {
-          param.append(_in.at(i));
+          param.append(ch);
         }
       }
 
+      if((bc != 0)&&(!param.isNull())) 
+      {
+        /* params << param; */
+        params.clear();
+        qDebug() << "Wrong closed brackeds";
+      }
       return params;
     };
 
