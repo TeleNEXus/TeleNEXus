@@ -31,6 +31,33 @@ namespace tnexcommon
 
 /*
  * ENG>
+ * Parses the string describing the action and returns a QStringList, 
+ * where the first element is the name of the 
+ * action and the next elements are its parameters.
+ *  --------------------------------
+ *  Parameters:
+ * _actionString  - string whith format "action_name(p1,p2,...,pn);
+ * _err           - error return functor;
+ */
+QStringList parseAction( 
+    const QString& _actionString, 
+    std::function<void(const QString& _error)> _err = [](const QString&){});
+
+QStringList parseValues(const QString& _values, const QChar& _separator = QChar(';'));
+
+QMap<QString, QString> parseAttributes(
+    const QString& _attributes, 
+    const QChar& _separator = QChar(';'), 
+    const QChar& _equal = QChar('='));
+
+
+
+
+
+
+
+/*
+ * ENG>
  *  Decodes a string with multiple attributes and executes 
  *  actions according to their names.
  *  --------------------------------
@@ -55,9 +82,8 @@ namespace tnexcommon
  *  _attrEqSign    - символ равенства.
  *
  */
-
-extern void setMultipleAttributes(
-    const QMap<QString, std::function<void(const QString& _val)>>& _assignActions,
+void setMultipleAttributes(
+    const QMap<QString, std::function<void(const QString& _val)>>& _assigns,
     const QString& _attributes,
     const QString _attrSeparator = QString(";"), 
     const QString _attrEqSign = QString("="));
@@ -85,7 +111,7 @@ extern void setMultipleAttributes(
  *  _valuesSeparator  - разделитель значений;
  *
  */
-extern void setMultipleValues(
+void setMultipleValues(
     const QList<std::function<void(const QString& _val)>>& _assigns,
     const QString& _values,
     const QString _valuesSeparator = QString(";"));
@@ -100,13 +126,9 @@ extern void setMultipleValues(
  * parameters through a list of strings.
  *
  */
-extern void performParamAction(
+void performParamAction(
     const QString& _actionString, 
-    const QMap<QString, std::function<void(const QStringList& _actionsMap)>>& _functors);
-
-extern void performParamAction(
-    const QString& _actionString, 
-    const std::function<void(const QStringList&)>& _functor);
+    const QMap<QString, std::function<void(const QStringList&)>>& _functors);
 }
 
 #endif /* TNEXCOMMON_H_ */
