@@ -95,7 +95,7 @@ public:
 };
 
 //==============================================================================
-class CAttributeGetter
+class CGetterVisibleControl
 {
 private:
   QMap<QString, std::function<void(const QString& _val)>> mAssignActions;
@@ -107,9 +107,9 @@ private:
   QString mUndefMode;
 
 public:
-  CAttributeGetter() = delete;
+  CGetterVisibleControl() = delete;
 
-  CAttributeGetter(const QString& _attributes)
+  CGetterVisibleControl(const QString& _attributes)
   {
     mAssignActions.insert(QStringLiteral("sourceId"),
           [this](const QString& _val)
@@ -199,13 +199,13 @@ bool LCQWidgetVisibleControl::build(const QDomElement& _element,
   QString attr = _element.attribute(__slAttributes.visibleControl);
   if(attr.isNull()) return ret_wrong();
 
-  CAttributeGetter attr_getter(attr);
+  CGetterVisibleControl getter_visible_control(attr);
 
-  QString attr_source = attr_getter.getSourceId(); 
-  QString attr_data   = attr_getter.getDataId(); 
-  QString attr_format = attr_getter.getFormat(); 
-  QString attr_show   = attr_getter.getShowValue(); 
-  QString attr_hide   = attr_getter.getHideValue(); 
+  QString attr_source = getter_visible_control.getSourceId(); 
+  QString attr_data   = getter_visible_control.getDataId(); 
+  QString attr_format = getter_visible_control.getFormat(); 
+  QString attr_show   = getter_visible_control.getShowValue(); 
+  QString attr_hide   = getter_visible_control.getHideValue(); 
 
   if( attr_source.isNull() || 
       attr_data.isNull() || 
@@ -223,7 +223,7 @@ bool LCQWidgetVisibleControl::build(const QDomElement& _element,
 
   ctrl = new LCQWidgetVisibleControl(_widget);
 
-  QString attr_undef = attr_getter.getUndefMode();
+  QString attr_undef = getter_visible_control.getUndefMode();
   if(!attr_undef.isNull())
   {
     if(attr_undef == __slAttributesVals.show) 
