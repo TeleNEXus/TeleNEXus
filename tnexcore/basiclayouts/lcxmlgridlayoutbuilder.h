@@ -24,7 +24,7 @@
 #include "LIXmlLayoutBuilder.h"
 #include <qglobal.h>
 #include <QString>
-#include "common.h"
+#include "layoutbuilderscommon.h"
 
 class LCXmlGridLayoutBuilder : public LIXmlLayoutBuilder
 {
