@@ -35,7 +35,8 @@ public:
   virtual ~LCWindow();
   virtual void show(EShowMode _mode) override;
   virtual void hide() override;
-  virtual void action(const QString& _action) override;
+  virtual void action(const QString& _name, 
+      const QStringList& _parameters = QStringList()) override;
   virtual bool validateAction(
       const QString& _action, QString* msg = nullptr) override;
   virtual void addActionShow(TAction _action) override;

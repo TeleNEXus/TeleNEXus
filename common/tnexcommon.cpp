@@ -24,7 +24,8 @@
 
 //==============================================================================removeSpaces
 static QString removeSpaces(
-    const QString& _instr, const QChar& _ignor_border, bool* _ef = nullptr)
+    const QString& _instr, const QChar& _ignor_border, 
+    std::function<void(const QString&)> _err = [](const QString&){})
 {
   enum
   {
@@ -38,12 +39,6 @@ static QString removeSpaces(
   QChar prch;
 
   QString out;
-
-  auto ret = [&_ef](const QString& _out, bool _flag)
-  {
-    if(_ef) *_ef = _flag;
-    return _out;
-  };
 
   for(int i = 0; i < _instr.size(); i++)
   {
@@ -73,36 +68,42 @@ static QString removeSpaces(
     prch = ch;
   };
 
-  if(state == ST_IN_STRING) return ret(QStringLiteral(), false);
-  return ret(out.replace(QString("\\%1").arg(_ignor_border), _ignor_border), true);
+  if(state == ST_IN_STRING) 
+  {
+    _err(QStringLiteral("String border error"));
+    return QString();
+  }
+
+  return out.replace(QString("\\%1").arg(_ignor_border), _ignor_border);
 };
 
+//------------------------------------------------------------------------------
+static const QRegularExpression __slRemoveEndLine("(\\r+)|(\\n+)");
 
 //==============================================================================
 namespace tnexcommon
 {
 
 //------------------------------------------------------------------------------parseAction
-QStringList parseAction( const QString& _actionString, 
+SAction parseAction( const QString& _actionString, 
     std::function<void(const QString& _error)> _err)
 {
 
   //----------------------------------------------------------ret_ok[]
   auto ret_ok = [](const QString& _func, const QStringList& _params)
   {
-    QStringList ret;
     if(!_func.isNull())
     {
-      ret << _func << _params;
+      return SAction{_func, _params};
     }
-    return ret;
+    return SAction{};
   };
 
   //----------------------------------------------------------ret_wrong[]
   auto ret_wrong = [&_err](const QString& _errStr)
   {
     _err(_errStr);
-    return QStringList();
+    return SAction{};
   };
 
   //----------------------------------------------------------get_func[]
@@ -195,101 +196,121 @@ QStringList parseAction( const QString& _actionString,
 
   QString params_string = _actionString.right(_actionString.size() - func.size());
 
-  bool flag = false;
 
-  params_string = removeSpaces(params_string, QChar('\''), &flag);
+  QString error;
 
-  if(!flag) 
+  params_string = removeSpaces(
+      params_string, 
+      QChar('\''), 
+      [&error](const QString& _str)
+      {
+        error = _str;
+      });
+
+  if(!error.isNull()) 
   {
-    return ret_wrong(QString("String border error"));
+    return ret_wrong(error);
   }
 
+  bool flag = false;
   auto params = get_params(params_string, &flag);
 
   if(!flag) return ret_wrong(QString("Close bracket error"));
   return ret_ok(func, params);
 }
 
-//------------------------------------------------------------------------------
-static const QRegularExpression __slRemoveEndLine("(\\r+)|(\\n+)");
-
-//------------------------------------------------------------------------------setMultipleAttributes
-void setMultipleAttributes(
-    const QMap<QString, std::function<void(const QString& _val)>>& _assigns,
-    const QString& _attributes,
-    const QString _attrSeparator, 
-    const QString _attrEqSign)
+//------------------------------------------------------------------------------parseValues
+QStringList parseValues(
+    const QString& _values, 
+    const QChar& _separator,
+    std::function<void(const QString& _error)> _err)
 {
+  QString error;
+  QString values = removeSpaces(_values, '\'', 
+     [&error](const QString& _str)
+     {
+       error = _str;
+     });
 
-  QString attrs = removeSpaces(_attributes, '\'');
-  attrs.remove(__slRemoveEndLine);
-  attrs.remove(QRegularExpression(QString("^%1{1,}|%1{1,}$").arg(_attrSeparator)));
-
-  auto attr_list = attrs.split(_attrSeparator);
-
-  for(auto lit = attr_list.begin(); lit != attr_list.end(); lit++)
+  if(!error.isNull()) 
   {
-    QString value;
-    auto record_list = (*lit).split(_attrEqSign);
-    if(record_list.size() == 2) 
-    {
-      value = record_list[1];
-    }
-    auto it = _assigns.find(record_list[0]);
-    if(it == _assigns.end()) continue;
-    (*it)(value);
-  } 
-}
-
-//------------------------------------------------------------------------------setMultipleValues
-void setMultipleValues(
-    const QList<std::function<void(const QString& _val)>>& _assigns,
-    const QString& _values,
-    const QString _valuesSeparator)
-{
-  QString values = removeSpaces(_values, '\'');
-  values.remove(__slRemoveEndLine);
-  values.remove(QRegularExpression(QString("^%1{1,}|%1{1,}$").arg(_valuesSeparator)));
-
-  auto values_list = values.split(_valuesSeparator);
-
-  auto it_value = values_list.begin();
-  for(auto it_assign = _assigns.begin(); 
-      it_assign != _assigns.end(); 
-      it_assign++)
-  {
-    if(it_value != values_list.end())
-    {
-      (*it_assign)((*it_value));
-    }
-    else
-    {
-      (*it_assign)(QString());
-    }
-    it_value++;
+    _err(error);
+    return QStringList();
   }
+  values.remove(__slRemoveEndLine);
+  values.remove(QRegularExpression(QString("^%1{1,}|%1{1,}$").arg(_separator)));
+  auto values_list = values.split(_separator);
+  return values_list;
 }
 
-void performParamAction(
-    const QString& _actionString, 
-    const QMap<QString, std::function<void(const QStringList&)>>& _functors)
+//------------------------------------------------------------------------------parseAttributes
+QMap<QString, QString> parseAttributes(
+    const QString& _attributes, 
+    const QChar& _separator, 
+    const QChar& _equal,
+    std::function<void(const QString& _error)> _err)
 {
-  //TODO: debug message
-  QString parse_error;
-  auto pef = [&parse_error](const QString& _err)
+  using TRetMap = QMap<QString, QString>;
+  QString error;
+  QString attrs = removeSpaces(_attributes, '\'', 
+      [&error](const QString& _str)
+      {
+        error = _str;
+      });
+
+  if(!error.isNull())
   {
-    parse_error = _err;
-  };
+    _err(error);
+    return TRetMap();
+  }
 
-  auto parse_res = parseAction(_actionString, pef);
-  if(!parse_error.isNull()) return;
+  attrs.remove(__slRemoveEndLine);
 
-  auto action_name = parse_res.first();
-  parse_res.removeFirst();
+  attrs.remove(QRegularExpression(QString("^%1{1,}|%1{1,}$").arg(_separator)));
 
-  auto actit = _functors.find(action_name);
-  if(actit == _functors.end()) return;
-  actit.value()(parse_res);
+  auto attributes = attrs.split(_separator);
+
+  TRetMap ret_map;
+
+  for(auto ait = attributes.begin(); ait != attributes.end(); ait++)
+  {
+    auto record_list = (*ait).split(_equal);
+
+    if(record_list.size() == 0) continue;
+
+    auto it = record_list.begin();
+    QString name;
+    QString value;
+    if(it != record_list.end()) name = (*it);
+    it++;
+    if(it != record_list.end()) value = (*it);
+    ret_map.insert(name, value);
+  } 
+  return ret_map;
+}
+
+//------------------------------------------------------------------------------parseDataSpecification
+SDataSpecification parseDataSpecification(const QString _dataSpec,
+    std::function<void(const QString& _error)> _err)
+{
+  QString error;
+  auto spec_list = parseValues(_dataSpec, QChar(':'), [&error](const QString& _str)
+      {
+        error = _str;
+      });
+  if(!error.isNull())
+  {
+    _err(error);
+    return SDataSpecification{};
+  }
+  QString sourceId;
+  QString dataId;
+  QString formatId;
+  auto it = spec_list.begin();
+  if(it != spec_list.end()) { sourceId = (*it); it++; }
+  if(it != spec_list.end()) { dataId   = (*it); it++; }
+  if(it != spec_list.end()) { formatId = (*it); }
+  return SDataSpecification{sourceId, dataId, formatId};
 }
 
 } /* namespace tnexcommon */
