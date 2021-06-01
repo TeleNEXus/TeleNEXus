@@ -18,4 +18,17 @@
  * You should have received a copy of the GNU General Public License
  * along with TeleNEXus.  If not, see <https://www.gnu.org/licenses/>.
  */
+#ifndef BASICWIDGETBUILDERS_H_
+#define BASICWIDGETBUILDERS_H_
+
+#include <QMap>
+#include <QSharedPointer>
+
+class LIXmlWidgetBuilder;
+namespace basicwidgetbuilders
+{
+QMap<QString, QSharedPointer<LIXmlWidgetBuilder>> getBuilders();
+}
+
+#endif /* BASICWIDGETBUILDERS_H_ */
 

@@ -19,3 +19,74 @@
  * along with TeleNEXus.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include "basicwidgetbuilders.h"
+
+#include "lcxmlwidgetbuilder.h"
+
+
+
+
+        /* widget                */ 
+        /* label                 */ 
+        /* table                 */ 
+        /* dataLabel             */ 
+        /* dataLineEdit          */ 
+        /* dataComboBox          */ 
+        /* dataComboLabel        */ 
+        /* tabs                  */ 
+        /* scrollArea            */ 
+        /* button                */ 
+        /* listWidget            */ 
+        /* stackedWidget         */ 
+        /* splitterVertical      */ 
+        /* splitterHorizontal    */ 
+
+
+namespace basicwidgetbuilders
+{
+QMap<QString, QSharedPointer<LIXmlWidgetBuilder>> getBuilders()
+{
+  QMap<QString, QSharedPointer<LIXmlWidgetBuilder>> builders;
+
+  builders.insert(QStringLiteral("widget"),
+      QSharedPointer<LIXmlWidgetBuilder>(new LCXmlWidgetBuilder()));
+  builders.insert(QStringLiteral("label"),
+      QSharedPointer<LIXmlWidgetBuilder>(new LCXmlWidgetBuilder()));
+  builders.insert(QStringLiteral("table"),
+      QSharedPointer<LIXmlWidgetBuilder>(new LCXmlWidgetBuilder()));
+  builders.insert(QStringLiteral("dataLabel"),
+      QSharedPointer<LIXmlWidgetBuilder>(new LCXmlWidgetBuilder()));
+  builders.insert(QStringLiteral("dataLineEdit"),
+      QSharedPointer<LIXmlWidgetBuilder>(new LCXmlWidgetBuilder()));
+  builders.insert(QStringLiteral("dataComboBox"),
+      QSharedPointer<LIXmlWidgetBuilder>(new LCXmlWidgetBuilder()));
+  builders.insert(QStringLiteral("dataComboLabel"),
+      QSharedPointer<LIXmlWidgetBuilder>(new LCXmlWidgetBuilder()));
+  builders.insert(QStringLiteral("tabs"),
+      QSharedPointer<LIXmlWidgetBuilder>(new LCXmlWidgetBuilder()));
+  builders.insert(QStringLiteral("scrollArea"),
+      QSharedPointer<LIXmlWidgetBuilder>(new LCXmlWidgetBuilder()));
+  builders.insert(QStringLiteral("button"),
+      QSharedPointer<LIXmlWidgetBuilder>(new LCXmlWidgetBuilder()));
+  builders.insert(QStringLiteral("listWidget"),
+      QSharedPointer<LIXmlWidgetBuilder>(new LCXmlWidgetBuilder()));
+  builders.insert(QStringLiteral("stackedWidget"),
+      QSharedPointer<LIXmlWidgetBuilder>(new LCXmlWidgetBuilder()));
+
+  builders.insert(QStringLiteral("splitterVertical"),
+      QSharedPointer<LIXmlWidgetBuilder>(new LCXmlWidgetBuilder()));
+
+  builders.insert(QStringLiteral("splitterHorizontal"),
+      QSharedPointer<LIXmlWidgetBuilder>(new LCXmlWidgetBuilder()));
+
+
+
+
+
+
+
+
+
+  return builders;
+}
+}
