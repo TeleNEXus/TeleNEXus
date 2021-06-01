@@ -34,12 +34,42 @@ INCLUDEPATH +=                          \
 ./jscripts/jscriptservice/jsappservice  \
 ./jscripts/jsformatter                  \
 ./jscripts                              \
-./keyboard
+./keyboard                              \
+./basiclayouts                          \
+./basicwidgets                          \
 
 
 SOURCES += \
+
 ../../common/lqvalidatoru32.cpp \
 ../../common/tnexcommon.cpp \
+
+
+
+basiclayouts/builders/layoutbuilderscommon.cpp \
+basiclayouts/builders/lcxmlboxlayoutbuilder.cpp  \
+basiclayouts/builders/lcxmlgridlayoutbuilder.cpp \
+basicwidgets/widgets/lcqlistwidget.cpp \
+basicwidgets/widgets/lcqremcombobox.cpp \
+basicwidgets/widgets/lcqremlabel.cpp \
+basicwidgets/widgets/lcqremcombolabel.cpp \
+basicwidgets/widgets/lcqstackedwidget.cpp \
+basicwidgets/builders/lcxmlbuilderbase.cpp \
+basicwidgets/builders/lcxmlremlabelbuilder.cpp \
+basicwidgets/builders/lcxmlremlineeditbuilder.cpp \
+basicwidgets/builders/lcxmltextlabelbuilder.cpp \
+basicwidgets/builders/lcxmlwidgetbuilder.cpp \
+basicwidgets/builders/lcxmlremcomboboxbuilder.cpp \
+basicwidgets/builders/lcxmlremcombolabelbuilder.cpp \
+basicwidgets/builders/lcxmltablewidgetbuilder.cpp \
+basicwidgets/builders/lcxmltabwidgetbuilder.cpp \
+basicwidgets/builders/lcxmlscrollareabuilder.cpp \
+basicwidgets/builders/lcxmlbuttonbuilder.cpp \
+basicwidgets/builders/lcxmllistwidgetbuilder.cpp \
+basicwidgets/builders/lcbuilderscommon.cpp \
+basicwidgets/builders/lcqwidgetvisiblecontrol.cpp \
+basicwidgets/builders/lcxmlstackedwidgetbuilder.cpp \
+basicwidgets/builders/lcxmlsplitterbuilder.cpp \
 dataformatters/lcformatterbase.cpp \
 dataformatters/lcformatterbitfield.cpp \
 dataformatters/lcformatterbits.cpp \
@@ -103,6 +133,31 @@ HEADERS += \
 ../common/interfaces/LIJScriptService.h \
 ../common/interfaces/keyboard/LIKeyboard.h \
 ../common/interfaces/keyboard/LIKeyboardListener.h \
+basiclayouts/builders/layoutbuilderscommon.h \
+basiclayouts/builders/lcxmlboxlayoutbuilder.h    \
+basiclayouts/builders/lcxmlgridlayoutbuilder.h   \
+basicwidgets/widgets/lcqlistwidget.h \
+basicwidgets/widgets/lcqremcombobox.h \
+basicwidgets/widgets/lcqremcombolabel.h \
+basicwidgets/widgets/lcqremlabel.h \
+basicwidgets/widgets/lcqstackedwidget.h \
+basicwidgets/builders/lcxmlbuilderbase.h \
+basicwidgets/builders/lcxmlremlineeditbuilder.h \
+basicwidgets/builders/lcxmlremlabelbuilder.h \
+basicwidgets/builders/lcxmlremlineeditbuilder.h \
+basicwidgets/builders/lcxmltextlabelbuilder.h \
+basicwidgets/builders/lcxmlwidgetbuilder.h \
+basicwidgets/builders/lcxmlremcomboboxbuilder.h \
+basicwidgets/builders/lcxmlremcombolabelbuilder.h \
+basicwidgets/builders/lcxmltablewidgetbuilder.h \
+basicwidgets/builders/lcxmltabwidgetbuilder.h \
+basicwidgets/builders/lcxmlscrollareabuilder.h \
+basicwidgets/builders/lcxmlbuttonbuilder.h \
+basicwidgets/builders/lcxmllistwidgetbuilder.h \
+basicwidgets/builders/lcbuilderscommon.h \
+basicwidgets/builders/lcqwidgetvisiblecontrol.h \
+basicwidgets/builders/lcxmlstackedwidgetbuilder.h \
+basicwidgets/builders/lcxmlsplitterbuilder.h \
 dataformatters/lcformatterbase.h \
 dataformatters/lcformatterbitfield.h \
 dataformatters/lcformatterbits.h \
@@ -142,7 +197,6 @@ xml/uploadkeyboards.h \
 xml/uploadwindows.h \
 keyboard/lckeyboard.h \
 window/lcwindow.h \
-
 
 
 
