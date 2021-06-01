@@ -46,7 +46,8 @@ public:
   //hide window
   virtual void hide() = 0;
   //execute action
-  virtual void action(const QString& _action) = 0;
+  virtual void action(const QString& _name, 
+      const QStringList& _parameters = QStringList()) = 0;
   //check action code for correct
   virtual bool validateAction(
       const QString& _action, QString* msg = nullptr) = 0;

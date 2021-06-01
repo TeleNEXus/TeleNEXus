@@ -45,9 +45,6 @@ static const struct
 
 static const struct
 {
-  /* QString sourceId = "sourceId"; */
-  /* QString dataId = "dataId"; */
-  /* QString format = "format"; */
   QString value = "value";
   QString dataSpec = "dataSpec";
 
@@ -90,9 +87,7 @@ private:
           const QDomElement& _element,
           const LIApplication& _app)
         {
-          QList<std::function<void(const QString&)>> dataspec_assigns;
           QSharedPointer<LIRemoteDataSource> source;
-          QString data_id;
           QSharedPointer<LIDataFormatter> format;
 
           QString attr_dataspec = _element.attribute(__slAttributesWriteData.dataSpec);
@@ -100,26 +95,15 @@ private:
           QString attr_value = _element.attribute(__slAttributesWriteData.value);
           if(attr_value.isNull()) return;
 
-          dataspec_assigns << [&_app, &source](const QString& _val) 
-          {
-            source = _app.getDataSource(_val);
-          };
 
-          dataspec_assigns << [&data_id](const QString& _val) 
-          {
-            data_id = _val;
-          };
+          auto data_spec = tnexcommon::parseDataSpecification(attr_dataspec);
 
-          dataspec_assigns << [&_app, &format](const QString& _val) 
-          {
-            format = _app.getDataFormatter(_val);
-          };
+          source = _app.getDataSource(data_spec.sourceId);
+          format = _app.getDataFormatter(data_spec.formatterId);
 
-          tnexcommon::setMultipleValues(dataspec_assigns, attr_dataspec, QStringLiteral(":"));
+          if(source.isNull()||format.isNull()) return;
 
-          if(source.isNull()||data_id.isNull()||format.isNull()) return;
-
-          auto writer = source->createWriter(data_id);
+          auto writer = source->createWriter(data_spec.dataId);
           if(writer.isNull()) return;
 
           QByteArray data = format->toBytes(attr_value);
@@ -143,11 +127,21 @@ private:
               attr_action.isNull())
             return;
 
-          _actions << [attr_action, attr_window, &_app]()
+          bool error_flag = false;
+
+          auto action = tnexcommon::parseAction(attr_action, 
+              [&error_flag](const QString&)
+              {
+                error_flag = true;
+              });
+
+          if(error_flag) return;
+
+          _actions << [action, attr_window, &_app]()
           {
             auto window = _app.getWindow(attr_window);
             if(window.isNull()) return;
-            window->action(attr_action);
+            window->action(action.name, action.parameters);
           };
         });
 

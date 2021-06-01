@@ -286,29 +286,20 @@ static LCWindow* uploadWindow(QWidget* _widget, const QDomElement& _element)
 
     Qt::WindowFlags flags = Qt::WindowType::Window;
 
-    auto get_flags_setters = [&flags]()
+    auto flag_attributes = tnexcommon::parseAttributes(attr_modes);
+
+    if(flag_attributes.size() == 0) return flags;
+
+    if(flag_attributes.contains(__slWindowFlags.stayOnTop))
     {
-      QMap<QString, std::function<void(const QString&)>> setters_map;
-
-      setters_map.insert(__slWindowFlags.stayOnTop,
-          [&flags](const QString&) mutable
-          {
-            flags |= Qt::WindowType::WindowStaysOnTopHint;
-          });
-
-      setters_map.insert(__slWindowFlags.frameless,
-          [&flags](const QString&) mutable
-          {
-            flags |= Qt::WindowType::FramelessWindowHint;
-          });
-
-      return setters_map;
-    };
-
-    if(!attr_modes.isNull())
-    {
-      tnexcommon::setMultipleAttributes(get_flags_setters(), attr_modes);
+      flags |= Qt::WindowType::WindowStaysOnTopHint;
     }
+
+    if(flag_attributes.contains(__slWindowFlags.frameless))
+    {
+      flags |= Qt::WindowType::FramelessWindowHint;
+    }
+    /* } */
 
     return flags;
   };
@@ -317,45 +308,29 @@ static LCWindow* uploadWindow(QWidget* _widget, const QDomElement& _element)
   auto get_size = [](const QDomElement& _element, const QSize _oldSize)
   {
     QSize size = _oldSize;
-
     QString attr_size = _element.attribute(__slAttributes.size);
-
     if(attr_size.isNull()) return size;
+    auto values = tnexcommon::parseValues(attr_size);
 
-    auto get_assigns = [&size]()
-    {
-      QList<std::function<void(const QString&)>> assigns_list;
-
-      assigns_list << [&size](const QString& _value)
-      {
-        if(_value.isNull()) return;
-        QString value = _value;
-        value.remove(QRegularExpression(QStringLiteral("[^0-9]")));
-
-        bool flag = false;
-        int width = value.toInt(&flag);
-        if(flag)
+    ([&size](const QString& _attr_size)
         {
-          size.setWidth(width);
-        }
-      };
+          auto values = tnexcommon::parseValues(_attr_size);
+          if(values.size() == 0) return;
+          QString val_str;
+          bool flag = false;
+          auto it = values.begin();
+          val_str = (*it);
+          val_str.remove(QRegularExpression(QStringLiteral("[^0-9]")));
+          int s = (*it).toInt(&flag);
+          if(flag) size.setWidth(s);
+          it++;
+          if(it == values.end()) return;
+          val_str = (*it);
+          val_str.remove(QRegularExpression(QStringLiteral("[^0-9]")));
+          s = (*it).toInt(&flag);
+          if(flag) size.setHeight(s);
+        })(attr_size);
 
-      assigns_list << [&size](const QString& _value)
-      {
-        if(_value.isNull()) return;
-        QString value = _value;
-        value.remove(QRegularExpression(QStringLiteral("[^0-9]")));
-        bool flag = false;
-        int height = value.toInt(&flag);
-        if(flag)
-        {
-          size.setHeight(height);
-        }
-      };
-      return assigns_list;
-    };
-
-    tnexcommon::setMultipleValues(get_assigns(), attr_size);
     return size;
   };
 
@@ -374,40 +349,25 @@ static LCWindow* uploadWindow(QWidget* _widget, const QDomElement& _element)
 
     if(attr_position.isNull()) return ret();
 
-    auto get_assigns = [&pos]()
-    {
-      QList<std::function<void(const QString&)>> assigns_list;
+    auto values = tnexcommon::parseValues(attr_position);
 
-      assigns_list << [&pos](const QString& _value)
-      {
-        if(_value.isNull()) return;
-        QString value = _value;
-        value.remove(QRegularExpression(QStringLiteral("[^0-9]")));
-
-        bool flag = false;
-        int posx = value.toInt(&flag);
-        if(flag)
+    ([&pos](const QStringList _values)
         {
-          pos.setX(posx);
-        }
-      };
-
-      assigns_list << [&pos](const QString& _value)
-      {
-        if(_value.isNull()) return;
-        QString value = _value;
-        value.remove(QRegularExpression(QStringLiteral("[^0-9]")));
-        bool flag = false;
-        int posy = value.toInt(&flag);
-        if(flag)
-        {
-          pos.setY(posy);
-        }
-      };
-      return assigns_list;
-    };
-
-    tnexcommon::setMultipleValues(get_assigns(), attr_position);
+          if(_values.size() == 0) return;
+          QString val_str;
+          bool flag = false;
+          auto it = _values.begin();
+          val_str = (*it);
+          val_str.remove(QRegularExpression(QStringLiteral("[^0-9]")));
+          int p = (*it).toInt(&flag);
+          if(flag) pos.setX(p);
+          it++;
+          if(it == _values.end()) return;
+          val_str = (*it);
+          val_str.remove(QRegularExpression(QStringLiteral("[^0-9]")));
+          p = (*it).toInt(&flag);
+          if(flag) pos.setY(p);
+        })(values);
 
     return ret();
   };
@@ -494,7 +454,7 @@ void upload(
     {
       auto show = [window, widget]() 
       {
-        window->action(QString("show()"));
+        window->action(QStringLiteral("show"));
         QCoreApplication::sendEvent(widget, new QShowEvent());
       };
       __slShowList << show;

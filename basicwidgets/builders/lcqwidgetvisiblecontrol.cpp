@@ -1,4 +1,4 @@
-/* 
+/*
  * TeleNEXus is a simple SCADA programm
  *
  * Copyright (C) 2020 Sergey S. Kuzmenko
@@ -33,14 +33,25 @@
 static const struct
 {
   QString visibleControl = "visibleControl";
-}__slAttributes;
+}__slXmlAttributes;
 
 static const struct
 {
-  //vcUndef
+QString sourceId    = "sourceId";
+QString dataId      = "dataId";
+QString format      = "format";
+QString showValue   = "showValue";
+QString hideValue   = "hideValue";
+QString undefState  = "undefState";
+
+}__slVisibleAttributes;
+
+
+static const struct
+{
   QString show = "show";
   QString hide = "hide";
-}__slAttributesVals;
+}__slXmlAttributesVals;
 
 
 
@@ -51,8 +62,8 @@ class CLocalData
 {
 private:
   QWidget* mpWidget = nullptr;
-public:
 
+public:
   enum class EVisibleStatus
   {
     show,
@@ -81,6 +92,7 @@ public:
     mVisibleStatus = EVisibleStatus::show;
     mpWidget->show();
   }
+
   void hideWidget()
   {
     if( mVisibleStatus == EVisibleStatus::hide) return;
@@ -95,72 +107,10 @@ public:
 };
 
 //==============================================================================
-class CGetterVisibleControl
-{
-private:
-  QMap<QString, std::function<void(const QString& _val)>> mAssignActions;
-  QString mSourceId;
-  QString mDataId;
-  QString mFormat;
-  QString mShowValue;
-  QString mHideValue;
-  QString mUndefMode;
-
-public:
-  CGetterVisibleControl() = delete;
-
-  CGetterVisibleControl(const QString& _attributes)
-  {
-    mAssignActions.insert(QStringLiteral("sourceId"),
-          [this](const QString& _val)
-          {
-            mSourceId = _val;
-          });
-
-    mAssignActions.insert(QStringLiteral("dataId"),
-          [this](const QString& _val)
-          {
-            mDataId = _val;
-          });
-
-    mAssignActions.insert(QStringLiteral("format"),
-          [this](const QString& _val)
-          {
-            mFormat = _val;
-          });
-
-    mAssignActions.insert(QStringLiteral("showValue"),
-          [this](const QString& _val)
-          {
-            mShowValue = _val;
-          });
-
-    mAssignActions.insert(QStringLiteral("hideValue"),
-          [this](const QString& _val)
-          {
-            mHideValue = _val;
-          });
-
-    mAssignActions.insert(QStringLiteral("undefState"),
-          [this](const QString& _val)
-          {
-            mUndefMode = _val;
-          });
-    tnexcommon::setMultipleAttributes(mAssignActions, _attributes);
-  }
-
-  QString getSourceId(){ return mSourceId; }
-  QString getDataId(){ return mDataId; }
-  QString getFormat(){ return mFormat; }
-  QString getShowValue(){ return mShowValue;}
-  QString getHideValue(){ return mHideValue;}
-  QString getUndefMode(){ return mUndefMode;}
-};
-
 #define toLocalData(p) (reinterpret_cast<CLocalData*>(p))
 
 //==============================================================================
-LCQWidgetVisibleControl::LCQWidgetVisibleControl(QWidget* _widget) : 
+LCQWidgetVisibleControl::LCQWidgetVisibleControl(QWidget* _widget) :
   QObject(_widget)
 {
   mpLocal = new CLocalData;
@@ -176,7 +126,7 @@ LCQWidgetVisibleControl::~LCQWidgetVisibleControl()
 }
 
 //------------------------------------------------------------------------------
-bool LCQWidgetVisibleControl::build(const QDomElement& _element, 
+bool LCQWidgetVisibleControl::build(const QDomElement& _element,
     QWidget* _widget,
     const LIApplication& _app
     )
@@ -196,21 +146,22 @@ bool LCQWidgetVisibleControl::build(const QDomElement& _element,
 
   if(_widget == nullptr) return ret_wrong();
 
-  QString attr = _element.attribute(__slAttributes.visibleControl);
+  QString attr = _element.attribute(__slXmlAttributes.visibleControl);
   if(attr.isNull()) return ret_wrong();
 
-  CGetterVisibleControl getter_visible_control(attr);
 
-  QString attr_source = getter_visible_control.getSourceId(); 
-  QString attr_data   = getter_visible_control.getDataId(); 
-  QString attr_format = getter_visible_control.getFormat(); 
-  QString attr_show   = getter_visible_control.getShowValue(); 
-  QString attr_hide   = getter_visible_control.getHideValue(); 
+  auto attr_values = tnexcommon::parseAttributes(attr);
 
-  if( attr_source.isNull() || 
-      attr_data.isNull() || 
-      attr_format.isNull() || 
-      (attr_show.isNull() && attr_hide.isNull())) 
+  QString attr_source = attr_values.value(__slVisibleAttributes.sourceId,   QString());
+  QString attr_data   = attr_values.value(__slVisibleAttributes.dataId,     QString());
+  QString attr_format = attr_values.value(__slVisibleAttributes.format,     QString());
+  QString attr_show   = attr_values.value(__slVisibleAttributes.showValue,  QString());
+  QString attr_hide   = attr_values.value(__slVisibleAttributes.hideValue,  QString());
+
+  if( attr_source.isNull() ||
+      attr_data.isNull() ||
+      attr_format.isNull() ||
+      (attr_show.isNull() && attr_hide.isNull()))
     return ret_wrong();
 
   auto source = _app.getDataSource(attr_source);
@@ -223,12 +174,12 @@ bool LCQWidgetVisibleControl::build(const QDomElement& _element,
 
   ctrl = new LCQWidgetVisibleControl(_widget);
 
-  QString attr_undef = getter_visible_control.getUndefMode();
+  QString attr_undef   = attr_values.value(__slVisibleAttributes.undefState, QString());
   if(!attr_undef.isNull())
   {
-    if(attr_undef == __slAttributesVals.show) 
+    if(attr_undef == __slXmlAttributesVals.show)
       toLocalData(ctrl->mpLocal)->mUndefMode = CLocalData::EUndefMode::show;
-    else if(attr_undef == __slAttributesVals.hide) 
+    else if(attr_undef == __slXmlAttributesVals.hide)
       toLocalData(ctrl->mpLocal)->mUndefMode = CLocalData::EUndefMode::hide;
   }
 
@@ -252,7 +203,7 @@ bool LCQWidgetVisibleControl::build(const QDomElement& _element,
 
   //--------------------------------------------action_show
   auto action_show = [ctrl, read_status_ctrl](
-      QSharedPointer<QByteArray> _data, 
+      QSharedPointer<QByteArray> _data,
       LERemoteDataStatus _status)
   {
 
@@ -272,42 +223,42 @@ bool LCQWidgetVisibleControl::build(const QDomElement& _element,
 
   //--------------------------------------------action_hide
   auto action_hide = [ctrl, read_status_ctrl](
-      QSharedPointer<QByteArray> _data, 
+      QSharedPointer<QByteArray> _data,
       LERemoteDataStatus _status)
   {
 
     if(!read_status_ctrl(_status)) return;
 
-    if(toLocalData(ctrl->mpLocal)->mCompareData == 
+    if(toLocalData(ctrl->mpLocal)->mCompareData ==
         toLocalData(ctrl->mpLocal)->mFormatter->toString(*_data))
       toLocalData(ctrl->mpLocal)->hideWidget();
     else
       toLocalData(ctrl->mpLocal)->showWidget();
   };
-  
+
   if(!attr_show.isNull())
   {
-    toLocalData(ctrl->mpLocal)->mCompareData = 
+    toLocalData(ctrl->mpLocal)->mCompareData =
       format->fitting(attr_show);
     toLocalData(ctrl->mpLocal)->mfAction = action_show;
   }
   else
   {
-    toLocalData(ctrl->mpLocal)->mCompareData = 
+    toLocalData(ctrl->mpLocal)->mCompareData =
       format->fitting(attr_hide);
     toLocalData(ctrl->mpLocal)->mfAction = action_hide;
   }
 
   //--------------------------------------------action_read_data
   auto action_read_data = [ctrl](
-      QSharedPointer<QByteArray> _data, 
+      QSharedPointer<QByteArray> _data,
       LERemoteDataStatus _status)
   {
     toLocalData(ctrl->mpLocal)->mfAction(_data, _status);
   };
 
 
-  toLocalData(ctrl->mpLocal)->mDataReader = 
+  toLocalData(ctrl->mpLocal)->mDataReader =
     source->createReader(attr_data, action_read_data);
 
   toLocalData(ctrl->mpLocal)->mFormatter = format;
@@ -328,7 +279,7 @@ bool LCQWidgetVisibleControl::eventFilter(QObject* _obj, QEvent* _event)
         (_event->type() == QEvent::Type::Paint) ||
         (_event->type() == QEvent::Type::ShowToParent) ||
         (_event->type() == QEvent::Type::Show)
-      ) 
+      )
     {
       dynamic_cast<QWidget*>(_obj)->hide();
       ret = true;
