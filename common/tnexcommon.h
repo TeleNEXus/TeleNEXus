@@ -56,11 +56,29 @@ SAction parseAction(
     const QString& _actionString, 
     std::function<void(const QString& _error)> _err = [](const QString&){});
 
+/* 
+ * Parses the string with values and returns a QStringList with them.
+ *  --------------------------------
+ *  Parameters:
+ *  _values - string for parsing;
+ *  _separator - values separator;
+ *  _err - error return functor;
+ */
 QStringList parseValues(
     const QString& _values, 
     const QChar& _separator = QChar(';'),
     std::function<void(const QString& _error)> _err = [](const QString&){});
 
+/* Parses the attributes string in the format 
+ * "attribute1 = value1; attribute2 = * value2; ... ;attributeN = valueN",
+ * and return a map of values in the form [attribute; value].
+ * -------------------------------
+ *  Parameters:
+ *  _attributes - string for parsing;
+ *  _separator - attributes separator;
+ *  _equal - equal symbol;
+ *  _err = error return functor;
+ */
 QMap<QString, QString> parseAttributes(
     const QString& _attributes, 
     const QChar& _separator = QChar(';'), 
@@ -69,84 +87,6 @@ QMap<QString, QString> parseAttributes(
 
 SDataSpecification parseDataSpecification(const QString _dataSpec,
     std::function<void(const QString& _error)> _err = [](const QString&){});
-
-
-
-
-
-/*
- * ENG>
- *  Decodes a string with multiple attributes and executes 
- *  actions according to their names.
- *  --------------------------------
- *  Parameters:
- *  _assignActions - action map of the format [attribute_name, action];
- *  _attributes    - string with attributes and their values
- *                   "attribute1 = val1; attribute2 = val2; attribure3 = val3";
- *  _attrSeparator - attribute separator;
- *  _attrEqSign    - equality symbol.
- *
- * RU>
- * Дeкодирует строку с множественными аттрибутами и выполняет 
- * дейсвие применения значения в соответствии с их именами.
- * Формат строки:
- *  "attribute1 = val1; attribute2 = val2; attribure3 = val3"
- *  --------------------------------
- *  Параметры:
- *  _assignActions - карта действий формата [attribute_name, action];
- *  _attributes    - строка формата
- *                   "attribute1 = val1; attribute2 = val2; attribure3 = val3";
- *  _attrSeparator - разделитель атрибутов;
- *  _attrEqSign    - символ равенства.
- *
- */
-/* void setMultipleAttributes( */
-/*     const QMap<QString, std::function<void(const QString& _val)>>& _assigns, */
-/*     const QString& _attributes, */
-/*     const QString _attrSeparator = QString(";"), */ 
-/*     const QString _attrEqSign = QString("=")); */
-
-/*
- * ENG>
- *  Decodes a string with multiple values and executes 
- *  assign actions
- *  --------------------------------
- *  Parameters:
- *  _assigns          - assign actions list;
- *  _values           - string with values
- *                      "val1;val2;val3";
- *  _valuesSeparator  - values separator;
- *
- * RU>
- * Дeкодирует строку с множественными значениями и выполняет 
- *  и выполняет действия назначения.
- * Формат строки:
- *  "val1;val2;val3"
- *  --------------------------------
- *  Параметры:
- *  _assigns          - список действий назначения;
- *  _values           - строка со значениями "val1;val2;val3";
- *  _valuesSeparator  - разделитель значений;
- *
- */
-/* void setMultipleValues( */
-/*     const QList<std::function<void(const QString& _val)>>& _assigns, */
-/*     const QString& _values, */
-/*     const QString _valuesSeparator = QString(";")); */
-
-/* RU>
- * Выполняет параметризированное действие (формата: action(p1, p2, ..., pN)),
- * выбирая их из переданной карты и передавая параметры через список строк.
- *
- * EN>
- * Performs a parameterized action (format: action (p1, p2,..., pN)),
- * selecting them from the passed map and passing the 
- * parameters through a list of strings.
- *
- */
-/* void performParamAction( */
-/*     const QString& _actionString, */ 
-/*     const QMap<QString, std::function<void(const QStringList&)>>& _functors); */
 }
 
 #endif /* TNEXCOMMON_H_ */

@@ -356,11 +356,9 @@ void LCWindow::action(
     const QString& _name, 
     const QStringList& _parameters)
 {
-  qDebug() << "LCWindow::action show 0 name = " << _name;
   auto action = ld.actions.find(_name);
   if(action == ld.actions.end()) return;
   action.value()(_parameters);
-  qDebug() << "LCWindow::action show 1";
 }
 
 //--------------------------------------------------------------------------
