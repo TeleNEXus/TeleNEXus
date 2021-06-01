@@ -17,6 +17,11 @@
     </LAYOUTBUILDERS>
     
     <WIDGETBUILDERS>
+
+
+        <switchWidgetsList      lib="examplewidgets" libhandler="getSwitchWidgetsListBuilder"   />
+
+
         <widget                 lib="basicwidgets" libhandler="getWidgetBuilder"                />
         <label                  lib="basicwidgets" libhandler="getTextLabelBuilder"             />
         <table                  lib="basicwidgets" libhandler="getTableWidgetBuilder"           />
@@ -25,7 +30,7 @@
         <dataComboBox           lib="basicwidgets" libhandler="getRemComboBoxBuilder"           />
         <dataComboLabel         lib="basicwidgets" libhandler="getRemComboLabelBuilder"         />
         <tabs                   lib="basicwidgets" libhandler="getTabWidgetBuilder"             />
-        <switchWidgetsList      lib="basicwidgets" libhandler="getSwitchWidgetsListBuilder"     />
+        <!-- <switchWidgetsList      lib="basicwidgets" libhandler="getSwitchWidgetsListBuilder"     /> -->
         <scrollArea             lib="basicwidgets" libhandler="getScrollAreaBuilder"            />
         <button                 lib="basicwidgets" libhandler="getButtonBuilder"                />
         <listWidget             lib="basicwidgets" libhandler="getListWidgetBuilder"            />
@@ -114,5 +119,19 @@
     <!--   <table file="../prj1/testtablelocalsource.xml"/> -->
     <!-- </mainWidget> -->
   <!-- </WINDOW> -->
+
+    <WINDOW 
+      id="exampleSwitchWidget" 
+      visible="true"
+      title="Example Switch Widget" 
+      showMode="normal"
+      modality="false"
+      flags="" 
+      size="300;600"
+      position="300;600" >
+    <mainWidget>
+      <switchWidgetsList file="../prj1/testswitchwidgetlist.xml"/>
+    </mainWidget>
+  </WINDOW>
 
 </APPLICATION>

@@ -21,16 +21,16 @@
 #ifndef LCXMLSWITCHWIDGETSLISTBUILDER_H_
 #define LCXMLSWITCHWIDGETSLISTBUILDER_H_
 
-#include "lcxmlbuilderbase.h"
+#include "LIXmlWidgetBuilder.h"
 
-class LCXmlSwitchWidgetsListBuilder : public LCXmlBuilderBase 
+class LCXmlSwitchWidgetsListBuilder : public LIXmlWidgetBuilder 
 {
 public:
   LCXmlSwitchWidgetsListBuilder();
   virtual ~LCXmlSwitchWidgetsListBuilder();
-
-protected:
-  virtual QWidget* buildLocal( 
-      QSharedPointer<SBuildData> _buildData) override final;
+  virtual QWidget* build(const QDomElement& _element,
+      const LIApplication& _app) override;
+private:
+  QWidget* buildLocal(const QDomElement& _element, const LIApplication& _app);
 };
 #endif /* LCXMLSWITCHWIDGETSLISTBUILDER_H_ */

@@ -25,7 +25,8 @@
 
             <button text="show window 1">
               <press>
-                <controlWindow windowId="TestWindow1" action="show"/>
+                <!-- <controlWindow windowId="TestWindow1" action="show(fullScreen)"/> -->
+                <controlWindow windowId="TestWindow1" action="show()"/>
               </press>
             </button>
 

@@ -18,25 +18,11 @@
  * You should have received a copy of the GNU General Public License
  * along with TeleNEXus.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef BASICWIDGETS_H
-#define BASICWIDGETS_H
+#ifndef EXAMPLEWIDGETS_H
+#define EXAMPLEWIDGETS_H
 
-#include "basicwidgets_global.h"
+#include "examplewidgets_global.h"
 
-extern "C" void* getWidgetBuilder();
-extern "C" void* getTextLabelBuilder();
+extern "C" void* getSwitchWidgetsListBuilder();
 
-extern "C" void* getRemLabelBuilder();
-extern "C" void* getRemLineEditBuilder();
-extern "C" void* getRemComboBoxBuilder();
-extern "C" void* getRemComboLabelBuilder();
-extern "C" void* getTableWidgetBuilder();
-extern "C" void* getTabWidgetBuilder();
-extern "C" void* getButtonBuilder();
-extern "C" void* getScrollAreaBuilder();
-extern "C" void* getListWidgetBuilder();
-extern "C" void* getStackedWidgetBuilder();
-extern "C" void* getHorizontalSplitterBuilder();
-extern "C" void* getVerticalSplitterBuilder();
-
-#endif // BASICWIDGETS_H
+#endif // EXAMPLEWIDGETS_H
