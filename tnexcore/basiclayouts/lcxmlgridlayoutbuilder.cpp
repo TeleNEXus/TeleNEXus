@@ -21,7 +21,7 @@
 #include "lcxmlgridlayoutbuilder.h"
 #include "LIApplication.h"
 #include "LIXmlWidgetBuilder.h"
-#include "common.h"
+#include "layoutbuilderscommon.h"
 
 #include <QGridLayout>
 #include <QSharedPointer>
