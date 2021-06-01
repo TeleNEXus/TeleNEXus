@@ -28,7 +28,6 @@
 #include "lcxmltablewidgetbuilder.h"
 #include "lcxmltabwidgetbuilder.h"
 #include "lcxmlbuttonbuilder.h"
-#include "lcxmlswitchwidgetslistbuilder.h"
 #include "lcxmlscrollareabuilder.h"
 #include "lcxmllistwidgetbuilder.h"
 #include "lcxmlstackedwidgetbuilder.h"
@@ -83,28 +82,10 @@ void* getTabWidgetBuilder()
   return new LCXmlTabWidgetBuilder;
 }
 
-/* //------------------------------------------------------------------------------ */
-/* void* getRemWriteButtonBuilder() */
-/* { */
-/*   return new LCXmlButtonBuilder(LCXmlButtonBuilder::EType::writeData); */
-/* } */
-
-/* //------------------------------------------------------------------------------ */
-/* void* getControlWindowButtonBuilder() */
-/* { */
-/*   return new LCXmlButtonBuilder(LCXmlButtonBuilder::EType::controlWindows); */
-/* } */
-
 //------------------------------------------------------------------------------
 void* getButtonBuilder()
 {
   return new LCXmlButtonBuilder();
-}
-
-//------------------------------------------------------------------------------
-void* getSwitchWidgetsListBuilder()
-{
-  return new LCXmlSwitchWidgetsListBuilder;
 }
 
 //------------------------------------------------------------------------------
