@@ -20,10 +20,9 @@
  */
 
 #include "lcxmllistwidgetbuilder.h"
-#include "lcqlistwidget.h"
-#include "LIApplication.h"
+#include "widgets/lcqlistwidget.h"
 #include "lcbuilderscommon.h"
-#include "lcqlistwidget.h"
+#include "LIApplication.h"
 #include <QDomElement>
 
 //------------------------------------------------------------------------------

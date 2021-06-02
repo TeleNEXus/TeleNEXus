@@ -24,6 +24,7 @@
 #include <QMap>
 #include <QLibrary>
 #include <QCoreApplication>
+#include "basicwidgetbuilders.h"
 
 //==============================================================================
 using LQLayoutBuildersMap = QMap<QString, QSharedPointer<LIXmlWidgetBuilder>>;
@@ -35,6 +36,7 @@ static LQLayoutBuildersMap __buildersMap;
 LCXmlWidgetBuilders::LCXmlWidgetBuilders() :
         LCXmlBuildersLoader(    LCXmlCommon::mBaseTags.widgetBuilders)
 {
+  __buildersMap.unite(basicwidgetbuilders::getBuilders());
 }
 
 //------------------------------------------------------------------------------

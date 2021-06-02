@@ -27,23 +27,23 @@ namespace basiclayoutbuilders
 
 QMap<QString, QSharedPointer<LIXmlLayoutBuilder>> getBuilders()
 {
-  QMap<QString, QSharedPointer<LIXmlLayoutBuilder>> builders;
+  QMap<QString, QSharedPointer<LIXmlLayoutBuilder>> builders_map;
 
-  builders.insert(
+  builders_map.insert(
       QStringLiteral("layoutGrid"), 
       QSharedPointer<LIXmlLayoutBuilder>(
         new LCXmlGridLayoutBuilder()));
 
-  builders.insert(
+  builders_map.insert(
       QStringLiteral("layoutVBox"), 
       QSharedPointer<LIXmlLayoutBuilder>(
         new LCXmlBoxLayoutBuilder(LCXmlBoxLayoutBuilder::EOrientation::VERTICAL)));
 
-  builders.insert(
+  builders_map.insert(
       QStringLiteral("layoutHBox"), 
       QSharedPointer<LIXmlLayoutBuilder>(
         new LCXmlBoxLayoutBuilder(LCXmlBoxLayoutBuilder::EOrientation::HORIZONTAL)));
 
-  return builders; 
+  return builders_map; 
 }
 } /* namespace */

@@ -25,10 +25,10 @@
 #include <QTableWidget>
 #include <QDomElement>
 #include <qnamespace.h>
-#include <qtablewidget.h>
+#include <QTableWidget>
 #include <QDebug>
 #include <QEvent>
-#include <QtWidgets>
+#include <QKeyEvent>
 //==============================================================================
 static int __slObjectCounter = 0;
 

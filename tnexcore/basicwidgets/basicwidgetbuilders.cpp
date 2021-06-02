@@ -19,74 +19,54 @@
  * along with TeleNEXus.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+/* #include "basicwidgetbuilders.h" */
+
 #include "basicwidgetbuilders.h"
+#include "LIXmlWidgetBuilder.h"
 
 #include "lcxmlwidgetbuilder.h"
-
-
-
-
-        /* widget                */ 
-        /* label                 */ 
-        /* table                 */ 
-        /* dataLabel             */ 
-        /* dataLineEdit          */ 
-        /* dataComboBox          */ 
-        /* dataComboLabel        */ 
-        /* tabs                  */ 
-        /* scrollArea            */ 
-        /* button                */ 
-        /* listWidget            */ 
-        /* stackedWidget         */ 
-        /* splitterVertical      */ 
-        /* splitterHorizontal    */ 
+#include "lcxmltextlabelbuilder.h"
+#include "lcxmltablewidgetbuilder.h"
+#include "lcxmlremlabelbuilder.h"
+#include "lcxmlremlineeditbuilder.h"
+#include "lcxmlremcomboboxbuilder.h"
+#include "lcxmlremcombolabelbuilder.h"
+#include "lcxmltabwidgetbuilder.h"
+#include "lcxmlscrollareabuilder.h"
+#include "lcxmlbuttonbuilder.h"
+#include "lcxmllistwidgetbuilder.h"
+#include "lcxmlstackedwidgetbuilder.h"
+#include "lcxmlsplitterbuilder.h"
+#include <qnamespace.h>
 
 
 namespace basicwidgetbuilders
 {
 QMap<QString, QSharedPointer<LIXmlWidgetBuilder>> getBuilders()
 {
-  QMap<QString, QSharedPointer<LIXmlWidgetBuilder>> builders;
+  QMap<QString, QSharedPointer<LIXmlWidgetBuilder>> builders_map;
 
-  builders.insert(QStringLiteral("widget"),
-      QSharedPointer<LIXmlWidgetBuilder>(new LCXmlWidgetBuilder()));
-  builders.insert(QStringLiteral("label"),
-      QSharedPointer<LIXmlWidgetBuilder>(new LCXmlWidgetBuilder()));
-  builders.insert(QStringLiteral("table"),
-      QSharedPointer<LIXmlWidgetBuilder>(new LCXmlWidgetBuilder()));
-  builders.insert(QStringLiteral("dataLabel"),
-      QSharedPointer<LIXmlWidgetBuilder>(new LCXmlWidgetBuilder()));
-  builders.insert(QStringLiteral("dataLineEdit"),
-      QSharedPointer<LIXmlWidgetBuilder>(new LCXmlWidgetBuilder()));
-  builders.insert(QStringLiteral("dataComboBox"),
-      QSharedPointer<LIXmlWidgetBuilder>(new LCXmlWidgetBuilder()));
-  builders.insert(QStringLiteral("dataComboLabel"),
-      QSharedPointer<LIXmlWidgetBuilder>(new LCXmlWidgetBuilder()));
-  builders.insert(QStringLiteral("tabs"),
-      QSharedPointer<LIXmlWidgetBuilder>(new LCXmlWidgetBuilder()));
-  builders.insert(QStringLiteral("scrollArea"),
-      QSharedPointer<LIXmlWidgetBuilder>(new LCXmlWidgetBuilder()));
-  builders.insert(QStringLiteral("button"),
-      QSharedPointer<LIXmlWidgetBuilder>(new LCXmlWidgetBuilder()));
-  builders.insert(QStringLiteral("listWidget"),
-      QSharedPointer<LIXmlWidgetBuilder>(new LCXmlWidgetBuilder()));
-  builders.insert(QStringLiteral("stackedWidget"),
-      QSharedPointer<LIXmlWidgetBuilder>(new LCXmlWidgetBuilder()));
+  auto add_builder = 
+    [&builders_map](const QString& _name, LIXmlWidgetBuilder* _builder)
+    {
+      builders_map.insert(_name, QSharedPointer<LIXmlWidgetBuilder>(_builder));
+    };
 
-  builders.insert(QStringLiteral("splitterVertical"),
-      QSharedPointer<LIXmlWidgetBuilder>(new LCXmlWidgetBuilder()));
+  add_builder(QStringLiteral("widget"             ),  new LCXmlWidgetBuilder());
+  add_builder(QStringLiteral("label"              ),  new LCXmlTextLabelBuilder());
+  add_builder(QStringLiteral("table"              ),  new LCXmlTableWidgetBuilder());
+  add_builder(QStringLiteral("dataLabel"          ),  new LCXmlRemLabelBuilder());
+  add_builder(QStringLiteral("dataLineEdit"       ),  new LCXmlRemLineEditBuilder());
+  add_builder(QStringLiteral("dataComboBox"       ),  new LCXmlRemComboBoxBuilder());
+  add_builder(QStringLiteral("dataComboLabel"     ),  new LCXmlRemComboLabelBuilder());
+  add_builder(QStringLiteral("tabs"               ),  new LCXmlTabWidgetBuilder());
+  add_builder(QStringLiteral("scrollArea"         ),  new LCXmlScrollAreaBuilder());
+  add_builder(QStringLiteral("button"             ),  new LCXmlButtonBuilder());
+  add_builder(QStringLiteral("listWidget"         ),  new LCXmlListWidgetBuilder());
+  add_builder(QStringLiteral("stackedWidget"      ),  new LCXmlStackedWidgetBuilder());
+  add_builder(QStringLiteral("splitterVertical"   ),  new LCXmlSplitterBuilder(Qt::Vertical));
+  add_builder(QStringLiteral("splitterHorizontal" ),  new LCXmlSplitterBuilder(Qt::Horizontal));
 
-  builders.insert(QStringLiteral("splitterHorizontal"),
-      QSharedPointer<LIXmlWidgetBuilder>(new LCXmlWidgetBuilder()));
-
-
-
-
-
-
-
-
-
-  return builders;
+  return builders_map;
 }
 }

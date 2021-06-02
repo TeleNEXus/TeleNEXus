@@ -37,18 +37,16 @@ INCLUDEPATH +=                          \
 ./keyboard                              \
 ./basiclayouts                          \
 ./basicwidgets                          \
+./basicwidgets/builders                 \
 
 
 SOURCES += \
-
 ../../common/lqvalidatoru32.cpp \
 ../../common/tnexcommon.cpp \
-
-
-
-basiclayouts/builders/layoutbuilderscommon.cpp \
-basiclayouts/builders/lcxmlboxlayoutbuilder.cpp  \
-basiclayouts/builders/lcxmlgridlayoutbuilder.cpp \
+basiclayouts/commonbuilderslayout.cpp \
+basiclayouts/lcxmlboxlayoutbuilder.cpp  \
+basiclayouts/lcxmlgridlayoutbuilder.cpp \
+basiclayouts/basiclayoutbuilders.cpp \
 basicwidgets/widgets/lcqlistwidget.cpp \
 basicwidgets/widgets/lcqremcombobox.cpp \
 basicwidgets/widgets/lcqremlabel.cpp \
@@ -70,6 +68,7 @@ basicwidgets/builders/lcbuilderscommon.cpp \
 basicwidgets/builders/lcqwidgetvisiblecontrol.cpp \
 basicwidgets/builders/lcxmlstackedwidgetbuilder.cpp \
 basicwidgets/builders/lcxmlsplitterbuilder.cpp \
+basicwidgets/basicwidgetbuilders.cpp \
 dataformatters/lcformatterbase.cpp \
 dataformatters/lcformatterbitfield.cpp \
 dataformatters/lcformatterbits.cpp \
@@ -112,6 +111,7 @@ keyboard/lckeyboard.cpp \
 window/lcwindow.cpp \
 main.cpp \
 
+
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
@@ -133,9 +133,10 @@ HEADERS += \
 ../common/interfaces/LIJScriptService.h \
 ../common/interfaces/keyboard/LIKeyboard.h \
 ../common/interfaces/keyboard/LIKeyboardListener.h \
-basiclayouts/builders/layoutbuilderscommon.h \
-basiclayouts/builders/lcxmlboxlayoutbuilder.h    \
-basiclayouts/builders/lcxmlgridlayoutbuilder.h   \
+basiclayouts/commonbuilderslayout.h \
+basiclayouts/lcxmlboxlayoutbuilder.h    \
+basiclayouts/lcxmlgridlayoutbuilder.h   \
+basiclayouts/basiclayoutbuilders.h   \
 basicwidgets/widgets/lcqlistwidget.h \
 basicwidgets/widgets/lcqremcombobox.h \
 basicwidgets/widgets/lcqremcombolabel.h \
@@ -158,6 +159,7 @@ basicwidgets/builders/lcbuilderscommon.h \
 basicwidgets/builders/lcqwidgetvisiblecontrol.h \
 basicwidgets/builders/lcxmlstackedwidgetbuilder.h \
 basicwidgets/builders/lcxmlsplitterbuilder.h \
+basicwidgets/builders/basicwidgetbuilders.h \
 dataformatters/lcformatterbase.h \
 dataformatters/lcformatterbitfield.h \
 dataformatters/lcformatterbits.h \

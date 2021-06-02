@@ -19,7 +19,7 @@
  * along with TeleNEXus.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include "lcxmlremcombolabelbuilder.h"
-#include "lcqremcombolabel.h"
+#include "widgets/lcqremcombolabel.h"
 #include "lcbuilderscommon.h"
 #include "LIApplication.h"
 #include "LIMovieAccess.h"

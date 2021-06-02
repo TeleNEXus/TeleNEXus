@@ -19,7 +19,7 @@
  * along with TeleNEXus.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include "lcxmlremlabelbuilder.h"
-#include "lcqremlabel.h"
+#include "widgets/lcqremlabel.h"
 #include "lcbuilderscommon.h"
 #include "LIApplication.h"
 
