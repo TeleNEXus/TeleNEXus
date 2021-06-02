@@ -19,7 +19,7 @@
  * along with TeleNEXus.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include "uploadwindows.h"
-#include "lcxmlcommon.h"
+#include "xmlcommon.h"
 #include "LIXmlWidgetBuilder.h"
 #include "LIWindow.h"
 #include "LIKeyboard.h"
@@ -228,7 +228,7 @@ static QDomElement endElement(
   {
     QDomElement el = _app.getDomDocument(attr_file).documentElement();
     if(el.isNull()) return el;
-    if(el.tagName() != LCXmlCommon::mBaseTags.window) return QDomElement();
+    if(el.tagName() != xmlcommon::mBaseTags.window) return QDomElement();
     set_attr(_element, el);
     return endElement(el, _app);
   }

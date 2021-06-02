@@ -19,7 +19,7 @@
  * along with TeleNEXus.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include "lcxmlfonts.h"
-#include "lcxmlcommon.h"
+#include "xmlcommon.h"
 #include "LIApplication.h"
 
 #include <QFont>
@@ -75,7 +75,7 @@ void LCXmlFonts::create(
     QDomElement el = _app.getDomDocument(attr_file).documentElement();
     if(!el.isNull())
     {
-      if(el.tagName() == LCXmlCommon::mBaseTags.fonts) create(el, _app);
+      if(el.tagName() == xmlcommon::mBaseTags.fonts) create(el, _app);
     }
     return;
   }

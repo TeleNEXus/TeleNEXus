@@ -22,7 +22,7 @@
 #include "uploaddataformatters.h"
 #include "LIApplication.h"
 #include "LIDataFormatter.h"
-#include "lcxmlcommon.h"
+#include "xmlcommon.h"
 #include "lcxmlformatterfactory.h"
 #include "lcjsformatter.h"
 
@@ -143,7 +143,7 @@ void upload( const QDomElement &_element, const LIApplication& _app)
     QDomElement el = _app.getDomDocument(attr_file).documentElement();
     if(!el.isNull())
     {
-      if(el.tagName() == LCXmlCommon::mBaseTags.formatters) upload(el, _app);
+      if(el.tagName() == xmlcommon::mBaseTags.formatters) upload(el, _app);
     }
     return;
   }

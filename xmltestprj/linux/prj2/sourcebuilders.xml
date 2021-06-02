@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <SOURCEBUILDERS>
-    <modbussources  lib="modbussource"  libhandler="getModbusSourceBuilder" />
-    <localsources   lib="localsource"   libhandler="getLocalSourceBuilder"  />
+
+    <modbussources  lib="modbussource"  handler="getModbusSourceBuilder" />
+    <localsources   lib="localsource"   handler="getLocalSourceBuilder"  />
 
     <!--
     <mssqlsource   lib="libs/sqlsources"     libhandler="getMsSqlSourcesBuilder" />

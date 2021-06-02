@@ -20,7 +20,7 @@
  */
 
 #include "uploadkeyboards.h"
-#include "lcxmlcommon.h"
+#include "xmlcommon.h"
 #include "LIApplication.h" 
 #include "lckeyboard.h"
 

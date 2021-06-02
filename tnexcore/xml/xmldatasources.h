@@ -18,8 +18,13 @@
  * You should have received a copy of the GNU General Public License
  * along with TeleNEXus.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "lcxmlcommon.h"
 
-const LCXmlCommon::SBaseTags          LCXmlCommon::mBaseTags;
-const LCXmlCommon::SCommonTags        LCXmlCommon::mCommonTags;
-const LCXmlCommon::SCommonAttributes  LCXmlCommon::mCommonAttributes;
+#include <QSharedPointer>
+class LIRemoteDataSource;
+class QDomElement;
+
+namespace xmldatasources
+{
+void upload(const QDomElement& _rootElement);
+QSharedPointer<LIRemoteDataSource> getSource(const QString& _id);
+} /* namespace datasources */

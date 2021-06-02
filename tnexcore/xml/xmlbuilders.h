@@ -22,22 +22,38 @@
 #define LCXMLBUILDERSLOADER_H
 
 #include <QDomElement>
-#include <functional>
+#include <QSharedPointer>
 
-class LCXmlBuildersLoader
+class LIXmlWidgetBuilder;
+class LIXmlLayoutBuilder;
+class LIXmlRemoteDataSourceBuilder;
+
+namespace builders
 {
-private:
-    const QString mTagRoot;
-    const QString mAttrFile         = "file";
-    const QString mAttrLib          = "lib";
-    const QString mAttrLibHandler   = "libhandler";
-public:
-    LCXmlBuildersLoader(const QString& _tagRoot);
-    virtual ~LCXmlBuildersLoader();
-    virtual int load(const QDomElement& _element, const QString& _pathPrj, const QStringList& _libPaths) final;
-    virtual bool add(const QString& _name, void* _builder) = 0;
-private:
-    int loadBuilders(const QDomElement& _element, const QStringList& _libPaths);
-};
+
+namespace widgets
+{
+void upload( const QDomElement& _rootElement, 
+    const QString& _pathPrj, const QStringList& _libPaths);
+QSharedPointer<LIXmlWidgetBuilder> getBuilder(const QString _id);
+} /* namespace widget */ 
+
+namespace layouts
+{
+void upload( const QDomElement& _rootElement, 
+    const QString& _pathPrj, const QStringList& _libPaths);
+
+QSharedPointer<LIXmlLayoutBuilder> getBuilder(const QString _name);
+} /* namespace layouts */
+
+namespace sources 
+{
+void upload( const QDomElement& _rootElement, 
+    const QString& _pathPrj, const QStringList& _libPaths);
+
+QSharedPointer<LIXmlRemoteDataSourceBuilder> getBuilder(const QString _name);
+} /* namespace sources*/
+
+} /* namespace uploadbuilders */
 
 #endif // LCXMLBUILDERSLOADER_H
