@@ -18,79 +18,46 @@
  * You should have received a copy of the GNU General Public License
  * along with TeleNEXus.  If not, see <https://www.gnu.org/licenses/>.
  */
+#include "LIApplication.h"
 
 class CApplicationInterface : public LIApplication
 {
+private:
+
+  QString __slXmlMainFilePath;
+
 public:
   CApplicationInterface(){}
-  virtual QString getProjectPath() const override { 
-    return __slXmlMainFilePath;}
-  virtual QDir getProjectDir() const override {return __slXmlMainFileDir;}
+  virtual QString getProjectPath() const override;
+
+  virtual QDir getProjectDir() const override;
 
   virtual QSharedPointer<LIXmlRemoteDataSourceBuilder> 
-    getDataSourceBuilder(
-        const QString& _name) const override
-    {
-      return builders::sources::getBuilder(_name);
-    }
+    getDataSourceBuilder( const QString& _name) const override;
 
   QSharedPointer<LIRemoteDataSource> 
-    getDataSource(const QString& _name) const override
-    {
-      auto it = __slRemoteDataSourceMap.find(_name);
-      if(it == __slRemoteDataSourceMap.end()) return nullptr;
-      return it.value();
-    }
+    getDataSource(const QString& _name) const override;
 
   QSharedPointer<LIXmlLayoutBuilder> 
-    getLayoutBuilder(const QString& _name) const override
-    {
-      return builders::layouts::getBuilder(_name);
-    }
+    getLayoutBuilder(const QString& _name) const override;
 
   QSharedPointer<LIXmlWidgetBuilder> 
-    getWidgetBuilder(const QString& _name) const override
-    {
-      return builders::widgets::getBuilder(_name);
-    }
+    getWidgetBuilder(const QString& _name) const override;
 
-  virtual QDomDocument getDomDocument(
-      const QString& _fileName) const override
-  {
-    return loadDomElement( _fileName);
-  }
+  virtual QDomDocument 
+    getDomDocument(const QString& _fileName) const override;
 
-  virtual QSharedPointer<LIWindow> getWindow(
-      const QString& _windowId) const override
-  {
-    return uploadwindows::getWindow(_windowId);
-  }
+  virtual QSharedPointer<LIWindow> 
+    getWindow(const QString& _windowId) const override;
 
-  virtual QSharedPointer<LIKeyboard> getKeyboard(
-      const QString& _keyboardId) const override
-  {
-    return uploadkeyboards::getKeyboard(_keyboardId);
-    
-  }
+  virtual QSharedPointer<LIKeyboard> 
+    getKeyboard(const QString& _keyboardId) const override;
 
-  virtual QString getFontStyle(const QString& _fontId) const override
-  {
-    return LCXmlFonts::instance().getFontStyle(_fontId);
-  }
+  virtual QString getFontStyle(const QString& _fontId) const override;
 
   virtual QSharedPointer<LIDataFormatter> 
-    getDataFormatter(const QString& _formatter) const override
-    {
-      auto format = stddataformatterfactory::getFormatter(_formatter);
-      if(format.isNull())
-      {
-        format  = uploaddataformatters::getDataFormatter(_formatter);
-      }
-      return format;
-    }
+    getDataFormatter(const QString& _formatter) const override;
 
-  virtual QSharedPointer<LIJScriptService> getScriptService(const QString& _scriptId) const override
-  {
-    return uploadjscripts::getScript(_scriptId);
-  }
+  virtual QSharedPointer<LIJScriptService> 
+    getScriptService(const QString& _scriptId) const override;
 };
