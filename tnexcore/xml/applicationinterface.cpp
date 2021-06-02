@@ -20,20 +20,20 @@
  */
 
 #include "applicationinterface.h"
-#include "QString"
+#include "xmlbuilders.h"
 
 QString CApplicationInterface::getProjectPath() const   { return __slXmlMainFilePath;}
 
 
-QDir getProjectDir() const   {return __slXmlMainFileDir;}
+QDir CApplicationInterface::getProjectDir() const   {return __slXmlMainFileDir;}
 
-QSharedPointer<LIXmlRemoteDataSourceBuilder> getDataSourceBuilder( const QString& _name) const  
+QSharedPointer<LIXmlRemoteDataSourceBuilder> CApplicationInterface::getDataSourceBuilder( const QString& _name) const  
 {
   return builders::sources::getBuilder(_name);
 }
 
 QSharedPointer<LIRemoteDataSource> 
-getDataSource(const QString& _name) const  
+CApplicationInterface::getDataSource(const QString& _name) const  
 {
   auto it = __slRemoteDataSourceMap.find(_name);
   if(it == __slRemoteDataSourceMap.end()) return nullptr;
@@ -41,30 +41,30 @@ getDataSource(const QString& _name) const
 }
 
 QSharedPointer<LIXmlLayoutBuilder> 
-getLayoutBuilder(const QString& _name) const  
+CApplicationInterface::getLayoutBuilder(const QString& _name) const  
 {
   return builders::layouts::getBuilder(_name);
 }
 
 QSharedPointer<LIXmlWidgetBuilder> 
-getWidgetBuilder(const QString& _name) const  
+CApplicationInterface::getWidgetBuilder(const QString& _name) const  
 {
   return builders::widgets::getBuilder(_name);
 }
 
-QDomDocument getDomDocument(
+QDomDocument CApplicationInterface::getDomDocument(
     const QString& _fileName) const  
 {
   return loadDomElement( _fileName);
 }
 
-QSharedPointer<LIWindow> getWindow(
+QSharedPointer<LIWindow> CApplicationInterface::getWindow(
     const QString& _windowId) const  
 {
   return uploadwindows::getWindow(_windowId);
 }
 
-QSharedPointer<LIKeyboard> getKeyboard(
+QSharedPointer<LIKeyboard> CApplicationInterface::getKeyboard(
     const QString& _keyboardId) const  
 {
   return uploadkeyboards::getKeyboard(_keyboardId);
