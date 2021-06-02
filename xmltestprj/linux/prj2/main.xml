@@ -18,7 +18,7 @@
     
     <WIDGETBUILDERS>
 
-        <switchWidgetsList      lib="examplewidgets" libhandler="getSwitchWidgetsListBuilder"   />
+        <switchWidgetsList      lib="examplewidgets" handler="getSwitchWidgetsListBuilder"   />
 
         <!-- <widget                 lib="basicwidgets" libhandler="getWidgetBuilder"                /> -->
         <!-- <label                  lib="basicwidgets" libhandler="getTextLabelBuilder"             /> -->
@@ -118,18 +118,18 @@
     <!-- </mainWidget> -->
   <!-- </WINDOW> -->
 
-    <WINDOW 
-      id="exampleSwitchWidget" 
-      visible="true"
-      title="Example Switch Widget" 
-      showMode="normal"
-      modality="false"
-      flags="" 
-      size="300;600"
-      position="300;600" >
-    <mainWidget>
-      <switchWidgetsList file="../prj1/testswitchwidgetlist.xml"/>
-    </mainWidget>
-  </WINDOW>
+    <!-- <WINDOW --> 
+    <!--   id="exampleSwitchWidget" --> 
+    <!--   visible="true" -->
+    <!--   title="Example Switch Widget" --> 
+    <!--   showMode="normal" -->
+    <!--   modality="false" -->
+    <!--   flags="" --> 
+    <!--   size="300;600" -->
+    <!--   position="300;600" > -->
+    <!-- <mainWidget> -->
+    <!--   <switchWidgetsList file="../prj1/testswitchwidgetlist.xml"/> -->
+    <!-- </mainWidget> -->
+  <!-- </WINDOW> -->
 
 </APPLICATION>

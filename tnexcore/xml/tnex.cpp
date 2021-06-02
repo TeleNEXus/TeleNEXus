@@ -19,16 +19,17 @@
  * along with TeleNEXus.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include "tnex.h"
-#include "lcxmlcommon.h"
+#include "xmlcommon.h"
 
 #include "LIApplication.h"
-#include "lcxmlremotedatasourcebuilders.h"
-#include "lcxmllayoutbuilders.h"
-#include "lcxmlwidgetbuilders.h"
+#include "LIXmlRemoteDataSourceBuilder.h"
+#include "LIXmlWidgetBuilder.h"
+#include "LIXmlLayoutBuilder.h"
 #include "lcxmlfonts.h"
 
 #include "LIRemoteDataReader.h"
 #include "LIRemoteDataSource.h"
+#include "xmlbuilders.h"
 #include "lcxmlformatterfactory.h"
 #include "uploadwindows.h"
 #include "uploaddataformatters.h"
@@ -39,6 +40,7 @@
 #include <QApplication>
 #include <QFile>
 #include <QWidget>
+#include <QDomElement>
 
 #include <QFileInfo>
 #include <QDir>
@@ -62,8 +64,8 @@ QDir projectDir(){ return __slXmlMainFileDir; }
 
 static const struct
 {
-    QString xmlMainFileName = "xmlfile";
-    QString xmlMainFilePath = "xmlpath";
+  QString xmlMainFileName = "xmlfile";
+  QString xmlMainFilePath = "xmlpath";
 } __slAppOptionsName;
 
 QMap<QString, QSharedPointer<LIRemoteDataSource>> __slRemoteDataSourceMap;
@@ -94,7 +96,7 @@ public:
     getDataSourceBuilder(
         const QString& _name) const override
     {
-      return LCXmlRemoteDataSourceBuilders::instance().getBuilder(_name);
+      return builders::sources::getBuilder(_name);
     }
 
   QSharedPointer<LIRemoteDataSource> 
@@ -108,13 +110,13 @@ public:
   QSharedPointer<LIXmlLayoutBuilder> 
     getLayoutBuilder(const QString& _name) const override
     {
-      return LCXmlLayoutBuilders::instance().getBuilder(_name);
+      return builders::layouts::getBuilder(_name);
     }
 
   QSharedPointer<LIXmlWidgetBuilder> 
     getWidgetBuilder(const QString& _name) const override
     {
-      return LCXmlWidgetBuilders::instance().getBuilder(_name);
+      return builders::widgets::getBuilder(_name);
     }
 
   virtual QDomDocument getDomDocument(
@@ -133,7 +135,7 @@ public:
       const QString& _keyboardId) const override
   {
     return uploadkeyboards::getKeyboard(_keyboardId);
-    
+
   }
 
   virtual QString getFontStyle(const QString& _fontId) const override
@@ -171,242 +173,235 @@ const LIApplication& tnex::getApplicationInterface()
 int tnex::exec(int argc, char *argv[])
 {
 
-    QApplication app(argc, argv);
-    qDebug() << QCoreApplication::applicationFilePath();
-    qDebug() << QCoreApplication::applicationDirPath();
-    
-    
-    auto lp = QCoreApplication::libraryPaths();
-    auto it = lp.begin();
-    while(it != lp.end())
+  QApplication app(argc, argv);
+  qDebug() << QCoreApplication::applicationFilePath();
+  qDebug() << QCoreApplication::applicationDirPath();
+
+
+  auto lp = QCoreApplication::libraryPaths();
+  auto it = lp.begin();
+  while(it != lp.end())
+  {
+    qDebug() << "libraryPaths: " << *it;
+    it++;
+  }
+
+  QDomDocument domDoc;
+  QString errorStr;
+  int errorLine;
+  int errorColumn;
+
+  QFileInfo fi(argv[0]);
+
+  QCommandLineParser parser;
+
+  QCommandLineOption fileName(__slAppOptionsName.xmlMainFileName,
+      QStringLiteral("Main XML filename."),
+      __slAppOptionsName.xmlMainFileName,
+      QStringLiteral("main.xml"));
+
+  QCommandLineOption pathName(__slAppOptionsName.xmlMainFilePath,
+      QStringLiteral("Root path XML files"),
+      __slAppOptionsName.xmlMainFilePath,
+      fi.absolutePath());
+
+  parser.addOption(fileName);
+  parser.addOption(pathName);
+
+  parser.parse(QApplication::arguments());
+
+
+  {
+    QString file = parser.value(__slAppOptionsName.xmlMainFileName);
+    QString path = parser.value(__slAppOptionsName.xmlMainFilePath);
+
+    QDir dir(path);
+
+    fi.setFile(path + "/" + file);
+    if(dir.exists() && fi.exists())
     {
-        qDebug() << "libraryPaths: " << *it;
-        it++;
+      __slXmlMainFileName    = fi.fileName();
+      __slXmlMainFilePath    = fi.absolutePath() + "/";
+      __slXmlMainFileDir     = fi.absoluteDir();
+      QDir::setCurrent(path);
+      qDebug() << "Project current path = " << QDir::currentPath();
     }
-
-    QDomDocument domDoc;
-    QString errorStr;
-    int errorLine;
-    int errorColumn;
-
-    QFileInfo fi(argv[0]);
-
-    QCommandLineParser parser;
-
-    QCommandLineOption fileName(__slAppOptionsName.xmlMainFileName,
-                                QStringLiteral("Main XML filename."),
-                                __slAppOptionsName.xmlMainFileName,
-                                QStringLiteral("main.xml"));
-
-    QCommandLineOption pathName(__slAppOptionsName.xmlMainFilePath,
-                                QStringLiteral("Root path XML files"),
-                                __slAppOptionsName.xmlMainFilePath,
-                                fi.absolutePath());
-
-    parser.addOption(fileName);
-    parser.addOption(pathName);
-
-    parser.parse(QApplication::arguments());
-
-
+    else
     {
-        QString file = parser.value(__slAppOptionsName.xmlMainFileName);
-        QString path = parser.value(__slAppOptionsName.xmlMainFilePath);
-
-        QDir dir(path);
-
-        fi.setFile(path + "/" + file);
-        if(dir.exists() && fi.exists())
-        {
-            __slXmlMainFileName    = fi.fileName();
-            __slXmlMainFilePath    = fi.absolutePath() + "/";
-            __slXmlMainFileDir     = fi.absoluteDir();
-            QDir::setCurrent(path);
-            qDebug() << "Project current path = " << QDir::currentPath();
-        }
-        else
-        {
-            qDebug() << "Main XML file not found";
-            qDebug() << "File location setting: " << path + "/" + file;
-            parser.showHelp(-1);
-        }
+      qDebug() << "Main XML file not found";
+      qDebug() << "File location setting: " << path + "/" + file;
+      parser.showHelp(-1);
     }
+  }
 
 
-    QFile file(__slXmlMainFilePath + __slXmlMainFileName);
+  QFile file(__slXmlMainFilePath + __slXmlMainFileName);
 
-    if(!domDoc.setContent(&file, true, &errorStr, &errorLine, &errorColumn))
-    {
-        qDebug() << "Application: parse error at line:" << errorLine <<
-                        " column:" << errorColumn << " msg: " << errorStr;
-        qDebug() << "Exit programm";
-        return -1;
-    }
+  if(!domDoc.setContent(&file, true, &errorStr, &errorLine, &errorColumn))
+  {
+    qDebug() << "Application: parse error at line:" << errorLine <<
+      " column:" << errorColumn << " msg: " << errorStr;
+    qDebug() << "Exit programm";
+    return -1;
+  }
 
-    QDomElement rootElement = domDoc.documentElement();
+  QDomElement rootElement = domDoc.documentElement();
 
-    if(rootElement.tagName() != LCXmlCommon::mBaseTags.rootTag)
-    {
-        qDebug() << "Application: wrong root element";
-        qDebug() << "Exit programm";
-        return -1;
-    }
+  if(rootElement.tagName() != xmlcommon::mBaseTags.rootTag)
+  {
+    qDebug() << "Application: wrong root element";
+    qDebug() << "Exit programm";
+    return -1;
+  }
 
-    QDomNode childNode = rootElement.firstChild();
+  QDomNode childNode = rootElement.firstChild();
 
-    if(childNode.isNull())
-    {
-        qDebug() << "Application: no child elements";
-        qDebug() << "Exit programm";
-        return -1;
-    }
+  if(childNode.isNull())
+  {
+    qDebug() << "Application: no child elements";
+    qDebug() << "Exit programm";
+    return -1;
+  }
 
-    addPlaginLibPathes(rootElement);
-    //----------------------------------------------------
-    addSourceBuilders(rootElement);
-    //----------------------------------------------------
-    addSources(rootElement);
-    //----------------------------------------------------
-    addFonts(rootElement);
-    //----------------------------------------------------
-    addFormatters(rootElement);
-    //----------------------------------------------------
-    addLayoutsBuilders(rootElement);
-    //----------------------------------------------------
-    addWidgetsBuilders(rootElement);
-    //----------------------------------------------------
-    addKeyboards(rootElement);
-    //----------------------------------------------------
-    addWindows(rootElement);
-    //----------------------------------------------------
-    addScripts(rootElement);
+  addPlaginLibPathes(rootElement);
+  //----------------------------------------------------
+  addSourceBuilders(rootElement);
+  //----------------------------------------------------
+  addSources(rootElement);
+  //----------------------------------------------------
+  addFonts(rootElement);
+  //----------------------------------------------------
+  addFormatters(rootElement);
+  //----------------------------------------------------
+  addLayoutsBuilders(rootElement);
+  //----------------------------------------------------
+  addWidgetsBuilders(rootElement);
+  //----------------------------------------------------
+  addKeyboards(rootElement);
+  //----------------------------------------------------
+  addWindows(rootElement);
+  //----------------------------------------------------
+  addScripts(rootElement);
 
-    //----------------------------------------------------
-    uploadkeyboards::init();
+  //----------------------------------------------------
+  uploadkeyboards::init();
 
-    uploadwindows::show();
+  uploadwindows::show();
 
 
-    QObject::connect(&app, &QApplication::aboutToQuit,
-                     [&](){
-            qDebug() << "QApplication::aboutToQuit";
-    });
+  QObject::connect(&app, &QApplication::aboutToQuit,
+      [&](){
+        qDebug() << "QApplication::aboutToQuit";
+      });
 
-    return app.exec();
+  return app.exec();
 }
 
 //==============================================================================
 static void addPlaginLibPathes(const QDomElement& _rootElement)
 {
-    QDomNodeList nodes = _rootElement.elementsByTagName(
-            LCXmlCommon::mBaseTags.plaginpath);
+  QDomNodeList nodes = _rootElement.elementsByTagName(
+      xmlcommon::mBaseTags.plaginpath);
 
+  if(!nodes.isEmpty())
+  {
+    nodes = nodes.at(0).toElement().elementsByTagName(
+        xmlcommon::mCommonTags.item);
     if(!nodes.isEmpty())
     {
-        nodes = nodes.at(0).toElement().elementsByTagName(
-                LCXmlCommon::mCommonTags.item);
-        if(!nodes.isEmpty())
+      for(int i = 0; i < nodes.size(); i++)
+      {
+
+        QString path = nodes.at(i).toElement().attribute(
+            xmlcommon::mCommonAttributes.path);
+        if(path.isNull()) continue;
+        QDir dir(path);
+        if(dir.isAbsolute())
         {
-            for(int i = 0; i < nodes.size(); i++)
-            {
-
-                QString path = nodes.at(i).toElement().attribute(
-                        LCXmlCommon::mCommonAttributes.path);
-                if(path.isNull()) continue;
-                QDir dir(path);
-                if(dir.isAbsolute())
-                {
-                    __slPlaginLibPaths << dir.path();
-                    continue;
-                }
-
-                path = QDir::currentPath();
-                QDir::setCurrent(__slXmlMainFilePath);
-                __slPlaginLibPaths << dir.absolutePath();
-                QDir::setCurrent(path);
-            }
+          __slPlaginLibPaths << dir.path();
+          continue;
         }
-    }
 
-    __slPlaginLibPaths << 
-        QCoreApplication::applicationDirPath() + 
-        QStringLiteral("/plaginlibs");
-
-    qDebug() << "PlaginLib paths:";
-    for(int i = 0; i < __slPlaginLibPaths.size(); i++)
-    {
-        qDebug() << "\t\t" << __slPlaginLibPaths.at(i);
+        path = QDir::currentPath();
+        QDir::setCurrent(__slXmlMainFilePath);
+        __slPlaginLibPaths << dir.absolutePath();
+        QDir::setCurrent(path);
+      }
     }
+  }
+
+  __slPlaginLibPaths << 
+    QCoreApplication::applicationDirPath() + 
+    QStringLiteral("/plaginlibs");
+
+  qDebug() << "PlaginLib paths:";
+  for(int i = 0; i < __slPlaginLibPaths.size(); i++)
+  {
+    qDebug() << "\t\t" << __slPlaginLibPaths.at(i);
+  }
 
 }
 
 //==============================================================================
 static void addSourceBuilders(const QDomElement& _rootElement)
 {
-    QDomNodeList nodes = _rootElement.elementsByTagName(
-            LCXmlCommon::mBaseTags.sourceBuilders);
-
-    if(!nodes.isEmpty())
-    {
-        LCXmlRemoteDataSourceBuilders::instance().load(
-                nodes.at(0).toElement(), __slXmlMainFilePath, __slPlaginLibPaths);
-    }
+  builders::sources::upload( 
+      _rootElement, __slXmlMainFilePath, __slPlaginLibPaths);
 }
 
 //==============================================================================
 static void addSources(const QDomElement& _rootElement)
 {
-    if(LCXmlRemoteDataSourceBuilders::instance().noItems()) return;
+  /* if(LCXmlRemoteDataSourceBuilders::instance().noItems()) return; */
 
-    QDomElement element = _rootElement.elementsByTagName(
-            LCXmlCommon::mBaseTags.sources).at(0).toElement();
+  QDomElement element = _rootElement.elementsByTagName(
+      xmlcommon::mBaseTags.sources).at(0).toElement();
 
-    if(element.isNull()) return;
+  if(element.isNull()) return;
 
-    QString attrFile = element.attribute(
-            LCXmlCommon::mCommonAttributes.file);
+  QString attrFile = element.attribute(
+      xmlcommon::mCommonAttributes.file);
 
-    if(!attrFile.isNull())
+  if(!attrFile.isNull())
+  {
+    element = loadDomElement(attrFile).documentElement();
+
+    if(element.tagName() != xmlcommon::mBaseTags.sources)
     {
-        element = loadDomElement(attrFile).documentElement();
-
-        if(element.tagName() != LCXmlCommon::mBaseTags.sources)
-        {
-            return;
-        }
+      return;
     }
+  }
 
-    //Добавление источников данных.
-    QDomNode node = element.firstChild();
+  //Добавление источников данных.
+  QDomNode node = element.firstChild();
 
-    while(!node.isNull())
+  while(!node.isNull())
+  {
+    QDomElement el = node.toElement();
+    auto builder = builders::sources::getBuilder(el.tagName());
+
+    if(!builder.isNull())
     {
-        QDomElement el = node.toElement();
-        auto builder = LCXmlRemoteDataSourceBuilders::instance().getBuilder(
-                el.tagName());
-
-        if(!builder.isNull())
+      auto sources = builder->build(el, __slAppInterface);
+      auto it = sources.begin();
+      while(it != sources.end())
+      {
+        if(__slRemoteDataSourceMap.find(it.key()) != sources.end())
         {
-            auto sources = builder->build(el, __slAppInterface);
-            auto it = sources.begin();
-            while(it != sources.end())
-            {
-                if(__slRemoteDataSourceMap.find(it.key()) != sources.end())
-                {
-                    __slRemoteDataSourceMap.insert(it.key(), it.value());
-                }
-                it++;
-            }
+          __slRemoteDataSourceMap.insert(it.key(), it.value());
         }
-        node = node.nextSibling();
+        it++;
+      }
     }
+    node = node.nextSibling();
+  }
 }
 
 //==============================================================================
 static void addFonts(const QDomElement& _rootElement)
 {
   QDomElement el = _rootElement.firstChildElement(
-      LCXmlCommon::mBaseTags.fonts);
+      xmlcommon::mBaseTags.fonts);
 
   if(el.isNull()) return;
 
@@ -417,7 +412,7 @@ static void addFonts(const QDomElement& _rootElement)
 static void addFormatters(const QDomElement& _rootElement)
 {
   QDomElement el = 
-    _rootElement.firstChildElement(LCXmlCommon::mBaseTags.formatters);
+    _rootElement.firstChildElement(xmlcommon::mBaseTags.formatters);
 
   if(el.isNull()) return;
 
@@ -427,29 +422,13 @@ static void addFormatters(const QDomElement& _rootElement)
 //==============================================================================
 static void addLayoutsBuilders(const QDomElement& _rootElement)
 {
-    //Загрузка построителей источников данных.
-    QDomNodeList nodes = _rootElement.elementsByTagName(
-            LCXmlCommon::mBaseTags.layoutBuilders);
-
-    if(!nodes.isEmpty())
-    {
-        LCXmlLayoutBuilders::instance().load(nodes.at(0).toElement(), 
-                __slXmlMainFilePath, __slPlaginLibPaths);
-    }
+  builders::layouts::upload( _rootElement, __slXmlMainFilePath, __slPlaginLibPaths);
 }
 
 //==============================================================================
 static void addWidgetsBuilders(const QDomElement& _rootElement)
 {
-    //Загрузка построителей источников данных.
-    QDomNodeList nodes = _rootElement.elementsByTagName(
-            LCXmlCommon::mBaseTags.widgetBuilders);
-
-    if(!nodes.isEmpty())
-    {
-        LCXmlWidgetBuilders::instance().load(nodes.at(0).toElement(), 
-                __slXmlMainFilePath, __slPlaginLibPaths);
-    }
+  builders::widgets::upload( _rootElement, __slXmlMainFilePath, __slPlaginLibPaths);
 }
 
 //==============================================================================
@@ -457,12 +436,12 @@ static void addWindows(const QDomElement& _rootElement)
 {
   for(auto node = 
       _rootElement.firstChildElement(
-        LCXmlCommon::mBaseTags.window); 
+        xmlcommon::mBaseTags.window); 
 
       !node.isNull(); 
 
       node = node.nextSiblingElement(
-        LCXmlCommon::mBaseTags.window))
+        xmlcommon::mBaseTags.window))
   {
     QDomElement el = node.toElement();
 
@@ -477,12 +456,12 @@ static void addKeyboards(const QDomElement& _rootElement)
 {
   for(auto node = 
       _rootElement.firstChildElement(
-        LCXmlCommon::mBaseTags.keyboard); 
+        xmlcommon::mBaseTags.keyboard); 
 
       !node.isNull(); 
 
       node = node.nextSiblingElement(
-        LCXmlCommon::mBaseTags.keyboard))
+        xmlcommon::mBaseTags.keyboard))
   {
     QDomElement el = node.toElement();
     if(el.isNull()) continue;
@@ -493,27 +472,27 @@ static void addKeyboards(const QDomElement& _rootElement)
 static void addScripts(const QDomElement& _rootElement)
 {
   uploadjscripts::upload(
-      _rootElement.firstChildElement(LCXmlCommon::mBaseTags.scripts), 
+      _rootElement.firstChildElement(xmlcommon::mBaseTags.scripts), 
       __slAppInterface);
 }
 
 //==============================================================================
 static QDomDocument loadDomElement(const QString& _fileName)
 {
-    QFile file(__slXmlMainFilePath + _fileName);
+  QFile file(__slXmlMainFilePath + _fileName);
 
-    QDomDocument domDoc;
-    QString errorStr;
-    int errorLine;
-    int errorColumn;
+  QDomDocument domDoc;
+  QString errorStr;
+  int errorLine;
+  int errorColumn;
 
-    if(!domDoc.setContent(&file, true, &errorStr, &errorLine, &errorColumn))
-    {
-        qDebug() << 
-            "Parse file "       << file.fileName() << 
-            " error at line:"   << errorLine <<
-            " column:"          << errorColumn << 
-            " msg: "            << errorStr;
-    }
-    return domDoc;
+  if(!domDoc.setContent(&file, true, &errorStr, &errorLine, &errorColumn))
+  {
+    qDebug() << 
+      "Parse file "       << file.fileName() << 
+      " error at line:"   << errorLine <<
+      " column:"          << errorColumn << 
+      " msg: "            << errorStr;
+  }
+  return domDoc;
 }

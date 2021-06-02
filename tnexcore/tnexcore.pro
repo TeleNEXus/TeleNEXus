@@ -96,12 +96,9 @@ jscripts/jscriptservice/cqjsprocess.cpp \
 jscripts/jscriptservice/jsappservice/lcqjsappservice.cpp \
 jscripts/jscriptservice/jsappservice/lcqreadfromsourcereq.cpp \
 jscripts/jscriptservice/jsappservice/lcqwritetosourcereq.cpp \
-xml/lcxmlcommon.cpp \
+xml/xmlcommon.cpp \
 xml/tnex.cpp \
-xml/lcxmlbuildersloader.cpp \
-xml/lcxmllayoutbuilders.cpp \
-xml/lcxmlremotedatasourcebuilders.cpp \
-xml/lcxmlwidgetbuilders.cpp \
+xml/xmlbuilders.cpp \
 xml/lcxmlfonts.cpp \
 xml/uploadjscripts.cpp \
 xml/uploaddataformatters.cpp \
@@ -136,7 +133,6 @@ HEADERS += \
 basiclayouts/commonbuilderslayout.h \
 basiclayouts/lcxmlboxlayoutbuilder.h    \
 basiclayouts/lcxmlgridlayoutbuilder.h   \
-basiclayouts/basiclayoutbuilders.h   \
 basicwidgets/widgets/lcqlistwidget.h \
 basicwidgets/widgets/lcqremcombobox.h \
 basicwidgets/widgets/lcqremcombolabel.h \
@@ -159,7 +155,7 @@ basicwidgets/builders/lcbuilderscommon.h \
 basicwidgets/builders/lcqwidgetvisiblecontrol.h \
 basicwidgets/builders/lcxmlstackedwidgetbuilder.h \
 basicwidgets/builders/lcxmlsplitterbuilder.h \
-basicwidgets/builders/basicwidgetbuilders.h \
+basicwidgets/basicwidgetbuilders.h \
 dataformatters/lcformatterbase.h \
 dataformatters/lcformatterbitfield.h \
 dataformatters/lcformatterbits.h \
@@ -187,12 +183,10 @@ jscripts/jscriptservice/cqjsprocess.h \
 jscripts/jscriptservice/jsappservice/lcqjsappservice.h \
 jscripts/jscriptservice/jsappservice/lcqreadfromsourcereq.h \
 jscripts/jscriptservice/jsappservice/lcqwritetosourcereq.h \
-xml/lcxmlcommon.h \
+xml/xmlcommon.h \
 xml/tnex.h \
-xml/lcxmlbuildersloader.h \
+xml/xmlbuilders.h \
 xml/lcxmllayoutbuilders.h \
-xml/lcxmlremotedatasourcebuilders.h \
-xml/lcxmlwidgetbuilders.h \
 xml/lcxmlfonts.h \
 xml/uploadjscripts.h \
 xml/uploadkeyboards.h \
