@@ -20,7 +20,7 @@
  */
 
 #include "lcxmlstackedwidgetbuilder.h"
-#include "lcqstackedwidget.h"
+#include "widgets/lcqstackedwidget.h"
 #include "LIApplication.h"
 #include "lcbuilderscommon.h"
 #include <QDomElement>

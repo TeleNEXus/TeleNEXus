@@ -26,7 +26,7 @@
 #include <QBoxLayout>
 #include <QDebug>
 #include <qnamespace.h>
-#include "layoutbuilderscommon.h"
+#include "commonbuilderslayout.h"
 //==============================================================================
 const LCXmlBoxLayoutBuilder::SAttributes LCXmlBoxLayoutBuilder::mAttributes;
 const LCXmlBoxLayoutBuilder::STags LCXmlBoxLayoutBuilder::mTags;

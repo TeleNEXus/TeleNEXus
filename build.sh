@@ -1,7 +1,7 @@
 #!/bin/bash
 
-v_basiclayouts="`pwd`/basiclayouts"
-v_basicwidgets="`pwd`/basicwidgets"
+# v_basiclayouts="`pwd`/basiclayouts"
+# v_basicwidgets="`pwd`/basicwidgets"
 v_modbussource="`pwd`/datasources/modbussource"
 v_localsource="`pwd`/datasources/localsource"
 v_tnexcore="`pwd`/tnexcore"
@@ -53,8 +53,8 @@ makePrg ()
 if [ "$1" == "--clear" ]
 then
     echo "$v_offset_line Clear builds"
-    deleteDir "$v_basiclayouts"
-    deleteDir "$v_basicwidgets"
+    # deleteDir "$v_basiclayouts"
+    # deleteDir "$v_basicwidgets"
     deleteDir "$v_modbussource"
     deleteDir "$v_localsource"
     deleteDir "$v_tnexcore"
@@ -62,8 +62,8 @@ then
     exit 0
 fi
 
-createDir "$v_basiclayouts"
-createDir "$v_basicwidgets"
+# createDir "$v_basiclayouts"
+# createDir "$v_basicwidgets"
 createDir "$v_modbussource"
 createDir "$v_localsource"
 createDir "$v_tnexcore"
@@ -71,16 +71,16 @@ createDir "$v_examplewidgets"
 
 # Запус сборщика Qt обязателен для любого варианта.
 echo "$v_offset_line qmake"
-makePrg "$v_basiclayouts" "qmake"
-makePrg "$v_basicwidgets" "qmake"
+# makePrg "$v_basiclayouts" "qmake"
+# makePrg "$v_basicwidgets" "qmake"
 makePrg "$v_modbussource" "qmake"
 makePrg "$v_localsource" "qmake"
 makePrg "$v_tnexcore" "qmake"
 makePrg "$v_examplewidgets" "qmake"
 
 echo "$v_offset_line make $1"
-makePrg "$v_basiclayouts" "make" "$1"
-makePrg "$v_basicwidgets" "make" "$1"
+# makePrg "$v_basiclayouts" "make" "$1"
+# makePrg "$v_basicwidgets" "make" "$1"
 makePrg "$v_modbussource" "make" "$1"
 makePrg "$v_localsource" "make" "$1"
 makePrg "$v_tnexcore" "make" "$1"

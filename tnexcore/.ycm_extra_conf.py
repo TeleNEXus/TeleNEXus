@@ -72,8 +72,6 @@ flags = [
              '-I', '../common',
              '-I', '../tnexcore/basicwidgets',
              '-I', '../tnexcore/basicwidgets/builders',
-             '-I', '../tnexcore/basicwidgets/common',
-             '-I', '../tnexcore/basicwidgets/widgets',
              '-I', '../tnexcore/basiclayouts',
              '-I', '../tnexcore/window',
              '-I', '../tnexcore/keyboard',

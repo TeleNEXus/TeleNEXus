@@ -24,6 +24,7 @@
 #include <QMap>
 #include <QLibrary>
 #include <QCoreApplication>
+#include "basiclayoutbuilders.h"
 
 //==============================================================================
 static QMap<QString, QSharedPointer<LIXmlLayoutBuilder>> __slBuildersMap;
@@ -32,6 +33,7 @@ static QMap<QString, QSharedPointer<LIXmlLayoutBuilder>> __slBuildersMap;
 LCXmlLayoutBuilders::LCXmlLayoutBuilders() :
         LCXmlBuildersLoader( LCXmlCommon::mBaseTags.layoutBuilders )
 {
+  __slBuildersMap.unite(basiclayoutbuilders::getBuilders());
 }
 
 //------------------------------------------------------------------------------

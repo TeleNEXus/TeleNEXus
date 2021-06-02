@@ -19,7 +19,7 @@
  * along with TeleNEXus.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include "lcxmlremcomboboxbuilder.h"
-#include "lcqremcombobox.h"
+#include "widgets/lcqremcombobox.h"
 #include "lcbuilderscommon.h"
 #include "LIApplication.h"
 #include "LIWindow.h"

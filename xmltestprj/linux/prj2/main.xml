@@ -11,32 +11,30 @@
     <SOURCES file="sources.xml"/>
     
     <LAYOUTBUILDERS>
-        <layoutGrid     lib="basiclayouts" libhandler="getGridLayoutBuilder" />
-        <layoutVBox     lib="basiclayouts" libhandler="getVBoxLayoutBuilder" />
-        <layoutHBox     lib="basiclayouts" libhandler="getHBoxLayoutBuilder" />
+        <!-- <layoutGrid     lib="basiclayouts" libhandler="getGridLayoutBuilder" /> -->
+        <!-- <layoutVBox     lib="basiclayouts" libhandler="getVBoxLayoutBuilder" /> -->
+        <!-- <layoutHBox     lib="basiclayouts" libhandler="getHBoxLayoutBuilder" /> -->
     </LAYOUTBUILDERS>
     
     <WIDGETBUILDERS>
 
-
         <switchWidgetsList      lib="examplewidgets" libhandler="getSwitchWidgetsListBuilder"   />
 
-
-        <widget                 lib="basicwidgets" libhandler="getWidgetBuilder"                />
-        <label                  lib="basicwidgets" libhandler="getTextLabelBuilder"             />
-        <table                  lib="basicwidgets" libhandler="getTableWidgetBuilder"           />
-        <dataLabel              lib="basicwidgets" libhandler="getRemLabelBuilder"              />
-        <dataLineEdit           lib="basicwidgets" libhandler="getRemLineEditBuilder"           />
-        <dataComboBox           lib="basicwidgets" libhandler="getRemComboBoxBuilder"           />
-        <dataComboLabel         lib="basicwidgets" libhandler="getRemComboLabelBuilder"         />
-        <tabs                   lib="basicwidgets" libhandler="getTabWidgetBuilder"             />
-        <!-- <switchWidgetsList      lib="basicwidgets" libhandler="getSwitchWidgetsListBuilder"     /> -->
-        <scrollArea             lib="basicwidgets" libhandler="getScrollAreaBuilder"            />
-        <button                 lib="basicwidgets" libhandler="getButtonBuilder"                />
-        <listWidget             lib="basicwidgets" libhandler="getListWidgetBuilder"            />
-        <stackedWidget          lib="basicwidgets" libhandler="getStackedWidgetBuilder"         />
-        <splitterVertical       lib="basicwidgets" libhandler="getVerticalSplitterBuilder"      />
-        <splitterHorizontal     lib="basicwidgets" libhandler="getHorizontalSplitterBuilder"    />
+        <!-- <widget                 lib="basicwidgets" libhandler="getWidgetBuilder"                /> -->
+        <!-- <label                  lib="basicwidgets" libhandler="getTextLabelBuilder"             /> -->
+        <!-- <table                  lib="basicwidgets" libhandler="getTableWidgetBuilder"           /> -->
+        <!-- <dataLabel              lib="basicwidgets" libhandler="getRemLabelBuilder"              /> -->
+        <!-- <dataLineEdit           lib="basicwidgets" libhandler="getRemLineEditBuilder"           /> -->
+        <!-- <dataComboBox           lib="basicwidgets" libhandler="getRemComboBoxBuilder"           /> -->
+        <!-- <dataComboLabel         lib="basicwidgets" libhandler="getRemComboLabelBuilder"         /> -->
+        <!-- <tabs                   lib="basicwidgets" libhandler="getTabWidgetBuilder"             /> -->
+        <!-- <!-1- <switchWidgetsList      lib="basicwidgets" libhandler="getSwitchWidgetsListBuilder"     /> -1-> -->
+        <!-- <scrollArea             lib="basicwidgets" libhandler="getScrollAreaBuilder"            /> -->
+        <!-- <button                 lib="basicwidgets" libhandler="getButtonBuilder"                /> -->
+        <!-- <listWidget             lib="basicwidgets" libhandler="getListWidgetBuilder"            /> -->
+        <!-- <stackedWidget          lib="basicwidgets" libhandler="getStackedWidgetBuilder"         /> -->
+        <!-- <splitterVertical       lib="basicwidgets" libhandler="getVerticalSplitterBuilder"      /> -->
+        <!-- <splitterHorizontal     lib="basicwidgets" libhandler="getHorizontalSplitterBuilder"    /> -->
     </WIDGETBUILDERS>
 
     <FONTS file="fonts.xml"/>
