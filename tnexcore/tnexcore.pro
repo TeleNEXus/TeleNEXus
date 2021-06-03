@@ -102,8 +102,8 @@ xml/xmlbuilders.cpp \
 xml/lcxmlfonts.cpp \
 xml/uploadjscripts.cpp \
 xml/uploaddataformatters.cpp \
-xml/uploadkeyboards.cpp \
-xml/uploadwindows.cpp \
+xml/xmlkeyboards.cpp \
+xml/xmlwindows.cpp \
 keyboard/lckeyboard.cpp \
 window/lcwindow.cpp \
 main.cpp \
@@ -189,8 +189,8 @@ xml/xmlbuilders.h \
 xml/lcxmllayoutbuilders.h \
 xml/lcxmlfonts.h \
 xml/uploadjscripts.h \
-xml/uploadkeyboards.h \
-xml/uploadwindows.h \
+xml/xmlkeyboards.h \
+xml/xmlwindows.h \
 keyboard/lckeyboard.h \
 window/lcwindow.h \
 

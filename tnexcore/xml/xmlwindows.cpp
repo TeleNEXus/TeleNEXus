@@ -394,8 +394,8 @@ static LCWindow* uploadWindow(QWidget* _widget, const QDomElement& _element)
   return window;
 }
 
-//==============================================================================uploadwindow
-namespace uploadwindows
+//==============================================================================xmlwindows
+namespace xmlwindows
 {
 
 //------------------------------------------------------------------------------

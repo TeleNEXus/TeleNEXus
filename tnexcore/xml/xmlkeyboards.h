@@ -18,19 +18,21 @@
  * You should have received a copy of the GNU General Public License
  * along with TeleNEXus.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef UPLOADJSCRIPT_H_ 
-#define UPLOADJSCRIPT_H_
+#ifndef UPLOADKEYBOARD_H_
+#define UPLOADKEYBOARD_H_
 
 #include <QSharedPointer>
 
 class QDomElement;
 class LIApplication;
-class LIJScriptService;
+class LIKeyboard;
 
-namespace uploadjscripts
+namespace xmlkeyboards 
 {
 void upload( const QDomElement &_element, const LIApplication& _app);
-QSharedPointer<LIJScriptService> getScript(const QString& _scriptId);
+void init();
+QSharedPointer<LIKeyboard> getKeyboard(const QString& _keyboardId);
 }
 
-#endif /* UPLOADJSCRIPT_H_ */
+#endif /* UPLOADKEYBOARD_H_ */
+

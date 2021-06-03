@@ -23,11 +23,10 @@
 class CApplicationInterface : public LIApplication
 {
 private:
-
-  QString __slXmlMainFilePath;
-
+  void* mpLocal;
 public:
-  CApplicationInterface(){}
+  CApplicationInterface();
+  ~CApplicationInterface();
   virtual QString getProjectPath() const override;
 
   virtual QDir getProjectDir() const override;
