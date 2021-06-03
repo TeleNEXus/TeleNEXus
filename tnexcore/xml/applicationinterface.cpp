@@ -1,4 +1,4 @@
-/* 
+/*
  * TeleNEXus is a simple SCADA programm
  *
  * Copyright (C) 2020 Sergey S. Kuzmenko
@@ -21,63 +21,109 @@
 
 #include "applicationinterface.h"
 #include "xmlbuilders.h"
+#include "xmldatasources.h"
+#include "xmlcommon.h"
+#include "uploadwindows.h"
+#include "uploadkeyboards.h"
 
-QString CApplicationInterface::getProjectPath() const   { return __slXmlMainFilePath;}
+#include "lcxmlfonts.h"
+#include "lcxmlformatterfactory.h"
+#include "uploaddataformatters.h"
+#include "uploadjscripts.h"
 
+#include <QDir>
 
-QDir CApplicationInterface::getProjectDir() const   {return __slXmlMainFileDir;}
-
-QSharedPointer<LIXmlRemoteDataSourceBuilder> CApplicationInterface::getDataSourceBuilder( const QString& _name) const  
+//==============================================================================
+struct SLocalData
 {
-  return builders::sources::getBuilder(_name);
+  QString xmlMainPath;
+  QDir    xmlMainDir;
+};
+#define toLocalData(p) (static_cast<SLocalData*>(p))
+#define ld (*toLocalData(mpLocal))
+
+//==============================================================================
+CApplicationInterface::CApplicationInterface()
+{
+  mpLocal = new SLocalData;
 }
 
-QSharedPointer<LIRemoteDataSource> 
-CApplicationInterface::getDataSource(const QString& _name) const  
+//------------------------------------------------------------------------------
+CApplicationInterface::~CApplicationInterface()
 {
-  auto it = __slRemoteDataSourceMap.find(_name);
-  if(it == __slRemoteDataSourceMap.end()) return nullptr;
-  return it.value();
+  delete toLocalData(mpLocal);
 }
 
-QSharedPointer<LIXmlLayoutBuilder> 
-CApplicationInterface::getLayoutBuilder(const QString& _name) const  
+//------------------------------------------------------------------------------
+QString CApplicationInterface::getProjectPath() const
 {
-  return builders::layouts::getBuilder(_name);
+  return ld.xmlMainPath;
 }
 
-QSharedPointer<LIXmlWidgetBuilder> 
-CApplicationInterface::getWidgetBuilder(const QString& _name) const  
+//------------------------------------------------------------------------------
+QDir CApplicationInterface::getProjectDir() const
 {
-  return builders::widgets::getBuilder(_name);
+  return ld.xmlMainDir;
 }
 
+//------------------------------------------------------------------------------
+QSharedPointer<LIXmlRemoteDataSourceBuilder>
+CApplicationInterface::getDataSourceBuilder( const QString& _id) const
+{
+  return builders::sources::getBuilder(_id);
+}
+
+//------------------------------------------------------------------------------
+QSharedPointer<LIRemoteDataSource>
+CApplicationInterface::getDataSource(const QString& _id) const
+{
+  return xmldatasources::getSource(_id);
+}
+
+//------------------------------------------------------------------------------
+QSharedPointer<LIXmlLayoutBuilder>
+CApplicationInterface::getLayoutBuilder(const QString& _id) const
+{
+  return builders::layouts::getBuilder(_id);
+}
+
+//------------------------------------------------------------------------------
+QSharedPointer<LIXmlWidgetBuilder>
+CApplicationInterface::getWidgetBuilder(const QString& _id) const
+{
+  return builders::widgets::getBuilder(_id);
+}
+
+//------------------------------------------------------------------------------
 QDomDocument CApplicationInterface::getDomDocument(
-    const QString& _fileName) const  
+    const QString& _fileName) const
 {
-  return loadDomElement( _fileName);
+  return xmlcommon::loadDomDocument(_fileName, *this);
 }
 
+//------------------------------------------------------------------------------
 QSharedPointer<LIWindow> CApplicationInterface::getWindow(
-    const QString& _windowId) const  
+    const QString& _windowId) const
 {
-  return uploadwindows::getWindow(_windowId);
+  return xmlwindows::getWindow(_windowId);
 }
 
+//------------------------------------------------------------------------------
 QSharedPointer<LIKeyboard> CApplicationInterface::getKeyboard(
-    const QString& _keyboardId) const  
+    const QString& _keyboardId) const
 {
-  return uploadkeyboards::getKeyboard(_keyboardId);
-
+  return xmlkeyboards::getKeyboard(_keyboardId);
 }
 
-QString getFontStyle(const QString& _fontId) const  
+//------------------------------------------------------------------------------
+QString CApplicationInterface::getFontStyle(const QString& _fontId) const
 {
   return LCXmlFonts::instance().getFontStyle(_fontId);
 }
 
-QSharedPointer<LIDataFormatter> 
-getDataFormatter(const QString& _formatter) const  
+//------------------------------------------------------------------------------
+QSharedPointer<LIDataFormatter>
+CApplicationInterface::getDataFormatter(const QString& _formatter) const
 {
   auto format = stddataformatterfactory::getFormatter(_formatter);
   if(format.isNull())
@@ -87,7 +133,9 @@ getDataFormatter(const QString& _formatter) const
   return format;
 }
 
-QSharedPointer<LIJScriptService> getScriptService(const QString& _scriptId) const  
+//------------------------------------------------------------------------------
+QSharedPointer<LIJScriptService>
+CApplicationInterface::getScriptService(const QString& _scriptId) const
 {
   return uploadjscripts::getScript(_scriptId);
 }

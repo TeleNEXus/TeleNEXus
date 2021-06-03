@@ -19,7 +19,7 @@
  * along with TeleNEXus.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "uploadkeyboards.h"
+#include "xmlkeyboards.h"
 #include "xmlcommon.h"
 #include "LIApplication.h" 
 #include "lckeyboard.h"
@@ -40,7 +40,7 @@ static const struct
 QMap<QString, QSharedPointer<LIKeyboard>> __slKeyboards;
 
 //==============================================================================
-namespace uploadkeyboards 
+namespace xmlkeyboards 
 {
 
 //------------------------------------------------------------------------------

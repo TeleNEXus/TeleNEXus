@@ -31,10 +31,10 @@
 #include "LIRemoteDataSource.h"
 #include "xmlbuilders.h"
 #include "lcxmlformatterfactory.h"
-#include "uploadwindows.h"
+#include "xmlwindows.h"
 #include "uploaddataformatters.h"
 #include "uploadjscripts.h"
-#include "uploadkeyboards.h"
+#include "xmlkeyboards.h"
 
 #include <QDebug>
 #include <QApplication>
@@ -128,13 +128,13 @@ public:
   virtual QSharedPointer<LIWindow> getWindow(
       const QString& _windowId) const override
   {
-    return uploadwindows::getWindow(_windowId);
+    return xmlwindows::getWindow(_windowId);
   }
 
   virtual QSharedPointer<LIKeyboard> getKeyboard(
       const QString& _keyboardId) const override
   {
-    return uploadkeyboards::getKeyboard(_keyboardId);
+    return xmlkeyboards::getKeyboard(_keyboardId);
 
   }
 
@@ -284,9 +284,9 @@ int tnex::exec(int argc, char *argv[])
   addScripts(rootElement);
 
   //----------------------------------------------------
-  uploadkeyboards::init();
+  xmlkeyboards::init();
 
-  uploadwindows::show();
+  xmlwindows::show();
 
 
   QObject::connect(&app, &QApplication::aboutToQuit,
@@ -447,7 +447,7 @@ static void addWindows(const QDomElement& _rootElement)
 
     if(el.isNull()) continue;
 
-    uploadwindows::upload(el, __slAppInterface);
+    xmlwindows::upload(el, __slAppInterface);
   }
 }
 
@@ -465,7 +465,7 @@ static void addKeyboards(const QDomElement& _rootElement)
   {
     QDomElement el = node.toElement();
     if(el.isNull()) continue;
-    uploadkeyboards::upload(el,__slAppInterface);
+    xmlkeyboards::upload(el,__slAppInterface);
   }
 }
 //==============================================================================

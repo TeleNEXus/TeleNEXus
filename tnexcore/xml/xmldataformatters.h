@@ -18,21 +18,21 @@
  * You should have received a copy of the GNU General Public License
  * along with TeleNEXus.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef UPLOADWINDOWS_H_
-#define UPLOADWINDOWS_H_
+#ifndef UPLOADDATAFORMATTERS_H_
+#define UPLOADDATAFORMATTERS_H_
 
 #include <QSharedPointer>
 
 class QDomElement;
 class LIApplication;
-class LIWindow;
+class LIDataFormatter;
 
-
-namespace uploadwindows
+namespace xmldataformatters
 {
-void upload( const QDomElement &_element, const LIApplication& _app);
-void show();
-QSharedPointer<LIWindow> getWindow(const QString& _windowId);
+//------------------------------------------------------------------------------
+extern void upload( const QDomElement &_element, const LIApplication& _app);
+//------------------------------------------------------------------------------
+extern QSharedPointer<LIDataFormatter> getDataFormatter(const QString& _formatterId);
 }
 
-#endif /* UPLOADWINDOWS_H_ */
+#endif  //UPLOADDATAFORMATTERS_H_

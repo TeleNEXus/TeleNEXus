@@ -19,7 +19,7 @@
  * along with TeleNEXus.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "uploaddataformatters.h"
+#include "xmldataformatters.h"
 #include "LIApplication.h"
 #include "LIDataFormatter.h"
 #include "xmlcommon.h"
@@ -128,8 +128,8 @@ public:
 
 }__slUploader;
 
-//==============================================================================uploaddataformatters
-namespace uploaddataformatters
+//==============================================================================xmldataformatters
+namespace xmldataformatters
 {
 
 
