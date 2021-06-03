@@ -26,10 +26,6 @@
 namespace xmlcommon
 {
 
-const SBaseTags          mBaseTags;
-const SCommonTags        mCommonTags;
-const SCommonAttributes  mCommonAttributes;
-
 QDomDocument loadDomDocument (const QString& _fileName)
 {
     QFile file(_fileName);

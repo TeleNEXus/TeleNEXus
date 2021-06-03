@@ -99,7 +99,6 @@ LCJSFormatter::LCJSFormatter(
     const QMap<QString, QString>& _attributes):
   mpData(new SLocalData(LCQJSFormatterInterface::create()))
 {
-  auto fi = mpLocalData->formatterInterface;
 
   QJSValue jsvalue = 
     mpLocalData->jsengine->newQObject(

@@ -96,9 +96,7 @@ jscripts/jscriptservice/cqjsprocess.cpp \
 jscripts/jscriptservice/jsappservice/lcqjsappservice.cpp \
 jscripts/jscriptservice/jsappservice/lcqreadfromsourcereq.cpp \
 jscripts/jscriptservice/jsappservice/lcqwritetosourcereq.cpp \
-xml/applicationinterface.cpp \
 xml/xmlcommon.cpp \
-xml/tnex.cpp \
 xml/xmlbuilders.cpp \
 xml/xmlfonts.cpp \
 xml/xmljscripts.cpp \
@@ -106,8 +104,10 @@ xml/xmldataformatters.cpp \
 xml/xmldatasources.cpp \
 xml/xmlkeyboards.cpp \
 xml/xmlwindows.cpp \
+xml/xmlpluginpathes.cpp \
 keyboard/lckeyboard.cpp \
 window/lcwindow.cpp \
+applicationinterface.cpp \
 main.cpp \
 
 
@@ -185,9 +185,7 @@ jscripts/jscriptservice/cqjsprocess.h \
 jscripts/jscriptservice/jsappservice/lcqjsappservice.h \
 jscripts/jscriptservice/jsappservice/lcqreadfromsourcereq.h \
 jscripts/jscriptservice/jsappservice/lcqwritetosourcereq.h \
-xml/applicationinterface.h \
 xml/xmlcommon.h \
-xml/tnex.h \
 xml/xmlbuilders.h \
 xml/xmlfonts.h \
 xml/xmldataformatters.h \
@@ -195,8 +193,9 @@ xml/xmldatasources.h \
 xml/xmljscripts.h \
 xml/xmlkeyboards.h \
 xml/xmlwindows.h \
+xml/xmlpluginpathes.h \
 keyboard/lckeyboard.h \
 window/lcwindow.h \
-
+applicationinterface.h \
 
 
