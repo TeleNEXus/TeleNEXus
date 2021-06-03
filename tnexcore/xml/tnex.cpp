@@ -28,7 +28,7 @@
 #include "LIXmlRemoteDataSourceBuilder.h"
 #include "LIXmlWidgetBuilder.h"
 #include "LIXmlLayoutBuilder.h"
-#include "lcxmlfonts.h"
+#include "xmlfonts.h"
 
 #include "LIRemoteDataReader.h"
 #include "LIRemoteDataSource.h"
@@ -284,12 +284,7 @@ static void addSources(const QDomElement& _rootElement)
 //==============================================================================
 static void addFonts(const QDomElement& _rootElement)
 {
-  QDomElement el = _rootElement.firstChildElement(
-      xmlcommon::mBaseTags.fonts);
-
-  if(el.isNull()) return;
-
-  LCXmlFonts::instance().create(el, CApplicationInterface::getInstance());
+  xmlfonts::upload(_rootElement);
 }
 
 //==============================================================================

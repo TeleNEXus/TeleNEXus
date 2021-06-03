@@ -26,20 +26,11 @@
 class QDomElement;
 class LIApplication;
 
-class LCXmlFonts
-{
-private:
-  LCXmlFonts();
-  ~LCXmlFonts();
-  LCXmlFonts(const LCXmlFonts&) = delete;
-  LCXmlFonts& operator=(const LCXmlFonts&) = delete;
-public:
-  static LCXmlFonts& instance();
-  void create(
-      const QDomElement &_element, 
-      const LIApplication& _app);
 
-  QString getFontStyle(const QString& _fontId);
-};
+namespace xmlfonts
+{
+void upload(const QDomElement& _rootElement);
+QString getFontStyle(const QString& _id);
+}
 
 #endif /* LCXMLFONTS_H_ */

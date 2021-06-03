@@ -30,10 +30,7 @@ namespace xmlcommon
 {
 struct SBaseTags
 {
-  /* QString rootTag         = "APPLICATION"; */
-  QString fonts           = "FONTS";
   QString plaginpath      = "PLAGINPATHS";
-  /* QString scripts         = "SCRIPTS"; */
   QString formatters      = "FORMATTERS";
 };
 
