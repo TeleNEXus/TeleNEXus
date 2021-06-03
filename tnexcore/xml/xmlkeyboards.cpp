@@ -21,11 +21,16 @@
 
 #include "xmlkeyboards.h"
 #include "xmlcommon.h"
-#include "LIApplication.h" 
 #include "lckeyboard.h"
+#include "applicationinterface.h"
 
 #include <QDomElement>
 #include <QDebug>
+
+static const struct
+{
+  QString keyboard = "KEYBOARD";
+}__slTags;
 
 static const struct
 {
@@ -44,39 +49,54 @@ namespace xmlkeyboards
 {
 
 //------------------------------------------------------------------------------
-void upload( const QDomElement &_element, const LIApplication& _app)
+void upload( const QDomElement &_rootElement)
 {
-  QString attr_id = _element.attribute(__slAttribubes.id);
-  if(attr_id.isNull()) return;
 
-  QString attr_stream_source = _element.attribute(__slAttribubes.streamSource);
-  if(attr_stream_source.isNull()) return;
-  auto stream_source = _app.getDataSource(attr_stream_source);
-  if(stream_source.isNull()) return;
+  const auto upload_local = [](const QDomElement _element)
+  {
+    const LIApplication& app = CApplicationInterface::getInstance();
+    QString attr_id = _element.attribute(__slAttribubes.id);
+    if(attr_id.isNull()) return;
 
-  QString attr_stream_name = _element.attribute(__slAttribubes.streamName);
-  if(attr_stream_name.isNull()) return;
+    QString attr_stream_source = _element.attribute(__slAttribubes.streamSource);
+    if(attr_stream_source.isNull()) return;
+    auto stream_source = app.getDataSource(attr_stream_source);
+    if(stream_source.isNull()) return;
 
-  QString attr_data_source = _element.attribute(__slAttribubes.dataSource);
-  if(attr_data_source.isNull()) return;
-  auto data_source = _app.getDataSource(attr_data_source);
-  if(data_source.isNull()) return;
+    QString attr_stream_name = _element.attribute(__slAttribubes.streamName);
+    if(attr_stream_name.isNull()) return;
 
-  QString attr_data_name = _element.attribute(__slAttribubes.dataName);
-  if(attr_data_name.isNull()) return;
+    QString attr_data_source = _element.attribute(__slAttribubes.dataSource);
+    if(attr_data_source.isNull()) return;
+    auto data_source = app.getDataSource(attr_data_source);
+    if(data_source.isNull()) return;
 
-  QString attr_window = _element.attribute(__slAttribubes.window);
-  if(attr_window.isNull()) return;
+    QString attr_data_name = _element.attribute(__slAttribubes.dataName);
+    if(attr_data_name.isNull()) return;
 
-  auto keyboard = LCKeyboard::create(
-      attr_window, 
-      _app,
-      stream_source, attr_stream_name, 
-      data_source, attr_data_name);
+    QString attr_window = _element.attribute(__slAttribubes.window);
+    if(attr_window.isNull()) return;
 
-  if(keyboard.isNull()) return;
+    auto keyboard = LCKeyboard::create(
+        attr_window, 
+        app,
+        stream_source, attr_stream_name, 
+        data_source, attr_data_name);
 
-  __slKeyboards.insert(attr_id, keyboard);
+    if(keyboard.isNull()) return;
+
+    __slKeyboards.insert(attr_id, keyboard);
+  };
+
+  for(auto node = 
+      _rootElement.firstChildElement(__slTags.keyboard); 
+      !node.isNull(); 
+      node = node.nextSiblingElement(__slTags.keyboard))
+  {
+    QDomElement el = node.toElement();
+    if(el.isNull()) continue;
+    upload_local(el);
+  }
 
 }
 

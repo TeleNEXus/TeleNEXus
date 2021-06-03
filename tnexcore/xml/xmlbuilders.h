@@ -18,8 +18,8 @@
  * You should have received a copy of the GNU General Public License
  * along with TeleNEXus.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef LCXMLBUILDERSLOADER_H
-#define LCXMLBUILDERSLOADER_H
+#ifndef LCXMLBUILDERS_H
+#define LCXMLBUILDERS_H
 
 #include <QDomElement>
 #include <QSharedPointer>
@@ -56,4 +56,4 @@ QSharedPointer<LIXmlRemoteDataSourceBuilder> getBuilder(const QString _name);
 
 } /* namespace uploadbuilders */
 
-#endif // LCXMLBUILDERSLOADER_H
+#endif // LCXMLBUILDERS_H

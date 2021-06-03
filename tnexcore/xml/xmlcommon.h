@@ -30,16 +30,10 @@ namespace xmlcommon
 {
 struct SBaseTags
 {
-  QString rootTag         = "APPLICATION";
-  QString window          = "WINDOW";
-  QString keyboard        = "KEYBOARD";
-  /* QString sourceBuilders  = "SOURCEBUILDERS"; */
-  /* QString widgetBuilders  = "WIDGETBUILDERS"; */
-  /* QString layoutBuilders  = "LAYOUTBUILDERS"; */
+  /* QString rootTag         = "APPLICATION"; */
   QString fonts           = "FONTS";
-  QString sources         = "SOURCES";
   QString plaginpath      = "PLAGINPATHS";
-  QString scripts         = "SCRIPTS";
+  /* QString scripts         = "SCRIPTS"; */
   QString formatters      = "FORMATTERS";
 };
 
@@ -77,7 +71,7 @@ extern const SCommonTags        mCommonTags;
 extern const SCommonAttributes  mCommonAttributes;
 
 
-QDomDocument loadDomDocument(const QString& _fileName, const LIApplication& _app);
+QDomDocument loadDomDocument(const QString& _fileName);
 }
 
 #endif

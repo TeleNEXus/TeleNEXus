@@ -19,8 +19,7 @@
  * along with TeleNEXus.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include "lcqreadfromsourcereq.h"
-#include "tnex.h"
-#include "LIApplication.h"
+#include "applicationinterface.h"
 
 #include <QCoreApplication>
 #include <QDebug>
@@ -41,8 +40,10 @@ LCQReadFromSourceReq::CEventRead::CEventRead()
 //------------------------------------------------------------------------------
 void LCQReadFromSourceReq::CEventRead::handle(LCQReadFromSourceReq* _sender)
 {
+
   auto source = 
-    tnex::getApplicationInterface().getDataSource(_sender->mSourceId);
+    CApplicationInterface::getInstance().getDataSource(_sender->mSourceId);
+
   if(source.isNull()) 
   {
     _sender->mWaitCond.wakeOne();

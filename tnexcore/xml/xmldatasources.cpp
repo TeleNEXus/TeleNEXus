@@ -21,8 +21,9 @@
 #include "xmldatasources.h"
 #include "xmlcommon.h"
 #include "xmlbuilders.h"
+#include "LIRemoteDataSource.h"
 #include "LIXmlRemoteDataSourceBuilder.h"
-#include "LIApplication.h"
+#include "applicationinterface.h"
 #include <QDomElement>
 #include <QMap>
 #include <QSharedPointer>
@@ -45,7 +46,7 @@ static QMap<QString, QSharedPointer<LIRemoteDataSource>> __slSources;
 namespace xmldatasources
 {
 
-void upload(const QDomElement& _rootElement, const LIApplication& _app)
+void upload(const QDomElement& _rootElement)
 {
     auto element = _rootElement.firstChildElement(__slTags.sources);
 
@@ -55,7 +56,10 @@ void upload(const QDomElement& _rootElement, const LIApplication& _app)
 
     if(!attrFile.isNull())
     {
-        element = xmlcommon::loadDomDocument(attrFile, _app).documentElement();
+        element = xmlcommon::loadDomDocument(
+            CApplicationInterface::getInstance().getProjectPath() + 
+            attrFile).documentElement();
+
         if(element.tagName() != __slTags.sources)
         {
             return;
@@ -72,7 +76,7 @@ void upload(const QDomElement& _rootElement, const LIApplication& _app)
 
         if(!builder.isNull())
         {
-            auto sources = builder->build(el, _app);
+            auto sources = builder->build(el, CApplicationInterface::getInstance());
             auto it = sources.begin();
             while(it != sources.end())
             {
@@ -86,5 +90,12 @@ void upload(const QDomElement& _rootElement, const LIApplication& _app)
         node = node.nextSibling();
     }
 }
-QSharedPointer<LIRemoteDataSource> getSource(const QString& _id);
+
+QSharedPointer<LIRemoteDataSource> getSource(const QString& _id)
+{
+  auto it = __slSources.find(_id);
+  if(it == __slSources.end()) return nullptr;
+  return it.value();
+}
+
 } /* namespace datasources */

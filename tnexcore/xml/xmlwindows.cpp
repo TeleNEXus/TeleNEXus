@@ -18,17 +18,13 @@
  * You should have received a copy of the GNU General Public License
  * along with TeleNEXus.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "uploadwindows.h"
-#include "xmlcommon.h"
+#include "xmlwindows.h"
+#include "applicationinterface.h"
 #include "LIXmlWidgetBuilder.h"
-#include "LIWindow.h"
 #include "LIKeyboard.h"
-#include "LIApplication.h"
 #include  "LIJScriptService.h"
 #include "tnexcommon.h"
-
 #include "lcwindow.h"
-
 #include <QDomElement>
 #include <QMap>
 #include <QList>
@@ -77,6 +73,7 @@ static const struct
 
 static const struct
 {
+  QString window        = "WINDOW";
   QString actions       = "actions";
   QString mainWidget    = "mainWidget";
   QString scriptExecute = "scriptExecute";
@@ -228,7 +225,7 @@ static QDomElement endElement(
   {
     QDomElement el = _app.getDomDocument(attr_file).documentElement();
     if(el.isNull()) return el;
-    if(el.tagName() != xmlcommon::mBaseTags.window) return QDomElement();
+    if(el.tagName() != __slTags.window) return QDomElement();
     set_attr(_element, el);
     return endElement(el, _app);
   }
@@ -421,44 +418,56 @@ void show()
 
 //------------------------------------------------------------------------------
 void upload(
-    const QDomElement &_element, 
-    const LIApplication& _app)
+    const QDomElement &_rootElement)
 {
-  QDomElement el = endElement(_element, _app);
-  QWidget* widget = uploadWidget(el, _app);
-
-  if(widget == nullptr) return;
-
-  LCWindow*  window = uploadWindow(widget, _element);
-
-  CActionLoader::getInstance().load(el, _app, window);
-
-  QString attr_id = _element.attribute(__slAttributes.id);
-
-  auto sp_win = QSharedPointer<LIWindow>(window);
-
-  if(!attr_id.isNull()) 
-  {
-    __slWindowsMap.insert(attr_id, sp_win);
-  }
-  else
-  {
-    __slNoNameWindows << sp_win; 
-  }
-
-  //Show controll
-  {
-    QString attr = _element.attribute(__slAttributes.visible);
-
-    if(attr == QStringLiteral("true"))
+  const auto upload_local = 
+    [](const QDomElement& _element, const LIApplication& _app)
     {
-      auto show = [window, widget]() 
+      QDomElement el = endElement(_element, _app);
+      QWidget* widget = uploadWidget(el, _app);
+
+      if(widget == nullptr) return;
+
+      LCWindow*  window = uploadWindow(widget, _element);
+
+      CActionLoader::getInstance().load(el, _app, window);
+
+      QString attr_id = _element.attribute(__slAttributes.id);
+
+      auto sp_win = QSharedPointer<LIWindow>(window);
+
+      if(!attr_id.isNull()) 
       {
-        window->action(QStringLiteral("show"));
-        QCoreApplication::sendEvent(widget, new QShowEvent());
-      };
-      __slShowList << show;
-    }
+        __slWindowsMap.insert(attr_id, sp_win);
+      }
+      else
+      {
+        __slNoNameWindows << sp_win; 
+      }
+
+      //Show controll
+      {
+        QString attr = _element.attribute(__slAttributes.visible);
+
+        if(attr == QStringLiteral("true"))
+        {
+          auto show = [window, widget]() 
+          {
+            window->action(QStringLiteral("show"));
+            QCoreApplication::sendEvent(widget, new QShowEvent());
+          };
+          __slShowList << show;
+        }
+      }
+    };
+
+  for(auto node = _rootElement.firstChildElement(__slTags.window); 
+      !node.isNull(); 
+      node = node.nextSiblingElement(__slTags.window))
+  {
+    QDomElement el = node.toElement();
+    if(el.isNull()) continue;
+    upload_local(el, CApplicationInterface::getInstance());
   }
 }
 } //namespace

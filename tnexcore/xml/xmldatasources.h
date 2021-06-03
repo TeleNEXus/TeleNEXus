@@ -19,6 +19,9 @@
  * along with TeleNEXus.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#ifndef XMLDATASOURCES_H_
+#define XMLDATASOURCES_H_
+
 #include <QSharedPointer>
 class LIRemoteDataSource;
 class QDomElement;
@@ -27,4 +30,6 @@ namespace xmldatasources
 {
 void upload(const QDomElement& _rootElement);
 QSharedPointer<LIRemoteDataSource> getSource(const QString& _id);
-} /* namespace datasources */
+} /* namespace xmldatasources */
+
+#endif /* XMLDATASOURCES_H_ */

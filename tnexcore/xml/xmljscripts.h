@@ -18,8 +18,8 @@
  * You should have received a copy of the GNU General Public License
  * along with TeleNEXus.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef UPLOADJSCRIPT_H_ 
-#define UPLOADJSCRIPT_H_
+#ifndef XMLJSCRIPT_H_ 
+#define XMLJSCRIPT_H_
 
 #include <QSharedPointer>
 
@@ -29,8 +29,8 @@ class LIJScriptService;
 
 namespace xmljscripts
 {
-void upload( const QDomElement &_element, const LIApplication& _app);
+void upload(const QDomElement &_element);
 QSharedPointer<LIJScriptService> getScript(const QString& _scriptId);
 }
 
-#endif /* UPLOADJSCRIPT_H_ */
+#endif /* XMLJSCRIPT_H_ */

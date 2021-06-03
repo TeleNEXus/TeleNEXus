@@ -18,8 +18,8 @@
  * You should have received a copy of the GNU General Public License
  * along with TeleNEXus.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef UPLOADKEYBOARD_H_
-#define UPLOADKEYBOARD_H_
+#ifndef XMLKEYBOARD_H_
+#define XMLKEYBOARD_H_
 
 #include <QSharedPointer>
 
@@ -29,10 +29,10 @@ class LIKeyboard;
 
 namespace xmlkeyboards 
 {
-void upload( const QDomElement &_element, const LIApplication& _app);
+void upload( const QDomElement &_element);
 void init();
 QSharedPointer<LIKeyboard> getKeyboard(const QString& _keyboardId);
 }
 
-#endif /* UPLOADKEYBOARD_H_ */
+#endif /* XMLKEYBOARD_H_ */
 

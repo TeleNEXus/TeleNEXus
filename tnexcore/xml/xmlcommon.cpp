@@ -30,7 +30,7 @@ const SBaseTags          mBaseTags;
 const SCommonTags        mCommonTags;
 const SCommonAttributes  mCommonAttributes;
 
-QDomDocument loadDomElement(const QString& _fileName)
+QDomDocument loadDomDocument (const QString& _fileName)
 {
     QFile file(_fileName);
 
