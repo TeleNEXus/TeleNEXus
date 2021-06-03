@@ -23,8 +23,7 @@
 #include "cqjstextfile.h"
 #include "cqjsbinaryfile.h"
 #include "cqjsprocess.h"
-#include "tnex.h"
-#include "LIApplication.h"
+#include "applicationinterface.h"
 
 #include <QDebug>
 #include <QThread>
@@ -244,7 +243,7 @@ void LCQJScriptHiden::debugOut(const QString& _out)
 //------------------------------------------------------------------------------
 QString LCQJScriptHiden::getProjectPath()
 {
-  return tnex::getApplicationInterface().getProjectPath();
+  return CApplicationInterface::getInstance().getProjectPath();
 }
 
 //------------------------------------------------------------------------------

@@ -23,47 +23,63 @@
 #include "xmlbuilders.h"
 #include "xmldatasources.h"
 #include "xmlcommon.h"
-#include "uploadwindows.h"
-#include "uploadkeyboards.h"
+#include "xmlwindows.h"
+#include "xmlkeyboards.h"
 
 #include "lcxmlfonts.h"
 #include "lcxmlformatterfactory.h"
-#include "uploaddataformatters.h"
-#include "uploadjscripts.h"
+#include "xmldataformatters.h"
+#include "xmljscripts.h"
 
 #include <QDir>
 
 //==============================================================================
-struct SLocalData
+static struct SLocalData
 {
-  QString xmlMainPath;
-  QDir    xmlMainDir;
-};
-#define toLocalData(p) (static_cast<SLocalData*>(p))
-#define ld (*toLocalData(mpLocal))
+  QString xmlMainFileName;
+  QString xmlProjectPath;
+  QDir    xmlProjectDir;
+} __slLocalData;
+
 
 //==============================================================================
 CApplicationInterface::CApplicationInterface()
 {
-  mpLocal = new SLocalData;
 }
 
 //------------------------------------------------------------------------------
 CApplicationInterface::~CApplicationInterface()
 {
-  delete toLocalData(mpLocal);
+}
+
+//------------------------------------------------------------------------------
+CApplicationInterface& CApplicationInterface::getInstance()
+{
+  static CApplicationInterface instance;
+  return instance;
+}
+
+//------------------------------------------------------------------------------
+void CApplicationInterface::setParameters(
+    const QString& _mainFileName, 
+    const QString& _projectPath,
+    const QDir& _projectDir)
+{
+  __slLocalData.xmlMainFileName = _mainFileName;
+  __slLocalData.xmlProjectPath = _projectPath;
+  __slLocalData.xmlProjectDir = _projectDir;
 }
 
 //------------------------------------------------------------------------------
 QString CApplicationInterface::getProjectPath() const
 {
-  return ld.xmlMainPath;
+  return __slLocalData.xmlProjectPath;
 }
 
 //------------------------------------------------------------------------------
 QDir CApplicationInterface::getProjectDir() const
 {
-  return ld.xmlMainDir;
+  return __slLocalData.xmlProjectDir;
 }
 
 //------------------------------------------------------------------------------
@@ -98,7 +114,7 @@ CApplicationInterface::getWidgetBuilder(const QString& _id) const
 QDomDocument CApplicationInterface::getDomDocument(
     const QString& _fileName) const
 {
-  return xmlcommon::loadDomDocument(_fileName, *this);
+  return xmlcommon::loadDomDocument(__slLocalData.xmlProjectPath + _fileName);
 }
 
 //------------------------------------------------------------------------------
@@ -128,7 +144,7 @@ CApplicationInterface::getDataFormatter(const QString& _formatter) const
   auto format = stddataformatterfactory::getFormatter(_formatter);
   if(format.isNull())
   {
-    format  = uploaddataformatters::getDataFormatter(_formatter);
+    format  = xmldataformatters::getDataFormatter(_formatter);
   }
   return format;
 }
@@ -137,6 +153,6 @@ CApplicationInterface::getDataFormatter(const QString& _formatter) const
 QSharedPointer<LIJScriptService>
 CApplicationInterface::getScriptService(const QString& _scriptId) const
 {
-  return uploadjscripts::getScript(_scriptId);
+  return xmljscripts::getScript(_scriptId);
 }
 

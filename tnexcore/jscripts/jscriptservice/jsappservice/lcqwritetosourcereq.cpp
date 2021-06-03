@@ -18,9 +18,8 @@
  * You should have received a copy of the GNU General Public License
  * along with TeleNEXus.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "tnex.h"
 #include "lcqwritetosourcereq.h"
-#include "LIApplication.h"
+#include "applicationinterface.h"
 
 #include <QCoreApplication>
 #include <QDebug>
@@ -42,7 +41,7 @@ LCQWriteToSource::CEventWrite::CEventWrite()
 void LCQWriteToSource::CEventWrite::handle(LCQWriteToSource* _sender)
 {
   auto source = 
-    tnex::getApplicationInterface().getDataSource(_sender->mSourceId);
+    CApplicationInterface::getInstance().getDataSource(_sender->mSourceId);
   if(source.isNull()) 
   {
     _sender->mWaitCond.wakeOne();

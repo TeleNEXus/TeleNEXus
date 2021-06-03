@@ -23,7 +23,7 @@
 #include "lcjscriptservice.h"
 
 #include "LIJScriptService.h"
-#include "LIApplication.h"
+#include "applicationinterface.h"
 
 #include <QDomElement>
 #include <QMap>
@@ -53,6 +53,7 @@ static const struct
 
 static const struct
 {
+  QString baseTag     = "SCRIPTS";
   QString script      = "script";
   QString attributes  = "attributes";
   QString launch      = "launch";
@@ -160,6 +161,27 @@ static void scriptExecute(const QDomElement &_element)
   }
 }
 
+static void uploadLocal(const QDomElement& _element)
+{
+  static const LIApplication& app = CApplicationInterface::getInstance();
+  QString attr_file = _element.attribute(__slAttributes.file);
+  if(!attr_file.isNull())
+  {
+    QDomElement el = app.getDomDocument(attr_file).documentElement();
+    if(!el.isNull())
+    {
+      if(el.tagName() == _element.tagName())
+      {
+        uploadLocal(el);
+      }
+    }
+    return;
+  }
+  scriptUpload(_element, CApplicationInterface::getInstance());
+  scriptLaunch(_element);
+  scriptExecute(_element);
+}
+
 //==============================================================================
 namespace xmljscripts
 {
@@ -173,27 +195,12 @@ QSharedPointer<LIJScriptService> getScript(const QString& _scriptId)
 }
 
 //------------------------------------------------------------------------------upload
-void upload( const QDomElement &_element, const LIApplication& _app)
+void upload( const QDomElement &_rootElement)
 {
-  QString attr_file = _element.attribute(__slAttributes.file);
-  if(!attr_file.isNull())
-  {
-    QDomElement el = _app.getDomDocument(attr_file).documentElement();
-    if(!el.isNull())
-    {
-      if(el.tagName() == _element.tagName())
-      {
-        upload(el, _app);
-      }
-    }
-    return;
-  }
-
-  scriptUpload(_element, _app);
-  scriptLaunch(_element);
-  scriptExecute(_element);
+  QDomElement el = _rootElement.firstChildElement(__slTags.baseTag);
+  if(el.isNull()) return;
+  uploadLocal(el);
 }
-
 }
 
 

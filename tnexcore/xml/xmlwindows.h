@@ -18,8 +18,8 @@
  * You should have received a copy of the GNU General Public License
  * along with TeleNEXus.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef UPLOADWINDOWS_H_
-#define UPLOADWINDOWS_H_
+#ifndef XMLWINDOWS_H_
+#define XMLWINDOWS_H_
 
 #include <QSharedPointer>
 
@@ -30,9 +30,9 @@ class LIWindow;
 
 namespace xmlwindows 
 {
-void upload( const QDomElement &_element, const LIApplication& _app);
+void upload( const QDomElement &_element);
 void show();
 QSharedPointer<LIWindow> getWindow(const QString& _windowId);
 }
 
-#endif /* UPLOADWINDOWS_H_ */
+#endif /* XMLWINDOWS_H_ */
