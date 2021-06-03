@@ -30,7 +30,7 @@ class LIDataFormatter;
 namespace xmldataformatters
 {
 //------------------------------------------------------------------------------
-extern void upload( const QDomElement &_element, const LIApplication& _app);
+extern void upload( const QDomElement &_element);
 //------------------------------------------------------------------------------
 extern QSharedPointer<LIDataFormatter> getDataFormatter(const QString& _formatterId);
 }

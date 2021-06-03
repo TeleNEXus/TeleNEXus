@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<FORMATTERS>
+<DATAFORMATS>
   <!-- <add id="hex_sparate_size_4"  stdformat="hex" size="4" separator=" "/> -->
   <!-- <add id="int32_xxx.xx"        jsfile="formatters/scaledInt32.js"   format="xxx.xx" /> -->
   <!-- <add id="int32_xx.xxxx"       script="formatters/scaledInt32.js"   format="xx.xxxx" /> -->
@@ -36,5 +36,5 @@
 
   <!-- <builder  id="int16_xx.x"         builder="formattersBuilder"       format="x.xxx" /> -->
 
-</FORMATTERS>
+</DATAFORMATS>
 

@@ -39,7 +39,7 @@
 
     <FONTS file="fonts.xml"/>
     <SCRIPTS file="scripts.xml"/>
-    <FORMATTERS file="formatters.xml"/>
+    <DATAFORMATS file="formatters.xml"/>
         
     <WINDOW 
       file="testbutton/testbutton.xml" 
