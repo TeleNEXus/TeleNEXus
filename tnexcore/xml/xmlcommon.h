@@ -31,36 +31,17 @@ namespace xmlcommon
 struct SBaseTags
 {
   QString plaginpath      = "PLAGINPATHS";
-  QString formatters      = "FORMATTERS";
 };
 
 struct SCommonTags
 {
   QString item  = "item";
-  /* QString script = "script"; */
 };
 
 struct SCommonAttributes
 {
   QString file      = "file";
   QString path      = "path";
-  /* QString id        = "id"; */
-  /* QString title     = "title"; */
-  /* QString widht     = "width"; */
-  /* QString height    = "height"; */
-  /* QString posx      = "posx"; */
-  /* QString posy      = "posy"; */
-  /* QString interval  = "interval"; */
-
-  /* struct */
-  /* { */
-  /*   QString tag = "show"; */
-  /*   struct */
-  /*   { */
-  /*     QString yes = "yes"; */
-  /*     QString no  = "no"; */
-  /*   }vals; */
-  /* }show; */
 };
 
 extern const SBaseTags          mBaseTags;

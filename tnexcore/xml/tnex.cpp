@@ -290,12 +290,7 @@ static void addFonts(const QDomElement& _rootElement)
 //==============================================================================
 static void addFormatters(const QDomElement& _rootElement)
 {
-  QDomElement el = 
-    _rootElement.firstChildElement(xmlcommon::mBaseTags.formatters);
-
-  if(el.isNull()) return;
-
-  xmldataformatters::upload(el, CApplicationInterface::getInstance());
+  xmldataformatters::upload(_rootElement);
 }
 
 //==============================================================================

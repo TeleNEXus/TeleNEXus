@@ -20,7 +20,7 @@
  */
 
 #include "xmldataformatters.h"
-#include "LIApplication.h"
+#include "applicationinterface.h"
 #include "LIDataFormatter.h"
 #include "xmlcommon.h"
 #include "lcxmlformatterfactory.h"
@@ -34,127 +34,117 @@
 
 static const struct
 {
-  QString file      = "file";
-  QString id        = "id";
-  QString format    = "format";
+  QString file        = "file";
+  QString format      = "format";
+  QString id          = "id";
 }__slAttributes;
 
 static const struct
 {
-  QString stdformat = "std";
-  QString script    = "script";
-  QString attributes = "attributes";
+  QString rootTag     = "DATAFORMATS";
+  QString script      = "script";
+  QString stdformat   = "std";
+  QString attributes  = "attributes";
 }__slTags;
 
 static QMap<QString, QSharedPointer<LIDataFormatter>> __slFormattersMap;
 
-static class CUploader
+//==============================================================================
+void uploadLocal(const QDomElement& _element)
 {
+  static const LIApplication& app = CApplicationInterface::getInstance();
 
-public:
-  //----------------------------------------------------------------------------
-  CUploader()
-  {
-  }
-
-  //----------------------------------------------------------------------------
-  QSharedPointer<LIDataFormatter> createFromStd(const QDomElement& _element)
-  {
-    QString format = _element.attribute(__slAttributes.format);
-    return stddataformatterfactory::createFormatter(_element);
-  }
-
-  //----------------------------------------------------------------------------
-  QSharedPointer<LIDataFormatter>  createFromScript(
-      const QDomNodeList& _attributeNodes, 
-      const QString& _scriptFile)
-  {
-
-    QFile file(_scriptFile);
-
-    if (!file.open(QIODevice::ReadOnly)) { return nullptr; }
-
-    QTextStream stream(&file);
-    QString scriptString = stream.readAll();
-    file.close();
-
-    QMap<QString, QString> attr_map;
-
-    for(int i = 0; i < _attributeNodes.count(); i++)
-    {
-      auto attr_nodes = _attributeNodes.at(i).toElement().attributes();
-      for(int i = 0; i < attr_nodes.count(); i++)
-      {
-        QDomNode node = attr_nodes.item(i);
-        attr_map.insert(node.nodeName(), node.toAttr().value());
-      }
-    }
-
-    return LCJSFormatter::create(scriptString, attr_map);
-  }
-
-  //----------------------------------------------------------------------------
-  void upload(const QDomElement& _element, const LIApplication& _app)
-  {
-
-    QString attr_id = _element.attribute(__slAttributes.id);
-    if(attr_id.isNull()) return;
-
-    QSharedPointer<LIDataFormatter> fsp;
-
-    QString tag = _element.tagName();
-
-    if(tag == __slTags.stdformat)
-    {
-      fsp = createFromStd(_element);
-    }
-    else if(tag == __slTags.script)
-    {
-
-      QString script_file = QString("%1%2")
-        .arg(_app.getProjectPath())
-        .arg(_element.attribute(__slAttributes.file));
-
-      fsp = createFromScript(
-          _element.elementsByTagName(__slTags.attributes), 
-          script_file);
-    }
-
-    if(!fsp.isNull())
-    {
-      __slFormattersMap.insert(attr_id, fsp);
-    }
-  }
-
-}__slUploader;
-
-//==============================================================================xmldataformatters
-namespace xmldataformatters
-{
-
-
-//------------------------------------------------------------------------------
-void upload( const QDomElement &_element, const LIApplication& _app)
-{
   QString attr_file =  _element.attribute(__slAttributes.file);
 
   if(!attr_file.isNull())
   {
-    QDomElement el = _app.getDomDocument(attr_file).documentElement();
+    QDomElement el = app.getDomDocument(attr_file).documentElement();
     if(!el.isNull())
     {
-      if(el.tagName() == xmlcommon::mBaseTags.formatters) upload(el, _app);
+      if(el.tagName() == __slTags.rootTag) uploadLocal(el);
     }
     return;
   }
+
+  //----------------------------------------------------------upload_script[]
+  static auto upload_script = 
+    [](const QDomElement& _element)
+    {
+      QString attr_id = _element.attribute(__slAttributes.id);
+      if(attr_id.isNull()) return;
+
+      QString attr_file = _element.attribute(__slAttributes.file);
+      if(attr_file.isNull()) return;
+
+      QFile file(QString("%1%2")
+          .arg(app.getProjectPath())
+          .arg(attr_file));
+
+      if (!file.open(QIODevice::ReadOnly)) { return; }
+
+      QTextStream stream(&file);
+      QString scriptString = stream.readAll();
+      file.close();
+
+      QMap<QString, QString> attr_map;
+
+      for(auto attr_el = _element.firstChildElement(__slTags.attributes);
+          !attr_el.isNull();
+          attr_el = attr_el.nextSiblingElement(__slTags.attributes))
+      {
+        auto attr_nodes = attr_el.attributes();
+        for(int i = 0; i < attr_nodes.count(); i++)
+        {
+          QDomNode node = attr_nodes.item(i);
+          attr_map.insert(node.nodeName(), node.toAttr().value());
+        }
+      }
+
+      auto formatter = LCJSFormatter::create(scriptString, attr_map);
+      if(formatter.isNull()) return;
+      __slFormattersMap.insert(attr_id, formatter);
+    };
+
+  //----------------------------------------------------------upload_std[]
+  auto upload_std = 
+    [](const QDomElement& _element)
+    {
+      QString attr_id = _element.attribute(__slAttributes.id);
+      if(attr_id.isNull()) return;
+      auto formatter = stddataformatterfactory::createFormatter(_element);
+      if(formatter.isNull()) return;
+      __slFormattersMap.insert(attr_id, formatter);
+    };
+
 
   for(auto node = _element.firstChild();
       !node.isNull();
       node = node.nextSibling())
   {
-    if(!node.isElement()) continue;
-    __slUploader.upload(node.toElement(), _app);
+    auto el = node.toElement();
+    if(el.isNull()) {continue;}
+
+    if(el.tagName() == __slTags.script)
+    {
+      upload_script(el);
+    }
+    else if(el.tagName() == __slTags.stdformat)
+    {
+      upload_std(el);
+    }
   }
+}
+
+//==============================================================================xmldataformatters
+namespace xmldataformatters
+{
+
+//------------------------------------------------------------------------------
+void upload( const QDomElement &_rootElement)
+{
+  auto element = _rootElement.firstChildElement(__slTags.rootTag);
+  if(element.isNull()) return;
+  uploadLocal(element);
 }
 
 //------------------------------------------------------------------------------
