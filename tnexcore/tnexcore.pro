@@ -100,7 +100,7 @@ xml/applicationinterface.cpp \
 xml/xmlcommon.cpp \
 xml/tnex.cpp \
 xml/xmlbuilders.cpp \
-xml/lcxmlfonts.cpp \
+xml/xmlfonts.cpp \
 xml/xmljscripts.cpp \
 xml/xmldataformatters.cpp \
 xml/xmldatasources.cpp \
@@ -189,7 +189,7 @@ xml/applicationinterface.h \
 xml/xmlcommon.h \
 xml/tnex.h \
 xml/xmlbuilders.h \
-xml/lcxmlfonts.h \
+xml/xmlfonts.h \
 xml/xmldataformatters.h \
 xml/xmldatasources.h \
 xml/xmljscripts.h \

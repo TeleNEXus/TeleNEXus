@@ -26,7 +26,7 @@
 #include "xmlwindows.h"
 #include "xmlkeyboards.h"
 
-#include "lcxmlfonts.h"
+#include "xmlfonts.h"
 #include "lcxmlformatterfactory.h"
 #include "xmldataformatters.h"
 #include "xmljscripts.h"
@@ -134,7 +134,7 @@ QSharedPointer<LIKeyboard> CApplicationInterface::getKeyboard(
 //------------------------------------------------------------------------------
 QString CApplicationInterface::getFontStyle(const QString& _fontId) const
 {
-  return LCXmlFonts::instance().getFontStyle(_fontId);
+  return xmlfonts::getFontStyle(_fontId);
 }
 
 //------------------------------------------------------------------------------
