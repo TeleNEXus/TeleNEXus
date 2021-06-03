@@ -2,9 +2,9 @@
 
 <APPLICATION>
 
-    <PLAGINPATHS>
-        <item path="./libs"/>
-    </PLAGINPATHS>
+    <PLAGINPATHES>
+        <item path="libs"/>
+    </PLAGINPATHES>
 
     <SOURCEBUILDERS file="sourcebuilders.xml"/>
     

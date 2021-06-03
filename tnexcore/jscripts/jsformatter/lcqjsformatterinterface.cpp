@@ -23,6 +23,10 @@ LCQJSFormatterInterface::~LCQJSFormatterInterface()
 //------------------------------------------------------------------------------
 QSharedPointer<LCQJSFormatterInterface> LCQJSFormatterInterface::create()
 {
+
+  //TODO: remove single formatter interface.
+
+
   static QWeakPointer<LCQJSFormatterInterface> wp_instance;
   auto sp = wp_instance.lock();
   if(sp.isNull())
@@ -41,6 +45,8 @@ void LCQJSFormatterInterface::debugOut(const QString& _str)
 }
 
 //------------------------------------------------------------------------------
-void LCQJSFormatterInterface::exportModule(const QString& _moduleFileName)
+void LCQJSFormatterInterface::importModule(
+    const QString& _moduleFileName,
+    const QString& _propertyName)
 {
 }

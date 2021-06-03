@@ -18,18 +18,18 @@
  * You should have received a copy of the GNU General Public License
  * along with TeleNEXus.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef LCXMLCOMMON_H_
-#define LCXMLCOMMON_H_
+
+#ifndef XMLPLAGINPATHES_H_
+#define XMLPLAGINPATHES_H_
 
 #include <QString>
 
-class QDomDocument;
-class LIApplication;
+class QDomElement;
 
-namespace xmlcommon
+namespace xmlpluginpathes
 {
-QDomDocument loadDomDocument(const QString& _fileName);
+void upload(const QDomElement& _rootElement);
+const QStringList& getPlaginPathes();
 }
 
-#endif
-
+#endif /* XMLPLAGINPATHES_H_ */

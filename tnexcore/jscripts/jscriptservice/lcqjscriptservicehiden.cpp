@@ -302,7 +302,7 @@ void LCQJScriptHiden::importModule(const QString& _fileName,
     if(jsval.isUndefined())
     {
       mJSEngine.throwError(
-          QString("Can't import property \"%1\" from file \"%2\" ").
+          QString("Can't import property \"%1\" from module \"%2\" ").
           arg(_propertyName).
           arg(_fileName));
       return;
