@@ -280,6 +280,8 @@ static void setStyleSheet(QPushButton* _button, const QDomElement& _element,
 {
   QString style = LCBuildersCommon::getBaseStyleSheet(_element, _app);
   _button->setStyleSheet(style);
+  qDebug() << "+++++++button base style sheet ";
+  qDebug() << style;
 }
 
 

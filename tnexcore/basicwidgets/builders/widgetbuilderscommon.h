@@ -64,6 +64,7 @@ public:
     QString bgpos       = "bgPos";
     QString text        = "text";
     QString textcolor   = "textColor";
+
     QString font        = "font";
     QString fontid      = "fontId";
 
