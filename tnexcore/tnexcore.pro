@@ -22,13 +22,14 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 INCLUDEPATH +=                          \
-../common/interfaces                    \
-../common/interfaces/remotedata         \
-../common/interfaces/xmlbuilders        \
-../common/interfaces/keyboard           \
-../common/                              \
+../tnexcommon/interfaces                    \
+../tnexcommon/interfaces/remotedata         \
+../tnexcommon/interfaces/xmlbuilders        \
+../tnexcommon/interfaces/keyboard           \
+../tnexcommon/                              \
 ./window                                \
 ./xml                                   \
+./common                                \
 ./dataformatters                        \
 ./jscripts/jscriptservice               \
 ./jscripts/jscriptservice/jsappservice  \
@@ -41,7 +42,6 @@ INCLUDEPATH +=                          \
 
 
 SOURCES += \
-../../common/tnexcommon.cpp \
 basiclayouts/commonbuilderslayout.cpp \
 basiclayouts/lcxmlboxlayoutbuilder.cpp  \
 basiclayouts/lcxmlgridlayoutbuilder.cpp \
@@ -96,7 +96,7 @@ jscripts/jscriptservice/cqjsprocess.cpp \
 jscripts/jscriptservice/jsappservice/lcqjsappservice.cpp \
 jscripts/jscriptservice/jsappservice/lcqreadfromsourcereq.cpp \
 jscripts/jscriptservice/jsappservice/lcqwritetosourcereq.cpp \
-xml/xmlcommon.cpp \
+common/xmlcommon.cpp \
 xml/xmlbuilders.cpp \
 xml/xmlfonts.cpp \
 xml/xmljscripts.cpp \
@@ -117,20 +117,19 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 HEADERS += \
-../common/lqextendevent.h \
-../common/tnexcommon.h \
-../common/interfaces/LIApplication.h \
-../common/interfaces/remotedata/LIRemoteDataReader.h \
-../common/interfaces/remotedata/LIRemoteDataSource.h \
-../common/interfaces/remotedata/LIRemoteDataWriter.h \
-../common/interfaces/xmlbuilders/LIXmlRemoteDataSourceBuilder.h \
-../common/interfaces/xmlbuilders/LIXmlLayoutBuilder.h \
-../common/interfaces/xmlbuilders/LIXmlWidgetBuilder.h \
-../common/interfaces/LIWindow.h \
-../common/interfaces/LIDataFormatter.h \
-../common/interfaces/LIJScriptService.h \
-../common/interfaces/keyboard/LIKeyboard.h \
-../common/interfaces/keyboard/LIKeyboardListener.h \
+../tnexcommon/lqextendevent.h \
+../tnexcommon/interfaces/LIApplication.h \
+../tnexcommon/interfaces/remotedata/LIRemoteDataReader.h \
+../tnexcommon/interfaces/remotedata/LIRemoteDataSource.h \
+../tnexcommon/interfaces/remotedata/LIRemoteDataWriter.h \
+../tnexcommon/interfaces/xmlbuilders/LIXmlRemoteDataSourceBuilder.h \
+../tnexcommon/interfaces/xmlbuilders/LIXmlLayoutBuilder.h \
+../tnexcommon/interfaces/xmlbuilders/LIXmlWidgetBuilder.h \
+../tnexcommon/interfaces/LIWindow.h \
+../tnexcommon/interfaces/LIDataFormatter.h \
+../tnexcommon/interfaces/LIJScriptService.h \
+../tnexcommon/interfaces/keyboard/LIKeyboard.h \
+../tnexcommon/interfaces/keyboard/LIKeyboardListener.h \
 basiclayouts/commonbuilderslayout.h \
 basiclayouts/lcxmlboxlayoutbuilder.h    \
 basiclayouts/lcxmlgridlayoutbuilder.h   \
@@ -185,7 +184,7 @@ jscripts/jscriptservice/cqjsprocess.h \
 jscripts/jscriptservice/jsappservice/lcqjsappservice.h \
 jscripts/jscriptservice/jsappservice/lcqreadfromsourcereq.h \
 jscripts/jscriptservice/jsappservice/lcqwritetosourcereq.h \
-xml/xmlcommon.h \
+common/xmlcommon.h \
 xml/xmlbuilders.h \
 xml/xmlfonts.h \
 xml/xmldataformatters.h \

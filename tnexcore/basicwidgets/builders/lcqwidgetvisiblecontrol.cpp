@@ -23,7 +23,7 @@
 #include "LIRemoteDataSource.h"
 #include "LIApplication.h"
 #include "LIDataFormatter.h"
-#include "tnexcommon.h"
+#include "xmlcommon.h"
 #include <QDomElement>
 #include <QWidget>
 #include <QByteArray>
@@ -150,7 +150,7 @@ bool LCQWidgetVisibleControl::build(const QDomElement& _element,
   if(attr.isNull()) return ret_wrong();
 
 
-  auto attr_values = tnexcommon::parseAttributes(attr);
+  auto attr_values = xmlcommon::parseAttributes(attr);
 
   QString attr_source = attr_values.value(__slVisibleAttributes.sourceId,   QString());
   QString attr_data   = attr_values.value(__slVisibleAttributes.dataId,     QString());
