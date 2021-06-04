@@ -63,7 +63,6 @@
       size="300;50"
       position="100;100">
     <mainWidget>
-
       <widget>
         <layout>
           <layoutVBox>
@@ -106,6 +105,7 @@
       </widget>
     </mainWidget>
   </WINDOW>
+
     <!-- <WINDOW --> 
     <!--   id="table local source" --> 
     <!--   title="table local source" --> 

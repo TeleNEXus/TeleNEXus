@@ -22,7 +22,7 @@
 #define LCFORMATTERUINT32_H_
 
 #include "lcformatterintbase.h"
-#include "lqvalidatoru32.h"
+#include "lcqvalidatoru32.h"
 
 
 class LCFormatterU32 : public LCFormatterIntBase
