@@ -20,7 +20,7 @@
  */
 #include "lcxmlremlabelbuilder.h"
 #include "widgets/lcqremlabel.h"
-#include "lcbuilderscommon.h"
+#include "widgetbuilderscommon.h"
 #include "LIApplication.h"
 
 #include <QDomElement>

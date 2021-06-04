@@ -22,7 +22,7 @@
 #include "lcxmlstackedwidgetbuilder.h"
 #include "widgets/lcqstackedwidget.h"
 #include "LIApplication.h"
-#include "lcbuilderscommon.h"
+#include "widgetbuilderscommon.h"
 #include <QDomElement>
 #include <QDebug>
 

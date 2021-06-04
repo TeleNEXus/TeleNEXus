@@ -21,7 +21,7 @@
 
 #include "lcxmllistwidgetbuilder.h"
 #include "widgets/lcqlistwidget.h"
-#include "lcbuilderscommon.h"
+#include "widgetbuilderscommon.h"
 #include "LIApplication.h"
 #include <QDomElement>
 

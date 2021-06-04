@@ -17,10 +17,23 @@
         <layoutVBox>
           <widgets>
 
-            <button test="write data">
+            <button test="write data" 
+              icon="file='picture/icon1.png'; size=(150,50)"
+              >
+              <!-- icon="file='picture/icon1.png'; size=(150,50)" -->
+              <!-- icon="file='picture/icon1.png'; size=(50,50)" -->
+              <!-- icon="picture/icon1.png" -->
+              <!-- iconHeight="50" -->
+              <!-- iconWidth="50" -->
+
               <press>
+                <controlScript scriptId="testlaunch1" scriptAction="launch(500)"/>
                 <writeData dataSpec="localsource:test_string:string" value="press write string 2"/>
               </press>
+              <release>
+                <controlScript scriptId="testlaunch1" scriptAction="stop"/>
+                <writeData dataSpec="localsource:test_string:string" value="press write string 2"/>
+              </release>
             </button>
 
             <button text="show window 1">

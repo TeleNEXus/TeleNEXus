@@ -20,7 +20,7 @@
  */
 #include "lcxmlremcomboboxbuilder.h"
 #include "widgets/lcqremcombobox.h"
-#include "lcbuilderscommon.h"
+#include "widgetbuilderscommon.h"
 #include "LIApplication.h"
 #include "LIWindow.h"
 

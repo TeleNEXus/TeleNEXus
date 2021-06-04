@@ -70,7 +70,7 @@ basicwidgets/builders/lcxmltabwidgetbuilder.cpp \
 basicwidgets/builders/lcxmlscrollareabuilder.cpp \
 basicwidgets/builders/lcxmlbuttonbuilder.cpp \
 basicwidgets/builders/lcxmllistwidgetbuilder.cpp \
-basicwidgets/builders/lcbuilderscommon.cpp \
+basicwidgets/builders/widgetbuilderscommon.cpp \
 basicwidgets/builders/lcqwidgetvisiblecontrol.cpp \
 basicwidgets/builders/lcxmlstackedwidgetbuilder.cpp \
 basicwidgets/builders/lcxmlsplitterbuilder.cpp \
@@ -164,7 +164,7 @@ basicwidgets/builders/lcxmltabwidgetbuilder.h \
 basicwidgets/builders/lcxmlscrollareabuilder.h \
 basicwidgets/builders/lcxmlbuttonbuilder.h \
 basicwidgets/builders/lcxmllistwidgetbuilder.h \
-basicwidgets/builders/lcbuilderscommon.h \
+basicwidgets/builders/widgetbuilderscommon.cpp \
 basicwidgets/builders/lcqwidgetvisiblecontrol.h \
 basicwidgets/builders/lcxmlstackedwidgetbuilder.h \
 basicwidgets/builders/lcxmlsplitterbuilder.h \

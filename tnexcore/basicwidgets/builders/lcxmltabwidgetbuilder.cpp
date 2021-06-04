@@ -19,7 +19,7 @@
  * along with TeleNEXus.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include "lcxmltabwidgetbuilder.h"
-#include "lcbuilderscommon.h"
+#include "widgetbuilderscommon.h"
 #include "LIApplication.h"
 #include <QTabWidget>
 #include <QDomElement>
