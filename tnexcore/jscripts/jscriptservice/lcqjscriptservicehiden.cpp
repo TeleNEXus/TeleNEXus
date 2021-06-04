@@ -266,7 +266,6 @@ int LCQJScriptHiden::writeData(
     const QString& _dataId, 
     const QVariantList& _data)
 {
-
   QByteArray wd;
 
   for(int i = 0; i < _data.size(); i++)
@@ -279,7 +278,6 @@ int LCQJScriptHiden::writeData(
     }
     wd[i] =  (unsigned char)d;
   }
-
   return mspAppService->writeData(_sourceId, _dataId, wd);
 }
 

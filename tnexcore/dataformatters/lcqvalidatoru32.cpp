@@ -18,7 +18,7 @@
  * You should have received a copy of the GNU General Public License
  * along with TeleNEXus.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "lqvalidatoru32.h"
+#include "lcqvalidatoru32.h"
 
 LQValidatorU32::LQValidatorU32(QObject *parent) : QValidator(parent)
 {

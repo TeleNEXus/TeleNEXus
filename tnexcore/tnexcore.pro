@@ -41,7 +41,6 @@ INCLUDEPATH +=                          \
 
 
 SOURCES += \
-../../common/lqvalidatoru32.cpp \
 ../../common/tnexcommon.cpp \
 basiclayouts/commonbuilderslayout.cpp \
 basiclayouts/lcxmlboxlayoutbuilder.cpp  \
@@ -85,6 +84,7 @@ dataformatters/lcformatteru8.cpp \
 dataformatters/lcformatterstring.cpp \
 dataformatters/lcformattertextstream.cpp \
 dataformatters/lcxmlformatterfactory.cpp \
+dataformatters/lcqvalidatoru32.cpp \
 jscripts/jsformatter/lcjsformatter.cpp \
 jscripts/jsformatter/lcqjsformatterinterface.cpp \
 jscripts/jscriptservice/lcjscriptservice.cpp \
@@ -118,7 +118,6 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 HEADERS += \
 ../common/lqextendevent.h \
-../common/lqvalidatoru32.h \
 ../common/tnexcommon.h \
 ../common/interfaces/LIApplication.h \
 ../common/interfaces/remotedata/LIRemoteDataReader.h \
@@ -174,6 +173,7 @@ dataformatters/lcformatteru8.h \
 dataformatters/lcformatterstring.h \
 dataformatters/lcformattertextstream.cpp \
 dataformatters/lcxmlformatterfactory.h \
+dataformatters/lcqvalidatoru32.h \
 jscripts/jsformatter/lcjsformatter.h \
 jscripts/jsformatter/lcqjsformatterinterface.h \
 jscripts/jscriptservice/lcjscriptservice.h \
