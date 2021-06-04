@@ -23,20 +23,20 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 INCLUDEPATH +=                              \
-    ../../common                            \
-    ../../common/interfaces                 \
-    ../../common/interfaces/remotedata      \
-    ../../common/interfaces/xmlbuilders     \
+    ../../tnexcommon                            \
+    ../../tnexcommon/interfaces                 \
+    ../../tnexcommon/interfaces/remotedata      \
+    ../../tnexcommon/interfaces/xmlbuilders     \
     builders                                \
     modbus
 
 HEADERS += \
-    ../../common/interfaces/LIApplication.h \
-    ../../common/interfaces/remotedata/LIRemoteDataReader.h \
-    ../../common/interfaces/remotedata/LIRemoteDataSource.h \
-    ../../common/interfaces/remotedata/LIRemoteDataWriter.h \
-    ../../common/interfaces/xmlbuilders/LIXmlRemoteDataSourceBuilder.h \
-    ../../common/lqextendevent.h \
+    ../../tnexcommon/interfaces/LIApplication.h \
+    ../../tnexcommon/interfaces/remotedata/LIRemoteDataReader.h \
+    ../../tnexcommon/interfaces/remotedata/LIRemoteDataSource.h \
+    ../../tnexcommon/interfaces/remotedata/LIRemoteDataWriter.h \
+    ../../tnexcommon/interfaces/xmlbuilders/LIXmlRemoteDataSourceBuilder.h \
+    ../../tnexcommon/lqextendevent.h \
     modbus/lmodbusdefs.h \
     modbus/lqmodbusdatareader.h \
     modbus/lqmodbusdatasource.h \

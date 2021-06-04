@@ -23,7 +23,7 @@
 #include "LIXmlWidgetBuilder.h"
 #include "LIKeyboard.h"
 #include  "LIJScriptService.h"
-#include "tnexcommon.h"
+#include "xmlcommon.h"
 #include "lcwindow.h"
 #include <QDomElement>
 #include <QMap>
@@ -283,7 +283,7 @@ static LCWindow* uploadWindow(QWidget* _widget, const QDomElement& _element)
 
     Qt::WindowFlags flags = Qt::WindowType::Window;
 
-    auto flag_attributes = tnexcommon::parseAttributes(attr_modes);
+    auto flag_attributes = xmlcommon::parseAttributes(attr_modes);
 
     if(flag_attributes.size() == 0) return flags;
 
@@ -307,11 +307,11 @@ static LCWindow* uploadWindow(QWidget* _widget, const QDomElement& _element)
     QSize size = _oldSize;
     QString attr_size = _element.attribute(__slAttributes.size);
     if(attr_size.isNull()) return size;
-    auto values = tnexcommon::parseValues(attr_size);
+    auto values = xmlcommon::parseValues(attr_size);
 
     ([&size](const QString& _attr_size)
         {
-          auto values = tnexcommon::parseValues(_attr_size);
+          auto values = xmlcommon::parseValues(_attr_size);
           if(values.size() == 0) return;
           QString val_str;
           bool flag = false;
@@ -346,7 +346,7 @@ static LCWindow* uploadWindow(QWidget* _widget, const QDomElement& _element)
 
     if(attr_position.isNull()) return ret();
 
-    auto values = tnexcommon::parseValues(attr_position);
+    auto values = xmlcommon::parseValues(attr_position);
 
     ([&pos](const QStringList _values)
         {

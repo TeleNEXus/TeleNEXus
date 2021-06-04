@@ -26,7 +26,7 @@
 #include "LIRemoteDataWriter.h"
 #include "LIJScriptService.h"
 #include "lcbuilderscommon.h"
-#include "tnexcommon.h"
+#include "xmlcommon.h"
 #include <QPushButton>
 #include <QDomElement>
 #include <qicon.h>
@@ -96,7 +96,7 @@ private:
           if(attr_value.isNull()) return;
 
 
-          auto data_spec = tnexcommon::parseDataSpecification(attr_dataspec);
+          auto data_spec = xmlcommon::parseDataSpecification(attr_dataspec);
 
           source = _app.getDataSource(data_spec.sourceId);
           format = _app.getDataFormatter(data_spec.formatterId);
@@ -129,7 +129,7 @@ private:
 
           bool error_flag = false;
 
-          auto action = tnexcommon::parseAction(attr_action, 
+          auto action = xmlcommon::parseAction(attr_action, 
               [&error_flag](const QString&)
               {
                 error_flag = true;

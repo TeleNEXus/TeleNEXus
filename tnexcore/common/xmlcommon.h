@@ -18,8 +18,8 @@
  * You should have received a copy of the GNU General Public License
  * along with TeleNEXus.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef TNEXCOMMON_H_
-#define TNEXCOMMON_H_
+#ifndef XMLCOMMON_H_
+#define XMLCOMMON_H_
 
 #include <QString>
 #include <QMap>
@@ -93,4 +93,4 @@ SDataSpecification parseDataSpecification(const QString _dataSpec,
 QDomDocument loadDomDocument(const QString& _fileName);
 }
 
-#endif /* TNEXCOMMON_H_ */
+#endif /* XMLCOMMON_H_ */

@@ -22,11 +22,11 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 INCLUDEPATH +=                              \
-    ../../../common                         \
-    ../../../common/interfaces/xmlbuilders  \
-    ../../../common/interfaces/remotedata   \
-    ../../../common/interfaces/keyboard     \
-    ../../../common/interfaces              \
+    ../../../tnexcommon                         \
+    ../../../tnexcommon/interfaces/xmlbuilders  \
+    ../../../tnexcommon/interfaces/remotedata   \
+    ../../../tnexcommon/interfaces/keyboard     \
+    ../../../tnexcommon/interfaces              \
     ./builders                              \
 
 SOURCES += \
@@ -34,15 +34,15 @@ SOURCES += \
     builders/lcxmlswitchwidgetslistbuilder.cpp \
 
 HEADERS += \
-    ../../../common/interfaces/LIApplication.h \
-    ../../../common/interfaces/LIDataFormatter.h \
-    ../../../common/interfaces/remotedata/LIRemoteDataReader.h \
-    ../../../common/interfaces/remotedata/LIRemoteDataSource.h \
-    ../../../common/interfaces/remotedata/LIRemoteDataWriter.h \
-    ../../../common/interfaces/xmlbuilders/LIXmlLayoutBuilder.h \
-    ../../../common/interfaces/xmlbuilders/LIXmlWidgetBuilder.h \
-    ../../../common/interfaces/keyboard/LIKeyboard.h \
-    ../../../common/interfaces/keyboard/LIKeyboardListener.h \
+    ../../../tnexcommon/interfaces/LIApplication.h \
+    ../../../tnexcommon/interfaces/LIDataFormatter.h \
+    ../../../tnexcommon/interfaces/remotedata/LIRemoteDataReader.h \
+    ../../../tnexcommon/interfaces/remotedata/LIRemoteDataSource.h \
+    ../../../tnexcommon/interfaces/remotedata/LIRemoteDataWriter.h \
+    ../../../tnexcommon/interfaces/xmlbuilders/LIXmlLayoutBuilder.h \
+    ../../../tnexcommon/interfaces/xmlbuilders/LIXmlWidgetBuilder.h \
+    ../../../tnexcommon/interfaces/keyboard/LIKeyboard.h \
+    ../../../tnexcommon/interfaces/keyboard/LIKeyboardListener.h \
     examplewidgets_global.h \
     examplewidgets.h \
     builders/lcxmlswitchwidgetslistbuilder.h \

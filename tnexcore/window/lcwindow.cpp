@@ -19,7 +19,7 @@
  * along with TeleNEXus.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include "lcwindow.h"
-#include "tnexcommon.h"
+#include "xmlcommon.h"
 #include <QWidget>
 #include <QEvent>
 #include <QMap>
