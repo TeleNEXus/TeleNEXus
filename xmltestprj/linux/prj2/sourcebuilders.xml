@@ -3,7 +3,6 @@
 <SOURCEBUILDERS>
 
     <modbussources  lib="modbussource"  handler="getModbusSourceBuilder" />
-    <localsources   lib="localsource"   handler="getLocalSourceBuilder"  />
 
     <!--
     <mssqlsource   lib="libs/sqlsources"     libhandler="getMsSqlSourcesBuilder" />
