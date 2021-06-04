@@ -215,7 +215,7 @@ static QString createScriptGlobal(const QMap<QString, QString>& _attributes)
       "var Acceptable   = %2;"
       "var Intermediate = %3;"
       "var Invalid      = %4;"
-      "funlction DebugOut(str) {%5.debugOut(str)};"
+      "function DebugOut(str) {%5.debugOut(str)};"
       )
     .arg(obj_attributes)
     .arg(QValidator::State::Acceptable)

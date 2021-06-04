@@ -2,7 +2,7 @@
 
 # v_basiclayouts="`pwd`/basiclayouts"
 # v_basicwidgets="`pwd`/basicwidgets"
-v_modbussource="`pwd`/datasources/modbussource"
+v_modbussource="`pwd`/plugins/modbussource"
 # v_localsource="`pwd`/datasources/localsource"
 v_tnexcore="`pwd`/tnexcore"
 v_examplewidgets="`pwd`/examples/plugin/widgets"

@@ -150,6 +150,7 @@ void upload( const QDomElement& _rootElement,
       _pathPrj, 
       _libPaths);
 }
+
 //------------------------------------------------------------------------------
 QSharedPointer<LIXmlWidgetBuilder> getBuilder(const QString _id)
 {
