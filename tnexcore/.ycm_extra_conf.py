@@ -70,6 +70,7 @@ flags = [
              '-I', '../tnexcommon/interfaces/xmlbuilders',
              '-I', '../datasources/modbussource',
              '-I', '../datasources/modbussource/modbus',
+             '-I', '../tnexcore/localsource',
              '-I', '../tnexcore/basicwidgets',
              '-I', '../tnexcore/basicwidgets/builders',
              '-I', '../tnexcore/basiclayouts',

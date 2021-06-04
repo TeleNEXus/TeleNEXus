@@ -27,6 +27,7 @@ INCLUDEPATH +=                          \
 ../tnexcommon/interfaces/xmlbuilders        \
 ../tnexcommon/interfaces/keyboard           \
 ../tnexcommon/                              \
+./localsource                           \
 ./window                                \
 ./xml                                   \
 ./common                                \
@@ -42,6 +43,12 @@ INCLUDEPATH +=                          \
 
 
 SOURCES += \
+localsource/lcdataitemmap.cpp              \
+localsource/lclocalsource.cpp              \
+localsource/lcqlocaldatareader.cpp         \
+localsource/lcqlocaldatawriter.cpp         \
+localsource/lcqlocalsourcehiden.cpp        \
+localsource/lcxmllocalsourcebuilder.cpp    \
 basiclayouts/commonbuilderslayout.cpp \
 basiclayouts/lcxmlboxlayoutbuilder.cpp  \
 basiclayouts/lcxmlgridlayoutbuilder.cpp \
@@ -130,6 +137,12 @@ HEADERS += \
 ../tnexcommon/interfaces/LIJScriptService.h \
 ../tnexcommon/interfaces/keyboard/LIKeyboard.h \
 ../tnexcommon/interfaces/keyboard/LIKeyboardListener.h \
+localsource/lcdataitemmap.h                \
+localsource/lclocalsource.h                \
+localsource/lcqlocaldatareader.h           \
+localsource/lcqlocaldatawriter.h           \
+localsource/lcqlocalsourcehiden.h          \
+localsource/lcxmllocalsourcebuilder.h      \
 basiclayouts/commonbuilderslayout.h \
 basiclayouts/lcxmlboxlayoutbuilder.h    \
 basiclayouts/lcxmlgridlayoutbuilder.h   \

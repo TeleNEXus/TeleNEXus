@@ -3,7 +3,7 @@
 # v_basiclayouts="`pwd`/basiclayouts"
 # v_basicwidgets="`pwd`/basicwidgets"
 v_modbussource="`pwd`/datasources/modbussource"
-v_localsource="`pwd`/datasources/localsource"
+# v_localsource="`pwd`/datasources/localsource"
 v_tnexcore="`pwd`/tnexcore"
 v_examplewidgets="`pwd`/examples/plugin/widgets"
 
@@ -13,7 +13,7 @@ v_offset_line="================================================"
 
 echo "$v_offset_line test build `pwd`"
 
-# Создание рабочих папок.
+# Create work dirs
 createDir ()
 {
     if [ ! -d "$1/$v_build_dir_name" ] 
@@ -23,7 +23,7 @@ createDir ()
     fi
 }
 
-# Удаление рабочих папок.
+#Remove work dirs
 deleteDir ()
 {
     if [ -d "$1/$v_build_dir_name" ] 
@@ -33,7 +33,7 @@ deleteDir ()
     fi
 }
 
-# Сборка
+# compil 
 makePrg ()
 {
 
@@ -56,7 +56,7 @@ then
     # deleteDir "$v_basiclayouts"
     # deleteDir "$v_basicwidgets"
     deleteDir "$v_modbussource"
-    deleteDir "$v_localsource"
+    # deleteDir "$v_localsource"
     deleteDir "$v_tnexcore"
     deleteDir "$v_examplewidgets"
     exit 0
@@ -65,16 +65,15 @@ fi
 # createDir "$v_basiclayouts"
 # createDir "$v_basicwidgets"
 createDir "$v_modbussource"
-createDir "$v_localsource"
+# createDir "$v_localsource"
 createDir "$v_tnexcore"
 createDir "$v_examplewidgets"
 
-# Запус сборщика Qt обязателен для любого варианта.
 echo "$v_offset_line qmake"
 # makePrg "$v_basiclayouts" "qmake"
 # makePrg "$v_basicwidgets" "qmake"
 makePrg "$v_modbussource" "qmake"
-makePrg "$v_localsource" "qmake"
+# makePrg "$v_localsource" "qmake"
 makePrg "$v_tnexcore" "qmake"
 makePrg "$v_examplewidgets" "qmake"
 
@@ -82,7 +81,7 @@ echo "$v_offset_line make $1"
 # makePrg "$v_basiclayouts" "make" "$1"
 # makePrg "$v_basicwidgets" "make" "$1"
 makePrg "$v_modbussource" "make" "$1"
-makePrg "$v_localsource" "make" "$1"
+# makePrg "$v_localsource" "make" "$1"
 makePrg "$v_tnexcore" "make" "$1"
 makePrg "$v_examplewidgets" "make" "$1"
 

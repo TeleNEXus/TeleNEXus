@@ -2,6 +2,6 @@
 
 
 
-<localsources id="localsource">
+<localsources>
   <source id="localsource" mapfile="localsourcemap1.xml"  />
 </localsources>

@@ -26,6 +26,7 @@
 
 #include "basicwidgetbuilders.h"
 #include "basiclayoutbuilders.h"
+#include "lcxmllocalsourcebuilder.h"
 
 #include <QLibrary>
 #include <QDebug>
@@ -40,6 +41,11 @@ static const struct
   QString layoutBuilders  = "LAYOUTBUILDERS";
   QString sourceBuilders  = "SOURCEBUILDERS";
 }__slRootTags;
+
+static const struct
+{
+  QString localsources = "localsources";
+}__slTags;
 
 static const struct
 {
@@ -103,19 +109,48 @@ static void loadBuilders(
 namespace builders
 {
 
+namespace widgets
+{ QMap<QString, QSharedPointer<LIXmlWidgetBuilder>> __slBuilders;}
+
+namespace layouts
+{ QMap<QString, QSharedPointer<LIXmlLayoutBuilder>> __slBuilders; }
+
+namespace sources
+{ QMap<QString, QSharedPointer<LIXmlRemoteDataSourceBuilder>> __slBuilders; }
+
+//------------------------------------------------------------------------------
+class CInitMaps
+{
+private:
+  CInitMaps()
+  {
+    widgets::__slBuilders.unite(basicwidgetbuilders::getBuilders());
+    layouts::__slBuilders.unite(basiclayoutbuilders::getBuilders());
+    sources::__slBuilders.insert(__slTags.localsources, 
+        QSharedPointer<LIXmlRemoteDataSourceBuilder>(
+          new LCXmlLocalSourceBuilder()));
+  }
+  CInitMaps(const CInitMaps&) = delete;
+  CInitMaps& operator=(const CInitMaps&) = delete;
+  static CInitMaps instance;
+};
+CInitMaps CInitMaps::instance;
 
 //------------------------------------------------------------------------------
 namespace widgets
 {
-
-QMap<QString, QSharedPointer<LIXmlWidgetBuilder>> __slBuilders;
-
+//------------------------------------------------------------------------------
 void upload( const QDomElement& _rootElement, 
     const QString& _pathPrj, const QStringList& _libPaths)
 {
-  Upload(__slBuilders, __slRootTags.widgetBuilders, _rootElement, _pathPrj, _libPaths);
+  Upload(
+      __slBuilders, 
+      __slRootTags.widgetBuilders, 
+      _rootElement, 
+      _pathPrj, 
+      _libPaths);
 }
-
+//------------------------------------------------------------------------------
 QSharedPointer<LIXmlWidgetBuilder> getBuilder(const QString _id)
 {
   return findBuilder(_id, __slBuilders);
@@ -125,16 +160,12 @@ QSharedPointer<LIXmlWidgetBuilder> getBuilder(const QString _id)
 //------------------------------------------------------------------------------
 namespace layouts
 {
-
-QMap<QString, QSharedPointer<LIXmlLayoutBuilder>> __slBuilders;
-
 //------------------------------------------------------------------------------
 void upload( const QDomElement& _rootElement, 
     const QString& _pathPrj, const QStringList& _libPaths)
 {
   Upload(__slBuilders, __slRootTags.layoutBuilders, _rootElement, _pathPrj, _libPaths);
 }
-
 //------------------------------------------------------------------------------
 QSharedPointer<LIXmlLayoutBuilder> getBuilder(const QString _id)
 {
@@ -145,8 +176,6 @@ QSharedPointer<LIXmlLayoutBuilder> getBuilder(const QString _id)
 //------------------------------------------------------------------------------
 namespace sources 
 {
-
-QMap<QString, QSharedPointer<LIXmlRemoteDataSourceBuilder>> __slBuilders;
 
 //------------------------------------------------------------------------------
 void upload( const QDomElement& _rootElement, 
@@ -163,22 +192,8 @@ QSharedPointer<LIXmlRemoteDataSourceBuilder> getBuilder(const QString _id)
 
 } /* namespace sources*/
 
-class CInitMaps
-{
-private:
-  CInitMaps()
-  {
-    qDebug() << "xmlbuilders.cpp: Init maps constructor call";
-    widgets::__slBuilders.unite(basicwidgetbuilders::getBuilders());
-    layouts::__slBuilders.unite(basiclayoutbuilders::getBuilders());
-  }
-  CInitMaps(const CInitMaps&) = delete;
-  CInitMaps& operator=(const CInitMaps&) = delete;
-  static CInitMaps instance;
-};
-CInitMaps CInitMaps::instance;
 
-} /* namespace uploadbuilders */
+} /* namespace xmlbuilders*/
 
 
 
