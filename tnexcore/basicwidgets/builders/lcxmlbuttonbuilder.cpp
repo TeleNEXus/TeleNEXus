@@ -25,7 +25,7 @@
 #include "LIWindow.h"
 #include "LIRemoteDataWriter.h"
 #include "LIJScriptService.h"
-#include "lcbuilderscommon.h"
+#include "widgetbuilderscommon.h"
 #include "xmlcommon.h"
 #include <QPushButton>
 #include <QDomElement>
@@ -258,7 +258,17 @@ QWidget* LCXmlButtonBuilder::buildLocal(
         });
   }
 
+  auto pixmap = LCBuildersCommon::parsePixmap(element.attribute(QStringLiteral("icon")), app);
+
+  if(!pixmap.isNull())
+  {
+    button->setIconSize(pixmap.size());
+    button->setIcon(pixmap);
+  }
+
   setStyleSheet(button, element, app);
+
+
   LCBuildersCommon::initPosition(element, *button);
 
   return button;
@@ -269,59 +279,7 @@ static void setStyleSheet(QPushButton* _button, const QDomElement& _element,
     const LIApplication& _app)
 {
   QString style = LCBuildersCommon::getBaseStyleSheet(_element, _app);
-
   _button->setStyleSheet(style);
-
-  QString attr_icon = _element.attribute(
-      LCBuildersCommon::mAttributes.icon);
-
-  if(!attr_icon.isNull())
-  {
-    QPixmap pixmap(LCBuildersCommon::getPixmap(attr_icon, _app));
-
-    QSize size_pixmap = pixmap.size();
-    QSize size_icon = _button->iconSize();
-
-    QString attr = _element.attribute(
-        LCBuildersCommon::mAttributes.iconscale);
-
-    if(!attr.isNull())
-    {
-      bool flag = false;
-      float scale = attr.toFloat(&flag);
-      if(flag)
-      {
-        pixmap = pixmap.scaled(
-            size_pixmap.width() * scale, size_pixmap.height() * scale);
-        _button->setIconSize(pixmap.size());
-      }
-    }
-    else
-    {
-      attr = _element.attribute(LCBuildersCommon::mAttributes.iconwidth);
-      if(!attr.isNull())
-      {
-        bool flag = false;
-        int width = attr.toInt(&flag);
-        if(flag) size_icon.setWidth(width);
-      }
-
-      attr = _element.attribute(LCBuildersCommon::mAttributes.iconheight);
-      if(!attr.isNull())
-      {
-        bool flag = false;
-        int height = attr.toInt(&flag);
-        if(flag) size_icon.setHeight(height);
-      }
-
-      if(size_icon != _button->iconSize())
-      {
-        pixmap = pixmap.scaled(size_icon.width(), size_icon.height());
-        _button->setIconSize(size_icon);
-      }
-    }
-    _button->setIcon(pixmap);
-  }
 }
 
 

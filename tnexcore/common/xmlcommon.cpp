@@ -23,6 +23,7 @@
 #include <QRegularExpression>
 #include <QDomDocument>
 #include <QFile>
+#include <QPixmap>
 #include <QDebug>
 
 //==============================================================================removeSpaces
@@ -95,11 +96,11 @@ SAction parseAction( const QString& _actionString,
   //----------------------------------------------------------ret_ok[]
   auto ret_ok = [](const QString& _func, const QStringList& _params)
   {
-    if(!_func.isNull())
-    {
+    /* if(!_func.isNull()) */
+    /* { */
       return SAction{_func, _params};
-    }
-    return SAction{};
+    /* } */
+    /* return SAction{}; */
   };
 
   //----------------------------------------------------------ret_wrong[]
@@ -192,10 +193,10 @@ SAction parseAction( const QString& _actionString,
 
   QString func = get_func(_actionString);
 
-  if(func.isNull())
-  {
-    return ret_wrong("No function name");
-  }
+  /* if(func.isNull()) */
+  /* { */
+  /*   return ret_wrong("No function name"); */
+  /* } */
 
   QString params_string = _actionString.right(_actionString.size() - func.size());
 
@@ -267,17 +268,19 @@ QMap<QString, QString> parseAttributes(
     return TRetMap();
   }
 
+  //TODO: change parse algorithm!!!!!!
+  
   attrs.remove(__slRemoveEndLine);
-
   attrs.remove(QRegularExpression(QString("^%1{1,}|%1{1,}$").arg(_separator)));
-
-  auto attributes = attrs.split(_separator);
+  auto attributes = attrs.split(
+      QRegularExpression(QString("(?<!\\\\)(%1)").arg(_separator)));
 
   TRetMap ret_map;
 
   for(auto ait = attributes.begin(); ait != attributes.end(); ait++)
   {
-    auto record_list = (*ait).split(_equal);
+    auto record_list = (*ait).split(
+        QRegularExpression(QString("(?<!\\\\)(%1)").arg(_equal)));
 
     if(record_list.size() == 0) continue;
 
@@ -287,6 +290,10 @@ QMap<QString, QString> parseAttributes(
     if(it != record_list.end()) name = (*it);
     it++;
     if(it != record_list.end()) value = (*it);
+    value.remove(QRegularExpression(QStringLiteral("^'|'$")));
+    value.replace(QRegularExpression(QString("(?<!\\\\)(\\\\%1)").arg(_separator)), _separator);
+    value.replace(QRegularExpression(QString("(?<!\\\\)(\\\\%1)").arg(_equal)), _equal);
+    value.replace(QStringLiteral("\\\\"), QStringLiteral("\\"));
     ret_map.insert(name, value);
   } 
   return ret_map;
@@ -336,6 +343,7 @@ QDomDocument loadDomDocument (const QString& _fileName)
   }
   return domDoc;
 }
+
 
 } /* namespace xmlcommon */
 

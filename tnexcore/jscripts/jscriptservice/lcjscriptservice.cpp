@@ -19,6 +19,7 @@
  * along with TeleNEXus.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include "lcjscriptservice.h"
+#include "xmlcommon.h"
 #include "lcqjscriptservicehiden.h"
 #include <QJSEngine>
 #include <QTimer>
@@ -89,13 +90,20 @@ public:
   void action(QString _expression)
   {
     if(_expression.isNull()) return;
-    auto action_list = _expression.remove(" ").split("(");
-    if(action_list.isEmpty()) return;
-    auto it = mActions.find(action_list[0]);
-    if(it == mActions.end()) return;
-    if(action_list.size() > 1)
+    QString error;
+    auto action = xmlcommon::parseAction(_expression, 
+        [&error](const QString& _str){error = _str;});
+    if(!error.isNull()) 
     {
-      it.value()(action_list[1].remove(")").split(","));
+      qDebug() << "Parse action error: " << error;
+      return;
+    }
+
+    auto it = mActions.find(action.name);
+    if(it == mActions.end()) return;
+    if(!action.parameters.isEmpty())
+    {
+      it.value()(action.parameters);
     }
     else
     {

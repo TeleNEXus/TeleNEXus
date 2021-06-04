@@ -137,6 +137,7 @@ public:
    *  _app - интерфейс доступа к функциям приложения.
    */
   static QPixmap getPixmap(const QString& _file, const LIApplication& _app);
+
   /*
    * Преозразует атрибут в флаг выравнивания.
    * Возвращает true при успешном преобразовании, и false при неуспешном.
@@ -175,6 +176,17 @@ public:
    * Получение строки определения базового стиля из DOM элемента.
    */
   static QString getBaseStyleSheet(const QDomElement& _element, const LIApplication& _app);
+
+
+
+  //=============================================================================================
+
+
+  /* Parses a string of an expression like 
+   * "file='pixmapfile'; size=(width, height)" 
+   * and returns a QPixmap of the specified size.
+   */
+  static QPixmap parsePixmap(const QString& _expr, const LIApplication& _app);
 };
 
 #endif /* BUILDERSCOMMON_H_ */

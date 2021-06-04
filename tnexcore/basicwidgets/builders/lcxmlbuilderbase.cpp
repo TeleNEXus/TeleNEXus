@@ -19,7 +19,7 @@
  * along with TeleNEXus.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include "lcxmlbuilderbase.h"
-#include "lcbuilderscommon.h"
+#include "widgetbuilderscommon.h"
 
 #include "LIApplication.h"
 #include "lcqwidgetvisiblecontrol.h"

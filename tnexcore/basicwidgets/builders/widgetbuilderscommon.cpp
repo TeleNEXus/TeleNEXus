@@ -18,7 +18,8 @@
  * You should have received a copy of the GNU General Public License
  * along with TeleNEXus.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "lcbuilderscommon.h"
+#include "widgetbuilderscommon.h"
+#include "xmlcommon.h"
 #include <QDomElement>
 #include <QWidget>
 #include <QDebug>
@@ -483,3 +484,62 @@ QString LCBuildersCommon::getBaseStyleSheet(const QDomElement& _element,
   return style;
 }
 
+//------------------------------------------------------------------------------
+QPixmap LCBuildersCommon::parsePixmap(
+    const QString& _expr, const LIApplication& _app)
+{
+  auto set_size = 
+    [](const QString& _attr_size, 
+        std::function<void(int)> _setWidth,
+        std::function<void(int)> _setHeight)
+    {
+      auto set_value = 
+        [](const QString& _value, std::function<void(int)> _setter)
+        {
+          bool flag = false;
+          int ivalue = _value.toInt(&flag);
+          if(!flag) return;
+          _setter(ivalue);
+        };
+
+      auto s = xmlcommon::parseAction(_attr_size);
+      auto itsize = s.parameters.begin();
+      if(itsize == s.parameters.end()) return;
+      if(!((*itsize).isNull()))
+      {
+        set_value((*itsize), _setWidth);
+      }
+      itsize++;
+      if(!((*itsize).isNull()))
+      {
+        set_value((*itsize), _setHeight);
+      }
+    };
+
+  if(_expr.isNull()) return QPixmap();
+  auto icon_attrs = xmlcommon::parseAttributes(_expr);
+  auto attr_it = icon_attrs.find(QStringLiteral("file"));
+  if(attr_it == icon_attrs.end()) return QPixmap();
+
+  QPixmap pixmap(LCBuildersCommon::getPixmap(attr_it.value(), _app));
+
+  if(pixmap.isNull()) return pixmap;
+  attr_it = icon_attrs.find(QStringLiteral("size"));
+
+  QSize size = pixmap.size();
+
+  if(attr_it != icon_attrs.end())
+  {
+    set_size(attr_it.value(), 
+        [&size](int _width)
+        {
+          size.setWidth(_width);
+        }, 
+        [&size](int _height)
+        {
+          size.setHeight(_height);
+        });
+    pixmap = pixmap.scaled(size.width(), size.height());
+  }
+  return(pixmap);
+}

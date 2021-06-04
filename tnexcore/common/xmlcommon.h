@@ -26,7 +26,7 @@
 #include <functional>
 
 class QDomDocument;
-
+class QPixmap;
 namespace xmlcommon
 {
 
@@ -88,7 +88,6 @@ QMap<QString, QString> parseAttributes(
 
 SDataSpecification parseDataSpecification(const QString _dataSpec,
     std::function<void(const QString& _error)> _err = [](const QString&){});
-
 
 QDomDocument loadDomDocument(const QString& _fileName);
 }

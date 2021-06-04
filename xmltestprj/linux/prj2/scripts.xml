@@ -2,6 +2,7 @@
 
 <SCRIPTS>
 
+  <script id="testlaunch1" file="scripts/testlaunch.js"/>
   <!-- <script id="testwrite1" file="scripts/writedatatosource.js"/> -->
 
   <!-- <script id="testattr1" file="scripts/testattributes.js"> -->
