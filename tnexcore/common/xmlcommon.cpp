@@ -19,8 +19,11 @@
  * along with TeleNEXus.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "tnexcommon.h"
+#include "xmlcommon.h"
 #include <QRegularExpression>
+#include <QDomDocument>
+#include <QFile>
+#include <QDebug>
 
 //==============================================================================removeSpaces
 static QString removeSpaces(
@@ -81,7 +84,7 @@ static QString removeSpaces(
 static const QRegularExpression __slRemoveEndLine("(\\r+)|(\\n+)");
 
 //==============================================================================
-namespace tnexcommon
+namespace xmlcommon
 {
 
 //------------------------------------------------------------------------------parseAction
@@ -313,5 +316,26 @@ SDataSpecification parseDataSpecification(const QString _dataSpec,
   return SDataSpecification{sourceId, dataId, formatId};
 }
 
-} /* namespace tnexcommon */
+//------------------------------------------------------------------------------
+QDomDocument loadDomDocument (const QString& _fileName)
+{
+  QFile file(_fileName);
+
+  QDomDocument domDoc;
+  QString errorStr;
+  int errorLine;
+  int errorColumn;
+
+  if(!domDoc.setContent(&file, true, &errorStr, &errorLine, &errorColumn))
+  {
+    qDebug() << 
+      "Parse file "       << file.fileName() << 
+      " error at line:"   << errorLine <<
+      " column:"          << errorColumn << 
+      " msg: "            << errorStr;
+  }
+  return domDoc;
+}
+
+} /* namespace xmlcommon */
 
