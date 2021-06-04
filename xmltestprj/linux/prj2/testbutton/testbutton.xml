@@ -19,6 +19,8 @@
 
             <button test="write data" 
               icon="file='picture/icon1.png'; size=(150,50)"
+              textColor="yellow"
+              bgColor="green"
               >
               <!-- icon="file='picture/icon1.png'; size=(150,50)" -->
               <!-- icon="file='picture/icon1.png'; size=(50,50)" -->
