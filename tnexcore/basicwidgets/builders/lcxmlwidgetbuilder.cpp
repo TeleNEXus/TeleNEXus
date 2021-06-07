@@ -116,11 +116,16 @@ QWidget* LCXmlWidgetBuilder::buildLocal(QSharedPointer<SBuildData> _buildData)
   QDomNode  node = element.firstChildElement(__slTags.layout);
   LCWidget* widget = new LCWidget;
 
-  QString style = LCBuildersCommon::getBaseStyleSheet(element, app);
+  /* QString style = LCBuildersCommon::getBaseStyleSheet(element, app); */
 
-  style = QString("QWidget#%1{  %2 }").arg(widget->objectName()).arg(style);
+  QString style = element.attribute(QStringLiteral("style"));
+  if(!style.isNull())
+  {
+    /* style = QString("QWidget#%1{  %2 }").arg(widget->objectName()).arg(style); */
+    style = QString("QWidget{  %1 }").arg(style);
+    widget->setStyleSheet(style);
+  }
 
-  widget->setStyleSheet(style);
 
   if(!node.isNull()) 
   {
@@ -137,6 +142,8 @@ QWidget* LCXmlWidgetBuilder::buildLocal(QSharedPointer<SBuildData> _buildData)
   }
 
   LCBuildersCommon::initPosition(element, *widget);
+
+
 
   return widget;
 }

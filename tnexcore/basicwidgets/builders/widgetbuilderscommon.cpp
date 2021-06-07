@@ -29,6 +29,7 @@
 #include <QFileInfo>
 #include <qnamespace.h>
 #include "LIMovieAccess.h"
+#include <QRegularExpression>
 
 //==============================================================================
 class CMovieAccess : public LIMovieAccess
@@ -543,3 +544,35 @@ QPixmap LCBuildersCommon::parsePixmap(
   }
   return(pixmap);
 }
+
+quint64 LCBuildersCommon::getUniqId()
+{
+  static quint64 counter = 0;
+  return counter++;
+}
+
+void LCBuildersCommon::setStyle(const QString& _style, QWidget* _widget)
+{
+  QString style = _style;
+  if(_style.contains(
+        QRegularExpression(
+          QStringLiteral("\\A([^{^}]*\\{[^{^}]*\\})+\\s*\\z"))))
+  {
+    //if the style string looks like "ClassName ... {...}" 
+    style = _style;
+  }
+  else if(!_widget->objectName().isNull())
+  {
+    _widget->setStyleSheet(
+        QString("%1#%2 {%3}")
+        .arg(_widget->metaObject()->className())
+        .arg(_widget->objectName())
+        .arg(_style));
+  }
+  else
+  {
+    style = _style;
+  }
+  _widget->setStyleSheet(_style);
+}
+
