@@ -53,19 +53,20 @@ QMap<QString, QSharedPointer<LIXmlWidgetBuilder>> getBuilders()
     };
 
   add_builder(QStringLiteral("frame"              ),  new LCXmlFrameBuilder());
-  add_builder(QStringLiteral("label"              ),  new LCXmlTextLabelBuilder());
-  add_builder(QStringLiteral("table"              ),  new LCXmlTableWidgetBuilder());
-  add_builder(QStringLiteral("dataLabel"          ),  new LCXmlRemLabelBuilder());
-  add_builder(QStringLiteral("dataLineEdit"       ),  new LCXmlRemLineEditBuilder());
-  add_builder(QStringLiteral("dataComboBox"       ),  new LCXmlRemComboBoxBuilder());
-  add_builder(QStringLiteral("dataComboLabel"     ),  new LCXmlRemComboLabelBuilder());
-  add_builder(QStringLiteral("tabs"               ),  new LCXmlTabWidgetBuilder());
-  add_builder(QStringLiteral("scrollArea"         ),  new LCXmlScrollAreaBuilder());
   add_builder(QStringLiteral("button"             ),  new LCXmlButtonBuilder());
-  add_builder(QStringLiteral("listWidget"         ),  new LCXmlListWidgetBuilder());
-  add_builder(QStringLiteral("stackedWidget"      ),  new LCXmlStackedWidgetBuilder());
-  add_builder(QStringLiteral("splitterVertical"   ),  new LCXmlSplitterBuilder(Qt::Vertical));
-  add_builder(QStringLiteral("splitterHorizontal" ),  new LCXmlSplitterBuilder(Qt::Horizontal));
+  /* add_builder(QStringLiteral("label"              ),  new LCXmlTextLabelBuilder()); */
+  /* add_builder(QStringLiteral("dataLabel"          ),  new LCXmlRemLabelBuilder()); */
+
+  /* add_builder(QStringLiteral("table"              ),  new LCXmlTableWidgetBuilder()); */
+  /* add_builder(QStringLiteral("dataLineEdit"       ),  new LCXmlRemLineEditBuilder()); */
+  /* add_builder(QStringLiteral("dataComboBox"       ),  new LCXmlRemComboBoxBuilder()); */
+  /* add_builder(QStringLiteral("dataComboLabel"     ),  new LCXmlRemComboLabelBuilder()); */
+  /* add_builder(QStringLiteral("tabs"               ),  new LCXmlTabWidgetBuilder()); */
+  /* add_builder(QStringLiteral("scrollArea"         ),  new LCXmlScrollAreaBuilder()); */
+  /* add_builder(QStringLiteral("listWidget"         ),  new LCXmlListWidgetBuilder()); */
+  /* add_builder(QStringLiteral("stackedWidget"      ),  new LCXmlStackedWidgetBuilder()); */
+  /* add_builder(QStringLiteral("splitterVertical"   ),  new LCXmlSplitterBuilder(Qt::Vertical)); */
+  /* add_builder(QStringLiteral("splitterHorizontal" ),  new LCXmlSplitterBuilder(Qt::Horizontal)); */
 
   return builders_map;
 }

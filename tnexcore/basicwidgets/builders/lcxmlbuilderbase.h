@@ -45,8 +45,10 @@ public:
       const LIApplication&    _app) override final;
 
 protected:
-
   virtual QWidget* buildLocal(QSharedPointer<SBuildData> _buildData) = 0;
+  static void setPosition(const QDomElement& _element, QWidget* _widget);
+  static void setSize(const QDomElement& _element, QWidget* _widget);
+  static void setFixedSize(const QDomElement& _element, QWidget* _widget);
 };
 
 #endif
