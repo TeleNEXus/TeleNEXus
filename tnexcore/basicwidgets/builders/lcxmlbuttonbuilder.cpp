@@ -196,8 +196,7 @@ LCXmlButtonBuilder::~LCXmlButtonBuilder()
 }
 
 //------------------------------------------------------------------------------
-static void setStyleSheet(QPushButton* _button, const QDomElement& _element, 
-    const LIApplication& _app);
+static void setStyleSheet(QPushButton* _button, const QDomElement& _element);
 
 //------------------------------------------------------------------------------
 QWidget* LCXmlButtonBuilder::buildLocal(
@@ -266,7 +265,7 @@ QWidget* LCXmlButtonBuilder::buildLocal(
     button->setIcon(pixmap);
   }
 
-  setStyleSheet(button, element, app);
+  setStyleSheet(button, element);
 
 
   LCBuildersCommon::initPosition(element, *button);
@@ -275,21 +274,11 @@ QWidget* LCXmlButtonBuilder::buildLocal(
 }
 
 //==============================================================================
-static void setStyleSheet(QPushButton* _button, const QDomElement& _element, 
-    const LIApplication& _app)
+static void setStyleSheet(QPushButton* _button, const QDomElement& _element)
 {
-
   QString style = _element.attribute(QStringLiteral("style"));
   if(style.isNull()) return;
-  _button->setStyleSheet(style);
-
-
-
-  /* QString style = LCBuildersCommon::getBaseStyleSheet(_element, _app); */
-  /* _button->setStyleSheet(style); */
-  /* qDebug() << "+++++++button base style sheet "; */
-  /* qDebug() << style; */
-
+  LCBuildersCommon::setStyle(style, _button);
 }
 
 

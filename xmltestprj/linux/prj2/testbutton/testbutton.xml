@@ -12,8 +12,9 @@
   </actions>
 
   <mainWidget>
-    <widget
-      style="background-image: url(picture/fon1.png)"
+    <frame
+      name="testname"
+      style="QFrame#testname {background-image: url(picture/fon1.png)}"
       >
               <!-- style="background-image: url(/home/serg/pprj/tnex/xmltestprj/linux/prj2/picture/fon1.png)" -->
       <layout>
@@ -80,7 +81,7 @@
           <stretch/>
         </layoutVBox>
       </layout>
-    </widget>
+    </frame>
     <!-- <button> -->
     <!--   <press> -->
     <!--     <!-1- <writeData sourceId="localsource" dataId="test_string" format="string" value="'\release write string 2'"/> -1-> -->

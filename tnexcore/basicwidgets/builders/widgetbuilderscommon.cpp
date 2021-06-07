@@ -545,34 +545,46 @@ QPixmap LCBuildersCommon::parsePixmap(
   return(pixmap);
 }
 
-quint64 LCBuildersCommon::getUniqId()
+void LCBuildersCommon::setWidgetName(QWidget* _widget, const QString& _name)
 {
   static quint64 counter = 0;
-  return counter++;
+  qDebug() << "LCBuildersCommon::setWidgetName _name = " << _name;
+
+  if(!_name.isNull()) 
+  {
+    _widget->setObjectName(_name);
+  }
+  else
+  {
+    _widget->setObjectName(
+        QString("%1_%2")
+        .arg(_widget->metaObject()->className())
+        .arg(counter));
+    counter++;
+  }
 }
 
 void LCBuildersCommon::setStyle(const QString& _style, QWidget* _widget)
 {
-  QString style = _style;
+  auto ret = [_widget](const QString& _ss)
+  {
+    _widget->setStyleSheet(_ss);
+  };
+
   if(_style.contains(
         QRegularExpression(
           QStringLiteral("\\A([^{^}]*\\{[^{^}]*\\})+\\s*\\z"))))
   {
-    //if the style string looks like "ClassName ... {...}" 
-    style = _style;
+    return ret(_style);
   }
-  else if(!_widget->objectName().isNull())
+
+  if(!_widget->objectName().isNull())
   {
-    _widget->setStyleSheet(
-        QString("%1#%2 {%3}")
+    return ret( QString("%1#%2 {%3}")
         .arg(_widget->metaObject()->className())
         .arg(_widget->objectName())
         .arg(_style));
   }
-  else
-  {
-    style = _style;
-  }
-  _widget->setStyleSheet(_style);
+  return ret(_style);
 }
 

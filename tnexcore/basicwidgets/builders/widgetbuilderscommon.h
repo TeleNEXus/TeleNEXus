@@ -189,8 +189,15 @@ public:
    */
   static QPixmap parsePixmap(const QString& _expr, const LIApplication& _app);
 
-  static quint64 getUniqId();
+  /* 
+   * Return unique id for anonimous objects naming.
+   */
+  /* static quint64 getUniqId(); */
 
+  static void setWidgetName(QWidget* _widget, const QString& _name = QString());
+  /*
+   *Sets style sheet for widget.
+   */
   static void setStyle(const QString& _style, QWidget* _widget);
 };
 

@@ -24,7 +24,7 @@
 #include "basicwidgetbuilders.h"
 #include "LIXmlWidgetBuilder.h"
 
-#include "lcxmlwidgetbuilder.h"
+#include "lcxmlframebuilder.h"
 #include "lcxmltextlabelbuilder.h"
 #include "lcxmltablewidgetbuilder.h"
 #include "lcxmlremlabelbuilder.h"
@@ -52,7 +52,7 @@ QMap<QString, QSharedPointer<LIXmlWidgetBuilder>> getBuilders()
       builders_map.insert(_name, QSharedPointer<LIXmlWidgetBuilder>(_builder));
     };
 
-  add_builder(QStringLiteral("widget"             ),  new LCXmlWidgetBuilder());
+  add_builder(QStringLiteral("frame"              ),  new LCXmlFrameBuilder());
   add_builder(QStringLiteral("label"              ),  new LCXmlTextLabelBuilder());
   add_builder(QStringLiteral("table"              ),  new LCXmlTableWidgetBuilder());
   add_builder(QStringLiteral("dataLabel"          ),  new LCXmlRemLabelBuilder());

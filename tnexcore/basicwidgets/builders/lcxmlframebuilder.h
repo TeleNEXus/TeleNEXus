@@ -23,11 +23,11 @@
 
 #include "lcxmlbuilderbase.h"
 
-class LCXmlWidgetBuilder : public LCXmlBuilderBase
+class LCXmlFrameBuilder : public LCXmlBuilderBase
 {
 public:
-  LCXmlWidgetBuilder();
-  virtual ~LCXmlWidgetBuilder();
+  LCXmlFrameBuilder();
+  virtual ~LCXmlFrameBuilder();
 
 protected:
 
