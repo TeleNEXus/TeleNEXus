@@ -62,7 +62,7 @@ basicwidgets/builders/lcxmlbuilderbase.cpp \
 basicwidgets/builders/lcxmlremlabelbuilder.cpp \
 basicwidgets/builders/lcxmlremlineeditbuilder.cpp \
 basicwidgets/builders/lcxmltextlabelbuilder.cpp \
-basicwidgets/builders/lcxmlwidgetbuilder.cpp \
+basicwidgets/builders/lcxmlframebuilder.cpp \
 basicwidgets/builders/lcxmlremcomboboxbuilder.cpp \
 basicwidgets/builders/lcxmlremcombolabelbuilder.cpp \
 basicwidgets/builders/lcxmltablewidgetbuilder.cpp \
@@ -156,7 +156,7 @@ basicwidgets/builders/lcxmlremlineeditbuilder.h \
 basicwidgets/builders/lcxmlremlabelbuilder.h \
 basicwidgets/builders/lcxmlremlineeditbuilder.h \
 basicwidgets/builders/lcxmltextlabelbuilder.h \
-basicwidgets/builders/lcxmlwidgetbuilder.h \
+basicwidgets/builders/lcxmlframebuilder.h \
 basicwidgets/builders/lcxmlremcomboboxbuilder.h \
 basicwidgets/builders/lcxmlremcombolabelbuilder.h \
 basicwidgets/builders/lcxmltablewidgetbuilder.h \

@@ -18,7 +18,7 @@
  * You should have received a copy of the GNU General Public License
  * along with TeleNEXus.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "lcxmlwidgetbuilder.h"
+#include "lcxmlframebuilder.h"
 #include "widgetbuilderscommon.h"
 #include "LIApplication.h"
 #include "LIXmlLayoutBuilder.h"
@@ -28,10 +28,23 @@
 #include <QDebug>
 
 //==============================================================================
+static const struct
+{
+  QString layout = "layout";
+  QString widgets = "widgets";
+} __slTags;
+
+//------------------------------------------------------------------------------
+static const struct
+{
+  QString style = "style";
+  QString name = "name";
+} __slAttributes;
+
+//==============================================================================
 class LCWidget : public QFrame
 {
 private:
-  static int mObjectCounter;
   QSize mSizeHint;
 public:
   explicit LCWidget(QWidget* _parent=nullptr); 
@@ -40,13 +53,9 @@ public:
 };
 
 //------------------------------------------------------------------------------
-int LCWidget::mObjectCounter = 0;
-//------------------------------------------------------------------------------
 LCWidget::LCWidget(QWidget* _parent) : 
   QFrame(_parent)
 {
-  setObjectName(QString("LCWidget_%1").arg(mObjectCounter));
-  mObjectCounter++;
 }
 
 //------------------------------------------------------------------------------
@@ -75,27 +84,15 @@ void LCWidget::addWidget(QWidget* _widget)
   mSizeHint = QSize(width, height);
 }
 
-//------------------------------------------------------------------------------
-static const struct
-{
-  QString layout = "layout";
-  QString widgets = "widgets";
-} __slTags;
-
-//------------------------------------------------------------------------------
-static const struct
-{
-  QString file = "file";
-} __attrName;
 
 //==============================================================================
-LCXmlWidgetBuilder::LCXmlWidgetBuilder()
+LCXmlFrameBuilder::LCXmlFrameBuilder()
 {
 
 }
 
 //------------------------------------------------------------------------------
-LCXmlWidgetBuilder::~LCXmlWidgetBuilder()
+LCXmlFrameBuilder::~LCXmlFrameBuilder()
 {
 
 }
@@ -108,7 +105,7 @@ static void buildFromWidgets(LCWidget* _widget, const QDomElement& _element,
     const LIApplication& _app);
 
 //------------------------------------------------------------------------------
-QWidget* LCXmlWidgetBuilder::buildLocal(QSharedPointer<SBuildData> _buildData)
+QWidget* LCXmlFrameBuilder::buildLocal(QSharedPointer<SBuildData> _buildData)
 {
   const QDomElement& element = _buildData->element;
   const LIApplication& app = _buildData->application;
@@ -116,16 +113,18 @@ QWidget* LCXmlWidgetBuilder::buildLocal(QSharedPointer<SBuildData> _buildData)
   QDomNode  node = element.firstChildElement(__slTags.layout);
   LCWidget* widget = new LCWidget;
 
-  /* QString style = LCBuildersCommon::getBaseStyleSheet(element, app); */
+  QString attr_name = element.attribute(__slAttributes.name);
+  qDebug() << "LCXmlFrameBuilder::buildLocal attribute naem = " << attr_name;
+  LCBuildersCommon::setWidgetName(
+      widget, attr_name);
 
-  QString style = element.attribute(QStringLiteral("style"));
+  qDebug() << "LCXmlFrameBuilder::builLocal widget name = " << widget->objectName();
+  QString style = element.attribute(__slAttributes.style);
+
   if(!style.isNull())
   {
-    /* style = QString("QWidget#%1{  %2 }").arg(widget->objectName()).arg(style); */
-    style = QString("QWidget{  %1 }").arg(style);
-    widget->setStyleSheet(style);
+    LCBuildersCommon::setStyle(style, widget);
   }
-
 
   if(!node.isNull()) 
   {

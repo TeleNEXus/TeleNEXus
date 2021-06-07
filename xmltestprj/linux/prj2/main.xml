@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <APPLICATION>
-
     <PLAGINPATHES>
         <item path="libs"/>
     </PLAGINPATHES>
@@ -63,7 +62,7 @@
       size="300;50"
       position="100;100">
     <mainWidget>
-      <widget>
+      <frame>
         <layout>
           <layoutVBox>
             <widgets>
@@ -72,7 +71,7 @@
             </widgets>
           </layoutVBox>
         </layout>
-      </widget>
+      </frame>
     </mainWidget>
   </WINDOW>
 
@@ -86,8 +85,8 @@
     size="200;50"
     position="300;100">
     <mainWidget>
-      <widget>
-      </widget>
+      <frame>
+      </frame>
     </mainWidget>
   </WINDOW>
 
@@ -101,8 +100,8 @@
     size="200;50"
     position="500;100">
     <mainWidget>
-      <widget>
-      </widget>
+      <frame>
+      </frame>
     </mainWidget>
   </WINDOW>
 
