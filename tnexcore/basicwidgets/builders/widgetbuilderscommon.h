@@ -188,6 +188,10 @@ public:
    * and returns a QPixmap of the specified size.
    */
   static QPixmap parsePixmap(const QString& _expr, const LIApplication& _app);
+
+  static quint64 getUniqId();
+
+  static void setStyle(const QString& _style, QWidget* _widget);
 };
 
 #endif /* BUILDERSCOMMON_H_ */

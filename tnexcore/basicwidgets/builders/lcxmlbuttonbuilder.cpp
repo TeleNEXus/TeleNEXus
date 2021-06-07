@@ -278,10 +278,18 @@ QWidget* LCXmlButtonBuilder::buildLocal(
 static void setStyleSheet(QPushButton* _button, const QDomElement& _element, 
     const LIApplication& _app)
 {
-  QString style = LCBuildersCommon::getBaseStyleSheet(_element, _app);
+
+  QString style = _element.attribute(QStringLiteral("style"));
+  if(style.isNull()) return;
   _button->setStyleSheet(style);
-  qDebug() << "+++++++button base style sheet ";
-  qDebug() << style;
+
+
+
+  /* QString style = LCBuildersCommon::getBaseStyleSheet(_element, _app); */
+  /* _button->setStyleSheet(style); */
+  /* qDebug() << "+++++++button base style sheet "; */
+  /* qDebug() << style; */
+
 }
 
 
