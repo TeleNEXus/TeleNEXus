@@ -58,22 +58,11 @@ basicwidgets/widgets/lcqremcombobox.cpp \
 basicwidgets/widgets/lcqremlabel.cpp \
 basicwidgets/widgets/lcqremcombolabel.cpp \
 basicwidgets/widgets/lcqstackedwidget.cpp \
-basicwidgets/builders/lcxmlbuilderbase.cpp \
-basicwidgets/builders/lcxmlremlabelbuilder.cpp \
-basicwidgets/builders/lcxmlremlineeditbuilder.cpp \
-basicwidgets/builders/lcxmltextlabelbuilder.cpp \
-basicwidgets/builders/lcxmlframebuilder.cpp \
-basicwidgets/builders/lcxmlremcomboboxbuilder.cpp \
-basicwidgets/builders/lcxmlremcombolabelbuilder.cpp \
-basicwidgets/builders/lcxmltablewidgetbuilder.cpp \
-basicwidgets/builders/lcxmltabwidgetbuilder.cpp \
-basicwidgets/builders/lcxmlscrollareabuilder.cpp \
-basicwidgets/builders/lcxmlbuttonbuilder.cpp \
-basicwidgets/builders/lcxmllistwidgetbuilder.cpp \
 basicwidgets/builders/widgetbuilderscommon.cpp \
 basicwidgets/builders/lcqwidgetvisiblecontrol.cpp \
-basicwidgets/builders/lcxmlstackedwidgetbuilder.cpp \
-basicwidgets/builders/lcxmlsplitterbuilder.cpp \
+basicwidgets/builders/lcxmlbuilderbase.cpp \
+basicwidgets/builders/lcxmlframebuilder.cpp \
+basicwidgets/builders/lcxmlbuttonbuilder.cpp \
 basicwidgets/basicwidgetbuilders.cpp \
 dataformatters/lcformatterbase.cpp \
 dataformatters/lcformatterbitfield.cpp \
@@ -117,6 +106,17 @@ window/lcwindow.cpp \
 applicationinterface.cpp \
 main.cpp \
 
+# basicwidgets/builders/lcxmltextlabelbuilder.cpp \
+# basicwidgets/builders/lcxmlremlabelbuilder.cpp \
+# basicwidgets/builders/lcxmlremlineeditbuilder.cpp \
+# basicwidgets/builders/lcxmlremcomboboxbuilder.cpp \
+# basicwidgets/builders/lcxmlremcombolabelbuilder.cpp \
+# basicwidgets/builders/lcxmltablewidgetbuilder.cpp \
+# basicwidgets/builders/lcxmltabwidgetbuilder.cpp \
+# basicwidgets/builders/lcxmlscrollareabuilder.cpp \
+# basicwidgets/builders/lcxmllistwidgetbuilder.cpp \
+# basicwidgets/builders/lcxmlstackedwidgetbuilder.cpp \
+# basicwidgets/builders/lcxmlsplitterbuilder.cpp \
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

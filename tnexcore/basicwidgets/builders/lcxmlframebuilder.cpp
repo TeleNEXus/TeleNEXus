@@ -140,8 +140,7 @@ QWidget* LCXmlFrameBuilder::buildLocal(QSharedPointer<SBuildData> _buildData)
     }
   }
 
-  LCBuildersCommon::initPosition(element, *widget);
-
+  /* LCBuildersCommon::initPosition(element, *widget); */
 
 
   return widget;

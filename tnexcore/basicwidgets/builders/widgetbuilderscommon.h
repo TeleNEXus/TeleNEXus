@@ -19,6 +19,12 @@
  * along with TeleNEXus.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+
+
+
+
+
+
 #ifndef BUILDERSCOMMON_H_
 #define BUILDERSCOMMON_H_
 
@@ -35,72 +41,6 @@ class LIMovieAccess;
 
 class LCBuildersCommon
 {
-public:
-  struct SDataSpec
-  {
-    QString sourceId;
-    QString dataId;
-    QString formagId;
-  };
-  //Общие атрибуты построителей виджетов.
-  struct SAttributes
-  {
-    QString data        = "data";
-    QString source      = "source";
-    QString label       = "label";
-    QString file        = "file";
-    QString posx        = "posx";
-    QString posy        = "posy";
-    QString width       = "fixWidth";
-    QString height      = "fixHeight";
-    QString maxwidth    = "maxWidth";
-    QString maxheight   = "maxHeight";
-    QString minwidth    = "minWidth";
-    QString minheight   = "minHeight";
-    QString fixwidth    = "fixWidth";
-    QString fixheight   = "fixHeight";
-    QString bgcolor     = "bgColor";
-    QString bgimage     = "bgImage";
-    QString bgpos       = "bgPos";
-    QString text        = "text";
-    QString textcolor   = "textColor";
-
-    QString font        = "font";
-    QString fontid      = "fontId";
-
-    QString dataformatter = "format";
-
-    QString icon        = "icon";
-    QString iconsize    = "iconSize";
-    QString iconwidth   = "iconWidth";
-    QString iconheight  = "iconHeight";
-    QString iconscale   = "iconScale";
-
-    QString image        = "image";
-    QString imagewidth   = "imageWidth";
-    QString imageheight  = "imageHeight";
-    QString imagescale   = "imageScale";
-
-    QString keyboard     = "keyboard";
-
-    //Атрибута выравнивания.
-    struct
-    {
-      const QString attrName = "align";
-      //Возможные значения выравнивания объеденяемые по "ИЛИ".
-      struct
-      {
-        QString Left    = "left";
-        QString Right   = "right";
-        QString Center  = "center";
-        QString HCenter = "hcenter";
-        QString Top     = "top";
-        QString Bottom  = "bottom";
-        QString VCenter = "vcenter";
-      }vals;
-    }aligns;
-  };
-  static const SAttributes mAttributes;
 
 private:
   static LCBuildersCommon instance;
@@ -109,19 +49,6 @@ private:
   LCBuildersCommon& operator=(const LCBuildersCommon&) = delete;
 
 public:
-
-  /*
-   * Устанавливает положение виджета.
-   */
-  static void initPosition(const QDomElement& _element, QWidget& _widget);
-  /*
-   * Устанавливает размер виджета.
-   */
-  static void initSize(const QDomElement& _element, QWidget& _widget);
-  /*
-   * Устанавливает фиксированный размер виджета.
-   */
-  static void initFixedSize(const QDomElement& _element, QWidget& _widget);
 
   /*
    * Возвращает указатель на интерфейс доступа к видеофрагменту.
@@ -172,11 +99,11 @@ public:
    *  _attr_color - атрибут содержащий значение либо стандартного цвена
    *  либо ARGB значение.
    */
-  static QColor attributeToColor(const QString& _attr_color);
+  /* static QColor attributeToColor(const QString& _attr_color); */
   /*
    * Получение строки определения базового стиля из DOM элемента.
    */
-  static QString getBaseStyleSheet(const QDomElement& _element, const LIApplication& _app);
+  /* static QString getBaseStyleSheet(const QDomElement& _element, const LIApplication& _app); */
 
 
 
@@ -202,3 +129,6 @@ public:
 };
 
 #endif /* BUILDERSCOMMON_H_ */
+
+
+
