@@ -25,8 +25,10 @@
 #include <QMap>
 #include <functional>
 
+
 class QDomDocument;
 class QPixmap;
+class QDomElement;
 namespace xmlcommon
 {
 
@@ -57,18 +59,6 @@ SAction parseAction(
     const QString& _actionString, 
     std::function<void(const QString& _error)> _err = [](const QString&){});
 
-/* 
- * Parses the string with values and returns a QStringList with them.
- *  --------------------------------
- *  Parameters:
- *  _values - string for parsing;
- *  _separator - values separator;
- *  _err - error return functor;
- */
-QStringList parseValues(
-    const QString& _values, 
-    const QChar& _separator = QChar(';'),
-    std::function<void(const QString& _error)> _err = [](const QString&){});
 
 /* Parses the attributes string in the format 
  * "attribute1 = value1; attribute2 = * value2; ... ;attributeN = valueN",
@@ -90,6 +80,19 @@ SDataSpecification parseDataSpecification(const QString _dataSpec,
     std::function<void(const QString& _error)> _err = [](const QString&){});
 
 QDomDocument loadDomDocument(const QString& _fileName);
+
+/* 
+ * Parses the string with values and returns a QStringList with them.
+ *  --------------------------------
+ *  Parameters:
+ *  _values - string for parsing;
+ *  _separator - values separator;
+ *  _err - error return functor;
+ */
+QStringList parseValues(
+    const QString& _values, 
+    const QChar& _separator = QChar(';'),
+    std::function<void(const QString& _error)> _err = [](const QString&){});
 }
 
 #endif /* XMLCOMMON_H_ */

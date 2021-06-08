@@ -31,8 +31,8 @@ public:
   virtual ~LCXmlStackedWidgetBuilder();
 
 protected:
-  virtual QWidget* buildLocal( 
-      QSharedPointer<SBuildData> _buildData) override final;
+  virtual QWidget* buildLocal(
+      const QDomElement& _element, const LIApplication& _app) override final;
 };
 
 #endif /*LCXMLSTACKEDWIDGETBUILDER_H_*/

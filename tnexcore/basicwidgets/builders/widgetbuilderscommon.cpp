@@ -20,307 +20,305 @@
  */
 
 
-#include "widgetbuilderscommon.h"
-#include "xmlcommon.h"
-#include <QDomElement>
-#include <QWidget>
-#include <QDebug>
-#include <QMovie>
-#include <QMap>
-#include "LIApplication.h"
-#include <QFileInfo>
-#include <qnamespace.h>
-#include "LIMovieAccess.h"
-#include <QRegularExpression>
+/* #include "widgetbuilderscommon.h" */
+/* #include "xmlcommon.h" */
+/* #include <QDomElement> */
+/* #include <QWidget> */
+/* #include <QDebug> */
+/* #include <QMovie> */
+/* #include <QMap> */
+/* #include "LIApplication.h" */
+/* #include <QFileInfo> */
+/* #include <qnamespace.h> */
+/* #include "LIMovieAccess.h" */
+/* #include <QRegularExpression> */
 
-static const struct 
-{
-  QString data        = "data";
-  QString source      = "source";
-  QString label       = "label";
-  QString file        = "file";
-  QString posx        = "posx";
-  QString posy        = "posy";
-  QString width       = "fixWidth";
-  QString height      = "fixHeight";
-  QString maxwidth    = "maxWidth";
-  QString maxheight   = "maxHeight";
-  QString minwidth    = "minWidth";
-  QString minheight   = "minHeight";
-  QString fixwidth    = "fixWidth";
-  QString fixheight   = "fixHeight";
-  QString bgcolor     = "bgColor";
-  QString bgimage     = "bgImage";
-  QString bgpos       = "bgPos";
-  QString text        = "text";
-  QString textcolor   = "textColor";
-
-  QString font        = "font";
-  QString fontid      = "fontId";
-
-  QString dataformatter = "format";
-
-  QString icon        = "icon";
-  QString iconsize    = "iconSize";
-  QString iconwidth   = "iconWidth";
-  QString iconheight  = "iconHeight";
-  QString iconscale   = "iconScale";
-
-  QString image        = "image";
-  QString imagewidth   = "imageWidth";
-  QString imageheight  = "imageHeight";
-  QString imagescale   = "imageScale";
-
-  QString keyboard     = "keyboard";
-
-  //Атрибута выравнивания.
-  struct
-  {
-    const QString attrName = "align";
-    //Возможные значения выравнивания объеденяемые по "ИЛИ".
-    struct
-    {
-      QString Left    = "left";
-      QString Right   = "right";
-      QString Center  = "center";
-      QString HCenter = "hcenter";
-      QString Top     = "top";
-      QString Bottom  = "bottom";
-      QString VCenter = "vcenter";
-    }vals;
-  }aligns;
-}__slAttributes;
+/* static const struct */ 
+/* { */
+/*   QString file = "file"; */
+/*   QString size = "size"; */
+/* }__slAttributes; */
 
 
-//==============================================================================
-class CMovieAccess : public LIMovieAccess
-{
-private:
-    QMovie* mpMovie;
-    int mStartCounter;
-public:
-    CMovieAccess() = delete;
-    explicit CMovieAccess(QMovie* _movie);
-    virtual ~CMovieAccess();
-    virtual QMovie* getMovie() override;
-    virtual void start() override;
-    virtual void stop() override;
-};
 
-//------------------------------------------------------------------------------
-CMovieAccess::CMovieAccess(QMovie* _movie) : 
-    mpMovie(_movie),
-    mStartCounter(0)
-{
-    mpMovie->jumpToFrame(0);
-}
+/* //============================================================================== */
+/* LCBuildersCommon LCBuildersCommon::instance; */ 
 
-//------------------------------------------------------------------------------
-CMovieAccess::~CMovieAccess()
-{
-    mpMovie->deleteLater();
-}
-
-//------------------------------------------------------------------------------
-QMovie* CMovieAccess::getMovie()
-{
-    return mpMovie;
-}
-
-//------------------------------------------------------------------------------
-void CMovieAccess::start()
-{
-    if(mStartCounter == 0) 
-    {
-        mpMovie->start();
-    }
-    mStartCounter++;
-}
-
-//------------------------------------------------------------------------------
-void CMovieAccess::stop()
-{
-    mStartCounter--;
-    if(mStartCounter <= 0)
-    {
-        mStartCounter = 0;
-        mpMovie->stop();
-    }
-}
-
-//==============================================================================
-LCBuildersCommon LCBuildersCommon::instance; 
-
-//------------------------------------------------------------------------------
-LCBuildersCommon::LCBuildersCommon()
-{
-}
+/* //------------------------------------------------------------------------------ */
+/* LCBuildersCommon::LCBuildersCommon() */
+/* { */
+/* } */
 
 
-//==============================================================================
-static QMap<QString, QSharedPointer<CMovieAccess>> __slMovies;
-//------------------------------------------------------------------------------
-QSharedPointer<LIMovieAccess> LCBuildersCommon::getMovie(
-        const QString& _movieFile, const LIApplication& _app)
-{
-    auto it = __slMovies.find(_movieFile);
+/* //============================================================================== */
+/* static QMap<QString, QSharedPointer<CMovieAccess>> __slMovies; */
+/* //------------------------------------------------------------------------------ */
+/* QSharedPointer<LIMovieAccess> LCBuildersCommon::getMovie( */
+/*         const QString& _movieFile, const LIApplication& _app) */
+/* { */
+/*     auto it = __slMovies.find(_movieFile); */
 
-    if(it != __slMovies.end())
-    {
-        return it.value();
-    }
+/*     if(it != __slMovies.end()) */
+/*     { */
+/*         return it.value(); */
+/*     } */
 
-    QMovie* movie = new QMovie(_app.getProjectPath() + _movieFile);
+/*     QMovie* movie = new QMovie(_app.getProjectPath() + _movieFile); */
 
-    auto ret = QSharedPointer<CMovieAccess>(new CMovieAccess(movie));
+/*     auto ret = QSharedPointer<CMovieAccess>(new CMovieAccess(movie)); */
 
-    __slMovies.insert(_movieFile, ret);
-    return ret;
-}
+/*     __slMovies.insert(_movieFile, ret); */
+/*     return ret; */
+/* } */
 
-//==============================================================================
-QMap<QString, QPixmap> __slPicture;
-//------------------------------------------------------------------------------
-QPixmap LCBuildersCommon::getPixmap(
-        const QString& _pixmapFile, const LIApplication& _app)
-{
-    auto it = __slPicture.find(_pixmapFile);
+/* //============================================================================== */
+/* QMap<QString, QPixmap> __slPicture; */
+/* //------------------------------------------------------------------------------ */
+/* QPixmap LCBuildersCommon::getPixmap( */
+/*         const QString& _pixmapFile, const LIApplication& _app) */
+/* { */
+/*     auto it = __slPicture.find(_pixmapFile); */
 
-    if(it != __slPicture.end())
-    {
-        return it.value();
-    }
+/*     if(it != __slPicture.end()) */
+/*     { */
+/*         return it.value(); */
+/*     } */
 
-    QPixmap pixmap(_app.getProjectPath() + _pixmapFile);
-    __slPicture.insert(_pixmapFile, pixmap);
+/*     QPixmap pixmap(_app.getProjectPath() + _pixmapFile); */
+/*     __slPicture.insert(_pixmapFile, pixmap); */
 
-    return pixmap;
-}
+/*     return pixmap; */
+/* } */
 
-//------------------------------------------------------------------------------
-bool
-LCBuildersCommon::toAlignFlags(const QString& _attributes, 
-    Qt::Alignment& _flags)
-{
+/* //------------------------------------------------------------------------------ */
+/* QPixmap LCBuildersCommon::parsePixmap( */
+/*     const QString& _expr, const LIApplication& _app) */
+/* { */
+/*   auto set_size = */ 
+/*     [](const QString& _attr_size, */ 
+/*         std::function<void(int)> _setWidth, */
+/*         std::function<void(int)> _setHeight) */
+/*     { */
+/*       auto set_value = */ 
+/*         [](const QString& _value, std::function<void(int)> _setter) */
+/*         { */
+/*           bool flag = false; */
+/*           int ivalue = _value.toInt(&flag); */
+/*           if(!flag) return; */
+/*           _setter(ivalue); */
+/*         }; */
 
-  bool ret = false;
+/*       auto s = xmlcommon::parseAction(_attr_size); */
+/*       auto itsize = s.parameters.begin(); */
+/*       if(itsize == s.parameters.end()) return; */
+/*       if(!((*itsize).isNull())) */
+/*       { */
+/*         set_value((*itsize), _setWidth); */
+/*       } */
+/*       itsize++; */
+/*       if(!((*itsize).isNull())) */
+/*       { */
+/*         set_value((*itsize), _setHeight); */
+/*       } */
+/*     }; */
 
-  if(_attributes.isNull())
-  {
-    return ret;
-  }
+/*   if(_expr.isNull()) return QPixmap(); */
+/*   auto icon_attrs = xmlcommon::parseAttributes(_expr); */
+/*   auto attr_it = icon_attrs.find(__slAttributes.file); */
+/*   if(attr_it == icon_attrs.end()) return QPixmap(); */
 
-  QString attr = _attributes.toLower();
+/*   QPixmap pixmap(LCBuildersCommon::getPixmap(attr_it.value(), _app)); */
 
-  if(attr.contains(__slAttributes.aligns.vals.Left))
-  {
-    ret = true;
-    _flags |= Qt::AlignLeft;
-  }
+/*   if(pixmap.isNull()) return pixmap; */
+/*   attr_it = icon_attrs.find(__slAttributes.size); */
 
-  if(_attributes.contains(__slAttributes.aligns.vals.Right))
-  {
-    ret = true;
-    _flags |= Qt::AlignRight;
-  }
+/*   QSize size = pixmap.size(); */
 
-  if((attr.contains(__slAttributes.aligns.vals.Center)) && 
-      (!attr.contains(__slAttributes.aligns.vals.HCenter)) &&
-      (!attr.contains(__slAttributes.aligns.vals.VCenter)))
-  {
-    ret = true;
-    _flags |= Qt::AlignCenter;
-  }
+/*   if(attr_it != icon_attrs.end()) */
+/*   { */
+/*     set_size(attr_it.value(), */ 
+/*         [&size](int _width) */
+/*         { */
+/*           size.setWidth(_width); */
+/*         }, */ 
+/*         [&size](int _height) */
+/*         { */
+/*           size.setHeight(_height); */
+/*         }); */
+/*     pixmap = pixmap.scaled(size.width(), size.height()); */
+/*   } */
+/*   return(pixmap); */
+/* } */
 
-  if(attr.contains(__slAttributes.aligns.vals.HCenter))
-  {
-    ret = true;
-    _flags |= Qt::AlignHCenter;
-  }
+/* void LCBuildersCommon::setWidgetName(QWidget* _widget, const QString& _name) */
+/* { */
+/*   static quint64 counter = 0; */
+/*   qDebug() << "LCBuildersCommon::setWidgetName _name = " << _name; */
 
-  if(attr.contains(__slAttributes.aligns.vals.Top))
-  {
-    ret = true;
-    _flags |= Qt::AlignTop;
-  }
+/*   if(!_name.isNull()) */ 
+/*   { */
+/*     _widget->setObjectName(_name); */
+/*   } */
+/*   else */
+/*   { */
+/*     _widget->setObjectName( */
+/*         QString("%1_%2") */
+/*         .arg(_widget->metaObject()->className()) */
+/*         .arg(counter)); */
+/*     counter++; */
+/*   } */
+/* } */
 
-  if(attr.contains(__slAttributes.aligns.vals.Bottom))
-  {
-    ret = true;
-    _flags |= Qt::AlignBottom;
-  }
+/* void LCBuildersCommon::setStyle(const QString& _style, QWidget* _widget) */
+/* { */
+/*   auto ret = [_widget](const QString& _ss) */
+/*   { */
+/*     _widget->setStyleSheet(_ss); */
+/*   }; */
 
-  if(attr.contains(__slAttributes.aligns.vals.VCenter))
-  {
-    ret = true;
-    _flags |= Qt::AlignVCenter;
-  }
+/*   if(_style.contains( */
+/*         QRegularExpression( */
+/*           QStringLiteral("\\A([^{^}]*\\{[^{^}]*\\})+\\s*\\z")))) */
+/*   { */
+/*     return ret(_style); */
+/*   } */
 
-  return ret;
-}
+/*   if(!_widget->objectName().isNull()) */
+/*   { */
+/*     return ret( QString("%1#%2 {%3}") */
+/*         .arg(_widget->metaObject()->className()) */
+/*         .arg(_widget->objectName()) */
+/*         .arg(_style)); */
+/*   } */
+/*   return ret(_style); */
+/* } */
 
-//------------------------------------------------------------------------------
-bool
-LCBuildersCommon::toAlignFlags(const QDomElement& _element, 
-    Qt::Alignment& _flags)
-{
-    return toAlignFlags(_element.attribute(__slAttributes.aligns.attrName), _flags);
-}
 
-//------------------------------------------------------------------------------
-QString LCBuildersCommon::toAlignString(const QString& _attributes)
-{
+
+/* //------------------------------------------------------------------------------ */
+/* bool */
+/* LCBuildersCommon::toAlignFlags(const QString& _attributes, */ 
+/*     Qt::Alignment& _flags) */
+/* { */
+
+/*   bool ret = false; */
+
+/*   if(_attributes.isNull()) */
+/*   { */
+/*     return ret; */
+/*   } */
+
+/*   QString attr = _attributes.toLower(); */
+
+/*   if(attr.contains(__slAttributes.aligns.vals.Left)) */
+/*   { */
+/*     ret = true; */
+/*     _flags |= Qt::AlignLeft; */
+/*   } */
+
+/*   if(_attributes.contains(__slAttributes.aligns.vals.Right)) */
+/*   { */
+/*     ret = true; */
+/*     _flags |= Qt::AlignRight; */
+/*   } */
+
+/*   if((attr.contains(__slAttributes.aligns.vals.Center)) && */ 
+/*       (!attr.contains(__slAttributes.aligns.vals.HCenter)) && */
+/*       (!attr.contains(__slAttributes.aligns.vals.VCenter))) */
+/*   { */
+/*     ret = true; */
+/*     _flags |= Qt::AlignCenter; */
+/*   } */
+
+/*   if(attr.contains(__slAttributes.aligns.vals.HCenter)) */
+/*   { */
+/*     ret = true; */
+/*     _flags |= Qt::AlignHCenter; */
+/*   } */
+
+/*   if(attr.contains(__slAttributes.aligns.vals.Top)) */
+/*   { */
+/*     ret = true; */
+/*     _flags |= Qt::AlignTop; */
+/*   } */
+
+/*   if(attr.contains(__slAttributes.aligns.vals.Bottom)) */
+/*   { */
+/*     ret = true; */
+/*     _flags |= Qt::AlignBottom; */
+/*   } */
+
+/*   if(attr.contains(__slAttributes.aligns.vals.VCenter)) */
+/*   { */
+/*     ret = true; */
+/*     _flags |= Qt::AlignVCenter; */
+/*   } */
+
+/*   return ret; */
+/* } */
+
+/* //------------------------------------------------------------------------------ */
+/* bool */
+/* LCBuildersCommon::toAlignFlags(const QDomElement& _element, */ 
+/*     Qt::Alignment& _flags) */
+/* { */
+/*     return toAlignFlags(_element.attribute(__slAttributes.aligns.attrName), _flags); */
+/* } */
+
+/* //------------------------------------------------------------------------------ */
+/* QString LCBuildersCommon::toAlignString(const QString& _attributes) */
+/* { */
   
-  QString ret;
-  if(_attributes.isNull())
-  {
-    return ret;
-  }
+/*   QString ret; */
+/*   if(_attributes.isNull()) */
+/*   { */
+/*     return ret; */
+/*   } */
   
-  QString attr = _attributes.toLower();
+/*   QString attr = _attributes.toLower(); */
 
-  if(attr.contains(__slAttributes.aligns.vals.Left))
-  {
-    ret += "Qt::AlignLeft | ";
-  }
+/*   if(attr.contains(__slAttributes.aligns.vals.Left)) */
+/*   { */
+/*     ret += "Qt::AlignLeft | "; */
+/*   } */
 
-  if(attr.contains(__slAttributes.aligns.vals.Right))
-  {
-    ret += "Qt::AlignRight | ";
-  }
+/*   if(attr.contains(__slAttributes.aligns.vals.Right)) */
+/*   { */
+/*     ret += "Qt::AlignRight | "; */
+/*   } */
 
-  if((attr.contains(__slAttributes.aligns.vals.Center)) && 
-      (!attr.contains(__slAttributes.aligns.vals.HCenter)) &&
-      (!attr.contains(__slAttributes.aligns.vals.VCenter)))
-  {
-    ret += "Qt::AlignCenter | ";
-  }
+/*   if((attr.contains(__slAttributes.aligns.vals.Center)) && */ 
+/*       (!attr.contains(__slAttributes.aligns.vals.HCenter)) && */
+/*       (!attr.contains(__slAttributes.aligns.vals.VCenter))) */
+/*   { */
+/*     ret += "Qt::AlignCenter | "; */
+/*   } */
 
-  if(attr.contains(__slAttributes.aligns.vals.HCenter))
-  {
-    ret += "Qt::AlignHCenter | ";
-  }
+/*   if(attr.contains(__slAttributes.aligns.vals.HCenter)) */
+/*   { */
+/*     ret += "Qt::AlignHCenter | "; */
+/*   } */
 
-  if(attr.contains(__slAttributes.aligns.vals.Top))
-  {
-    ret += "Qt::AlignTop | ";
-  }
+/*   if(attr.contains(__slAttributes.aligns.vals.Top)) */
+/*   { */
+/*     ret += "Qt::AlignTop | "; */
+/*   } */
 
-  if(attr.contains(__slAttributes.aligns.vals.Bottom))
-  {
-    ret += "Qt::AlignBottom | ";
-  }
+/*   if(attr.contains(__slAttributes.aligns.vals.Bottom)) */
+/*   { */
+/*     ret += "Qt::AlignBottom | "; */
+/*   } */
 
-  if(attr.contains(__slAttributes.aligns.vals.VCenter))
-  {
-    ret += "Qt::AlignVCenter | ";
-  }
-  if(!ret.isNull())
-  {
-    ret.resize(ret.size() - 3);
-  }
-  return ret;
-}
+/*   if(attr.contains(__slAttributes.aligns.vals.VCenter)) */
+/*   { */
+/*     ret += "Qt::AlignVCenter | "; */
+/*   } */
+/*   if(!ret.isNull()) */
+/*   { */
+/*     ret.resize(ret.size() - 3); */
+/*   } */
+/*   return ret; */
+/* } */
 
 /* //------------------------------------------------------------------------------ */
 /* QColor LCBuildersCommon::attributeToColor(const QString& _color) */
@@ -444,108 +442,6 @@ QString LCBuildersCommon::toAlignString(const QString& _attributes)
 /*   return style; */
 /* } */
 
-//------------------------------------------------------------------------------
-QPixmap LCBuildersCommon::parsePixmap(
-    const QString& _expr, const LIApplication& _app)
-{
-  auto set_size = 
-    [](const QString& _attr_size, 
-        std::function<void(int)> _setWidth,
-        std::function<void(int)> _setHeight)
-    {
-      auto set_value = 
-        [](const QString& _value, std::function<void(int)> _setter)
-        {
-          bool flag = false;
-          int ivalue = _value.toInt(&flag);
-          if(!flag) return;
-          _setter(ivalue);
-        };
-
-      auto s = xmlcommon::parseAction(_attr_size);
-      auto itsize = s.parameters.begin();
-      if(itsize == s.parameters.end()) return;
-      if(!((*itsize).isNull()))
-      {
-        set_value((*itsize), _setWidth);
-      }
-      itsize++;
-      if(!((*itsize).isNull()))
-      {
-        set_value((*itsize), _setHeight);
-      }
-    };
-
-  if(_expr.isNull()) return QPixmap();
-  auto icon_attrs = xmlcommon::parseAttributes(_expr);
-  auto attr_it = icon_attrs.find(QStringLiteral("file"));
-  if(attr_it == icon_attrs.end()) return QPixmap();
-
-  QPixmap pixmap(LCBuildersCommon::getPixmap(attr_it.value(), _app));
-
-  if(pixmap.isNull()) return pixmap;
-  attr_it = icon_attrs.find(QStringLiteral("size"));
-
-  QSize size = pixmap.size();
-
-  if(attr_it != icon_attrs.end())
-  {
-    set_size(attr_it.value(), 
-        [&size](int _width)
-        {
-          size.setWidth(_width);
-        }, 
-        [&size](int _height)
-        {
-          size.setHeight(_height);
-        });
-    pixmap = pixmap.scaled(size.width(), size.height());
-  }
-  return(pixmap);
-}
-
-void LCBuildersCommon::setWidgetName(QWidget* _widget, const QString& _name)
-{
-  static quint64 counter = 0;
-  qDebug() << "LCBuildersCommon::setWidgetName _name = " << _name;
-
-  if(!_name.isNull()) 
-  {
-    _widget->setObjectName(_name);
-  }
-  else
-  {
-    _widget->setObjectName(
-        QString("%1_%2")
-        .arg(_widget->metaObject()->className())
-        .arg(counter));
-    counter++;
-  }
-}
-
-void LCBuildersCommon::setStyle(const QString& _style, QWidget* _widget)
-{
-  auto ret = [_widget](const QString& _ss)
-  {
-    _widget->setStyleSheet(_ss);
-  };
-
-  if(_style.contains(
-        QRegularExpression(
-          QStringLiteral("\\A([^{^}]*\\{[^{^}]*\\})+\\s*\\z"))))
-  {
-    return ret(_style);
-  }
-
-  if(!_widget->objectName().isNull())
-  {
-    return ret( QString("%1#%2 {%3}")
-        .arg(_widget->metaObject()->className())
-        .arg(_widget->objectName())
-        .arg(_style));
-  }
-  return ret(_style);
-}
 
 
 

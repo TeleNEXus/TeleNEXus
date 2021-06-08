@@ -18,44 +18,53 @@
  * You should have received a copy of the GNU General Public License
  * along with TeleNEXus.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "lcxmltextlabelbuilder.h"
-#include "widgetbuilderscommon.h"
+#include "lcxmllabelbuilder.h"
 #include "LIApplication.h"
 #include <QLabel>
 #include <QDomElement>
-#include <QDebug>
+
 //==============================================================================
-LCXmlTextLabelBuilder::LCXmlTextLabelBuilder()
+static const struct
+{
+  QString text = "text";
+}__slAttributes;
+//==============================================================================
+LCXmlLabelBuilder::LCXmlLabelBuilder()
 {
 
 }
 
 //------------------------------------------------------------------------------
-LCXmlTextLabelBuilder::~LCXmlTextLabelBuilder()
+LCXmlLabelBuilder::~LCXmlLabelBuilder()
 {
 
 }
 
 //------------------------------------------------------------------------------
-QWidget* LCXmlTextLabelBuilder::buildLocal(
-      QSharedPointer<SBuildData> _buildData) 
+QWidget* LCXmlLabelBuilder::buildLocal(
+      const QDomElement& _element, const LIApplication& _app) 
 {
+  Q_UNUSED(_app);
 
-  const QDomElement& element = _buildData->element;
-  const LIApplication& app = _buildData->application;
   QLabel* label = new QLabel();
 
-  //Задание текста в виде атрибута.
-  if(!element.attribute("text").isNull())
+  QString text = _element.attribute(__slAttributes.text);
+
+  if(text.isNull())
   {
-    label->setText(element.attribute("text"));
+    label->setText(QStringLiteral("Label"));
+  }
+  else
+  {
+    label->setText(text);
   }
 
-  QString style;
-  style = LCBuildersCommon::getBaseStyleSheet(element, app);
-  label->setStyleSheet(style);
 
-  LCBuildersCommon::initPosition(element, *label);
+  setWidgetName(_element, label);
+  setWidgetStyle(_element, label);
+  setWidgetSize(_element, label);
+  setWidgetFixedSize(_element, label);
+  setWidgetPosition(_element, label);
 
   return label;
 }

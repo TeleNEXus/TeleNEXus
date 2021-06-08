@@ -18,8 +18,8 @@
  * You should have received a copy of the GNU General Public License
  * along with TeleNEXus.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef LCXMLWIDGETBUILDER_H
-#define LCXMLWIDGETBUILDER_H
+#ifndef LCXMLFRAMEBUILDER_H
+#define LCXMLFRAMEBUILDER_H
 
 #include "lcxmlbuilderbase.h"
 
@@ -31,8 +31,8 @@ public:
 
 protected:
 
-  virtual QWidget* buildLocal(
-      QSharedPointer<SBuildData> _buildData) override final;
+  virtual QWidget* buildLocal( 
+      const QDomElement& _element, const LIApplication& _app) override final;
 };
 
-#endif // LCXMLWIDGETBUILDER_H
+#endif // LCXMLFRAMEBUILDER_H

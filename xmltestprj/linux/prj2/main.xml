@@ -1,79 +1,99 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <APPLICATION>
-    <PLAGINPATHES>
-        <item path="libs"/>
-    </PLAGINPATHES>
+  <PLAGINPATHES>
+    <item path="libs"/>
+  </PLAGINPATHES>
 
-    <SOURCEBUILDERS file="sourcebuilders.xml"/>
-    
-    <SOURCES file="sources.xml"/>
-    
-    <LAYOUTBUILDERS>
-        <!-- <layoutGrid     lib="basiclayouts" libhandler="getGridLayoutBuilder" /> -->
-        <!-- <layoutVBox     lib="basiclayouts" libhandler="getVBoxLayoutBuilder" /> -->
-        <!-- <layoutHBox     lib="basiclayouts" libhandler="getHBoxLayoutBuilder" /> -->
-    </LAYOUTBUILDERS>
-    
-    <WIDGETBUILDERS>
+  <SOURCEBUILDERS file="sourcebuilders.xml"/>
 
-        <switchWidgetsList      lib="examplewidgets" handler="getSwitchWidgetsListBuilder"   />
+  <SOURCES file="sources.xml"/>
 
-        <!-- <widget                 lib="basicwidgets" libhandler="getWidgetBuilder"                /> -->
-        <!-- <label                  lib="basicwidgets" libhandler="getTextLabelBuilder"             /> -->
-        <!-- <table                  lib="basicwidgets" libhandler="getTableWidgetBuilder"           /> -->
-        <!-- <dataLabel              lib="basicwidgets" libhandler="getRemLabelBuilder"              /> -->
-        <!-- <dataLineEdit           lib="basicwidgets" libhandler="getRemLineEditBuilder"           /> -->
-        <!-- <dataComboBox           lib="basicwidgets" libhandler="getRemComboBoxBuilder"           /> -->
-        <!-- <dataComboLabel         lib="basicwidgets" libhandler="getRemComboLabelBuilder"         /> -->
-        <!-- <tabs                   lib="basicwidgets" libhandler="getTabWidgetBuilder"             /> -->
-        <!-- <!-1- <switchWidgetsList      lib="basicwidgets" libhandler="getSwitchWidgetsListBuilder"     /> -1-> -->
-        <!-- <scrollArea             lib="basicwidgets" libhandler="getScrollAreaBuilder"            /> -->
-        <!-- <button                 lib="basicwidgets" libhandler="getButtonBuilder"                /> -->
-        <!-- <listWidget             lib="basicwidgets" libhandler="getListWidgetBuilder"            /> -->
-        <!-- <stackedWidget          lib="basicwidgets" libhandler="getStackedWidgetBuilder"         /> -->
-        <!-- <splitterVertical       lib="basicwidgets" libhandler="getVerticalSplitterBuilder"      /> -->
-        <!-- <splitterHorizontal     lib="basicwidgets" libhandler="getHorizontalSplitterBuilder"    /> -->
-    </WIDGETBUILDERS>
+  <LAYOUTBUILDERS>
+    <!-- <layoutGrid     lib="basiclayouts" libhandler="getGridLayoutBuilder" /> -->
+    <!-- <layoutVBox     lib="basiclayouts" libhandler="getVBoxLayoutBuilder" /> -->
+    <!-- <layoutHBox     lib="basiclayouts" libhandler="getHBoxLayoutBuilder" /> -->
+  </LAYOUTBUILDERS>
 
-    <FONTS file="fonts.xml"/>
-    <SCRIPTS file="scripts.xml"/>
-    <DATAFORMATS file="formatters.xml"/>
-        
-    <WINDOW 
-      file="testbutton/testbutton.xml" 
-      id="testbutton" 
-      visible="true"
-      title="Test Buttons" 
-      showMode="normal"
-      modality="false"
-      flags="" 
-      size="300;50"
-      position="300;600"
-      />
+  <WIDGETBUILDERS>
+    <switchWidgetsList      lib="examplewidgets" handler="getSwitchWidgetsListBuilder"/>
+  </WIDGETBUILDERS>
 
-    <WINDOW 
-      id="Label" 
-      visible="true"
-      title="Label" 
-      showMode="normal"
-      modality="false"
-      flags="stayOnTop; frameless" 
-      size="300;50"
-      position="100;100">
-    <mainWidget>
-      <frame>
-        <layout>
-          <layoutVBox>
-            <widgets>
-              <dataLabel      source="localsource"  data="test_string"  format="string"   />
-              <dataLabel      source="localsource"  data="test_string"  format="string"   />
-            </widgets>
-          </layoutVBox>
-        </layout>
-      </frame>
-    </mainWidget>
-  </WINDOW>
+  <FONTS file="fonts.xml"/>
+  <SCRIPTS file="scripts.xml"/>
+  <DATAFORMATS file="formatters.xml"/>
+
+  <WINDOW 
+    file="testdatalabels/testdatalabels1.xml" 
+    id="testdatalabel1" 
+    visible="true"
+    title="Test Data Labels 1" 
+    showMode="normal"
+    modality="false"
+    flags="" 
+    size="300;300"
+    position="0;0"
+    />
+
+  <WINDOW 
+    file="testdatalabels/testdatalabels2.xml" 
+    id="testdatalabel2" 
+    visible="true"
+    title="Test Data Labels 2" 
+    showMode="normal"
+    modality="false"
+    flags="" 
+    size="300;300"
+    position="300;300"
+    />
+
+  <WINDOW 
+    file="testlabels/testlabels.xml" 
+    id="testlabel" 
+    visible="false"
+    title="Test Labels" 
+    showMode="normal"
+    modality="false"
+    flags="" 
+    size="300;300"
+    position="0;0"
+    />
+
+  <WINDOW 
+    file="testlabels/testlabels2.xml" 
+    id="testlabel2" 
+    visible="false"
+    title="Test Labels 2" 
+    showMode="normal"
+    modality="false"
+    flags="" 
+    size="300;300"
+    position="300;300"
+    />
+
+  <WINDOW 
+    file="testbutton/testbutton.xml" 
+    id="testbutton" 
+    visible="false"
+    title="Test Buttons" 
+    showMode="normal"
+    modality="false"
+    flags="" 
+    size="300;50"
+    position="300;600"
+    />
+
+  <WINDOW 
+    file="testbutton/testbutton2.xml" 
+    id="testbutton2" 
+    visible="false"
+    title="Test Buttons" 
+    showMode="normal"
+    modality="false"
+    flags="" 
+    size="500;500"
+    position="600;100"
+    />
 
   <WINDOW
     id="TestWindow1" 
@@ -85,8 +105,8 @@
     size="200;50"
     position="300;100">
     <mainWidget>
-      <frame>
-      </frame>
+      <Frame>
+      </Frame>
     </mainWidget>
   </WINDOW>
 
@@ -100,35 +120,9 @@
     size="200;50"
     position="500;100">
     <mainWidget>
-      <frame>
-      </frame>
+      <Frame>
+      </Frame>
     </mainWidget>
   </WINDOW>
-
-    <!-- <WINDOW --> 
-    <!--   id="table local source" --> 
-    <!--   title="table local source" --> 
-    <!--   show="normal" -->
-    <!--   modes= "stayOnTop=true;frameless=false" --> 
-    <!--   size="500;600" -->
-    <!--   position="300;100"> -->
-    <!-- <mainWidget> -->
-    <!--   <table file="../prj1/testtablelocalsource.xml"/> -->
-    <!-- </mainWidget> -->
-  <!-- </WINDOW> -->
-
-    <!-- <WINDOW --> 
-    <!--   id="exampleSwitchWidget" --> 
-    <!--   visible="true" -->
-    <!--   title="Example Switch Widget" --> 
-    <!--   showMode="normal" -->
-    <!--   modality="false" -->
-    <!--   flags="" --> 
-    <!--   size="300;600" -->
-    <!--   position="300;600" > -->
-    <!-- <mainWidget> -->
-    <!--   <switchWidgetsList file="../prj1/testswitchwidgetlist.xml"/> -->
-    <!-- </mainWidget> -->
-  <!-- </WINDOW> -->
 
 </APPLICATION>

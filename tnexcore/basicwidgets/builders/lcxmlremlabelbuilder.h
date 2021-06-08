@@ -24,15 +24,15 @@
 #include "lcxmlbuilderbase.h"
 
 
-class LCXmlRemLabelBuilder : public LCXmlBuilderBase
+class LCXmlRemLabelBuilder final : public LCXmlBuilderBase
 {
 public:
   LCXmlRemLabelBuilder();
   virtual ~LCXmlRemLabelBuilder();
 
 protected:
-  virtual QWidget* buildLocal( 
-      QSharedPointer<SBuildData> _buildData) override final;
+  virtual QWidget* buildLocal(
+      const QDomElement& _element, const LIApplication& _app) override;
 };
 
 #endif // LCXMLREMLABELBUILDER_H

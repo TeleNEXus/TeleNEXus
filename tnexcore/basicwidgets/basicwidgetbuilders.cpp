@@ -25,18 +25,20 @@
 #include "LIXmlWidgetBuilder.h"
 
 #include "lcxmlframebuilder.h"
-#include "lcxmltextlabelbuilder.h"
-#include "lcxmltablewidgetbuilder.h"
+#include "lcxmllabelbuilder.h"
 #include "lcxmlremlabelbuilder.h"
-#include "lcxmlremlineeditbuilder.h"
-#include "lcxmlremcomboboxbuilder.h"
-#include "lcxmlremcombolabelbuilder.h"
-#include "lcxmltabwidgetbuilder.h"
-#include "lcxmlscrollareabuilder.h"
 #include "lcxmlbuttonbuilder.h"
-#include "lcxmllistwidgetbuilder.h"
-#include "lcxmlstackedwidgetbuilder.h"
-#include "lcxmlsplitterbuilder.h"
+
+
+/* #include "lcxmltablewidgetbuilder.h" */
+/* #include "lcxmlremlineeditbuilder.h" */
+/* #include "lcxmlremcomboboxbuilder.h" */
+/* #include "lcxmlremcombolabelbuilder.h" */
+/* #include "lcxmltabwidgetbuilder.h" */
+/* #include "lcxmlscrollareabuilder.h" */
+/* #include "lcxmllistwidgetbuilder.h" */
+/* #include "lcxmlstackedwidgetbuilder.h" */
+/* #include "lcxmlsplitterbuilder.h" */
 #include <qnamespace.h>
 
 
@@ -52,10 +54,10 @@ QMap<QString, QSharedPointer<LIXmlWidgetBuilder>> getBuilders()
       builders_map.insert(_name, QSharedPointer<LIXmlWidgetBuilder>(_builder));
     };
 
-  add_builder(QStringLiteral("frame"              ),  new LCXmlFrameBuilder());
-  add_builder(QStringLiteral("button"             ),  new LCXmlButtonBuilder());
-  /* add_builder(QStringLiteral("label"              ),  new LCXmlTextLabelBuilder()); */
-  /* add_builder(QStringLiteral("dataLabel"          ),  new LCXmlRemLabelBuilder()); */
+  add_builder(QStringLiteral("Frame"              ),  new LCXmlFrameBuilder());
+  add_builder(QStringLiteral("Button"             ),  new LCXmlButtonBuilder());
+  add_builder(QStringLiteral("Label"              ),  new LCXmlLabelBuilder());
+  add_builder(QStringLiteral("DataLabel"          ),  new LCXmlRemLabelBuilder());
 
   /* add_builder(QStringLiteral("table"              ),  new LCXmlTableWidgetBuilder()); */
   /* add_builder(QStringLiteral("dataLineEdit"       ),  new LCXmlRemLineEditBuilder()); */

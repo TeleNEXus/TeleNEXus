@@ -47,28 +47,25 @@ LCXmlStackedWidgetBuilder::~LCXmlStackedWidgetBuilder()
 }
 
 //------------------------------------------------------------------------------
-QWidget* LCXmlStackedWidgetBuilder::buildLocal( 
-    QSharedPointer<SBuildData> _buildData)
+QWidget* LCXmlStackedWidgetBuilder::buildLocal(
+    const QDomElement& _element, const LIApplication& _app)
 {
 
   auto ret_wrong = [](){return new QStackedWidget;};
 
-  const QDomElement& element = _buildData->element;
-  const LIApplication& app = _buildData->application;
-
-  auto source = [&element, &app]()
+  auto source = [&_element, &_app]()
   {
-    QString attr = element.attribute(LCBuildersCommon::mAttributes.source);
+    QString attr = _element.attribute(LCBuildersCommon::mAttributes.source);
     if(attr.isNull()) return QSharedPointer<LIRemoteDataSource>();
-    return app.getDataSource(attr);
+    return _app.getDataSource(attr);
   }();
 
   if(source.isNull()) return ret_wrong();
 
-  QString data = element.attribute(LCBuildersCommon::mAttributes.data);
+  QString data = _element.attribute(LCBuildersCommon::mAttributes.data);
   if(data.isNull()) return ret_wrong();
 
-  auto format = _buildData->application.getDataFormatter(element.attribute(
+  auto format = _app.getDataFormatter(_element.attribute(
         LCBuildersCommon::mAttributes.dataformatter));
 
   if(format.isNull()) return ret_wrong();
@@ -76,7 +73,7 @@ QWidget* LCXmlStackedWidgetBuilder::buildLocal(
   auto stacked_widget = new LCQStackedWidget(source, data, format); 
 
   auto add_item = 
-    [&app, &stacked_widget](const QDomNode& _node)
+    [&_app, &stacked_widget](const QDomNode& _node)
     {
 
       if(!_node.isElement()) return;
@@ -91,9 +88,9 @@ QWidget* LCXmlStackedWidgetBuilder::buildLocal(
       {
         auto we = node.toElement();
         if(!we.isElement()) continue;
-        auto builder = app.getWidgetBuilder(we.tagName());
+        auto builder = _app.getWidgetBuilder(we.tagName());
         if(builder.isNull()) continue;
-        QWidget* widget = builder->build(we, app);
+        QWidget* widget = builder->build(we, _app);
         if(widget)
         {
           stacked_widget->addWidget(widget, attr_id);
@@ -102,7 +99,7 @@ QWidget* LCXmlStackedWidgetBuilder::buildLocal(
       }
     };
 
-  for(QDomNode node = element.firstChildElement(__slTags.item);
+  for(QDomNode node = _element.firstChildElement(__slTags.item);
       !node.isNull();
       node = node.nextSiblingElement(__slTags.item))
   {

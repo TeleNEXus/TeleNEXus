@@ -81,6 +81,34 @@ static QString removeSpaces(
   return out.replace(QString("\\%1").arg(_ignor_border), _ignor_border);
 };
 
+
+//==============================================================================
+template<typename T> 
+void attributeToValues(
+    const QDomElement& _element, 
+    const QString& _attrName, 
+    std::function<void(T,T)> _setter,
+    const QChar& _separator)
+{
+  QString values_string = _element.attribute(_attrName);
+
+  if(values_string.isNull()) return;
+
+  auto values = xmlcommon::parseValues(values_string, _separator);
+
+  if(values.size() != 2) return;
+
+  T val_a;
+  T val_b;
+
+  if(!stringToNumber(values.first(), val_a)) return;
+
+  values.pop_front();
+  if(!stringToNumber(values.first(), val_b)) return;
+
+  _setter(val_a, val_b);
+}
+
 //==============================================================================
 static const QRegularExpression __slRemoveEndLine("(\\r+)|(\\n+)");
 
@@ -343,7 +371,6 @@ QDomDocument loadDomDocument (const QString& _fileName)
   }
   return domDoc;
 }
-
 
 } /* namespace xmlcommon */
 

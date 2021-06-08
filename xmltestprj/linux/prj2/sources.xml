@@ -2,5 +2,5 @@
 
 <SOURCES>
     <modbussources  file="modbussources.xml"/>
-    <localsources   file="localsource.xml" />
+    <Localsources   file="localsource.xml" />
 </SOURCES>

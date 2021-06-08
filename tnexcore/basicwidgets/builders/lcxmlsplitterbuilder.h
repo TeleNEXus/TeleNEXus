@@ -34,9 +34,8 @@ public:
   virtual ~LCXmlSplitterBuilder();
 
 protected:
-
   virtual QWidget* buildLocal(
-      QSharedPointer<SBuildData> _buildData) override final;
+      const QDomElement& _element, const LIApplication& _app) override final;
 };
 
 #endif // LCXMLSPLITTERBUILDER_H_

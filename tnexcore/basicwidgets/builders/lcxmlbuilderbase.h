@@ -26,16 +26,11 @@
 #include <QSharedPointer>
 #include <qglobal.h>
 
+class LIMovieAccess;
+
 class LCXmlBuilderBase : public LIXmlWidgetBuilder
 {
 protected:
-  struct SBuildData
-  {
-    QPoint pos;
-    const QDomElement& element;
-    const LIApplication& application;
-  };
-public:
 
   LCXmlBuilderBase();
   virtual ~LCXmlBuilderBase();
@@ -45,10 +40,17 @@ public:
       const LIApplication&    _app) override final;
 
 protected:
-  virtual QWidget* buildLocal(QSharedPointer<SBuildData> _buildData) = 0;
-  static void setPosition(const QDomElement& _element, QWidget* _widget);
-  static void setSize(const QDomElement& _element, QWidget* _widget);
-  static void setFixedSize(const QDomElement& _element, QWidget* _widget);
+  virtual QWidget* buildLocal(
+      const QDomElement& _element, const LIApplication& _app) = 0;
+  static bool setWidgetPosition(const QDomElement& _element, QWidget* _widget);
+  static bool setWidgetSize(const QDomElement& _element, QWidget* _widget);
+  static bool setWidgetFixedSize(const QDomElement& _element, QWidget* _widget);
+  static void setWidgetName(const QDomElement& _element, QWidget* _widget);
+  static void setWidgetStyle(const QString& _style, QWidget* _widget);
+  static void setWidgetStyle(const QDomElement& _element, QWidget* _widget);
+  static QSharedPointer<LIMovieAccess> getMovie(const QString& _movie, const LIApplication& _app);
+  static QPixmap getPixmap(const QString& _file, const LIApplication& _app);
+  static QPixmap parsePixmap(const QString& _expr, const LIApplication& _app);
 };
 
 #endif

@@ -38,21 +38,19 @@ LCXmlSplitterBuilder::~LCXmlSplitterBuilder()
 }
 
 //------------------------------------------------------------------------------
-QWidget* LCXmlSplitterBuilder::buildLocal(QSharedPointer<SBuildData> _buildData)
+QWidget* LCXmlSplitterBuilder::buildLocal(
+    const QDomElement& _element, const LIApplication& _app)
 {
   QSplitter* splitter = new QSplitter(mOrientation);
 
-  const QDomElement& element = _buildData->element;
-  const LIApplication& app = _buildData->application;
-
-  for(QDomNode node = element.firstChild(); !node.isNull();
+  for(QDomNode node = _element.firstChild(); !node.isNull();
       node = node.nextSibling())
   {
     auto el =  node.toElement();
     if(el.isNull()) continue;
-    auto builder = app.getWidgetBuilder(el.tagName());
+    auto builder = _app.getWidgetBuilder(el.tagName());
     if(builder.isNull()) continue;
-    QWidget* widget = builder->build(el, app);
+    QWidget* widget = builder->build(el, _app);
     if(widget)
     {
       splitter->addWidget(widget);
