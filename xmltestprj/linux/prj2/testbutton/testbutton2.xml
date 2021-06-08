@@ -17,42 +17,25 @@
       style="QFrame#testname {background-image: url(picture/fon1.png)}"
       >
               <!-- style="background-image: url(/home/serg/pprj/tnex/xmltestprj/linux/prj2/picture/fon1.png)" -->
-      <layout>
-        <LayoutVBox>
           <widgets>
-
-            <Button text="write data" 
+            <Button test="write data" 
               style="background: white; border: 4px solid red; font: bold italic 40pt 'Karumbi'"
               icon="file='picture/icon1.png'; size=(150, 50)"
-              >
-              <!-- style="border: 4px solid red;background:yellow" -->
-              <!-- icon="file='picture/icon1.png'; size=(150,50)" -->
-
-              <!-- style="border: 4px solid red" -->
-              <!-- styleId="ButtonStart" -->
-              <!-- style="background-image: url(:/home/serg/pprj/tnex/xmltestprj/linux/prj2/picture/fon1.png)" -->
-              <!-- style="color:red; background:yellow" -->
-              <!-- textColor="yellow" -->
-              <!-- bgColor="green" -->
-              <!-- icon="file='picture/icon1.png'; size=(150,50)" -->
-              <!-- icon="file='picture/icon1.png'; size=(50,50)" -->
-              <!-- icon="picture/icon1.png" -->
-              <!-- iconHeight="50" -->
-              <!-- iconWidth="50" -->
-
+              position="0;0">
               <press>
                 <controlScript scriptId="testlaunch1" scriptAction="launch(500)"/>
-                <writeData data="localsource:test_string:string" value="press write string 2"/>
+                <writeData dataSpec="localsource:test_string:string" value="press write string 2"/>
               </press>
               <release>
                 <controlScript scriptId="testlaunch1" scriptAction="stop"/>
-                <writeData data="localsource:test_string:string" value="press write string 2"/>
+                <writeData dataSpec="localsource:test_string:string" value="press write string 2"/>
               </release>
             </Button>
 
             <Button text="show window 1"
-              style="background-image: url(:/home/serg/pprj/tnex/xmltestprj/linux/prj2/picture/fon1.png)"
               fixedSize="150;150"
+              position="100;100"
+              style="background-image: url(:/home/serg/pprj/tnex/xmltestprj/linux/prj2/picture/fon1.png)"
               >
               <press>
                 <!-- <controlWindow windowId="TestWindow1" action="show(fullScreen)"/> -->
@@ -61,36 +44,40 @@
             </Button>
 
             <Button text="hide window 1"
+              position="100;300"
               >
               <press>
                 <controlWindow windowId="TestWindow1" action="hide"/>
               </press>
             </Button>
 
-            <Button text="show window 2">
+            <Button text="show window 2"
+              position="100;350">
               <press>
                 <controlWindow windowId="TestWindow2" action="show"/>
               </press>
             </Button>
 
-            <Button text="show window 2">
+            <Button text="show window 2"
+              name="showwindow2"
+              position="100;400"
+              style=":hover {background: blue; color:red}">
+              <!-- name="showwindow2" -->
+              <!-- style="QPushButton#showwindow2:hover {background: blue; color:red}" -->
               <press>
                 <controlWindow windowId="TestWindow2" action="hide"/>
               </press>
             </Button>
 
           </widgets>
-          <stretch/>
-        </LayoutVBox>
-      </layout>
     </Frame>
     <!-- <Button> -->
     <!--   <press> -->
     <!--     <!-1- <writeData sourceId="localsource" dataId="test_string" format="string" value="'\release write string 2'"/> -1-> -->
-    <!--     <!-1- <writeData data = " sourceId = localsource; dataId = test_string; format = string" value = "release write string 2" -1-> -->
+    <!--     <!-1- <writeData dataSpec = " sourceId = localsource; dataId = test_string; format = string" value = "release write string 2" -1-> -->
     <!--     <!-1-   /> -1-> -->
 
-    <!--     <writeData data="localsource:test_string:string" value="release write string 2"/> -->
+    <!--     <writeData dataSpec="localsource:test_string:string" value="release write string 2"/> -->
 
 
     <!--     <!-1- <controlScript scriptId="window_event_script_11" scriptAction="launch(500)"/> -1-> -->

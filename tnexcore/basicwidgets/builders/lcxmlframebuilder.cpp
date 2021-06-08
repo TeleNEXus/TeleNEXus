@@ -38,7 +38,6 @@ static const struct
 static const struct
 {
   QString style = "style";
-  QString name = "name";
 } __slAttributes;
 
 //==============================================================================
@@ -105,44 +104,32 @@ static void buildFromWidgets(LCWidget* _widget, const QDomElement& _element,
     const LIApplication& _app);
 
 //------------------------------------------------------------------------------
-QWidget* LCXmlFrameBuilder::buildLocal(QSharedPointer<SBuildData> _buildData)
+QWidget* LCXmlFrameBuilder::buildLocal(
+    const QDomElement& _element, const LIApplication& _app)
 {
-  const QDomElement& element = _buildData->element;
-  const LIApplication& app = _buildData->application;
-
-  QDomNode  node = element.firstChildElement(__slTags.layout);
   LCWidget* widget = new LCWidget;
 
-  QString attr_name = element.attribute(__slAttributes.name);
-  qDebug() << "LCXmlFrameBuilder::buildLocal attribute naem = " << attr_name;
-  LCBuildersCommon::setWidgetName(
-      widget, attr_name);
+  setWidgetName(_element, widget); 
+  setWidgetStyle(_element, widget);
 
-  qDebug() << "LCXmlFrameBuilder::builLocal widget name = " << widget->objectName();
-  QString style = element.attribute(__slAttributes.style);
-
-  if(!style.isNull())
-  {
-    LCBuildersCommon::setStyle(style, widget);
-  }
+  QDomNode  node = _element.firstChildElement(__slTags.layout);
 
   if(!node.isNull()) 
   {
-    buildFromLayout(widget, node.toElement(), app);
+    buildFromLayout(widget, node.toElement(), _app);
   }
   else
   {
-    node = element.firstChildElement(__slTags.widgets);
+    node = _element.firstChildElement(__slTags.widgets);
 
     if(!node.isNull()) 
     {
-      buildFromWidgets(widget, node.toElement(), app);
+      buildFromWidgets(widget, node.toElement(), _app);
     }
   }
-
-  /* LCBuildersCommon::initPosition(element, *widget); */
-
-
+  setWidgetSize(_element, widget);
+  setWidgetPosition(_element, widget);
+  setWidgetFixedSize(_element, widget);
   return widget;
 }
 

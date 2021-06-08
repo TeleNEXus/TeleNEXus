@@ -19,14 +19,38 @@
  * along with TeleNEXus.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include "lcxmlremlabelbuilder.h"
-#include "widgets/lcqremlabel.h"
-#include "widgetbuilderscommon.h"
 #include "LIApplication.h"
 
+#include <QLabel>
 #include <QDomElement>
 #include <QDebug>
 
+static const struct
+{
+  QString data = "data";
+}__slAttributes;
 
+//==============================================================================CQEventFilter
+class CQEventFilter final : public QObject
+{
+private:
+  CQEventFilter() = delete;
+  CQEventFilter(QObject* _parent) : QObject(_parent)
+  {
+  }
+public:
+
+  static void install(QLabel* _label, QSharedPointer<LIRemoteDataReader> _dataReader)
+  {
+    auto filter = new CQEventFilter(_label);
+    _label->installEventFilter(&filter);
+  }
+
+  virtual bool eventFilter(QObject* _obj, QEvent* _event) override
+  {
+    return false;
+  }
+};
 //==============================================================================
 LCXmlRemLabelBuilder::LCXmlRemLabelBuilder()
 {
@@ -41,10 +65,8 @@ LCXmlRemLabelBuilder::~LCXmlRemLabelBuilder()
 
 //------------------------------------------------------------------------------
 QWidget* LCXmlRemLabelBuilder::buildLocal(
-      QSharedPointer<SBuildData> _buildData) 
+   const QDomElement& _elemnt, const LIApplication& _app) 
 {
-  const QDomElement& element = _buildData->element;
-  const LIApplication& app = _buildData->application;
   QLabel* ret = nullptr;
   QString data;
   QString attr = element.attribute(LCBuildersCommon::mAttributes.source);
@@ -56,7 +78,7 @@ QWidget* LCXmlRemLabelBuilder::buildLocal(
     goto LABEL_WRONG_EXIT;
   }
 
-  source = app.getDataSource(attr);
+  source = _app.getDataSource(attr);
 
   if(source.isNull())
   {

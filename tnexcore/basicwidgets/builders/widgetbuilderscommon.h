@@ -19,36 +19,30 @@
  * along with TeleNEXus.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-
-
-
-
-
-
 #ifndef BUILDERSCOMMON_H_
 #define BUILDERSCOMMON_H_
 
-#include <QString>
-#include <QSharedPointer>
-#include <qnamespace.h>
+/* #include <QString> */
+/* #include <QSharedPointer> */
+/* #include <qnamespace.h> */
 
-class QDomElement;
-class QWidget;
-class QMovie;
-class LIApplication;
-class LIMovieAccess;
+/* class QDomElement; */
+/* class QWidget; */
+/* class QMovie; */
+/* class LIApplication; */
+/* class LIMovieAccess; */
 
 
-class LCBuildersCommon
-{
+/* class LCBuildersCommon */
+/* { */
 
-private:
-  static LCBuildersCommon instance;
-  explicit LCBuildersCommon();
-  explicit LCBuildersCommon(const LCBuildersCommon&) = delete;
-  LCBuildersCommon& operator=(const LCBuildersCommon&) = delete;
+/* private: */
+/*   static LCBuildersCommon instance; */
+/*   explicit LCBuildersCommon(); */
+/*   explicit LCBuildersCommon(const LCBuildersCommon&) = delete; */
+/*   LCBuildersCommon& operator=(const LCBuildersCommon&) = delete; */
 
-public:
+/* public: */
 
   /*
    * Возвращает указатель на интерфейс доступа к видеофрагменту.
@@ -56,15 +50,37 @@ public:
    *  _movie - отнисительный путь к файлу фрагметна.
    *  _app - интерфейс доступа к функциям приложения.
    */
-  static QSharedPointer<LIMovieAccess> getMovie(const QString& _movie,
-      const LIApplication& _app);
+  /* static QSharedPointer<LIMovieAccess> getMovie(const QString& _movie, */
+  /*     const LIApplication& _app); */
+
   /*
    * Возвращает пиксельное изображение.
    * --------------------------
    *  _file - отнисительный путь к файлу фрагметна.
    *  _app - интерфейс доступа к функциям приложения.
    */
-  static QPixmap getPixmap(const QString& _file, const LIApplication& _app);
+  /* static QPixmap getPixmap(const QString& _file, const LIApplication& _app); */
+
+
+  //=============================================================================================
+  /* Parses a string of an expression like 
+   * "file='pixmapfile'; size=(width, height)" 
+   * and returns a QPixmap of the specified size.
+   */
+  /* static QPixmap parsePixmap(const QString& _expr, const LIApplication& _app); */
+
+  /* 
+   * Return unique id for anonimous objects naming.
+   */
+  /* static quint64 getUniqId(); */
+
+  /* static void setWidgetName(QWidget* _widget, const QString& _name = QString()); */
+  /*
+   *Sets style sheet for widget.
+   */
+  /* static void setWidgetStyle(const QString& _style, QWidget* _widget); */
+
+
 
   /*
    * Преозразует атрибут в флаг выравнивания.
@@ -74,7 +90,7 @@ public:
    *  _attributes - атрибут.
    *  _flags - ссылка на возвращаемое значение флага.
    */
-  static bool toAlignFlags(const QString& _attributes, Qt::Alignment& _flags);
+  /* static bool toAlignFlags(const QString& _attributes, Qt::Alignment& _flags); */
   /*
    * Производит поиск и преобразования атрибута
    * DOM елемента вo флаг выравнивания.
@@ -84,14 +100,14 @@ public:
    *  _element- атрибут.
    *  _flags - ссылка на возвращаемое значение флага.
    */
-  static bool toAlignFlags(const QDomElement& _element, Qt::Alignment& _flags);
+  /* static bool toAlignFlags(const QDomElement& _element, Qt::Alignment& _flags); */
 
   /*
    * Преозразует атрибут в строку вида "AlignTop | ... | AlignVCenter"
    * для использования при задании стилей выравниавния чурез механизм
    * свойств qproperty-alignment.
    */
-  static QString toAlignString(const QString& _attributes);
+  /* static QString toAlignString(const QString& _attributes); */
   /*
    * Преозразует атрибут в значение цвета.
    * --------------------------------------
@@ -104,29 +120,7 @@ public:
    * Получение строки определения базового стиля из DOM элемента.
    */
   /* static QString getBaseStyleSheet(const QDomElement& _element, const LIApplication& _app); */
-
-
-
-  //=============================================================================================
-
-
-  /* Parses a string of an expression like 
-   * "file='pixmapfile'; size=(width, height)" 
-   * and returns a QPixmap of the specified size.
-   */
-  static QPixmap parsePixmap(const QString& _expr, const LIApplication& _app);
-
-  /* 
-   * Return unique id for anonimous objects naming.
-   */
-  /* static quint64 getUniqId(); */
-
-  static void setWidgetName(QWidget* _widget, const QString& _name = QString());
-  /*
-   *Sets style sheet for widget.
-   */
-  static void setStyle(const QString& _style, QWidget* _widget);
-};
+/* }; */
 
 #endif /* BUILDERSCOMMON_H_ */
 

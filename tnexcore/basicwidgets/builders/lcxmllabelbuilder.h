@@ -18,19 +18,19 @@
  * You should have received a copy of the GNU General Public License
  * along with TeleNEXus.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef LCXMLTEXTLABELBUILDER_H
-#define LCXMLTEXTLABELBUILDER_H
+#ifndef LCXMLLABELBUILDER_H
+#define LCXMLLABELBUILDER_H
 
 #include "lcxmlbuilderbase.h"
 
-class LCXmlTextLabelBuilder : public LCXmlBuilderBase
+class LCXmlLabelBuilder : public LCXmlBuilderBase
 {
 public:
-  LCXmlTextLabelBuilder();
-  virtual ~LCXmlTextLabelBuilder();
+  LCXmlLabelBuilder();
+  virtual ~LCXmlLabelBuilder();
 protected:
   virtual QWidget* buildLocal(
-      QSharedPointer<SBuildData> _buildData) override final;
+      const QDomElement& _element, const LIApplication& _app) override final;
 };
 
-#endif // LCXMLTEXTLABELBUILDER_H
+#endif // LCXMLLABELBUILDER_H

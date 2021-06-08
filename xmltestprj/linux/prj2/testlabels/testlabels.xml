@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<WINDOW>
+  <actions>
+    <!-- <scriptExecute event="show" scriptId=""                /> -->
+    <!-- <scriptLaunch  event="show" scriptId="" interval="500" /> -->
+    <!-- <scriptStop    event="show" scriptId=""                /> -->
+
+    <!-- <scriptExecute event="hide" scriptId=""                /> -->
+    <!-- <scriptLaunch  event="hide" scriptId="" interval="500" /> -->
+    <!-- <scriptStop    event="hide" scriptId=""                /> -->
+  </actions>
+
+  <mainWidget>
+    <Frame>
+      <layout>
+        <LayoutVBox>
+          <widgets>
+            <Label text="Simple text Label 1" 
+              style="qproperty-alignment: AlignCenter; color:red; background:yellow" size="500;30"/>
+            <Label text="Simple text Label 2" 
+              style="qproperty-alignment: AlignCenter; color:red; background:yellow" fixedSize="300;30"/>
+          </widgets>
+          <stretch/>
+        </LayoutVBox>
+      </layout>
+    </Frame>
+  </mainWidget>
+</WINDOW>
+
+
+

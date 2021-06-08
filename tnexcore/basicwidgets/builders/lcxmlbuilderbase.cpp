@@ -20,28 +20,111 @@
  */
 
 #include "lcxmlbuilderbase.h"
-#include "widgetbuilderscommon.h"
 #include "QRegularExpression"
 
+#include "LIMovieAccess.h"
 #include "LIApplication.h"
 #include "lcqwidgetvisiblecontrol.h"
 #include "xmlcommon.h"
 
 #include <QWidget>
-
+#include <QMovie>
 #include <QDomElement>
 #include <QDebug>
 
-//==============================================================================
+//==============================================================================__slAttributes
 static const struct
 {
   QString file      = "file";
   QString position  = "position";
   QString fixedSize = "fixedSize";
   QString size = "size";
+  QString name = "name";
+  QString style = "style";
 }__slAttributes;
 
+//==============================================================================CMovieAccess
+class CMovieAccess final : public LIMovieAccess
+{
+private:
+  QMovie* mpMovie;
+  int mStartCounter;
+public:
+  CMovieAccess() = delete;
+  CMovieAccess(QMovie* _movie) : 
+    mpMovie(_movie),
+    mStartCounter(0)
+  {
+    mpMovie->jumpToFrame(0);
+  }
+  virtual ~CMovieAccess(){ mpMovie->deleteLater(); }
+  virtual QMovie* getMovie() override { return mpMovie; }
+  virtual void start() override
+  {
+    if(mStartCounter == 0) 
+    {
+      mpMovie->start();
+    }
+    mStartCounter++;
+  }
+
+  virtual void stop() override
+  {
+    mStartCounter--;
+    if(mStartCounter <= 0)
+    {
+      mStartCounter = 0;
+      mpMovie->stop();
+    }
+  }
+};
+
 //==============================================================================
+static bool stringToNumber(const QString& _str, int& _out)
+{
+  bool flag = false;
+  int number = _str.toInt(&flag);
+  if(!flag) return false;
+  _out = number;
+  return true;
+}
+
+/* static bool stringToNumber(const QString& _str, float& _out) */
+/* { */
+/*   bool flag = false; */
+/*   int number = _str.toFloat(&flag); */
+/*   if(!flag) return false; */
+/*   _out = number; */
+/*   return true; */
+/* } */
+
+//==============================================================================
+template<typename T> 
+void attributeToValues(
+    const QDomElement& _element, 
+    const QString& _attrName, 
+    std::function<void(T,T)> _setter)
+{
+  QString values_string = _element.attribute(_attrName);
+
+  if(values_string.isNull()) return;
+
+  auto values = xmlcommon::parseValues(values_string);
+
+  if(values.size() != 2) return;
+
+  T val_a;
+  T val_b;
+
+  if(!stringToNumber(values.first(), val_a)) return;
+
+  values.pop_front();
+  if(!stringToNumber(values.first(), val_b)) return;
+
+  _setter(val_a, val_b);
+}
+
+//==============================================================================LCXmlBuilderBase
 LCXmlBuilderBase::LCXmlBuilderBase()
 {
 }
@@ -69,66 +152,206 @@ QWidget* LCXmlBuilderBase::build( const QDomElement& _element,
     if(el.tagName() != _element.tagName()) return nullptr;
     return ret(build(el, _app));
   }
-
-  return ret(buildLocal(
-      QSharedPointer<SBuildData>(new SBuildData{QPoint(), _element, _app})));
+  return ret(buildLocal( _element, _app));
 }
-
-
-static void twoIntValueSetter(const QString& _valuesString, std::function<void(int,int)> _setter)
-{
-  auto values = xmlcommon::parseValues(_valuesString);
-  if(values.size() != 2) return;
-
-  int val_a;
-  int val_b;
-
-  bool flag = false;
-  int value = values.first().toInt(&flag);
-  if(!flag) return;
-  val_a = (value);
-  values.pop_front();
-  flag = false;
-  value = values.first().toInt(&flag);
-  if(!flag) return;
-  val_b = (value);
-  _setter(val_a, val_b);
-}
-
 
 //------------------------------------------------------------------------------
-void LCXmlBuilderBase::setPosition(const QDomElement& _element, QWidget* _widget)
+bool LCXmlBuilderBase::setWidgetPosition(const QDomElement& _element, QWidget* _widget)
 {
-  QString attr = _element.attribute(__slAttributes.position);
-  if(attr.isNull()) return;
-  twoIntValueSetter(attr,
-      [_widget](int w, int h)
+  bool ret = false;
+  attributeToValues<int>(
+      _element, 
+      __slAttributes.position,
+      [_widget, &ret](int w, int h)
       {
         _widget->move(w, h);
+        ret = true;
       });
+  return ret;
 }
 
 //------------------------------------------------------------------------------
-void LCXmlBuilderBase::setSize(const QDomElement& _element, QWidget* _widget)
+bool LCXmlBuilderBase::setWidgetSize(const QDomElement& _element, QWidget* _widget)
 {
-  QString attr = _element.attribute(__slAttributes.size);
-  if(attr.isNull()) return;
-  twoIntValueSetter(attr,
-      [_widget](int w, int h)
+  bool ret = false;
+  attributeToValues<int>(
+      _element, 
+      __slAttributes.size,
+      [_widget, &ret](int w, int h)
       {
         _widget->resize(w, h);
+        ret = true;
       });
+  return ret;
 }
 
 //------------------------------------------------------------------------------
-void LCXmlBuilderBase::setFixedSize(const QDomElement& _element, QWidget* _widget)
+bool LCXmlBuilderBase::setWidgetFixedSize(const QDomElement& _element, QWidget* _widget)
 {
-  QString attr = _element.attribute(__slAttributes.fixedSize);
-  if(attr.isNull()) return;
-  twoIntValueSetter(attr,
-      [_widget](int w, int h)
+  bool ret = false;
+  attributeToValues<int>(
+      _element, 
+      __slAttributes.fixedSize,
+      [_widget, &ret](int w, int h)
       {
         _widget->setFixedSize(w, h);
+        ret = true;
       });
+  return ret;
 }
 
+//------------------------------------------------------------------------------
+void LCXmlBuilderBase::setWidgetName(
+    const QDomElement& _element, QWidget* _widget)
+{
+  static quint64 counter = 0;
+  QString attr_name = _element.attribute(__slAttributes.name);
+  if(!attr_name.isNull()) 
+  {
+    _widget->setObjectName(attr_name);
+  }
+  else
+  {
+    _widget->setObjectName(
+        QString("%1_%2")
+        .arg(_widget->metaObject()->className())
+        .arg(counter));
+    counter++;
+  }
+}
+
+//------------------------------------------------------------------------------
+void LCXmlBuilderBase::setWidgetStyle(const QString& _style, QWidget* _widget)
+{
+  auto ret = [_widget](const QString& _ss)
+  {
+    _widget->setStyleSheet(_ss);
+  };
+
+  if(_style.contains(
+        QRegularExpression(
+          QStringLiteral("\\A([^{^}]*\\{[^{^}]*\\})+\\s*\\z"))))
+  {
+    return ret(_style);
+  }
+
+  if(!_widget->objectName().isNull())
+  {
+    return ret( QString("%1#%2 {%3}")
+        .arg(_widget->metaObject()->className())
+        .arg(_widget->objectName())
+        .arg(_style));
+  }
+  return ret(_style);
+}
+
+//------------------------------------------------------------------------------
+void LCXmlBuilderBase::setWidgetStyle(
+    const QDomElement& _element, QWidget* _widget)
+{
+  QString attr_style = _element.attribute(__slAttributes.style);
+  if(attr_style.isNull()) return;
+  setWidgetStyle(attr_style, _widget);
+}
+
+
+//==============================================================================
+static QMap<QString, QSharedPointer<CMovieAccess>> __slMovies;
+//------------------------------------------------------------------------------
+QSharedPointer<LIMovieAccess> LCXmlBuilderBase::getMovie(
+        const QString& _movieFile, const LIApplication& _app)
+{
+    auto it = __slMovies.find(_movieFile);
+
+    if(it != __slMovies.end())
+    {
+        return it.value();
+    }
+
+    QMovie* movie = new QMovie(_app.getProjectPath() + _movieFile);
+
+    auto ret = QSharedPointer<CMovieAccess>(new CMovieAccess(movie));
+
+    __slMovies.insert(_movieFile, ret);
+    return ret;
+}
+
+//==============================================================================
+QMap<QString, QPixmap> __slPicture;
+
+//------------------------------------------------------------------------------
+QPixmap LCXmlBuilderBase::getPixmap(
+        const QString& _pixmapFile, const LIApplication& _app)
+{
+    auto it = __slPicture.find(_pixmapFile);
+
+    if(it != __slPicture.end())
+    {
+        return it.value();
+    }
+
+    QPixmap pixmap(_app.getProjectPath() + _pixmapFile);
+    __slPicture.insert(_pixmapFile, pixmap);
+
+    return pixmap;
+}
+
+//------------------------------------------------------------------------------
+QPixmap LCXmlBuilderBase::parsePixmap(
+    const QString& _expr, const LIApplication& _app)
+{
+  auto set_size = 
+    [](const QString& _attr_size, 
+        std::function<void(int)> _setWidth,
+        std::function<void(int)> _setHeight)
+    {
+      auto set_value = 
+        [](const QString& _value, std::function<void(int)> _setter)
+        {
+          bool flag = false;
+          int ivalue = _value.toInt(&flag);
+          if(!flag) return;
+          _setter(ivalue);
+        };
+
+      auto s = xmlcommon::parseAction(_attr_size);
+      auto itsize = s.parameters.begin();
+      if(itsize == s.parameters.end()) return;
+      if(!((*itsize).isNull()))
+      {
+        set_value((*itsize), _setWidth);
+      }
+      itsize++;
+      if(!((*itsize).isNull()))
+      {
+        set_value((*itsize), _setHeight);
+      }
+    };
+
+  if(_expr.isNull()) return QPixmap();
+  auto icon_attrs = xmlcommon::parseAttributes(_expr);
+  auto attr_it = icon_attrs.find(__slAttributes.file);
+  if(attr_it == icon_attrs.end()) return QPixmap();
+
+  QPixmap pixmap(LCXmlBuilderBase::getPixmap(attr_it.value(), _app));
+
+  if(pixmap.isNull()) return pixmap;
+  attr_it = icon_attrs.find(__slAttributes.size);
+
+  QSize size = pixmap.size();
+
+  if(attr_it != icon_attrs.end())
+  {
+    set_size(attr_it.value(), 
+        [&size](int _width)
+        {
+          size.setWidth(_width);
+        }, 
+        [&size](int _height)
+        {
+          size.setHeight(_height);
+        });
+    pixmap = pixmap.scaled(size.width(), size.height());
+  }
+  return(pixmap);
+}

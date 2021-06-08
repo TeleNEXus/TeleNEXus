@@ -448,12 +448,14 @@ void upload(
       //Show controll
       {
         QString attr = _element.attribute(__slAttributes.visible);
-
         if(attr == QStringLiteral("true"))
         {
-          auto show = [window, widget]() 
+          auto wp_win = sp_win.toWeakRef();
+          auto show = [wp_win, widget]() 
           {
-            window->action(QStringLiteral("show"));
+            auto sp = wp_win.toStrongRef();
+            if(sp.isNull()) return;
+            sp->action(QStringLiteral("show"));
             QCoreApplication::sendEvent(widget, new QShowEvent());
           };
           __slShowList << show;

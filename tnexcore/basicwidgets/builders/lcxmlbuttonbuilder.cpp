@@ -46,7 +46,7 @@ static const struct
 static const struct
 {
   QString value = "value";
-  QString dataSpec = "dataSpec";
+  QString data = "data";
 
 }__slAttributesWriteData;
 
@@ -90,7 +90,7 @@ private:
           QSharedPointer<LIRemoteDataSource> source;
           QSharedPointer<LIDataFormatter> format;
 
-          QString attr_dataspec = _element.attribute(__slAttributesWriteData.dataSpec);
+          QString attr_dataspec = _element.attribute(__slAttributesWriteData.data);
           if(attr_dataspec.isNull()) return;
           QString attr_value = _element.attribute(__slAttributesWriteData.value);
           if(attr_value.isNull()) return;
@@ -195,18 +195,13 @@ LCXmlButtonBuilder::~LCXmlButtonBuilder()
 {
 }
 
-//------------------------------------------------------------------------------
-static void setStyleSheet(QPushButton* _button, const QDomElement& _element);
 
 //------------------------------------------------------------------------------
 QWidget* LCXmlButtonBuilder::buildLocal(
-    QSharedPointer<SBuildData> _buildData)
+const QDomElement& _element, const LIApplication& _app)
 {
-  const QDomElement& element = _buildData->element;
-  const LIApplication& app = _buildData->application;
 
-
-  QString attr_text = element.attribute(__slAttributes.text);
+  QString attr_text = _element.attribute(__slAttributes.text);
   if(attr_text.isNull())
   {
     attr_text = QStringLiteral("Button");
@@ -217,16 +212,16 @@ QWidget* LCXmlButtonBuilder::buildLocal(
   TActions actions_pressed;
   TActions actions_released;
 
-  auto parse_actions = [&_buildData](
+  auto parse_actions = [&_element, &_app](
       const QString& _action_tag, TActions& _actions)
   {
-    auto element = _buildData->element.firstChildElement(_action_tag);
+    auto element = _element.firstChildElement(_action_tag);
     if(element.isNull()) return;
     for(auto node = element.firstChild(); !node.isNull(); node = node.nextSibling())
     {
       auto el = node.toElement();
       if(el.isNull()) continue;
-      CActionBuilder::instance().build(_actions, el, _buildData->application);
+      CActionBuilder::instance().build(_actions, el, _app);
     }
   };
 
@@ -257,7 +252,7 @@ QWidget* LCXmlButtonBuilder::buildLocal(
         });
   }
 
-  auto pixmap = LCBuildersCommon::parsePixmap(element.attribute(QStringLiteral("icon")), app);
+  auto pixmap = parsePixmap(_element.attribute(QStringLiteral("icon")), _app);
 
   if(!pixmap.isNull())
   {
@@ -265,18 +260,13 @@ QWidget* LCXmlButtonBuilder::buildLocal(
     button->setIcon(pixmap);
   }
 
-  setStyleSheet(button, element);
+  setWidgetName(_element, button);
+  setWidgetStyle(_element, button);
+  setWidgetSize(_element, button);
+  setWidgetPosition(_element, button);
+  setWidgetFixedSize(_element, button);
 
-  setPosition(element, button);
   return button;
-}
-
-//==============================================================================
-static void setStyleSheet(QPushButton* _button, const QDomElement& _element)
-{
-  QString style = _element.attribute(QStringLiteral("style"));
-  if(style.isNull()) return;
-  LCBuildersCommon::setStyle(style, _button);
 }
 
 

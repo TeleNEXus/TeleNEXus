@@ -44,7 +44,7 @@ static const struct
 
 static const struct
 {
-  QString localsources = "localsources";
+  QString Localsources = "Localsources";
 }__slTags;
 
 static const struct
@@ -126,7 +126,7 @@ private:
   {
     widgets::__slBuilders.unite(basicwidgetbuilders::getBuilders());
     layouts::__slBuilders.unite(basiclayoutbuilders::getBuilders());
-    sources::__slBuilders.insert(__slTags.localsources, 
+    sources::__slBuilders.insert(__slTags.Localsources, 
         QSharedPointer<LIXmlRemoteDataSourceBuilder>(
           new LCXmlLocalSourceBuilder()));
   }

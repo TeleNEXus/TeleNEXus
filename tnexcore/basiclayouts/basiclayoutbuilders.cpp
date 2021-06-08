@@ -30,17 +30,17 @@ QMap<QString, QSharedPointer<LIXmlLayoutBuilder>> getBuilders()
   QMap<QString, QSharedPointer<LIXmlLayoutBuilder>> builders_map;
 
   builders_map.insert(
-      QStringLiteral("layoutGrid"), 
+      QStringLiteral("LayoutGrid"), 
       QSharedPointer<LIXmlLayoutBuilder>(
         new LCXmlGridLayoutBuilder()));
 
   builders_map.insert(
-      QStringLiteral("layoutVBox"), 
+      QStringLiteral("LayoutVBox"), 
       QSharedPointer<LIXmlLayoutBuilder>(
         new LCXmlBoxLayoutBuilder(LCXmlBoxLayoutBuilder::EOrientation::VERTICAL)));
 
   builders_map.insert(
-      QStringLiteral("layoutHBox"), 
+      QStringLiteral("LayoutHBox"), 
       QSharedPointer<LIXmlLayoutBuilder>(
         new LCXmlBoxLayoutBuilder(LCXmlBoxLayoutBuilder::EOrientation::HORIZONTAL)));
 
