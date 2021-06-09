@@ -24,11 +24,11 @@
 #include "lcxmlbuilderbase.h"
 
 
-class LCXmlRemLabelBuilder final : public LCXmlBuilderBase
+class LCXmlDataLabelBuilder final : public LCXmlBuilderBase
 {
 public:
-  LCXmlRemLabelBuilder(){};
-  virtual ~LCXmlRemLabelBuilder(){};
+  LCXmlDataLabelBuilder(){};
+  virtual ~LCXmlDataLabelBuilder(){};
 
 protected:
   virtual QWidget* buildLocal(

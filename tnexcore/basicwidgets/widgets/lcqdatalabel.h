@@ -29,7 +29,7 @@
 
 #include <QLabel>
 
-class LCQRemLabel : public QLabel
+class LCQDataLabel : public QLabel
 {
   Q_OBJECT;
 private:
@@ -38,17 +38,17 @@ private:
   QSharedPointer<LIDataFormatter> mFormatter;
 
 public:
-  explicit LCQRemLabel(QWidget* _parent = nullptr);
+  explicit LCQDataLabel(QWidget* _parent = nullptr);
 
-  explicit LCQRemLabel(QString _text, QWidget* _parent = nullptr);
+  explicit LCQDataLabel(QString _text, QWidget* _parent = nullptr);
 
-  explicit LCQRemLabel(   
+  explicit LCQDataLabel(   
       const QString&                      _dataName,
       QSharedPointer<LIRemoteDataSource>  _dataSource,
       QSharedPointer<LIDataFormatter>     _formatter,
       QWidget* _parent = nullptr);
 
-  virtual ~LCQRemLabel();
+  virtual ~LCQDataLabel();
   virtual bool event(QEvent *e) override;
 private:
   bool mFlagActive;

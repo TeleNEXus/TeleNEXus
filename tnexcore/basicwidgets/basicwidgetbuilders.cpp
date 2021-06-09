@@ -26,7 +26,7 @@
 
 #include "lcxmlframebuilder.h"
 #include "lcxmllabelbuilder.h"
-#include "lcxmlremlabelbuilder.h"
+#include "lcxmldatalabelbuilder.h"
 #include "lcxmlbuttonbuilder.h"
 
 
@@ -57,7 +57,7 @@ QMap<QString, QSharedPointer<LIXmlWidgetBuilder>> getBuilders()
   add_builder(QStringLiteral("Frame"              ),  new LCXmlFrameBuilder());
   add_builder(QStringLiteral("Button"             ),  new LCXmlButtonBuilder());
   add_builder(QStringLiteral("Label"              ),  new LCXmlLabelBuilder());
-  add_builder(QStringLiteral("DataLabel"          ),  new LCXmlRemLabelBuilder());
+  add_builder(QStringLiteral("DataLabel"          ),  new LCXmlDataLabelBuilder());
 
   /* add_builder(QStringLiteral("table"              ),  new LCXmlTableWidgetBuilder()); */
   /* add_builder(QStringLiteral("dataLineEdit"       ),  new LCXmlRemLineEditBuilder()); */

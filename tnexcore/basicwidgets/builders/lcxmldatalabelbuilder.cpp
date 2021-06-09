@@ -18,9 +18,9 @@
  * You should have received a copy of the GNU General Public License
  * along with TeleNEXus.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "lcxmlremlabelbuilder.h"
+#include "lcxmldatalabelbuilder.h"
 #include "LIApplication.h"
-#include "lcqremlabel.h"
+#include "lcqdatalabel.h"
 #include "xmlcommon.h"
 
 #include <QLabel>
@@ -33,9 +33,8 @@ static const struct
 }__slAttributes;
 
 
-
 //------------------------------------------------------------------------------
-QWidget* LCXmlRemLabelBuilder::buildLocal(
+QWidget* LCXmlDataLabelBuilder::buildLocal(
    const QDomElement& _element, const LIApplication& _app) 
 {
   auto ret = 
@@ -86,7 +85,7 @@ QWidget* LCXmlRemLabelBuilder::buildLocal(
     return ret_wrong();
   }
 
-  return ret(new LCQRemLabel(dataSpec.dataId, source, format));
+  return ret(new LCQDataLabel(dataSpec.dataId, source, format));
 
 }
 

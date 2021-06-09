@@ -50,7 +50,7 @@
   <WINDOW 
     file="testlabels/testlabels.xml" 
     id="testlabel" 
-    visible="false"
+    visible="true"
     title="Test Labels" 
     showMode="normal"
     modality="false"
@@ -62,7 +62,7 @@
   <WINDOW 
     file="testlabels/testlabels2.xml" 
     id="testlabel2" 
-    visible="false"
+    visible="true"
     title="Test Labels 2" 
     showMode="normal"
     modality="false"
