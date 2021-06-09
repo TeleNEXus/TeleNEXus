@@ -28,9 +28,8 @@
 #include "lcxmllabelbuilder.h"
 #include "lcxmldatalabelbuilder.h"
 #include "lcxmlbuttonbuilder.h"
+#include "lcxmltablewidgetbuilder.h"
 
-
-/* #include "lcxmltablewidgetbuilder.h" */
 /* #include "lcxmlremlineeditbuilder.h" */
 /* #include "lcxmlremcomboboxbuilder.h" */
 /* #include "lcxmlremcombolabelbuilder.h" */
@@ -58,8 +57,8 @@ QMap<QString, QSharedPointer<LIXmlWidgetBuilder>> getBuilders()
   add_builder(QStringLiteral("Button"             ),  new LCXmlButtonBuilder());
   add_builder(QStringLiteral("Label"              ),  new LCXmlLabelBuilder());
   add_builder(QStringLiteral("DataLabel"          ),  new LCXmlDataLabelBuilder());
+  add_builder(QStringLiteral("Table"              ),  new LCXmlTableWidgetBuilder());
 
-  /* add_builder(QStringLiteral("table"              ),  new LCXmlTableWidgetBuilder()); */
   /* add_builder(QStringLiteral("dataLineEdit"       ),  new LCXmlRemLineEditBuilder()); */
   /* add_builder(QStringLiteral("dataComboBox"       ),  new LCXmlRemComboBoxBuilder()); */
   /* add_builder(QStringLiteral("dataComboLabel"     ),  new LCXmlRemComboLabelBuilder()); */
