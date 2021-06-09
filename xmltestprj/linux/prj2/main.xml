@@ -24,10 +24,10 @@
   <DATAFORMATS file="formatters.xml"/>
 
   <WINDOW 
-    file="testdatalabels/testdatalabels1.xml" 
-    id="testdatalabel1" 
+    file="testtable/testtable.xml" 
+    id="testtable1" 
     visible="true"
-    title="Test Data Labels 1" 
+    title="Test table" 
     showMode="normal"
     modality="false"
     flags="" 
@@ -35,94 +35,106 @@
     position="0;0"
     />
 
-  <WINDOW 
-    file="testdatalabels/testdatalabels2.xml" 
-    id="testdatalabel2" 
-    visible="true"
-    title="Test Data Labels 2" 
-    showMode="normal"
-    modality="false"
-    flags="" 
-    size="300;300"
-    position="300;300"
-    />
+  <!-- <WINDOW --> 
+  <!--   file="testdatalabels/testdatalabels1.xml" --> 
+  <!--   id="testdatalabel1" --> 
+  <!--   visible="false" -->
+  <!--   title="Test Data Labels 1" --> 
+  <!--   showMode="normal" -->
+  <!--   modality="false" -->
+  <!--   flags="" --> 
+  <!--   size="300;300" -->
+  <!--   position="0;0" -->
+  <!--   /> -->
 
-  <WINDOW 
-    file="testlabels/testlabels.xml" 
-    id="testlabel" 
-    visible="true"
-    title="Test Labels" 
-    showMode="normal"
-    modality="false"
-    flags="" 
-    size="300;300"
-    position="0;0"
-    />
+  <!-- <WINDOW --> 
+  <!--   file="testdatalabels/testdatalabels2.xml" --> 
+  <!--   id="testdatalabel2" --> 
+  <!--   visible="false" -->
+  <!--   title="Test Data Labels 2" --> 
+  <!--   showMode="normal" -->
+  <!--   modality="false" -->
+  <!--   flags="" --> 
+  <!--   size="300;300" -->
+  <!--   position="300;300" -->
+  <!--   /> -->
 
-  <WINDOW 
-    file="testlabels/testlabels2.xml" 
-    id="testlabel2" 
-    visible="true"
-    title="Test Labels 2" 
-    showMode="normal"
-    modality="false"
-    flags="" 
-    size="300;300"
-    position="300;300"
-    />
+  <!-- <WINDOW --> 
+  <!--   file="testlabels/testlabels.xml" --> 
+  <!--   id="testlabel" --> 
+  <!--   visible="false" -->
+  <!--   title="Test Labels" --> 
+  <!--   showMode="normal" -->
+  <!--   modality="false" -->
+  <!--   flags="" --> 
+  <!--   size="300;300" -->
+  <!--   position="0;0" -->
+  <!--   /> -->
 
-  <WINDOW 
-    file="testbutton/testbutton.xml" 
-    id="testbutton" 
-    visible="false"
-    title="Test Buttons" 
-    showMode="normal"
-    modality="false"
-    flags="" 
-    size="300;50"
-    position="300;600"
-    />
+  <!-- <WINDOW --> 
+  <!--   file="testlabels/testlabels2.xml" --> 
+  <!--   id="testlabel2" --> 
+  <!--   visible="false" -->
+  <!--   title="Test Labels 2" --> 
+  <!--   showMode="normal" -->
+  <!--   modality="false" -->
+  <!--   flags="" --> 
+  <!--   size="300;300" -->
+  <!--   position="300;300" -->
+  <!--   /> -->
 
-  <WINDOW 
-    file="testbutton/testbutton2.xml" 
-    id="testbutton2" 
-    visible="false"
-    title="Test Buttons" 
-    showMode="normal"
-    modality="false"
-    flags="" 
-    size="500;500"
-    position="600;100"
-    />
+  <!-- <WINDOW --> 
+  <!--   file="testbutton/testbutton.xml" --> 
+  <!--   id="testbutton" --> 
+  <!--   visible="false" -->
+  <!--   title="Test Buttons" --> 
+  <!--   showMode="normal" -->
+  <!--   modality="false" -->
+  <!--   flags="" --> 
+  <!--   size="300;50" -->
+  <!--   position="300;600" -->
+  <!--   /> -->
 
-  <WINDOW
-    id="TestWindow1" 
-    title="TestWindow1" 
-    visible="false"
-    showMode="normal"
-    modality="false"
-    flags="" 
-    size="200;50"
-    position="300;100">
-    <mainWidget>
-      <Frame>
-      </Frame>
-    </mainWidget>
-  </WINDOW>
+  <!-- <WINDOW --> 
+  <!--   file="testbutton/testbutton2.xml" --> 
+  <!--   id="testbutton2" --> 
+  <!--   visible="false" -->
+  <!--   title="Test Buttons" --> 
+  <!--   showMode="normal" -->
+  <!--   modality="false" -->
+  <!--   flags="" --> 
+  <!--   size="500;500" -->
+  <!--   position="600;100" -->
+  <!--   /> -->
 
-  <WINDOW
-    id="TestWindow2" 
-    title="TestWindow2" 
-    visible="false"
-    showMode="normal"
-    modality="false"
-    flags="" 
-    size="200;50"
-    position="500;100">
-    <mainWidget>
-      <Frame>
-      </Frame>
-    </mainWidget>
-  </WINDOW>
+  <!-- <WINDOW -->
+  <!--   id="TestWindow1" --> 
+  <!--   title="TestWindow1" --> 
+  <!--   visible="false" -->
+  <!--   showMode="normal" -->
+  <!--   modality="false" -->
+  <!--   flags="" --> 
+  <!--   size="200;50" -->
+  <!--   position="300;100"> -->
+  <!--   <mainWidget> -->
+  <!--     <Frame> -->
+  <!--     </Frame> -->
+  <!--   </mainWidget> -->
+  <!-- </WINDOW> -->
+
+  <!-- <WINDOW -->
+  <!--   id="TestWindow2" --> 
+  <!--   title="TestWindow2" --> 
+  <!--   visible="false" -->
+  <!--   showMode="normal" -->
+  <!--   modality="false" -->
+  <!--   flags="" --> 
+  <!--   size="200;50" -->
+  <!--   position="500;100"> -->
+  <!--   <mainWidget> -->
+  <!--     <Frame> -->
+  <!--     </Frame> -->
+  <!--   </mainWidget> -->
+  <!-- </WINDOW> -->
 
 </APPLICATION>
