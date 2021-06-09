@@ -75,6 +75,7 @@ LCQRemLabel::~LCQRemLabel()
 //------------------------------------------------------------------------------setActive
 void LCQRemLabel::setActive(bool _flag)
 {
+  if(mDataReader.isNull()) return;
   if(_flag)
   {
     mFlagActive = true;

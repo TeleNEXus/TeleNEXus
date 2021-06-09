@@ -27,8 +27,8 @@
 class LCXmlRemLabelBuilder final : public LCXmlBuilderBase
 {
 public:
-  LCXmlRemLabelBuilder();
-  virtual ~LCXmlRemLabelBuilder();
+  LCXmlRemLabelBuilder(){};
+  virtual ~LCXmlRemLabelBuilder(){};
 
 protected:
   virtual QWidget* buildLocal(

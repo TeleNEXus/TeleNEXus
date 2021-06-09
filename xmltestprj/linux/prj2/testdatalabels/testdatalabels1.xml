@@ -16,10 +16,10 @@
       <layout>
         <LayoutVBox>
           <widgets>
-            <DataLabel text="Simple text Label 1" 
-              style="qproperty-alignment: AlignCenter; color:red; background:yellow" size="500;30"/>
-            <DataLabel text="Simple text Label 2" 
-              style="qproperty-alignment: AlignCenter; color:red; background:yellow" fixedSize="300;30"/>
+            <!-- <DataLabel sourceId="localsource" dataId="test_string" formatId="string"/> --> 
+            <DataLabel 
+              style="background: white; border: 4px solid red; font: bold italic 20pt 'Karumbi'"
+              data="localsource:test_string:string" /> 
           </widgets>
           <stretch/>
         </LayoutVBox>
