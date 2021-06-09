@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<WINDOW>
+  <mainWidget>
+    <Frame>
+      <widgets>
+        <Table
+          fixedSize="350;250"
+          position="150;200"
+          name="testtable2"
+          style="gridline-color:red"
+          styleTable = "background:yellow"
+          styleHeader = "background:blue; color:yellow"
+          styleCorner = "background:blue; color:yellow">
+
+          <!-- style="gridline-color:red" -->
+          <!-- styleTable = "background:lightgrey" -->
+          <!-- styleHeader = "background:blue; color:yellow" -->
+          <!-- styleCorner = "background:blue; color:yellow"> -->
+          <!-- style=" -->
+          <!-- QTableWidget#testtable1:hover {background:grey} -->
+          <!-- QTableWidget#testtable1 > QHeaderView {background:blue; color:yellow; font: bold italic 19pt Arial} -->
+          <!-- QTableWidget#testtable1 > QTableCornerButton {background:blue} -->
+          <!-- " -->
+
+        <col label="Data name">
+          <Label text="bits_size(1)" /> 
+
+          <Label text="bits_defs_1" /> 
+
+          <Label text="bytes_uint8"   /> 
+          <Label text="bytes_uint16"  /> 
+          <Label text="bytes_uint32"  /> 
+          <Label text="bytes_float32" /> 
+          <Label text="test_string"  /> 
+        </col>
+
+        <col label="Data labels">
+          <DataLabel      data="localsource:  bits_size(1)    :bits"/>
+
+          <DataLabel      data="localsource:  bits_defs_1     :bits"/>
+
+          <DataLabel      data="localsource:  bytes_uint8     :uint8"    />
+          <DataLabel      data="localsource:  bytes_uint16    :uint16"   />
+          <DataLabel      data="localsource:  bytes_uint32    :uint32"   />
+          <DataLabel      data="localsource:  bytes_float32   :float32"  />
+          <DataLabel      data="localsource:  test_string     :string"   />
+        </col>
+
+      </Table>
+    </widgets>
+  </Frame>
+</mainWidget>
+  </WINDOW>

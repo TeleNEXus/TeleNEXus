@@ -36,6 +36,11 @@ static const struct
   QString label               = "label";
   QString width               = "width";
   QString height              = "height";
+
+  QString styleTable          = "styleTable";
+  QString styleHeader         = "styleHeader";
+  QString styleCorner         = "styleCorner";
+
 } __slAttributes;
 
 //------------------------------------------------------------------------------
@@ -88,7 +93,7 @@ struct SLocalData
   QTableWidget* mpTable= nullptr;
   SLocalData() : mpTable(new QTableWidget)
   {
-    /* mpTable->setSelectionMode(QTableWidget::SelectionMode::NoSelection); */
+    mpTable->setSelectionMode(QTableWidget::SelectionMode::NoSelection);
     mpTable->installEventFilter(new CQEventFilter(mpTable));
     mpTable->setEditTriggers(QTableWidget::EditTrigger::NoEditTriggers);
   }
@@ -105,6 +110,7 @@ static void createCol(
     const LIApplication& _app,
     SLocalData& _localData);
 
+static void setLocalStyle(const QDomElement& _element, QWidget* _widget);
 //------------------------------------------------------------------------------
 QWidget* LCXmlTableWidgetBuilder::buildLocal(
     const QDomElement& _element, const LIApplication& _app)
@@ -131,6 +137,7 @@ QWidget* LCXmlTableWidgetBuilder::buildLocal(
 
   setWidgetName(      _element, buildData.mpTable);
   setWidgetStyle(     _element, buildData.mpTable);
+  setLocalStyle(      _element, buildData.mpTable);
   setWidgetSize(      _element, buildData.mpTable);
   setWidgetFixedSize( _element, buildData.mpTable);
   setWidgetPosition(  _element, buildData.mpTable);
@@ -138,6 +145,44 @@ QWidget* LCXmlTableWidgetBuilder::buildLocal(
   return buildData.mpTable;
 }
 
+//------------------------------------------------------------------------------
+static void setLocalStyle(const QDomElement& _element, QWidget* _widget)
+{
+  QString attr_style = _element.attribute(__slAttributes.styleTable);
+  if(!attr_style.isNull())
+  {
+    _widget->setStyleSheet(
+        QString("%1 %2#%3{%4}")
+        .arg(_widget->styleSheet())
+        .arg(QStringLiteral("QTableWidget"))
+        .arg(_widget->objectName())
+        .arg(attr_style));
+  }
+
+  attr_style = _element.attribute(__slAttributes.styleHeader);
+  if(!attr_style.isNull())
+  {
+    _widget->setStyleSheet(
+        QString("%1 %2#%3 > %4 {%5}")
+        .arg(_widget->styleSheet())
+        .arg(QStringLiteral("QTableWidget"))
+        .arg(_widget->objectName())
+        .arg("QHeaderView")
+        .arg(attr_style));
+  }
+
+  attr_style = _element.attribute(__slAttributes.styleCorner);
+  if(!attr_style.isNull())
+  {
+    _widget->setStyleSheet(
+        QString("%1 %2#%3 > %4 {%5}")
+        .arg(_widget->styleSheet())
+        .arg(QStringLiteral("QTableWidget"))
+        .arg(_widget->objectName())
+        .arg("QTableCornerButton")
+        .arg(attr_style));
+  }
+}
 
 //------------------------------------------------------------------------------
 static void createRow(

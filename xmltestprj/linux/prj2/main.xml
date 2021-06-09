@@ -35,6 +35,18 @@
     position="0;0"
     />
 
+  <WINDOW 
+    file="testtable/testtable2.xml" 
+    id="testtable2" 
+    visible="true"
+    title="Test table" 
+    showMode="normal"
+    modality="false"
+    flags="" 
+    size="600;600"
+    position="400;300"
+    />
+
   <!-- <WINDOW --> 
   <!--   file="testdatalabels/testdatalabels1.xml" --> 
   <!--   id="testdatalabel1" --> 
