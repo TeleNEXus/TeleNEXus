@@ -42,7 +42,7 @@ LCXmlScrollAreaBuilder::~LCXmlScrollAreaBuilder()
 
 //------------------------------------------------------------------------------
 QWidget* LCXmlScrollAreaBuilder::buildLocal(
-      QSharedPointer<SBuildData> _buildData)
+    QSharedPointer<SBuildData> _buildData)
 {
   const QDomElement& element = _buildData->element;
   const LIApplication& app = _buildData->application;

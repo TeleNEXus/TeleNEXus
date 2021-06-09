@@ -18,26 +18,26 @@
  * You should have received a copy of the GNU General Public License
  * along with TeleNEXus.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "lcqremlabel.h"
+#include "lcqdatalabel.h"
 #include <QCoreApplication>
 #include <QDebug>
 #include <qnamespace.h>
 
-//==============================================================================LCQRemLabel
-LCQRemLabel::LCQRemLabel(QWidget* _parent) : QLabel(_parent), mFlagActive(false)
+//==============================================================================LCQDataLabel
+LCQDataLabel::LCQDataLabel(QWidget* _parent) : QLabel(_parent), mFlagActive(false)
 {
-  setText("LCQRemLabel");
+  setText("LCQDataLabel");
   setEnabled(false);
 }
 
-LCQRemLabel::LCQRemLabel(QString _text, QWidget* _parent) : 
+LCQDataLabel::LCQDataLabel(QString _text, QWidget* _parent) : 
   QLabel(_text, _parent),
   mFlagActive(false)
 {
   setEnabled(false);
 }
 
-LCQRemLabel::LCQRemLabel(const QString& _dataName,
+LCQDataLabel::LCQDataLabel(const QString& _dataName,
     QSharedPointer<LIRemoteDataSource> _dataSource,
     QSharedPointer<LIDataFormatter> _formatter,
     QWidget* _parent) :    QLabel(_parent),
@@ -68,12 +68,12 @@ LCQRemLabel::LCQRemLabel(const QString& _dataName,
       );
 }
 
-LCQRemLabel::~LCQRemLabel()
+LCQDataLabel::~LCQDataLabel()
 {
 }
 
 //------------------------------------------------------------------------------setActive
-void LCQRemLabel::setActive(bool _flag)
+void LCQDataLabel::setActive(bool _flag)
 {
   if(mDataReader.isNull()) return;
   if(_flag)
@@ -90,7 +90,7 @@ void LCQRemLabel::setActive(bool _flag)
 }
 
 //------------------------------------------------------------------------------event
-bool LCQRemLabel::event(QEvent *_event)
+bool LCQDataLabel::event(QEvent *_event)
 {
   bool ret = false;
   switch(_event->type())
