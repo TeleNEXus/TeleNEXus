@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<WINDOW>
+  <mainWidget>
+    <Table>
+      <col label="Data name">
+        <Label text="bits_size(1)" /> 
+        <Label text="bits_size(2)" /> 
+        <Label text="bits_size(3)" /> 
+
+        <Label text="bits_defs_1" /> 
+        <Label text="bits_defs_2" /> 
+        <Label text="bits_defs_3" /> 
+        <Label text="bits_defs_4" /> 
+
+        <Label text="bytes_uint8"   /> 
+        <Label text="bytes_int8"    /> 
+        <Label text="bytes_uint16"  /> 
+        <Label text="bytes_int16"   /> 
+        <Label text="bytes_uint32"  /> 
+        <Label text="bytes_int32"   /> 
+        <Label text="bytes_float32" /> 
+        <Label text="bytes_string"  /> 
+        <Label text="test_string"  /> 
+      </col>
+
+      <col label="Data labels">
+        <DataLabel      data="localsource:  bits_size(1)    :bits"/>
+        <DataLabel      data="localsource:  bits_size(2)    :bits"/>
+        <DataLabel      data="localsource:  bits_size(3)    :bits"/>
+
+        <DataLabel      data="localsource:  bits_defs_1     :bits"/>
+        <DataLabel      data="localsource:  bits_defs_2     :bits"/>
+        <DataLabel      data="localsource:  bits_defs_3     :bits"/>
+        <DataLabel      data="localsource:  bits_defs_4     :bits"/>
+
+        <DataLabel      data="localsource:  bytes_uint8     :uint8"    />
+        <DataLabel      data="localsource:  bytes_int8      :int8"     />
+        <DataLabel      data="localsource:  bytes_uint16    :uint16"   />
+        <DataLabel      data="localsource:  bytes_int16     :int16"    />
+        <DataLabel      data="localsource:  bytes_uint32    :uint32"   />
+        <DataLabel      data="localsource:  bytes_int32     :int32"    />
+        <DataLabel      data="localsource:  bytes_float32   :float32"  />
+        <DataLabel      data="localsource:  bytes_string    :string"   />
+        <DataLabel      data="localsource:  test_string     :string"   />
+      </col>
+
+    </Table>
+  </mainWidget>
+</WINDOW>
