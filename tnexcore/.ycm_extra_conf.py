@@ -72,6 +72,7 @@ flags = [
              '-I', '../datasources/modbussource/modbus',
              '-I', '../tnexcore/localsource',
              '-I', '../tnexcore/basicwidgets',
+             '-I', '../tnexcore/basicwidgets/widgets',
              '-I', '../tnexcore/basicwidgets/builders',
              '-I', '../tnexcore/basiclayouts',
              '-I', '../tnexcore/window',

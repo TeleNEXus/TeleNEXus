@@ -54,6 +54,18 @@ LCQListWidget::LCQListWidget(
   mpLocal = new CLocalData;
   ld.mFormatter = _formatter;
   ld.mDataWriter = _source->createWriter(_data);
+
+  if(!(ld.mDataWriter.isNull()))
+  {
+    connect(this, &LCQListWidget::currentRowChanged, 
+        [this](int _row)
+        {
+          auto it = ld.mRowValue.find(_row);
+          if(it == ld.mRowValue.end()) return;
+          ld.mDataWriter->writeRequest(it.value());
+        });
+  }
+
   ld.mDataReader = _source->createReader(_data,
 
       [this](QSharedPointer<QByteArray> _data, LERemoteDataStatus _dataStatus)
@@ -70,15 +82,8 @@ LCQListWidget::LCQListWidget(
         setCurrentRow(it.value());
       });
 
-  ld.mDataReader->connectToSource();
+  if(!(ld.mDataReader.isNull())) ld.mDataReader->connectToSource();
 
-  connect(this, &LCQListWidget::currentRowChanged, 
-      [this](int _row)
-      {
-        auto it = ld.mRowValue.find(_row);
-        if(it == ld.mRowValue.end()) return;
-        ld.mDataWriter->writeRequest(it.value());
-      });
 }
 
 LCQListWidget::~LCQListWidget()

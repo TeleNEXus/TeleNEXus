@@ -40,6 +40,7 @@ INCLUDEPATH +=                          \
 ./basiclayouts                          \
 ./basicwidgets                          \
 ./basicwidgets/builders                 \
+./basicwidgets/widgets                  \
 
 
 SOURCES += \
@@ -63,6 +64,7 @@ basicwidgets/builders/lcxmlbuilderbase.cpp \
 basicwidgets/builders/lcxmlframebuilder.cpp \
 basicwidgets/builders/lcxmllabelbuilder.cpp \
 basicwidgets/builders/lcxmlbuttonbuilder.cpp \
+basicwidgets/builders/lcxmlremlabelbuilder.cpp \
 basicwidgets/basicwidgetbuilders.cpp \
 dataformatters/lcformatterbase.cpp \
 dataformatters/lcformatterbitfield.cpp \
@@ -106,7 +108,6 @@ window/lcwindow.cpp \
 applicationinterface.cpp \
 main.cpp \
 
-# basicwidgets/builders/lcxmlremlabelbuilder.cpp \
 # basicwidgets/builders/lcxmlremlineeditbuilder.cpp \
 # basicwidgets/builders/lcxmlremcomboboxbuilder.cpp \
 # basicwidgets/builders/lcxmlremcombolabelbuilder.cpp \

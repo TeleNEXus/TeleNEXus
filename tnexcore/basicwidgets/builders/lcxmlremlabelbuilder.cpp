@@ -20,6 +20,8 @@
  */
 #include "lcxmlremlabelbuilder.h"
 #include "LIApplication.h"
+#include "lcqremlabel.h"
+#include "xmlcommon.h"
 
 #include <QLabel>
 #include <QDomElement>
@@ -30,85 +32,61 @@ static const struct
   QString data = "data";
 }__slAttributes;
 
-//==============================================================================CQEventFilter
-class CQEventFilter final : public QObject
-{
-private:
-  CQEventFilter() = delete;
-  CQEventFilter(QObject* _parent) : QObject(_parent)
-  {
-  }
-public:
 
-  static void install(QLabel* _label, QSharedPointer<LIRemoteDataReader> _dataReader)
-  {
-    auto filter = new CQEventFilter(_label);
-    _label->installEventFilter(&filter);
-  }
-
-  virtual bool eventFilter(QObject* _obj, QEvent* _event) override
-  {
-    return false;
-  }
-};
-//==============================================================================
-LCXmlRemLabelBuilder::LCXmlRemLabelBuilder()
-{
-
-}
-
-//------------------------------------------------------------------------------
-LCXmlRemLabelBuilder::~LCXmlRemLabelBuilder()
-{
-
-}
 
 //------------------------------------------------------------------------------
 QWidget* LCXmlRemLabelBuilder::buildLocal(
-   const QDomElement& _elemnt, const LIApplication& _app) 
+   const QDomElement& _element, const LIApplication& _app) 
 {
-  QLabel* ret = nullptr;
-  QString data;
-  QString attr = element.attribute(LCBuildersCommon::mAttributes.source);
+  auto ret = 
+    [&_element](QLabel* _label)
+    {
+      setWidgetName(_element, _label);
+      setWidgetStyle(_element, _label);
+      setWidgetSize(_element, _label);
+      setWidgetPosition(_element, _label);
+      setWidgetFixedSize(_element, _label);
+      return _label;
+    };
+
+  auto ret_wrong = 
+    [&_element, &ret]()
+    {
+      return ret(new QLabel(_element.tagName()));
+    };
+
   QSharedPointer<LIRemoteDataSource> source;
   QSharedPointer<LIDataFormatter> format;
 
-  if(attr.isNull())
+  bool err_flag = false;
+
+  auto dataSpec = xmlcommon::parseDataSpecification(
+      _element.attribute(__slAttributes.data), 
+      [&err_flag](const QString&)
+      {
+        err_flag = true;
+      });
+
+  if(err_flag) 
   {
-    goto LABEL_WRONG_EXIT;
+    return ret_wrong();
   }
 
-  source = _app.getDataSource(attr);
+  source = _app.getDataSource(dataSpec.sourceId);
 
   if(source.isNull())
   {
-    goto LABEL_WRONG_EXIT;
+    return ret_wrong();
   }
 
-  data = element.attribute(LCBuildersCommon::mAttributes.data);
-
-  if(data.isNull())
-  {
-    goto LABEL_WRONG_EXIT;
-  }
-  
-  attr = element.attribute(LCBuildersCommon::mAttributes.dataformatter);
-
-  format = _buildData->application.getDataFormatter(attr);
+  format = _app.getDataFormatter(dataSpec.formatterId);
 
   if(format.isNull())
   {
-    goto LABEL_WRONG_EXIT;
+    return ret_wrong();
   }
 
-  ret = new LCQRemLabel(data, source, format);
+  return ret(new LCQRemLabel(dataSpec.dataId, source, format));
 
-LABEL_WRONG_EXIT:
-
-  if(ret == nullptr) ret = new QLabel(element.tagName());
-  QString style = LCBuildersCommon::getBaseStyleSheet(element, app);
-  ret->setStyleSheet(style);
-  LCBuildersCommon::initPosition(element, *ret);
-  return ret;
 }
 
