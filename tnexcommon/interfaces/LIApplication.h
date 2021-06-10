@@ -40,63 +40,69 @@ class LIJScriptService;
 class LIApplication
 {
 public:
-    LIApplication(){}
-    /*
-     * Возвращает путь к каталогу проекта.
-     */
-    virtual QString getProjectPath() const = 0;
-    /*
-     * Возвращает папку главного файла Xml.
-     */
-    virtual QDir getProjectDir() const = 0;
-    /*
-     * Возвращает интеллектуальный указатель на источник данных
-     */
-    virtual QSharedPointer<LIXmlRemoteDataSourceBuilder> 
-        getDataSourceBuilder(const QString& _name) const = 0;
+  LIApplication(){}
+  /*
+   * Возвращает путь к каталогу проекта.
+   */
+  virtual QString getProjectPath() const = 0;
+  /*
+   * Возвращает папку главного файла Xml.
+   */
+  virtual QDir getProjectDir() const = 0;
+  /*
+   * Возвращает интеллектуальный указатель на источник данных
+   */
+  virtual QSharedPointer<LIXmlRemoteDataSourceBuilder> 
+    getDataSourceBuilder(const QString& _name) const = 0;
 
-    virtual QSharedPointer<LIRemoteDataSource> 
-        getDataSource(const QString& _name) const = 0;
-    /*
-     * Возвращает интеллектуальный указатель на построитель 
-     * компоновцика объектов.
-     */
-    virtual QSharedPointer<LIXmlLayoutBuilder> 
-        getLayoutBuilder(const QString& _name) const = 0;
-    /*
-     * Возвращает интеллектуальный указатель на построитель визуального объекта.
-     */
-    virtual QSharedPointer<LIXmlWidgetBuilder> 
-        getWidgetBuilder(const QString& _name) const = 0;
-    /*
-     * Производит поиск и загрузку xml файла в элемент dom используя
-     * относительный путь к файлу.
-     */
-    virtual QDomDocument 
-        getDomDocument(const QString& _fileName) const = 0; 
+  virtual QSharedPointer<LIRemoteDataSource> 
+    getDataSource(const QString& _name) const = 0;
+  /*
+   * Возвращает интеллектуальный указатель на построитель 
+   * компоновцика объектов.
+   */
+  virtual QSharedPointer<LIXmlLayoutBuilder> 
+    getLayoutBuilder(const QString& _name) const = 0;
+  /*
+   * Возвращает интеллектуальный указатель на построитель визуального объекта.
+   */
+  virtual QSharedPointer<LIXmlWidgetBuilder> 
+    getWidgetBuilder(const QString& _name) const = 0;
+  /*
+   * Производит поиск и загрузку xml файла в элемент dom используя
+   * относительный путь к файлу.
+   */
+  virtual QDomDocument 
+    getDomDocument(const QString& _fileName) const = 0; 
 
-    /*
-     * Возвращает указатель на окно с заданным именем. 
-     */
-    virtual QSharedPointer<LIWindow> 
-        getWindow(const QString& _windowId) const = 0;
+  /*
+   * Возвращает указатель на окно с заданным именем. 
+   */
+  virtual QSharedPointer<LIWindow> 
+    getWindow(const QString& _windowId) const = 0;
 
-    /*
-     * Возвращает указатель на окно с заданным именем. 
-     */
-    virtual QSharedPointer<LIKeyboard> 
-        getKeyboard(const QString& _keyboardId) const = 0;
-    
-    /*
-     * Возвращает строку стиля шрифта. 
-     */
-    virtual QString getFontStyle(const QString& _fontId) const = 0;
+  /*
+   * Возвращает указатель на окно с заданным именем. 
+   */
+  virtual QSharedPointer<LIKeyboard> 
+    getKeyboard(const QString& _keyboardId) const = 0;
 
-    virtual QSharedPointer<LIDataFormatter> 
-      getDataFormatter(const QString& _formatter) const = 0;
+  /*
+   * Возвращает строку стиля шрифта. 
+   */
+  virtual QString getFontStyle(const QString& _fontId) const = 0;
 
-    virtual QSharedPointer<LIJScriptService> 
-      getScriptService(const QString& _scriptId) const = 0;
+  virtual QSharedPointer<LIDataFormatter> 
+    getDataFormatter(const QString& _formatter) const = 0;
+
+  virtual QSharedPointer<LIJScriptService> 
+    getScriptService(const QString& _scriptId) const = 0;
+
+  /*
+   * Returns widgtet style by its id.
+   */
+  virtual QString getWidgetStyle(const QString& _styleId) const = 0;
+
 };
 
 #endif // LIAPPLICATION_H

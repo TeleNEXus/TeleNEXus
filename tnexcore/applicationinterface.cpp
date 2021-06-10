@@ -25,6 +25,7 @@
 #include "xmlcommon.h"
 #include "xmlwindows.h"
 #include "xmlkeyboards.h"
+#include "xmlwidgetstyles.h"
 
 #include "xmlfonts.h"
 #include "lcxmlformatterfactory.h"
@@ -155,4 +156,11 @@ CApplicationInterface::getScriptService(const QString& _scriptId) const
 {
   return xmljscripts::getScript(_scriptId);
 }
+
+//------------------------------------------------------------------------------
+QString CApplicationInterface::getWidgetStyle(const QString& _styleId) const
+{
+  return xmlwidgetstyles::getWidgetStyle(_styleId);
+}
+
 

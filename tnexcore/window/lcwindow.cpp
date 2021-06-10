@@ -26,6 +26,7 @@
 #include <functional>
 #include <qnamespace.h>
 #include <QDebug>
+#include <QScreen>
 
 class CQEventFilter : public QObject
 {

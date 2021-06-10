@@ -104,6 +104,7 @@ xml/xmldatasources.cpp \
 xml/xmlkeyboards.cpp \
 xml/xmlwindows.cpp \
 xml/xmlpluginpathes.cpp \
+xml/xmlwidgetstyles.cpp \
 keyboard/lckeyboard.cpp \
 window/lcwindow.cpp \
 applicationinterface.cpp \
@@ -205,6 +206,7 @@ xml/xmljscripts.h \
 xml/xmlkeyboards.h \
 xml/xmlwindows.h \
 xml/xmlpluginpathes.h \
+xml/xmlwidgetstyles.h \
 keyboard/lckeyboard.h \
 window/lcwindow.h \
 applicationinterface.h \

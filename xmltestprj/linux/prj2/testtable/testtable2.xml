@@ -7,11 +7,11 @@
         <Table
           fixedSize="350;250"
           position="150;200"
-          name="testtable2"
-          style="gridline-color:red"
-          styleTable = "background:yellow"
-          styleHeader = "background:blue; color:yellow"
-          styleCorner = "background:blue; color:yellow">
+          name="testtable2">
+          <!-- style="gridline-color:red" -->
+          <!-- styleTable = "background:yellow" -->
+          <!-- styleHeader = "background:blue; color:yellow" -->
+          <!-- styleCorner = "background:blue; color:yellow"> -->
 
           <!-- style="gridline-color:red" -->
           <!-- styleTable = "background:lightgrey" -->

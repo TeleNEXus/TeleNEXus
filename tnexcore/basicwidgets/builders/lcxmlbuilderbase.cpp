@@ -23,7 +23,7 @@
 #include "QRegularExpression"
 
 #include "LIMovieAccess.h"
-#include "LIApplication.h"
+#include "applicationinterface.h"
 #include "lcqwidgetvisiblecontrol.h"
 #include "xmlcommon.h"
 
@@ -221,37 +221,45 @@ void LCXmlBuilderBase::setWidgetName(
 }
 
 //------------------------------------------------------------------------------
-void LCXmlBuilderBase::setWidgetStyle(const QString& _style, QWidget* _widget)
+void LCXmlBuilderBase::setWidgetStyle(const QString& _style, QWidget* _widget, 
+    const QString& _name)
 {
-  auto ret = [_widget](const QString& _ss)
-  {
-    _widget->setStyleSheet(_ss);
-  };
 
-  if(_style.contains(
-        QRegularExpression(
-          QStringLiteral("\\A([^{^}]*\\{[^{^}]*\\})+\\s*\\z"))))
-  {
-    return ret(_style);
-  }
+  QString outstyle = _style;
 
-  if(!_widget->objectName().isNull())
+  auto set_style = 
+    [_widget, &outstyle](const QString& _name)
+    {
+      outstyle.replace(QStringLiteral("(...)"), _name);
+      _widget->setStyleSheet(outstyle);
+    };
+
+  if(_name.isNull())
   {
-    return ret( QString("%1#%2 {%3}")
+    set_style(QString("%1#%2")
         .arg(_widget->metaObject()->className())
-        .arg(_widget->objectName())
-        .arg(_style));
+        .arg(_widget->objectName()));
   }
-  return ret(_style);
+  else
+  {
+    set_style(_name);
+  }
 }
 
 //------------------------------------------------------------------------------
 void LCXmlBuilderBase::setWidgetStyle(
-    const QDomElement& _element, QWidget* _widget)
+    const QDomElement& _element, 
+    QWidget* _widget,
+    const QString& _name)
 {
   QString attr_style = _element.attribute(__slAttributes.style);
   if(attr_style.isNull()) return;
-  setWidgetStyle(attr_style, _widget);
+
+  QString style = 
+    CApplicationInterface::getInstance().getWidgetStyle(attr_style);
+  if(style.isNull()) {style = attr_style;}
+
+  setWidgetStyle(style, _widget, _name);
 }
 
 

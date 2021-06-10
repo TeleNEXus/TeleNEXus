@@ -28,6 +28,7 @@
 #include "xmljscripts.h"
 #include "xmlkeyboards.h"
 #include "xmlpluginpathes.h"
+#include "xmlwidgetstyles.h"
 
 #include <QDebug>
 #include <QApplication>
@@ -169,7 +170,9 @@ int main(int argc, char *argv[])
   //----------------------------------------------------
   xmldatasources::upload(rootElement);
   //----------------------------------------------------
-  xmlfonts::upload(rootElement);
+  /* xmlfonts::upload(rootElement); */
+  xmlwidgetstyles::upload(rootElement);
+  
   //----------------------------------------------------
   xmldataformatters::upload(rootElement);
   //----------------------------------------------------
