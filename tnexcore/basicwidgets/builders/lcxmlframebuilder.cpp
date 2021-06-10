@@ -19,7 +19,6 @@
  * along with TeleNEXus.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include "lcxmlframebuilder.h"
-#include "widgetbuilderscommon.h"
 #include "LIApplication.h"
 #include "LIXmlLayoutBuilder.h"
 #include <QFrame>

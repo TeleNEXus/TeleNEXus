@@ -58,7 +58,6 @@ public:
     getWindow(const QString& _windowId) const override;
   virtual QSharedPointer<LIKeyboard> 
     getKeyboard(const QString& _keyboardId) const override;
-  virtual QString getFontStyle(const QString& _fontId) const override;
   virtual QSharedPointer<LIDataFormatter> 
     getDataFormatter(const QString& _formatter) const override;
   virtual QSharedPointer<LIJScriptService> 

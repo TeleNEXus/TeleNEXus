@@ -19,7 +19,6 @@
  * along with TeleNEXus.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include "lcxmltablewidgetbuilder.h"
-#include "widgetbuilderscommon.h"
 #include "LIApplication.h"
 
 #include <QTableWidget>

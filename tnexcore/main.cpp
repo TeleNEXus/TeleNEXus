@@ -20,7 +20,6 @@
  */
 
 #include "applicationinterface.h"
-#include "xmlfonts.h"
 #include "xmlbuilders.h"
 #include "xmldatasources.h"
 #include "xmlwindows.h"

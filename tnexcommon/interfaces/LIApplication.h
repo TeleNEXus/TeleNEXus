@@ -87,11 +87,6 @@ public:
   virtual QSharedPointer<LIKeyboard> 
     getKeyboard(const QString& _keyboardId) const = 0;
 
-  /*
-   * Возвращает строку стиля шрифта. 
-   */
-  virtual QString getFontStyle(const QString& _fontId) const = 0;
-
   virtual QSharedPointer<LIDataFormatter> 
     getDataFormatter(const QString& _formatter) const = 0;
 
