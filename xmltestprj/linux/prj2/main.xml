@@ -19,7 +19,8 @@
     <switchWidgetsList      lib="examplewidgets" handler="getSwitchWidgetsListBuilder"/>
   </WIDGETBUILDERS>
 
-  <FONTS file="fonts.xml"/>
+  <WIDGETSTYLES file="widgetstyles.xml" />
+
   <SCRIPTS file="scripts.xml"/>
   <DATAFORMATS file="formatters.xml"/>
 
@@ -30,22 +31,24 @@
     title="Test table" 
     showMode="normal"
     modality="false"
-    flags="" 
+    flags="fullScreen" 
     size="300;300"
-    position="0;0"
+    screen="0"
+    position="150;150"
     />
 
-  <WINDOW 
-    file="testtable/testtable2.xml" 
-    id="testtable2" 
-    visible="true"
-    title="Test table" 
-    showMode="normal"
-    modality="false"
-    flags="" 
-    size="600;600"
-    position="400;300"
-    />
+  <!-- <WINDOW --> 
+  <!--   file="testtable/testtable2.xml" --> 
+  <!--   id="testtable2" --> 
+  <!--   visible="true" -->
+  <!--   title="Test table" --> 
+  <!--   showMode="normal" -->
+  <!--   modality="false" -->
+  <!--   flags="" --> 
+  <!--   size="600;600" -->
+  <!--   screen="0" -->
+  <!--   position="400;300" -->
+  <!--   /> -->
 
   <!-- <WINDOW --> 
   <!--   file="testdatalabels/testdatalabels1.xml" --> 
@@ -95,29 +98,30 @@
   <!--   position="300;300" -->
   <!--   /> -->
 
-  <!-- <WINDOW --> 
-  <!--   file="testbutton/testbutton.xml" --> 
-  <!--   id="testbutton" --> 
-  <!--   visible="false" -->
-  <!--   title="Test Buttons" --> 
-  <!--   showMode="normal" -->
-  <!--   modality="false" -->
-  <!--   flags="" --> 
-  <!--   size="300;50" -->
-  <!--   position="300;600" -->
-  <!--   /> -->
+  <WINDOW 
+    file="testbutton/testbutton.xml" 
+    id="testbutton" 
+    visible="true"
+    title="Test Buttons" 
+    showMode="normal"
+    modality="false"
+    flags="" 
+    size="300;50"
+    position="300;600"
+    />
 
-  <!-- <WINDOW --> 
-  <!--   file="testbutton/testbutton2.xml" --> 
-  <!--   id="testbutton2" --> 
-  <!--   visible="false" -->
-  <!--   title="Test Buttons" --> 
-  <!--   showMode="normal" -->
-  <!--   modality="false" -->
-  <!--   flags="" --> 
-  <!--   size="500;500" -->
-  <!--   position="600;100" -->
-  <!--   /> -->
+  <WINDOW 
+    file="testbutton/testbutton2.xml" 
+    id="testbutton2" 
+    visible="true"
+    title="Test Buttons" 
+    showMode="normal"
+    modality="false"
+    flags="" 
+    size="500;500"
+    screen="0"
+    position="600;100"
+    />
 
   <!-- <WINDOW -->
   <!--   id="TestWindow1" --> 

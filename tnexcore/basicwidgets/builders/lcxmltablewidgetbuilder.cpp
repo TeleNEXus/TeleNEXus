@@ -110,7 +110,6 @@ static void createCol(
     const LIApplication& _app,
     SLocalData& _localData);
 
-static void setLocalStyle(const QDomElement& _element, QWidget* _widget);
 //------------------------------------------------------------------------------
 QWidget* LCXmlTableWidgetBuilder::buildLocal(
     const QDomElement& _element, const LIApplication& _app)
@@ -135,53 +134,65 @@ QWidget* LCXmlTableWidgetBuilder::buildLocal(
     }
   }
 
+  auto set_style_table = 
+    [&buildData, &_element, &_app]()
+    {
+      QString attr_style = _element.attribute(__slAttributes.styleTable);
+      if(attr_style.isNull()) return;
+
+      QString style = _app.getWidgetStyle(attr_style);
+      if(style.isNull()) { style = attr_style;}
+
+      setWidgetStyle(
+          QString("%1 %2 ").arg(buildData.mpTable->styleSheet()).arg(style),
+          buildData.mpTable, 
+          QString("QTableWidget#%1 ")
+          .arg(buildData.mpTable->objectName()));
+    };
+
+  auto set_style_header = 
+    [&buildData, &_element, &_app]()
+    {
+      QString attr_style = _element.attribute(__slAttributes.styleHeader);
+      if(attr_style.isNull()) return;
+
+      QString style = _app.getWidgetStyle(attr_style);
+      if(style.isNull()) { style = attr_style;}
+
+      setWidgetStyle(
+          QString("%1 %2").arg(buildData.mpTable->styleSheet()).arg(style),
+          buildData.mpTable, 
+          QString("QTableWidget#%1 > %2 ")
+          .arg(buildData.mpTable->objectName())
+          .arg(QStringLiteral("QHeaderView")));
+    };
+
+  auto set_style_corner = 
+    [&buildData, &_element, &_app]()
+    {
+      QString attr_style = _element.attribute(__slAttributes.styleCorner);
+      if(attr_style.isNull()) return;
+
+      QString style = _app.getWidgetStyle(attr_style);
+      if(style.isNull()) { style = attr_style;}
+
+      setWidgetStyle(
+          QString("%1 %2").arg(buildData.mpTable->styleSheet()).arg(style),
+          buildData.mpTable, 
+          QString("QTableWidget#%1 > %2 ")
+          .arg(buildData.mpTable->objectName())
+          .arg(QStringLiteral("QTableCornerButton")));
+    };
+
   setWidgetName(      _element, buildData.mpTable);
-  setWidgetStyle(     _element, buildData.mpTable);
-  setLocalStyle(      _element, buildData.mpTable);
+  set_style_table();
+  set_style_header();
+  set_style_corner();
   setWidgetSize(      _element, buildData.mpTable);
   setWidgetFixedSize( _element, buildData.mpTable);
   setWidgetPosition(  _element, buildData.mpTable);
 
   return buildData.mpTable;
-}
-
-//------------------------------------------------------------------------------
-static void setLocalStyle(const QDomElement& _element, QWidget* _widget)
-{
-  QString attr_style = _element.attribute(__slAttributes.styleTable);
-  if(!attr_style.isNull())
-  {
-    _widget->setStyleSheet(
-        QString("%1 %2#%3{%4}")
-        .arg(_widget->styleSheet())
-        .arg(QStringLiteral("QTableWidget"))
-        .arg(_widget->objectName())
-        .arg(attr_style));
-  }
-
-  attr_style = _element.attribute(__slAttributes.styleHeader);
-  if(!attr_style.isNull())
-  {
-    _widget->setStyleSheet(
-        QString("%1 %2#%3 > %4 {%5}")
-        .arg(_widget->styleSheet())
-        .arg(QStringLiteral("QTableWidget"))
-        .arg(_widget->objectName())
-        .arg("QHeaderView")
-        .arg(attr_style));
-  }
-
-  attr_style = _element.attribute(__slAttributes.styleCorner);
-  if(!attr_style.isNull())
-  {
-    _widget->setStyleSheet(
-        QString("%1 %2#%3 > %4 {%5}")
-        .arg(_widget->styleSheet())
-        .arg(QStringLiteral("QTableWidget"))
-        .arg(_widget->objectName())
-        .arg("QTableCornerButton")
-        .arg(attr_style));
-  }
 }
 
 //------------------------------------------------------------------------------

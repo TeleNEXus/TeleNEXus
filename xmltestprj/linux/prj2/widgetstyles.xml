@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<WIDGETSTYLES>
+
+  <label1  style="(...){color:red; font: 30pt italic blod Arial}"/>
+
+  <button1 style="(...){color:red}"/>
+
+  <button2 style="
+    (...):hover {background:blue; color:red}
+    (...):!hover {background:red; color:blue}
+    "/>
+
+  <buttonCrazy style = "
+    (...){border: 4px solid red; font: bold italic 40pt 'Karumbi'}
+    (...){background: white}"
+    />
+
+  <table1       style = "(...){background:lightgrey}"           />
+  <table1Header style = "(...){background:blue; color:yellow}"  />
+  <table1Corner style = "(...){background:blue; color:yellow}"  />
+
+</WIDGETSTYLES>

@@ -265,7 +265,6 @@ const QDomElement& _element, const LIApplication& _app)
   setWidgetSize(_element, button);
   setWidgetPosition(_element, button);
   setWidgetFixedSize(_element, button);
-
   return button;
 }
 

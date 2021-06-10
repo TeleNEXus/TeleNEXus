@@ -14,12 +14,11 @@
   <mainWidget>
     <Frame
       name="testname"
-      style="QFrame#testname {background-image: url(picture/fon1.png)}"
+      style="(...){background-image: url(picture/fon1.png)}"
       >
-              <!-- style="background-image: url(/home/serg/pprj/tnex/xmltestprj/linux/prj2/picture/fon1.png)" -->
           <widgets>
             <Button test="write data" 
-              style="background: white; border: 4px solid red; font: bold italic 40pt 'Karumbi'"
+              style="(...){background: white; border: 4px solid red; font: bold italic 40pt 'Karumbi'}"
               icon="file='picture/icon1.png'; size=(150, 50)"
               position="0;0">
               <press>
@@ -35,7 +34,7 @@
             <Button text="show window 1"
               fixedSize="150;150"
               position="100;100"
-              style="background-image: url(:/home/serg/pprj/tnex/xmltestprj/linux/prj2/picture/fon1.png)"
+              style="(...)(background-image: url(:/home/serg/pprj/tnex/xmltestprj/linux/prj2/picture/fon1.png))"
               >
               <press>
                 <!-- <controlWindow windowId="TestWindow1" action="show(fullScreen)"/> -->
@@ -59,16 +58,12 @@
             </Button>
 
             <Button text="show window 2"
-              name="showwindow2"
               position="100;400"
-              style=":hover {background: blue; color:red}">
-              <!-- name="showwindow2" -->
-              <!-- style="QPushButton#showwindow2:hover {background: blue; color:red}" -->
+              style="(...):hover {background: blue; color:red}">
               <press>
                 <controlWindow windowId="TestWindow2" action="hide"/>
               </press>
             </Button>
-
           </widgets>
     </Frame>
     <!-- <Button> -->

@@ -63,6 +63,7 @@ public:
     getDataFormatter(const QString& _formatter) const override;
   virtual QSharedPointer<LIJScriptService> 
     getScriptService(const QString& _scriptId) const override;
+  virtual QString getWidgetStyle(const QString& _styleId) const override;
 };
 
 #endif /* APPLICATIONINTERFACE_H_ */

@@ -35,7 +35,8 @@
 #include <functional>
 #include <qnamespace.h>
 #include <QRegularExpression>
-#include <QCoreApplication>
+#include <QGuiApplication>
+#include <QScreen>
 
 //==============================================================================
 QMap<QString, QSharedPointer<LIWindow>> __slWindowsMap;
@@ -52,11 +53,13 @@ static const struct
   QString id = "id";
   QString visible = "visible";
 
+  QString screen   = "screen";
   QString interval = "interval";
   QString scriptId = "scriptId";
   QString modality = "modality";
   QString showMode = "showMode";
   QString flags = "flags";
+
   struct 
   {
     QString attribute = "event";
@@ -277,31 +280,32 @@ static LCWindow* uploadWindow(QWidget* _widget, const QDomElement& _element)
   };
 
   //----------------------------------------------------get_flags[]
-  auto get_flags = [](const QDomElement& _element)
-  {
-    QString attr_modes = _element.attribute(__slAttributes.flags);
-
-    Qt::WindowFlags flags = Qt::WindowType::Window;
-
-    auto flag_attributes = xmlcommon::parseAttributes(attr_modes);
-
-    if(flag_attributes.size() == 0) return flags;
-
-    if(flag_attributes.contains(__slWindowFlags.stayOnTop))
+  auto get_flags = 
+    [](const QDomElement& _element)
     {
-      flags |= Qt::WindowType::WindowStaysOnTopHint;
-    }
+      QString attr_modes = _element.attribute(__slAttributes.flags);
 
-    if(flag_attributes.contains(__slWindowFlags.frameless))
-    {
-      flags |= Qt::WindowType::FramelessWindowHint;
-    }
-    /* } */
+      Qt::WindowFlags flags = Qt::WindowType::Window;
 
-    return flags;
-  };
+      auto flag_attributes = xmlcommon::parseAttributes(attr_modes);
 
-    //----------------------------------------------------widget_size[]
+      if(flag_attributes.size() == 0) return flags;
+
+      if(flag_attributes.contains(__slWindowFlags.stayOnTop))
+      {
+        flags |= Qt::WindowType::WindowStaysOnTopHint;
+      }
+
+      if(flag_attributes.contains(__slWindowFlags.frameless))
+      {
+        flags |= Qt::WindowType::FramelessWindowHint;
+      }
+
+      return flags;
+    };
+
+
+  //----------------------------------------------------widget_size[]
   auto get_size = [](const QDomElement& _element, const QSize _oldSize)
   {
     QSize size = _oldSize;
@@ -331,20 +335,29 @@ static LCWindow* uploadWindow(QWidget* _widget, const QDomElement& _element)
     return size;
   };
 
-  //----------------------------------------------------set_position[]
+  //----------------------------------------------------get_screen_origin[]
+  auto get_screen_origin = 
+    [](const QDomElement& _element)
+    {
+      QString attr = _element.attribute(__slAttributes.screen);
+      if(attr.isNull()) return QPoint(0,0);
+      bool flag = false;
+      int sn = attr.toUInt(&flag);
+      if(!flag) return QPoint(0,0);
+      auto screens = QGuiApplication::screens();
+      if((sn < 0) || (sn >= screens.size())) return QPoint(0,0);
+      return screens[sn]->geometry().topLeft();
+    };
+
+  //----------------------------------------------------get_position[]
   auto get_position = [](const QDomElement& _element)
   {
 
     QPoint pos = QPoint(0, 0);
 
-    auto ret = [&pos]()
-    {
-      return pos;
-    };
-
     QString attr_position = _element.attribute(__slAttributes.position);
 
-    if(attr_position.isNull()) return ret();
+    if(attr_position.isNull()) return pos;
 
     auto values = xmlcommon::parseValues(attr_position);
 
@@ -366,7 +379,7 @@ static LCWindow* uploadWindow(QWidget* _widget, const QDomElement& _element)
           if(flag) pos.setY(p);
         })(values);
 
-    return ret();
+    return pos;
   };
 
 
@@ -380,13 +393,13 @@ static LCWindow* uploadWindow(QWidget* _widget, const QDomElement& _element)
     }
     return false;
   };
-  
+
   window->setTitle(get_title(_element));
   window->setShowMode(get_show_mode(_element));
   window->setModality(get_modality(_element));
   window->setFlags(get_flags(_element));
   window->setSize(get_size(_element, window->getSize()));
-  window->setPosition(get_position(_element));
+  window->setPosition(get_position(_element) + get_screen_origin(_element));
 
   return window;
 }

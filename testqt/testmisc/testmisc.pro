@@ -21,9 +21,10 @@ DEFINES += QT_DEPRECATED_WARNINGS
 INCLUDEPATH +=                                  \
        ./testjsdataformatter 
 
+
+SOURCES += testscreen.cpp \
 # SOURCES += main.cpp \
 # SOURCES +=  ./regexpr.cpp \
-SOURCES +=  ./testparsing.cpp \
 # SOURCES +=  ./multipleattr.cpp \
 # SOURCES +=  ./testevents.cpp \
 # SOURCES +=  ./bitfield.cpp \

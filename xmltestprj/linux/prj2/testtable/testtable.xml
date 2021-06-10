@@ -3,12 +3,10 @@
 <WINDOW>
   <mainWidget>
     <Table
-      name="testtable1"
 
-      style="gridline-color:red"
-      styleTable = "background:lightgrey"
-      styleHeader = "background:blue; color:yellow"
-      styleCorner = "background:blue; color:yellow">
+      styleTable  = "table1"
+      styleHeader = "table1Header"
+      styleCorner = "(...){background:yellow;}">
 
       <col label="Data name">
         <Label text="bits_size(1)" /> 
