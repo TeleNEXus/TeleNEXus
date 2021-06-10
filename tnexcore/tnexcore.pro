@@ -97,7 +97,6 @@ jscripts/jscriptservice/jsappservice/lcqreadfromsourcereq.cpp \
 jscripts/jscriptservice/jsappservice/lcqwritetosourcereq.cpp \
 common/xmlcommon.cpp \
 xml/xmlbuilders.cpp \
-xml/xmlfonts.cpp \
 xml/xmljscripts.cpp \
 xml/xmldataformatters.cpp \
 xml/xmldatasources.cpp \
@@ -199,7 +198,6 @@ jscripts/jscriptservice/jsappservice/lcqreadfromsourcereq.h \
 jscripts/jscriptservice/jsappservice/lcqwritetosourcereq.h \
 common/xmlcommon.h \
 xml/xmlbuilders.h \
-xml/xmlfonts.h \
 xml/xmldataformatters.h \
 xml/xmldatasources.h \
 xml/xmljscripts.h \

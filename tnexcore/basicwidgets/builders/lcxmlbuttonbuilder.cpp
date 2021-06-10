@@ -25,7 +25,6 @@
 #include "LIWindow.h"
 #include "LIRemoteDataWriter.h"
 #include "LIJScriptService.h"
-#include "widgetbuilderscommon.h"
 #include "xmlcommon.h"
 #include <QPushButton>
 #include <QDomElement>
