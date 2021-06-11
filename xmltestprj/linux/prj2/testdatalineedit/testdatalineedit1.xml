@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<WINDOW>
+  <mainWidget>
+    <Frame>
+      <layout>
+        <LayoutVBox>
+          <widgets>
+
+            <DataLineEdit style="lineedit1" 
+              dataRead="localsource:bytes_uint16:uint16" 
+              dataWrite="localsource:bytes_uint32:uint32"/>
+
+            <DataLineEdit style="lineedit2" data="localsource:bytes_uint16:uint16"/>
+
+            <DataLineEdit style="lineedit3" data="localsource:bytes_uint32:uint32"/>
+
+          </widgets>
+          <stretch/>
+        </LayoutVBox>
+      </layout>
+    </Frame>
+  </mainWidget>
+</WINDOW>
+
