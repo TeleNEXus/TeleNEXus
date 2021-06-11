@@ -266,20 +266,16 @@ void LCXmlBuilderBase::setWidgetStyle(
 //==============================================================================
 static QMap<QString, QSharedPointer<CMovieAccess>> __slMovies;
 //------------------------------------------------------------------------------
-QSharedPointer<LIMovieAccess> LCXmlBuilderBase::getMovie(
-        const QString& _movieFile, const LIApplication& _app)
+QSharedPointer<LIMovieAccess> 
+LCXmlBuilderBase::getMovie(const QString& _movieFile)
 {
     auto it = __slMovies.find(_movieFile);
-
     if(it != __slMovies.end())
     {
         return it.value();
     }
-
-    QMovie* movie = new QMovie(_app.getProjectPath() + _movieFile);
-
+    QMovie* movie = new QMovie(_movieFile);
     auto ret = QSharedPointer<CMovieAccess>(new CMovieAccess(movie));
-
     __slMovies.insert(_movieFile, ret);
     return ret;
 }
@@ -288,8 +284,7 @@ QSharedPointer<LIMovieAccess> LCXmlBuilderBase::getMovie(
 QMap<QString, QPixmap> __slPicture;
 
 //------------------------------------------------------------------------------
-QPixmap LCXmlBuilderBase::getPixmap(
-        const QString& _pixmapFile, const LIApplication& _app)
+QPixmap LCXmlBuilderBase::getPixmap(const QString& _pixmapFile)
 {
     auto it = __slPicture.find(_pixmapFile);
 
@@ -298,15 +293,14 @@ QPixmap LCXmlBuilderBase::getPixmap(
         return it.value();
     }
 
-    QPixmap pixmap(_app.getProjectPath() + _pixmapFile);
+    QPixmap pixmap(_pixmapFile);
     __slPicture.insert(_pixmapFile, pixmap);
 
     return pixmap;
 }
 
 //------------------------------------------------------------------------------
-QPixmap LCXmlBuilderBase::parsePixmap(
-    const QString& _expr, const LIApplication& _app)
+QPixmap LCXmlBuilderBase::parsePixmap(const QString& _expr)
 {
   auto set_size = 
     [](const QString& _attr_size, 
@@ -341,7 +335,7 @@ QPixmap LCXmlBuilderBase::parsePixmap(
   auto attr_it = icon_attrs.find(__slAttributes.file);
   if(attr_it == icon_attrs.end()) return QPixmap();
 
-  QPixmap pixmap(LCXmlBuilderBase::getPixmap(attr_it.value(), _app));
+  QPixmap pixmap(LCXmlBuilderBase::getPixmap(attr_it.value()));
 
   if(pixmap.isNull()) return pixmap;
   attr_it = icon_attrs.find(__slAttributes.size);

@@ -251,7 +251,7 @@ const QDomElement& _element, const LIApplication& _app)
         });
   }
 
-  auto pixmap = parsePixmap(_element.attribute(QStringLiteral("icon")), _app);
+  auto pixmap = parsePixmap(_element.attribute(QStringLiteral("icon")));
 
   if(!pixmap.isNull())
   {

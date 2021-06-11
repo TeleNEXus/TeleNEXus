@@ -75,7 +75,6 @@ static QWidget* createWidget(
 
 static QListWidgetItem* createItem(
     const QDomElement& _element, 
-    const LIApplication& _app,
     int   _iconSize = -1);
 
 //------------------------------------------------------------------------------
@@ -140,7 +139,7 @@ QWidget* LCXmlSwitchWidgetsListBuilder::buildLocal(
 
     if(widget)
     { 
-      listWidget->addItem(createItem(el, app, icon_size));
+      listWidget->addItem(createItem(el, icon_size));
       stacked_widget->addWidget(widget);
     }
   }
@@ -182,7 +181,6 @@ static QWidget* createWidget(
 //------------------------------------------------------------------------------
 static QListWidgetItem* createItem(
     const QDomElement& _element, 
-    const LIApplication& _app,
     int _iconSize)
 {
   QListWidgetItem *item = new QListWidgetItem;
@@ -193,7 +191,7 @@ static QListWidgetItem* createItem(
   attr = _element.attribute(__slBaseStyleAttribute.icon);
   if(!attr.isNull()) 
   {
-    QPixmap pixmap(_app.getProjectPath() + attr);
+    QPixmap pixmap(attr);
     if(_iconSize >= 0)
     {
       int maxsize = (pixmap.width() > pixmap.height()) ? 
@@ -226,11 +224,11 @@ static QString baseStyleSheet(const QDomElement& _element,
 
   if(!attr.isNull())
   {
-    QString font = _app.getFontStyle(attr);
-    if(!font.isNull())
-    {
-      style += "font :" + font + "; ";
-    }
+    /* QString font = _app.getFontStyle(attr); */
+    /* if(!font.isNull()) */
+    /* { */
+    /*   style += "font :" + font + "; "; */
+    /* } */
   }
   else
   {

@@ -65,7 +65,7 @@ QMap<QString, QSharedPointer<LIJScriptService>> __slScriptMap;
 
 
 //==============================================================================scriptUpload
-static void scriptUpload(const QDomElement &_element, const LIApplication& _app)
+static void scriptUpload(const QDomElement &_element)
 {
 
   for(QDomNode node = _element.firstChildElement(__slTags.script);
@@ -80,12 +80,9 @@ static void scriptUpload(const QDomElement &_element, const LIApplication& _app)
     QString attr_id = el.attribute(__slAttributes.id);
     if(attr_id.isNull()) continue;
 
-    QString fileName = _app.getProjectPath() + attr_file;
-
-    QFile scriptFile(fileName);
+    QFile scriptFile(attr_file);
     if (!scriptFile.open(QIODevice::ReadOnly)) 
     {
-      qDebug() << "LCXmlJScripts::load message: can't open script file " << fileName;
       continue;
     }
 
@@ -95,7 +92,6 @@ static void scriptUpload(const QDomElement &_element, const LIApplication& _app)
 
     if(script_str.isNull()) 
     {
-      qDebug() << "LCXmlJScripts::load message: empty script file " << fileName;
       continue;
     }
 
@@ -177,7 +173,7 @@ static void uploadLocal(const QDomElement& _element)
     }
     return;
   }
-  scriptUpload(_element, CApplicationInterface::getInstance());
+  scriptUpload(_element);
   scriptLaunch(_element);
   scriptExecute(_element);
 }

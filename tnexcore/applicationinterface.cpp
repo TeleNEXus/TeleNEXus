@@ -114,7 +114,7 @@ CApplicationInterface::getWidgetBuilder(const QString& _id) const
 QDomDocument CApplicationInterface::getDomDocument(
     const QString& _fileName) const
 {
-  return xmlcommon::loadDomDocument(__slLocalData.xmlProjectPath + _fileName);
+  return xmlcommon::loadDomDocument(_fileName);
 }
 
 //------------------------------------------------------------------------------

@@ -53,9 +53,9 @@ protected:
   static void setWidgetStyle( const QDomElement& _element, 
       QWidget* _widget, const QString& _name = QString() );
 
-  static QSharedPointer<LIMovieAccess> getMovie(const QString& _movie, const LIApplication& _app);
-  static QPixmap getPixmap(const QString& _file, const LIApplication& _app);
-  static QPixmap parsePixmap(const QString& _expr, const LIApplication& _app);
+  static QSharedPointer<LIMovieAccess> getMovie(const QString& _movie);
+  static QPixmap getPixmap(const QString& _file);
+  static QPixmap parsePixmap(const QString& _expr);
 };
 
 #endif
