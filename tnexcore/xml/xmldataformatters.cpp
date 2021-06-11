@@ -20,7 +20,6 @@
  */
 
 #include "xmldataformatters.h"
-#include "applicationinterface.h"
 #include "LIDataFormatter.h"
 #include "xmlcommon.h"
 #include "lcxmlformatterfactory.h"
@@ -52,16 +51,19 @@ static QMap<QString, QSharedPointer<LIDataFormatter>> __slFormattersMap;
 //==============================================================================
 void uploadLocal(const QDomElement& _element)
 {
-  static const LIApplication& app = CApplicationInterface::getInstance();
-
   QString attr_file =  _element.attribute(__slAttributes.file);
 
   if(!attr_file.isNull())
   {
-    QDomElement el = app.getDomDocument(attr_file).documentElement();
-    if(!el.isNull())
+    auto ddoc = xmlcommon::loadDomDocument(attr_file);
+
+    if(!ddoc.isNull())
     {
-      if(el.tagName() == __slTags.rootTag) uploadLocal(el);
+      QDomElement el = ddoc.documentElement();
+      if(!el.isNull())
+      {
+        if(el.tagName() == __slTags.rootTag) uploadLocal(el);
+      }
     }
     return;
   }
@@ -76,9 +78,7 @@ void uploadLocal(const QDomElement& _element)
       QString attr_file = _element.attribute(__slAttributes.file);
       if(attr_file.isNull()) return;
 
-      QFile file(QString("%1%2")
-          .arg(app.getProjectPath())
-          .arg(attr_file));
+      QFile file(attr_file);
 
       if (!file.open(QIODevice::ReadOnly)) { return; }
 

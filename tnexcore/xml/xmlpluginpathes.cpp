@@ -19,8 +19,6 @@
  * along with TeleNEXus.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include "xmlpluginpathes.h"
-#include "applicationinterface.h"
-
 #include <QDomElement>
 #include <QDir>
 #include <QDebug>
@@ -43,8 +41,6 @@ namespace xmlpluginpathes
 {
 void upload(const QDomElement& _rootElement)
 {
-  static const LIApplication& app = CApplicationInterface::getInstance();
-
   QDomNodeList nodes = _rootElement.elementsByTagName(__slTags.rootTag); 
 
   auto element_pathes = _rootElement.firstChildElement(__slTags.rootTag);
@@ -57,13 +53,6 @@ void upload(const QDomElement& _rootElement)
   {
     QString path = element_item.attribute(__slAttributes.path);
     if(path.isNull()) continue;
-    QDir dir(path);
-    if(dir.isAbsolute())
-    {
-      __slPlaginLibPaths << dir.path();
-      continue;
-    }
-    path = app.getProjectPath() + path;
     __slPlaginLibPaths << path;
 
   }

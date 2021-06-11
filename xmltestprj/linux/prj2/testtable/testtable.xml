@@ -3,12 +3,11 @@
 <WINDOW>
   <mainWidget>
     <Table
-
+      styleTable  = "table1"
+      styleHeader = "table1Header"
+      styleCorner = "(...){background:yellow;}"
       >
 
-      <!-- styleTable  = "table1" -->
-      <!-- styleHeader = "table1Header" -->
-      <!-- styleCorner = "(...){background:yellow;}" -->
       <col label="Data name">
         <Label text="bits_size(1)" /> 
 
@@ -19,6 +18,10 @@
         <Label text="bytes_uint32"  /> 
         <Label text="bytes_float32" /> 
         <Label text="test_string"  /> 
+
+        <Label text="modbus hreg0"  /> 
+        <Label text="modbus hreg1"  /> 
+
       </col>
 
       <col label="Data labels">
@@ -31,6 +34,9 @@
         <DataLabel      data="localsource:  bytes_uint32    :uint32"   />
         <DataLabel      data="localsource:  bytes_float32   :float32"  />
         <DataLabel      data="localsource:  test_string     :string"   />
+
+        <DataLabel      data="qtslavetcp:  hreg0  :uint16"   />
+        <DataLabel      data="qtslavetcp:  hreg1  :uint16"   />
       </col>
 
     </Table>

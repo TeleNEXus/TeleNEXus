@@ -20,7 +20,7 @@
  */
 
 #include "xmlwidgetstyles.h"
-#include "applicationinterface.h"
+#include "xmlcommon.h"
 #include <QFile>
 #include <QDomElement>
 #include <QMap>
@@ -79,10 +79,8 @@ static void uploadElement(const QDomElement& _element)
   }
   else
   {
-    uploadElement(
-        CApplicationInterface::getInstance()
-        .getDomDocument(attr_file)
-        .documentElement());
+    auto ddoc = xmlcommon::loadDomDocument(attr_file);
+    if(!ddoc.isNull()) uploadElement(ddoc.documentElement());
   }
 }
 
@@ -94,9 +92,7 @@ static void uploadStyles(const QDomElement& _element)
   auto load_from_file = 
     [](const QString& _fileName)
     {
-      QFile style_file(
-          CApplicationInterface::getInstance().getProjectPath() + 
-          _fileName);
+      QFile style_file( _fileName);
       if(style_file.open(QFile::OpenModeFlag::ReadOnly))
       {
         return QTextStream(&style_file).readAll();

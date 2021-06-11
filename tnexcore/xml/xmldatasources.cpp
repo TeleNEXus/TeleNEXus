@@ -48,47 +48,42 @@ namespace xmldatasources
 
 void upload(const QDomElement& _rootElement)
 {
-    auto element = _rootElement.firstChildElement(__slTags.sources);
+  auto element = _rootElement.firstChildElement(__slTags.sources);
 
-    if(element.isNull()) return;
+  if(element.isNull()) return;
+  QString attrFile = element.attribute(__slAttributes.file);
 
-    QString attrFile = element.attribute(__slAttributes.file);
+  if(!attrFile.isNull())
+  {
+    auto ddoc = xmlcommon::loadDomDocument(attrFile);
+    if(ddoc.isNull()) return;
+    element = xmlcommon::loadDomDocument(attrFile).documentElement();
+    if(element.tagName() != __slTags.sources) { return; }
+  }
 
-    if(!attrFile.isNull())
+  //Добавление источников данных.
+  QDomNode node = element.firstChild();
+
+  while(!node.isNull())
+  {
+    QDomElement el = node.toElement();
+    auto builder = builders::sources::getBuilder(el.tagName());
+
+    if(!builder.isNull())
     {
-        element = xmlcommon::loadDomDocument(
-            CApplicationInterface::getInstance().getProjectPath() + 
-            attrFile).documentElement();
-
-        if(element.tagName() != __slTags.sources)
+      auto sources = builder->build(el, CApplicationInterface::getInstance());
+      auto it = sources.begin();
+      while(it != sources.end())
+      {
+        if(__slSources.find(it.key()) != sources.end())
         {
-            return;
+          __slSources.insert(it.key(), it.value());
         }
+        it++;
+      }
     }
-
-    //Добавление источников данных.
-    QDomNode node = element.firstChild();
-
-    while(!node.isNull())
-    {
-        QDomElement el = node.toElement();
-        auto builder = builders::sources::getBuilder(el.tagName());
-
-        if(!builder.isNull())
-        {
-            auto sources = builder->build(el, CApplicationInterface::getInstance());
-            auto it = sources.begin();
-            while(it != sources.end())
-            {
-                if(__slSources.find(it.key()) != sources.end())
-                {
-                    __slSources.insert(it.key(), it.value());
-                }
-                it++;
-            }
-        }
-        node = node.nextSibling();
-    }
+    node = node.nextSibling();
+  }
 }
 
 QSharedPointer<LIRemoteDataSource> getSource(const QString& _id)

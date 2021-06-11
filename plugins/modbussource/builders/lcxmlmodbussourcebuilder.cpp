@@ -47,68 +47,69 @@ static LTMastersMap createMasters(const QDomNodeList& nodes);
 
 //----------------------------------------------------------------------------------------------------------------------
 static void createSources(const QDomNodeList& nodes,
-                          LTMastersMap _masters,
-                          LQDataSources& _sourcesmap,
-                          const LIApplication& _app);
+    LTMastersMap _masters,
+    LQDataSources& _sourcesmap);
 
 //----------------------------------------------------------------------------------------------------------------------
 LQDataSources LCXmlModbusSourceBuilder::build(const QDomElement &_element, const LIApplication& _app)
 {
-    LQDataSources map;
-    QFile file;
-    QString xmlfilename = _element.attribute("file");
+  Q_UNUSED(_app);
+  LQDataSources map;
+  QFile file;
+  QString xmlfilename = _element.attribute("file");
 
-    if(xmlfilename.isNull()) return map;
+  if(xmlfilename.isNull()) return map;
 
-    file.setFileName(_app.getProjectPath() + xmlfilename);
+  /* file.setFileName(_app.getProjectPath() + xmlfilename); */
+  file.setFileName(xmlfilename);
 
-    QDomDocument domDoc;
-    QString errorStr;
-    int errorLine;
-    int errorColumn;
+  QDomDocument domDoc;
+  QString errorStr;
+  int errorLine;
+  int errorColumn;
 
-    if(!domDoc.setContent(&file, true, &errorStr, &errorLine, &errorColumn))
-    {
-        qDebug() << "LCXmlModbusSources: parse error at line:"
-                 << errorLine << " column:" << errorColumn << " msg: " << errorStr;
-        return map;
-    }
-
-    QDomElement rootElement = domDoc.documentElement();
-
-    if(rootElement.tagName() != "modbussources")
-    {
-        qDebug() << "LCXmlModbusSources: wrong root element";
-        return map;
-    }
-
-    QDomNodeList nodes = rootElement.elementsByTagName("master");
-
-    if(nodes.isEmpty())
-    {
-        qDebug() << "LCXmlModbusSources: no elements modbus masters";
-        return map;
-    }
-
-    LTMastersMap masters = createMasters(nodes);
-
-    if(masters.isEmpty())
-    {
-        qDebug() << "LCXmlModbusSources: no valid modbus masters";
-        return map;
-    }
-
-    nodes = rootElement.elementsByTagName("source");
-
-    if(nodes.isEmpty())
-    {
-        qDebug() << "LCXmlModbusSources: no elements modbus source";
-        return map;
-    }
-
-    createSources(nodes, masters, map, _app);
-
+  if(!domDoc.setContent(&file, true, &errorStr, &errorLine, &errorColumn))
+  {
+    qDebug() << "LCXmlModbusSources: parse error at line:"
+      << errorLine << " column:" << errorColumn << " msg: " << errorStr;
     return map;
+  }
+
+  QDomElement rootElement = domDoc.documentElement();
+
+  if(rootElement.tagName() != "modbussources")
+  {
+    qDebug() << "LCXmlModbusSources: wrong root element";
+    return map;
+  }
+
+  QDomNodeList nodes = rootElement.elementsByTagName("master");
+
+  if(nodes.isEmpty())
+  {
+    qDebug() << "LCXmlModbusSources: no elements modbus masters";
+    return map;
+  }
+
+  LTMastersMap masters = createMasters(nodes);
+
+  if(masters.isEmpty())
+  {
+    qDebug() << "LCXmlModbusSources: no valid modbus masters";
+    return map;
+  }
+
+  nodes = rootElement.elementsByTagName("source");
+
+  if(nodes.isEmpty())
+  {
+    qDebug() << "LCXmlModbusSources: no elements modbus source";
+    return map;
+  }
+
+  createSources(nodes, masters, map);
+
+  return map;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -117,86 +118,85 @@ static int loadMemoryMap(LQModbusDataSource* _p_source, const QString& _filename
 //----------------------------------------------------------------------------------------------------------------------
 static const struct
 {
-    QString name            = "name";
-    QString master          = "master";
-    QString deviceid        = "devid";
-    QString updatetime      = "updatetime";
-    QString memorymapfile   = "mapfile";
+  QString name            = "name";
+  QString master          = "master";
+  QString deviceid        = "devid";
+  QString updatetime      = "updatetime";
+  QString memorymapfile   = "mapfile";
 
 }__sourceAttributes;
 //----------------------------------------------------------------------------------------------------------------------
 static void createSources(const QDomNodeList& nodes,
-                          LTMastersMap _masters,
-                          LQDataSources& _sourcesmap,
-                          const LIApplication& _app)
+    LTMastersMap _masters,
+    LQDataSources& _sourcesmap)
 {
-    QString attr;
-    QString attrName;
+  QString attr;
+  QString attrName;
 
-    LTMastersMap::iterator itm;
+  LTMastersMap::iterator itm;
 
-    quint32 devid = 0;
-    bool boolBuff = false;
+  quint32 devid = 0;
+  bool boolBuff = false;
 
-    for(int i = 0; i < nodes.size(); i++)
+  for(int i = 0; i < nodes.size(); i++)
+  {
+    QDomElement el;
+    qDebug() << "createSources pass0";
+    el = nodes.at(i).toElement();
+    if(el.isNull()) continue;
+
+    attrName = el.attribute(__sourceAttributes.name);
+    if(attrName.isNull()) continue;
+    if(_sourcesmap.contains(attrName)) continue;
+
+    attr = el.attribute(__sourceAttributes.master);
+    if(attr.isNull()) continue;
+
+    itm = _masters.find(attr);
+
+    if(itm == _masters.end()) continue;
+
+    attr = el.attribute(__sourceAttributes.deviceid);
+    if(attr.isNull()) continue;
+
+    devid = attr.toUInt(&boolBuff);
+
+    if(!boolBuff) continue;
+    if(devid > 255) continue;
+
+    attr = el.attribute(__sourceAttributes.memorymapfile);
+    if(attr.isNull()) continue;
+
+    QSharedPointer<LQModbusDataSource> source = LQModbusDataSource::create(devid, itm.value());
+
+    if(loadMemoryMap(source.data(), attr) != 0)
     {
-        QDomElement el;
-        qDebug() << "createSources pass0";
-        el = nodes.at(i).toElement();
-        if(el.isNull()) continue;
+      int updatetime;
+      bool flag;
 
-        attrName = el.attribute(__sourceAttributes.name);
-        if(attrName.isNull()) continue;
-        if(_sourcesmap.contains(attrName)) continue;
+      _sourcesmap.insert(attrName, source);
 
-        attr = el.attribute(__sourceAttributes.master);
-        if(attr.isNull()) continue;
+      attr = el.attribute(__sourceAttributes.updatetime);
 
-        itm = _masters.find(attr);
+      updatetime = attr.toInt(&flag);
 
-        if(itm == _masters.end()) continue;
-
-        attr = el.attribute(__sourceAttributes.deviceid);
-        if(attr.isNull()) continue;
-
-        devid = attr.toUInt(&boolBuff);
-
-        if(!boolBuff) continue;
-        if(devid > 255) continue;
-
-        attr = el.attribute(__sourceAttributes.memorymapfile);
-        if(attr.isNull()) continue;
-
-        QSharedPointer<LQModbusDataSource> source = LQModbusDataSource::create(devid, itm.value());
-
-        if(loadMemoryMap(source.data(), _app.getProjectPath() + attr) != 0)
-        {
-            int updatetime;
-            bool flag;
-
-            _sourcesmap.insert(attrName, source);
-
-            attr = el.attribute(__sourceAttributes.updatetime);
-
-            updatetime = attr.toInt(&flag);
-
-            if(flag)
-            {
-                source->start(QSharedPointer<QThread>(new QThread), updatetime);
-            }
-            else
-            {
-                source->start(QSharedPointer<QThread>(new QThread));
-            }
-        }
+      if(flag)
+      {
+        source->start(QSharedPointer<QThread>(new QThread), updatetime);
+      }
+      else
+      {
+        source->start(QSharedPointer<QThread>(new QThread));
+      }
     }
+  }
 }
 
 //----------------------------------------------------------------------------------------------------------------------
 static const struct
 {
-    QString name        = "name";
-    QString type        = "type";
+  QString name        = "name";
+  QString type        = "type";
 }__mastersCommonAttributes;
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -207,65 +207,65 @@ static QSharedPointer<LQModbusMasterBase> createMasterTcp(const QDomElement _ele
 //----------------------------------------------------------------------------------------------------------------------
 static LTMastersMap createMasters(const QDomNodeList& nodes)
 {
-    LTMastersMap map;
-    QString attrType;
-    QString attrName;
-    for(int i = 0; i < nodes.size(); i++)
+  LTMastersMap map;
+  QString attrType;
+  QString attrName;
+  for(int i = 0; i < nodes.size(); i++)
+  {
+    QDomElement el;
+    el = nodes.at(i).toElement();
+
+    attrName = el.attribute(__mastersCommonAttributes.name);
+    if(attrName.isNull()) continue;
+    if(map.contains(attrName))continue;
+
+    attrType = el.attribute(__mastersCommonAttributes.type);
+    if(attrType.isNull()) continue;
+
+    QSharedPointer<LQModbusMasterBase> master;
+    if(attrType == "rtu")
     {
-        QDomElement el;
-        el = nodes.at(i).toElement();
-
-        attrName = el.attribute(__mastersCommonAttributes.name);
-        if(attrName.isNull()) continue;
-        if(map.contains(attrName))continue;
-
-        attrType = el.attribute(__mastersCommonAttributes.type);
-        if(attrType.isNull()) continue;
-
-        QSharedPointer<LQModbusMasterBase> master;
-        if(attrType == "rtu")
-        {
-            master = createMasterRtu(el);
-            if(!master.isNull()) map.insert(attrName, master);
-        }
-        else if(attrType == "tcp")
-        {
-            master = createMasterTcp(el);
-            if(!master.isNull()) map.insert(attrName, master);
-        }
+      master = createMasterRtu(el);
+      if(!master.isNull()) map.insert(attrName, master);
     }
+    else if(attrType == "tcp")
+    {
+      master = createMasterTcp(el);
+      if(!master.isNull()) map.insert(attrName, master);
+    }
+  }
 
-    return map;
+  return map;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
 static const struct
 {
-    QString port        = "portname";
-    QString baudrate    = "baud";
-    QString parity      = "parity";
-    QString databits    = "databits";
-    QString stopbits    = "stopbits";
-    QString timeout     = "timeout";
+  QString port        = "portname";
+  QString baudrate    = "baud";
+  QString parity      = "parity";
+  QString databits    = "databits";
+  QString stopbits    = "stopbits";
+  QString timeout     = "timeout";
 
-    static QSerialPort::Parity getParity(const QString& _name)
+  static QSerialPort::Parity getParity(const QString& _name)
+  {
+    static struct
     {
-        static struct
-        {
-            QString noparity    = "no";
-            QString evenparity  = "even";
-            QString oddparity   = "odd";
-            QString spaceparity = "space";
-            QString markparity  = "mark";
-        }parytyAttr;
+      QString noparity    = "no";
+      QString evenparity  = "even";
+      QString oddparity   = "odd";
+      QString spaceparity = "space";
+      QString markparity  = "mark";
+    }parytyAttr;
 
-        if(_name == parytyAttr.noparity)    return QSerialPort::Parity::NoParity;
-        if(_name == parytyAttr.evenparity)  return QSerialPort::Parity::EvenParity;
-        if(_name == parytyAttr.oddparity)   return QSerialPort::Parity::OddParity;
-        if(_name == parytyAttr.spaceparity) return QSerialPort::Parity::SpaceParity;
-        if(_name == parytyAttr.markparity)  return QSerialPort::Parity::MarkParity;
-        return QSerialPort::Parity::UnknownParity;
-    }
+    if(_name == parytyAttr.noparity)    return QSerialPort::Parity::NoParity;
+    if(_name == parytyAttr.evenparity)  return QSerialPort::Parity::EvenParity;
+    if(_name == parytyAttr.oddparity)   return QSerialPort::Parity::OddParity;
+    if(_name == parytyAttr.spaceparity) return QSerialPort::Parity::SpaceParity;
+    if(_name == parytyAttr.markparity)  return QSerialPort::Parity::MarkParity;
+    return QSerialPort::Parity::UnknownParity;
+  }
 
 }__mastersRtuAttributes;
 
@@ -273,101 +273,101 @@ static const struct
 //----------------------------------------------------------------------------------------------------------------------
 static QSharedPointer<LQModbusMasterBase> createMasterRtu(const QDomElement _element)
 {
-    QString attr;
+  QString attr;
 
-    QString portName;
-    int baud;
-    QSerialPort::Parity parity;
-    int dataBits;
-    int stopBits;
-    int timeout;
+  QString portName;
+  int baud;
+  QSerialPort::Parity parity;
+  int dataBits;
+  int stopBits;
+  int timeout;
 
-    bool boolBuff = false;
+  bool boolBuff = false;
 
-    QSharedPointer<LQModbusMasterRtu> master;
+  QSharedPointer<LQModbusMasterRtu> master;
 
-    portName = _element.attribute(__mastersRtuAttributes.port);
-    if(portName.isNull()) goto LABELRET;
+  portName = _element.attribute(__mastersRtuAttributes.port);
+  if(portName.isNull()) goto LABELRET;
 
-    attr = _element.attribute(__mastersRtuAttributes.baudrate);
-    baud = attr.toInt(&boolBuff);
-    if(!boolBuff) goto LABELRET;
+  attr = _element.attribute(__mastersRtuAttributes.baudrate);
+  baud = attr.toInt(&boolBuff);
+  if(!boolBuff) goto LABELRET;
 
-    attr = _element.attribute(__mastersRtuAttributes.parity);
-    parity = __mastersRtuAttributes.getParity(attr);
-    if(parity == QSerialPort::Parity::UnknownParity) goto LABELRET;
+  attr = _element.attribute(__mastersRtuAttributes.parity);
+  parity = __mastersRtuAttributes.getParity(attr);
+  if(parity == QSerialPort::Parity::UnknownParity) goto LABELRET;
 
 
-    attr = _element.attribute(__mastersRtuAttributes.databits);
-    dataBits = attr.toInt(&boolBuff);
-    if(!boolBuff || (dataBits < 0)) goto LABELRET;
+  attr = _element.attribute(__mastersRtuAttributes.databits);
+  dataBits = attr.toInt(&boolBuff);
+  if(!boolBuff || (dataBits < 0)) goto LABELRET;
 
-    attr = _element.attribute(__mastersRtuAttributes.stopbits);
-    if(attr.isNull()) goto LABELRET;
+  attr = _element.attribute(__mastersRtuAttributes.stopbits);
+  if(attr.isNull()) goto LABELRET;
 
-    stopBits = attr.toInt(&boolBuff);
-    if(!boolBuff || (stopBits < 0)) goto LABELRET;
+  stopBits = attr.toInt(&boolBuff);
+  if(!boolBuff || (stopBits < 0)) goto LABELRET;
 
-    master = LQModbusMasterRtu::create();
+  master = LQModbusMasterRtu::create();
 
-    attr = _element.attribute(__mastersRtuAttributes.timeout);
-    timeout = attr.toInt(&boolBuff);
+  attr = _element.attribute(__mastersRtuAttributes.timeout);
+  timeout = attr.toInt(&boolBuff);
 
-    if(boolBuff)
-    {
-        master->connectToPort(  portName,
-                                static_cast<QSerialPort::BaudRate>(baud),
-                                static_cast<QSerialPort::Parity>(parity),
-                                static_cast<QSerialPort::DataBits>(dataBits),
-                                static_cast<QSerialPort::StopBits>(stopBits));
-    }
-    else
-    {
-        master->connectToPort(  portName,
-                                static_cast<QSerialPort::BaudRate>(baud),
-                                static_cast<QSerialPort::Parity>(parity),
-                                static_cast<QSerialPort::DataBits>(dataBits),
-                                static_cast<QSerialPort::StopBits>(stopBits),
-                                timeout);
-    }
+  if(boolBuff)
+  {
+    master->connectToPort(  portName,
+        static_cast<QSerialPort::BaudRate>(baud),
+        static_cast<QSerialPort::Parity>(parity),
+        static_cast<QSerialPort::DataBits>(dataBits),
+        static_cast<QSerialPort::StopBits>(stopBits));
+  }
+  else
+  {
+    master->connectToPort(  portName,
+        static_cast<QSerialPort::BaudRate>(baud),
+        static_cast<QSerialPort::Parity>(parity),
+        static_cast<QSerialPort::DataBits>(dataBits),
+        static_cast<QSerialPort::StopBits>(stopBits),
+        timeout);
+  }
 
 LABELRET:
-    return master;
+  return master;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
 static const struct
 {
-    QString url = "url";
+  QString url = "url";
 
 }__mastersTcpAttributes;
 
 //----------------------------------------------------------------------------------------------------------------------
 static QSharedPointer<LQModbusMasterBase> createMasterTcp(const QDomElement _element)
 {
-    QSharedPointer<LQModbusMasterTcp> master;
-    QString urlstr = _element.attribute(__mastersTcpAttributes.url);
+  QSharedPointer<LQModbusMasterTcp> master;
+  QString urlstr = _element.attribute(__mastersTcpAttributes.url);
 
-    if(urlstr.isNull()) return master;
+  if(urlstr.isNull()) return master;
 
-    QUrl url = QUrl::fromUserInput(urlstr);
+  QUrl url = QUrl::fromUserInput(urlstr);
 
-    if(url.isValid())
-    {
-        master = LQModbusMasterTcp::create();
-        master->connectToHost(url);
+  if(url.isValid())
+  {
+    master = LQModbusMasterTcp::create();
+    master->connectToHost(url);
 
-    }
-    return master;
+  }
+  return master;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
 enum class EItemType
 {
-    COILS,
-    DISCRETEINPUTS,
-    INPUTREGISTERS,
-    HOLDINGREGISTERS
+  COILS,
+  DISCRETEINPUTS,
+  INPUTREGISTERS,
+  HOLDINGREGISTERS
 };
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -376,72 +376,72 @@ static int addSourceDataItems(LQModbusDataSource* _p_source, const QDomNodeList&
 //----------------------------------------------------------------------------------------------------------------------
 static const struct
 {
-    QString coils               = "coil";
-    QString discreteinputs      = "discin";
-    QString inputregisters      = "inreg";
-    QString holdingregisters    = "holdreg";
+  QString coils               = "coil";
+  QString discreteinputs      = "discin";
+  QString inputregisters      = "inreg";
+  QString holdingregisters    = "holdreg";
 }__memoryMapItemElementNames;
 
 //----------------------------------------------------------------------------------------------------------------------
 static int loadMemoryMap(LQModbusDataSource* _p_source,  const QString& _filename)
 {
-    QFile file(_filename);
+  QFile file(_filename);
 
-    QDomDocument domDoc;
-    QDomNodeList itemnodes;
-    QString errorStr;
-    int errorLine;
-    int errorColumn;
-    int itemsCounter = 0;
+  QDomDocument domDoc;
+  QDomNodeList itemnodes;
+  QString errorStr;
+  int errorLine;
+  int errorColumn;
+  int itemsCounter = 0;
 
-    if(!domDoc.setContent(&file, true, &errorStr, &errorLine, &errorColumn))
-    {
-        qDebug() << "LCXmlModbusSources: parse memory map file:" << _filename << " "
-                 << errorLine << " column:" << errorColumn << " msg: " << errorStr;
-        return -1;
-    }
+  if(!domDoc.setContent(&file, true, &errorStr, &errorLine, &errorColumn))
+  {
+    qDebug() << "LCXmlModbusSources: parse memory map file:" << _filename << " "
+      << errorLine << " column:" << errorColumn << " msg: " << errorStr;
+    return -1;
+  }
 
-    QDomElement rootElement = domDoc.documentElement();
+  QDomElement rootElement = domDoc.documentElement();
 
-    if(rootElement.tagName() != "memorymap")
-    {
-        qDebug() << "LCXmlModbusSources: memory map file " <<  _filename << " wrong root element";
-        return -2;
-    }
+  if(rootElement.tagName() != "memorymap")
+  {
+    qDebug() << "LCXmlModbusSources: memory map file " <<  _filename << " wrong root element";
+    return -2;
+  }
 
-    itemnodes = rootElement.elementsByTagName(__memoryMapItemElementNames.coils);
-    if(!itemnodes.isEmpty())
-    {
-        itemsCounter += addSourceDataItems(_p_source, itemnodes, EItemType::COILS);
-    }
+  itemnodes = rootElement.elementsByTagName(__memoryMapItemElementNames.coils);
+  if(!itemnodes.isEmpty())
+  {
+    itemsCounter += addSourceDataItems(_p_source, itemnodes, EItemType::COILS);
+  }
 
-    itemnodes = rootElement.elementsByTagName(__memoryMapItemElementNames.discreteinputs);
-    if(!itemnodes.isEmpty())
-    {
-        itemsCounter += addSourceDataItems(_p_source, itemnodes, EItemType::DISCRETEINPUTS);
-    }
+  itemnodes = rootElement.elementsByTagName(__memoryMapItemElementNames.discreteinputs);
+  if(!itemnodes.isEmpty())
+  {
+    itemsCounter += addSourceDataItems(_p_source, itemnodes, EItemType::DISCRETEINPUTS);
+  }
 
-    itemnodes = rootElement.elementsByTagName(__memoryMapItemElementNames.inputregisters);
-    if(!itemnodes.isEmpty())
-    {
-        itemsCounter += addSourceDataItems(_p_source, itemnodes, EItemType::INPUTREGISTERS);
-    }
+  itemnodes = rootElement.elementsByTagName(__memoryMapItemElementNames.inputregisters);
+  if(!itemnodes.isEmpty())
+  {
+    itemsCounter += addSourceDataItems(_p_source, itemnodes, EItemType::INPUTREGISTERS);
+  }
 
-    itemnodes = rootElement.elementsByTagName(__memoryMapItemElementNames.holdingregisters);
-    if(!itemnodes.isEmpty())
-    {
-        itemsCounter += addSourceDataItems(_p_source, itemnodes, EItemType::HOLDINGREGISTERS);
-    }
+  itemnodes = rootElement.elementsByTagName(__memoryMapItemElementNames.holdingregisters);
+  if(!itemnodes.isEmpty())
+  {
+    itemsCounter += addSourceDataItems(_p_source, itemnodes, EItemType::HOLDINGREGISTERS);
+  }
 
-    return itemsCounter;
+  return itemsCounter;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
 static const struct
 {
-    QString name = "name";
-    QString addr = "addr";
-    QString size = "size";
+  QString name = "name";
+  QString addr = "addr";
+  QString size = "size";
 }__memoryMapItemAttributes;
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -450,67 +450,67 @@ static const struct
  */
 static int addSourceDataItems(LQModbusDataSource* _p_source, const QDomNodeList& _nodes, EItemType _type)
 {
-    QDomElement element;
-    QString attr;
-    QString name;
-    int  addr;
-    int  size;
-    bool boolBuff;
-    int  itemCounter = 0;
+  QDomElement element;
+  QString attr;
+  QString name;
+  int  addr;
+  int  size;
+  bool boolBuff;
+  int  itemCounter = 0;
 
-    for(int i = 0; i < _nodes.size(); i++)
+  for(int i = 0; i < _nodes.size(); i++)
+  {
+    element = _nodes.at(i).toElement();
+
+    name = element.attribute(__memoryMapItemAttributes.name);
+    if(name.isNull()) continue;
+
+    attr = element.attribute(__memoryMapItemAttributes.addr);
+    if(attr.isNull()) continue;
+
+    addr = attr.toInt(&boolBuff);
+    if( (!boolBuff) ||
+        (addr < 0)  ||
+        (addr > 0x0000ffff))
     {
-        element = _nodes.at(i).toElement();
-
-        name = element.attribute(__memoryMapItemAttributes.name);
-        if(name.isNull()) continue;
-
-        attr = element.attribute(__memoryMapItemAttributes.addr);
-        if(attr.isNull()) continue;
-
-        addr = attr.toInt(&boolBuff);
-        if( (!boolBuff) ||
-            (addr < 0)  ||
-            (addr > 0x0000ffff))
-        {
-            continue;
-        }
-
-        attr = element.attribute(__memoryMapItemAttributes.size);
-        if(attr.isNull())
-        {
-            size = 1;
-        }
-        else
-        {
-            size = attr.toInt(&boolBuff);
-            if( (!boolBuff) ||
-                (addr < 0)  ||
-                (addr > 0x0000ffff))
-            {
-                continue;
-            }
-        }
-
-        switch(_type)
-        {
-        case EItemType::COILS:
-            _p_source->addDataItemCoils(name, addr, size);
-            break;
-
-        case EItemType::DISCRETEINPUTS:
-            _p_source->addDataItemDiscreteInputs(name, addr, size);
-            break;
-
-        case EItemType::INPUTREGISTERS:
-            _p_source->addDataItemInputRegs(name, addr, size);
-            break;
-
-        case EItemType::HOLDINGREGISTERS:
-            _p_source->addDataItemHoldingRegs(name, addr, size);
-            break;
-        }
-        itemCounter++;
+      continue;
     }
-    return itemCounter;
+
+    attr = element.attribute(__memoryMapItemAttributes.size);
+    if(attr.isNull())
+    {
+      size = 1;
+    }
+    else
+    {
+      size = attr.toInt(&boolBuff);
+      if( (!boolBuff) ||
+          (addr < 0)  ||
+          (addr > 0x0000ffff))
+      {
+        continue;
+      }
+    }
+
+    switch(_type)
+    {
+    case EItemType::COILS:
+      _p_source->addDataItemCoils(name, addr, size);
+      break;
+
+    case EItemType::DISCRETEINPUTS:
+      _p_source->addDataItemDiscreteInputs(name, addr, size);
+      break;
+
+    case EItemType::INPUTREGISTERS:
+      _p_source->addDataItemInputRegs(name, addr, size);
+      break;
+
+    case EItemType::HOLDINGREGISTERS:
+      _p_source->addDataItemHoldingRegs(name, addr, size);
+      break;
+    }
+    itemCounter++;
+  }
+  return itemCounter;
 }
