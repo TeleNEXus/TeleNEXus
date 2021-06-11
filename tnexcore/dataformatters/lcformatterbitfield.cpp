@@ -130,60 +130,6 @@ static inline void __l_byte_align(QString& _instr)
     _instr.insert(0, QString(8-remains, '0'));
   }
 }
-//------------------------------------------------------------------------------fitting
-QString LCFormatterBitfield::fitting(const QString& _instr)
-{
-  QString out_string = _instr;
-
-  //Удаляем разделительные символы.
-  out_string.remove(QRegExp(  QString("[ ]{1,}|[_]{1,}|[%1]{1,}")
-        .arg(mValidator.mSeparator) ));
-
-  //Проверяем на строку нулевой длины.
-  if( out_string.size() <= 0)
-  {
-    return QString();
-  }
-
-  //Проверяем на наличие нецифровых значений.
-  if( out_string.contains(QRegExp("[^0-1]{1,}")))
-  {
-    //Если присутствуют посторонние символы, 
-    //возвращаем пустую строку.
-    return QString();
-  }
-
-  //Переводим строку в нижний регистр.
-  out_string  = out_string.toLower(); 
-
-  if(mValidator.mSize <= 0)
-  {
-    //Если размер не задан, то производим нормализацию 
-    //до количества символов кратного восьми и проверку значений.
-    __l_byte_align(out_string);
-    return out_string;
-  }
-  //Если установлен размер данных.
-  //Удаляем незначащие нули.
-  out_string.remove(QRegExp("^[0]{1,}"));
-
-  //Выравниваем количество бит по байту в 8 бит.
-  __l_byte_align(out_string);
-
-  int str_byte_size = out_string.length() / 8;
-
-  if( str_byte_size > mValidator.mSize )
-  {
-    //Удаляем лишние цифры.
-    out_string.remove(0, (str_byte_size - mValidator.mSize) * 8);
-  }
-  else if( mValidator.mSize > str_byte_size )
-  {
-    //Добавляем незначащий ноль.
-    out_string.insert(0, QString((mValidator.mSize - str_byte_size) * 8, '0'));
-  }
-  return out_string;
-}
 
 //------------------------------------------------------------------------------toBytes
 QByteArray LCFormatterBitfield::toBytes(const QString& _str)

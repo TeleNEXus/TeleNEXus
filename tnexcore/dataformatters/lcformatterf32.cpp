@@ -59,17 +59,6 @@ QString LCFormatterF32::toString(const QByteArray& _data)
       mFieldWidth, mFormat, mPrecision, mFillChar);
 }
 
-//------------------------------------------------------------------------------
-QString LCFormatterF32::fitting(const QString& _str)
-{
-  bool ok = false;
-  float valf = ((float)_str.toFloat(&ok));
-
-  if(!ok) return QString();
-
-  return QString("%1").arg( valf, 
-      mFieldWidth, mFormat, mPrecision, mFillChar);
-}
 
 //------------------------------------------------------------------------------toBytes
 QByteArray LCFormatterF32::toBytes(const QString& _str)

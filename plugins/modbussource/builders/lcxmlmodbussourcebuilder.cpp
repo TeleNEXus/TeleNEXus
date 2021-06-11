@@ -19,12 +19,9 @@
  * along with TeleNEXus.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include "lcxmlmodbussourcebuilder.h"
-
 #include "lqmodbusmasterbase.h"
-
 #include "lqmodbusmasterrtu.h"
 #include "lqmodbusmastertcp.h"
-
 #include "lqmodbusdatasource.h"
 
 #include "LIApplication.h"
@@ -59,8 +56,6 @@ LQDataSources LCXmlModbusSourceBuilder::build(const QDomElement &_element, const
   QString xmlfilename = _element.attribute("file");
 
   if(xmlfilename.isNull()) return map;
-
-  /* file.setFileName(_app.getProjectPath() + xmlfilename); */
   file.setFileName(xmlfilename);
 
   QDomDocument domDoc;

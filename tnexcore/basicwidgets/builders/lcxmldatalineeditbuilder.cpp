@@ -18,8 +18,8 @@
  * You should have received a copy of the GNU General Public License
  * along with TeleNEXus.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "lcxmlremlineeditbuilder.h"
-#include "widgetbuilderscommon.h"
+#include "lcxmldatalineeditbuilder.h"
+#include "xmlcommon.h"
 #include "LIApplication.h"
 #include "LIKeyboard.h"
 #include "LIKeyboardListener.h"
@@ -39,9 +39,13 @@
 class CQControlBase : public QObject
 {
 protected:
+
   QSharedPointer<LIRemoteDataReader>  mDataReader;
+  QSharedPointer<LIDataFormatter>     mDataReadFormatter;
+
   QSharedPointer<LIRemoteDataWriter>  mDataWriter;
-  QSharedPointer<LIDataFormatter>     mFormatter;
+  QSharedPointer<LIDataFormatter>     mDataWriteFormatter;
+
   QLineEdit* mpLineEdit;
   bool mFlagUpdateOn = false;
 
@@ -51,19 +55,25 @@ protected:
   CQControlBase() = delete;
 
   CQControlBase(
-    const QString& _dataNameRead,
-    const QString& _dataNameWrite,
-    QSharedPointer<LIRemoteDataSource> _dataSource,
-    QSharedPointer<LIDataFormatter> _formatter,
-    QLineEdit* _lineEdit) :  
-    QObject(_lineEdit), mFormatter(_formatter), mpLineEdit(_lineEdit)
+      const QString& _dataReadName,
+      QSharedPointer<LIRemoteDataSource>  _dataReadSource,
+      QSharedPointer<LIDataFormatter>     _dataReadFormatter,
+      const QString& _dataWriteName,
+      QSharedPointer<LIRemoteDataSource>  _dataWriteSource,
+      QSharedPointer<LIDataFormatter>     _dataWriteFormatter,
+      QLineEdit* _lineEdit) :  
+    QObject(_lineEdit), 
+    mDataReadFormatter(_dataReadFormatter),
+    mDataWriteFormatter(_dataWriteFormatter),
+    mpLineEdit(_lineEdit)
   {
+
     QString str = "Undef";
     mpLineEdit->setText(str);
-    mpLineEdit->setValidator(_formatter->validator());
+    mpLineEdit->setValidator(_dataWriteFormatter->validator());
     mpLineEdit->setEnabled(false);
 
-    mDataReader = _dataSource->createReader(_dataNameRead,
+    mDataReader = _dataReadSource->createReader(_dataReadName,
         [this, str](QSharedPointer<QByteArray> _data, LERemoteDataStatus _status)
         {
           if(mFlagUpdateOn)
@@ -75,10 +85,11 @@ protected:
               return;
             }
             mpLineEdit->setEnabled(true);
-            mpLineEdit->setText(mFormatter.data()->toString(*_data));
+            mpLineEdit->setText(mDataReadFormatter.data()->toString(*_data));
           }
         });
-    mDataWriter = _dataSource->createWriter(_dataNameWrite);
+
+    mDataWriter = _dataWriteSource->createWriter(_dataWriteName);
 
 
     //init events map
@@ -112,10 +123,10 @@ protected:
           {
           case Qt::Key::Key_Enter:
           case Qt::Key::Key_Return:
-            mDataWriter->writeRequest(mFormatter->toBytes(mpLineEdit->text()));
-            mDataReader->readRequest();
+            writeRequest(mpLineEdit->text());
+            readRequest();
             mFlagUpdateOn = true;
-          break;
+            break;
 
           case Qt::Key::Key_Escape:
             mpLineEdit->clearFocus();
@@ -144,13 +155,14 @@ protected:
           Q_UNUSED(_obj);
           Q_UNUSED(_event);
           mFlagUpdateOn = true;
-          mDataReader->readRequest();
+          readRequest();
           return false;
         });
   }
 
   void  setActive(bool _flag)
   {
+    if(mDataReader.isNull()) return;
     if(_flag)
     {
       mDataReader->connectToSource();
@@ -161,6 +173,21 @@ protected:
       mpLineEdit->setEnabled(false);
       mDataReader->disconnectFromSource();
     }
+  }
+
+protected:
+
+  void readRequest()
+  {
+    if(!mDataReader.isNull()) mDataReader->readRequest();
+  }
+
+  void writeRequest(const QString _text)
+  {
+    if(mDataWriter.isNull()) return;
+    if(mDataWriteFormatter.isNull()) return;
+    mDataWriter->writeRequest(
+        mDataWriteFormatter->toBytes(_text));
   }
 
 public:
@@ -174,14 +201,22 @@ public:
   }
 
   static void install(
-    const QString& _dataNameRead,
-    const QString& _dataNameWrite,
-    QSharedPointer<LIRemoteDataSource> _dataSource,
-    QSharedPointer<LIDataFormatter> _formatter,
-    QLineEdit* _lineEdit)
+      const QString& _dataReadName,
+      QSharedPointer<LIRemoteDataSource> _dataReadSource,
+      QSharedPointer<LIDataFormatter> _dataReadFormatter,
+      const QString& _dataWriteName,
+      QSharedPointer<LIRemoteDataSource> _dataWriteSource,
+      QSharedPointer<LIDataFormatter> _dataWriteFormatter,
+      QLineEdit* _lineEdit)
   {
     auto ctrl = new CQControlBase( 
-        _dataNameRead, _dataNameWrite, _dataSource, _formatter, _lineEdit);
+        _dataReadName, 
+        _dataReadSource, 
+        _dataReadFormatter, 
+        _dataWriteName, 
+        _dataWriteSource, 
+        _dataWriteFormatter, 
+        _lineEdit);
     _lineEdit->installEventFilter(ctrl);
   }
 
@@ -194,14 +229,23 @@ private:
   QSharedPointer<LIKeyboardListener> mKeyboardListener;
   CQControlKeyboard() = delete;
   CQControlKeyboard(
-    const QString& _dataNameRead,
-    const QString& _dataNameWrite,
-    QSharedPointer<LIRemoteDataSource> _dataSource,
-    QSharedPointer<LIDataFormatter> _formatter,
-    QLineEdit* _lineEdit,
-    QSharedPointer<LIKeyboard> _keyboard) :  
+      const QString&                      _dataReadName,
+      QSharedPointer<LIRemoteDataSource>  _dataReadSource,
+      QSharedPointer<LIDataFormatter>     _dataReadFormatter,
+      const QString&                      _dataWriteName,
+      QSharedPointer<LIRemoteDataSource>  _dataWriteSource,
+      QSharedPointer<LIDataFormatter>     _dataWriteFormatter,
+      QLineEdit*                          _lineEdit,
+      QSharedPointer<LIKeyboard>          _keyboard) :  
     CQControlBase(
-        _dataNameRead, _dataNameWrite, _dataSource, _formatter, _lineEdit)
+        _dataReadName, 
+        _dataReadSource, 
+        _dataReadFormatter, 
+        _dataWriteName, 
+        _dataWriteSource, 
+        _dataWriteFormatter, 
+        _lineEdit
+        )
   {
 
     //-----------------------------keyboard
@@ -215,7 +259,7 @@ private:
     auto action_enter =
       [this](const QString& _str)
       {
-        mDataWriter->writeRequest(mFormatter->toBytes(_str));
+        writeRequest(_str);
       };
 
     auto action_disconnect =
@@ -226,9 +270,9 @@ private:
       };
 
     QValidator* validator = nullptr; 
-    if(!mFormatter.isNull())
+    if(!mDataWriteFormatter.isNull())
     {
-      validator = mFormatter->validator();
+      validator = mDataWriteFormatter->validator();
     }
 
     mKeyboardListener = _keyboard->createListener(
@@ -255,15 +299,24 @@ private:
   }
 public:
   static void install(
-    const QString& _dataNameRead,
-    const QString& _dataNameWrite,
-    QSharedPointer<LIRemoteDataSource> _dataSource,
-    QSharedPointer<LIDataFormatter> _formatter,
-    QLineEdit* _lineEdit,
-    QSharedPointer<LIKeyboard> _keyboard)
+      const QString&                      _dataReadName,
+      QSharedPointer<LIRemoteDataSource>  _dataReadSource,
+      QSharedPointer<LIDataFormatter>     _dataReadFormatter,
+      const QString&                      _dataWriteName,
+      QSharedPointer<LIRemoteDataSource>  _dataWriteSource,
+      QSharedPointer<LIDataFormatter>     _dataWriteFormatter,
+      QLineEdit*                          _lineEdit,
+      QSharedPointer<LIKeyboard>          _keyboard)
   {
     auto ctrl = new CQControlKeyboard( 
-        _dataNameRead, _dataNameWrite, _dataSource, _formatter, _lineEdit, _keyboard);
+        _dataReadName, 
+        _dataReadSource, 
+        _dataReadFormatter, 
+        _dataWriteName, 
+        _dataWriteSource, 
+        _dataWriteFormatter, 
+        _lineEdit,
+        _keyboard);
     _lineEdit->installEventFilter(ctrl);
   }
 };
@@ -286,8 +339,8 @@ public:
     switch(_event->type())
     {
     case QEvent::Type::MouseButtonPress:
-        mListener->connect(line_edit->text());
-        ret = true;
+      mListener->connect(line_edit->text());
+      ret = true;
       break;
 
     case QEvent::Type::FocusIn:
@@ -314,89 +367,145 @@ public:
 //==============================================================================
 const struct
 {
-  QString data    = "data";
-  QString source  = "source";
+  QString data = "data";
+  QString dataRead = "dataRead";
+  QString dataWrite = "dataWrite";
   QString keyboard = "keyboard";
 } __slAttributes;
 
 //==============================================================================
-LCXmlRemLineEditBuilder::LCXmlRemLineEditBuilder()
+LCXmlDataLineEditBuilder::LCXmlDataLineEditBuilder()
 {
 
 }
 
 //------------------------------------------------------------------------------
-LCXmlRemLineEditBuilder::~LCXmlRemLineEditBuilder()
+LCXmlDataLineEditBuilder::~LCXmlDataLineEditBuilder()
 {
 
 }
 
 
 //------------------------------------------------------------------------------
-QWidget* LCXmlRemLineEditBuilder::buildLocal(
-      QSharedPointer<SBuildData> _buildData)
+QWidget* LCXmlDataLineEditBuilder::buildLocal(
+    const QDomElement& _element, const LIApplication& _app)
 {
-  QLineEdit* line_edit = new QLineEdit(_buildData->element.tagName());
 
-  const QDomElement& element = _buildData->element;
-  const LIApplication& app = _buildData->application;
+  QLineEdit* line_edit = new QLineEdit(_element.tagName());
 
-  QString data;
-  QString attr = element.attribute(__slAttributes.source);
-  QSharedPointer<LIRemoteDataSource> source;
-  QSharedPointer<LIDataFormatter> format;
+  QString data_read_name;
+  QString data_write_name;
+  QSharedPointer<LIRemoteDataSource> read_source;
+  QSharedPointer<LIRemoteDataSource> write_source;
+  QSharedPointer<LIDataFormatter> read_formatter;
+  QSharedPointer<LIDataFormatter> write_formatter;
 
-  auto ret_widget = 
-    [_buildData, line_edit]()
+  auto ret_wrong = 
+    [line_edit]()
     {
-      QString style = LCBuildersCommon::getBaseStyleSheet(_buildData->element, _buildData->application);
-      line_edit->setStyleSheet(style);
-      LCBuildersCommon::initPosition(_buildData->element, *line_edit);
       return line_edit;
     };
 
-  if(attr.isNull())
+  auto ret_ok = 
+    [ 
+    &_element, 
+    &_app, 
+    &data_read_name,
+    &data_write_name,
+    &read_source,
+    &write_source,
+    &read_formatter,
+    &write_formatter,
+    line_edit
+    ]()
+    {
+      auto keyboard = _app.getKeyboard(
+          _element.attribute(__slAttributes.keyboard));
+
+      if(keyboard.isNull())
+      {
+        CQControlBase::install(
+            data_read_name,
+            read_source,
+            read_formatter,
+            data_write_name,
+            write_source,
+            write_formatter,
+            line_edit);
+      }
+      else
+      {
+        CQControlKeyboard::install(
+            data_read_name,
+            read_source,
+            read_formatter,
+            data_write_name,
+            write_source,
+            write_formatter,
+            line_edit,
+            keyboard);
+      }
+
+      setWidgetName(_element, line_edit);
+      setWidgetStyle(_element, line_edit);
+      setWidgetSize(_element, line_edit);
+      setWidgetPosition(_element, line_edit);
+      setWidgetFixedSize(_element, line_edit);
+
+      return line_edit;
+    };
+
+  bool error_flag = false;
+
+  auto data_spec = xmlcommon::parseDataSpecification(
+      _element.attribute(__slAttributes.data),
+      [&error_flag](const QString&)
+      {
+        error_flag = true;
+      });
+
+  if(!error_flag)
   {
-    return ret_widget();
+    data_read_name = data_spec.dataId;
+    read_source = _app.getDataSource(data_spec.sourceId);
+    read_formatter = _app.getDataFormatter(data_spec.formatterId);
+
+    data_write_name = data_read_name;
+    write_source = read_source;
+    write_formatter = read_formatter;
+    return ret_ok();
   }
 
-  source = app.getDataSource(attr);
+  error_flag = false;
+  data_spec = xmlcommon::parseDataSpecification(
+      _element.attribute(__slAttributes.dataRead),
+      [&error_flag](const QString&)
+      {
+        error_flag = true;
+      });
 
-  if(source.isNull())
-  {
-    return ret_widget();
-  }
+  if(error_flag) return ret_wrong();
 
-  data = element.attribute(__slAttributes.data);
+  data_read_name = data_spec.dataId;
+  read_source = _app.getDataSource(data_spec.sourceId);
+  read_formatter = _app.getDataFormatter(data_spec.formatterId);
 
-  if(data.isNull())
-  {
-    return ret_widget();
-  }
 
-  attr = element.attribute(LCBuildersCommon::mAttributes.dataformatter);
-  format = _buildData->application.getDataFormatter(attr);
-  if(format.isNull()) return ret_widget();
+  error_flag = false;
+  data_spec = xmlcommon::parseDataSpecification(
+      _element.attribute(__slAttributes.dataWrite),
+      [&error_flag](const QString&)
+      {
+        error_flag = true;
+      });
 
-  auto get_keyboard = [&_buildData]()
-  {
-    QString keyboard_id = _buildData->element.attribute(__slAttributes.keyboard);
-    if(keyboard_id.isNull()) return QSharedPointer<LIKeyboard>();
-    return  _buildData->application.getKeyboard(keyboard_id);
-  };
+  if(error_flag) return ret_wrong();
 
-  auto keyboard = get_keyboard();
+  data_write_name = data_spec.dataId;
+  write_source = _app.getDataSource(data_spec.sourceId);
+  write_formatter = _app.getDataFormatter(data_spec.formatterId);
 
-  if(keyboard.isNull())
-  {
-    CQControlBase::install(data,data,source,format,line_edit);
-  }
-  else
-  {
-    CQControlKeyboard::install(data,data,source,format,line_edit,keyboard);
-  }
-
-  return ret_widget();
+  return ret_ok();
 }
 
 

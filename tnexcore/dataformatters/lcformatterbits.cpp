@@ -117,49 +117,6 @@ QString LCFormatterBits::toString(const QByteArray& _data)
     return out_str;
 }
 
-//------------------------------------------------------------------------------fitting
-QString LCFormatterBits::fitting(const QString& _str)
-{
-    QString out_str = _str;
-
-    //Удаляем разделительные символы.
-    out_str.remove(QRegExp(QString("[ _%1]{1,}").arg(mValidator.mSeparator)));
-
-    // Проверяем задан ли размер битового поля. 
-    if(mValidator.mSize <= 0)
-    {
-        //Если размер не задан.
-        //проверяем на наличие не цифровых значений.
-        if(out_str.contains(QRegExp("[^0-1]{1,}")) != 0)
-        {
-            //Если присутствуют не цифровые значения, 
-            //возвращаем пустую строку.
-            return QString();
-        }
-        return out_str;
-    }
-
-    //Удаление незначащих нулуй в начале последовательности.
-    out_str.remove(QRegExp("^[0]{1,}"));
-
-
-    if( mValidator.mSize < out_str.size())
-    {
-        out_str.remove(0, out_str.size() - mValidator.mSize);
-    }
-    else if(mValidator.mSize > out_str.size())
-    {
-        out_str.insert(0, QString( mValidator.mSize - out_str.size(), '0'));
-    }
-
-    /* if( mSize < out_str.size()) */
-    /* { */
-    /*     return QString(); */
-    /* } */
-
-    return out_str;
-}
-
 //------------------------------------------------------------------------------toBytes
 QByteArray LCFormatterBits::toBytes(const QString& _str)
 {

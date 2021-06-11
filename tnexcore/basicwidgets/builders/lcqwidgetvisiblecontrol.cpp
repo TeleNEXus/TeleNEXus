@@ -80,7 +80,7 @@ public:
   EVisibleStatus mVisibleStatus = EVisibleStatus::undef;
   QSharedPointer<LIRemoteDataReader>  mDataReader;
   QSharedPointer<LIDataFormatter>     mFormatter;
-  QString mCompareData;
+  QByteArray mCompareData;
   std::function<void(QSharedPointer<QByteArray>, LERemoteDataStatus)> mfAction;
 
   CLocalData(){}
@@ -238,13 +238,13 @@ bool LCQWidgetVisibleControl::build(const QDomElement& _element,
   if(!attr_show.isNull())
   {
     toLocalData(ctrl->mpLocal)->mCompareData =
-      format->fitting(attr_show);
+      format->toBytes(attr_show);
     toLocalData(ctrl->mpLocal)->mfAction = action_show;
   }
   else
   {
     toLocalData(ctrl->mpLocal)->mCompareData =
-      format->fitting(attr_hide);
+      format->toBytes(attr_hide);
     toLocalData(ctrl->mpLocal)->mfAction = action_hide;
   }
 

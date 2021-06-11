@@ -36,7 +36,6 @@ public:
 
   virtual QString toString(const QByteArray& _data) = 0;
   virtual QByteArray toBytes(const QString& _str) = 0;
-  virtual QString fitting(const QString& _str) = 0;
   virtual QValidator* validator() = 0;
 };
 

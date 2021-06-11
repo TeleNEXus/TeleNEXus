@@ -336,11 +336,19 @@ SDataSpecification parseDataSpecification(const QString _dataSpec,
       {
         error = _str;
       });
+
   if(!error.isNull())
   {
     _err(error);
     return SDataSpecification{};
   }
+
+  if(spec_list.size() != 3)
+  {
+    _err("Wrong parce data specification");
+    return SDataSpecification{};
+  }
+
   QString sourceId;
   QString dataId;
   QString formatId;

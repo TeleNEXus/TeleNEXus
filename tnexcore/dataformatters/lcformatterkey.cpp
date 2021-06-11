@@ -60,12 +60,6 @@ QString LCFormatterKey::toString(const QByteArray& _data)
   return _data.toHex();
 }
 
-//------------------------------------------------------------------------------fitting
-QString LCFormatterKey::fitting(const QString& _instr)
-{
-  return _instr;
-}
-
 //------------------------------------------------------------------------------toBytes
 QByteArray LCFormatterKey::toBytes(const QString& _str)
 {
