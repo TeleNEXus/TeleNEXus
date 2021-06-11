@@ -18,23 +18,22 @@
  * You should have received a copy of the GNU General Public License
  * along with TeleNEXus.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef LCXMLREMLINEEDITBUILDER_H
-#define LCXMLREMLINEEDITBUILDER_H
+#ifndef LCXMLDATALINEEDITBUILDER_H
+#define LCXMLDATALINEEDITBUILDER_H
 
 #include "lcxmlbuilderbase.h"
 
-class LCXmlRemLineEditBuilder : public LCXmlBuilderBase 
+class LCXmlDataLineEditBuilder final : public LCXmlBuilderBase 
 {
 
 public:
-  LCXmlRemLineEditBuilder();
-  virtual ~LCXmlRemLineEditBuilder();
+  LCXmlDataLineEditBuilder();
+  virtual ~LCXmlDataLineEditBuilder();
 
 protected:
-  virtual QWidget* buildLocal(
-      QSharedPointer<SBuildData> _buildData) override final;
+  virtual QWidget* buildLocal(const QDomElement& _element, const LIApplication& _app) override;
 
 };
 
 
-#endif // LCXMLREMLINEEDITBUILDER_H
+#endif // LCXMLDATALINEEDITBUILDER_H

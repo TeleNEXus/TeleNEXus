@@ -41,7 +41,6 @@ public:
   ~LCJSFormatter();
   virtual QString     toString(const QByteArray& _data)override;
   virtual QByteArray  toBytes(const QString& _str)override;
-  virtual QString     fitting(const QString& _str)override;
   virtual QValidator* validator()override;
 
   static QSharedPointer<LCJSFormatter> create(

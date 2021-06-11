@@ -50,15 +50,6 @@ QString LCFormatterS8::toString(const QByteArray& _data)
   return QString("%1").arg( r, mFieldWidth, mBase, mFillChar);
 }
 
-//------------------------------------------------------------------------------fitting
-QString LCFormatterS8::fitting(const QString& _str)
-{
-  bool    ok  = false;
-  qint8   val = _str.toShort(&ok);
-  if(!ok) return QString();
-  return QString("%1").arg( val, mFieldWidth, mBase, mFillChar);
-}
-
 //------------------------------------------------------------------------------toBytes
 QByteArray LCFormatterS8::toBytes(const QString& _str)
 {

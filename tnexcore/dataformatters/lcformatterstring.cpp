@@ -32,12 +32,6 @@ QString LCFormatterString::toString(const QByteArray& _data)
   /* return QString(_data); */
 }
 
-//------------------------------------------------------------------------------fitting
-QString LCFormatterString::fitting(const QString& _str)
-{
-  return _str;
-}
-
 //------------------------------------------------------------------------------toBytes
 QByteArray LCFormatterString::toBytes(const QString& _str)
 {

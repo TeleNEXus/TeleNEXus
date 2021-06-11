@@ -117,67 +117,6 @@ QString LCFormatterHex::toString(const QByteArray& _data)
   return str;
 }
 
-//------------------------------------------------------------------------------fitting
-QString LCFormatterHex::fitting(const QString& _instr)
-{
-  QString out_string = _instr;
-
-  //Удаляем разделительные символы.
-  out_string.remove(QRegExp(  QString("[ ]{1,}|[_]{1,}|[%1]{1,}")
-        .arg(mValidator.mSeparator) ));
-
-  //Проверяем на строку нулевой длины.
-  if( out_string.size() <= 0)
-  {
-    return QString();
-  }
-
-  //Проверяем на наличие нецифровых значений.
-  if( out_string.contains(QRegExp("[^0-9a-f]{1,}")))
-  {
-    //Если присутствуют посторонние символы, 
-    //возвращаем пустую строку.
-    return QString();
-  }
-
-  //Переводим строку в нижний регистр.
-  out_string  = out_string.toLower(); 
-
-  if(mValidator.mSize <= 0)
-  {
-    //Если размер не задан, то производим нормализацию до четного количества
-    //символов и проверку значений.
-    if( (out_string.size() % 2 ) != 0)
-    {
-      //Добавляем незначащий ноль.
-      out_string.insert(0, '0');
-    }
-    return out_string;
-  }
-  //Если установлен размер данных.
-  //Удаляем незначащие нули.
-  out_string.remove(QRegExp("^[0]{1,}"));
-  //Добавляем незначащий ноль для сохранения четности количества цифр.
-  if( (out_string.size() % 2 ) != 0)
-  {
-    //Добавляем незначащий ноль.
-    out_string.insert(0, '0');
-  }
-  int str_byte_size = out_string.length() / 2;
-
-  if( str_byte_size > mValidator.mSize )
-  {
-    //Удаляем лишние цифры.
-    out_string.remove(0, (str_byte_size - mValidator.mSize) * 2);
-  }
-  else if( mValidator.mSize > str_byte_size )
-  {
-    //Добавляем незначащий ноль.
-    out_string.insert(0, QString((mValidator.mSize - str_byte_size) * 2, '0'));
-  }
-  return out_string;
-}
-
 //------------------------------------------------------------------------------toBytes
 QByteArray LCFormatterHex::toBytes(const QString& _str)
 {

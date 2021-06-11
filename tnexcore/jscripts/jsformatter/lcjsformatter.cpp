@@ -173,14 +173,6 @@ QByteArray LCJSFormatter::toBytes(const QString& _str)
 }
 
 //------------------------------------------------------------------------------
-QString LCJSFormatter::fitting(const QString& _str)
-{
-  QJSValue jsret = mpLocalData->callFitting.call(QJSValueList() << _str);
-  if(!jsret.isString()) return QString();
-  return jsret.toString();
-}
-
-//------------------------------------------------------------------------------
 QValidator* LCJSFormatter::validator()
 {
   return mpLocalData->validator;

@@ -31,9 +31,10 @@ QString LCFormatterTextStream::toString(const QByteArray& _data)
   return QString::fromUtf8(_data);
 }
 
-//------------------------------------------------------------------------------fitting
-QString LCFormatterTextStream::fitting(const QString& _str)
+//------------------------------------------------------------------------------toBytes
+QByteArray LCFormatterTextStream::toBytes(const QString& _str)
 {
+
   using QRE = QRegularExpression;
 
   static const QRE zero_expr    = QRE("(?<!\\\\)(\\\\0)");
@@ -46,35 +47,35 @@ QString LCFormatterTextStream::fitting(const QString& _str)
   static const QRE single_slash = QRE("(?<!\\\\)(\\\\)(?!x)");
   static const QRE double_slash = QRE("(\\\\)(?!x)");
 
-  QString outstr = _str;
+  QString format_str = _str;
 
   //Разделение по нулевому символу.
   {
-    auto split_list = outstr.split(zero_expr);
+    auto split_list = format_str.split(zero_expr);
     if(split_list.length() > 1)
     {
-      outstr = split_list.first();
-      outstr.append(QStringLiteral("\0"));
+      format_str = split_list.first();
+      format_str.append(QStringLiteral("\0"));
     }
   }
 
   //Замена управляющих символов.
-  outstr.replace(slash_b, QStringLiteral("\b"));
-  outstr.replace(slash_f, QStringLiteral("\f"));
-  outstr.replace(slash_n, QStringLiteral("\n"));
-  outstr.replace(slash_r, QStringLiteral("\r"));
-  outstr.replace(slash_t, QStringLiteral("\t"));
-  outstr.replace(slash_v, QStringLiteral("\v"));
+  format_str.replace(slash_b, QStringLiteral("\b"));
+  format_str.replace(slash_f, QStringLiteral("\f"));
+  format_str.replace(slash_n, QStringLiteral("\n"));
+  format_str.replace(slash_r, QStringLiteral("\r"));
+  format_str.replace(slash_t, QStringLiteral("\t"));
+  format_str.replace(slash_v, QStringLiteral("\v"));
 
   //Удаление одиночных обратных черт.
-  outstr.replace(single_slash, QStringLiteral(""));
+  format_str.replace(single_slash, QStringLiteral(""));
   //Замена двойной обратной черты на одинарную.
-  outstr.replace(double_slash, QString("\\"));
+  format_str.replace(double_slash, QString("\\"));
 
   //Замена hex кодов.
   {
     static const QRE hex_code = QRE("\\\\x[0-9a-fA-F]{1,4}");
-    auto match_it = hex_code.globalMatch(outstr);
+    auto match_it = hex_code.globalMatch(format_str);
 
     while(match_it.hasNext())
     {
@@ -85,18 +86,13 @@ QString LCFormatterTextStream::fitting(const QString& _str)
       quint16 b = ms.toUInt(&flag, 16);
       if(flag)
       {
-        outstr.replace(m.captured(), QChar(b));
+        format_str.replace(m.captured(), QChar(b));
       }
     }
   }
 
-  return outstr;
-}
+  return format_str.toUtf8();
 
-//------------------------------------------------------------------------------toBytes
-QByteArray LCFormatterTextStream::toBytes(const QString& _str)
-{
-  return fitting(_str).toUtf8();
 }
 
 

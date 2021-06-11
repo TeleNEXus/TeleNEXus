@@ -46,13 +46,6 @@ QString LCFormatterBool::toString(const QByteArray& _data)
   return mStrFalse;
 }
 
-//------------------------------------------------------------------------------fitting
-QString LCFormatterBool::fitting(const QString& _str)
-{
-  //Удаление незначащих нулей.
-  //Удаление сепараторов.
-  return _str;
-}
 
 //------------------------------------------------------------------------------
 QByteArray LCFormatterBool::toBytes(const QString& _str)
