@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <APPLICATION>
+
   <PLAGINPATHES>
     <item path="libs"/>
   </PLAGINPATHES>
@@ -19,9 +20,13 @@
     <switchWidgetsList      lib="examplewidgets" handler="getSwitchWidgetsListBuilder"/>
   </WIDGETBUILDERS>
 
+  <!-- <GLOBALSTYLE file="qstyles/Darkeum.qss"/> -->
+  <!-- <GLOBALSTYLE file="qstyles/Integrid.qss"/> -->
+
   <WIDGETSTYLES file="widgetstyles.xml" />
 
   <SCRIPTS file="scripts.xml"/>
+
   <DATAFORMATS file="formatters.xml"/>
 
   <WINDOW 

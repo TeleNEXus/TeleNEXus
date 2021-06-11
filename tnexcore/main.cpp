@@ -28,6 +28,7 @@
 #include "xmlkeyboards.h"
 #include "xmlpluginpathes.h"
 #include "xmlwidgetstyles.h"
+#include "xmlglobalstyle.h"
 
 #include <QDebug>
 #include <QApplication>
@@ -103,6 +104,7 @@ int main(int argc, char *argv[])
 {
 
   QApplication app(argc, argv);
+
   qDebug() << QCoreApplication::applicationFilePath();
   qDebug() << QCoreApplication::applicationDirPath();
 
@@ -159,6 +161,8 @@ int main(int argc, char *argv[])
   }
 
 
+  //----------------------------------------------------
+  xmlglobalstyle::upload(rootElement, app);
   //----------------------------------------------------
   xmlpluginpathes::upload(rootElement);
   //----------------------------------------------------
