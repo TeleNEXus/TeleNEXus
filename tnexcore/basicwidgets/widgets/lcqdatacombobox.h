@@ -18,8 +18,8 @@
  * You should have received a copy of the GNU General Public License
  * along with TeleNEXus.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef LCQREMCOMBOBOX_H
-#define LCQREMCOMBOBOX_H
+#ifndef LCQDATACOMBOBOX_H
+#define LCQDATACOMBOBOX_H
 
 #include "LIRemoteDataReader.h"
 #include "LIRemoteDataWriter.h"
@@ -30,30 +30,32 @@
 
 #include <QComboBox>
 
-class LCQRemComboBox : public QComboBox
+class LCQDataComboBox : public QComboBox
 {
   Q_OBJECT;
 private:
   bool mIsVisibleFlag = false;
   QSharedPointer<LIRemoteDataReader>   mDataReader;
+  QSharedPointer<LIDataFormatter>      mFormatterRead;
   QSharedPointer<LIRemoteDataWriter>   mDataWriter;
-  QSharedPointer<LIDataFormatter>      mFormatter;
+  QSharedPointer<LIDataFormatter>      mFormatterWrite;
   bool mFlagPopupOn; //Флаг состояния всплывающего меню.
 
 public:
-  explicit LCQRemComboBox(QWidget* _parent = nullptr) = delete;
+  explicit LCQDataComboBox(QWidget* _parent = nullptr) = delete;
 
-  explicit LCQRemComboBox(    
-      const QString&                      _dataNameRead,
-      const QString&                      _dataNameWrite,
-      QSharedPointer<LIRemoteDataSource>  _dataSource,
-      QSharedPointer<LIDataFormatter>     _formatter,
+  explicit LCQDataComboBox(    
+      QSharedPointer<LIRemoteDataReader>  _dataReader,
+      QSharedPointer<LIDataFormatter>     _formatterRead,
+      QSharedPointer<LIRemoteDataWriter>  _dataWriter,
+      QSharedPointer<LIDataFormatter>     _formatterWrite,
       QWidget* _parent = nullptr);
-  virtual ~LCQRemComboBox();
+
+  virtual ~LCQDataComboBox();
   virtual bool event(QEvent *e) override;
 private:
   virtual void showPopup(void) override;
   virtual void hidePopup(void) override;
 };
 
-#endif // LCQREMCOMBOBOX_H
+#endif // LCQDATACOMBOBOX_H

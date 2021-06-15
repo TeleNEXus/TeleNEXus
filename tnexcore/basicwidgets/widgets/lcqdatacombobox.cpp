@@ -18,7 +18,7 @@
  * You should have received a copy of the GNU General Public License
  * along with TeleNEXus.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "lcqremcombobox.h"
+#include "lcqdatacombobox.h"
 #include "LIRemoteDataReader.h"
 #include "LIRemoteDataWriter.h"
 
@@ -26,26 +26,18 @@
 #include <QKeyEvent>
 #include <QDebug>
 
-//==============================================================================
-class CReaderStub : public LIRemoteDataReader
-{
-public:
-  CReaderStub(){}
-  virtual void readRequest()override {}
-  virtual void connectToSource()override {}
-  virtual void disconnectFromSource()override {}
-  virtual void setHandler(THandler)override {}
-};
-
 //------------------------------------------------------------------------------
-LCQRemComboBox::LCQRemComboBox( 
-    const QString&                       _dataNameRead, 
-    const QString&                       _dataNameWrite,
-    QSharedPointer<LIRemoteDataSource>   _dataSource,
-    QSharedPointer<LIDataFormatter>      _formatter,
-    QWidget* _parent):  
+LCQDataComboBox::LCQDataComboBox(    
+    QSharedPointer<LIRemoteDataReader>  _dataReader,
+    QSharedPointer<LIDataFormatter>     _formatterRead,
+    QSharedPointer<LIRemoteDataWriter>  _dataWriter,
+    QSharedPointer<LIDataFormatter>     _formatterWrite,
+    QWidget* _parent) :
   QComboBox(_parent),
-  mFormatter(_formatter),
+  mDataReader(_dataReader),
+  mFormatterRead(_formatterRead),
+  mDataWriter(_dataWriter),
+  mFormatterWrite(_formatterWrite),
   mFlagPopupOn(false)
 {
 
@@ -56,7 +48,7 @@ LCQRemComboBox::LCQRemComboBox(
       switch(_status)
       {
       case EReadStatus::Valid:
-        setCurrentIndex(findData( mFormatter->toString( *_data.data()))); 
+        setCurrentIndex(findData( mFormatterRead->toString( *_data.data()))); 
         setEnabled(true);
         break;
 
@@ -73,43 +65,27 @@ LCQRemComboBox::LCQRemComboBox(
       }
     };
 
-  mDataReader = _dataSource->createReader(_dataNameRead);
+  mDataReader->setHandler(read_handler);
 
-  if(!mDataReader.isNull())
-  {
-    mDataReader->setHandler(read_handler);
-  }
-  else
-  {
-    mDataReader = QSharedPointer<LIRemoteDataReader>(new CReaderStub);
-  }
-
-
-  mDataWriter = _dataSource->createWriter(_dataNameWrite);
-
-  if((!mDataWriter.isNull())&&(!mFormatter.isNull())) 
-  {
-
-    connect(this, static_cast <void(LCQRemComboBox::*)(int)> 
-        (&LCQRemComboBox::activated),
-        [this](int index)
-        {
-          Q_UNUSED(index);
-          mDataWriter->writeRequest(
-              mFormatter->toBytes(currentData().toString()));
-        });
-  }
+  connect(this, static_cast <void(LCQDataComboBox::*)(int)> 
+      (&LCQDataComboBox::activated),
+      [this](int index)
+      {
+        Q_UNUSED(index);
+        mDataWriter->writeRequest(
+            mFormatterWrite->toBytes(currentData().toString()));
+      });
 
   setEnabled(false);
 }
 
 //------------------------------------------------------------------------------
-LCQRemComboBox::~LCQRemComboBox()
+LCQDataComboBox::~LCQDataComboBox()
 {
 }
 
 //------------------------------------------------------------------------------
-bool LCQRemComboBox::event(QEvent *_event)
+bool LCQDataComboBox::event(QEvent *_event)
 {
   int key;
   bool ret = false;
@@ -162,14 +138,14 @@ bool LCQRemComboBox::event(QEvent *_event)
 }
 
 //------------------------------------------------------------------------------
-void LCQRemComboBox::showPopup(void)
+void LCQDataComboBox::showPopup(void)
 {
   mFlagPopupOn = true;
   QComboBox::showPopup();
 }
 
 //------------------------------------------------------------------------------
-void LCQRemComboBox::hidePopup(void)
+void LCQDataComboBox::hidePopup(void)
 {
   mFlagPopupOn = false;
   mDataReader->readRequest();

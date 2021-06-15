@@ -19,8 +19,6 @@
  * along with TeleNEXus.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-/* #include "basicwidgetbuilders.h" */
-
 #include "basicwidgetbuilders.h"
 #include "LIXmlWidgetBuilder.h"
 
@@ -30,7 +28,7 @@
 #include "lcxmlbuttonbuilder.h"
 #include "lcxmltablewidgetbuilder.h"
 #include "lcxmldatalineeditbuilder.h"
-#include "lcxmlremcomboboxbuilder.h"
+#include "lcxmldatacomboboxbuilder.h"
 
 /* #include "lcxmlremcombolabelbuilder.h" */
 /* #include "lcxmltabwidgetbuilder.h" */
@@ -38,30 +36,29 @@
 /* #include "lcxmllistwidgetbuilder.h" */
 /* #include "lcxmlstackedwidgetbuilder.h" */
 /* #include "lcxmlsplitterbuilder.h" */
-#include <qnamespace.h>
 
+#include <qnamespace.h>
 
 namespace basicwidgetbuilders
 {
 QMap<QString, QSharedPointer<LIXmlWidgetBuilder>> getBuilders()
 {
   QMap<QString, QSharedPointer<LIXmlWidgetBuilder>> builders_map;
+
   auto add_builder = 
     [&builders_map](const QString& _name, LIXmlWidgetBuilder* _builder)
     {
       builders_map.insert(_name, QSharedPointer<LIXmlWidgetBuilder>(_builder));
     };
 
-  add_builder(QStringLiteral("Frame"              ),  new LCXmlFrameBuilder());
-  add_builder(QStringLiteral("Button"             ),  new LCXmlButtonBuilder());
-  add_builder(QStringLiteral("Label"              ),  new LCXmlLabelBuilder());
-  add_builder(QStringLiteral("DataLabel"          ),  new LCXmlDataLabelBuilder());
-  add_builder(QStringLiteral("Table"              ),  new LCXmlTableWidgetBuilder());
-  add_builder(QStringLiteral("DataLineEdit"       ),  new LCXmlDataLineEditBuilder());
-  add_builder(QStringLiteral("DataComboBox"       ),  new LCXmlRemComboBoxBuilder());
+  add_builder(QStringLiteral("Frame"        ),  new LCXmlFrameBuilder());
+  add_builder(QStringLiteral("Button"       ),  new LCXmlButtonBuilder());
+  add_builder(QStringLiteral("Label"        ),  new LCXmlLabelBuilder());
+  add_builder(QStringLiteral("DataLabel"    ),  new LCXmlDataLabelBuilder());
+  add_builder(QStringLiteral("Table"        ),  new LCXmlTableWidgetBuilder());
+  add_builder(QStringLiteral("DataLineEdit" ),  new LCXmlDataLineEditBuilder());
+  add_builder(QStringLiteral("DataComboBox" ),  new LCXmlDataComboBoxBuilder());
 
-  /* add_builder(QStringLiteral("dataLineEdit"       ),  new LCXmlRemLineEditBuilder()); */
-  /* add_builder(QStringLiteral("dataComboBox"       ),  new LCXmlRemComboBoxBuilder()); */
   /* add_builder(QStringLiteral("dataComboLabel"     ),  new LCXmlRemComboLabelBuilder()); */
   /* add_builder(QStringLiteral("tabs"               ),  new LCXmlTabWidgetBuilder()); */
   /* add_builder(QStringLiteral("scrollArea"         ),  new LCXmlScrollAreaBuilder()); */
