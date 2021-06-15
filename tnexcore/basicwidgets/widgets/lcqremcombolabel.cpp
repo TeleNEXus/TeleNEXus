@@ -58,7 +58,7 @@ LCQRemComboLabel::LCQRemComboLabel(const QString& _dataName,
       {
         if(mFlagActive)
         {
-          if(_status != LERemoteDataStatus::DS_OK)
+          if(_status != LERemoteDataStatus::Valid)
           {
             if(L_OWNDATA->undefItem != nullptr)
             {

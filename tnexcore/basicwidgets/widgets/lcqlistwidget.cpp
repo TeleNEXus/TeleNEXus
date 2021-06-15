@@ -70,7 +70,7 @@ LCQListWidget::LCQListWidget(
 
       [this](QSharedPointer<QByteArray> _data, LERemoteDataStatus _dataStatus)
       {
-        if(_dataStatus != LERemoteDataStatus::DS_OK) return;
+        if(_dataStatus != LERemoteDataStatus::Valid) return;
 
         auto it = ld.mValueRow.find(*(_data.data()));
         if(it == ld.mValueRow.end())

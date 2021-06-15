@@ -135,7 +135,7 @@ LCKeyboard::LCKeyboard( const QString& _windowId,
   ld.streamReader = _streamSource->createReader(_streamName,
       [this](QSharedPointer<QByteArray> _data, LERemoteDataStatus _status)
       {
-        if(_status != LERemoteDataStatus::DS_OK) return;
+        if(_status != LERemoteDataStatus::Valid) return;
         QString instr = QString::fromUtf8(*_data);
         auto control_action_iterator = ld.controlActions.find(instr);
         if(control_action_iterator != ld.controlActions.end())

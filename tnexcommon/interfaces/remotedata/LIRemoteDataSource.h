@@ -26,10 +26,9 @@
 
 enum class LERemoteDataStatus
 {
-  DS_UNDEF, // Первичной инициализации статуса операции с данными 
-  // и при попытке чтения несуществующих данных.
-  DS_OK,    // Операция с данными корректна.
-  DS_WRONG  // Операция с данными ошибочна.
+  Undef, 
+  Valid,
+  Wrong 
 };
 
 class LIRemoteDataReader;
@@ -53,6 +52,7 @@ public:
   virtual QSharedPointer<LIRemoteDataWriter> createWriter(
       const QString& _dataName,
       LTWriteAction _writeAction = [](LERemoteDataStatus){}) = 0;
+
 };
 
 #endif // LIREMOTEDATASOURCE_H

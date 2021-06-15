@@ -196,7 +196,7 @@ void LCDataItemMap::readData(QSharedPointer<LCQLocalDataReader> _sp_reader)
   auto it = mDataMap.find(_sp_reader->getDataName());
   if(it ==  mDataMap.end()) 
   {
-    _sp_reader->notify(LERemoteDataStatus::DS_UNDEF);
+    _sp_reader->notify(LERemoteDataStatus::Undef);
     return;
   }
   it.value()->notify(_sp_reader);
@@ -208,13 +208,13 @@ void LCDataItemMap::writeData(
     const QByteArray& _data)
 {
   auto it = mDataMap.find(_sp_writer->getDataName());
-  LERemoteDataStatus ret_status = LERemoteDataStatus::DS_OK;
+  LERemoteDataStatus ret_status = LERemoteDataStatus::Valid;
   if(it ==  mDataMap.end())
   {
-    ret_status = LERemoteDataStatus::DS_WRONG;
+    ret_status = LERemoteDataStatus::Wrong;
   }else if(it.value()->setData(_data) <= 0)
   {
-    ret_status = LERemoteDataStatus::DS_WRONG;
+    ret_status = LERemoteDataStatus::Wrong;
   }
   _sp_writer->notify(ret_status);
 }
@@ -225,7 +225,7 @@ void LCDataItemMap::connectReader(QSharedPointer<LCQLocalDataReader> _sp_reader)
   auto it = mDataMap.find(_sp_reader->getDataName());
   if(it == mDataMap.end()) 
   {
-    _sp_reader->notify(LERemoteDataStatus::DS_UNDEF);
+    _sp_reader->notify(LERemoteDataStatus::Undef);
     return;
   }
   it.value()->connectReader(_sp_reader);

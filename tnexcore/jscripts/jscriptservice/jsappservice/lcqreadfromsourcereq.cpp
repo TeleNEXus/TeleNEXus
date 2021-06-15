@@ -53,7 +53,7 @@ void LCQReadFromSourceReq::CEventRead::handle(LCQReadFromSourceReq* _sender)
   _sender->mspDataReader = source->createReader( _sender->mDataId, 
       [_sender](QSharedPointer<QByteArray> _data, LERemoteDataStatus _status)
       {
-        if(_status == LERemoteDataStatus::DS_OK) 
+        if(_status == LERemoteDataStatus::Valid) 
         {
           _sender->mRetData = *_data.data();
         }

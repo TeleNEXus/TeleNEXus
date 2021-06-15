@@ -52,7 +52,7 @@ void LCQWriteToSource::CEventWrite::handle(LCQWriteToSource* _sender)
       _sender->mDataId, 
       [_sender](LERemoteDataStatus _status)
       {
-        if(_status == LERemoteDataStatus::DS_OK) 
+        if(_status == LERemoteDataStatus::Valid) 
         {
           _sender->mWriteDataSize = _sender->edWriteData.size();
         }
