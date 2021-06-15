@@ -110,7 +110,7 @@ void LCQLocalDataReader::disconnectFromSource()
 void LCQLocalDataReader::notify(const QByteArray& _data)
 {
   QCoreApplication::postEvent(this, 
-      new CQEventDataIsRead(_data, LERemoteDataStatus::DS_OK));
+      new CQEventDataIsRead(_data, LERemoteDataStatus::Valid));
 }
 
 //------------------------------------------------------------------------------

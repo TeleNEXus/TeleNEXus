@@ -185,7 +185,7 @@ bool LCQWidgetVisibleControl::build(const QDomElement& _element,
   //--------------------------------------------
   auto read_status_ctrl = [ctrl](LERemoteDataStatus _status)
   {
-    if(_status == LERemoteDataStatus::DS_OK) return true;
+    if(_status == LERemoteDataStatus::Valid) return true;
     switch(toLocalData(ctrl->mpLocal)->mUndefMode)
     {
     case CLocalData::EUndefMode::show:

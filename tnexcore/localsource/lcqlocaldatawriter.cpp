@@ -75,7 +75,7 @@ void LCQLocalDataWriter::writeRequest(const QByteArray& _data)
   auto sp = mwpDataSource.lock();
   if(sp.isNull())
   {
-    mListener(LERemoteDataStatus::DS_WRONG);
+    mListener(LERemoteDataStatus::Wrong);
   }
   else
   {
@@ -97,7 +97,7 @@ void LCQLocalDataWriter::customEvent(QEvent *_event)
     CQEventDataIsWrite *e = dynamic_cast<CQEventDataIsWrite*>(_event);
     if(e == nullptr)
     {
-      mListener(LERemoteDataStatus::DS_WRONG);
+      mListener(LERemoteDataStatus::Wrong);
     }
     else
     {

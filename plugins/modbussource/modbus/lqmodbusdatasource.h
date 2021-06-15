@@ -127,7 +127,7 @@ private:
 
       explicit CDataItem(quint16 _addr, quint16 _size) :  mAddr(_addr),
       mSize(_size),
-      mStatus(LERemoteDataStatus::DS_UNDEF)
+      mStatus(LERemoteDataStatus::Undef)
       {
         mpData = new quint16[_size];
       }
@@ -215,7 +215,7 @@ private:
 
       explicit CDataItem(quint16 _addr, quint16 _size) :  mAddr(_addr),
       mSize(_size),
-      mStatus(LERemoteDataStatus::DS_UNDEF)
+      mStatus(LERemoteDataStatus::Undef)
       {
         mpData = new quint8[_size];
       }

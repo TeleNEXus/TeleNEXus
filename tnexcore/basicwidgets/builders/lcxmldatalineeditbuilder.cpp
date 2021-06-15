@@ -78,7 +78,7 @@ protected:
         {
           if(mFlagUpdateOn)
           {
-            if(_status != LERemoteDataStatus::DS_OK)
+            if(_status != LERemoteDataStatus::Valid)
             {
               mpLineEdit->setText(str);
               mpLineEdit->setEnabled(false);

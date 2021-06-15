@@ -43,17 +43,17 @@ LCQRemComboBox::LCQRemComboBox(
       {
         switch(_status)
         {
-        case LERemoteDataStatus::DS_OK:
+        case LERemoteDataStatus::Valid:
           setCurrentIndex(findData( mFormatter->toString( *_data.data()))); 
           setEnabled(true);
           break;
 
-        case LERemoteDataStatus::DS_WRONG:
+        case LERemoteDataStatus::Wrong:
           setCurrentIndex(-1);
           setEnabled(true);
           break;
 
-        case LERemoteDataStatus::DS_UNDEF:
+        case LERemoteDataStatus::Undef:
           setCurrentIndex(-1);
           setEnabled(false);
         default:

@@ -78,7 +78,7 @@ void LQModbusDataWriter::writeRequest(const QByteArray& _data)
 
   if(sp.isNull())
   {
-    mWriteAction(LERemoteDataStatus::DS_WRONG);
+    mWriteAction(LERemoteDataStatus::Wrong);
   }
   else
   {
@@ -100,7 +100,7 @@ void LQModbusDataWriter::customEvent(QEvent *_event)
     CQEventDataIsWrite *e = dynamic_cast<CQEventDataIsWrite*>(_event);
     if(e == nullptr)
     {
-      mWriteAction(LERemoteDataStatus::DS_WRONG);
+      mWriteAction(LERemoteDataStatus::Wrong);
     }
     else
     {

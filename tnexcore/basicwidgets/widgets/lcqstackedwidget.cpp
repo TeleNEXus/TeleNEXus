@@ -56,7 +56,7 @@ LCQStackedWidget::LCQStackedWidget(
   ld.mDataReader = _source->createReader(_data,
       [this](QSharedPointer<QByteArray> _data, LERemoteDataStatus _dataStatus)
       {
-        if(_dataStatus != LERemoteDataStatus::DS_OK) return;
+        if(_dataStatus != LERemoteDataStatus::Valid) return;
         auto it = ld.mValueIndex.find(*_data);
         if(it != ld.mValueIndex.end())
         {
