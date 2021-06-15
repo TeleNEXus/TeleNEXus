@@ -66,11 +66,16 @@ LCQListWidget::LCQListWidget(
         });
   }
 
-  ld.mDataReader = _source->createReader(_data,
 
-      [this](QSharedPointer<QByteArray> _data, LERemoteDataStatus _dataStatus)
+  ld.mDataReader = _source->createReader(_data);
+
+  if(ld.mDataReader.isNull()) return; 
+
+  ld.mDataReader->setHandler(
+      [this](QSharedPointer<QByteArray> _data, 
+        LIRemoteDataReader::EReadStatus _dataStatus)
       {
-        if(_dataStatus != LERemoteDataStatus::Valid) return;
+        if(_dataStatus != LIRemoteDataReader::EReadStatus::Valid) return;
 
         auto it = ld.mValueRow.find(*(_data.data()));
         if(it == ld.mValueRow.end())
@@ -81,9 +86,7 @@ LCQListWidget::LCQListWidget(
         }
         setCurrentRow(it.value());
       });
-
-  if(!(ld.mDataReader.isNull())) ld.mDataReader->connectToSource();
-
+  ld.mDataReader->connectToSource();
 }
 
 LCQListWidget::~LCQListWidget()

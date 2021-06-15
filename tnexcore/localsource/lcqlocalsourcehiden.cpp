@@ -140,18 +140,16 @@ void LCQLocalSourceHiden::addStreamItem(const QString& _id)
 
 //------------------------------------------------------------------------------
 QSharedPointer<LCQLocalDataReader> LCQLocalSourceHiden::createReader(
-    const QString& _dataName, 
-    LTReadAction _readAction)
+    const QString& _dataName)
 {
-  return LCQLocalDataReader::create(_dataName, _readAction, mwpThis);
+  return LCQLocalDataReader::create(_dataName, mwpThis);
 }
 
 //------------------------------------------------------------------------------
 QSharedPointer<LCQLocalDataWriter> LCQLocalSourceHiden::createWriter(
-    const QString& _dataName, 
-    LTWriteAction _writeAction)
+    const QString& _dataName)
 {
-  return LCQLocalDataWriter::create(_dataName, _writeAction, mwpThis);
+  return LCQLocalDataWriter::create(_dataName, mwpThis);
 }
 
 //------------------------------------------------------------------------------

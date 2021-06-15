@@ -167,14 +167,14 @@ void LQModbusDataSource::CControllerRegistersBase::deleteReadDataItem(
 void LQModbusDataSource::CControllerRegistersBase::read(
     quint16 _addr, quint16 _size, QSharedPointer<LQModbusDataReader> _reader)
 {
-  LERemoteDataStatus status = LERemoteDataStatus::Wrong;
+  EReadStatus status = EReadStatus::Wrong;
 
   if(!mspMaster.isNull())
   {
     if(readRegs(mspMaster.data(), _addr, _size, mRegBuff).status ==
         LQModbusMasterBase::SReply::EStatus::OK)
     {
-      status = LERemoteDataStatus::Valid;
+      status = EReadStatus::Valid;
     }
   }
   _reader->notifyListener(QByteArray( (char*)mRegBuff, _size * 2), status);
@@ -187,7 +187,7 @@ void LQModbusDataSource::CControllerRegistersBase::write(
     const QByteArray& _data,
     QSharedPointer<LQModbusDataWriter> _writer)
 {
-  LERemoteDataStatus status = LERemoteDataStatus::Wrong;
+  EWriteStatus status = EWriteStatus::Failure;
 
   if(_data.size() % 2 == 0)
   {
@@ -202,7 +202,7 @@ void LQModbusDataSource::CControllerRegistersBase::write(
               length,
               ((quint16*)_data.constData())).status ==
             LQModbusMasterBase::SReply::EStatus::OK)
-          status = LERemoteDataStatus::Valid;
+          status = EWriteStatus::Success;
       }
     }
   }
@@ -220,14 +220,14 @@ void LQModbusDataSource::CControllerRegistersBase::update()
       it != mReadDataList.end();
       it++)
   {
-    (*it)->mStatus = LERemoteDataStatus::Wrong;
+    (*it)->mStatus = EReadStatus::Wrong;
     if(readRegs(
           mspMaster.data(),
           (*it)->mAddr,
           (*it)->mSize,
           (*it)->mpData).status == LQModbusMasterBase::SReply::EStatus::OK)
     {
-      (*it)->mStatus = LERemoteDataStatus::Valid;
+      (*it)->mStatus = EReadStatus::Valid;
     }
     (*it)->notifyReaders();
     if((*it)->mReadersList.isEmpty()) mReadDataList.erase(it);
@@ -353,14 +353,14 @@ void LQModbusDataSource::CControllerBitsBase::deleteReadDataItem(
 void LQModbusDataSource::CControllerBitsBase::read(
     quint16 _addr, quint16 _size, QSharedPointer<LQModbusDataReader> _reader)
 {
-  LERemoteDataStatus status = LERemoteDataStatus::Wrong;
+  EReadStatus status = EReadStatus::Wrong;
 
   if(!mspMaster.isNull())
   {
     if(readBits(mspMaster.data(), _addr, _size, mBitsBuff).status ==
         LQModbusMasterBase::SReply::EStatus::OK)
     {
-      status = LERemoteDataStatus::Valid;
+      status = EReadStatus::Valid;
     }
   }
   _reader->notifyListener(QByteArray((char*)mBitsBuff, _size), status);
@@ -373,7 +373,7 @@ void LQModbusDataSource::CControllerBitsBase::write(
     const QByteArray& _data,
     QSharedPointer<LQModbusDataWriter> _writer)
 {
-  LERemoteDataStatus status = LERemoteDataStatus::Wrong;
+  EWriteStatus status = EWriteStatus::Failure;
 
   if(_data.size() == _size)
   {
@@ -385,7 +385,7 @@ void LQModbusDataSource::CControllerBitsBase::write(
             _size,
             ((quint8*)_data.constData())).status ==
           LQModbusMasterBase::SReply::EStatus::OK)
-        status = LERemoteDataStatus::Valid;
+        status = EWriteStatus::Success;
     }
   }
   _writer->notifyListener(status);
@@ -400,7 +400,7 @@ void LQModbusDataSource::CControllerBitsBase::update()
     //для всех слушателей при нескольких таймаутах.
     for(auto it = mReadDataList.begin(); it != mReadDataList.end(); it++)
     {
-      (*it)->mStatus = LERemoteDataStatus::Wrong;
+      (*it)->mStatus = EReadStatus::Wrong;
       if(readBits(
             mspMaster.data(),
             (*it)->mAddr,
@@ -408,7 +408,7 @@ void LQModbusDataSource::CControllerBitsBase::update()
             (*it)->mpData).status ==
           LQModbusMasterBase::SReply::EStatus::OK)
       {
-        (*it)->mStatus = LERemoteDataStatus::Valid;
+        (*it)->mStatus = EReadStatus::Valid;
       }
       (*it)->notifyReaders();
       if((*it)->mReadersList.isEmpty()) mReadDataList.erase(it);
@@ -570,7 +570,7 @@ void LQModbusDataSource::CDataMapItemInputRegs::write(
 {
   Q_UNUSED(_data);
   Q_UNUSED(_writer);
-  _writer->notifyListener(LERemoteDataStatus::Wrong);
+  _writer->notifyListener(EWriteStatus::Failure);
 }
 
 //==============================================================================CDataMapItemBitsBase
@@ -659,7 +659,7 @@ void LQModbusDataSource::CDataMapItemDiscreteInputs::write(
 {
   Q_UNUSED(_data);
   Q_UNUSED(_writer);
-  _writer->notifyListener(LERemoteDataStatus::Wrong);
+  _writer->notifyListener(EWriteStatus::Failure);
 }
 
 //==============================================================================CDataMap
@@ -753,7 +753,7 @@ void LQModbusDataSource::CDataMap::write(
   auto it = mMapItems.find(_writer->getDataName());
   if(it == mMapItems.end())
   {
-    _writer->notifyListener(LERemoteDataStatus::Wrong);
+    _writer->notifyListener(EWriteStatus::Failure);
   }
   else
   {
@@ -768,7 +768,7 @@ void LQModbusDataSource::CDataMap::read(
   auto it = mMapItems.find(_reader->getDataName());
   if(it == mMapItems.end())
   {
-    _reader->notifyListener(LERemoteDataStatus::Undef);
+    _reader->notifyListener(EReadStatus::Undef);
   }
   else
   {
@@ -923,17 +923,15 @@ void LQModbusDataSource::customEvent(QEvent* _event)
 
 //------------------------------------------------------------------------------
 QSharedPointer<LIRemoteDataReader> LQModbusDataSource::createReader(
-    const QString& _dataName,
-    LTReadAction _readAction)
+    const QString& _dataName)
 {
-  return LQModbusDataReader::create(_dataName, _readAction, mwpThis);
+  return LQModbusDataReader::create(_dataName, mwpThis);
 }
 
 //------------------------------------------------------------------------------
 QSharedPointer<LIRemoteDataWriter> LQModbusDataSource::createWriter(
-    const QString& _dataName,
-    LTWriteAction _writeAction)
+    const QString& _dataName)
 {
-  return LQModbusDataWriter::create(_dataName, _writeAction, mwpThis);
+  return LQModbusDataWriter::create(_dataName, mwpThis);
 }
 

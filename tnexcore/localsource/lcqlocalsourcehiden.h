@@ -33,10 +33,7 @@ class LCQLocalDataWriter;
 
 class LCQLocalSourceHiden final : public QObject 
 {
-
 private:
-  using LTReadAction = LIRemoteDataSource::LTReadAction;
-  using LTWriteAction = LIRemoteDataSource::LTWriteAction;
   //----------------------------------------------------------------------------CEventBase
   class CEventBase : public QEvent
   {
@@ -112,13 +109,10 @@ public:
 //TODO: Добавление сущности потока данных.
 
   QSharedPointer<LCQLocalDataReader> createReader(
-      const QString& _dataName, 
-      LTReadAction _readAction);
-
+      const QString& _dataName);
 
   QSharedPointer<LCQLocalDataWriter> createWriter(
-      const QString& _dataName, 
-      LTWriteAction _writeListener);
+      const QString& _dataName);
 
 private:
   int counter = 0;

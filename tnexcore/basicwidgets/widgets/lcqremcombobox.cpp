@@ -26,6 +26,17 @@
 #include <QKeyEvent>
 #include <QDebug>
 
+//==============================================================================
+class CReaderStub : public LIRemoteDataReader
+{
+public:
+  CReaderStub(){}
+  virtual void readRequest()override {}
+  virtual void connectToSource()override {}
+  virtual void disconnectFromSource()override {}
+  virtual void setHandler(THandler)override {}
+};
+
 //------------------------------------------------------------------------------
 LCQRemComboBox::LCQRemComboBox( 
     const QString&                       _dataNameRead, 
@@ -38,39 +49,56 @@ LCQRemComboBox::LCQRemComboBox(
   mFlagPopupOn(false)
 {
 
-  mDataReader = _dataSource->createReader(_dataNameRead, 
-      [this](QSharedPointer<QByteArray> _data, LERemoteDataStatus _status)
+  auto read_handler = 
+    [this](QSharedPointer<QByteArray> _data, LIRemoteDataReader::EReadStatus _status)
+    {
+      using EReadStatus = LIRemoteDataReader::EReadStatus;
+      switch(_status)
       {
-        switch(_status)
-        {
-        case LERemoteDataStatus::Valid:
-          setCurrentIndex(findData( mFormatter->toString( *_data.data()))); 
-          setEnabled(true);
-          break;
+      case EReadStatus::Valid:
+        setCurrentIndex(findData( mFormatter->toString( *_data.data()))); 
+        setEnabled(true);
+        break;
 
-        case LERemoteDataStatus::Wrong:
-          setCurrentIndex(-1);
-          setEnabled(true);
-          break;
+      case EReadStatus::Wrong:
+        setCurrentIndex(-1);
+        setEnabled(true);
+        break;
 
-        case LERemoteDataStatus::Undef:
-          setCurrentIndex(-1);
-          setEnabled(false);
-        default:
-          break;
-        }
-      });
+      case EReadStatus::Undef:
+        setCurrentIndex(-1);
+        setEnabled(false);
+      default:
+        break;
+      }
+    };
+
+  mDataReader = _dataSource->createReader(_dataNameRead);
+
+  if(!mDataReader.isNull())
+  {
+    mDataReader->setHandler(read_handler);
+  }
+  else
+  {
+    mDataReader = QSharedPointer<LIRemoteDataReader>(new CReaderStub);
+  }
+
 
   mDataWriter = _dataSource->createWriter(_dataNameWrite);
 
-  connect(this, static_cast <void(LCQRemComboBox::*)(int)> 
-      (&LCQRemComboBox::activated),
-      [&](int index)
-      {
-        Q_UNUSED(index);
-        mDataWriter->writeRequest(
-            mFormatter->toBytes(currentData().toString()));
-      });
+  if((!mDataWriter.isNull())&&(!mFormatter.isNull())) 
+  {
+
+    connect(this, static_cast <void(LCQRemComboBox::*)(int)> 
+        (&LCQRemComboBox::activated),
+        [this](int index)
+        {
+          Q_UNUSED(index);
+          mDataWriter->writeRequest(
+              mFormatter->toBytes(currentData().toString()));
+        });
+  }
 
   setEnabled(false);
 }

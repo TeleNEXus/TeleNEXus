@@ -40,6 +40,7 @@ LCQWriteToSource::CEventWrite::CEventWrite()
 //------------------------------------------------------------------------------
 void LCQWriteToSource::CEventWrite::handle(LCQWriteToSource* _sender)
 {
+  using EWriteStatus = LIRemoteDataWriter::EWriteStatus;
   auto source = 
     CApplicationInterface::getInstance().getDataSource(_sender->mSourceId);
   if(source.isNull()) 
@@ -48,18 +49,23 @@ void LCQWriteToSource::CEventWrite::handle(LCQWriteToSource* _sender)
     return;
   }
 
-  _sender->mspDataWriter = source->createWriter( 
-      _sender->mDataId, 
-      [_sender](LERemoteDataStatus _status)
+  auto write_handler = 
+    [_sender](EWriteStatus _status)
+    {
+      if(_status == EWriteStatus::Success) 
       {
-        if(_status == LERemoteDataStatus::Valid) 
-        {
-          _sender->mWriteDataSize = _sender->edWriteData.size();
-        }
-        _sender->mWaitCond.wakeOne();
-      });
+        _sender->mWriteDataSize = _sender->edWriteData.size();
+      }
+      _sender->mWaitCond.wakeOne();
+    };
 
-  _sender->mspDataWriter->writeRequest(_sender->edWriteData);
+  _sender->mspDataWriter = source->createWriter(_sender->mDataId);
+
+  if(!_sender->mspDataWriter.isNull())
+  {
+    _sender->mspDataWriter->setHandler(write_handler);
+    _sender->mspDataWriter->writeRequest(_sender->edWriteData);
+  }
 }
 
 //==============================================================================requestDeleter

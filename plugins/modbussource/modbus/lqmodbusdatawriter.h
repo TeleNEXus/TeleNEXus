@@ -32,19 +32,18 @@ class LQModbusDataWriter : public QObject, public LIRemoteDataWriter
   Q_OBJECT;
 
 private:
-  using LTWriteAction = LIRemoteDataSource::LTWriteAction;
   //----------------------------------------------------------------------------CQEventDataIsWrite
   class CQEventDataIsWrite : public QEvent
   {
     __LQ_EXTENDED_QEVENT_DECLARATION
   public:
-      const LERemoteDataStatus mStatus;
-      explicit CQEventDataIsWrite(LERemoteDataStatus _status);
+      const EWriteStatus mStatus;
+      explicit CQEventDataIsWrite(EWriteStatus _status);
   };
 
   QString mDataName;
 
-  LTWriteAction mWriteAction;
+  THandler mHandler;
   QWeakPointer<LQModbusDataSource> mwpDataSource;
   QWeakPointer<LQModbusDataWriter> mwpThis;
 
@@ -53,7 +52,6 @@ private:
 
   explicit LQModbusDataWriter(
       const QString& _dataName,
-      LTWriteAction _writeAction,
       QSharedPointer<LQModbusDataSource> _dataSource);
 public:
 
@@ -61,12 +59,12 @@ public:
 
   static QSharedPointer<LQModbusDataWriter> create(
       const QString& _dataName,
-      LTWriteAction _writeAction,
       QSharedPointer<LQModbusDataSource> _dataSource);
 
   virtual void writeRequest(const QByteArray& _data) override;
+  virtual void setHandler(THandler _handler) override { mHandler = _handler; }
   QString getDataName(){ return mDataName; }
-  void notifyListener(LERemoteDataStatus _status);
+  void notifyListener(EWriteStatus _status);
 
 private:
   virtual void customEvent(QEvent *_event) override;

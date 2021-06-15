@@ -53,10 +53,11 @@ LCQStackedWidget::LCQStackedWidget(
   /* QStackedWidget::addWidget(new QWidget); */
   ld.mFormatter = _formatter;
 
-  ld.mDataReader = _source->createReader(_data,
-      [this](QSharedPointer<QByteArray> _data, LERemoteDataStatus _dataStatus)
+  auto read_handler =
+      [this](QSharedPointer<QByteArray> _data, 
+          LIRemoteDataReader::EReadStatus _dataStatus)
       {
-        if(_dataStatus != LERemoteDataStatus::Valid) return;
+        if(_dataStatus != LIRemoteDataReader::EReadStatus::Valid) return;
         auto it = ld.mValueIndex.find(*_data);
         if(it != ld.mValueIndex.end())
         {
@@ -67,8 +68,16 @@ LCQStackedWidget::LCQStackedWidget(
         /*   setCurrentIndex(0); */
         /*   qDebug() << "LCQStackedWidget undef widget"; */
         /* } */
-      });
-  ld.mDataReader->connectToSource();
+      };
+
+  ld.mDataReader = _source->createReader(_data);
+
+  if((!ld.mDataReader.isNull()) && (!ld.mFormatter.isNull()))
+  {
+    ld.mDataReader->setHandler(read_handler);
+    ld.mDataReader->connectToSource();
+  }
+
 }
 
 LCQStackedWidget::~LCQStackedWidget()

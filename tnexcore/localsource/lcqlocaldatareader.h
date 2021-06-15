@@ -29,9 +29,6 @@
 class LCQLocalDataReader final: public QObject, public LIRemoteDataReader
 {
   Q_OBJECT;
-private:
-  using LTReadAction = LIRemoteDataSource::LTReadAction;
-
 public:
   //----------------------------------------------------------------------------CQEventDataRead
   class CQEventDataIsRead : public QEvent
@@ -40,19 +37,19 @@ public:
 
   public:
       QSharedPointer<QByteArray> mspData;
-      LERemoteDataStatus mStatus;
+      EReadStatus mStatus;
 
       explicit CQEventDataIsRead(
           const QByteArray& _data,
-          LERemoteDataStatus _status);
+          EReadStatus _status);
 
-      explicit CQEventDataIsRead(LERemoteDataStatus _status);
+      explicit CQEventDataIsRead(EReadStatus _status);
   };
 
 private:
 
-  QString mDataName;
-  LTReadAction mReadAction;
+  QString  mDataName;
+  THandler mHandler;
   QWeakPointer<LCQLocalSourceHiden> mwpDataSource;
   QWeakPointer<LCQLocalDataReader> mwpThis;
 
@@ -60,7 +57,6 @@ private:
 
   LCQLocalDataReader(
       const QString& _dataName, 
-      LTReadAction _readAction,
       QSharedPointer<LCQLocalSourceHiden> _dataSource);
 
 public:
@@ -69,17 +65,17 @@ public:
   static QSharedPointer<LCQLocalDataReader> 
     create(
         const QString& _dataName, 
-        LTReadAction _readAction,
         QSharedPointer<LCQLocalSourceHiden> _dataSource);
 
   virtual void readRequest() override;
   virtual void connectToSource() override;
   virtual void disconnectFromSource() override;
+  virtual void setHandler(THandler _handler) override { mHandler = _handler; }
 
 public:
 
   void notify(const QByteArray& _data);
-  void notify(LERemoteDataStatus _status);
+  void notify(EReadStatus _status);
   QString getDataName(){ return mDataName; }
 
 private:

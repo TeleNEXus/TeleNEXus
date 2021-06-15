@@ -30,6 +30,8 @@
 #include <QDebug>
 #include <QEvent>
 
+using EReadStatus = LIRemoteDataReader::EReadStatus;
+
 static const struct
 {
   QString visibleControl = "visibleControl";
@@ -81,7 +83,7 @@ public:
   QSharedPointer<LIRemoteDataReader>  mDataReader;
   QSharedPointer<LIDataFormatter>     mFormatter;
   QByteArray mCompareData;
-  std::function<void(QSharedPointer<QByteArray>, LERemoteDataStatus)> mfAction;
+  std::function<void(QSharedPointer<QByteArray>, EReadStatus)> mfAction;
 
   CLocalData(){}
 
@@ -183,9 +185,9 @@ bool LCQWidgetVisibleControl::build(const QDomElement& _element,
   }
 
   //--------------------------------------------
-  auto read_status_ctrl = [ctrl](LERemoteDataStatus _status)
+  auto read_status_ctrl = [ctrl](EReadStatus _status)
   {
-    if(_status == LERemoteDataStatus::Valid) return true;
+    if(_status == EReadStatus::Valid) return true;
     switch(toLocalData(ctrl->mpLocal)->mUndefMode)
     {
     case CLocalData::EUndefMode::show:
@@ -203,7 +205,7 @@ bool LCQWidgetVisibleControl::build(const QDomElement& _element,
   //--------------------------------------------action_show
   auto action_show = [ctrl, read_status_ctrl](
       QSharedPointer<QByteArray> _data,
-      LERemoteDataStatus _status)
+      EReadStatus _status)
   {
 
     if(!read_status_ctrl(_status)) return;
@@ -223,7 +225,7 @@ bool LCQWidgetVisibleControl::build(const QDomElement& _element,
   //--------------------------------------------action_hide
   auto action_hide = [ctrl, read_status_ctrl](
       QSharedPointer<QByteArray> _data,
-      LERemoteDataStatus _status)
+      EReadStatus _status)
   {
 
     if(!read_status_ctrl(_status)) return;
@@ -251,17 +253,20 @@ bool LCQWidgetVisibleControl::build(const QDomElement& _element,
   //--------------------------------------------action_read_data
   auto action_read_data = [ctrl](
       QSharedPointer<QByteArray> _data,
-      LERemoteDataStatus _status)
+      EReadStatus _status)
   {
     toLocalData(ctrl->mpLocal)->mfAction(_data, _status);
   };
 
+  toLocalData(ctrl->mpLocal)->mDataReader = source->createReader(attr_data);
 
-  toLocalData(ctrl->mpLocal)->mDataReader =
-    source->createReader(attr_data, action_read_data);
 
-  toLocalData(ctrl->mpLocal)->mFormatter = format;
-  toLocalData(ctrl->mpLocal)->mDataReader->connectToSource();
+  if((!toLocalData(ctrl->mpLocal)->mDataReader.isNull())&&(!format.isNull()))
+  {
+    toLocalData(ctrl->mpLocal)->mDataReader->setHandler(action_read_data);
+    toLocalData(ctrl->mpLocal)->mFormatter = format;
+    toLocalData(ctrl->mpLocal)->mDataReader->connectToSource();
+  }
 
   return ret_ok();
 }

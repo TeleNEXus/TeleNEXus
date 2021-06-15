@@ -40,6 +40,19 @@ using LTAction = LCKeyboard::LTAction;
 using TRemoteReader = QSharedPointer<LIRemoteDataReader>;
 using TRemoteWriter = QSharedPointer<LIRemoteDataWriter>;
 
+using EReadStatus = LIRemoteDataReader::EReadStatus;
+
+//==============================================================================CReaderStub
+class CReaderStub : public LIRemoteDataReader
+{
+public:
+  CReaderStub(){}
+  virtual void readRequest()override {}
+  virtual void connectToSource()override {}
+  virtual void disconnectFromSource()override {}
+  virtual void setHandler(THandler)override {}
+};
+
 class LCKeyboardListener;
 //==============================================================================SLocalData
 struct SLocalData
@@ -132,10 +145,11 @@ LCKeyboard::LCKeyboard( const QString& _windowId,
         });
   //--------------------------------------------------
 
-  ld.streamReader = _streamSource->createReader(_streamName,
-      [this](QSharedPointer<QByteArray> _data, LERemoteDataStatus _status)
+
+  auto stream_read_handler = 
+      [this](QSharedPointer<QByteArray> _data, EReadStatus _status)
       {
-        if(_status != LERemoteDataStatus::Valid) return;
+        if(_status != EReadStatus::Valid) return;
         QString instr = QString::fromUtf8(*_data);
         auto control_action_iterator = ld.controlActions.find(instr);
         if(control_action_iterator != ld.controlActions.end())
@@ -171,9 +185,18 @@ LCKeyboard::LCKeyboard( const QString& _windowId,
 
         ld.dataWriter->writeRequest(ld.currentData.toUtf8());
         listener->mfActionChange(ld.currentData);
-      });
+      };
 
-  ld.dataWriter = _dataSource->createWriter(_dataName);
+  ld.streamReader = _streamSource->createReader(_streamName);
+  if(!ld.streamReader.isNull())
+  {
+    ld.streamReader->setHandler(stream_read_handler);
+    ld.dataWriter = _dataSource->createWriter(_dataName);
+  }
+  else
+  {
+    ld.streamReader = QSharedPointer<LIRemoteDataReader>(new CReaderStub);
+  }
 }
 
 LCKeyboard::~LCKeyboard()

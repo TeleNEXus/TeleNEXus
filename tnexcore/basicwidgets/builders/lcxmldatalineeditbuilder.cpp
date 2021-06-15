@@ -36,6 +36,17 @@
 #include <qnamespace.h>
 
 //==============================================================================
+class CReaderStub : public LIRemoteDataReader
+{
+public:
+  CReaderStub(){}
+  virtual void readRequest()override {}
+  virtual void connectToSource()override {}
+  virtual void disconnectFromSource()override {}
+  virtual void setHandler(THandler)override {}
+};
+
+//==============================================================================
 class CQControlBase : public QObject
 {
 protected:
@@ -73,23 +84,33 @@ protected:
     mpLineEdit->setValidator(_dataWriteFormatter->validator());
     mpLineEdit->setEnabled(false);
 
-    mDataReader = _dataReadSource->createReader(_dataReadName,
-        [this, str](QSharedPointer<QByteArray> _data, LERemoteDataStatus _status)
-        {
-          if(mFlagUpdateOn)
-          {
-            if(_status != LERemoteDataStatus::Valid)
-            {
-              mpLineEdit->setText(str);
-              mpLineEdit->setEnabled(false);
-              return;
-            }
-            mpLineEdit->setEnabled(true);
-            mpLineEdit->setText(mDataReadFormatter.data()->toString(*_data));
-          }
-        });
+    mDataReader = _dataReadSource->createReader(_dataReadName);
 
     mDataWriter = _dataWriteSource->createWriter(_dataWriteName);
+    if(mDataReader.isNull())
+    {
+      mDataReader = QSharedPointer<LIRemoteDataReader>(new CReaderStub);
+    }
+    else
+    {
+      mDataReader->setHandler(
+          [this, str](QSharedPointer<QByteArray> _data, 
+            LIRemoteDataReader::EReadStatus _status)
+          {
+            if(mFlagUpdateOn)
+            {
+              if(_status != LIRemoteDataReader::EReadStatus::Valid)
+              {
+                mpLineEdit->setText(str);
+                mpLineEdit->setEnabled(false);
+                return;
+              }
+              mpLineEdit->setEnabled(true);
+              mpLineEdit->setText(mDataReadFormatter.data()->toString(*_data));
+            }
+          }
+          );
+    }
 
 
     //init events map
@@ -124,7 +145,7 @@ protected:
           case Qt::Key::Key_Enter:
           case Qt::Key::Key_Return:
             writeRequest(mpLineEdit->text());
-            readRequest();
+            mDataReader->readRequest();
             mFlagUpdateOn = true;
             break;
 
@@ -155,14 +176,13 @@ protected:
           Q_UNUSED(_obj);
           Q_UNUSED(_event);
           mFlagUpdateOn = true;
-          readRequest();
+          mDataReader->readRequest();
           return false;
         });
   }
 
   void  setActive(bool _flag)
   {
-    if(mDataReader.isNull()) return;
     if(_flag)
     {
       mDataReader->connectToSource();
@@ -176,11 +196,6 @@ protected:
   }
 
 protected:
-
-  void readRequest()
-  {
-    if(!mDataReader.isNull()) mDataReader->readRequest();
-  }
 
   void writeRequest(const QString _text)
   {

@@ -31,23 +31,22 @@ class LQModbusDataSource;
 class LQModbusDataReader : public QObject, public LIRemoteDataReader
 {
   Q_OBJECT;
-private:
-  using LTReadAction = LIRemoteDataSource::LTReadAction;
 
+private:
   //----------------------------------------------------------------------------CQEventDataRead
   class CQEventDataIsRead : public QEvent
   {
     __LQ_EXTENDED_QEVENT_DECLARATION
   public:
       QSharedPointer<QByteArray> mData;
-      LERemoteDataStatus mStatus;
+      EReadStatus mStatus;
       explicit CQEventDataIsRead(const QByteArray& _data, 
-          LERemoteDataStatus _status);
-      explicit CQEventDataIsRead(LERemoteDataStatus _status);
+          EReadStatus _status);
+      explicit CQEventDataIsRead(EReadStatus _status);
   };
 
   QString mDataName;
-  LTReadAction mReadAction;
+  THandler mHandler;
   QWeakPointer<LQModbusDataSource> mwpDataSource;
   QWeakPointer<LQModbusDataReader> mwpThis;
 
@@ -56,25 +55,23 @@ private:
 
   explicit LQModbusDataReader(  
       const QString& _dataName,
-      LTReadAction _readAction, 
       QWeakPointer<LQModbusDataSource> _dataSource);
 
 public:
   virtual ~LQModbusDataReader();
 
   static QSharedPointer<LQModbusDataReader> 
-    create(
-        const QString& _dataName, 
-        LTReadAction _readAction,
+    create( const QString& _dataName, 
         QWeakPointer<LQModbusDataSource> _dataSource);
 
   virtual void readRequest() override;
   virtual void connectToSource() override;
   virtual void disconnectFromSource() override;
+  virtual void setHandler(THandler _handler) override { mHandler = _handler; }
 
-  void notifyListener(const QByteArray& _data, LERemoteDataStatus _status);
-  void notifyListener(LERemoteDataStatus _status);
-  QString getDataName(){ return mDataName; }
+  void notifyListener(const QByteArray& _data, EReadStatus _status);
+  void notifyListener(EReadStatus _status);
+  QString getDataName(){return mDataName;}
 
 private:
   virtual void customEvent(QEvent* _event) override;
