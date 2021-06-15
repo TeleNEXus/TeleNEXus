@@ -63,6 +63,7 @@ QSharedPointer<LCQLocalDataWriter> LCQLocalDataWriter::create(
         new LCQLocalDataWriter(_dataName, _dataSource), 
         pointerDeleter);
   sp_writer->mwpThis = sp_writer;
+  sp_writer->setHandler([](EWriteStatus){});
   return sp_writer;
 }
 
