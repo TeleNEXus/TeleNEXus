@@ -18,17 +18,17 @@
  * You should have received a copy of the GNU General Public License
  * along with TeleNEXus.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef LCXMLREMCOMBOBOXBUILDER_H
-#define LCXMLREMCOMBOBOXBUILDER_H
+#ifndef LCXMLDATACOMBOBOXBUILDER_H
+#define LCXMLDATACOMBOBOXBUILDER_H
 
 #include "lcxmlbuilderbase.h"
 
-class LCXmlRemComboBoxBuilder: public LCXmlBuilderBase 
+class LCXmlDataComboBoxBuilder: public LCXmlBuilderBase 
 {
 
 public:
-    LCXmlRemComboBoxBuilder();
-    virtual ~LCXmlRemComboBoxBuilder();
+    LCXmlDataComboBoxBuilder();
+    virtual ~LCXmlDataComboBoxBuilder();
 
 protected:
     virtual QWidget* buildLocal(
@@ -36,4 +36,4 @@ protected:
         const LIApplication& _app) override final;
 };
 
-#endif // LCXMLREMCOMBOBOXBUILDER_H
+#endif // LCXMLDATACOMBOBOXBUILDER_H

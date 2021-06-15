@@ -42,18 +42,18 @@
     position="550;150"
     />
 
-  <WINDOW 
-    file="testdatalineedit/testdatalineedit1.xml" 
-    id="testdatalineedit1" 
-    visible="true"
-    title="Test Data Line Edit" 
-    showMode="normal"
-    modality="false"
-    flags="" 
-    size="300;300"
-    screen="0"
-    position="550;150"
-    />
+  <!-- <WINDOW --> 
+  <!--   file="testdatalineedit/testdatalineedit1.xml" --> 
+  <!--   id="testdatalineedit1" --> 
+  <!--   visible="true" -->
+  <!--   title="Test Data Line Edit" --> 
+  <!--   showMode="normal" -->
+  <!--   modality="false" -->
+  <!--   flags="" --> 
+  <!--   size="300;300" -->
+  <!--   screen="0" -->
+  <!--   position="550;150" -->
+  <!--   /> -->
 
   <!-- <WINDOW --> 
   <!--   file="testtable/testtable.xml" --> 
@@ -81,17 +81,17 @@
   <!--   position="400;300" -->
   <!--   /> -->
 
-  <!-- <WINDOW --> 
-  <!--   file="testdatalabels/testdatalabels1.xml" --> 
-  <!--   id="testdatalabel1" --> 
-  <!--   visible="false" -->
-  <!--   title="Test Data Labels 1" --> 
-  <!--   showMode="normal" -->
-  <!--   modality="false" -->
-  <!--   flags="" --> 
-  <!--   size="300;300" -->
-  <!--   position="0;0" -->
-  <!--   /> -->
+  <WINDOW 
+    file="testdatalabels/testdatalabels1.xml" 
+    id="testdatalabel1" 
+    visible="true"
+    title="Test Data Labels 1" 
+    showMode="normal"
+    modality="false"
+    flags="" 
+    size="300;300"
+    position="0;0"
+    />
 
   <!-- <WINDOW --> 
   <!--   file="testdatalabels/testdatalabels2.xml" --> 
