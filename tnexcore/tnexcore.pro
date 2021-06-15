@@ -67,6 +67,7 @@ basicwidgets/builders/lcxmlbuttonbuilder.cpp \
 basicwidgets/builders/lcxmldatalabelbuilder.cpp \
 basicwidgets/builders/lcxmltablewidgetbuilder.cpp \
 basicwidgets/builders/lcxmldatalineeditbuilder.cpp \
+basicwidgets/builders/lcxmlremcomboboxbuilder.cpp \
 basicwidgets/basicwidgetbuilders.cpp \
 dataformatters/lcformatterbase.cpp \
 dataformatters/lcformatterbitfield.cpp \
@@ -111,7 +112,6 @@ window/lcwindow.cpp \
 applicationinterface.cpp \
 main.cpp \
 
-# basicwidgets/builders/lcxmlremcomboboxbuilder.cpp \
 # basicwidgets/builders/lcxmlremcombolabelbuilder.cpp \
 # basicwidgets/builders/lcxmltabwidgetbuilder.cpp \
 # basicwidgets/builders/lcxmlscrollareabuilder.cpp \

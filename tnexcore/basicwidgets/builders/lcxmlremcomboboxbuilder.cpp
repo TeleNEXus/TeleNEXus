@@ -20,7 +20,6 @@
  */
 #include "lcxmlremcomboboxbuilder.h"
 #include "widgets/lcqremcombobox.h"
-#include "widgetbuilderscommon.h"
 #include "LIApplication.h"
 #include "LIWindow.h"
 
@@ -44,19 +43,19 @@ LCXmlRemComboBoxBuilder::~LCXmlRemComboBoxBuilder()
 //------------------------------------------------------------------------------
 const struct
 {
-  QString dataread    = "read";
-  QString datawrite   = "write";
-  /* QString source      = "source"; */
-  /* QString format      = "format"; */
-  /* QString text        = "text"; */
+  QString read        = "read";
+  QString write       = "write";
+  QString source      = "source";
+  QString format      = "format";
+  QString text        = "text";
   QString value       = "value";
-} __attrNames;
+} __slAttributes;
 
 //------------------------------------------------------------------------------
 const struct
 {
   QString item    = "item";
-} __elementNames;
+} __slTags;
 
 //------------------------------------------------------------------------------buildCombobox
 static void buildCombobox(   const QDomElement& _element, 
@@ -65,15 +64,13 @@ static void buildCombobox(   const QDomElement& _element,
 
 //------------------------------------------------------------------------------build
 QWidget* LCXmlRemComboBoxBuilder::buildLocal(
-      QSharedPointer<SBuildData> _buildData)
+        const QDomElement& _element, 
+        const LIApplication& _app)
 {
-  const QDomElement& element = _buildData->element;
-  const LIApplication& app = _buildData->application;
-
   QWidget *ret = nullptr;
   QString dataread;
   QString datawrite;
-  QString attr = element.attribute(LCBuildersCommon::mAttributes.source);
+  QString attr = _element.attribute(__slAttributes.source);
   QSharedPointer<LIRemoteDataSource> source;
   QSharedPointer<LIDataFormatter> format;
 
@@ -82,29 +79,29 @@ QWidget* LCXmlRemComboBoxBuilder::buildLocal(
     goto LABEL_WRONG_EXIT;
   }
 
-  source = app.getDataSource(attr);
+  source = _app.getDataSource(attr);
 
   if(source.isNull())
   {
     goto LABEL_WRONG_EXIT;
   }
 
-  dataread = element.attribute(__attrNames.dataread);
+  dataread = _element.attribute(__slAttributes.read);
 
   if(dataread.isNull())
   {
     goto LABEL_WRONG_EXIT;
   }
 
-  datawrite = element.attribute(__attrNames.datawrite);
+  datawrite = _element.attribute(__slAttributes.write);
 
   if(datawrite.isNull())
   {
     datawrite = dataread;
   }
 
-  format = _buildData->application.getDataFormatter(
-      element.attribute(LCBuildersCommon::mAttributes.dataformatter));
+  format = _app.getDataFormatter(
+      _element.attribute(__slAttributes.format));
   if(format.isNull())
   {
     goto LABEL_WRONG_EXIT;
@@ -116,20 +113,16 @@ QWidget* LCXmlRemComboBoxBuilder::buildLocal(
   }
 
   ret = new LCQRemComboBox(dataread, datawrite, source, format);
-  buildCombobox(element, static_cast<LCQRemComboBox*>(ret), format);
+  buildCombobox(_element, static_cast<LCQRemComboBox*>(ret), format);
 
 LABEL_WRONG_EXIT:
   if(ret == nullptr) 
   {
     ret = new QComboBox(); 
     static_cast<QComboBox*>(ret)->setEnabled(false);
-    static_cast<QComboBox*>(ret)->addItem(element.tagName());
+    static_cast<QComboBox*>(ret)->addItem(_element.tagName());
   }
 
-  QString style = LCBuildersCommon::getBaseStyleSheet(element, app);
-  ret->setStyleSheet(style);
-
-  LCBuildersCommon::initPosition(element, *ret);
   return ret;
 }
 
@@ -139,31 +132,31 @@ static void buildCombobox(   const QDomElement& _element,
     QSharedPointer<LIDataFormatter> _format)
 {
   QDomNodeList nodes = _element.childNodes();
-  for(int i = 0; i < nodes.length(); i++)
+
+  for(auto item_element = _element.firstChildElement(__slTags.item);
+      !item_element.isNull();
+      item_element = item_element.nextSiblingElement(__slTags.item))
   {
-    QDomElement el = nodes.at(i).toElement();
-    if(el.isNull()) continue;
-    if(el.tagName() != __elementNames.item) continue;
+    QString attr_name = item_element.attribute(__slAttributes.text);
+    QString attr_value = item_element.attribute(__slAttributes.value);
 
-    QString name = el.attribute(LCBuildersCommon::mAttributes.text);
-    QString val = el.attribute(__attrNames.value);
-    if (val.isNull()) 
-    {
-      continue;
-    }
-    if (name == "")
-    {
-      name = val;
-    }
-
-    val = _format->fitting(val);
-
-    if(val.isNull())
+    if (attr_value.isNull()) 
     {
       continue;
     }
 
-    _box->addItem(name, val);
+    if (attr_name == "")
+    {
+      attr_name = attr_value;
+    }
+
+    QByteArray value = _format->toBytes(attr_value);
+
+    if( (value.isNull()) || (value.size() == 0))
+    {
+      continue;
+    }
+    _box->addItem(attr_name, _format->toString(value));
   }
 }
 

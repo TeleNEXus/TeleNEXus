@@ -30,6 +30,19 @@
   <DATAFORMATS file="formatters.xml"/>
 
   <WINDOW 
+    file="testdatacombobox/testdatacombobox1.xml" 
+    id="test DataComboBox" 
+    visible="true"
+    title="Test DataComboBox" 
+    showMode="normal"
+    modality="false"
+    flags="" 
+    size="300;300"
+    screen="0"
+    position="550;150"
+    />
+
+  <WINDOW 
     file="testdatalineedit/testdatalineedit1.xml" 
     id="testdatalineedit1" 
     visible="true"
@@ -42,18 +55,18 @@
     position="550;150"
     />
 
-  <WINDOW 
-    file="testtable/testtable.xml" 
-    id="testtable1" 
-    visible="true"
-    title="Test table" 
-    showMode="normal"
-    modality="false"
-    flags="" 
-    size="300;300"
-    screen="0"
-    position="150;150"
-    />
+  <!-- <WINDOW --> 
+  <!--   file="testtable/testtable.xml" --> 
+  <!--   id="testtable1" --> 
+  <!--   visible="true" -->
+  <!--   title="Test table" --> 
+  <!--   showMode="normal" -->
+  <!--   modality="false" -->
+  <!--   flags="" --> 
+  <!--   size="300;300" -->
+  <!--   screen="0" -->
+  <!--   position="150;150" -->
+  <!--   /> -->
 
   <!-- <WINDOW --> 
   <!--   file="testtable/testtable2.xml" --> 
@@ -116,30 +129,30 @@
   <!--   position="300;300" -->
   <!--   /> -->
 
-  <WINDOW 
-    file="testbutton/testbutton.xml" 
-    id="testbutton" 
-    visible="false"
-    title="Test Buttons" 
-    showMode="normal"
-    modality="false"
-    flags="" 
-    size="300;50"
-    position="300;600"
-    />
+  <!-- <WINDOW --> 
+  <!--   file="testbutton/testbutton.xml" --> 
+  <!--   id="testbutton" --> 
+  <!--   visible="false" -->
+  <!--   title="Test Buttons" --> 
+  <!--   showMode="normal" -->
+  <!--   modality="false" -->
+  <!--   flags="" --> 
+  <!--   size="300;50" -->
+  <!--   position="300;600" -->
+  <!--   /> -->
 
-  <WINDOW 
-    file="testbutton/testbutton2.xml" 
-    id="testbutton2" 
-    visible="false"
-    title="Test Buttons" 
-    showMode="normal"
-    modality="false"
-    flags="" 
-    size="500;500"
-    screen="0"
-    position="600;100"
-    />
+  <!-- <WINDOW --> 
+  <!--   file="testbutton/testbutton2.xml" --> 
+  <!--   id="testbutton2" --> 
+  <!--   visible="false" -->
+  <!--   title="Test Buttons" --> 
+  <!--   showMode="normal" -->
+  <!--   modality="false" -->
+  <!--   flags="" --> 
+  <!--   size="500;500" -->
+  <!--   screen="0" -->
+  <!--   position="600;100" -->
+  <!--   /> -->
 
   <!-- <WINDOW -->
   <!--   id="TestWindow1" --> 

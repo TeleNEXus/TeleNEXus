@@ -65,6 +65,7 @@ QSharedPointer<LQModbusDataWriter> LQModbusDataWriter::create(
       new LQModbusDataWriter(_dataName, _dataSource),
       doDeleteLater);
   sp->mwpThis = sp;
+  sp->setHandler([](EWriteStatus){});
   return sp;
 }
 
