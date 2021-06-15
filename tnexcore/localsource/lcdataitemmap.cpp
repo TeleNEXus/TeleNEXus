@@ -24,6 +24,9 @@
 #include "LIRemoteDataSource.h"
 #include <QDebug>
 
+using EReadStatus = LIRemoteDataReader::EReadStatus;
+using EWriteStatus = LIRemoteDataWriter::EWriteStatus;
+
 //==============================================================================
 void LCDataItemMap::CDataItemBase::notifyAll(const QByteArray& _data)
 {
@@ -196,7 +199,7 @@ void LCDataItemMap::readData(QSharedPointer<LCQLocalDataReader> _sp_reader)
   auto it = mDataMap.find(_sp_reader->getDataName());
   if(it ==  mDataMap.end()) 
   {
-    _sp_reader->notify(LERemoteDataStatus::Undef);
+    _sp_reader->notify(EReadStatus::Undef);
     return;
   }
   it.value()->notify(_sp_reader);
@@ -207,16 +210,16 @@ void LCDataItemMap::writeData(
     QSharedPointer<LCQLocalDataWriter> _sp_writer,
     const QByteArray& _data)
 {
+  auto ret = 
+    [&_sp_writer](EWriteStatus _status)
+    {
+      _sp_writer->notify(_status);
+    };
   auto it = mDataMap.find(_sp_writer->getDataName());
-  LERemoteDataStatus ret_status = LERemoteDataStatus::Valid;
-  if(it ==  mDataMap.end())
-  {
-    ret_status = LERemoteDataStatus::Wrong;
-  }else if(it.value()->setData(_data) <= 0)
-  {
-    ret_status = LERemoteDataStatus::Wrong;
-  }
-  _sp_writer->notify(ret_status);
+  if(_data.size() == 0) return ret(EWriteStatus::Success);
+  if(it == mDataMap.end()) return ret(EWriteStatus::Failure);
+  if(it.value()->setData(_data) <= 0) return ret(EWriteStatus::Failure);
+  return ret(EWriteStatus::Success);
 }
 
 //------------------------------------------------------------------------------
@@ -225,7 +228,7 @@ void LCDataItemMap::connectReader(QSharedPointer<LCQLocalDataReader> _sp_reader)
   auto it = mDataMap.find(_sp_reader->getDataName());
   if(it == mDataMap.end()) 
   {
-    _sp_reader->notify(LERemoteDataStatus::Undef);
+    _sp_reader->notify(EReadStatus::Undef);
     return;
   }
   it.value()->connectReader(_sp_reader);

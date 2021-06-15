@@ -28,8 +28,8 @@
 //==============================================================================CQEventDataIsWrite
 __LQ_EXTENDED_QEVENT_IMPLEMENTATION(LQModbusDataWriter::CQEventDataIsWrite);
 
-LQModbusDataWriter::CQEventDataIsWrite::CQEventDataIsWrite(
-    LERemoteDataStatus _status) : 
+LQModbusDataWriter::
+CQEventDataIsWrite::CQEventDataIsWrite(EWriteStatus _status) : 
   QEvent(__LQ_EXTENDED_QEVENT_REGISTERED),
   mStatus(_status)
 {
@@ -44,11 +44,9 @@ static void doDeleteLater(LQModbusDataWriter* _writer)
 //==============================================================================LQModbusDataWriter
 LQModbusDataWriter::LQModbusDataWriter(
     const QString& _dataName,
-    LTWriteAction _writeAction,
     QSharedPointer<LQModbusDataSource> _dataSource) : 
   QObject(nullptr),
   mDataName(_dataName),
-  mWriteAction(_writeAction),
   mwpDataSource(_dataSource)
 {
 }
@@ -61,11 +59,10 @@ LQModbusDataWriter::~LQModbusDataWriter()
 //------------------------------------------------------------------------------
 QSharedPointer<LQModbusDataWriter> LQModbusDataWriter::create(
     const QString& _dataName,
-    LTWriteAction _writeAction,
     QSharedPointer<LQModbusDataSource> _dataSource)
 {
   auto sp  = QSharedPointer<LQModbusDataWriter>(
-      new LQModbusDataWriter(_dataName, _writeAction, _dataSource),
+      new LQModbusDataWriter(_dataName, _dataSource),
       doDeleteLater);
   sp->mwpThis = sp;
   return sp;
@@ -78,7 +75,7 @@ void LQModbusDataWriter::writeRequest(const QByteArray& _data)
 
   if(sp.isNull())
   {
-    mWriteAction(LERemoteDataStatus::Wrong);
+    mHandler(EWriteStatus::Failure);
   }
   else
   {
@@ -87,7 +84,7 @@ void LQModbusDataWriter::writeRequest(const QByteArray& _data)
 }
 
 //------------------------------------------------------------------------------
-void LQModbusDataWriter::notifyListener(LERemoteDataStatus _status)
+void LQModbusDataWriter::notifyListener(EWriteStatus _status)
 {
   QCoreApplication::postEvent(this, new CQEventDataIsWrite(_status));
 }
@@ -100,11 +97,11 @@ void LQModbusDataWriter::customEvent(QEvent *_event)
     CQEventDataIsWrite *e = dynamic_cast<CQEventDataIsWrite*>(_event);
     if(e == nullptr)
     {
-      mWriteAction(LERemoteDataStatus::Wrong);
+      mHandler(EWriteStatus::Failure);
     }
     else
     {
-      mWriteAction(e->mStatus);
+      mHandler(e->mStatus);
     }
   }
 }

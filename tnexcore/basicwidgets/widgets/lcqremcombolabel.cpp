@@ -26,6 +26,17 @@
 #include <qnamespace.h>
 #include <QLabel>
 
+//==============================================================================CReaderStub
+class CReaderStub : public LIRemoteDataReader
+{
+public:
+  CReaderStub(){}
+  virtual void readRequest()override {}
+  virtual void connectToSource()override {}
+  virtual void disconnectFromSource()override {}
+  virtual void setHandler(THandler)override {}
+};
+
 //==============================================================================SOwnData
 //Собственные данные класса.
 struct SOwnData
@@ -48,43 +59,56 @@ LCQRemComboLabel::LCQRemComboLabel(const QString& _dataName,
     QWidget* _parent) :    QStackedWidget(_parent),
   mspFormatter(_formatter)
 {
+  using EReadStatus = LIRemoteDataReader::EReadStatus;
+
   mpOwnData = new SOwnData();
 
   addItemUndef(new QLabel("Undef"));
   addItemWrong(new QLabel("Wrong"));
 
-  mDataReader = _dataSource->createReader(_dataName, 
-      [this](QSharedPointer<QByteArray> _data, LERemoteDataStatus _status)
+  auto read_handler = 
+    [this](QSharedPointer<QByteArray> _data, EReadStatus _status)
+    {
+      if(mFlagActive)
       {
-        if(mFlagActive)
+        if(_status != EReadStatus::Valid)
         {
-          if(_status != LERemoteDataStatus::Valid)
+          if(L_OWNDATA->undefItem != nullptr)
           {
-            if(L_OWNDATA->undefItem != nullptr)
-            {
-              if(currentWidget() != L_OWNDATA->undefItem) 
-                setCurrentWidget(L_OWNDATA->undefItem);
-            }
-            setEnabled(false);
-            return;
+            if(currentWidget() != L_OWNDATA->undefItem) 
+              setCurrentWidget(L_OWNDATA->undefItem);
           }
-          setEnabled(true);
-          auto it = L_OWNDATA->normalItemMap.find( mspFormatter->toString(*_data));
-          if(it == L_OWNDATA->normalItemMap.end())
-          {
-            if(L_OWNDATA->wrongItem != nullptr)
-            {
-              if(currentWidget() != L_OWNDATA->wrongItem) 
-                setCurrentWidget(L_OWNDATA->wrongItem);
-            }
-            return;
-          }
-          if(it.value() != currentWidget())
-          {
-            setCurrentWidget(it.value());
-          }
+          setEnabled(false);
+          return;
         }
-      });
+        setEnabled(true);
+        auto it = L_OWNDATA->normalItemMap.find( mspFormatter->toString(*_data));
+        if(it == L_OWNDATA->normalItemMap.end())
+        {
+          if(L_OWNDATA->wrongItem != nullptr)
+          {
+            if(currentWidget() != L_OWNDATA->wrongItem) 
+              setCurrentWidget(L_OWNDATA->wrongItem);
+          }
+          return;
+        }
+        if(it.value() != currentWidget())
+        {
+          setCurrentWidget(it.value());
+        }
+      }
+    };
+
+  mDataReader = _dataSource->createReader(_dataName);
+
+  if(!mDataReader.isNull())
+  {
+    mDataReader->setHandler(read_handler);
+  }
+  else
+  {
+    mDataReader = QSharedPointer<LIRemoteDataReader>(new CReaderStub);
+  }
 
   setEnabled(false);
 }

@@ -41,13 +41,11 @@ public:
   void addStringItem(const QString& _dataName, const QString& _data); 
   void addStreamItem(const QString& _dataName); 
 
-  virtual QSharedPointer<LIRemoteDataReader> createReader(
-      const QString& _dataName,
-      LTReadAction _readAction) override;
+  virtual QSharedPointer<LIRemoteDataReader> 
+    createReader(const QString& _dataName) override;
 
-  virtual QSharedPointer<LIRemoteDataWriter> createWriter(
-      const QString& _dataName,
-      LTWriteAction _writeAction) override;
+  virtual QSharedPointer<LIRemoteDataWriter> 
+    createWriter(const QString& _dataName) override;
 };
 
 #endif //LCLOCALSOURCE_H_

@@ -24,6 +24,18 @@
 #include <QCoreApplication>
 #include <QDebug>
 
+using EReadStatus = LIRemoteDataReader::EReadStatus;
+//==============================================================================CReaderStub
+class CReaderStub : public LIRemoteDataReader
+{
+public:
+  CReaderStub(){}
+  virtual void readRequest()override {}
+  virtual void connectToSource()override {}
+  virtual void disconnectFromSource()override {}
+  virtual void setHandler(THandler)override {}
+};
+
 //==============================================================================CEventBase
 __LQ_EXTENDED_QEVENT_IMPLEMENTATION(LCQReadFromSourceReq::CEventBase);
 
@@ -50,17 +62,28 @@ void LCQReadFromSourceReq::CEventRead::handle(LCQReadFromSourceReq* _sender)
     return;
   }
 
-  _sender->mspDataReader = source->createReader( _sender->mDataId, 
-      [_sender](QSharedPointer<QByteArray> _data, LERemoteDataStatus _status)
+
+  auto read_handler = 
+      [_sender](QSharedPointer<QByteArray> _data, EReadStatus _status)
       {
-        if(_status == LERemoteDataStatus::Valid) 
+        if(_status == EReadStatus::Valid) 
         {
           _sender->mRetData = *_data.data();
         }
         _sender->mWaitCond.wakeOne();
-      });
+      };
 
-  _sender->mspDataReader->readRequest();
+  _sender->mspDataReader = source->createReader(_sender->mDataId);
+
+  if(!_sender->mspDataReader.isNull())
+  {
+    _sender->mspDataReader->setHandler(read_handler);
+    _sender->mspDataReader->readRequest();
+  }
+  else
+  {
+    _sender->mspDataReader = QSharedPointer<LIRemoteDataReader>(new CReaderStub);
+  }
 }
 
 static void requestDeleter(LCQReadFromSourceReq* _req)

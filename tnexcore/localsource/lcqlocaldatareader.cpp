@@ -18,6 +18,8 @@
  * You should have received a copy of the GNU General Public License
  * along with TeleNEXus.  If not, see <https://www.gnu.org/licenses/>.
  */
+
+
 #include "lcqlocaldatareader.h"
 
 #include <QCoreApplication>
@@ -28,7 +30,7 @@ __LQ_EXTENDED_QEVENT_IMPLEMENTATION(LCQLocalDataReader::CQEventDataIsRead);
 
 LCQLocalDataReader::CQEventDataIsRead::CQEventDataIsRead(
         const QByteArray& _data,
-        LERemoteDataStatus _status) : 
+        EReadStatus _status) : 
     QEvent(__LQ_EXTENDED_QEVENT_REGISTERED),
     mspData(new QByteArray(_data)),
     mStatus(_status)
@@ -37,7 +39,7 @@ LCQLocalDataReader::CQEventDataIsRead::CQEventDataIsRead(
 
 //------------------------------------------------------------------------------
 LCQLocalDataReader::CQEventDataIsRead::CQEventDataIsRead( 
-        LERemoteDataStatus _status) :  
+        EReadStatus _status) :  
     QEvent(__LQ_EXTENDED_QEVENT_REGISTERED),
     mspData(new QByteArray),
     mStatus(_status)
@@ -53,11 +55,9 @@ static void pointerDeleter(LCQLocalDataReader* _reader)
 //==============================================================================LCQRemoteDataListener
 LCQLocalDataReader::LCQLocalDataReader(
     const QString& _dataName, 
-    LTReadAction _readAction,
     QSharedPointer<LCQLocalSourceHiden> _dataSource) :   
   QObject(nullptr),
   mDataName(_dataName),
-  mReadAction(_readAction),
   mwpDataSource(_dataSource)
 {
 }
@@ -70,11 +70,10 @@ LCQLocalDataReader::~LCQLocalDataReader()
 //------------------------------------------------------------------------------
 QSharedPointer<LCQLocalDataReader> LCQLocalDataReader::create(
     const QString& _dataName, 
-    LTReadAction _readAction,
     QSharedPointer<LCQLocalSourceHiden> _dataSource)
 {
   auto sp = QSharedPointer<LCQLocalDataReader>(
-      new LCQLocalDataReader( _dataName, _readAction, _dataSource), 
+      new LCQLocalDataReader( _dataName, _dataSource), 
       pointerDeleter);
   sp->mwpThis = sp;
   return sp;
@@ -110,11 +109,11 @@ void LCQLocalDataReader::disconnectFromSource()
 void LCQLocalDataReader::notify(const QByteArray& _data)
 {
   QCoreApplication::postEvent(this, 
-      new CQEventDataIsRead(_data, LERemoteDataStatus::Valid));
+      new CQEventDataIsRead(_data, EReadStatus::Valid));
 }
 
 //------------------------------------------------------------------------------
-void LCQLocalDataReader::notify(LERemoteDataStatus _status)
+void LCQLocalDataReader::notify(EReadStatus _status)
 {
   QCoreApplication::postEvent(this, new CQEventDataIsRead(_status));
 }
@@ -125,6 +124,6 @@ void LCQLocalDataReader::customEvent(QEvent* _event)
   if(_event->type() != CQEventDataIsRead::msExtendedEventType) return;
   CQEventDataIsRead *e = dynamic_cast<CQEventDataIsRead*>(_event);
   if(e == nullptr) return;
-  mReadAction(e->mspData, e->mStatus);
+  mHandler(e->mspData, e->mStatus);
 }
 

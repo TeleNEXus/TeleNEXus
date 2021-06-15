@@ -30,6 +30,8 @@
 #include "lqextendevent.h"
 #include "lqmodbusmasterbase.h"
 #include "LIRemoteDataSource.h"
+#include "LIRemoteDataReader.h"
+#include "LIRemoteDataWriter.h"
 
 class LQModbusDataWriter;
 class LQModbusDataReader;
@@ -39,6 +41,9 @@ class LQModbusDataSource : public QObject, public LIRemoteDataSource
 {
   Q_OBJECT;
 private:
+
+  using EReadStatus = LIRemoteDataReader::EReadStatus;
+  using EWriteStatus= LIRemoteDataWriter::EWriteStatus;
   //----------------------------------------------------------------------------CQEventBase
   class CQEventBase : public QEvent
   {
@@ -119,7 +124,7 @@ private:
     public:
       quint16 mAddr;
       quint16 mSize;
-      LERemoteDataStatus mStatus;
+      EReadStatus mStatus;
       quint16 *mpData;
       QLinkedList<QWeakPointer<LQModbusDataReader>> mReadersList;
     public:
@@ -127,7 +132,7 @@ private:
 
       explicit CDataItem(quint16 _addr, quint16 _size) :  mAddr(_addr),
       mSize(_size),
-      mStatus(LERemoteDataStatus::Undef)
+      mStatus(EReadStatus::Undef)
       {
         mpData = new quint16[_size];
       }
@@ -207,7 +212,7 @@ private:
     public:
       quint16 mAddr;
       quint16 mSize;
-      LERemoteDataStatus mStatus;
+      EReadStatus mStatus;
       quint8 *mpData;
       QLinkedList<QWeakPointer<LQModbusDataReader>> mReadersList;
     public:
@@ -215,7 +220,7 @@ private:
 
       explicit CDataItem(quint16 _addr, quint16 _size) :  mAddr(_addr),
       mSize(_size),
-      mStatus(LERemoteDataStatus::Undef)
+      mStatus(EReadStatus::Undef)
       {
         mpData = new quint8[_size];
       }
@@ -442,13 +447,11 @@ private:
 public:
 
   virtual QSharedPointer<LIRemoteDataReader> createReader(
-      const QString& _dataName,
-      LTReadAction _readAction) override;
+      const QString& _dataName) override;
 
 
   virtual QSharedPointer<LIRemoteDataWriter> createWriter(
-      const QString& _dataName,
-      LTWriteAction _writeAction) override;
+      const QString& _dataName) override;
 
   friend class LQModbusDataReader;
   friend class LQModbusDataWriter;

@@ -31,19 +31,18 @@ class LCQLocalDataWriter final : public QObject, public LIRemoteDataWriter
 {
   Q_OBJECT;
 private:
-  using LTWriteAction = LIRemoteDataSource::LTWriteAction;
 
   //--------------------------------------------------------------------------
   class CQEventDataIsWrite : public QEvent
   {
     __LQ_EXTENDED_QEVENT_DECLARATION
   public:
-      const LERemoteDataStatus mStatus;
-      explicit CQEventDataIsWrite(LERemoteDataStatus _status);
+      const EWriteStatus mStatus;
+      explicit CQEventDataIsWrite(EWriteStatus _status);
   };
 
   QString mDataName;
-  LTWriteAction mListener;
+  THandler mHandler;
   QWeakPointer<LCQLocalSourceHiden> mwpDataSource;
   QWeakPointer<LCQLocalDataWriter> mwpThis;
 
@@ -51,20 +50,19 @@ private:
   LCQLocalDataWriter() = delete;
   LCQLocalDataWriter(
       const QString& _dataName,
-      LTWriteAction _writeListener,
       QSharedPointer<LCQLocalSourceHiden> _dataSource);
 
 public:
   virtual ~LCQLocalDataWriter();
   static QSharedPointer<LCQLocalDataWriter> create(
       const QString& _dataName,
-      LTWriteAction _writeListener,
       QSharedPointer<LCQLocalSourceHiden> _dataSource);
 
   virtual void writeRequest(const QByteArray& _data) override;
+  virtual void setHandler(THandler _handler) override { mHandler = _handler; }
 
   QString getDataName(){ return mDataName; }
-  void notify(LERemoteDataStatus _status);
+  void notify(EWriteStatus _status);
 
 private:
   virtual void customEvent(QEvent *_event) override;

@@ -26,7 +26,7 @@
 __LQ_EXTENDED_QEVENT_IMPLEMENTATION(LCQLocalDataWriter::CQEventDataIsWrite);
 
 LCQLocalDataWriter::CQEventDataIsWrite::CQEventDataIsWrite(
-    LERemoteDataStatus _status) : 
+    EWriteStatus _status) : 
   QEvent(__LQ_EXTENDED_QEVENT_REGISTERED),
   mStatus(_status)
 {
@@ -35,11 +35,9 @@ LCQLocalDataWriter::CQEventDataIsWrite::CQEventDataIsWrite(
 //==============================================================================
 LCQLocalDataWriter::LCQLocalDataWriter(
     const QString& _dataName,
-    LTWriteAction _writeListener,
     QSharedPointer<LCQLocalSourceHiden> _dataSource):
   QObject(nullptr),
   mDataName(_dataName),
-  mListener(_writeListener),
   mwpDataSource(_dataSource)
 {
 }
@@ -58,12 +56,11 @@ static void pointerDeleter(QObject* _obj)
 //------------------------------------------------------------------------------
 QSharedPointer<LCQLocalDataWriter> LCQLocalDataWriter::create(
     const QString& _dataName,
-    LTWriteAction _writeListener,
     QSharedPointer<LCQLocalSourceHiden> _dataSource)
 {
   auto sp_writer = 
     QSharedPointer<LCQLocalDataWriter>(
-        new LCQLocalDataWriter(_dataName, _writeListener, _dataSource), 
+        new LCQLocalDataWriter(_dataName, _dataSource), 
         pointerDeleter);
   sp_writer->mwpThis = sp_writer;
   return sp_writer;
@@ -75,7 +72,7 @@ void LCQLocalDataWriter::writeRequest(const QByteArray& _data)
   auto sp = mwpDataSource.lock();
   if(sp.isNull())
   {
-    mListener(LERemoteDataStatus::Wrong);
+    mHandler(EWriteStatus::Failure);
   }
   else
   {
@@ -84,7 +81,7 @@ void LCQLocalDataWriter::writeRequest(const QByteArray& _data)
 }
 
 //------------------------------------------------------------------------------
-void LCQLocalDataWriter::notify(LERemoteDataStatus _status)
+void LCQLocalDataWriter::notify(EWriteStatus _status)
 {
   QCoreApplication::postEvent(this, new CQEventDataIsWrite(_status));
 }
@@ -97,11 +94,11 @@ void LCQLocalDataWriter::customEvent(QEvent *_event)
     CQEventDataIsWrite *e = dynamic_cast<CQEventDataIsWrite*>(_event);
     if(e == nullptr)
     {
-      mListener(LERemoteDataStatus::Wrong);
+      mHandler(EWriteStatus::Failure);
     }
     else
     {
-      mListener(e->mStatus);
+      mHandler(e->mStatus);
     }
   }
 }

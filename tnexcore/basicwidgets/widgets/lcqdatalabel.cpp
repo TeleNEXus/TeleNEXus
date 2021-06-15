@@ -23,6 +23,17 @@
 #include <QDebug>
 #include <qnamespace.h>
 
+class CReaderStub : public LIRemoteDataReader
+{
+public:
+  CReaderStub(){}
+  virtual void readRequest()override {}
+  virtual void connectToSource()override {}
+  virtual void disconnectFromSource()override {}
+  virtual void setHandler(THandler)override {}
+};
+
+
 //==============================================================================LCQDataLabel
 LCQDataLabel::LCQDataLabel(QWidget* _parent) : QLabel(_parent), mFlagActive(false)
 {
@@ -44,18 +55,27 @@ LCQDataLabel::LCQDataLabel(const QString& _dataName,
   mFormatter(_formatter),
   mFlagActive(false)
 {
+
   setEnabled(false);
   QString str = "Undef";
   setText(str);
 
-  mDataReader = _dataSource->createReader( _dataName,
+  mDataReader = _dataSource->createReader(_dataName);
+
+  if(mDataReader.isNull())
+  {
+    mDataReader = QSharedPointer<LIRemoteDataReader>(new CReaderStub);
+    return;
+  }
+
+  mDataReader->setHandler(
       [this, str](
         QSharedPointer<QByteArray> _data, 
-        LERemoteDataStatus _status)
+        LIRemoteDataReader::EReadStatus _status)
       {
         if(mFlagActive)
         {
-          if(_status != LERemoteDataStatus::Valid)
+          if(_status != LIRemoteDataReader::EReadStatus::Valid)
           {
             setText(str);
             setEnabled(false);
@@ -64,8 +84,7 @@ LCQDataLabel::LCQDataLabel(const QString& _dataName,
           setText(mFormatter.data()->toString(*_data));
           setEnabled(true);
         }
-      }
-      );
+      });
 }
 
 LCQDataLabel::~LCQDataLabel()
@@ -75,7 +94,6 @@ LCQDataLabel::~LCQDataLabel()
 //------------------------------------------------------------------------------setActive
 void LCQDataLabel::setActive(bool _flag)
 {
-  if(mDataReader.isNull()) return;
   if(_flag)
   {
     mFlagActive = true;

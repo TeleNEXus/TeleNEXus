@@ -21,14 +21,29 @@
 #ifndef LIREMOTEDATAREADER_H
 #define LIREMOTEDATAREADER_H
 
+#include <functional>
+#include <QSharedPointer>
+
+class QByteArray;
+
 class LIRemoteDataReader
 {
 public:
+  enum class EReadStatus
+  {
+    Undef,
+    Valid,
+    Wrong
+  };
+
+  using THandler = std::function<void(QSharedPointer<QByteArray>, EReadStatus)>;
+
   LIRemoteDataReader(){}
   ~LIRemoteDataReader(){}
   virtual void readRequest() = 0;
   virtual void connectToSource() = 0;
   virtual void disconnectFromSource() = 0;
+  virtual void setHandler(THandler _handler) = 0;
 };
 
 #endif // LIREMOTEDATAREADER_H
