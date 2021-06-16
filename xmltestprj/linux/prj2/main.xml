@@ -31,7 +31,20 @@
 
   <WINDOW 
     file="testdatacombobox/testdatacombobox1.xml" 
-    id="test DataComboBox" 
+    id="test DataComboBox 1" 
+    visible="true"
+    title="Test DataComboBox" 
+    showMode="normal"
+    modality="false"
+    flags="" 
+    size="300;300"
+    screen="0"
+    position="0;0"
+    />
+
+  <WINDOW 
+    file="testdatacombobox/testdatacombobox2.xml" 
+    id="test DataComboBox 2" 
     visible="true"
     title="Test DataComboBox" 
     showMode="normal"
@@ -41,7 +54,6 @@
     screen="0"
     position="550;150"
     />
-
   <!-- <WINDOW --> 
   <!--   file="testdatalineedit/testdatalineedit1.xml" --> 
   <!--   id="testdatalineedit1" --> 
@@ -81,17 +93,17 @@
   <!--   position="400;300" -->
   <!--   /> -->
 
-  <WINDOW 
-    file="testdatalabels/testdatalabels1.xml" 
-    id="testdatalabel1" 
-    visible="true"
-    title="Test Data Labels 1" 
-    showMode="normal"
-    modality="false"
-    flags="" 
-    size="300;300"
-    position="0;0"
-    />
+  <!-- <WINDOW --> 
+  <!--   file="testdatalabels/testdatalabels1.xml" --> 
+  <!--   id="testdatalabel1" --> 
+  <!--   visible="true" -->
+  <!--   title="Test Data Labels 1" --> 
+  <!--   showMode="normal" -->
+  <!--   modality="false" -->
+  <!--   flags="" --> 
+  <!--   size="300;300" -->
+  <!--   position="0;0" -->
+  <!--   /> -->
 
   <!-- <WINDOW --> 
   <!--   file="testdatalabels/testdatalabels2.xml" --> 
