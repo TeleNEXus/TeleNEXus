@@ -35,7 +35,6 @@ class CLocalData
 public:
   QSharedPointer<LIRemoteDataReader> mDataReader;
   QSharedPointer<LIRemoteDataWriter> mDataWriter;
-  QSharedPointer<LIDataFormatter> mFormatter;
   QMap<int, QByteArray> mRowValue;
   QMap<QByteArray, int> mValueRow;
   CLocalData(){}
@@ -47,12 +46,10 @@ public:
 LCQListWidget::LCQListWidget(
     QSharedPointer<LIRemoteDataSource> _source,
     QString _data,
-    QSharedPointer<LIDataFormatter> _formatter,
     QWidget* _parent) :
   QListWidget(_parent)
 {
   mpLocal = new CLocalData;
-  ld.mFormatter = _formatter;
   ld.mDataWriter = _source->createWriter(_data);
 
   if(!(ld.mDataWriter.isNull()))
@@ -65,7 +62,6 @@ LCQListWidget::LCQListWidget(
           ld.mDataWriter->writeRequest(it.value());
         });
   }
-
 
   ld.mDataReader = _source->createReader(_data);
 
@@ -95,13 +91,12 @@ LCQListWidget::~LCQListWidget()
 }
 
 //------------------------------------------------------------------------------
-void LCQListWidget::addItem(QListWidgetItem* _item, const QString& _id)
+void LCQListWidget::addItem(QListWidgetItem* _item, const QByteArray& _matching) 
 {
   QListWidget::addItem(_item);
   int r = row(_item);
-  QByteArray value = ld.mFormatter->toBytes(_id);
-  ld.mRowValue.insert(r, value);
-  ld.mValueRow.insert(value, r);
+  ld.mRowValue.insert(r, _matching);
+  ld.mValueRow.insert(_matching, r);
 }
 
 

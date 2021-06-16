@@ -20,16 +20,21 @@
  */
 
 #include "lcxmllistwidgetbuilder.h"
+#include "LIDataFormatter.h"
 #include "widgets/lcqlistwidget.h"
-#include "widgetbuilderscommon.h"
+#include "xmlcommon.h"
 #include "LIApplication.h"
 #include <QDomElement>
 
 //------------------------------------------------------------------------------
 static const struct
 {
-  QString text = "text";
-  QString id = "id";
+  QString icon      = "icon";
+  QString format    = "format";
+  QString data      = "data";
+  QString source    = "source";
+  QString text      = "text";
+  QString matching  = "matching";
 }__slAttributes;
 
 static const struct
@@ -47,57 +52,34 @@ LCXmlListWidgetBuilder::~LCXmlListWidgetBuilder()
 }
 
 //------------------------------------------------------------------------------
-QWidget* LCXmlListWidgetBuilder::buildLocal( 
-    QSharedPointer<SBuildData> _buildData)
+QWidget* LCXmlListWidgetBuilder::buildLocal(      
+    const QDomElement& _element, const LIApplication& _app)
 {
 
   auto ret_wrong = [](){return new QListWidget;};
 
-  const QDomElement& element = _buildData->element;
-  const LIApplication& app = _buildData->application;
+  bool err_flag = false;
 
-  auto source = [&element, &app]()
-  {
-    QString attr = element.attribute(LCBuildersCommon::mAttributes.source);
-    if(attr.isNull()) return QSharedPointer<LIRemoteDataSource>();
-    return app.getDataSource(attr);
-  }();
+  auto data_spec = xmlcommon::parseDataSpecification(
+      _element.attribute(__slAttributes.data),
+      [&err_flag](const QString)
+      {
+        err_flag = true;
+      });
 
+  if(err_flag) return ret_wrong();
+
+
+  auto source = _app.getDataSource(data_spec.sourceId);
   if(source.isNull()) return ret_wrong();
 
-  QString data = element.attribute(LCBuildersCommon::mAttributes.data);
-  if(data.isNull()) return ret_wrong();
-
-  auto format = app.getDataFormatter(element.attribute(
-        LCBuildersCommon::mAttributes.dataformatter));
-
+  auto format = _app.getDataFormatter(data_spec.formatterId);
   if(format.isNull()) return ret_wrong();
 
-  auto list_widget = new LCQListWidget(source, data, format);
+  auto list_widget = new LCQListWidget(source, data_spec.dataId);
 
-  int icon_size = -1;
-
-  QString attr = element.attribute(LCBuildersCommon::mAttributes.iconsize);
-  if(!attr.isNull())
-  {
-    bool flag = 0;
-    icon_size = attr.toInt(&flag);
-    if(flag)
-    {
-      list_widget->setIconSize(QSize(icon_size, icon_size));
-    }
-    else
-    {
-      icon_size = -1;
-    }
-  }
-
-  QString style_sheet = 
-    LCBuildersCommon::getBaseStyleSheet(element, app);
-
-  list_widget->setStyleSheet(style_sheet);
-
-  auto add_item = [&app, &list_widget](const QDomNode& _node, int _iconSize)
+  //----------------------------------------------------------add_item[]
+  auto add_item = [&list_widget, &format](const QDomNode& _node)
   {
 
     if(!_node.isElement()) return;
@@ -106,43 +88,43 @@ QWidget* LCXmlListWidgetBuilder::buildLocal(
     QString attr_text = el.attribute(__slAttributes.text);
     if(attr_text.isNull()) return;
 
-    QString attr_val = el.attribute(__slAttributes.id);
-    if(attr_val.isNull()) return;
+    QString attr_matching = el.attribute(__slAttributes.matching);
 
+    if(attr_matching.isNull()) return;
 
     QListWidgetItem *item = new QListWidgetItem;
     item->setText(attr_text);
 
-    QString attr = el.attribute(LCBuildersCommon::mAttributes.icon);
-    if(!attr.isNull()) 
+    QString attr = el.attribute(__slAttributes.icon);
+
+    QPixmap pixmap = parsePixmap(el.attribute(__slAttributes.icon));
+
+    if(!pixmap.isNull())
     {
-      QPixmap pixmap = LCBuildersCommon::getPixmap(attr, app);
-      if(_iconSize >= 0)
-      {
-        int maxsize = (pixmap.width() > pixmap.height()) ? 
-          (pixmap.width()) : (pixmap.height());
-
-        float scale = 1;
-
-        if(maxsize > 0)
-        {
-          scale = (float) _iconSize /(float)  maxsize;
-        }
-
-        pixmap = pixmap.scaled(
-            pixmap.width() * scale, pixmap.height() * scale);
-      }
       item->setIcon(pixmap);
+      if(
+          (pixmap.size().width() > list_widget->iconSize().width()) || 
+          (pixmap.size().height() > list_widget->iconSize().height()))
+      {
+        list_widget->setIconSize(pixmap.size());
+      }
     }
-    list_widget->addItem(item, attr_val);
+
+    list_widget->addItem(item, format->toBytes(attr_matching)); 
   };
 
-  for(QDomNode node = element.firstChildElement(__slTags.item);
+  for(QDomNode node = _element.firstChildElement(__slTags.item);
       !node.isNull();
       node = node.nextSiblingElement(__slTags.item))
   {
-    add_item(node, icon_size);
+    add_item(node);
   }
+
+  setWidgetName(      _element, list_widget);
+  setWidgetStyle(     _element, list_widget);
+  setWidgetSize(      _element, list_widget);
+  setWidgetPosition(  _element, list_widget);
+  setWidgetFixedSize( _element, list_widget);
 
   return list_widget;
 }

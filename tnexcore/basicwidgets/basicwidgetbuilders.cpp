@@ -31,8 +31,8 @@
 #include "lcxmldatacomboboxbuilder.h"
 #include "lcxmltabwidgetbuilder.h"
 #include "lcxmlscrollareabuilder.h"
+#include "lcxmllistwidgetbuilder.h"
 
-/* #include "lcxmllistwidgetbuilder.h" */
 /* #include "lcxmlstackedwidgetbuilder.h" */
 /* #include "lcxmlsplitterbuilder.h" */
 
@@ -61,10 +61,9 @@ QMap<QString, QSharedPointer<LIXmlWidgetBuilder>> getBuilders()
   add_builder(QStringLiteral("DataComboBox" ),  new LCXmlDataComboBoxBuilder());
   add_builder(QStringLiteral("Tabs"         ),  new LCXmlTabWidgetBuilder());
   add_builder(QStringLiteral("ScrollArea"   ),  new LCXmlScrollAreaBuilder());
+  add_builder(QStringLiteral("ListWidget"   ),  new LCXmlListWidgetBuilder());
 
   /* add_builder(QStringLiteral("dataComboLabel"     ),  new LCXmlRemComboLabelBuilder()); */
-  /* add_builder(QStringLiteral("scrollArea"         ),  new LCXmlScrollAreaBuilder()); */
-  /* add_builder(QStringLiteral("listWidget"         ),  new LCXmlListWidgetBuilder()); */
   /* add_builder(QStringLiteral("stackedWidget"      ),  new LCXmlStackedWidgetBuilder()); */
   /* add_builder(QStringLiteral("splitterVertical"   ),  new LCXmlSplitterBuilder(Qt::Vertical)); */
   /* add_builder(QStringLiteral("splitterHorizontal" ),  new LCXmlSplitterBuilder(Qt::Horizontal)); */

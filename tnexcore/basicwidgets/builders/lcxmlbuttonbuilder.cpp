@@ -259,11 +259,11 @@ const QDomElement& _element, const LIApplication& _app)
     button->setIcon(pixmap);
   }
 
-  setWidgetName(_element, button);
-  setWidgetStyle(_element, button);
-  setWidgetSize(_element, button);
-  setWidgetPosition(_element, button);
-  setWidgetFixedSize(_element, button);
+  setWidgetName(      _element, button);
+  setWidgetStyle(     _element, button);
+  setWidgetSize(      _element, button);
+  setWidgetPosition(  _element, button);
+  setWidgetFixedSize( _element, button);
   return button;
 }
 
