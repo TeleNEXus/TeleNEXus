@@ -44,12 +44,11 @@ public:
   explicit LCQListWidget(
       QSharedPointer<LIRemoteDataSource> _source,
       QString _data,
-      QSharedPointer<LIDataFormatter> _formatter,
       QWidget* _parent = nullptr);
 
   virtual ~LCQListWidget();
 
-  void addItem(QListWidgetItem* _item, const QString& _id);
+  void addItem(QListWidgetItem* _item, const QByteArray& _matching);
 };
 
 #endif /* LCQLISTWIDGET_H_ */

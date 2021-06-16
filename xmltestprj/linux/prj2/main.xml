@@ -30,17 +30,30 @@
   <DATAFORMATS file="formatters.xml"/>
 
   <WINDOW 
-    file="testscrollarea/testscrollarea1.xml" 
-    id="test scroll area 1" 
+    file="testlistwidget/testlistwidget1.xml" 
+    id="test list widget 1" 
     visible="true"
-    title="Test scroll area 1" 
+    title="test list widget 1" 
     showMode="normal"
     modality="false"
     flags="" 
-    size="300;300"
+    size="900;700"
     screen="0"
     position="0;0"
     />
+
+  <!-- <WINDOW --> 
+  <!--   file="testscrollarea/testscrollarea1.xml" --> 
+  <!--   id="test scroll area 1" --> 
+  <!--   visible="true" -->
+  <!--   title="Test scroll area 1" --> 
+  <!--   showMode="normal" -->
+  <!--   modality="false" -->
+  <!--   flags="" --> 
+  <!--   size="300;300" -->
+  <!--   screen="0" -->
+  <!--   position="0;0" -->
+  <!--   /> -->
 
   <!-- <WINDOW --> 
   <!--   file="testtabwidget/testtabwidget.xml" --> 
