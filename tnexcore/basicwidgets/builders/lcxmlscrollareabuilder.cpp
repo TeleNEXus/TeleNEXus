@@ -19,7 +19,6 @@
  * along with TeleNEXus.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include "lcxmlscrollareabuilder.h"
-#include "widgetbuilderscommon.h"
 
 #include "LIApplication.h"
 #include "LIXmlLayoutBuilder.h"
@@ -41,22 +40,20 @@ LCXmlScrollAreaBuilder::~LCXmlScrollAreaBuilder()
 }
 
 //------------------------------------------------------------------------------
-QWidget* LCXmlScrollAreaBuilder::buildLocal(
-    QSharedPointer<SBuildData> _buildData)
+QWidget* LCXmlScrollAreaBuilder::buildLocal( 
+    const QDomElement& _element, const LIApplication& _app)
 {
-  const QDomElement& element = _buildData->element;
-  const LIApplication& app = _buildData->application;
   QWidget* widget = nullptr;
 
-  for(QDomNode node = element.firstChild();
+  for(QDomNode node = _element.firstChild();
       !node.isNull();
       node = node.nextSibling())
   {
     QDomElement el = node.toElement();
     if(el.isNull()) continue;
-    auto builder = app.getWidgetBuilder(el.tagName());
+    auto builder = _app.getWidgetBuilder(el.tagName());
     if(builder.isNull()) continue;
-    QWidget* w = builder->build(el, app);
+    QWidget* w = builder->build(el, _app);
 
     if(w)
     {
@@ -75,9 +72,11 @@ QWidget* LCXmlScrollAreaBuilder::buildLocal(
     scrollarea->setWidget(new QWidget);
   }
 
-  QString style = LCBuildersCommon::getBaseStyleSheet(element, app);
-  style = QString(".QScrollArea { %1 }").arg(style);
-  scrollarea->setStyleSheet(style);
+  setWidgetName(      _element, scrollarea);
+  setWidgetStyle(     _element, scrollarea);
+  setWidgetSize(      _element, scrollarea);
+  setWidgetPosition(  _element, scrollarea);
+  setWidgetFixedSize( _element, scrollarea);
 
   return scrollarea;
 }
