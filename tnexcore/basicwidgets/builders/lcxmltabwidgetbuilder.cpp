@@ -118,7 +118,6 @@ static void buildTab(
 {
   QString attr_text = _element.attribute(__slAttributes.text);
   QIcon icon;
-  QSize max_size;
   QPixmap pixmap = LCXmlBuilderBase::parsePixmap(_element.attribute(__slAttributes.icon));
   if(!pixmap.isNull())
   {

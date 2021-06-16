@@ -30,12 +30,13 @@
 #include "lcxmldatalineeditbuilder.h"
 #include "lcxmldatacomboboxbuilder.h"
 #include "lcxmltabwidgetbuilder.h"
+#include "lcxmlscrollareabuilder.h"
 
-/* #include "lcxmlremcombolabelbuilder.h" */
-/* #include "lcxmlscrollareabuilder.h" */
 /* #include "lcxmllistwidgetbuilder.h" */
 /* #include "lcxmlstackedwidgetbuilder.h" */
 /* #include "lcxmlsplitterbuilder.h" */
+
+/* #include "lcxmlremcombolabelbuilder.h" */
 
 #include <qnamespace.h>
 
@@ -59,6 +60,7 @@ QMap<QString, QSharedPointer<LIXmlWidgetBuilder>> getBuilders()
   add_builder(QStringLiteral("DataLineEdit" ),  new LCXmlDataLineEditBuilder());
   add_builder(QStringLiteral("DataComboBox" ),  new LCXmlDataComboBoxBuilder());
   add_builder(QStringLiteral("Tabs"         ),  new LCXmlTabWidgetBuilder());
+  add_builder(QStringLiteral("ScrollArea"   ),  new LCXmlScrollAreaBuilder());
 
   /* add_builder(QStringLiteral("dataComboLabel"     ),  new LCXmlRemComboLabelBuilder()); */
   /* add_builder(QStringLiteral("scrollArea"         ),  new LCXmlScrollAreaBuilder()); */

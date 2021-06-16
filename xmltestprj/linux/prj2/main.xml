@@ -30,10 +30,10 @@
   <DATAFORMATS file="formatters.xml"/>
 
   <WINDOW 
-    file="testtabwidget/testtabwidget.xml" 
-    id="test tab widget" 
+    file="testscrollarea/testscrollarea1.xml" 
+    id="test scroll area 1" 
     visible="true"
-    title="Test Tab Widget" 
+    title="Test scroll area 1" 
     showMode="normal"
     modality="false"
     flags="" 
@@ -42,18 +42,31 @@
     position="0;0"
     />
 
-  <WINDOW 
-    file="testtabwidget/testtabwidget1.xml" 
-    id="test tab widget 1" 
-    visible="true"
-    title="Test Tab Widget 1" 
-    showMode="normal"
-    modality="false"
-    flags="" 
-    size="300;300"
-    screen="0"
-    position="310;0"
-    />
+  <!-- <WINDOW --> 
+  <!--   file="testtabwidget/testtabwidget.xml" --> 
+  <!--   id="test tab widget" --> 
+  <!--   visible="true" -->
+  <!--   title="Test Tab Widget" --> 
+  <!--   showMode="normal" -->
+  <!--   modality="false" -->
+  <!--   flags="" --> 
+  <!--   size="300;300" -->
+  <!--   screen="0" -->
+  <!--   position="0;0" -->
+  <!--   /> -->
+
+  <!-- <WINDOW --> 
+  <!--   file="testtabwidget/testtabwidget1.xml" --> 
+  <!--   id="test tab widget 1" --> 
+  <!--   visible="true" -->
+  <!--   title="Test Tab Widget 1" --> 
+  <!--   showMode="normal" -->
+  <!--   modality="false" -->
+  <!--   flags="" --> 
+  <!--   size="300;300" -->
+  <!--   screen="0" -->
+  <!--   position="310;0" -->
+  <!--   /> -->
 
   <!-- <WINDOW --> 
   <!--   file="testdatacombobox/testdatacombobox1.xml" --> 
