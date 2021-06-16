@@ -39,7 +39,7 @@ protected:
       const QDomElement&      _element, 
       const LIApplication&    _app) override final;
 
-protected:
+public:
   virtual QWidget* buildLocal(
       const QDomElement& _element, const LIApplication& _app) = 0;
   static bool setWidgetPosition(const QDomElement& _element, QWidget* _widget);

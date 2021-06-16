@@ -99,7 +99,7 @@ static bool stringToNumber(const QString& _str, int& _out)
 /* } */
 
 //==============================================================================
-template<typename T> 
+  template<typename T> 
 void attributeToValues(
     const QDomElement& _element, 
     const QString& _attrName, 
@@ -266,37 +266,25 @@ void LCXmlBuilderBase::setWidgetStyle(
 //==============================================================================
 static QMap<QString, QSharedPointer<CMovieAccess>> __slMovies;
 //------------------------------------------------------------------------------
-QSharedPointer<LIMovieAccess> 
+  QSharedPointer<LIMovieAccess> 
 LCXmlBuilderBase::getMovie(const QString& _movieFile)
 {
-    auto it = __slMovies.find(_movieFile);
-    if(it != __slMovies.end())
-    {
-        return it.value();
-    }
-    QMovie* movie = new QMovie(_movieFile);
-    auto ret = QSharedPointer<CMovieAccess>(new CMovieAccess(movie));
-    __slMovies.insert(_movieFile, ret);
-    return ret;
+  auto it = __slMovies.find(_movieFile);
+  if(it != __slMovies.end())
+  {
+    return it.value();
+  }
+  QMovie* movie = new QMovie(_movieFile);
+  auto ret = QSharedPointer<CMovieAccess>(new CMovieAccess(movie));
+  __slMovies.insert(_movieFile, ret);
+  return ret;
 }
 
 //==============================================================================
-QMap<QString, QPixmap> __slPicture;
-
-//------------------------------------------------------------------------------
 QPixmap LCXmlBuilderBase::getPixmap(const QString& _pixmapFile)
 {
-    auto it = __slPicture.find(_pixmapFile);
-
-    if(it != __slPicture.end())
-    {
-        return it.value();
-    }
-
-    QPixmap pixmap(_pixmapFile);
-    __slPicture.insert(_pixmapFile, pixmap);
-
-    return pixmap;
+  QPixmap pixmap(_pixmapFile);
+  return pixmap;
 }
 
 //------------------------------------------------------------------------------

@@ -30,10 +30,10 @@
   <DATAFORMATS file="formatters.xml"/>
 
   <WINDOW 
-    file="testdatacombobox/testdatacombobox1.xml" 
-    id="test DataComboBox 1" 
+    file="testtabwidget/testtabwidget.xml" 
+    id="test tab widget" 
     visible="true"
-    title="Test DataComboBox" 
+    title="Test Tab Widget" 
     showMode="normal"
     modality="false"
     flags="" 
@@ -43,17 +43,44 @@
     />
 
   <WINDOW 
-    file="testdatacombobox/testdatacombobox2.xml" 
-    id="test DataComboBox 2" 
+    file="testtabwidget/testtabwidget1.xml" 
+    id="test tab widget 1" 
     visible="true"
-    title="Test DataComboBox" 
+    title="Test Tab Widget 1" 
     showMode="normal"
     modality="false"
     flags="" 
     size="300;300"
     screen="0"
-    position="550;150"
+    position="310;0"
     />
+
+  <!-- <WINDOW --> 
+  <!--   file="testdatacombobox/testdatacombobox1.xml" --> 
+  <!--   id="test DataComboBox 1" --> 
+  <!--   visible="true" -->
+  <!--   title="Test DataComboBox" --> 
+  <!--   showMode="normal" -->
+  <!--   modality="false" -->
+  <!--   flags="" --> 
+  <!--   size="300;300" -->
+  <!--   screen="0" -->
+  <!--   position="0;0" -->
+  <!--   /> -->
+
+  <!-- <WINDOW --> 
+  <!--   file="testdatacombobox/testdatacombobox2.xml" --> 
+  <!--   id="test DataComboBox 2" --> 
+  <!--   visible="true" -->
+  <!--   title="Test DataComboBox" --> 
+  <!--   showMode="normal" -->
+  <!--   modality="false" -->
+  <!--   flags="" --> 
+  <!--   size="300;300" -->
+  <!--   screen="0" -->
+  <!--   position="550;150" -->
+  <!--   /> -->
+
   <!-- <WINDOW --> 
   <!--   file="testdatalineedit/testdatalineedit1.xml" --> 
   <!--   id="testdatalineedit1" --> 
