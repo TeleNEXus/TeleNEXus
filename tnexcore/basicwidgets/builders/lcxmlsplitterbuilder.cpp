@@ -19,7 +19,6 @@
  * along with TeleNEXus.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include "lcxmlsplitterbuilder.h"
-#include "widgetbuilderscommon.h"
 #include "LIApplication.h"
 #include <QDomElement>
 #include <QSplitter>
@@ -56,6 +55,13 @@ QWidget* LCXmlSplitterBuilder::buildLocal(
       splitter->addWidget(widget);
     }
   }
+
+  setWidgetName(      _element, splitter);
+  setWidgetStyle(     _element, splitter);
+  setWidgetSize(      _element, splitter);
+  setWidgetPosition(  _element, splitter);
+  setWidgetFixedSize( _element, splitter);
+
   return splitter;
 }
 
