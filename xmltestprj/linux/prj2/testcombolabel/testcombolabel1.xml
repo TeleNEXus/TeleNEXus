@@ -1,0 +1,55 @@
+<WINDOW>
+  <actions>
+    <!-- <scriptExecute event="show" scriptId=""                /> -->
+    <!-- <scriptLaunch  event="show" scriptId="" interval="500" /> -->
+    <!-- <scriptStop    event="show" scriptId=""                /> -->
+
+    <!-- <scriptExecute event="hide" scriptId=""                /> -->
+    <!-- <scriptLaunch  event="hide" scriptId="" interval="500" /> -->
+    <!-- <scriptStop    event="hide" scriptId=""                /> -->
+  </actions>
+
+  <mainWidget>
+    <Frame>
+      <layout>
+        <LayoutVBox>
+          <widgets>
+
+            <DataComboLabel  data="hreg0:qtslavetcp:uint16">
+
+              <actions>
+                <press>
+                </press>
+                <release>
+                </release>
+              </actions>
+
+              <stateUndef picture="movies/undef_150_100.gif"/>
+              <stateWrong picture="movies/wrong_150_100.gif"/> 
+
+              <matchings>
+                <match picture="movies/20_21_22_23.gif"        value="0" style="" />
+                <match picture="picture/picture_150_100.png"   value="1" style="" />
+                <match text="Test 0"                           velue="2"/>
+                <match text="Test 1"                           value="3"/>
+                <match text="Test 4"                           value="4"/>
+                <match text="Test 5"                           value="5"/>
+                <match text="Test 6"                           value="6"/>
+                <match text="Test 7"                           value="7"/>
+                <match text="Test 8"                           value="8"/>
+              </matchings>
+            </DataComboLabel>
+
+
+          </widgets>
+          <stretch/>
+        </LayoutVBox>
+      </layout>
+    </Frame>
+  </mainWidget>
+</WINDOW>
+
+
+
+
+

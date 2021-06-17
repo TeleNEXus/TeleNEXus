@@ -18,20 +18,20 @@
  * You should have received a copy of the GNU General Public License
  * along with TeleNEXus.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef LCXMLREMCOMBOLABELBUILDER_H
-#define LCXMLREMCOMBOLABELBUILDER_H
+#ifndef LCXMLDATACOMBOLABELBUILDER_H
+#define LCXMLDATACOMBOLABELBUILDER_H
 
 #include "lcxmlbuilderbase.h"
 
-class LCXmlRemComboLabelBuilder: public LCXmlBuilderBase 
+class LCXmlDataComboLabelBuilder: public LCXmlBuilderBase 
 {
 public:
-  LCXmlRemComboLabelBuilder();
-  virtual ~LCXmlRemComboLabelBuilder();
+  LCXmlDataComboLabelBuilder();
+  virtual ~LCXmlDataComboLabelBuilder();
 
 protected:
   virtual QWidget* buildLocal(
-      QSharedPointer<SBuildData> _buildData) override final;
+      const QDomElement& _element, const LIApplication& _app) override final;
 };
 
-#endif // LCXMLREMCOMBOLABELBUILDER_H
+#endif // LCXMLDATACOMBOLABELBUILDER_H

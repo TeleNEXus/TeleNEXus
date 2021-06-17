@@ -18,8 +18,8 @@
  * You should have received a copy of the GNU General Public License
  * along with TeleNEXus.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef LCQREMCOMBOLABEL_H
-#define LCQREMCOMBOLABEL_H
+#ifndef LCQDATACOMBOLABEL_H
+#define LCQDATACOMBOLABEL_H
 
 #include "lqextendevent.h"
 #include "LIDataFormatter.h"
@@ -31,7 +31,7 @@
 
 class LIMovieAccess;
 
-class LCQRemComboLabel : public QStackedWidget 
+class LCQDataComboLabel : public QStackedWidget 
 {
   Q_OBJECT
 private:
@@ -40,13 +40,13 @@ private:
     QSharedPointer<LIDataFormatter> mspFormatter;
 public:
 
-    explicit LCQRemComboLabel(   
+    explicit LCQDataComboLabel(   
         const QString&                      _dataName,
         QSharedPointer<LIRemoteDataSource>  _dataSource,
         QSharedPointer<LIDataFormatter>     _formatter,
         QWidget* _parent = nullptr);
 
-    virtual ~LCQRemComboLabel();
+    virtual ~LCQDataComboLabel();
 
     void addItem(QWidget* _widget, const QString&  _val);
     void addItemUndef(QWidget* _widget);
@@ -57,4 +57,4 @@ private:
     virtual bool event(QEvent *e) override;
 };
 
-#endif // LCQREMCOMBOLABEL_H
+#endif // LCQDATACOMBOLABEL_H

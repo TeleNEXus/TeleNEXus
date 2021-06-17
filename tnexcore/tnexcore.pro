@@ -57,7 +57,7 @@ basiclayouts/basiclayoutbuilders.cpp \
 basicwidgets/widgets/lcqlistwidget.cpp \
 basicwidgets/widgets/lcqdatacombobox.cpp \
 basicwidgets/widgets/lcqdatalabel.cpp \
-basicwidgets/widgets/lcqremcombolabel.cpp \
+basicwidgets/widgets/lcqdatacombolabel.cpp \
 basicwidgets/widgets/lcqstackwidget.cpp \
 basicwidgets/builders/lcqwidgetvisiblecontrol.cpp \
 basicwidgets/builders/lcxmlbuilderbase.cpp \
@@ -73,6 +73,7 @@ basicwidgets/builders/lcxmlscrollareabuilder.cpp \
 basicwidgets/builders/lcxmllistwidgetbuilder.cpp \
 basicwidgets/builders/lcxmlstackwidgetbuilder.cpp \
 basicwidgets/builders/lcxmlsplitterbuilder.cpp \
+basicwidgets/builders/lcxmldatacombolabelbuilder.cpp \
 basicwidgets/basicwidgetbuilders.cpp \
 dataformatters/lcformatterbase.cpp \
 dataformatters/lcformatterbitfield.cpp \
@@ -117,7 +118,6 @@ window/lcwindow.cpp \
 applicationinterface.cpp \
 main.cpp \
 
-# basicwidgets/builders/lcxmlremcombolabelbuilder.cpp \
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
@@ -149,7 +149,7 @@ basiclayouts/lcxmlboxlayoutbuilder.h    \
 basiclayouts/lcxmlgridlayoutbuilder.h   \
 basicwidgets/widgets/lcqlistwidget.h \
 basicwidgets/widgets/lcqdatacombobox.h \
-basicwidgets/widgets/lcqremcombolabel.h \
+basicwidgets/widgets/lcqdatacombolabel.h \
 basicwidgets/widgets/lcqdatalabel.h \
 basicwidgets/widgets/lcqstackwidget.h \
 basicwidgets/builders/lcxmlbuilderbase.h \
@@ -159,7 +159,7 @@ basicwidgets/builders/lcxmldatalineeditbuilder.h \
 basicwidgets/builders/lcxmllabelbuilder.h \
 basicwidgets/builders/lcxmlframebuilder.h \
 basicwidgets/builders/lcxmldatacomboboxbuilder.h \
-basicwidgets/builders/lcxmlremcombolabelbuilder.h \
+basicwidgets/builders/lcxmldatacombolabelbuilder.h \
 basicwidgets/builders/lcxmltablewidgetbuilder.h \
 basicwidgets/builders/lcxmltabwidgetbuilder.h \
 basicwidgets/builders/lcxmlscrollareabuilder.h \

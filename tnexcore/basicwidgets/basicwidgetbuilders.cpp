@@ -33,10 +33,8 @@
 #include "lcxmlscrollareabuilder.h"
 #include "lcxmllistwidgetbuilder.h"
 #include "lcxmlstackwidgetbuilder.h"
-
 #include "lcxmlsplitterbuilder.h"
-
-/* #include "lcxmlremcombolabelbuilder.h" */
+#include "lcxmldatacombolabelbuilder.h"
 
 #include <qnamespace.h>
 
@@ -65,8 +63,7 @@ QMap<QString, QSharedPointer<LIXmlWidgetBuilder>> getBuilders()
   add_builder(QStringLiteral("StackWidget"  ),  new LCXmlStackWidgetBuilder());
   add_builder(QStringLiteral("SplitterVertical"   ),  new LCXmlSplitterBuilder(Qt::Vertical));
   add_builder(QStringLiteral("SplitterHorizontal" ),  new LCXmlSplitterBuilder(Qt::Horizontal));
-
-  /* add_builder(QStringLiteral("dataComboLabel"     ),  new LCXmlRemComboLabelBuilder()); */
+  add_builder(QStringLiteral("DataComboLabel"     ),  new LCXmlDataComboLabelBuilder());
 
   return builders_map;
 }

@@ -29,18 +29,18 @@
 
   <DATAFORMATS file="formatters.xml"/>
 
-  <WINDOW 
-    file="teststackwidget/teststackwidget2.xml" 
-    id="test stack widget 1" 
-    visible="true"
-    title="Test Stack Widget 1" 
-    showMode="normal"
-    modality="false"
-    flags="" 
-    size="900;700"
-    screen="0"
-    position="0;0"
-    />
+  <!-- <WINDOW --> 
+  <!--   file="teststackwidget/teststackwidget2.xml" --> 
+  <!--   id="test stack widget 1" --> 
+  <!--   visible="true" -->
+  <!--   title="Test Stack Widget 1" --> 
+  <!--   showMode="normal" -->
+  <!--   modality="false" -->
+  <!--   flags="" --> 
+  <!--   size="900;700" -->
+  <!--   screen="0" -->
+  <!--   position="0;0" -->
+  <!--   /> -->
 
   <!-- <WINDOW --> 
   <!--   file="testlistwidget/testlistwidget1.xml" --> 
@@ -207,17 +207,17 @@
   <!--   position="300;300" -->
   <!--   /> -->
 
-  <!-- <WINDOW --> 
-  <!--   file="testbutton/testbutton.xml" --> 
-  <!--   id="testbutton" --> 
-  <!--   visible="true" -->
-  <!--   title="Test Buttons" --> 
-  <!--   showMode="normal" -->
-  <!--   modality="false" -->
-  <!--   flags="" --> 
-  <!--   size="300;50" -->
-  <!--   position="300;600" -->
-  <!--   /> -->
+  <WINDOW 
+    file="testbutton/testbutton.xml" 
+    id="testbutton" 
+    visible="true"
+    title="Test Buttons" 
+    showMode="normal"
+    modality="false"
+    flags="" 
+    size="300;50"
+    position="300;600"
+    />
 
   <!-- <WINDOW --> 
   <!--   file="testbutton/testbutton2.xml" --> 

@@ -18,7 +18,7 @@
  * You should have received a copy of the GNU General Public License
  * along with TeleNEXus.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "lcqremcombolabel.h"
+#include "lcqdatacombolabel.h"
 #include "LIMovieAccess.h"
 
 #include <QMap>
@@ -52,8 +52,8 @@ struct SOwnData
 //------------------------------------------------------------------------------
 #define L_OWNDATA (static_cast<SOwnData*>(mpOwnData))
 
-//==============================================================================LCQRemComboLabel
-LCQRemComboLabel::LCQRemComboLabel(const QString& _dataName,
+//==============================================================================LCQDataComboLabel
+LCQDataComboLabel::LCQDataComboLabel(const QString& _dataName,
     QSharedPointer<LIRemoteDataSource> _dataSource,
     QSharedPointer<LIDataFormatter> _formatter,
     QWidget* _parent) :    QStackedWidget(_parent),
@@ -114,14 +114,14 @@ LCQRemComboLabel::LCQRemComboLabel(const QString& _dataName,
 }
 
 
-//------------------------------------------------------------------------------~LCQRemComboLabel
-LCQRemComboLabel::~LCQRemComboLabel()
+//------------------------------------------------------------------------------~LCQDataComboLabel
+LCQDataComboLabel::~LCQDataComboLabel()
 {
   delete L_OWNDATA;
 }
 
 //------------------------------------------------------------------------------setActive
-void LCQRemComboLabel::setActive(bool _flag)
+void LCQDataComboLabel::setActive(bool _flag)
 {
   if(_flag)
   {
@@ -137,7 +137,7 @@ void LCQRemComboLabel::setActive(bool _flag)
 }
 
 //------------------------------------------------------------------------------addItem
-void LCQRemComboLabel::addItem(QWidget* _widget, const QString&  _val)
+void LCQDataComboLabel::addItem(QWidget* _widget, const QString&  _val)
 {
   auto it = L_OWNDATA->normalItemMap.find(_val);
 
@@ -153,7 +153,7 @@ void LCQRemComboLabel::addItem(QWidget* _widget, const QString&  _val)
 }
 
 //------------------------------------------------------------------------------addItemUndef
-void LCQRemComboLabel::addItemUndef(QWidget* _widget)
+void LCQDataComboLabel::addItemUndef(QWidget* _widget)
 {
   if(L_OWNDATA->undefItem != nullptr)
   {
@@ -166,7 +166,7 @@ void LCQRemComboLabel::addItemUndef(QWidget* _widget)
 }
 
 //------------------------------------------------------------------------------addItemWrong
-void LCQRemComboLabel::addItemWrong(QWidget* _widget)
+void LCQDataComboLabel::addItemWrong(QWidget* _widget)
 {
   if(L_OWNDATA->wrongItem != nullptr)
   {
@@ -178,7 +178,7 @@ void LCQRemComboLabel::addItemWrong(QWidget* _widget)
 }
 
 //------------------------------------------------------------------------------event
-bool LCQRemComboLabel::event(QEvent *_event)
+bool LCQDataComboLabel::event(QEvent *_event)
 {
   bool ret = false;
   switch(_event->type())
