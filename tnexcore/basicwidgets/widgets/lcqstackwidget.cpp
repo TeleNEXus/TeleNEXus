@@ -19,7 +19,7 @@
  * along with TeleNEXus.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "lcqstackedwidget.h"
+#include "lcqstackwidget.h"
 #include "LIRemoteDataSource.h"
 #include "LIRemoteDataReader.h"
 #include "LIRemoteDataWriter.h"
@@ -34,7 +34,6 @@ class CLocalData
 {
 public:
   QSharedPointer<LIRemoteDataReader> mDataReader;
-  QSharedPointer<LIDataFormatter> mFormatter;
   QMap<QByteArray, int> mValueIndex;
   CLocalData(){}
 };
@@ -42,16 +41,14 @@ public:
 #define ld  (*(reinterpret_cast<CLocalData*>(mpLocal)))
 
 //==============================================================================
-LCQStackedWidget::LCQStackedWidget(
+LCQStackWidget::LCQStackWidget(
     QSharedPointer<LIRemoteDataSource> _source,
     QString _data,
-    QSharedPointer<LIDataFormatter> _formatter,
     QWidget* _parent) :
   QStackedWidget(_parent)
 {
   mpLocal = new CLocalData;
   /* QStackedWidget::addWidget(new QWidget); */
-  ld.mFormatter = _formatter;
 
   auto read_handler =
       [this](QSharedPointer<QByteArray> _data, 
@@ -66,30 +63,27 @@ LCQStackedWidget::LCQStackedWidget(
         /* else */
         /* { */
         /*   setCurrentIndex(0); */
-        /*   qDebug() << "LCQStackedWidget undef widget"; */
+        /*   qDebug() << "LCQStackWidget undef widget"; */
         /* } */
       };
 
   ld.mDataReader = _source->createReader(_data);
 
-  if((!ld.mDataReader.isNull()) && (!ld.mFormatter.isNull()))
-  {
-    ld.mDataReader->setHandler(read_handler);
-    ld.mDataReader->connectToSource();
-  }
+  if(ld.mDataReader.isNull()) return;
 
+  ld.mDataReader->setHandler(read_handler);
+  ld.mDataReader->connectToSource();
 }
 
-LCQStackedWidget::~LCQStackedWidget()
+LCQStackWidget::~LCQStackWidget()
 {
   delete &ld;
 }
 
 //------------------------------------------------------------------------------
-void LCQStackedWidget::addWidget(QWidget* _widget, const QString& _id)
+void LCQStackWidget::addWidget(QWidget* _widget, const QByteArray& _matching)
 {
-  ld.mValueIndex.insert(
-      ld.mFormatter->toBytes(_id), QStackedWidget::addWidget(_widget));
+  ld.mValueIndex.insert(_matching, QStackedWidget::addWidget(_widget));
 }
 
 

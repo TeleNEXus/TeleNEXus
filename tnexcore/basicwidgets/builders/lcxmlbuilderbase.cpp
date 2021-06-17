@@ -222,19 +222,44 @@ void LCXmlBuilderBase::setWidgetName(
 
 //------------------------------------------------------------------------------
 void LCXmlBuilderBase::setWidgetStyle(const QString& _style, QWidget* _widget, 
-    const QString& _name)
+    const QString& _objectName)
 {
+  QString outstyle = _style; 
 
-  QString outstyle = _style;
+  const QRegularExpression rexpr_style_id_desc(
+      QStringLiteral("\\$\\([^\\(\\)\\$]+\\)"));
+
+  const QRegularExpression rexpr_style_id_extract(
+      QStringLiteral("(?<=\\$\\()(.*)(?=\\))"));
+
+  auto mit= rexpr_style_id_desc.globalMatch(_style);
+
+  while(mit.hasNext())
+  {
+    QString style_desc = mit.next().captured();
+    QString style_id = 
+      rexpr_style_id_extract.match(style_desc).captured();
+
+    QString load_style = CApplicationInterface::getInstance().getWidgetStyle(style_id);
+    if(load_style.isNull())
+    {
+      outstyle.remove(style_desc);
+    }
+    else
+    {
+      outstyle.replace(style_desc, load_style);
+    }
+  }
+
 
   auto set_style = 
-    [_widget, &outstyle](const QString& _name)
+    [_widget, &outstyle](const QString& _objectName)
     {
-      outstyle.replace(QStringLiteral("(...)"), _name);
+      outstyle.replace(QStringLiteral("(...)"), _objectName);
       _widget->setStyleSheet(outstyle);
     };
 
-  if(_name.isNull())
+  if(_objectName.isNull())
   {
     set_style(QString("%1#%2")
         .arg(_widget->metaObject()->className())
@@ -242,7 +267,7 @@ void LCXmlBuilderBase::setWidgetStyle(const QString& _style, QWidget* _widget,
   }
   else
   {
-    set_style(_name);
+    set_style(_objectName);
   }
 }
 
@@ -255,11 +280,12 @@ void LCXmlBuilderBase::setWidgetStyle(
   QString attr_style = _element.attribute(__slAttributes.style);
   if(attr_style.isNull()) return;
 
-  QString style = 
-    CApplicationInterface::getInstance().getWidgetStyle(attr_style);
-  if(style.isNull()) {style = attr_style;}
+  /* QString style = */ 
+  /*   CApplicationInterface::getInstance().getWidgetStyle(attr_style); */
+  /* if(style.isNull()) {style = attr_style;} */
 
-  setWidgetStyle(style, _widget, _name);
+  /* setWidgetStyle(style, _widget, _name); */
+  setWidgetStyle(attr_style, _widget, _name);
 }
 
 

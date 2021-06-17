@@ -58,7 +58,7 @@ basicwidgets/widgets/lcqlistwidget.cpp \
 basicwidgets/widgets/lcqdatacombobox.cpp \
 basicwidgets/widgets/lcqdatalabel.cpp \
 basicwidgets/widgets/lcqremcombolabel.cpp \
-basicwidgets/widgets/lcqstackedwidget.cpp \
+basicwidgets/widgets/lcqstackwidget.cpp \
 basicwidgets/builders/lcqwidgetvisiblecontrol.cpp \
 basicwidgets/builders/lcxmlbuilderbase.cpp \
 basicwidgets/builders/lcxmlframebuilder.cpp \
@@ -71,6 +71,7 @@ basicwidgets/builders/lcxmldatacomboboxbuilder.cpp \
 basicwidgets/builders/lcxmltabwidgetbuilder.cpp \
 basicwidgets/builders/lcxmlscrollareabuilder.cpp \
 basicwidgets/builders/lcxmllistwidgetbuilder.cpp \
+basicwidgets/builders/lcxmlstackwidgetbuilder.cpp \
 basicwidgets/basicwidgetbuilders.cpp \
 dataformatters/lcformatterbase.cpp \
 dataformatters/lcformatterbitfield.cpp \
@@ -116,7 +117,6 @@ applicationinterface.cpp \
 main.cpp \
 
 # basicwidgets/builders/lcxmlremcombolabelbuilder.cpp \
-# basicwidgets/builders/lcxmlstackedwidgetbuilder.cpp \
 # basicwidgets/builders/lcxmlsplitterbuilder.cpp \
 
 # Default rules for deployment.
@@ -151,7 +151,7 @@ basicwidgets/widgets/lcqlistwidget.h \
 basicwidgets/widgets/lcqdatacombobox.h \
 basicwidgets/widgets/lcqremcombolabel.h \
 basicwidgets/widgets/lcqdatalabel.h \
-basicwidgets/widgets/lcqstackedwidget.h \
+basicwidgets/widgets/lcqstackwidget.h \
 basicwidgets/builders/lcxmlbuilderbase.h \
 basicwidgets/builders/lcxmldatalineeditbuilder.h \
 basicwidgets/builders/lcxmldatalabelbuilder.h \
@@ -166,7 +166,7 @@ basicwidgets/builders/lcxmlscrollareabuilder.h \
 basicwidgets/builders/lcxmlbuttonbuilder.h \
 basicwidgets/builders/lcxmllistwidgetbuilder.h \
 basicwidgets/builders/lcqwidgetvisiblecontrol.h \
-basicwidgets/builders/lcxmlstackedwidgetbuilder.h \
+basicwidgets/builders/lcxmlstackwidgetbuilder.h \
 basicwidgets/builders/lcxmlsplitterbuilder.h \
 basicwidgets/basicwidgetbuilders.h \
 dataformatters/lcformatterbase.h \

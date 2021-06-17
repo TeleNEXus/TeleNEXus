@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<WINDOW>
+  <mainWidget>
+    <Frame>
+      <layout>
+        <LayoutHBox>
+          <widgets>
+
+            <StackWidget 
+              style="(...){ max-width: 250; color:yellow; background:lightblue;}"
+              data="localsource:listwidgetitem:string">
+
+              <item matching="item0">
+                <Label text="Widget item 0" />
+              </item>
+
+              <item matching="item1">
+                <Label text="Widget item 1" />
+              </item>
+
+              <item matching="item2">
+                <Label text="Widget item 2" />
+              </item>
+
+              <item matching="item3">
+                <Label text="Widget item 3" />
+              </item>
+
+              <item matching="item4">
+                <Label text="Widget item 4" />
+              </item>
+
+              <item matching="item5">
+                <Label text="Widget item 5" />
+              </item>
+
+              <item matching="item6">
+                <Label text="Widget item 6" />
+              </item>
+
+            </StackWidget>
+
+          </widgets>
+
+          <layout>
+            <LayoutVBox>
+              <widgets>
+                <DataLabel    data="localsource:listwidgetitem:string" />
+                <DataLineEdit data="localsource:listwidgetitem:string" />
+              </widgets>
+              <stretch/>
+            </LayoutVBox>
+          </layout>
+        </LayoutHBox>
+      </layout>
+    </Frame>
+</mainWidget>
+</WINDOW>
+
+
+
+

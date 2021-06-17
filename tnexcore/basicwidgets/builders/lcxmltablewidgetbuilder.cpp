@@ -134,32 +134,29 @@ QWidget* LCXmlTableWidgetBuilder::buildLocal(
   }
 
   auto set_style_table = 
-    [&buildData, &_element, &_app]()
+    [&buildData, &_element]()
     {
       QString attr_style = _element.attribute(__slAttributes.styleTable);
       if(attr_style.isNull()) return;
 
-      QString style = _app.getWidgetStyle(attr_style);
-      if(style.isNull()) { style = attr_style;}
+      /* QString style = _app.getWidgetStyle(attr_style); */
+      /* if(style.isNull()) { style = attr_style;} */
 
       setWidgetStyle(
-          QString("%1 %2 ").arg(buildData.mpTable->styleSheet()).arg(style),
+          QString("%1 %2 ").arg(buildData.mpTable->styleSheet()).arg(attr_style),
           buildData.mpTable, 
           QString("QTableWidget#%1 ")
           .arg(buildData.mpTable->objectName()));
     };
 
   auto set_style_header = 
-    [&buildData, &_element, &_app]()
+    [&buildData, &_element]()
     {
       QString attr_style = _element.attribute(__slAttributes.styleHeader);
       if(attr_style.isNull()) return;
 
-      QString style = _app.getWidgetStyle(attr_style);
-      if(style.isNull()) { style = attr_style;}
-
       setWidgetStyle(
-          QString("%1 %2").arg(buildData.mpTable->styleSheet()).arg(style),
+          QString("%1 %2").arg(buildData.mpTable->styleSheet()).arg(attr_style),
           buildData.mpTable, 
           QString("QTableWidget#%1 > %2 ")
           .arg(buildData.mpTable->objectName())
@@ -167,16 +164,13 @@ QWidget* LCXmlTableWidgetBuilder::buildLocal(
     };
 
   auto set_style_corner = 
-    [&buildData, &_element, &_app]()
+    [&buildData, &_element]()
     {
       QString attr_style = _element.attribute(__slAttributes.styleCorner);
       if(attr_style.isNull()) return;
 
-      QString style = _app.getWidgetStyle(attr_style);
-      if(style.isNull()) { style = attr_style;}
-
       setWidgetStyle(
-          QString("%1 %2").arg(buildData.mpTable->styleSheet()).arg(style),
+          QString("%1 %2").arg(buildData.mpTable->styleSheet()).arg(attr_style),
           buildData.mpTable, 
           QString("QTableWidget#%1 > %2 ")
           .arg(buildData.mpTable->objectName())

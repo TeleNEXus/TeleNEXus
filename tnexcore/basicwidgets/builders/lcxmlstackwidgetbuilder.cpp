@@ -19,17 +19,19 @@
  * along with TeleNEXus.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "lcxmlstackedwidgetbuilder.h"
-#include "widgets/lcqstackedwidget.h"
+#include "lcxmlstackwidgetbuilder.h"
+#include "widgets/lcqstackwidget.h"
+#include "xmlcommon.h"
 #include "LIApplication.h"
-#include "widgetbuilderscommon.h"
+#include "LIDataFormatter.h"
 #include <QDomElement>
 #include <QDebug>
 
 //------------------------------------------------------------------------------
 static const struct
 {
-  QString id = "id";
+  QString data = "data";
+  QString matching = "matching";
 }__slAttributes;
 
 static const struct
@@ -38,49 +40,51 @@ static const struct
 } __slTags;
 
 //==============================================================================
-LCXmlStackedWidgetBuilder::LCXmlStackedWidgetBuilder()
+LCXmlStackWidgetBuilder::LCXmlStackWidgetBuilder()
 {
 }
 
-LCXmlStackedWidgetBuilder::~LCXmlStackedWidgetBuilder()
+LCXmlStackWidgetBuilder::~LCXmlStackWidgetBuilder()
 {
 }
 
 //------------------------------------------------------------------------------
-QWidget* LCXmlStackedWidgetBuilder::buildLocal(
+QWidget* LCXmlStackWidgetBuilder::buildLocal(
     const QDomElement& _element, const LIApplication& _app)
 {
 
   auto ret_wrong = [](){return new QStackedWidget;};
 
-  auto source = [&_element, &_app]()
-  {
-    QString attr = _element.attribute(LCBuildersCommon::mAttributes.source);
-    if(attr.isNull()) return QSharedPointer<LIRemoteDataSource>();
-    return _app.getDataSource(attr);
-  }();
+  bool err_flag = false;
 
+  auto data_spec = xmlcommon::parseDataSpecification(
+      _element.attribute(__slAttributes.data),
+      [&err_flag](const QString)
+      {
+        err_flag = true;
+      });
+
+  if(err_flag) return ret_wrong();
+
+
+  auto source = _app.getDataSource(data_spec.sourceId);
   if(source.isNull()) return ret_wrong();
 
-  QString data = _element.attribute(LCBuildersCommon::mAttributes.data);
-  if(data.isNull()) return ret_wrong();
-
-  auto format = _app.getDataFormatter(_element.attribute(
-        LCBuildersCommon::mAttributes.dataformatter));
-
+  auto format = _app.getDataFormatter(data_spec.formatterId);
   if(format.isNull()) return ret_wrong();
 
-  auto stacked_widget = new LCQStackedWidget(source, data, format); 
+
+  auto stacked_widget = new LCQStackWidget(source, data_spec.dataId); 
 
   auto add_item = 
-    [&_app, &stacked_widget](const QDomNode& _node)
+    [&_app, &stacked_widget, &format](const QDomNode& _node)
     {
 
       if(!_node.isElement()) return;
       QDomElement el = _node.toElement();
 
-      QString attr_id = el.attribute(__slAttributes.id);
-      if(attr_id.isNull()) return;
+      QString attr_matching = el.attribute(__slAttributes.matching);
+      if(attr_matching.isNull()) return;
 
       for(QDomNode node = el.firstChild(); 
           !node.isNull(); 
@@ -93,7 +97,7 @@ QWidget* LCXmlStackedWidgetBuilder::buildLocal(
         QWidget* widget = builder->build(we, _app);
         if(widget)
         {
-          stacked_widget->addWidget(widget, attr_id);
+          stacked_widget->addWidget(widget, format->toBytes(attr_matching));
           break;
         }
       }
@@ -105,6 +109,12 @@ QWidget* LCXmlStackedWidgetBuilder::buildLocal(
   {
     add_item(node);
   }
+
+  setWidgetName(      _element, stacked_widget);
+  setWidgetStyle(     _element, stacked_widget);
+  setWidgetSize(      _element, stacked_widget);
+  setWidgetPosition(  _element, stacked_widget);
+  setWidgetFixedSize( _element, stacked_widget);
 
   return stacked_widget;
 }

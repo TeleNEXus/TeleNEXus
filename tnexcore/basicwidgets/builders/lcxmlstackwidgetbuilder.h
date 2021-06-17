@@ -19,37 +19,20 @@
  * along with TeleNEXus.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef LCQSTACKEDWIDGET_H_
-#define LCQSTACKEDWIDGET_H_
+#ifndef LCXMLSTACKWIDGETBUILDER_H_
+#define LCXMLSTACKWIDGETBUILDER_H_
 
-#include <QStackedWidget>
+#include "lcxmlbuilderbase.h"
 
-#include <QSharedPointer>
-
-class LIRemoteDataSource;
-class LIRemoteDataReader;
-class LIRemoteDataWriter;
-class LIDataFormatter;
-
-class LCQStackedWidget: public QStackedWidget 
+class LCXmlStackWidgetBuilder : public LCXmlBuilderBase
 {
-  Q_OBJECT;
-
-private:
-  void* mpLocal = nullptr;
-
 public:
+  LCXmlStackWidgetBuilder();
+  virtual ~LCXmlStackWidgetBuilder();
 
-  explicit LCQStackedWidget() = delete;
-
-  explicit LCQStackedWidget(
-      QSharedPointer<LIRemoteDataSource> _source,
-      QString _data,
-      QSharedPointer<LIDataFormatter> _formatter,
-      QWidget* _parent = nullptr);
-
-  virtual ~LCQStackedWidget();
-
-  void addWidget(QWidget* _widget, const QString& _id);
+protected:
+  virtual QWidget* buildLocal(
+      const QDomElement& _element, const LIApplication& _app) override final;
 };
-#endif /*LCQSTACKEDWIDGET_H_ */
+
+#endif /*LCXMLSTACKWIDGETBUILDER_H_*/
