@@ -5,6 +5,9 @@
     <Frame>
       <widgets>
         <Table
+          styleTable  = "$(table1)"
+          styleHeader = "$(table1Header)"
+          styleCorner = "(...){background:yellow;}"
           fixedSize="350;250"
           position="150;200"
           name="testtable2">

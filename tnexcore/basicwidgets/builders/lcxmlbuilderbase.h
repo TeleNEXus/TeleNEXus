@@ -42,13 +42,14 @@ protected:
 public:
   virtual QWidget* buildLocal(
       const QDomElement& _element, const LIApplication& _app) = 0;
+
   static bool setWidgetPosition(const QDomElement& _element, QWidget* _widget);
   static bool setWidgetSize(const QDomElement& _element, QWidget* _widget);
   static bool setWidgetFixedSize(const QDomElement& _element, QWidget* _widget);
   static void setWidgetName(const QDomElement& _element, QWidget* _widget);
 
   static void setWidgetStyle( const QString& _style, 
-      QWidget* _widget, const QString& _name = QString());
+      QWidget* _widget, const QString& _objectName = QString());
 
   static void setWidgetStyle( const QDomElement& _element, 
       QWidget* _widget, const QString& _name = QString() );

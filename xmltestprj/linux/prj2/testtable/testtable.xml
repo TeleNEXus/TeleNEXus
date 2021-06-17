@@ -3,8 +3,8 @@
 <WINDOW>
   <mainWidget>
     <Table
-      styleTable  = "table1"
-      styleHeader = "table1Header"
+      styleTable  = "$(table1)"
+      styleHeader = "$(table1Header)"
       styleCorner = "(...){background:yellow;}"
       >
 

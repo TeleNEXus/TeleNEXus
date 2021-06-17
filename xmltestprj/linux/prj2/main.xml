@@ -30,10 +30,10 @@
   <DATAFORMATS file="formatters.xml"/>
 
   <WINDOW 
-    file="testlistwidget/testlistwidget1.xml" 
-    id="test list widget 1" 
+    file="teststackwidget/teststackwidget1.xml" 
+    id="test stack widget 1" 
     visible="true"
-    title="test list widget 1" 
+    title="Test Stack Widget 1" 
     showMode="normal"
     modality="false"
     flags="" 
@@ -41,6 +41,19 @@
     screen="0"
     position="0;0"
     />
+
+  <!-- <WINDOW --> 
+  <!--   file="testlistwidget/testlistwidget1.xml" --> 
+  <!--   id="test list widget 1" --> 
+  <!--   visible="true" -->
+  <!--   title="test list widget 1" --> 
+  <!--   showMode="normal" -->
+  <!--   modality="false" -->
+  <!--   flags="" --> 
+  <!--   size="900;700" -->
+  <!--   screen="0" -->
+  <!--   position="0;0" -->
+  <!--   /> -->
 
   <!-- <WINDOW --> 
   <!--   file="testscrollarea/testscrollarea1.xml" --> 
@@ -111,7 +124,7 @@
   <!--   file="testdatalineedit/testdatalineedit1.xml" --> 
   <!--   id="testdatalineedit1" --> 
   <!--   visible="true" -->
-  <!--   title="Test Data Line Edit" --> 
+  <!--   title="Test DataLineEdit" --> 
   <!--   showMode="normal" -->
   <!--   modality="false" -->
   <!--   flags="" --> 
@@ -150,7 +163,7 @@
   <!--   file="testdatalabels/testdatalabels1.xml" --> 
   <!--   id="testdatalabel1" --> 
   <!--   visible="true" -->
-  <!--   title="Test Data Labels 1" --> 
+  <!--   title="Test DataLabel 1" --> 
   <!--   showMode="normal" -->
   <!--   modality="false" -->
   <!--   flags="" --> 
@@ -161,7 +174,7 @@
   <!-- <WINDOW --> 
   <!--   file="testdatalabels/testdatalabels2.xml" --> 
   <!--   id="testdatalabel2" --> 
-  <!--   visible="false" -->
+  <!--   visible="true" -->
   <!--   title="Test Data Labels 2" --> 
   <!--   showMode="normal" -->
   <!--   modality="false" -->
@@ -197,7 +210,7 @@
   <!-- <WINDOW --> 
   <!--   file="testbutton/testbutton.xml" --> 
   <!--   id="testbutton" --> 
-  <!--   visible="false" -->
+  <!--   visible="true" -->
   <!--   title="Test Buttons" --> 
   <!--   showMode="normal" -->
   <!--   modality="false" -->
@@ -209,7 +222,7 @@
   <!-- <WINDOW --> 
   <!--   file="testbutton/testbutton2.xml" --> 
   <!--   id="testbutton2" --> 
-  <!--   visible="false" -->
+  <!--   visible="true" -->
   <!--   title="Test Buttons" --> 
   <!--   showMode="normal" -->
   <!--   modality="false" -->
