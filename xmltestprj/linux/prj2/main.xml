@@ -30,7 +30,7 @@
   <DATAFORMATS file="formatters.xml"/>
 
   <WINDOW 
-    file="teststackwidget/teststackwidget1.xml" 
+    file="teststackwidget/teststackwidget2.xml" 
     id="test stack widget 1" 
     visible="true"
     title="Test Stack Widget 1" 

@@ -194,7 +194,8 @@ bool LCXmlBuilderBase::setWidgetFixedSize(const QDomElement& _element, QWidget* 
       __slAttributes.fixedSize,
       [_widget, &ret](int w, int h)
       {
-        _widget->setFixedSize(w, h);
+        if(w > 0) _widget->setFixedWidth(w);
+        if(h > 0) _widget->setFixedHeight(h);
         ret = true;
       });
   return ret;
@@ -269,6 +270,7 @@ void LCXmlBuilderBase::setWidgetStyle(const QString& _style, QWidget* _widget,
   {
     set_style(_objectName);
   }
+  qDebug() << "+++++++++outstyle   " << outstyle;
 }
 
 //------------------------------------------------------------------------------
