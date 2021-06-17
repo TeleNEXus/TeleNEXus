@@ -18,11 +18,11 @@
  * You should have received a copy of the GNU General Public License
  * along with TeleNEXus.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "lcxmlremcombolabelbuilder.h"
-#include "widgets/lcqremcombolabel.h"
-#include "widgetbuilderscommon.h"
+#include "lcxmldatacombolabelbuilder.h"
+#include "widgets/lcqdatacombolabel.h"
 #include "LIApplication.h"
 #include "LIMovieAccess.h"
+#include "xmlcommon.h"
 
 #include <QDomElement>
 #include <qdom.h>
@@ -60,13 +60,13 @@ public:
 };
 
 //==============================================================================
-LCXmlRemComboLabelBuilder::LCXmlRemComboLabelBuilder()
+LCXmlDataComboLabelBuilder::LCXmlDataComboLabelBuilder()
 {
 
 }
 
 //------------------------------------------------------------------------------
-LCXmlRemComboLabelBuilder::~LCXmlRemComboLabelBuilder()
+LCXmlDataComboLabelBuilder::~LCXmlDataComboLabelBuilder()
 {
 
 }
@@ -74,11 +74,10 @@ LCXmlRemComboLabelBuilder::~LCXmlRemComboLabelBuilder()
 //------------------------------------------------------------------------------
 const struct
 {
-  QString dataread    = "read";
-  /* QString source      = "source"; */
-  QString format      = "format";
-  /* QString text        = "text"; */
-  QString value       = "value";
+  QString data  = "data";
+  QString value = "value";
+  QString text = "text";
+
   struct
   {
     QString attr_name = "mode";
@@ -92,78 +91,58 @@ const struct
 
   /* QString movie       = "movie"; */
   QString picture     = "picture";
-} __attrNames;
+} __slAttributes;
 
 //------------------------------------------------------------------------------
 const struct
 {
   QString item    = "item";
-} __elementNames;
+} __slTags;
 
 //------------------------------------------------------------------------------
 static void buildComboLabel( const QDomElement& _element, 
-    LCQRemComboLabel* _label,
-    QSharedPointer<LIDataFormatter> _format,
-    const QString& _baseStyle,
-    const LIApplication& _app);
+    LCQDataComboLabel* _label,
+    QSharedPointer<LIDataFormatter> _format);
 
 //------------------------------------------------------------------------------
-QWidget* LCXmlRemComboLabelBuilder::buildLocal( 
-      QSharedPointer<SBuildData> _buildData)
+QWidget* LCXmlDataComboLabelBuilder::buildLocal(
+    const QDomElement& _element, const LIApplication& _app)
 {
-  const QDomElement& element = _buildData->element;
-  const LIApplication& app = _buildData->application;
 
-  LCQRemComboLabel *remlabel= nullptr;
-  QString dataread;
-  QString attr = element.attribute(LCBuildersCommon::mAttributes.source);
-  QSharedPointer<LIRemoteDataSource> source;
-  QSharedPointer<LIDataFormatter> format;
+  LCQDataComboLabel *remlabel= nullptr;
 
-  QString style;
+  auto ret_wrong = 
+   [&_element]()
+   {
+     return new QLabel(_element.tagName());
+   }; 
 
-  if(attr.isNull())
-  {
-    goto LABEL_WRONG_EXIT;
-  }
 
-  source = app.getDataSource(attr);
 
-  if(source.isNull())
-  {
-    goto LABEL_WRONG_EXIT;
-  }
+  bool err_flag = false;
 
-  dataread = element.attribute(__attrNames.dataread);
+  auto data_spec = xmlcommon::parseDataSpecification(
+      _element.attribute(__slAttributes.data),
+      [&err_flag](const QString)
+      {
+        err_flag = true;
+      });
 
-  if(dataread.isNull())
-  {
-    goto LABEL_WRONG_EXIT;
-  }
+  if(err_flag) return ret_wrong();
 
-  format = _buildData->application.getDataFormatter(
-      element.attribute(LCBuildersCommon::mAttributes.dataformatter));
-  if(format.isNull())
-  {
-    goto LABEL_WRONG_EXIT;
-  }
 
-  style = LCBuildersCommon::getBaseStyleSheet(element, app);
+  auto source = _app.getDataSource(data_spec.sourceId);
+  if(source.isNull()) return ret_wrong();
 
-  remlabel = new LCQRemComboLabel(dataread, source, format);
-  buildComboLabel(element, remlabel, format, style, app);
+  auto format = _app.getDataFormatter(data_spec.formatterId);
+  if(format.isNull()) return ret_wrong();
 
-LABEL_WRONG_EXIT:
-  QWidget* ret = remlabel;
-  if(ret == nullptr) 
-  {
-    ret = new QLabel(element.tagName());
-    ret->setStyleSheet(style);
-  }
 
-  LCBuildersCommon::initPosition(element, *ret);
+  remlabel = new LCQDataComboLabel(data_spec.dataId, source, format);
 
-  return ret;
+  buildComboLabel(_element, remlabel, format);
+
+  return remlabel;
 }
 
 //------------------------------------------------------------------------------
@@ -175,40 +154,35 @@ enum class EItemMode
 };
 
 //------------------------------------------------------------------------------
-static QString readStylePicture(const QDomElement& _element, 
-    const LIApplication& _app);
-
 static void buildComboLabel( const QDomElement& _element, 
-    LCQRemComboLabel* _cl,
-    QSharedPointer<LIDataFormatter> _format,
-    const QString& _baseStyle,
-    const LIApplication& _app)
+    LCQDataComboLabel* _cl,
+    QSharedPointer<LIDataFormatter> _format)
 {
-  for( QDomNode node = _element.firstChildElement(__elementNames.item);
+  for( QDomNode node = _element.firstChildElement(__slTags.item);
       !node.isNull();
-      node = node.nextSiblingElement(__elementNames.item))
+      node = node.nextSiblingElement(__slTags.item))
   {
     QDomElement el = node.toElement();
 
     QLabel* label = nullptr;
 
 
-    QString attr = el.attribute(__attrNames.mode.attr_name);
+    QString attr = el.attribute(__slAttributes.mode.attr_name);
 
     EItemMode  mode = EItemMode::normal;
     if(!attr.isNull())
     {
-      if(attr == __attrNames.mode.vals.undef)
+      if(attr == __slAttributes.mode.vals.undef)
       {
         mode = EItemMode::undef;
       }
-      else if(attr == __attrNames.mode.vals.wrong)
+      else if(attr == __slAttributes.mode.vals.wrong)
       {
         mode = EItemMode::wrong;
       }
     }
 
-    QString attr_data= el.attribute(LCBuildersCommon::mAttributes.text);
+    QString attr_data= el.attribute(__slAttributes.text);
     if(!attr_data.isNull())
     {
 
@@ -230,11 +204,11 @@ static void buildComboLabel( const QDomElement& _element,
 
       default: //normal
         {
-          QString attr_value = el.attribute(__attrNames.value);
+          QString attr_value = el.attribute(__slAttributes.value);
 
           if(!attr_value.isNull())
           {
-            attr_value = _format->fitting(attr_value);
+            attr_value = _format->toString(_format->toBytes(attr_value));
             if(attr_value.isNull()) continue;
           }
           label = new QLabel(attr_data);
@@ -242,18 +216,17 @@ static void buildComboLabel( const QDomElement& _element,
         }
       }
 
-      if(label != nullptr)
-      {
-        label->setStyleSheet(_baseStyle);
-      }
       continue;
     }
 
     //-------------------------------------picture
-    attr_data= el.attribute(__attrNames.picture);
+    attr_data = el.attribute(__slAttributes.picture);
+
     if(attr_data.isNull()) continue;
 
-    auto movie_access = LCBuildersCommon::getMovie(attr_data, _app);  
+
+    auto movie_access = LCXmlBuilderBase::getMovie(attr_data);  
+
     if(movie_access.isNull()) continue;
 
     label = nullptr;
@@ -276,11 +249,12 @@ static void buildComboLabel( const QDomElement& _element,
 
     default: //normal
       {
-        QString attr_value = el.attribute(__attrNames.value);
+        QString attr_value = el.attribute(__slAttributes.value);
 
         if(!attr_value.isNull())
         {
-          attr_value = _format->fitting(attr_value);
+
+          attr_value = _format->toString(_format->toBytes(attr_value));
           if(attr_value.isNull()) continue;
         }
         label = new CQMovieLabel(movie_access);
@@ -290,31 +264,5 @@ static void buildComboLabel( const QDomElement& _element,
       break;
     }
 
-    if(label != nullptr)
-    {
-      QString style = readStylePicture(el,_app);
-      style = _baseStyle + style;
-      label->setStyleSheet(style);
-    }
   }
-}
-
-/* #include <functional> */
-/* static void addItem( */
-/*     LCQRemComboLabel& _comboLabel, */ 
-/*     const QDomElement& el, */ 
-/*     const QString& _baseStyle, */ 
-/*     QSharedPointer<LIDataFormatter> _format, */
-/*     EItemMode _mode, */
-/*     std::function<void(QLabel**)> _newLabel) */
-/* { */
-/* } */
-
-//==============================================================================
-static QString readStylePicture(const QDomElement& _element, 
-    const LIApplication& _app)
-{
-  QString style = LCBuildersCommon::getBaseStyleSheet(_element, _app);
-
-  return style;
 }

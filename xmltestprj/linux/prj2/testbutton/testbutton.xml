@@ -34,11 +34,10 @@
             </Button>
 
             <Button text="show window 1"
-              style="(...):!hover{background:yellow; color:red}
-              (...):hover{
-              background-image: url(picture/fon1.png); 
-              font: bold italic 20pt 'Karumbi';
-              color:yellow}"
+              style="
+              (...):pressed { background: red}
+              (...) { background-image: url(picture/icon1.png); background-color: red; background-attachment: fixed;}
+              "
               fixedSize="150;150"
               >
               <press>
