@@ -94,35 +94,35 @@
   <!--   position="310;0" -->
   <!--   /> -->
 
-  <!-- <WINDOW --> 
-  <!--   file="testdatacombobox/testdatacombobox1.xml" --> 
-  <!--   id="test DataComboBox 1" --> 
-  <!--   visible="true" -->
-  <!--   title="Test DataComboBox" --> 
-  <!--   showMode="normal" -->
-  <!--   modality="false" -->
-  <!--   flags="" --> 
-  <!--   size="300;300" -->
-  <!--   screen="0" -->
-  <!--   position="0;0" -->
-  <!--   /> -->
+  <WINDOW 
+    file="testcombobox/testcombobox1.xml" 
+    id="test DataComboBox 1" 
+    visible="true"
+    title="Test DataComboBox" 
+    showMode="normal"
+    modality="false"
+    flags="" 
+    size="300;300"
+    screen="0"
+    position="0;0"
+    />
+
+  <WINDOW 
+    file="testcombobox/testcombobox2.xml" 
+    id="test DataComboBox 2" 
+    visible="true"
+    title="Test DataComboBox" 
+    showMode="normal"
+    modality="false"
+    flags="" 
+    size="300;300"
+    screen="0"
+    position="550;150"
+    />
 
   <!-- <WINDOW --> 
-  <!--   file="testdatacombobox/testdatacombobox2.xml" --> 
-  <!--   id="test DataComboBox 2" --> 
-  <!--   visible="true" -->
-  <!--   title="Test DataComboBox" --> 
-  <!--   showMode="normal" -->
-  <!--   modality="false" -->
-  <!--   flags="" --> 
-  <!--   size="300;300" -->
-  <!--   screen="0" -->
-  <!--   position="550;150" -->
-  <!--   /> -->
-
-  <!-- <WINDOW --> 
-  <!--   file="testdatalineedit/testdatalineedit1.xml" --> 
-  <!--   id="testdatalineedit1" --> 
+  <!--   file="testlineedit/testlineedit1.xml" --> 
+  <!--   id="testlineedit1" --> 
   <!--   visible="true" -->
   <!--   title="Test DataLineEdit" --> 
   <!--   showMode="normal" -->
@@ -159,21 +159,21 @@
   <!--   position="400;300" -->
   <!--   /> -->
 
-  <WINDOW 
-    file="testlabels/testlabels1.xml" 
-    id="testdatalabel1" 
-    visible="true"
-    title="Test DataLabel 1" 
-    showMode="normal"
-    modality="false"
-    flags="" 
-    size="300;300"
-    position="0;0"
-    />
+  <!-- <WINDOW --> 
+  <!--   file="testlabels/testlabels1.xml" --> 
+  <!--   id="testlabel1" --> 
+  <!--   visible="true" -->
+  <!--   title="Test DataLabel 1" --> 
+  <!--   showMode="normal" -->
+  <!--   modality="false" -->
+  <!--   flags="" --> 
+  <!--   size="300;300" -->
+  <!--   position="0;0" -->
+  <!--   /> -->
 
   <!-- <WINDOW --> 
   <!--   file="testlabels/testlabels2.xml" --> 
-  <!--   id="testdatalabel2" --> 
+  <!--   id="testlabel2" --> 
   <!--   visible="true" -->
   <!--   title="Test Data Labels 2" --> 
   <!--   showMode="normal" -->

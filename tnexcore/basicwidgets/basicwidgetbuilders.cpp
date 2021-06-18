@@ -33,7 +33,6 @@
 #include "lcxmllistwidgetbuilder.h"
 #include "lcxmlstackwidgetbuilder.h"
 #include "lcxmlsplitterbuilder.h"
-#include "lcxmldatacombolabelbuilder.h"
 
 #include <qnamespace.h>
 
@@ -49,19 +48,18 @@ QMap<QString, QSharedPointer<LIXmlWidgetBuilder>> getBuilders()
       builders_map.insert(_name, QSharedPointer<LIXmlWidgetBuilder>(_builder));
     };
 
-  add_builder(QStringLiteral("Frame"        ),  new LCXmlFrameBuilder());
-  add_builder(QStringLiteral("Button"       ),  new LCXmlButtonBuilder());
-  add_builder(QStringLiteral("Label"        ),  new LCXmlLabelBuilder());
-  add_builder(QStringLiteral("Table"        ),  new LCXmlTableWidgetBuilder());
-  add_builder(QStringLiteral("DataLineEdit" ),  new LCXmlDataLineEditBuilder());
-  add_builder(QStringLiteral("DataComboBox" ),  new LCXmlDataComboBoxBuilder());
-  add_builder(QStringLiteral("Tabs"         ),  new LCXmlTabWidgetBuilder());
-  add_builder(QStringLiteral("ScrollArea"   ),  new LCXmlScrollAreaBuilder());
-  add_builder(QStringLiteral("ListWidget"   ),  new LCXmlListWidgetBuilder());
-  add_builder(QStringLiteral("StackWidget"  ),  new LCXmlStackWidgetBuilder());
+  add_builder(QStringLiteral("Frame"              ),  new LCXmlFrameBuilder());
+  add_builder(QStringLiteral("Button"             ),  new LCXmlButtonBuilder());
+  add_builder(QStringLiteral("Label"              ),  new LCXmlLabelBuilder());
+  add_builder(QStringLiteral("Table"              ),  new LCXmlTableWidgetBuilder());
+  add_builder(QStringLiteral("LineEdit"           ),  new LCXmlDataLineEditBuilder());
+  add_builder(QStringLiteral("ComboBox"           ),  new LCXmlDataComboBoxBuilder());
+  add_builder(QStringLiteral("Tabs"               ),  new LCXmlTabWidgetBuilder());
+  add_builder(QStringLiteral("ScrollArea"         ),  new LCXmlScrollAreaBuilder());
+  add_builder(QStringLiteral("ListWidget"         ),  new LCXmlListWidgetBuilder());
+  add_builder(QStringLiteral("StackWidget"        ),  new LCXmlStackWidgetBuilder());
   add_builder(QStringLiteral("SplitterVertical"   ),  new LCXmlSplitterBuilder(Qt::Vertical));
   add_builder(QStringLiteral("SplitterHorizontal" ),  new LCXmlSplitterBuilder(Qt::Horizontal));
-  add_builder(QStringLiteral("DataComboLabel"     ),  new LCXmlDataComboLabelBuilder());
 
   return builders_map;
 }
