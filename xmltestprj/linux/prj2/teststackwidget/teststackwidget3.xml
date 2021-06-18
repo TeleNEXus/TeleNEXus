@@ -5,11 +5,11 @@
     <SplitterHorizontal>
 
       <ScrollArea style="(...){background:green; qproperty-alignment: AlignCenter;}">
-        <Frame size="500;450" style="(...){qproperty-alignment: AlignCenter;}">
+        <Frame size="500;450" style="(...){}">
           <widgets>
 
             <StackWidget 
-              position="100;100" style="(...){ color:yellow; background:lightblue;}" data="localsource:listwidgetitem:string">
+              position="100;100" style="(...){ color:yellow; background:red;}" data="localsource:listwidgetitem:string">
 
               <item matching="item0">
                 <Label text="Widget item 0" />
@@ -27,10 +27,14 @@
                 <Label movie="movies/10_11_12_13.gif" />
               </item>
 
-              <item matching="item4">
+              <item matching="item0">
 
-                <Button text="write data" style="$(buttonCrazy) (...){color:green}" icon="file='picture/icon1.png'; size=(150, 50)">
+                <!-- <Button text="write data" style="$(buttonCrazy) (...){color:green}" icon="file='picture/icon1.png'; size=(150, 50)"> -->
 
+                  <Button text="" style=
+                    "(...){border-image: url(picture/picture_1.png)}
+                    (...):pressed {border-image: url(picture/picture_2.png)}
+                    (...):focus{padding: 10px; margin: 10px}">
                   <press>
                     <controlScript scriptId="testlaunch1" scriptAction="launch(500)"/>
                     <writeData data="localsource:test_string:string" value="press write string 2"/>
