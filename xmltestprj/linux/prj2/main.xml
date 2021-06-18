@@ -159,20 +159,20 @@
   <!--   position="400;300" -->
   <!--   /> -->
 
-  <!-- <WINDOW --> 
-  <!--   file="testdatalabels/testdatalabels1.xml" --> 
-  <!--   id="testdatalabel1" --> 
-  <!--   visible="true" -->
-  <!--   title="Test DataLabel 1" --> 
-  <!--   showMode="normal" -->
-  <!--   modality="false" -->
-  <!--   flags="" --> 
-  <!--   size="300;300" -->
-  <!--   position="0;0" -->
-  <!--   /> -->
+  <WINDOW 
+    file="testlabels/testlabels1.xml" 
+    id="testdatalabel1" 
+    visible="true"
+    title="Test DataLabel 1" 
+    showMode="normal"
+    modality="false"
+    flags="" 
+    size="300;300"
+    position="0;0"
+    />
 
   <!-- <WINDOW --> 
-  <!--   file="testdatalabels/testdatalabels2.xml" --> 
+  <!--   file="testlabels/testlabels2.xml" --> 
   <!--   id="testdatalabel2" --> 
   <!--   visible="true" -->
   <!--   title="Test Data Labels 2" --> 
@@ -184,40 +184,16 @@
   <!--   /> -->
 
   <!-- <WINDOW --> 
-  <!--   file="testlabels/testlabels.xml" --> 
-  <!--   id="testlabel" --> 
-  <!--   visible="false" -->
-  <!--   title="Test Labels" --> 
+  <!--   file="testbutton/testbutton.xml" --> 
+  <!--   id="testbutton" --> 
+  <!--   visible="true" -->
+  <!--   title="Test Buttons" --> 
   <!--   showMode="normal" -->
   <!--   modality="false" -->
   <!--   flags="" --> 
-  <!--   size="300;300" -->
-  <!--   position="0;0" -->
+  <!--   size="300;50" -->
+  <!--   position="300;600" -->
   <!--   /> -->
-
-  <!-- <WINDOW --> 
-  <!--   file="testlabels/testlabels2.xml" --> 
-  <!--   id="testlabel2" --> 
-  <!--   visible="false" -->
-  <!--   title="Test Labels 2" --> 
-  <!--   showMode="normal" -->
-  <!--   modality="false" -->
-  <!--   flags="" --> 
-  <!--   size="300;300" -->
-  <!--   position="300;300" -->
-  <!--   /> -->
-
-  <WINDOW 
-    file="testbutton/testbutton.xml" 
-    id="testbutton" 
-    visible="true"
-    title="Test Buttons" 
-    showMode="normal"
-    modality="false"
-    flags="" 
-    size="300;50"
-    position="300;600"
-    />
 
   <!-- <WINDOW --> 
   <!--   file="testbutton/testbutton2.xml" --> 

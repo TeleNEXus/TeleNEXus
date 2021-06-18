@@ -23,14 +23,16 @@
 
 #include "lcxmlbuilderbase.h"
 
-class LCXmlLabelBuilder : public LCXmlBuilderBase
+
+class LCXmlLabelBuilder final : public LCXmlBuilderBase
 {
 public:
-  LCXmlLabelBuilder();
-  virtual ~LCXmlLabelBuilder();
+  LCXmlLabelBuilder(){};
+  virtual ~LCXmlLabelBuilder(){};
+
 protected:
   virtual QWidget* buildLocal(
-      const QDomElement& _element, const LIApplication& _app) override final;
+      const QDomElement& _element, const LIApplication& _app) override;
 };
 
 #endif // LCXMLLABELBUILDER_H

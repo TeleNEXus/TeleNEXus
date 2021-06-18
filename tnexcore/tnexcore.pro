@@ -62,9 +62,8 @@ basicwidgets/widgets/lcqstackwidget.cpp \
 basicwidgets/builders/lcqwidgetvisiblecontrol.cpp \
 basicwidgets/builders/lcxmlbuilderbase.cpp \
 basicwidgets/builders/lcxmlframebuilder.cpp \
-basicwidgets/builders/lcxmllabelbuilder.cpp \
 basicwidgets/builders/lcxmlbuttonbuilder.cpp \
-basicwidgets/builders/lcxmldatalabelbuilder.cpp \
+basicwidgets/builders/lcxmllabelbuilder.cpp \
 basicwidgets/builders/lcxmltablewidgetbuilder.cpp \
 basicwidgets/builders/lcxmldatalineeditbuilder.cpp \
 basicwidgets/builders/lcxmldatacomboboxbuilder.cpp \
@@ -154,9 +153,8 @@ basicwidgets/widgets/lcqdatalabel.h \
 basicwidgets/widgets/lcqstackwidget.h \
 basicwidgets/builders/lcxmlbuilderbase.h \
 basicwidgets/builders/lcxmldatalineeditbuilder.h \
-basicwidgets/builders/lcxmldatalabelbuilder.h \
-basicwidgets/builders/lcxmldatalineeditbuilder.h \
 basicwidgets/builders/lcxmllabelbuilder.h \
+basicwidgets/builders/lcxmldatalineeditbuilder.h \
 basicwidgets/builders/lcxmlframebuilder.h \
 basicwidgets/builders/lcxmldatacomboboxbuilder.h \
 basicwidgets/builders/lcxmldatacombolabelbuilder.h \

@@ -22,7 +22,7 @@ INCLUDEPATH +=                                  \
        ./testjsdataformatter 
 
 
-SOURCES += testscreen.cpp \
+# SOURCES += testscreen.cpp \
 # SOURCES += main.cpp \
 # SOURCES +=  ./regexpr.cpp \
 # SOURCES +=  ./multipleattr.cpp \
@@ -32,7 +32,7 @@ SOURCES += testscreen.cpp \
 # SOURCES +=  ./testlayout.cpp \
 # SOURCES +=  ./testgridlayout.cpp \
 # SOURCES +=  ./listwidget.cpp \
-# SOURCES +=  ./testwidget.cpp \
+SOURCES +=  ./testwidget.cpp \
 # SOURCES +=  ./testwidget1.cpp \
 # SOURCES +=  ./testtable.cpp \
 #
