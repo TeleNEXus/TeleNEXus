@@ -17,7 +17,7 @@
         <LayoutVBox>
           <widgets>
 
-            <DataComboBox 
+            <ComboBox 
               style="(...){color:green; background:black; font: bold italic 16pt DejavuSansMono}
               (...) {
               border: 2px solid red;
@@ -29,9 +29,9 @@
               <item name="value[1]" value="1"/>
               <item name="value[2]" value="2"/>
               <item name="value[3]" value="3"/>
-            </DataComboBox>
+            </ComboBox>
 
-            <DataComboBox 
+            <ComboBox 
               style="
               (...) {
               border: 2px solid red;
@@ -80,9 +80,9 @@
             <item name="value[1]" value="1"/>
             <item name="value[2]" value="2"/>
             <item name="value[3]" value="3"/>
-          </DataComboBox>
+          </ComboBox>
 
-          <DataComboBox 
+          <ComboBox 
             style="(...){color:yellow; background:black; font: bold italic 16pt DejavuSansMono}"
             dataRead="localsource:bytes_uint16:uint16"
             dataWrite="qtslavetcp:hreg0:uint16">
@@ -90,7 +90,7 @@
           <item name="value[1]" value="1"/>
           <item name="value[2]" value="2"/>
           <item name="value[3]" value="3"/>
-            </DataComboBox>
+            </ComboBox>
 
           </widgets>
           <stretch/>
