@@ -11,6 +11,17 @@
             <StackWidget 
               position="100;100" style="(...){ color:yellow; background:red;}" data="localsource:listwidgetitem:string">
 
+              <actions>
+                <press>
+                  <controlScript scriptId="testlaunch1" scriptAction="launch(500)"/>
+                  <writeData data="localsource:test_string:string" value="press write string 2"/>
+                </press>
+                <release>
+                    <controlScript scriptId="testlaunch1" scriptAction="stop"/>
+                    <writeData data="localsource:test_string:string" value="press write string 3"/>
+                </release>
+              </actions>
+
               <item matching="item0">
                 <Label text="Widget item 0" />
               </item>
@@ -42,7 +53,7 @@
 
                   <release>
                     <controlScript scriptId="testlaunch1" scriptAction="stop"/>
-                    <writeData data="localsource:test_string:string" value="press write string 2"/>
+                    <writeData data="localsource:test_string:string" value="press write string 3"/>
                   </release>
 
                 </Button>
