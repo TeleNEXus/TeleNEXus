@@ -25,18 +25,18 @@
       </col>
 
       <col label="Data labels">
-        <DataLabel      data="localsource:  bits_size(1)    :bits"/>
+        <Label      data="localsource:  bits_size(1)    :bits"/>
 
-        <DataLabel      data="localsource:  bits_defs_1     :bits"/>
+        <Label      data="localsource:  bits_defs_1     :bits"/>
 
-        <DataLabel      data="localsource:  bytes_uint8     :uint8"    />
-        <DataLabel      data="localsource:  bytes_uint16    :uint16"   />
-        <DataLabel      data="localsource:  bytes_uint32    :uint32"   />
-        <DataLabel      data="localsource:  bytes_float32   :float32"  />
-        <DataLabel      data="localsource:  test_string     :string"   />
+        <Label      data="localsource:  bytes_uint8     :uint8"    />
+        <Label      data="localsource:  bytes_uint16    :uint16"   />
+        <Label      data="localsource:  bytes_uint32    :uint32"   />
+        <Label      data="localsource:  bytes_float32   :float32"  />
+        <Label      data="localsource:  test_string     :string"   />
 
-        <DataLabel      data="qtslavetcp:  hreg0  :uint16"   />
-        <DataLabel      data="qtslavetcp:  hreg1  :uint16"   />
+        <Label      data="qtslavetcp:  hreg0  :uint16"   />
+        <Label      data="qtslavetcp:  hreg1  :uint16"   />
       </col>
 
     </Table>

@@ -29,7 +29,7 @@
             <LayoutVBox>
               <widgets>
                 <DataLabel    data="localsource:listwidgetitem:string" />
-                <DataLineEdit data="localsource:listwidgetitem:string" />
+                <LineEdit data="localsource:listwidgetitem:string" />
               </widgets>
               <stretch/>
             </LayoutVBox>
