@@ -29,8 +29,20 @@
 
   <DATAFORMATS file="formatters.xml"/>
 
+  <WINDOW 
+    file="teststackwidget/teststackwidget3.xml" 
+    id="test stack widget 3" 
+    visible="true"
+    title="Test Stack Widget 3" 
+    showMode="normal"
+    modality="false"
+    flags="" 
+    size="900;700"
+    screen="0"
+    position="0;0"
+    />
   <!-- <WINDOW --> 
-  <!--   file="teststackwidget/teststackwidget2.xml" --> 
+  <!--   file="teststackwidget/teststackwidget1.xml" --> 
   <!--   id="test stack widget 1" --> 
   <!--   visible="true" -->
   <!--   title="Test Stack Widget 1" --> 
@@ -94,31 +106,31 @@
   <!--   position="310;0" -->
   <!--   /> -->
 
-  <WINDOW 
-    file="testcombobox/testcombobox1.xml" 
-    id="test DataComboBox 1" 
-    visible="true"
-    title="Test DataComboBox" 
-    showMode="normal"
-    modality="false"
-    flags="" 
-    size="300;300"
-    screen="0"
-    position="0;0"
-    />
+  <!-- <WINDOW --> 
+  <!--   file="testcombobox/testcombobox1.xml" --> 
+  <!--   id="test DataComboBox 1" --> 
+  <!--   visible="true" -->
+  <!--   title="Test DataComboBox" --> 
+  <!--   showMode="normal" -->
+  <!--   modality="false" -->
+  <!--   flags="" --> 
+  <!--   size="300;300" -->
+  <!--   screen="0" -->
+  <!--   position="0;0" -->
+  <!--   /> -->
 
-  <WINDOW 
-    file="testcombobox/testcombobox2.xml" 
-    id="test DataComboBox 2" 
-    visible="true"
-    title="Test DataComboBox" 
-    showMode="normal"
-    modality="false"
-    flags="" 
-    size="300;300"
-    screen="0"
-    position="550;150"
-    />
+  <!-- <WINDOW --> 
+  <!--   file="testcombobox/testcombobox2.xml" --> 
+  <!--   id="test DataComboBox 2" --> 
+  <!--   visible="true" -->
+  <!--   title="Test DataComboBox" --> 
+  <!--   showMode="normal" -->
+  <!--   modality="false" -->
+  <!--   flags="" --> 
+  <!--   size="300;300" -->
+  <!--   screen="0" -->
+  <!--   position="550;150" -->
+  <!--   /> -->
 
   <!-- <WINDOW --> 
   <!--   file="testlineedit/testlineedit1.xml" --> 
@@ -163,7 +175,7 @@
   <!--   file="testlabels/testlabels1.xml" --> 
   <!--   id="testlabel1" --> 
   <!--   visible="true" -->
-  <!--   title="Test DataLabel 1" --> 
+  <!--   title="Test Label 1" --> 
   <!--   showMode="normal" -->
   <!--   modality="false" -->
   <!--   flags="" --> 

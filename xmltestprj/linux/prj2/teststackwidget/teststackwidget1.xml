@@ -7,54 +7,66 @@
         <LayoutHBox>
           <widgets>
 
-            <StackWidget 
-              style="(...){ max-width: 250; color:yellow; background:lightblue;}"
-              data="localsource:listwidgetitem:string">
+            <StackWidget size="150;150"
+              style="(...){ color:yellow; background:lightblue;}" data="localsource:listwidgetitem:string">
 
-              <item matching="item0">
-                <Label text="Widget item 0" />
-              </item>
+            <item matching="item0">
+              <Label text="Widget item 0" />
+            </item>
 
-              <item matching="item1">
-                <Label text="Widget item 1" />
-              </item>
+            <item matching="item1">
+              <Label data="localsource:listwidgetitem:string" />
+            </item>
 
-              <item matching="item2">
-                <Label text="Widget item 2" />
-              </item>
+            <item matching="item2">
+              <Label picture="file=picture/picture_1.png; size=(100,100)" />
+            </item>
 
-              <item matching="item3">
-                <Label text="Widget item 3" />
-              </item>
+            <item matching="item3">
+              <Label movie="movies/10_11_12_13.gif" />
+            </item>
 
-              <item matching="item4">
-                <Label text="Widget item 4" />
-              </item>
+            <item matching="item4">
 
-              <item matching="item5">
-                <Label text="Widget item 5" />
-              </item>
+              <Button text="write data" style="$(buttonCrazy) (...){color:green}" icon="file='picture/icon1.png'; size=(150, 50)">
 
-              <item matching="item6">
-                <Label text="Widget item 6" />
-              </item>
+                <press>
+                  <controlScript scriptId="testlaunch1" scriptAction="launch(500)"/>
+                  <writeData data="localsource:test_string:string" value="press write string 2"/>
+                </press>
 
-            </StackWidget>
+                <release>
+                  <controlScript scriptId="testlaunch1" scriptAction="stop"/>
+                  <writeData data="localsource:test_string:string" value="press write string 2"/>
+                </release>
 
-          </widgets>
+              </Button>
 
-          <layout>
-            <LayoutVBox>
-              <widgets>
-                <DataLabel    data="localsource:listwidgetitem:string" />
-                <DataLineEdit data="localsource:listwidgetitem:string" />
-              </widgets>
-              <stretch/>
-            </LayoutVBox>
-          </layout>
-        </LayoutHBox>
-      </layout>
-    </Frame>
+            </item>
+
+            <item matching="item5">
+              <Label text="Widget item 5" />
+            </item>
+
+            <item matching="item6">
+              <Label text="Widget item 6" />
+            </item>
+
+          </StackWidget>
+        </widgets>
+
+        <layout>
+          <LayoutVBox>
+            <widgets>
+              <Label    data="localsource:listwidgetitem:string" />
+              <LineEdit data="localsource:listwidgetitem:string" />
+            </widgets>
+            <stretch/>
+          </LayoutVBox>
+        </layout>
+      </LayoutHBox>
+    </layout>
+  </Frame>
 </mainWidget>
 </WINDOW>
 

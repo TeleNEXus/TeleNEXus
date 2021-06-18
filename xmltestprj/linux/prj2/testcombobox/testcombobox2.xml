@@ -15,7 +15,7 @@
     <Frame>
       <widgets>
 
-            <DataComboBox 
+            <ComboBox 
 
               style="(...){color:green; background:black; font: bold italic 16pt DejavuSansMono}
               (...) {
@@ -28,9 +28,9 @@
               <item name="value[1]" value="1"/>
               <item name="value[2]" value="2"/>
               <item name="value[3]" value="3"/>
-            </DataComboBox>
+            </ComboBox>
 
-            <DataComboBox 
+            <ComboBox 
               position="50;50"
               style="
               (...) {
@@ -80,9 +80,9 @@
             <item name="value[1]" value="1"/>
             <item name="value[2]" value="2"/>
             <item name="value[3]" value="3"/>
-          </DataComboBox>
+          </ComboBox>
 
-          <DataComboBox 
+          <ComboBox 
             position="100;100"
             style="(...){color:yellow; background:black; font: bold italic 16pt DejavuSansMono}"
             dataRead="localsource:bytes_uint16:uint16"
@@ -91,7 +91,7 @@
           <item name="value[1]" value="1"/>
           <item name="value[2]" value="2"/>
           <item name="value[3]" value="3"/>
-            </DataComboBox>
+            </ComboBox>
 
       </widgets>
     </Frame>

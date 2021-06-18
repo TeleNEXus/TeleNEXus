@@ -59,6 +59,7 @@ LCQStackWidget::LCQStackWidget(
         if(it != ld.mValueIndex.end())
         {
           setCurrentIndex(it.value());
+          qDebug() << "Resize stacked widget";
         }
         /* else */
         /* { */
