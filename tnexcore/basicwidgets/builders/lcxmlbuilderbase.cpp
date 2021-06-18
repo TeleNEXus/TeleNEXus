@@ -270,7 +270,6 @@ void LCXmlBuilderBase::setWidgetStyle(const QString& _style, QWidget* _widget,
   {
     set_style(_objectName);
   }
-  qDebug() << "+++++++++outstyle   " << outstyle;
 }
 
 //------------------------------------------------------------------------------
@@ -303,6 +302,11 @@ LCXmlBuilderBase::getMovie(const QString& _movieFile)
     return it.value();
   }
   QMovie* movie = new QMovie(_movieFile);
+  if(!movie->isValid())
+  {
+    delete movie;
+    return QSharedPointer<LIMovieAccess>();
+  }
   auto ret = QSharedPointer<CMovieAccess>(new CMovieAccess(movie));
   __slMovies.insert(_movieFile, ret);
   return ret;
