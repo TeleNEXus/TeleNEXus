@@ -75,33 +75,33 @@ public:
 
   virtual bool eventFilter(QObject*, QEvent* _event) override
   {
-    bool ret = false;
-
+    bool ret =  false;
     switch(_event->type())
     {
     case QEvent::Type::MouseButtonPress:
       if(static_cast<QMouseEvent*>(_event)->button() == Qt::MouseButton::LeftButton)
       {
         perform(mActionsPress);
-        ret = true;
       }
+      /* ret = true; */
       break;
 
     case QEvent::Type::MouseButtonRelease:
       if(static_cast<QMouseEvent*>(_event)->button() == Qt::MouseButton::LeftButton)
       {
         perform(mActionsRelease);
-        ret = true;
       }
+      /* ret = true; */
+      break;
 
     case QEvent::Type::TouchBegin:
       perform(mActionsPress);
-      ret = true;
+      /* ret = true; */
       break;
 
     case QEvent::Type::TouchEnd:
       perform(mActionsRelease);
-      ret = true;
+      /* ret = true; */
       break;
 
     /* case QEvent::Type::KeyPress: */
@@ -171,18 +171,32 @@ QWidget* LCXmlStackWidgetBuilder::buildLocal(
 
   auto stacked_widget = new LCQStackWidget(source, data_spec.dataId); 
 
-  //TODO: add actions
   
-  /* TActions actions_press; */
-  /* TActions actions_release; */
-  /* if(!_element.(__slTags.actions).isNull()) */
-  /* { */
-  /*   actions_press = LCXmlStdActionBuilder::instance().build( */
-  /* } */
+  TActions actions_press;
+  TActions actions_release;
+
+  [&_element, &actions_press, &actions_release, &_app]()
+  {
+    auto actions_element = _element.firstChildElement(__slTags.actions);
+    if(actions_element.isNull()) return;
+
+    actions_press = LCXmlStdActionBuilder::instance().
+      build( actions_element.firstChildElement(__slTags.press), _app);
+
+    actions_release = LCXmlStdActionBuilder::instance().build(
+        actions_element.firstChildElement(__slTags.release), _app);
+  }();
+
+  QObject* event_filter = nullptr;
+  if((actions_press.size() != 0) || (actions_release.size() != 0))
+  {
+    event_filter = new CEventFilter(
+        actions_press, actions_release, stacked_widget);
+  }
 
 
   auto add_item = 
-    [&_app, &stacked_widget, &format](const QDomNode& _node)
+    [&_app, &stacked_widget, &format, event_filter](const QDomNode& _node)
     {
 
       if(!_node.isElement()) return;
@@ -203,6 +217,10 @@ QWidget* LCXmlStackWidgetBuilder::buildLocal(
         if(widget)
         {
           stacked_widget->addWidget(widget, format->toBytes(attr_matching));
+          if(event_filter)
+          {
+            widget->installEventFilter(event_filter);
+          }
           break;
         }
       }
