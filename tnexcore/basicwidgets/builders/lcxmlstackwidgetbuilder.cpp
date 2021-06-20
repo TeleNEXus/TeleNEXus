@@ -50,6 +50,8 @@ static const struct
   QString press   = "press";
   QString release = "release";
   QString item = "item";
+  QString itemUndef = "itemUndef";
+  QString itemWrong = "itemWrong";
 } __slTags;
 
 
@@ -187,6 +189,7 @@ QWidget* LCXmlStackWidgetBuilder::buildLocal(
         actions_element.firstChildElement(__slTags.release), _app);
   }();
 
+
   QObject* event_filter = nullptr;
   if((actions_press.size() != 0) || (actions_release.size() != 0))
   {
@@ -195,17 +198,23 @@ QWidget* LCXmlStackWidgetBuilder::buildLocal(
   }
 
 
-  auto add_item = 
-    [&_app, &stacked_widget, &format, event_filter](const QDomNode& _node)
+  [&_element, &_app, &stacked_widget]()
+  {
+    auto undef_element = _element.firstChildElement(__slTags.itemUndef);
+    if(undef_element.isNull()) return;
+  }();
+
+
+
+  auto add_widget = 
+    [&_app, &stacked_widget, event_filter](
+        const QDomElement _element,
+        const QByteArray& _matching,
+        std::function<void(QWidget* _widget, 
+          const QByteArray& _matching)> _adder)
     {
 
-      if(!_node.isElement()) return;
-      QDomElement el = _node.toElement();
-
-      QString attr_matching = el.attribute(__slAttributes.matching);
-      if(attr_matching.isNull()) return;
-
-      for(QDomNode node = el.firstChild(); 
+      for(auto node = _element.firstChild(); 
           !node.isNull(); 
           node = node.nextSibling())
       {
@@ -216,7 +225,7 @@ QWidget* LCXmlStackWidgetBuilder::buildLocal(
         QWidget* widget = builder->build(we, _app);
         if(widget)
         {
-          stacked_widget->addWidget(widget, format->toBytes(attr_matching));
+          _adder(widget, _matching);
           if(event_filter)
           {
             widget->installEventFilter(event_filter);
@@ -226,11 +235,50 @@ QWidget* LCXmlStackWidgetBuilder::buildLocal(
       }
     };
 
+  auto add_item = 
+    [&stacked_widget](QWidget* _widget, const QByteArray& _matching)
+    {
+      stacked_widget->addWidget(_widget, _matching);
+    };
+
+
+  //add item undef
+  [&_element, &add_widget, &stacked_widget]()
+  {
+    auto el = _element.firstChildElement(__slTags.itemUndef);
+    if(el.isNull()) return;
+    add_widget(el, QByteArray(), 
+        [&stacked_widget](QWidget* _widget, const QByteArray)
+        {
+          stacked_widget->addWidgetUndef(_widget);
+        });
+  }();
+
+  //add item wrong 
+  [&_element, &add_widget, &stacked_widget]()
+  {
+    auto el = _element.firstChildElement(__slTags.itemWrong);
+    if(el.isNull()) return;
+    add_widget(el, QByteArray(), 
+        [&stacked_widget](QWidget* _widget, const QByteArray)
+        {
+          stacked_widget->addWidgetWrong(_widget);
+        });
+  }();
+
+
+  //add items
   for(QDomNode node = _element.firstChildElement(__slTags.item);
       !node.isNull();
       node = node.nextSiblingElement(__slTags.item))
   {
-    add_item(node);
+    auto el = node.toElement();
+    if(el.isNull()) continue;
+    QString attr_matching = el.attribute(__slAttributes.matching);
+    if(attr_matching.isNull()) continue;
+    auto matching = format->toBytes(attr_matching);
+    if(matching.isNull()) continue;
+    add_widget(el, matching, add_item);
   }
 
   setWidgetName(      _element, stacked_widget);

@@ -22,6 +22,16 @@
                 </release>
               </actions>
 
+              <itemUndef>
+                <Label text="Undefined Item" />
+              </itemUndef>
+
+              <itemWrong>
+                <Label text="Wrong Item" />
+              </itemWrong>
+
+
+
               <item matching="item0">
                 <Label text="Widget item 0" />
               </item>
