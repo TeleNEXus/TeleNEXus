@@ -33,6 +33,7 @@
 #include "lcxmllistwidgetbuilder.h"
 #include "lcxmlstackwidgetbuilder.h"
 #include "lcxmlsplitterbuilder.h"
+#include "lcxmlpushareabuilder.h"
 
 #include <qnamespace.h>
 
@@ -60,6 +61,7 @@ QMap<QString, QSharedPointer<LIXmlWidgetBuilder>> getBuilders()
   add_builder(QStringLiteral("StackWidget"        ),  new LCXmlStackWidgetBuilder());
   add_builder(QStringLiteral("SplitterVertical"   ),  new LCXmlSplitterBuilder(Qt::Vertical));
   add_builder(QStringLiteral("SplitterHorizontal" ),  new LCXmlSplitterBuilder(Qt::Horizontal));
+  add_builder(QStringLiteral("PushArea"           ),  new LCXmlPushAreaBuilder());
 
   return builders_map;
 }
