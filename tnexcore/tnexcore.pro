@@ -74,6 +74,7 @@ basicwidgets/builders/lcxmlstackwidgetbuilder.cpp \
 basicwidgets/builders/lcxmlsplitterbuilder.cpp \
 basicwidgets/builders/lcxmldatacombolabelbuilder.cpp \
 basicwidgets/builders/lcxmlstdactionbuilder.cpp \
+basicwidgets/builders/lcxmlpushareabuilder.cpp \
 basicwidgets/basicwidgetbuilders.cpp \
 dataformatters/lcformatterbase.cpp \
 dataformatters/lcformatterbitfield.cpp \
@@ -168,6 +169,7 @@ basicwidgets/builders/lcqwidgetvisiblecontrol.h \
 basicwidgets/builders/lcxmlstackwidgetbuilder.h \
 basicwidgets/builders/lcxmlsplitterbuilder.h \
 basicwidgets/builders/lcxmlstdactionbuilder.h \
+basicwidgets/builders/lcxmlpushareabuilder.cpp \
 basicwidgets/basicwidgetbuilders.h \
 dataformatters/lcformatterbase.h \
 dataformatters/lcformatterbitfield.h \

@@ -75,6 +75,7 @@ public:
   {
   }
 
+protected:
   virtual bool eventFilter(QObject*, QEvent* _event) override
   {
     bool ret =  false;

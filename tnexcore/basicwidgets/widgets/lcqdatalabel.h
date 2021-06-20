@@ -18,8 +18,8 @@
  * You should have received a copy of the GNU General Public License
  * along with TeleNEXus.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef LCQREMLABEL_H
-#define LCQREMLABEL_H
+#ifndef LCQDATALABEL_H
+#define LCQDATALABEL_H
 
 #include "lqextendevent.h"
 
@@ -55,4 +55,4 @@ private:
   void setActive(bool _flag);
 };
 
-#endif // LCQREMLABEL_H
+#endif // LCQDATALABEL_H

@@ -30,17 +30,29 @@
   <DATAFORMATS file="formatters.xml"/>
 
   <WINDOW 
-    file="teststackwidget/teststackwidget3.xml" 
-    id="test stack widget 3" 
+    file="testpusharea/testpusharea1.xml" 
+    id="test push area 1" 
     visible="true"
-    title="Test Stack Widget 3" 
+    title="Test push area 1" 
     showMode="normal"
     modality="false"
     flags="" 
-    size="900;700"
+    size="300;300"
     screen="0"
     position="0;0"
     />
+  <!-- <WINDOW --> 
+  <!--   file="teststackwidget/teststackwidget3.xml" --> 
+  <!--   id="test stack widget 3" --> 
+  <!--   visible="true" -->
+  <!--   title="Test Stack Widget 3" --> 
+  <!--   showMode="normal" -->
+  <!--   modality="false" -->
+  <!--   flags="" --> 
+  <!--   size="900;700" -->
+  <!--   screen="0" -->
+  <!--   position="0;0" -->
+  <!--   /> -->
   <!-- <WINDOW --> 
   <!--   file="teststackwidget/teststackwidget1.xml" --> 
   <!--   id="test stack widget 1" --> 
