@@ -50,5 +50,7 @@ public:
   virtual ~LCQStackWidget();
 
   void addWidget(QWidget* _widget, const QByteArray& _matching);
+  void addWidgetUndef(QWidget* _widget);
+  void addWidgetWrong(QWidget* _widget);
 };
 #endif /*LCQSTACKEDWIDGET_H_ */

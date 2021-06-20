@@ -35,6 +35,8 @@ class CLocalData
 public:
   QSharedPointer<LIRemoteDataReader> mDataReader;
   QMap<QByteArray, int> mValueIndex;
+  int indexUndef = -1;
+  int indexWrong = -1;
   CLocalData(){}
 };
 
@@ -48,24 +50,27 @@ LCQStackWidget::LCQStackWidget(
   QStackedWidget(_parent)
 {
   mpLocal = new CLocalData;
-  /* QStackedWidget::addWidget(new QWidget); */
 
   auto read_handler =
       [this](QSharedPointer<QByteArray> _data, 
           LIRemoteDataReader::EReadStatus _dataStatus)
       {
-        if(_dataStatus != LIRemoteDataReader::EReadStatus::Valid) return;
-        auto it = ld.mValueIndex.find(*_data);
-        if(it != ld.mValueIndex.end())
+
+        if(_dataStatus != LIRemoteDataReader::EReadStatus::Valid) 
         {
-          setCurrentIndex(it.value());
-          qDebug() << "Resize stacked widget";
+          setCurrentIndex(ld.indexUndef);
+          return;
         }
-        /* else */
-        /* { */
-        /*   setCurrentIndex(0); */
-        /*   qDebug() << "LCQStackWidget undef widget"; */
-        /* } */
+
+        auto it = ld.mValueIndex.find(*_data);
+
+        if(it == ld.mValueIndex.end())
+        {
+          setCurrentIndex(ld.indexWrong);
+          return;
+        }
+
+        setCurrentIndex(it.value());
       };
 
   ld.mDataReader = _source->createReader(_data);
@@ -87,4 +92,17 @@ void LCQStackWidget::addWidget(QWidget* _widget, const QByteArray& _matching)
   ld.mValueIndex.insert(_matching, QStackedWidget::addWidget(_widget));
 }
 
+//------------------------------------------------------------------------------
+void LCQStackWidget::addWidgetUndef(QWidget* _widget)
+{
+  int index = QStackedWidget::addWidget(_widget);
+  ld.indexUndef = index;
+}
+
+//------------------------------------------------------------------------------
+void LCQStackWidget::addWidgetWrong(QWidget* _widget)
+{
+  int index = QStackedWidget::addWidget(_widget);
+  ld.indexWrong= index;
+}
 
