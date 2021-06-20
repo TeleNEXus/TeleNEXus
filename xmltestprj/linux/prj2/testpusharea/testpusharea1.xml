@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<WINDOW>
+  <mainWidget>
+    <Frame>
+      <layout>
+        <LayoutVBox>
+          <widgets>
+
+            <PushArea>
+              <actions>
+                <push>
+                </push>
+                <released>
+                </released>
+              </actions>
+              <pressed>
+                <!-- <Label movie="movies/10_11_12_13.gif" /> -->
+                <Label picture="file=picture/picture_2.png; size=(100,100)" />
+              </pressed> 
+              <released>
+                <Label picture="file=picture/picture_1.png; size=(100,100)" />
+              </released>
+            </PushArea>
+
+          </widgets>
+        </LayoutVBox>
+      </layout>
+    </Frame>
+  </mainWidget>
+</WINDOW>
+
