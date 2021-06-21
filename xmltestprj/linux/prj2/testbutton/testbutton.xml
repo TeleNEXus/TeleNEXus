@@ -21,16 +21,16 @@
 
             <Button text = "write data" 
               style = "$(buttonCrazy) (...){color:green}"
-              icon = "file='picture/icon1.png'; size=(150, 50)" pushDelay="1000">
+              icon = "file='picture/icon1.png'; size=(150, 50)" pushDelay="100">
 
               <press>
                 <controlScript scriptId="testlaunch1" scriptAction="launch(500)"/>
-                <writeData data="localsource:test_string:string" value="press write string 2"/>
+                <writeData data="localsource:test_string:string" value="Push button press"/>
               </press>
 
               <release>
                 <controlScript scriptId="testlaunch1" scriptAction="stop"/>
-                <writeData data="localsource:test_string:string" value="press write string 2"/>
+                <writeData data="localsource:test_string:string" value="Push button release"/>
               </release>
             </Button>
 

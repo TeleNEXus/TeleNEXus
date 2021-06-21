@@ -29,18 +29,18 @@
 
   <DATAFORMATS file="formatters.xml"/>
 
-  <!-- <WINDOW --> 
-  <!--   file="testpusharea/testpusharea2.xml" --> 
-  <!--   id="test push area 2" --> 
-  <!--   visible="true" -->
-  <!--   title="Test push area 2" --> 
-  <!--   showMode="normal" -->
-  <!--   modality="false" -->
-  <!--   flags="" --> 
-  <!--   size="300;300" -->
-  <!--   screen="0" -->
-  <!--   position="0;0" -->
-  <!--   /> -->
+  <WINDOW 
+    file="testpusharea/testpusharea2.xml" 
+    id="test push area 2" 
+    visible="true"
+    title="Test push area 2" 
+    showMode="normal"
+    modality="false"
+    flags="" 
+    size="300;300"
+    screen="0"
+    position="0;0"
+    />
   <!-- <WINDOW --> 
   <!--   file="testpusharea/testpusharea1.xml" --> 
   <!--   id="test push area 1" --> 

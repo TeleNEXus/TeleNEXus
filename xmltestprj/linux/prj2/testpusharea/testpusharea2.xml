@@ -5,7 +5,7 @@
           <widgets>
             <PushArea fixedSize="100;100" position="100;100"
               style="(...){border: 2px solid green; background: red}">
-              <actions pushDelay="1000">
+              <actions pushDelay="250">
                 <press>
                   <controlScript scriptId="testlaunch1" scriptAction="launch(500)"/>
                   <writeData data="localsource:test_string:string" value="PushLabel press"/>

@@ -72,12 +72,14 @@ QWidget* LCXmlPushAreaBuilder::buildLocal(
   struct SCommonData
   {
     QSharedPointer<LIMovieAccess> spCurrentMovieAccess;
-    QTimer timer;
+    /* QTimer timer; */
     SCommonData()
     {
-      timer.setSingleShot(true);
+      /* timer.setSingleShot(true); */
     }
   };
+
+  LCQPushLabel* push_label = new LCQPushLabel();
 
   auto common_data = QSharedPointer<SCommonData>(new SCommonData());
 
@@ -85,14 +87,15 @@ QWidget* LCXmlPushAreaBuilder::buildLocal(
   auto element_actions = _element.firstChildElement(__slTags.actions);
   if(!element_actions.isNull())
   {
-    QString attr_pushDelay = element_actions.attribute(__slAttributes.pushDelay);
-    if(!attr_pushDelay.isNull())
+    QString attr_push_delay = element_actions.attribute(__slAttributes.pushDelay);
+
+    if(!attr_push_delay.isNull())
     {
       bool flag = false;
-      int pushDelay = attr_pushDelay.toInt(&flag);
+      int delay = attr_push_delay.toInt(&flag);
       if(flag)
       {
-        if(pushDelay >= 0) common_data->timer.setInterval(pushDelay);
+        push_label->setPushDelay(delay);
       }
     }
 
@@ -103,7 +106,6 @@ QWidget* LCXmlPushAreaBuilder::buildLocal(
       build(element_actions.firstChildElement(__slTags.release), _app);
   }
 
-  LCQPushLabel* push_label = new LCQPushLabel();
 
   auto create_handler = 
     [&_element, common_data, push_label](const QString& _tag, const TActions& _actions)
@@ -220,30 +222,30 @@ QWidget* LCXmlPushAreaBuilder::buildLocal(
   auto handler_release = create_handler(__slTags.released, actions_release);
 
 
-  QObject::connect(&(common_data->timer), &QTimer::timeout,
-      [handler_press, push_label]()
-      {
-        handler_press(push_label);
-      });
+  /* QObject::connect(&(common_data->timer), &QTimer::timeout, */
+  /*     [handler_press, push_label]() */
+  /*     { */
+  /*       handler_press(push_label); */
+  /*     }); */
 
-  QObject::connect(push_label, &LCQPushLabel::press, 
-      [common_data](QLabel*)
-      {
-        common_data->timer.start();
-      });
+  QObject::connect(push_label, &LCQPushLabel::press, handler_press);
+      /* [common_data](QLabel*) */
+      /* { */
+      /*   common_data->timer.start(); */
+      /* }); */
 
-  QObject::connect(push_label, &LCQPushLabel::release, 
-      [common_data, handler_release](QLabel* _label)
-      {
-        if(common_data->timer.isActive())
-        {
-          common_data->timer.stop();
-        }
-        else
-        {
-          handler_release(_label);
-        }
-      });
+  QObject::connect(push_label, &LCQPushLabel::release, handler_release);
+      /* [common_data, handler_release](QLabel* _label) */
+      /* { */
+      /*   if(common_data->timer.isActive()) */
+      /*   { */
+      /*     common_data->timer.stop(); */
+      /*   } */
+      /*   else */
+      /*   { */
+      /*     handler_release(_label); */
+      /*   } */
+      /* }); */
 
   setWidgetName(      _element, push_label);
   setWidgetStyle(     _element, push_label);
