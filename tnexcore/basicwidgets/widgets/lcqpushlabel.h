@@ -33,9 +33,10 @@ private:
 public:
 
   explicit LCQPushLabel(QWidget* _widget = nullptr);
-  ~LCQPushLabel();
+  virtual ~LCQPushLabel();
 
   virtual bool event(QEvent* _event) override;
+  void setPushDelay(int _msec);
 
 signals:
   void press(QLabel* _label);
