@@ -24,11 +24,14 @@
 #include "LIApplication.h"
 #include "xmlcommon.h"
 #include "lcxmlstdactionbuilder.h"
+#include "lcqpushbutton.h"
 
-#include <QPushButton>
+/* #include <QPushButton> */
+#include <QSharedPointer>
 #include <QDomElement>
 #include <qicon.h>
 #include <QDebug>
+#include <QTimer>
 
 //==============================================================================
 static const struct
@@ -39,8 +42,14 @@ static const struct
 
 static const struct
 {
+  QString icon="icon";
   QString text="text";
+  QString pushDelay = "pushDelay";
 }__slAttributes;
+
+using TActions = LCXmlStdActionBuilder::TActions;
+//==============================================================================
+static void performActions(const TActions& _actions);
 
 //==============================================================================LCXmlButtonBuilder
 LCXmlButtonBuilder::LCXmlButtonBuilder()
@@ -52,39 +61,42 @@ LCXmlButtonBuilder::~LCXmlButtonBuilder()
 {
 }
 
-using TActions = LCXmlStdActionBuilder::TActions;
-
 //------------------------------------------------------------------------------
 QWidget* LCXmlButtonBuilder::buildLocal(
 const QDomElement& _element, const LIApplication& _app)
 {
 
-  QString attr_text = _element.attribute(__slAttributes.text);
-  if(attr_text.isNull())
+  QString attr = _element.attribute(__slAttributes.text);
+  if(attr.isNull())
   {
-    attr_text = QStringLiteral("Button");
+    attr = QStringLiteral("Button");
   }
 
-  QPushButton* button = new QPushButton(attr_text);
+  LCQPushButton* button = new LCQPushButton(attr);
 
+  attr = _element.attribute(__slAttributes.pushDelay);
+  if(!attr.isNull())
+  {
+    bool flag = false;
+    int delay = attr.toInt(&flag);
+    if(flag)
+    {
+      if(delay >= 0) button->setPushDelay(delay);
+    }
+  }
 
   TActions actions_pressed = LCXmlStdActionBuilder::instance().build(
       _element.firstChildElement(__slTags.press), _app);
 
-
   TActions actions_released = LCXmlStdActionBuilder::instance().build(
       _element.firstChildElement(__slTags.release), _app);
-
 
   if(actions_pressed.size() > 0)
   {
     QObject::connect(button, &QPushButton::pressed,
         [actions_pressed]()
         {
-          for(auto it = actions_pressed.begin(); it != actions_pressed.end(); it++)
-          {
-            (*it)();
-          }
+          performActions(actions_pressed);
         });
   }
 
@@ -93,14 +105,11 @@ const QDomElement& _element, const LIApplication& _app)
     QObject::connect(button, &QPushButton::released,
         [actions_released]()
         {
-          for(auto it = actions_released.begin(); it != actions_released.end(); it++)
-          {
-            (*it)();
-          }
+          performActions(actions_released);
         });
   }
 
-  auto pixmap = parsePixmap(_element.attribute(QStringLiteral("icon")));
+  auto pixmap = parsePixmap(_element.attribute(__slAttributes.icon));
 
   if(!pixmap.isNull())
   {
@@ -116,4 +125,11 @@ const QDomElement& _element, const LIApplication& _app)
   return button;
 }
 
-
+//==============================================================================
+static void performActions(const TActions& _actions)
+{
+  for(auto it = _actions.begin(); it != _actions.end(); it++)
+  {
+    (*it)();
+  }
+}
