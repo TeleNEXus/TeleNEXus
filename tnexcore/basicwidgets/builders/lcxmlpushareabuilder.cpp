@@ -34,7 +34,7 @@ static const struct
 {
   QString picture = "picture";
   QString movie = "movie";
-  QString delay = "delay";
+  QString pushDelay = "pushDelay";
 }__slAttributes;
 
 static const struct 
@@ -85,14 +85,14 @@ QWidget* LCXmlPushAreaBuilder::buildLocal(
   auto element_actions = _element.firstChildElement(__slTags.actions);
   if(!element_actions.isNull())
   {
-    QString attr_delay = element_actions.attribute(__slAttributes.delay);
-    if(!attr_delay.isNull())
+    QString attr_pushDelay = element_actions.attribute(__slAttributes.pushDelay);
+    if(!attr_pushDelay.isNull())
     {
       bool flag = false;
-      int delay = attr_delay.toInt(&flag);
+      int pushDelay = attr_pushDelay.toInt(&flag);
       if(flag)
       {
-        if(delay >= 0) common_data->timer.setInterval(delay);
+        if(pushDelay >= 0) common_data->timer.setInterval(pushDelay);
       }
     }
 
@@ -106,7 +106,7 @@ QWidget* LCXmlPushAreaBuilder::buildLocal(
   LCQPushLabel* push_label = new LCQPushLabel();
 
   auto create_handler = 
-    [&_element, &_app, common_data, push_label](const QString& _tag, const TActions& _actions)
+    [&_element, common_data, push_label](const QString& _tag, const TActions& _actions)
     {
       using TRet = std::function<void(QLabel*)>;
 
