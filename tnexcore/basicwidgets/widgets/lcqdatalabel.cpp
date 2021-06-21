@@ -79,10 +79,15 @@ LCQDataLabel::LCQDataLabel(const QString& _dataName,
           {
             setText(str);
             setEnabled(false);
-            return;
           }
-          setText(mFormatter.data()->toString(*_data));
-          setEnabled(true);
+          else
+          {
+            setText(mFormatter.data()->toString(*_data));
+            setEnabled(true);
+          }
+          QRect bound = QFontMetrics(this->font()).boundingRect(this->text());
+          this->resize(bound.size());
+
         }
       });
 }

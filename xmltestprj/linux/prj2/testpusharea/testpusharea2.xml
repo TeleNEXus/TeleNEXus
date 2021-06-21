@@ -2,13 +2,10 @@
 <WINDOW>
   <mainWidget>
     <Frame>
-      <layout>
-        <LayoutVBox>
           <widgets>
-
-            <PushArea fixedSize="100;100" 
+            <PushArea fixedSize="100;100" position="100;100"
               style="(...){border: 2px solid green; background: red}">
-              <actions>
+              <actions delay="200">
                 <press>
                   <controlScript scriptId="testlaunch1" scriptAction="launch(500)"/>
                   <writeData data="localsource:test_string:string" value="PushLabel press"/>
@@ -26,10 +23,11 @@
               <!-- <pressed picture="file=picture/picture_1.png; size=(100,100)" /> -->
             </PushArea>
             <Label data="localsource:test_string:string"/>
+              <!-- style="(...){border: 2px solid green; background: red; qproperty-alignment:right}" -->
+<!-- size="250;20" -->
+            <Label text="localsource:test_string:string" position="30;30"/>
           </widgets>
           <stretch/>
-        </LayoutVBox>
-      </layout>
     </Frame>
   </mainWidget>
 </WINDOW>

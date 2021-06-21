@@ -18,6 +18,29 @@
  * You should have received a copy of the GNU General Public License
  * along with TeleNEXus.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "lcqpusharea.h"
-LCQPushArea::LCQPushArea(QWidget* _widget) :
-  QLabel()
+#ifndef LCQPUSHAREA_H_
+#define LCQPUSHAREA_H_
+
+#include <QLabel>
+#include <functional>
+
+class LCQPushLabel : public QLabel
+{
+  Q_OBJECT;
+private:
+  void* mpLocal;
+
+public:
+
+  explicit LCQPushLabel(QWidget* _widget = nullptr);
+  ~LCQPushLabel();
+
+  virtual bool event(QEvent* _event) override;
+
+signals:
+  void press(QLabel* _label);
+  void release(QLabel* _label);
+  void shown(QLabel* _label);
+  void hidden(QLabel* _label);
+};
+#endif /* LCQPUSHAREA_H_ */
