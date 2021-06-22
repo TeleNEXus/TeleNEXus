@@ -37,7 +37,7 @@ public:
   };
 
   using THandler = std::function<void(QSharedPointer<QByteArray>, EReadStatus)>;
-
+  
   LIRemoteDataReader(){}
   ~LIRemoteDataReader(){}
   virtual void readRequest() = 0;

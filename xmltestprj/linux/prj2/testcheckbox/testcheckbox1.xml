@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<WINDOW>
+  <mainWidget>
+    <Frame>
+      <layout>
+        <LayoutVBox>
+          <widgets>
+
+            <CheckBox 
+              text="Check box 1" 
+              data="localsource:test_string:string" checkValue="1" uncheckValue="2"/>
+
+            <CheckBox 
+              text="Check box 2" 
+              data="localsource:test_string:string" checkValue="2" uncheckValue="1"/>
+
+            <Label data="localsource:test_string:string"/>
+            <LineEdit data="localsource:test_string:string"/>
+
+            <CheckBox 
+              text="Check box 1" 
+              data="qtslavetcp:din0:bits" checkValue="1" uncheckValue="0"/>
+
+              <!-- style = "(...)::indicator:checked{image: url(picture/fon2.png)} -->
+<!-- (...)::indicator{width: 30px; height: 30px} -->
+            <CheckBox 
+              style = "
+              (...)::indicator{width: 30px; height: 30px}
+              (...):unchecked{background-color:grey}
+              (...):checked{background-color:lightgreen}
+              (...){font: 16pt; color:blue}
+              "
+              text="Check box 2" 
+              data="qtslavetcp:coil[0-2]:bits" checkValue="111" uncheckValue="010"/>
+
+            <Label data="qtslavetcp:coil0:bool"/>
+            <LineEdit data="qtslavetcp:coil0:bool"/>
+
+          </widgets>
+          <stretch/>
+        </LayoutVBox>
+      </layout>
+    </Frame>
+  </mainWidget>
+</WINDOW>
+
+
