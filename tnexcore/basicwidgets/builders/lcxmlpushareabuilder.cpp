@@ -29,6 +29,7 @@
 #include <QDebug>
 #include <QDomElement>
 #include <QTimer>
+#include <qnamespace.h>
 
 static const struct
 {
@@ -72,11 +73,7 @@ QWidget* LCXmlPushAreaBuilder::buildLocal(
   struct SCommonData
   {
     QSharedPointer<LIMovieAccess> spCurrentMovieAccess;
-    /* QTimer timer; */
-    SCommonData()
-    {
-      /* timer.setSingleShot(true); */
-    }
+    SCommonData(){}
   };
 
   LCQPushLabel* push_label = new LCQPushLabel();
@@ -221,37 +218,17 @@ QWidget* LCXmlPushAreaBuilder::buildLocal(
   auto handler_press = create_handler(__slTags.pressed, actions_press);
   auto handler_release = create_handler(__slTags.released, actions_release);
 
-
-  /* QObject::connect(&(common_data->timer), &QTimer::timeout, */
-  /*     [handler_press, push_label]() */
-  /*     { */
-  /*       handler_press(push_label); */
-  /*     }); */
-
   QObject::connect(push_label, &LCQPushLabel::press, handler_press);
-      /* [common_data](QLabel*) */
-      /* { */
-      /*   common_data->timer.start(); */
-      /* }); */
 
   QObject::connect(push_label, &LCQPushLabel::release, handler_release);
-      /* [common_data, handler_release](QLabel* _label) */
-      /* { */
-      /*   if(common_data->timer.isActive()) */
-      /*   { */
-      /*     common_data->timer.stop(); */
-      /*   } */
-      /*   else */
-      /*   { */
-      /*     handler_release(_label); */
-      /*   } */
-      /* }); */
 
   setWidgetName(      _element, push_label);
   setWidgetStyle(     _element, push_label);
   setWidgetSize(      _element, push_label);
   setWidgetPosition(  _element, push_label);
   setWidgetFixedSize( _element, push_label);
+
+  push_label->setAlignment(Qt::AlignmentFlag::AlignCenter);
 
   return push_label;
 }

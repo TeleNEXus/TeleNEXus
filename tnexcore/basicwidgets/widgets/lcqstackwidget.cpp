@@ -27,8 +27,20 @@
 #include <QMap>
 #include <QByteArray>
 #include <QDebug>
+#include <QMouseEvent>
+#include <QKeyEvent>
+#include <qnamespace.h>
+#include <QTimer>
+#include <QGuiApplication>
 
 
+
+//==============================================================================
+enum class EState
+{
+  released,
+  pressed
+};
 //==============================================================================
 class CLocalData
 {
@@ -37,7 +49,14 @@ public:
   QMap<QByteArray, int> mValueIndex;
   int indexUndef = -1;
   int indexWrong = -1;
-  CLocalData(){}
+  QTimer timer;
+  EState state;
+  CLocalData()
+  {
+    state = EState::released;
+    timer.setSingleShot(true);
+    timer.setInterval(1000);
+  }
 };
 
 #define ld  (*(reinterpret_cast<CLocalData*>(mpLocal)))
@@ -79,6 +98,23 @@ LCQStackWidget::LCQStackWidget(
 
   ld.mDataReader->setHandler(read_handler);
   ld.mDataReader->connectToSource();
+
+  connect(&(ld.timer), &QTimer::timeout, 
+      [this]()
+      {
+        emit press();
+
+        static QMouseEvent event = QMouseEvent(
+            QEvent::Type::MouseButtonPress,
+            QPointF(),
+            QPointF(),
+            Qt::MouseButton::LeftButton,
+            Qt::MouseButtons(),
+            Qt::KeyboardModifiers()
+            );
+        QGuiApplication::sendEvent(this->currentWidget(), &event);
+      });
+  installEventFilter(this);
 }
 
 LCQStackWidget::~LCQStackWidget()
@@ -90,6 +126,7 @@ LCQStackWidget::~LCQStackWidget()
 void LCQStackWidget::addWidget(QWidget* _widget, const QByteArray& _matching)
 {
   ld.mValueIndex.insert(_matching, QStackedWidget::addWidget(_widget));
+  _widget->installEventFilter(this);
 }
 
 //------------------------------------------------------------------------------
@@ -97,6 +134,7 @@ void LCQStackWidget::addWidgetUndef(QWidget* _widget)
 {
   int index = QStackedWidget::addWidget(_widget);
   ld.indexUndef = index;
+  _widget->installEventFilter(this);
 }
 
 //------------------------------------------------------------------------------
@@ -104,5 +142,119 @@ void LCQStackWidget::addWidgetWrong(QWidget* _widget)
 {
   int index = QStackedWidget::addWidget(_widget);
   ld.indexWrong= index;
+  _widget->installEventFilter(this);
 }
+
+//------------------------------------------------------------------------------
+bool LCQStackWidget::eventFilter(QObject*, QEvent* _event)
+{
+
+  bool ret = false;
+
+  //---------------------------------------state_released[]
+  auto state_released = 
+    [this, &ret](QEvent* _event)
+    {
+      auto to_state_pressed = 
+        [this, &ret]()
+        {
+          ld.timer.start();
+          ret = true;
+          return EState::pressed;
+        };
+
+      switch(_event->type())
+      {
+      case QEvent::Type::MouseButtonDblClick:
+      case QEvent::Type::MouseButtonPress:
+        if(static_cast<QMouseEvent*>(_event)->button() == Qt::MouseButton::LeftButton)
+        {
+          return to_state_pressed();
+        }
+        break;
+
+      case QEvent::Type::KeyPress:
+        {
+          QKeyEvent& ke = *(static_cast<QKeyEvent*>(_event));
+          if(ke.key() == Qt::Key::Key_Space)
+          {
+            return to_state_pressed();
+          }
+        }
+      default:
+        break;
+      }
+      return EState::released;
+    };
+
+  //---------------------------------------state_pressed[]
+  auto state_pressed = 
+    [this](QEvent* _event)
+    {
+      auto to_state_released = 
+        [this]()
+        {
+          if(!(ld.timer.isActive()))
+          {
+            emit release();
+          }
+          ld.timer.stop();
+          return EState::released;
+        };
+
+      switch(_event->type())
+      {
+      case QEvent::Type::MouseButtonRelease:
+        if(static_cast<QMouseEvent*>(_event)->button() == Qt::MouseButton::LeftButton)
+        {
+          return to_state_released();
+        }
+        break;
+
+      case QEvent::Type::MouseMove:
+        {
+          QMouseEvent& me = *(static_cast<QMouseEvent*>(_event));
+          if((me.localPos().x() < 0.0) || 
+              (me.localPos().y() < 0.0) ||
+              (me.localPos().x() > this->size().width()) ||
+              (me.localPos().y() > this->size().height()))
+          {
+            return to_state_released();
+          }
+        }
+        break;
+
+      case QEvent::Type::KeyRelease:
+        {
+          QKeyEvent& ke = *(static_cast<QKeyEvent*>(_event));
+          if((ke.key() == Qt::Key::Key_Space) && (!ke.isAutoRepeat()))
+          {
+            return to_state_released();
+          }
+        }
+        break;
+
+      default:
+        break;
+      }
+      return EState::pressed;
+    };
+
+
+  switch(ld.state)
+  {
+  case EState::released:
+    ld.state = state_released(_event);
+    break;
+
+  case EState::pressed:
+    ld.state = state_pressed(_event);
+    break;
+  }
+
+  return ret;
+}
+
+
+
 

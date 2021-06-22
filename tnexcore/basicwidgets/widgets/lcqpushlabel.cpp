@@ -26,11 +26,19 @@
 #include <QTimer>
 
 //==============================================================================
+enum EState 
+{
+  released,
+  pressed
+};
+//==============================================================================
 struct SLocalData
 {
+  EState state;
   QTimer timer;
   SLocalData()
   {
+    state = EState::released;
     timer.setSingleShot(true);
   }
 };
@@ -48,6 +56,7 @@ LCQPushLabel::LCQPushLabel(QWidget* _widget) :
       {
         emit press(this);
       });
+  this->setFocusPolicy(Qt::FocusPolicy::StrongFocus);
 }
 
 //------------------------------------------------------------------------------
@@ -60,54 +69,106 @@ LCQPushLabel::~LCQPushLabel()
 bool LCQPushLabel::event(QEvent* _event)
 {
 
-  switch(_event->type())
-  {
-  case QEvent::Type::MouseButtonDblClick:
-  case QEvent::Type::MouseButtonPress:
-    if(static_cast<QMouseEvent*>(_event)->button() == 
-        Qt::MouseButton::LeftButton)
+  //---------------------------------------state_released[]
+  auto state_released = 
+    [this](QEvent* _event)
     {
-      ld.timer.start();
-      return true;
-    }
-    break;
+      auto to_state_pressed = 
+        [this]()
+        {
+          ld.timer.start();
+          return EState::pressed;
+        };
 
-  case QEvent::Type::MouseButtonRelease:
-    if(static_cast<QMouseEvent*>(_event)->button() == 
-        Qt::MouseButton::LeftButton)
-    {
-      if(!(ld.timer.isActive()))
+      switch(_event->type())
       {
-        emit release(this);
+      case QEvent::Type::MouseButtonDblClick:
+      case QEvent::Type::MouseButtonPress:
+        if(static_cast<QMouseEvent*>(_event)->button() == Qt::MouseButton::LeftButton)
+        {
+          return to_state_pressed();
+        }
+        break;
+
+      case QEvent::Type::KeyPress:
+        {
+          QKeyEvent& ke = *(static_cast<QKeyEvent*>(_event));
+          if(ke.key() == Qt::Key::Key_Space)
+          {
+            return to_state_pressed();
+          }
+        }
+      default:
+        break;
       }
-      ld.timer.stop();
-    }
+      return EState::released;
+    };
+
+  //---------------------------------------state_pressed[]
+  auto state_pressed = 
+    [this](QEvent* _event)
+    {
+      auto to_state_released = 
+        [this]()
+        {
+          if(!(ld.timer.isActive()))
+          {
+            emit release(this);
+          }
+          ld.timer.stop();
+          return EState::released;
+        };
+
+      switch(_event->type())
+      {
+      case QEvent::Type::MouseButtonRelease:
+        if(static_cast<QMouseEvent*>(_event)->button() == Qt::MouseButton::LeftButton)
+        {
+          return to_state_released();
+        }
+        break;
+
+      case QEvent::Type::MouseMove:
+        {
+          QMouseEvent& me = *(static_cast<QMouseEvent*>(_event));
+          if((me.localPos().x() < 0.0) || 
+              (me.localPos().y() < 0.0) ||
+              (me.localPos().x() > this->size().width()) ||
+              (me.localPos().y() > this->size().height()))
+          {
+            return to_state_released();
+          }
+        }
+        break;
+
+      case QEvent::Type::KeyRelease:
+        {
+          QKeyEvent& ke = *(static_cast<QKeyEvent*>(_event));
+          if((ke.key() == Qt::Key::Key_Space) && (!ke.isAutoRepeat()))
+          {
+            return to_state_released();
+          }
+        }
+        break;
+
+      default:
+        break;
+      }
+      return EState::pressed;
+    };
+
+
+  switch(ld.state)
+  {
+  case EState::released:
+    ld.state = state_released(_event);
     break;
 
-  /* case QEvent::Type::MouseMove: */
-  /*   { */
-  /*     QMouseEvent* me = static_cast<QMouseEvent*>(_event); */
-  /*     if((me->localPos().x() < 0.0) || */ 
-  /*         (me->localPos().y() < 0.0) || */
-  /*         (me->localPos().x() > this->size().width()) || */
-  /*         (me->localPos().y() > this->size().height())) */
-  /*     { */
-  /*       emit release(this); */
-  /*     } */
-  /*   } */
-  /*   break; */
-
-  case QEvent::Type::Show:
-    emit shown(this);
-    break;
-
-  case QEvent::Type::Hide:
-    emit hidden(this);
-    break;
-
-  default:
+  case EState::pressed:
+    ld.state = state_pressed(_event);
     break;
   }
+
   return QLabel::event(_event);
 }
 
@@ -116,3 +177,4 @@ void LCQPushLabel::setPushDelay(int _msec)
 {
   if(_msec >= 0) ld.timer.setInterval(_msec);
 }
+

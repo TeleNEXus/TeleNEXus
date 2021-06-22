@@ -3,8 +3,12 @@
   <mainWidget>
     <Frame>
           <widgets>
-            <PushArea fixedSize="100;100" position="100;100"
-              style="(...){border: 2px solid green; background: red}">
+            <!-- <PushArea fixedSize="150;150" position="100;100" -->
+            <PushArea  position="100;100"
+
+              style="(...){border: 2px solid green; background: grey}
+              (...):focus{border: 10px solid yellow; padding: 10px}
+              ">
               <actions pushDelay="250">
                 <press>
                   <controlScript scriptId="testlaunch1" scriptAction="launch(500)"/>
@@ -18,7 +22,7 @@
               <!-- <released movie="movies/10_11_12_13.gif"/> -->
               <pressed movie="movies/20_21_22_23.gif" />
               <!-- <pressed movie="movies/10_11_12_13.gif"/> -->
-              <released picture="file=picture/picture_1.png; size=(100,100)" />
+              <released picture="file=picture/picture_1.png; size=(150,100)" />
               <!-- <released movie="movies/10_11_12_13.gif"/> -->
               <!-- <pressed picture="file=picture/picture_1.png; size=(100,100)" /> -->
             </PushArea>
@@ -26,6 +30,7 @@
               <!-- style="(...){border: 2px solid green; background: red; qproperty-alignment:right}" -->
 <!-- size="250;20" -->
             <Label text="localsource:test_string:string" position="30;30"/>
+            <LineEdit data="localsource:test_string:string" position="60;60"/>
           </widgets>
           <stretch/>
     </Frame>
