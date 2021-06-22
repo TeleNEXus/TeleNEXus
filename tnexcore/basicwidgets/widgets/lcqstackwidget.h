@@ -31,6 +31,7 @@ class LIRemoteDataReader;
 class LIRemoteDataWriter;
 class LIDataFormatter;
 
+
 class LCQStackWidget: public QStackedWidget 
 {
   Q_OBJECT;
@@ -52,5 +53,9 @@ public:
   void addWidget(QWidget* _widget, const QByteArray& _matching);
   void addWidgetUndef(QWidget* _widget);
   void addWidgetWrong(QWidget* _widget);
+  virtual bool eventFilter(QObject* _obj, QEvent* _event) override;
+signals:
+  void press(void);
+  void release(void);
 };
 #endif /*LCQSTACKEDWIDGET_H_ */

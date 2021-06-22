@@ -53,18 +53,20 @@
   <!--   screen="0" -->
   <!--   position="0;0" -->
   <!--   /> -->
-  <!-- <WINDOW --> 
-  <!--   file="teststackwidget/teststackwidget3.xml" --> 
-  <!--   id="test stack widget 3" --> 
-  <!--   visible="true" -->
-  <!--   title="Test Stack Widget 3" --> 
-  <!--   showMode="normal" -->
-  <!--   modality="false" -->
-  <!--   flags="" --> 
-  <!--   size="900;700" -->
-  <!--   screen="0" -->
-  <!--   position="0;0" -->
-  <!--   /> -->
+
+  <WINDOW 
+    file="teststackwidget/teststackwidget3.xml" 
+    id="test stack widget 3" 
+    visible="true"
+    title="Test Stack Widget 3" 
+    showMode="normal"
+    modality="false"
+    flags="" 
+    size="900;700"
+    screen="0"
+    position="0;0"
+    />
+
   <!-- <WINDOW --> 
   <!--   file="teststackwidget/teststackwidget1.xml" --> 
   <!--   id="test stack widget 1" --> 

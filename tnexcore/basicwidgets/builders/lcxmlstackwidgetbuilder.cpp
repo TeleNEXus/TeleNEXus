@@ -58,84 +58,92 @@ static const struct
 
 using TActions = LCXmlStdActionBuilder::TActions;
 //==============================================================================
-class CEventFilter : public QObject
+/* class CEventFilter : public QObject */
+/* { */
+/* private: */
+/*   TActions mActionsPress; */
+/*   TActions mActionsRelease; */
+
+/* public: */
+
+/*   CEventFilter( */
+/*       const TActions& _actionsPress, */ 
+/*       const TActions& _actionsRelease, */ 
+/*       QObject* _parent) : QObject(_parent), */
+/*   mActionsPress(_actionsPress), */
+/*   mActionsRelease(_actionsRelease) */
+/*   { */
+/*   } */
+
+/* protected: */
+/*   virtual bool eventFilter(QObject*, QEvent* _event) override */
+/*   { */
+/*     bool ret =  false; */
+/*     switch(_event->type()) */
+/*     { */
+/*     case QEvent::Type::MouseButtonPress: */
+/*       if(static_cast<QMouseEvent*>(_event)->button() == Qt::MouseButton::LeftButton) */
+/*       { */
+/*         perform(mActionsPress); */
+/*       } */
+/*       /1* ret = true; *1/ */
+/*       break; */
+
+/*     case QEvent::Type::MouseButtonRelease: */
+/*       if(static_cast<QMouseEvent*>(_event)->button() == Qt::MouseButton::LeftButton) */
+/*       { */
+/*         perform(mActionsRelease); */
+/*       } */
+/*       /1* ret = true; *1/ */
+/*       break; */
+
+/*     case QEvent::Type::TouchBegin: */
+/*       perform(mActionsPress); */
+/*       /1* ret = true; *1/ */
+/*       break; */
+
+/*     case QEvent::Type::TouchEnd: */
+/*       perform(mActionsRelease); */
+/*       /1* ret = true; *1/ */
+/*       break; */
+
+/*     /1* case QEvent::Type::KeyPress: *1/ */
+/*     /1*   { *1/ */
+/*     /1*     auto key = static_cast<QKeyEvent*>(_event)->key(); *1/ */
+
+/*     /1*     if( (key == Qt::Key::Key_Enter) || *1/ */
+/*     /1*         (key == Qt::Key::Key_Return)) *1/ */
+/*     /1*     { *1/ */
+/*     /1*       perform(mActionsPress); *1/ */
+/*     /1*     } *1/ */
+/*     /1*   } *1/ */
+/*     /1*   break; *1/ */
+
+/*       break; */
+/*     default: */
+/*       break; */
+/*     } */
+/*     return ret; */
+/*   } */
+
+/* private: */
+/*   void perform(const TActions& _actions) */
+/*   { */
+/*     for(auto it = _actions.begin(); it != _actions.end(); it++) */
+/*     { */
+/*       (*it)(); */
+/*     } */
+/*   } */
+/* }; */
+
+//==============================================================================
+void performActions(const TActions& _actions)
 {
-private:
-  TActions mActionsPress;
-  TActions mActionsRelease;
-
-public:
-
-  CEventFilter(
-      const TActions& _actionsPress, 
-      const TActions& _actionsRelease, 
-      QObject* _parent) : QObject(_parent),
-  mActionsPress(_actionsPress),
-  mActionsRelease(_actionsRelease)
+  for(auto it = _actions.begin(); it != _actions.end(); it++)
   {
+    (*it)();
   }
-
-protected:
-  virtual bool eventFilter(QObject*, QEvent* _event) override
-  {
-    bool ret =  false;
-    switch(_event->type())
-    {
-    case QEvent::Type::MouseButtonPress:
-      if(static_cast<QMouseEvent*>(_event)->button() == Qt::MouseButton::LeftButton)
-      {
-        perform(mActionsPress);
-      }
-      /* ret = true; */
-      break;
-
-    case QEvent::Type::MouseButtonRelease:
-      if(static_cast<QMouseEvent*>(_event)->button() == Qt::MouseButton::LeftButton)
-      {
-        perform(mActionsRelease);
-      }
-      /* ret = true; */
-      break;
-
-    case QEvent::Type::TouchBegin:
-      perform(mActionsPress);
-      /* ret = true; */
-      break;
-
-    case QEvent::Type::TouchEnd:
-      perform(mActionsRelease);
-      /* ret = true; */
-      break;
-
-    /* case QEvent::Type::KeyPress: */
-    /*   { */
-    /*     auto key = static_cast<QKeyEvent*>(_event)->key(); */
-
-    /*     if( (key == Qt::Key::Key_Enter) || */
-    /*         (key == Qt::Key::Key_Return)) */
-    /*     { */
-    /*       perform(mActionsPress); */
-    /*     } */
-    /*   } */
-    /*   break; */
-
-      break;
-    default:
-      break;
-    }
-    return ret;
-  }
-
-private:
-  void perform(const TActions& _actions)
-  {
-    for(auto it = _actions.begin(); it != _actions.end(); it++)
-    {
-      (*it)();
-    }
-  }
-};
-
+}
 
 //==============================================================================
 LCXmlStackWidgetBuilder::LCXmlStackWidgetBuilder()
@@ -190,25 +198,33 @@ QWidget* LCXmlStackWidgetBuilder::buildLocal(
         actions_element.firstChildElement(__slTags.release), _app);
   }();
 
+  /* QObject* event_filter = nullptr; */
+  /* if((actions_press.size() != 0) || (actions_release.size() != 0)) */
+  /* { */
+  /*   event_filter = new CEventFilter( */
+  /*       actions_press, actions_release, stacked_widget); */
+  /* } */
 
-  QObject* event_filter = nullptr;
-  if((actions_press.size() != 0) || (actions_release.size() != 0))
+  if(actions_press.size() != 0)
   {
-    event_filter = new CEventFilter(
-        actions_press, actions_release, stacked_widget);
+    QObject::connect(stacked_widget, &LCQStackWidget::press,
+        [actions_press]()
+        {
+          performActions(actions_press);
+        });
   }
 
-
-  [&_element, &_app, &stacked_widget]()
+  if(actions_release.size() != 0)
   {
-    auto undef_element = _element.firstChildElement(__slTags.itemUndef);
-    if(undef_element.isNull()) return;
-  }();
-
-
+    QObject::connect(stacked_widget, &LCQStackWidget::release,
+        [actions_release]()
+        {
+          performActions(actions_release);
+        });
+  }
 
   auto add_widget = 
-    [&_app, &stacked_widget, event_filter](
+    [&_app](
         const QDomElement _element,
         const QByteArray& _matching,
         std::function<void(QWidget* _widget, 
@@ -227,10 +243,10 @@ QWidget* LCXmlStackWidgetBuilder::buildLocal(
         if(widget)
         {
           _adder(widget, _matching);
-          if(event_filter)
-          {
-            widget->installEventFilter(event_filter);
-          }
+          /* if(event_filter) */
+          /* { */
+          /*   widget->installEventFilter(event_filter); */
+          /* } */
           break;
         }
       }

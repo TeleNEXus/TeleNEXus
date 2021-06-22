@@ -54,6 +54,7 @@ LCQPushButton::LCQPushButton(QWidget* _parent) :
             Qt::KeyboardModifiers()
             );
         QPushButton::event(&event);
+
       });
 }
 
@@ -75,6 +76,7 @@ bool LCQPushButton::event(QEvent* _event)
 {
   switch(_event->type())
   {
+
   case QEvent::Type::MouseButtonDblClick:
   case QEvent::Type::MouseButtonPress:
     if(static_cast<QMouseEvent*>(_event)->button() == Qt::MouseButton::LeftButton)

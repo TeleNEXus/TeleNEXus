@@ -8,7 +8,7 @@
         <Frame size="500;450" style="(...){}">
           <widgets>
 
-            <StackWidget 
+            <StackWidget
               position="100;100" style="(...){ color:yellow; background:red;}" data="localsource:listwidgetitem:string">
 
               <actions>
@@ -58,12 +58,12 @@
                     (...):focus{padding: 10px; margin: 10px}">
                   <!-- <press> -->
                   <!--   <controlScript scriptId="testlaunch1" scriptAction="launch(500)"/> -->
-                  <!--   <writeData data="localsource:test_string:string" value="press write string 2"/> -->
+                  <!--   <writeData data="localsource:test_string:string" value="Button press 1"/> -->
                   <!-- </press> -->
 
                   <!-- <release> -->
                   <!--   <controlScript scriptId="testlaunch1" scriptAction="stop"/> -->
-                  <!--   <writeData data="localsource:test_string:string" value="press write string 3"/> -->
+                  <!--   <writeData data="localsource:test_string:string" value="Button release 1"/> -->
                   <!-- </release> -->
 
                 </Button>
@@ -80,6 +80,7 @@
 
             </StackWidget>
 
+              <Label    data="localsource:listwidgetitem:string" />
           </widgets>
         </Frame>
       </ScrollArea>
