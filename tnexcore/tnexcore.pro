@@ -61,6 +61,7 @@ basicwidgets/widgets/lcqdatacombolabel.cpp \
 basicwidgets/widgets/lcqstackwidget.cpp \
 basicwidgets/widgets/lcqpushlabel.cpp \
 basicwidgets/widgets/lcqpushbutton.cpp \
+basicwidgets/widgets/lcqcheckbox.cpp \
 basicwidgets/builders/lcqwidgetvisiblecontrol.cpp \
 basicwidgets/builders/lcxmlbuilderbase.cpp \
 basicwidgets/builders/lcxmlframebuilder.cpp \
@@ -77,6 +78,7 @@ basicwidgets/builders/lcxmlsplitterbuilder.cpp \
 basicwidgets/builders/lcxmldatacombolabelbuilder.cpp \
 basicwidgets/builders/lcxmlstdactionbuilder.cpp \
 basicwidgets/builders/lcxmlpushareabuilder.cpp \
+basicwidgets/builders/lcxmlcheckboxbuilder.cpp \
 basicwidgets/basicwidgetbuilders.cpp \
 dataformatters/lcformatterbase.cpp \
 dataformatters/lcformatterbitfield.cpp \
@@ -157,6 +159,7 @@ basicwidgets/widgets/lcqdatalabel.h \
 basicwidgets/widgets/lcqstackwidget.h \
 basicwidgets/widgets/lcqpushlabel.h \
 basicwidgets/widgets/lcqpushbutton.h \
+basicwidgets/widgets/lcqcheckbox.h \
 basicwidgets/builders/lcxmlbuilderbase.h \
 basicwidgets/builders/lcxmldatalineeditbuilder.h \
 basicwidgets/builders/lcxmllabelbuilder.h \
@@ -173,7 +176,8 @@ basicwidgets/builders/lcqwidgetvisiblecontrol.h \
 basicwidgets/builders/lcxmlstackwidgetbuilder.h \
 basicwidgets/builders/lcxmlsplitterbuilder.h \
 basicwidgets/builders/lcxmlstdactionbuilder.h \
-basicwidgets/builders/lcxmlpushareabuilder.cpp \
+basicwidgets/builders/lcxmlpushareabuilder.h \
+basicwidgets/builders/lcxmlcheckboxbuilder.h\
 basicwidgets/basicwidgetbuilders.h \
 dataformatters/lcformatterbase.h \
 dataformatters/lcformatterbitfield.h \

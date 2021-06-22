@@ -30,17 +30,30 @@
   <DATAFORMATS file="formatters.xml"/>
 
   <WINDOW 
-    file="testpusharea/testpusharea2.xml" 
-    id="test push area 2" 
+    file="testcheckbox/testcheckbox1.xml" 
+    id="testbutton" 
     visible="true"
-    title="Test push area 2" 
+    title="Test Buttons" 
     showMode="normal"
     modality="false"
     flags="" 
-    size="300;300"
-    screen="0"
-    position="0;0"
+    size="300;50"
+    position="300;600"
     />
+
+  <!-- <WINDOW --> 
+  <!--   file="testpusharea/testpusharea2.xml" --> 
+  <!--   id="test push area 2" --> 
+  <!--   visible="true" -->
+  <!--   title="Test push area 2" --> 
+  <!--   showMode="normal" -->
+  <!--   modality="false" -->
+  <!--   flags="" --> 
+  <!--   size="300;300" -->
+  <!--   screen="0" -->
+  <!--   position="0;0" -->
+  <!--   /> -->
+
   <!-- <WINDOW --> 
   <!--   file="testpusharea/testpusharea1.xml" --> 
   <!--   id="test push area 1" --> 
@@ -54,18 +67,18 @@
   <!--   position="0;0" -->
   <!--   /> -->
 
-  <WINDOW 
-    file="teststackwidget/teststackwidget3.xml" 
-    id="test stack widget 3" 
-    visible="true"
-    title="Test Stack Widget 3" 
-    showMode="normal"
-    modality="false"
-    flags="" 
-    size="900;700"
-    screen="0"
-    position="0;0"
-    />
+  <!-- <WINDOW --> 
+  <!--   file="teststackwidget/teststackwidget3.xml" --> 
+  <!--   id="test stack widget 3" --> 
+  <!--   visible="true" -->
+  <!--   title="Test Stack Widget 3" --> 
+  <!--   showMode="normal" -->
+  <!--   modality="false" -->
+  <!--   flags="" --> 
+  <!--   size="900;700" -->
+  <!--   screen="0" -->
+  <!--   position="0;0" -->
+  <!--   /> -->
 
   <!-- <WINDOW --> 
   <!--   file="teststackwidget/teststackwidget1.xml" --> 
@@ -221,17 +234,18 @@
   <!--   position="300;300" -->
   <!--   /> -->
 
-  <WINDOW 
-    file="testbutton/testbutton.xml" 
-    id="testbutton" 
-    visible="true"
-    title="Test Buttons" 
-    showMode="normal"
-    modality="false"
-    flags="" 
-    size="300;50"
-    position="300;600"
-    />
+
+  <!-- <WINDOW --> 
+  <!--   file="testbutton/testbutton.xml" --> 
+  <!--   id="testbutton" --> 
+  <!--   visible="true" -->
+  <!--   title="Test Buttons" --> 
+  <!--   showMode="normal" -->
+  <!--   modality="false" -->
+  <!--   flags="" --> 
+  <!--   size="300;50" -->
+  <!--   position="300;600" -->
+  <!--   /> -->
 
   <!-- <WINDOW --> 
   <!--   file="testbutton/testbutton2.xml" --> 

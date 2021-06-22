@@ -34,6 +34,7 @@
 #include "lcxmlstackwidgetbuilder.h"
 #include "lcxmlsplitterbuilder.h"
 #include "lcxmlpushareabuilder.h"
+#include "lcxmlcheckboxbuilder.h"
 
 #include <qnamespace.h>
 
@@ -62,6 +63,7 @@ QMap<QString, QSharedPointer<LIXmlWidgetBuilder>> getBuilders()
   add_builder(QStringLiteral("SplitterVertical"   ),  new LCXmlSplitterBuilder(Qt::Vertical));
   add_builder(QStringLiteral("SplitterHorizontal" ),  new LCXmlSplitterBuilder(Qt::Horizontal));
   add_builder(QStringLiteral("PushArea"           ),  new LCXmlPushAreaBuilder());
+  add_builder(QStringLiteral("CheckBox"           ),  new LCXmlCheckBoxBuilder());
 
   return builders_map;
 }

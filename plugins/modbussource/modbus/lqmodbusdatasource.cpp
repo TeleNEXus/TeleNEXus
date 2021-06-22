@@ -604,9 +604,11 @@ void LQModbusDataSource::CDataMapItemBitsBase::connectReader(
 void LQModbusDataSource::
 CDataMapItemBitsBase::disconnectReader(QWeakPointer<LQModbusDataReader> _reader)
 {
-  mDataItem.mReadersList.removeOne(_reader);
+  mDataItem.mReadersList.removeAll(_reader);
   if(mDataItem.mReadersList.isEmpty())
+  {
     mController.deleteReadDataItem(&mDataItem);
+  }
 }
 
 //------------------------------------------------------------------------------
