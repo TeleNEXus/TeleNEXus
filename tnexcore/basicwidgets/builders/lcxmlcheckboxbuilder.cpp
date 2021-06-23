@@ -19,7 +19,7 @@
  * along with TeleNEXus.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include "lcxmlcheckboxbuilder.h"
-#include "widgets/lcqcheckbox.h"
+#include "widgets/lcqdatacheckbox.h"
 #include "xmlcommon.h"
 #include "LIApplication.h"
 #include "LIDataFormatter.h"
@@ -66,7 +66,7 @@ QWidget* LCXmlCheckBoxBuilder::buildLocal(
     &check_value,
     &uncheck_value]()
     {
-      auto check_box = new LCQCheckBox(
+      auto check_box = new LCQDataCheckBox(
           attr_text, 
           data_reader, 
           data_writer, 

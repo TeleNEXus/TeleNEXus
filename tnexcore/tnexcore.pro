@@ -61,7 +61,7 @@ basicwidgets/widgets/lcqdatacombolabel.cpp \
 basicwidgets/widgets/lcqstackwidget.cpp \
 basicwidgets/widgets/lcqpushlabel.cpp \
 basicwidgets/widgets/lcqpushbutton.cpp \
-basicwidgets/widgets/lcqcheckbox.cpp \
+basicwidgets/widgets/lcqdatacheckbox.cpp \
 basicwidgets/widgets/lcqdatalineedit.cpp \
 basicwidgets/builders/lcqwidgetvisiblecontrol.cpp \
 basicwidgets/builders/lcxmlbuilderbase.cpp \
@@ -160,7 +160,7 @@ basicwidgets/widgets/lcqdatalabel.h \
 basicwidgets/widgets/lcqstackwidget.h \
 basicwidgets/widgets/lcqpushlabel.h \
 basicwidgets/widgets/lcqpushbutton.h \
-basicwidgets/widgets/lcqcheckbox.h \
+basicwidgets/widgets/lcqdatacheckbox.h \
 basicwidgets/widgets/lcqdatalineedit.h \
 basicwidgets/builders/lcxmlbuilderbase.h \
 basicwidgets/builders/lcxmldatalineeditbuilder.h \
