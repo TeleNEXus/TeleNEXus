@@ -70,9 +70,20 @@
     modality="false"
     flags="" 
     size="300;300"
-    position="300;300"
+    position="350;300"
     />
 
+  <WINDOW 
+    file="testvisiblecontrol/testvisiblecontrol3.xml" 
+    id="testvisiblecontrol3" 
+    visible="true"
+    title="Test visible contorl 3" 
+    showMode="normal"
+    modality="false"
+    flags="" 
+    size="300;300"
+    position="700;300"
+    />
 
   <!-- <WINDOW --> 
   <!--   file="testkeyboard/testkeyboardinput1.xml" --> 

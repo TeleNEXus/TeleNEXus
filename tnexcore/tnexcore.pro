@@ -57,7 +57,6 @@ basiclayouts/basiclayoutbuilders.cpp \
 basicwidgets/widgets/lcqlistwidget.cpp \
 basicwidgets/widgets/lcqdatacombobox.cpp \
 basicwidgets/widgets/lcqdatalabel.cpp \
-basicwidgets/widgets/lcqdatacombolabel.cpp \
 basicwidgets/widgets/lcqstackwidget.cpp \
 basicwidgets/widgets/lcqpushlabel.cpp \
 basicwidgets/widgets/lcqpushbutton.cpp \
@@ -76,7 +75,6 @@ basicwidgets/builders/lcxmlscrollareabuilder.cpp \
 basicwidgets/builders/lcxmllistwidgetbuilder.cpp \
 basicwidgets/builders/lcxmlstackwidgetbuilder.cpp \
 basicwidgets/builders/lcxmlsplitterbuilder.cpp \
-basicwidgets/builders/lcxmldatacombolabelbuilder.cpp \
 basicwidgets/builders/lcxmlstdactionbuilder.cpp \
 basicwidgets/builders/lcxmlpushareabuilder.cpp \
 basicwidgets/builders/lcxmlcheckboxbuilder.cpp \
@@ -155,7 +153,6 @@ basiclayouts/lcxmlboxlayoutbuilder.h    \
 basiclayouts/lcxmlgridlayoutbuilder.h   \
 basicwidgets/widgets/lcqlistwidget.h \
 basicwidgets/widgets/lcqdatacombobox.h \
-basicwidgets/widgets/lcqdatacombolabel.h \
 basicwidgets/widgets/lcqdatalabel.h \
 basicwidgets/widgets/lcqstackwidget.h \
 basicwidgets/widgets/lcqpushlabel.h \
@@ -168,7 +165,6 @@ basicwidgets/builders/lcxmllabelbuilder.h \
 basicwidgets/builders/lcxmldatalineeditbuilder.h \
 basicwidgets/builders/lcxmlframebuilder.h \
 basicwidgets/builders/lcxmldatacomboboxbuilder.h \
-basicwidgets/builders/lcxmldatacombolabelbuilder.h \
 basicwidgets/builders/lcxmltablewidgetbuilder.h \
 basicwidgets/builders/lcxmltabwidgetbuilder.h \
 basicwidgets/builders/lcxmlscrollareabuilder.h \

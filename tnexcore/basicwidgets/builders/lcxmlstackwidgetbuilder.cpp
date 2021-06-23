@@ -38,6 +38,7 @@ static const struct
 {
 
 
+  QString pushDelay = "pushDelay";
   QString data = "data";
   QString matching = "matching";
 
@@ -54,87 +55,8 @@ static const struct
   QString itemWrong = "itemWrong";
 } __slTags;
 
-
-
-using TActions = LCXmlStdActionBuilder::TActions;
 //==============================================================================
-/* class CEventFilter : public QObject */
-/* { */
-/* private: */
-/*   TActions mActionsPress; */
-/*   TActions mActionsRelease; */
-
-/* public: */
-
-/*   CEventFilter( */
-/*       const TActions& _actionsPress, */ 
-/*       const TActions& _actionsRelease, */ 
-/*       QObject* _parent) : QObject(_parent), */
-/*   mActionsPress(_actionsPress), */
-/*   mActionsRelease(_actionsRelease) */
-/*   { */
-/*   } */
-
-/* protected: */
-/*   virtual bool eventFilter(QObject*, QEvent* _event) override */
-/*   { */
-/*     bool ret =  false; */
-/*     switch(_event->type()) */
-/*     { */
-/*     case QEvent::Type::MouseButtonPress: */
-/*       if(static_cast<QMouseEvent*>(_event)->button() == Qt::MouseButton::LeftButton) */
-/*       { */
-/*         perform(mActionsPress); */
-/*       } */
-/*       /1* ret = true; *1/ */
-/*       break; */
-
-/*     case QEvent::Type::MouseButtonRelease: */
-/*       if(static_cast<QMouseEvent*>(_event)->button() == Qt::MouseButton::LeftButton) */
-/*       { */
-/*         perform(mActionsRelease); */
-/*       } */
-/*       /1* ret = true; *1/ */
-/*       break; */
-
-/*     case QEvent::Type::TouchBegin: */
-/*       perform(mActionsPress); */
-/*       /1* ret = true; *1/ */
-/*       break; */
-
-/*     case QEvent::Type::TouchEnd: */
-/*       perform(mActionsRelease); */
-/*       /1* ret = true; *1/ */
-/*       break; */
-
-/*     /1* case QEvent::Type::KeyPress: *1/ */
-/*     /1*   { *1/ */
-/*     /1*     auto key = static_cast<QKeyEvent*>(_event)->key(); *1/ */
-
-/*     /1*     if( (key == Qt::Key::Key_Enter) || *1/ */
-/*     /1*         (key == Qt::Key::Key_Return)) *1/ */
-/*     /1*     { *1/ */
-/*     /1*       perform(mActionsPress); *1/ */
-/*     /1*     } *1/ */
-/*     /1*   } *1/ */
-/*     /1*   break; *1/ */
-
-/*       break; */
-/*     default: */
-/*       break; */
-/*     } */
-/*     return ret; */
-/*   } */
-
-/* private: */
-/*   void perform(const TActions& _actions) */
-/*   { */
-/*     for(auto it = _actions.begin(); it != _actions.end(); it++) */
-/*     { */
-/*       (*it)(); */
-/*     } */
-/*   } */
-/* }; */
+using TActions = LCXmlStdActionBuilder::TActions;
 
 //==============================================================================
 void performActions(const TActions& _actions)
@@ -186,7 +108,7 @@ QWidget* LCXmlStackWidgetBuilder::buildLocal(
   TActions actions_press;
   TActions actions_release;
 
-  [&_element, &actions_press, &actions_release, &_app]()
+  [&_element, &actions_press, &actions_release, &_app, &stacked_widget]()
   {
     auto actions_element = _element.firstChildElement(__slTags.actions);
     if(actions_element.isNull()) return;
@@ -196,14 +118,20 @@ QWidget* LCXmlStackWidgetBuilder::buildLocal(
 
     actions_release = LCXmlStdActionBuilder::instance().build(
         actions_element.firstChildElement(__slTags.release), _app);
-  }();
 
-  /* QObject* event_filter = nullptr; */
-  /* if((actions_press.size() != 0) || (actions_release.size() != 0)) */
-  /* { */
-  /*   event_filter = new CEventFilter( */
-  /*       actions_press, actions_release, stacked_widget); */
-  /* } */
+    QString attr_push_delay = 
+      actions_element.attribute(__slAttributes.pushDelay);
+
+    if(!attr_push_delay.isNull())
+    {
+      bool flag = false;
+      int delay = attr_push_delay.toInt(&flag);
+      if(flag)
+      {
+        stacked_widget->setPushDelay(delay);
+      }
+    }
+  }();
 
   if(actions_press.size() != 0)
   {
@@ -243,10 +171,6 @@ QWidget* LCXmlStackWidgetBuilder::buildLocal(
         if(widget)
         {
           _adder(widget, _matching);
-          /* if(event_filter) */
-          /* { */
-          /*   widget->installEventFilter(event_filter); */
-          /* } */
           break;
         }
       }

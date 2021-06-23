@@ -42,9 +42,6 @@ private:
   LCQWidgetVisibleControl() = delete;
   LCQWidgetVisibleControl(QWidget* _widget);
 
-protected:
-  virtual bool eventFilter(QObject* _opbj, QEvent* _event) override;
-
 };
 
 #endif /* LCQWIDGETVISIBLECONTROL_H_ */

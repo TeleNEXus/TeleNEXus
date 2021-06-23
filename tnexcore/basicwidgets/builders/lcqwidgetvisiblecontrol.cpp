@@ -116,9 +116,6 @@ LCQWidgetVisibleControl::LCQWidgetVisibleControl(QWidget* _widget) :
 {
   mpLocal = new CLocalData;
   toLocalData(mpLocal)->setWidget(_widget);
-
-  _widget->installEventFilter(this);
-
 }
 
 LCQWidgetVisibleControl::~LCQWidgetVisibleControl()
@@ -270,31 +267,6 @@ bool LCQWidgetVisibleControl::build(const QDomElement& _element,
   return ret_ok();
 }
 
-//------------------------------------------------------------------------------
-bool LCQWidgetVisibleControl::eventFilter(QObject* _obj, QEvent* _event)
-{
-  bool ret = false;
-  switch(toLocalData(mpLocal)->mVisibleStatus)
-  {
-  case CLocalData::EVisibleStatus::hide:
-    if(
-        (_event->type() == QEvent::Type::MouseButtonPress) ||
-        (_event->type() == QEvent::Type::Paint) ||
-        (_event->type() == QEvent::Type::ShowToParent) ||
-        (_event->type() == QEvent::Type::Show)
-      )
-    {
-      dynamic_cast<QWidget*>(_obj)->hide();
-      ret = true;
-    }
-    break;
-
-  case CLocalData::EVisibleStatus::show:
-  default:
-    break;
-  }
-  return ret;
-}
 
 
 
