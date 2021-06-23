@@ -30,10 +30,12 @@
 //==============================================================================
 static const struct
 {
-  QString text = "text";
-  QString data = "data";
-  QString checkValue = "checkValue";
-  QString uncheckValue = "uncheckValue";
+  QString text          = "text";
+  QString data          = "data";
+  QString dataRead      = "dataRead";
+  QString dataWrite     = "dataWrite";
+  QString checkValue    = "checkValue";
+  QString uncheckValue  = "uncheckValue";
 }__slAttributes;
 //==============================================================================
 LCXmlCheckBoxBuilder::LCXmlCheckBoxBuilder()
@@ -49,15 +51,34 @@ LCXmlCheckBoxBuilder::~LCXmlCheckBoxBuilder()
 QWidget* LCXmlCheckBoxBuilder::buildLocal(
       const QDomElement& _element, const LIApplication& _app)
 {
-  auto ret = 
-    [&_element](QWidget* _widget)
+
+  QSharedPointer<LIRemoteDataReader> data_reader;
+  QSharedPointer<LIRemoteDataWriter> data_writer;
+  QByteArray check_value;
+  QByteArray uncheck_value;
+  QString attr_text;
+
+  auto ret_ok = 
+    [&_element,
+    &attr_text,
+    &data_reader,
+    &data_writer,
+    &check_value,
+    &uncheck_value]()
     {
-      setWidgetName(      _element, _widget);
-      setWidgetStyle(     _element, _widget);
-      setWidgetSize(      _element, _widget);
-      setWidgetPosition(  _element, _widget);
-      setWidgetFixedSize( _element, _widget);
-      return _widget;
+      auto check_box = new LCQCheckBox(
+          attr_text, 
+          data_reader, 
+          data_writer, 
+          check_value, 
+          uncheck_value);
+
+      setWidgetName(      _element, check_box);
+      setWidgetStyle(     _element, check_box);
+      setWidgetSize(      _element, check_box);
+      setWidgetPosition(  _element, check_box);
+      setWidgetFixedSize( _element, check_box);
+      return check_box;
     };
 
   auto ret_wrong =
@@ -65,43 +86,85 @@ QWidget* LCXmlCheckBoxBuilder::buildLocal(
     {
       return new QCheckBox(QStringLiteral("CheckBox"));
     };
-  QString attr_text = _element.attribute(__slAttributes.text);
+
+  attr_text = _element.attribute(__slAttributes.text);
 
   bool err_flag = false;
 
-  auto data_spec = xmlcommon::parseDataSpecification(
-      _element.attribute(__slAttributes.data),
-        [&err_flag](const QString&)
-        {
-          err_flag = true;
-        });
+  auto err_handler =
+    [&err_flag](const QString&)
+    {
+      err_flag = true;
+    };
+
+  auto data_spec_read = xmlcommon::parseDataSpecification(
+      _element.attribute(__slAttributes.data), err_handler);
+
+
+  if(!err_flag)
+  {
+    auto source = _app.getDataSource(data_spec_read.sourceId);
+    if(source.isNull()) return ret_wrong();
+
+    auto format = _app.getDataFormatter(data_spec_read.formatterId);
+    if(format.isNull()) return ret_wrong();
+
+    data_reader = source->createReader(data_spec_read.dataId);
+    if(data_reader.isNull()) return ret_wrong();
+
+    data_writer = source->createWriter(data_spec_read.dataId);
+    if(data_writer.isNull()) return ret_wrong();
+
+    check_value = 
+      format->toBytes(_element.attribute(__slAttributes.checkValue));
+    if(check_value.isNull()) ret_wrong();
+
+    uncheck_value = 
+      format->toBytes(_element.attribute(__slAttributes.uncheckValue));
+    return ret_ok();
+  }
+
+  err_flag = false;
+
+  data_spec_read = xmlcommon::parseDataSpecification(
+      _element.attribute(__slAttributes.dataRead), err_handler);
   if(err_flag) return ret_wrong();
 
-  auto source = _app.getDataSource(data_spec.sourceId);
-  if(source.isNull()) return ret_wrong();
+  auto data_spec_write = xmlcommon::parseDataSpecification(
+      _element.attribute(__slAttributes.dataWrite), err_handler);
+  if(err_flag) return ret_wrong();
+  
+  {
+    auto source = _app.getDataSource(data_spec_read.sourceId);
+    if(source.isNull()) return ret_wrong();
 
-  auto format = _app.getDataFormatter(data_spec.formatterId);
-  if(format.isNull()) return ret_wrong();
+    auto format = _app.getDataFormatter(data_spec_read.formatterId);
+    if(format.isNull()) return ret_wrong();
 
-  auto reader = source->createReader(data_spec.dataId);
-  if(reader.isNull()) return ret_wrong();
+    data_reader = source->createReader(data_spec_read.dataId);
+    if(data_reader.isNull()) return ret_wrong();
 
-  auto writer = source->createWriter(data_spec.dataId);
-  if(writer.isNull()) return ret_wrong();
+    check_value = 
+      format->toBytes(_element.attribute(__slAttributes.checkValue));
+    if(check_value.isNull()) ret_wrong();
+  }
 
-  QByteArray check_value = 
-    format->toBytes(_element.attribute(__slAttributes.checkValue));
-  if(check_value.isNull()) ret_wrong();
+  {
+    auto source = _app.getDataSource(data_spec_write.sourceId);
+    if(source.isNull()) return ret_wrong();
 
-  QByteArray uncheck_value = 
-    format->toBytes(_element.attribute(__slAttributes.uncheckValue));
-  /* if(uncheck_value.isNull()) ret_wrong(); */
+    auto format = _app.getDataFormatter(data_spec_write.formatterId);
+    if(format.isNull()) return ret_wrong();
 
-  return ret(
-      new LCQCheckBox(
-        attr_text, 
-        reader, 
-        writer, 
-        check_value, 
-        uncheck_value));
+    data_writer = source->createWriter(data_spec_write.dataId);
+    if(data_writer.isNull()) return ret_wrong();
+
+    uncheck_value = 
+      format->toBytes(_element.attribute(__slAttributes.uncheckValue));
+  }
+
+  return ret_ok();
 }
+
+
+
