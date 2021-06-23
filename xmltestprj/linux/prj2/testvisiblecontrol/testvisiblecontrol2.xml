@@ -18,12 +18,12 @@
           <widgets>
 
             <Label 
-              visibleControl= 
+              visibility= 
               "sourceId=localsource; dataId=bit0; format=bits; showValue=1; undefState=show"
               text="Text Label 0"/> 
 
             <Label 
-              visibleControl=
+              visibility=
               "sourceId=localsource; dataId=bit1; format=bits; hideValue=0; undefState=show"
               text="Text Label 1"/> 
 
