@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<WINDOW>
+  <actions>
+    <!-- <scriptExecute event="show" scriptId=""                /> -->
+    <!-- <scriptLaunch  event="show" scriptId="" interval="500" /> -->
+    <!-- <scriptStop    event="show" scriptId=""                /> -->
+
+    <!-- <scriptExecute event="hide" scriptId=""                /> -->
+    <!-- <scriptLaunch  event="hide" scriptId="" interval="500" /> -->
+    <!-- <scriptStop    event="hide" scriptId=""                /> -->
+  </actions>
+
+  <mainWidget>
+    <Frame>
+      <layout>
+        <LayoutVBox>
+          <widgets>
+
+            <Label 
+              visibleControl= 
+              "sourceId=localsource; dataId=bit0; format=bits; showValue=1; undefState=show"
+              text="Text Label 0"/> 
+
+            <Label 
+              visibleControl=
+              "sourceId=localsource; dataId=bit1; format=bits; hideValue=0; undefState=show"
+              text="Text Label 1"/> 
+
+            <Label text="Text Label 3"/> 
+
+          </widgets>
+          <stretch/>
+        </LayoutVBox>
+      </layout>
+    </Frame>
+  </mainWidget>
+</WINDOW>
+
+
+

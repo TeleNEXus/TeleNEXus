@@ -159,6 +159,7 @@ bool LCQWidgetVisibleControl::build(const QDomElement& _element,
   QString attr_show   = attr_values.value(__slVisibleAttributes.showValue,  QString());
   QString attr_hide   = attr_values.value(__slVisibleAttributes.hideValue,  QString());
 
+
   if( attr_source.isNull() ||
       attr_data.isNull() ||
       attr_format.isNull() ||
@@ -210,8 +211,7 @@ bool LCQWidgetVisibleControl::build(const QDomElement& _element,
 
     if(!read_status_ctrl(_status)) return;
 
-    if(toLocalData(ctrl->mpLocal)->mCompareData ==
-        toLocalData(ctrl->mpLocal)->mFormatter->toString(*_data))
+    if(toLocalData(ctrl->mpLocal)->mCompareData == *_data)
     {
       toLocalData(ctrl->mpLocal)->showWidget();
     }
@@ -230,8 +230,7 @@ bool LCQWidgetVisibleControl::build(const QDomElement& _element,
 
     if(!read_status_ctrl(_status)) return;
 
-    if(toLocalData(ctrl->mpLocal)->mCompareData ==
-        toLocalData(ctrl->mpLocal)->mFormatter->toString(*_data))
+    if(toLocalData(ctrl->mpLocal)->mCompareData == *_data)
       toLocalData(ctrl->mpLocal)->hideWidget();
     else
       toLocalData(ctrl->mpLocal)->showWidget();
