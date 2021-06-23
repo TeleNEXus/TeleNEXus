@@ -85,8 +85,8 @@ LCQDataLabel::LCQDataLabel(const QString& _dataName,
             setText(mFormatter.data()->toString(*_data));
             setEnabled(true);
           }
-          QRect bound = QFontMetrics(this->font()).boundingRect(this->text());
-          this->resize(bound.size());
+          /* QRect bound = QFontMetrics(this->font()).boundingRect(this->text()); */
+          /* this->resize(bound.size()); */
 
         }
       });

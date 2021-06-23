@@ -29,17 +29,48 @@
 
   <DATAFORMATS file="formatters.xml"/>
 
+
+    <KEYBOARD 
+      id="DigitalKeyboard" window="digitalkeyboard1"
+      streamSource="localsource" streamName="keyboard_stream"
+      dataSource="localsource" dataName="keyboard_data" />
+
+    <WINDOW 
+    file="testkeyboard/testdigitalkeyboard1.xml" 
+    id="digitalkeyboard1" 
+    visible="false"
+    title="Digital Keyboard" 
+    showMode="normal"
+    modality="true"
+    flags="stayOnTop" 
+    position="300;600" />
+
+    <!-- flags="stayOnTop;frameless" --> 
+    <!-- size="50;50" -->
+
   <WINDOW 
-    file="testcheckbox/testcheckbox1.xml" 
-    id="testbutton" 
+    file="testkeyboard/testkeyboardinput1.xml" 
+    id="testkeyboardinput1" 
     visible="true"
-    title="Test Buttons" 
+    title="Test keyboard input" 
     showMode="normal"
     modality="false"
     flags="" 
-    size="300;50"
-    position="300;600"
+    size="300;300"
+    position="100;100"
     />
+
+  <!-- <WINDOW --> 
+  <!--   file="testcheckbox/testcheckbox1.xml" --> 
+  <!--   id="testbutton" --> 
+  <!--   visible="true" -->
+  <!--   title="Test Buttons" --> 
+  <!--   showMode="normal" -->
+  <!--   modality="false" -->
+  <!--   flags="" --> 
+  <!--   size="300;50" -->
+  <!--   position="300;600" -->
+  <!--   /> -->
 
   <!-- <WINDOW --> 
   <!--   file="testpusharea/testpusharea2.xml" --> 
