@@ -18,8 +18,8 @@
  * You should have received a copy of the GNU General Public License
  * along with TeleNEXus.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef LCQCHECKBOX_H_
-#define LCQCHECKBOX_H_
+#ifndef LCQDATACHECKBOX_H_
+#define LCQDATACHECKBOX_H_
 
 #include "lqextendevent.h"
 
@@ -32,7 +32,7 @@ class LIRemoteDataReader;
 class LIRemoteDataWriter;
 class LIDataFormatter;
 
-class LCQCheckBox : public QCheckBox 
+class LCQDataCheckBox : public QCheckBox 
 {
   Q_OBJECT;
 private:
@@ -43,9 +43,9 @@ private:
   QByteArray mUncheckData;
 
 public:
-  explicit LCQCheckBox() = delete;
+  explicit LCQDataCheckBox() = delete;
 
-  explicit LCQCheckBox(   
+  explicit LCQDataCheckBox(   
       const QString&                      _text,
       QSharedPointer<LIRemoteDataReader>  _dataReader,
       QSharedPointer<LIRemoteDataWriter>  _dataWriter,
@@ -53,7 +53,7 @@ public:
       const QByteArray&                   _uncheckData,
       QWidget* _parent = nullptr);
 
-  virtual ~LCQCheckBox();
+  virtual ~LCQDataCheckBox();
   virtual bool event(QEvent *_event) override;
 
 private:
@@ -61,5 +61,5 @@ private:
   void setActive(bool _flag);
 };
 
-#endif // LCQCHECKBOX_H_
+#endif // LCQDATACHECKBOX_H_
 
