@@ -7,14 +7,14 @@
           <widgets>
 
             <CheckBox 
-              text="Visible label 0" 
+              text="Visibility label 0" 
               data="localsource:bit0:bits" checkValue="1" uncheckValue="0"/>
 
             <Label data="localsource:bit0:bits" />
 
 
             <CheckBox 
-              text="Visible label 1" 
+              text="Visibility label 1" 
               data="localsource:bit1:bits" checkValue="1" uncheckValue="0"/>
 
             <Label data="localsource:bit1:bits" />

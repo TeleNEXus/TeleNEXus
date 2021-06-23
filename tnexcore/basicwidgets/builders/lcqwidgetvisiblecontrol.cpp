@@ -34,7 +34,7 @@ using EReadStatus = LIRemoteDataReader::EReadStatus;
 
 static const struct
 {
-  QString visibleControl = "visibleControl";
+  QString visibility = "visibility";
 }__slXmlAttributes;
 
 static const struct
@@ -147,7 +147,7 @@ bool LCQWidgetVisibleControl::build(const QDomElement& _element,
 
   if(_widget == nullptr) return ret_wrong();
 
-  QString attr = _element.attribute(__slXmlAttributes.visibleControl);
+  QString attr = _element.attribute(__slXmlAttributes.visibility);
   if(attr.isNull()) return ret_wrong();
 
 
