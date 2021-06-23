@@ -13,8 +13,6 @@
 
   <mainWidget>
     <Frame>
-      <layout>
-        <LayoutVBox>
           <widgets>
 
             <Label 
@@ -23,16 +21,21 @@
               text="Text Label 0"/> 
 
             <Label 
+              position="0;30"
               visibility=
               "sourceId=localsource; dataId=bit1; format=bits; hideValue=0; undefState=show"
               text="Text Label 1"/> 
 
-            <Label text="Text Label 3"/> 
+            <Label 
+              position="0;60"
+              text="Text Label 3"/> 
 
 
             <StackWidget
+              fixedSize="100;100"
+              position="0;90"
               visibility= 
-              "sourceId=localsource; dataId=bit0; format=bits; hideValue=0; undefState=show"
+              "sourceId=localsource; dataId=bit0; format=bits; showValue=0; undefState=show"
               position="100;100" 
               style="(...){ color:yellow; background:red;}" 
               data="localsource:listwidgetitem:string">
@@ -88,14 +91,12 @@
 
             </StackWidget>
             <LineEdit 
+              position="0;250"
               visibility= 
-              "sourceId=localsource; dataId=bit0; format=bits; heidValue=0; undefState=show"
+              "sourceId=localsource; dataId=bit0; format=bits; showValue=0; undefState=show"
               data="localsource:listwidgetitem:string"/>
 
           </widgets>
-          <stretch/>
-        </LayoutVBox>
-      </layout>
     </Frame>
   </mainWidget>
 </WINDOW>

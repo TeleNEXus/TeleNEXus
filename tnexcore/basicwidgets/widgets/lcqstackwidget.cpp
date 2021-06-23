@@ -55,7 +55,6 @@ public:
   {
     state = EState::released;
     timer.setSingleShot(true);
-    timer.setInterval(1000);
   }
 };
 
@@ -143,6 +142,12 @@ void LCQStackWidget::addWidgetWrong(QWidget* _widget)
   int index = QStackedWidget::addWidget(_widget);
   ld.indexWrong= index;
   _widget->installEventFilter(this);
+}
+
+//------------------------------------------------------------------------------
+void LCQStackWidget::setPushDelay(int _msec)
+{
+  if(_msec >= 0) ld.timer.setInterval(_msec);
 }
 
 //------------------------------------------------------------------------------
