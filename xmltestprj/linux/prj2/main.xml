@@ -48,17 +48,43 @@
     <!-- flags="stayOnTop;frameless" --> 
     <!-- size="50;50" -->
 
+
   <WINDOW 
-    file="testkeyboard/testkeyboardinput1.xml" 
-    id="testkeyboardinput1" 
+    file="testvisiblecontrol/testvisiblecontrol1.xml" 
+    id="testvisiblecontrol1" 
     visible="true"
-    title="Test keyboard input" 
+    title="Test visible contorl 1" 
     showMode="normal"
     modality="false"
     flags="" 
     size="300;300"
-    position="100;100"
+    position="0;0"
     />
+
+  <WINDOW 
+    file="testvisiblecontrol/testvisiblecontrol2.xml" 
+    id="testvisiblecontrol2" 
+    visible="true"
+    title="Test visible contorl 2" 
+    showMode="normal"
+    modality="false"
+    flags="" 
+    size="300;300"
+    position="300;300"
+    />
+
+
+  <!-- <WINDOW --> 
+  <!--   file="testkeyboard/testkeyboardinput1.xml" --> 
+  <!--   id="testkeyboardinput1" --> 
+  <!--   visible="true" -->
+  <!--   title="Test keyboard input" --> 
+  <!--   showMode="normal" -->
+  <!--   modality="false" -->
+  <!--   flags="" --> 
+  <!--   size="300;300" -->
+  <!--   position="100;100" -->
+  <!--   /> -->
 
   <!-- <WINDOW --> 
   <!--   file="testcheckbox/testcheckbox1.xml" --> 
