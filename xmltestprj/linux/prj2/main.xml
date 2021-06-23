@@ -29,17 +29,17 @@
 
   <DATAFORMATS file="formatters.xml"/>
 
-  <WINDOW 
-    file="testcheckbox/testcheckbox1.xml" 
-    id="testbutton" 
-    visible="true"
-    title="Test Buttons" 
-    showMode="normal"
-    modality="false"
-    flags="" 
-    size="300;50"
-    position="300;600"
-    />
+  <!-- <WINDOW --> 
+  <!--   file="testcheckbox/testcheckbox1.xml" --> 
+  <!--   id="testbutton" --> 
+  <!--   visible="true" -->
+  <!--   title="Test Buttons" --> 
+  <!--   showMode="normal" -->
+  <!--   modality="false" -->
+  <!--   flags="" --> 
+  <!--   size="300;50" -->
+  <!--   position="300;600" -->
+  <!--   /> -->
 
   <!-- <WINDOW --> 
   <!--   file="testpusharea/testpusharea2.xml" --> 
@@ -171,18 +171,18 @@
   <!--   position="550;150" -->
   <!--   /> -->
 
-  <!-- <WINDOW --> 
-  <!--   file="testlineedit/testlineedit1.xml" --> 
-  <!--   id="testlineedit1" --> 
-  <!--   visible="true" -->
-  <!--   title="Test DataLineEdit" --> 
-  <!--   showMode="normal" -->
-  <!--   modality="false" -->
-  <!--   flags="" --> 
-  <!--   size="300;300" -->
-  <!--   screen="0" -->
-  <!--   position="550;150" -->
-  <!--   /> -->
+  <WINDOW 
+    file="testlineedit/testlineedit1.xml" 
+    id="testlineedit1" 
+    visible="true"
+    title="Test DataLineEdit" 
+    showMode="normal"
+    modality="false"
+    flags="" 
+    size="300;300"
+    screen="0"
+    position="550;150"
+    />
 
   <!-- <WINDOW --> 
   <!--   file="testtable/testtable.xml" --> 
