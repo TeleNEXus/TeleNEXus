@@ -36,6 +36,25 @@
             <Label data="qtslavetcp:coil0:bool"/>
             <LineEdit data="qtslavetcp:coil0:bool"/>
 
+            <CheckBox 
+              text="Check box 1" 
+              dataRead="localsource:test_string:string" 
+              dataWrite="localsource:test_string:string" 
+              checkValue="1" uncheckValue="2"/>
+
+            <CheckBox 
+              text="Check box 2" 
+              dataRead="localsource:test_string:string" 
+              dataWrite="localsource:test_string:string" 
+              checkValue="2" uncheckValue="1"/>
+
+            <CheckBox 
+              text="Check box 1" 
+              dataRead="qtslavetcp:din0:bits" 
+              dataWrite="qtslavetcp:coil0:bits" 
+              checkValue="1" uncheckValue="0"/>
+
+
           </widgets>
           <stretch/>
         </LayoutVBox>
