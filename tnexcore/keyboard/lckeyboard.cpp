@@ -137,11 +137,21 @@ LCKeyboard::LCKeyboard( const QString& _windowId,
         {
           auto listener = ld.listener.lock();
           if(listener.isNull()) return;
+
           int size = ld.currentData.size();
-          if(size <= 0) return;
-          ld.currentData.resize(size - 1);
-          ld.dataWriter->writeRequest(ld.currentData.toUtf8());
-          listener->mfActionChange(ld.currentData);
+
+          if(size > 1)
+          {
+            ld.currentData.resize(size - 1);
+            ld.dataWriter->writeRequest(ld.currentData.toUtf8());
+            listener->mfActionChange(ld.currentData);
+          }
+          else
+          {
+            ld.currentData.clear();
+            listener->mfActionChange(ld.currentData);
+            ld.dataWriter->writeRequest(QStringLiteral("\0").toUtf8());
+          }
         });
   //--------------------------------------------------
 

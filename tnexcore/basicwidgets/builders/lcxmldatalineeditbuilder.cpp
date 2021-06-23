@@ -75,6 +75,7 @@ QWidget* LCXmlDataLineEditBuilder::buildLocal(
 
   auto ret_ok = 
     [&_element,
+    &_app,
     &data_reader,
     &data_writer,
     &read_formatter,
@@ -87,6 +88,16 @@ QWidget* LCXmlDataLineEditBuilder::buildLocal(
           write_formatter);
 
       //install keyboard
+      QString attr_keyboard = _element.attribute(__slAttributes.keyboard);
+
+      if(!attr_keyboard.isNull())
+      {
+        auto keyboard = _app.getKeyboard(attr_keyboard);
+        if(!keyboard.isNull())
+        {
+          data_line_edit->installKeyboard(keyboard);
+        }
+      }
 
       setWidgetName(      _element, data_line_edit);
       setWidgetStyle(     _element, data_line_edit);
