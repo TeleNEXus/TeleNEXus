@@ -92,7 +92,6 @@ void LCQLocalDataReader::connectToSource()
 {
     auto sp = mwpDataSource.lock();
     if(sp.isNull()) return;
-    qDebug() << "LCQLocalDataReader::connectToSource";
     sp->connectReader(mwpThis);
 }
 
@@ -101,7 +100,6 @@ void LCQLocalDataReader::disconnectFromSource()
 {
     auto sp = mwpDataSource.lock();
     if(sp.isNull()) return;
-    qDebug() << "LCQLocalDataReader::disconnectFromSource";
     sp->disconnectReader(mwpThis);
 }
 

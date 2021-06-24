@@ -98,6 +98,10 @@ public:
    */
   virtual QString getWidgetStyle(const QString& _styleId) const = 0;
 
+
+  virtual void messageDeploy(const QString& _msg) const = 0;
+  virtual void messageRuntime(const QString& _msg) const = 0;
+
 };
 
 #endif // LIAPPLICATION_H

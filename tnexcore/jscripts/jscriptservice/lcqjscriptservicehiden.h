@@ -72,6 +72,7 @@ private:
 
   };
 
+  QString     mScriptFileName;
   int         mId;
   QSharedPointer<LCQJSAppService> mspAppService;
   QJSEngine   mJSEngine;
@@ -99,7 +100,6 @@ private:
   void timerStart(int _interval);
   void timerStop();
   void scriptExecute();
-  void emitError(const QJSValue& _jsvalue);
 
 //--------------------------------------------------------jsexports
 public slots:

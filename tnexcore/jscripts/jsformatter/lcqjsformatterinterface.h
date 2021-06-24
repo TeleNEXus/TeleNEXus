@@ -2,24 +2,28 @@
 #define LCQJSFORMATTERINTERFACE_H_
 
 #include <QObject>
-#include <QJSEngine>
-
+/* #include <QJSEngine> */
+class QJSEngine;
 class LCQJSFormatterInterface final: public QObject
 {
   Q_OBJECT;
 
-  LCQJSFormatterInterface();
+private:
+  QJSEngine* mpEngine;
+  LCQJSFormatterInterface(QJSEngine* _engine);
+  LCQJSFormatterInterface() = delete;
   LCQJSFormatterInterface(const LCQJSFormatterInterface&) = delete;
   LCQJSFormatterInterface& operator=(const LCQJSFormatterInterface&) = delete;
 
 public:
   ~LCQJSFormatterInterface();
-  static QSharedPointer<LCQJSFormatterInterface> create();
+  static QSharedPointer<LCQJSFormatterInterface> 
+    create(QJSEngine* _engine);
 
 public slots:
   void debugOut(const QString&);
 void importModule(
-    const QString& _moduleFileName,
+    const QString& _fileName,
     const QString& _propertyName = QString());
 
 

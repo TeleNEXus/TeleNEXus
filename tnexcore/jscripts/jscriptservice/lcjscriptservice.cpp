@@ -78,7 +78,6 @@ public:
 
   void execute()
   {
-    qDebug() << "LCJScriptService script execute";
     mpScriptHiden->execute();
   }
 
@@ -95,7 +94,6 @@ public:
         [&error](const QString& _str){error = _str;});
     if(!error.isNull()) 
     {
-      qDebug() << "Parse action error: " << error;
       return;
     }
 

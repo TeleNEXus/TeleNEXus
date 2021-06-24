@@ -63,6 +63,9 @@ public:
   virtual QSharedPointer<LIJScriptService> 
     getScriptService(const QString& _scriptId) const override;
   virtual QString getWidgetStyle(const QString& _styleId) const override;
+
+  virtual void messageDeploy(const QString& _msg) const override;
+  virtual void messageRuntime(const QString& _msg) const override;
 };
 
 #endif /* APPLICATIONINTERFACE_H_ */

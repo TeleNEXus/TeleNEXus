@@ -277,7 +277,6 @@ QSharedPointer<LCKeyboard> LCKeyboard::create(
     TRemoteSource _streamSource, const QString& _streamName,
     TRemoteSource _dataSource, const QString& _dataName)
 {
-  qDebug() << "LCKeyboard::create 0";
   auto keyboard = QSharedPointer<LCKeyboard>(
       new LCKeyboard(_windowId, 
         _app,

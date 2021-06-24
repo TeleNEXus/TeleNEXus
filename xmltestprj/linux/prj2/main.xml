@@ -48,6 +48,17 @@
     <!-- flags="stayOnTop;frameless" --> 
     <!-- size="50;50" -->
 
+  <WINDOW 
+    file="testsformatscript/testformatscript.xml" 
+    id="testformat1" 
+    visible="true"
+    title="Test format script 1" 
+    showMode="normal"
+    modality="false"
+    flags="" 
+    size="300;300"
+    position="0;0"
+    />
 
   <!-- <WINDOW --> 
   <!--   file="testvisiblecontrol/testvisiblecontrol1.xml" --> 
@@ -85,17 +96,17 @@
   <!--   position="700;300" -->
   <!--   /> -->
 
-  <WINDOW 
-    file="testkeyboard/testkeyboardinput1.xml" 
-    id="testkeyboardinput1" 
-    visible="true"
-    title="Test keyboard input" 
-    showMode="normal"
-    modality="false"
-    flags="" 
-    size="300;300"
-    position="100;100"
-    />
+  <!-- <WINDOW --> 
+  <!--   file="testkeyboard/testkeyboardinput1.xml" --> 
+  <!--   id="testkeyboardinput1" --> 
+  <!--   visible="true" -->
+  <!--   title="Test keyboard input" --> 
+  <!--   showMode="normal" -->
+  <!--   modality="false" -->
+  <!--   flags="" --> 
+  <!--   size="300;300" -->
+  <!--   position="100;100" -->
+  <!--   /> -->
 
   <!-- <WINDOW --> 
   <!--   file="testcheckbox/testcheckbox1.xml" --> 

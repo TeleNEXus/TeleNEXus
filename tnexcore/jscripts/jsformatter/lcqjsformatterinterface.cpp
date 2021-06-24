@@ -1,5 +1,9 @@
 #include "lcqjsformatterinterface.h"
+#include "jscriptcommon.h"
+#include "applicationinterface.h"
 #include <QSharedPointer>
+#include <QJSEngine>
+#include <QJSValueIterator>
 #include <QDebug>
 
 
@@ -10,7 +14,8 @@ static void laterDeleter(QObject* _obj)
 }
 
 //==============================================================================LCQJSFormatterInterface
-LCQJSFormatterInterface::LCQJSFormatterInterface()
+LCQJSFormatterInterface::LCQJSFormatterInterface(QJSEngine* _engine) :
+  mpEngine(_engine)
 {
 }
 
@@ -21,32 +26,24 @@ LCQJSFormatterInterface::~LCQJSFormatterInterface()
 
 
 //------------------------------------------------------------------------------
-QSharedPointer<LCQJSFormatterInterface> LCQJSFormatterInterface::create()
+QSharedPointer<LCQJSFormatterInterface> 
+LCQJSFormatterInterface::create(QJSEngine* _engine)
 {
-
-  //TODO: remove single formatter interface.
-
-
-  static QWeakPointer<LCQJSFormatterInterface> wp_instance;
-  auto sp = wp_instance.lock();
-  if(sp.isNull())
-  {
-    sp = QSharedPointer<LCQJSFormatterInterface>(
-        new LCQJSFormatterInterface(),
+  return QSharedPointer<LCQJSFormatterInterface>(
+        new LCQJSFormatterInterface(_engine),
         laterDeleter);
-  }
-  return sp;
 }
 
 //------------------------------------------------------------------------------
 void LCQJSFormatterInterface::debugOut(const QString& _str)
 {
-  qDebug("%s", qPrintable(_str));
+  CApplicationInterface::getInstance().messageRuntime(_str);
 }
 
 //------------------------------------------------------------------------------
 void LCQJSFormatterInterface::importModule(
-    const QString& _moduleFileName,
+    const QString& _fileName,
     const QString& _propertyName)
 {
+  jscriptcommon::importModule(*mpEngine, _fileName, _propertyName);
 }

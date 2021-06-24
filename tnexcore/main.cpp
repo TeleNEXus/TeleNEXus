@@ -54,6 +54,8 @@ struct SParameters
   QDir    projectDir;
   void parseCommandLine(char *argv[])
   {
+    const LIApplication& app = CApplicationInterface::getInstance();
+
     QFileInfo fi(argv[0]);
 
     QCommandLineParser parser;
@@ -87,12 +89,15 @@ struct SParameters
         projectPath  = fi.absolutePath() + "/";
         projectDir   = fi.absoluteDir();
         QDir::setCurrent(path);
-        qDebug() << "Project current path = " << QDir::currentPath();
+        app.messageDeploy(QString("Project current path: '%1'").arg(QDir::currentPath()));
       }
       else
       {
-        qDebug() << "Main XML file not found";
-        qDebug() << "File location setting: " << path + "/" + file;
+        app.messageDeploy(
+            QString(
+              "Main XML file not found, file location setting: %1/%2")
+            .arg(path)
+            .arg(file));
         parser.showHelp(-1);
       }
     }
@@ -103,17 +108,14 @@ struct SParameters
 int main(int argc, char *argv[])
 {
 
+  const LIApplication& appinterface = CApplicationInterface::getInstance();
   QApplication app(argc, argv);
-
-  qDebug() << QCoreApplication::applicationFilePath();
-  qDebug() << QCoreApplication::applicationDirPath();
-
 
   auto lp = QCoreApplication::libraryPaths();
   auto it = lp.begin();
   while(it != lp.end())
   {
-    qDebug() << "libraryPaths: " << *it;
+    appinterface.messageDeploy( QString("add library path: %1").arg(*it));
     it++;
   }
 
@@ -136,9 +138,12 @@ int main(int argc, char *argv[])
 
   if(!domDoc.setContent(&file, true, &errorStr, &errorLine, &errorColumn))
   {
-    qDebug() << "Application: parse error at line:" << errorLine <<
-      " column:" << errorColumn << " msg: " << errorStr;
-    qDebug() << "Exit programm";
+    appinterface.messageDeploy(
+        QString("Application: parse error at line: %1 column: %2 msg: #3")
+       .arg(errorLine)
+       .arg(errorColumn)
+       .arg(errorStr));
+    appinterface.messageDeploy("Exit programm");
     return -1;
   }
 
@@ -146,8 +151,8 @@ int main(int argc, char *argv[])
 
   if(rootElement.tagName() != __slRootTag)
   {
-    qDebug() << "Application: wrong root element";
-    qDebug() << "Exit programm";
+    appinterface.messageDeploy("Application: wrong root element");
+    appinterface.messageDeploy("Exit programm");
     return -1;
   }
 
@@ -155,8 +160,8 @@ int main(int argc, char *argv[])
 
   if(childNode.isNull())
   {
-    qDebug() << "Application: no child elements";
-    qDebug() << "Exit programm";
+    appinterface.messageDeploy("Application: no child elements");
+    appinterface.messageDeploy("Exit programm");
     return -1;
   }
 
@@ -173,7 +178,6 @@ int main(int argc, char *argv[])
   //----------------------------------------------------
   xmldatasources::upload(rootElement);
   //----------------------------------------------------
-  /* xmlfonts::upload(rootElement); */
   xmlwidgetstyles::upload(rootElement);
   
   //----------------------------------------------------
@@ -194,15 +198,13 @@ int main(int argc, char *argv[])
   xmlwindows::upload(rootElement);
   //----------------------------------------------------
   xmljscripts::upload(rootElement);
-  
 
   xmlkeyboards::init();
   xmlwindows::show();
 
-
   QObject::connect(&app, &QApplication::aboutToQuit,
       [&](){
-        qDebug() << "QApplication::aboutToQuit";
+        appinterface.messageRuntime("QApplication::aboutToQuit");
       });
 
   return app.exec();

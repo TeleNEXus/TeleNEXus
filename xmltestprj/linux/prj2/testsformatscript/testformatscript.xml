@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<WINDOW>
+  <mainWidget>
+    <Frame>
+      <layout>
+        <LayoutVBox>
+          <widgets>
+
+            <LineEdit style="$(lineedit1)" data="localsource:bytes_uint32:scaledInt32_xxx.x"/>
+            <LineEdit style="$(lineedit1)" data="localsource:bytes_uint32:scaledInt32_xxxxx.xxxx"/>
+
+            <Button text = "Launch/Stop script">
+              <press>
+                <controlScript scriptId="testlaunch1" scriptAction="launch(500)"/>
+              </press>
+              <release>
+                <controlScript scriptId="testlaunch1" scriptAction="stop"/>
+              </release>
+            </Button>
+
+          </widgets>
+          <stretch/>
+        </LayoutVBox>
+      </layout>
+    </Frame>
+  </mainWidget>
+</WINDOW>
+

@@ -135,13 +135,10 @@ QWidget* LCXmlLabelBuilder::buildLocal(
   auto build_movie =
     [&_element, &ret]()
     {
-      qDebug() << "+++++build movie 0";
       QString attr_movie = _element.attribute(__slAttributes.movie);
       if(attr_movie.isNull()) return (QLabel*)nullptr;
-      qDebug() << "+++++build movie 1";
       auto movie = getMovie(attr_movie);
       if(movie.isNull()) return (QLabel*)nullptr;
-      qDebug() << "+++++build movie 2";
       return ret(new CQMovieLabel(movie));
     };
 
