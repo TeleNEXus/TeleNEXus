@@ -34,17 +34,24 @@
 DebugOut(">>>>>>>>>>>>>>>>>>>>>>>>>>>> Formatter Script " + Attributes.id);
 DebugOut(">>>>>>>>>>>>>>>>>>>>>>>>>>>> Formatter Script File" + Attributes.file);
 
+ImportModule("scripts/testexportmodule1.js");
 //------------------------------------------------------------------------------
 //Debug all DOM attributes.
 var attributes_keys = Object.keys(Attributes);
 
 for(var i = 0; i < attributes_keys.length; i++) {
 
-  DebugOut("  Attributes[ " 
+  console.debug("  Attributes[ " 
     + attributes_keys[i] 
     + "\t] = '" 
     + Attributes[ attributes_keys[i] ] 
     + "'");
+
+  // DebugOut("  Attributes[ " 
+  //   + attributes_keys[i] 
+  //   + "\t] = '" 
+  //   + Attributes[ attributes_keys[i] ] 
+  //   + "'");
 }
 
 //------------------------------------------------------------------------------
@@ -142,6 +149,8 @@ function formatting(_input){
 //==============================================================================Validate
 function Validate(_val){
 
+  testImportDebug("TestDebug");
+
   DebugOut("Validate value = " + _val);
   var sign = 1;
   if(typeof _val !== "string") {
@@ -195,11 +204,5 @@ function ToBytes(_str) {
     array[i] = 0x000000ff & (num_data >>> (8*i));
   }
   return array;
-}
-
-//==============================================================================Fitting
-function Fitting(_str)
-{
-  return ToString(ToBytes(_str));
 }
 

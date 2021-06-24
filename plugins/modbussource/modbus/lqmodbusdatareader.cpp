@@ -89,7 +89,6 @@ void LQModbusDataReader::connectToSource()
 {
     auto sp = mwpDataSource.lock();
     if(sp.isNull()) return;
-    qDebug() << "LCQModbusDataReader::connectToSource:" << mDataName;
     sp.data()->connectReader(mwpThis);
 }
 
@@ -98,7 +97,6 @@ void LQModbusDataReader::disconnectFromSource()
 {
     auto sp = mwpDataSource.lock();
     if(sp.isNull()) return;
-    qDebug() << "LQModbusDataReader::disconnectFromSource:" << mDataName;
     sp.data()->disconnectReader(mwpThis);
 }
 

@@ -78,14 +78,6 @@ void uploadLocal(const QDomElement& _element)
       QString attr_file = _element.attribute(__slAttributes.file);
       if(attr_file.isNull()) return;
 
-      QFile file(attr_file);
-
-      if (!file.open(QIODevice::ReadOnly)) { return; }
-
-      QTextStream stream(&file);
-      QString scriptString = stream.readAll();
-      file.close();
-
       QMap<QString, QString> attr_map;
 
       for(auto attr_el = _element.firstChildElement(__slTags.attributes);
@@ -100,7 +92,7 @@ void uploadLocal(const QDomElement& _element)
         }
       }
 
-      auto formatter = LCJSFormatter::create(scriptString, attr_map);
+      auto formatter = LCJSFormatter::create(attr_file, attr_map);
       if(formatter.isNull()) return;
       __slFormattersMap.insert(attr_id, formatter);
     };

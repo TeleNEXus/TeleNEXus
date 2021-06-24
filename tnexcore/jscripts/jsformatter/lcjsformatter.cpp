@@ -1,6 +1,7 @@
 #include "lcjsformatter.h"
 #include "LIApplication.h"
 #include "lcqjsformatterinterface.h"
+#include "jscriptcommon.h"
 
 #include <QValidator>
 #include <QDomElement>
@@ -9,6 +10,7 @@
 #include <QJSValue>
 #include <QJSEngine>
 #include <QSharedPointer>
+#include <QFile>
 #include <QDebug>
 
 //==============================================================================__slPropNames
@@ -20,24 +22,24 @@ static const struct
   QString funcValidate        = "Validate";
   QString funcToBytes         = "ToBytes";
   QString funcToString        = "ToString";
-  QString funcFitting         = "Fitting"; 
 }__slPropNames;
 
-//==============================================================================emitError
-static void emitError(const QJSValue& _value);
 //==============================================================================createScriptGlobal
 static QString createScriptGlobal(const QMap<QString, QString>& _attributes);
 
 
 //==============================================================================CJSValidator
+struct SLocalData;
 class CJSValidator : public QValidator
 {
 private:
+  const SLocalData& mLocalData;
   mutable QJSValue mCallValue;
 
 public:
-  CJSValidator() : 
-    QValidator(nullptr)
+  CJSValidator(const SLocalData& _localData) : 
+    QValidator(nullptr),
+    mLocalData(_localData)
   {
   }
 
@@ -47,41 +49,27 @@ public:
   }
 
   //----------------------------------------------------------------------------
-  virtual State validate(QString& _input, int& _pos) const override
-  {
-    Q_UNUSED(_pos);
-
-    QJSValue jsret = mCallValue.call(QJSValueList() << _input);
-
-    if(jsret.isError())
-    {
-      emitError(jsret);
-      return State::Intermediate;
-    }
-
-    State state = static_cast<State>(jsret.toInt());
-
-    if(!jsret.isNumber()) return State::Intermediate;
-
-    return state;
-  }
+  virtual State validate(QString& _input, int& _pos) const override;
 };
 
 //==============================================================================SLocalData
 struct SLocalData
 {
+  QString scriptFileName;
+  QJSEngine *jsengine;
   CJSValidator* validator;
   QSharedPointer<LCQJSFormatterInterface> formatterInterface;
-  QJSEngine *jsengine;
   QJSValue callToString;
   QJSValue callToBytes;
   QJSValue callFitting;
   SLocalData() = delete;
-  SLocalData(QSharedPointer<LCQJSFormatterInterface> _formatterInterface) :
-    validator(new CJSValidator()),
-    formatterInterface(_formatterInterface),
-    jsengine(new QJSEngine())
+  SLocalData(const QString& _scriptFileName) :
+    scriptFileName(_scriptFileName),
+    jsengine(new QJSEngine()),
+    validator(new CJSValidator(*this)),
+    formatterInterface(LCQJSFormatterInterface::create(jsengine))
   {
+    jsengine->installExtensions(QJSEngine::Extension::AllExtensions);
   }
   ~SLocalData()
   {
@@ -90,61 +78,88 @@ struct SLocalData
   }
 };
 
+//----------------------------------------------------------------------------CJSValidator::validate
+CJSValidator::State CJSValidator::validate(QString& _input, int& _pos) const
+{
+  Q_UNUSED(_pos);
+  QJSValue jsret = mCallValue.call(QJSValueList() << _input);
+
+  if(jsret.isError())
+  {
+    jscriptcommon::emitRuntimeError(jsret, mLocalData.scriptFileName);
+    return State::Intermediate;
+  }
+
+  State state = static_cast<State>(jsret.toInt());
+
+  if(!jsret.isNumber()) return State::Intermediate;
+
+  return state;
+}
+
 //==============================================================================mpLocalData
-#define mpLocalData (static_cast<SLocalData*>(mpData))
+#define mpLocalData(p) (static_cast<SLocalData*>(p))
+#define ld (*(static_cast<SLocalData*>(mpData)))
 
 //==============================================================================LCJSFormatter
 LCJSFormatter::LCJSFormatter( 
+    const QString& _scriptFileName,
     const QString& _script,
     const QMap<QString, QString>& _attributes):
-  mpData(new SLocalData(LCQJSFormatterInterface::create()))
+  mpData(new SLocalData(_scriptFileName))
 {
 
   QJSValue jsvalue = 
-    mpLocalData->jsengine->newQObject(
-        mpLocalData->formatterInterface.data());
+    ld.jsengine->newQObject(
+        ld.formatterInterface.data());
 
-  mpLocalData->jsengine->globalObject().setProperty(
+  ld.jsengine->globalObject().setProperty(
       __slPropNames.formatterInterface, jsvalue);
 
-  mpLocalData->jsengine->evaluate(
+
+  ld.jsengine->evaluate(
       createScriptGlobal(_attributes));
 
-  jsvalue= mpLocalData->jsengine->evaluate(_script);
+  jsvalue= ld.jsengine->evaluate(_script, _scriptFileName);
 
-  if(jsvalue.isError()) { emitError(jsvalue); }
+  if(jsvalue.isError()) { jscriptcommon::emitEvaluateError(jsvalue); }
 
-  mpLocalData->validator->setCallValue(
-      mpLocalData->jsengine->globalObject().property(
+  ld.validator->setCallValue(
+      ld.jsengine->globalObject().property(
         __slPropNames.funcValidate));
 
-  mpLocalData->callToString = 
-    mpLocalData->jsengine->globalObject().property( __slPropNames.funcToString);
+  ld.callToString = 
+    ld.jsengine->globalObject().property( __slPropNames.funcToString);
 
-  mpLocalData->callToBytes = 
-    mpLocalData->jsengine->globalObject().property( __slPropNames.funcToBytes);
-
-  mpLocalData->callFitting = 
-    mpLocalData->jsengine->globalObject().property( __slPropNames.funcFitting);
+  ld.callToBytes = 
+    ld.jsengine->globalObject().property( __slPropNames.funcToBytes);
 }
 
 //------------------------------------------------------------------------------
 LCJSFormatter::~LCJSFormatter()
 {
-  delete mpLocalData;
+  delete mpLocalData(mpData);
 }
 
 //------------------------------------------------------------------------------
 QString LCJSFormatter::toString(const QByteArray& _data)
 {
-  QJSValue jsarray = mpLocalData->jsengine->newArray(_data.size());
+  QJSValue jsarray = ld.jsengine->newArray(_data.size());
   for(int i = 0; i < _data.size(); i++)
   {
     jsarray.setProperty(i, _data[i]);
   }
 
-  QJSValue jsret = mpLocalData->callToString.call(QJSValueList() << jsarray);
+  QJSValue jsret = ld.callToString.call(QJSValueList() << jsarray);
+
+  if(jsret.isError()) 
+  {
+    jscriptcommon::emitRuntimeError(jsret, ld.scriptFileName);
+    return QString();
+  }
+
   if(jsret.isString()) return jsret.toString();
+
   return QString();
 }
 
@@ -153,7 +168,12 @@ QByteArray LCJSFormatter::toBytes(const QString& _str)
 {
   QByteArray ret_data;
 
-  QJSValue jsret = mpLocalData->callToBytes.call(QJSValueList() << _str);
+  QJSValue jsret = ld.callToBytes.call(QJSValueList() << _str);
+  if(jsret.isError()) 
+  {
+    jscriptcommon::emitRuntimeError(jsret, ld.scriptFileName);
+    return ret_data;
+  }
 
   if(!jsret.isArray()) return ret_data;
 
@@ -175,16 +195,25 @@ QByteArray LCJSFormatter::toBytes(const QString& _str)
 //------------------------------------------------------------------------------
 QValidator* LCJSFormatter::validator()
 {
-  return mpLocalData->validator;
+  return ld.validator;
 }
 
 //------------------------------------------------------------------------------
 QSharedPointer<LCJSFormatter> LCJSFormatter::create(
-    const QString& _script,
+    const QString& _fileName,
     const QMap<QString, QString>& _attributes)
 {
+  auto ret_wrong = [](){ return QSharedPointer<LCJSFormatter>(); };
+
+  QFile file(_fileName);
+  if (!file.open(QIODevice::ReadOnly)) return ret_wrong();
+  QString script(file.readAll());
+  file.close();
+
+  if(script.isNull()) return ret_wrong();
+
   return QSharedPointer<LCJSFormatter>(
-      new LCJSFormatter(_script,  _attributes));
+      new LCJSFormatter(_fileName, script,  _attributes));
 }
 
 //==============================================================================createScriptGlobal
@@ -208,20 +237,14 @@ static QString createScriptGlobal(const QMap<QString, QString>& _attributes)
       "var Intermediate = %3;"
       "var Invalid      = %4;"
       "function DebugOut(str) {%5.debugOut(str)};"
+      "function ImportModule(_fileName, _property) {"
+      "%5.importModule(_fileName, _property)};"
       )
-    .arg(obj_attributes)
-    .arg(QValidator::State::Acceptable)
-    .arg(QValidator::State::Intermediate)
-    .arg(QValidator::State::Invalid)
-    .arg(__slPropNames.formatterInterface);
+/*1*/ .arg(obj_attributes)
+/*2*/ .arg(QValidator::State::Acceptable)
+/*3*/ .arg(QValidator::State::Intermediate)
+/*4*/ .arg(QValidator::State::Invalid)
+/*5*/ .arg(__slPropNames.formatterInterface);
   return out;
 }
 
-//==============================================================================emitError
-static void emitError(const QJSValue& _value)
-{
-  qDebug() 
-    << "Uncaught exception at line"
-    << _value.property("lineNumber").toInt()
-    << ":" << _value.toString();
-}

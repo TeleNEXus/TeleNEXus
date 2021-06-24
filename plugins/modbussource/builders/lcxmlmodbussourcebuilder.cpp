@@ -45,7 +45,7 @@ static LTMastersMap createMasters(const QDomNodeList& nodes);
 //----------------------------------------------------------------------------------------------------------------------
 static void createSources(const QDomNodeList& nodes,
     LTMastersMap _masters,
-    LQDataSources& _sourcesmap);
+    LQDataSources& _sourcesmap, const LIApplication& _app);
 
 //----------------------------------------------------------------------------------------------------------------------
 LQDataSources LCXmlModbusSourceBuilder::build(const QDomElement &_element, const LIApplication& _app)
@@ -65,8 +65,8 @@ LQDataSources LCXmlModbusSourceBuilder::build(const QDomElement &_element, const
 
   if(!domDoc.setContent(&file, true, &errorStr, &errorLine, &errorColumn))
   {
-    qDebug() << "LCXmlModbusSources: parse error at line:"
-      << errorLine << " column:" << errorColumn << " msg: " << errorStr;
+    _app.messageDeploy(QString("LCXmlModbusSources: parse error at line: %1 column %2 msg: %3")
+      .arg(errorLine).arg( errorColumn).arg(errorStr));
     return map;
   }
 
@@ -74,7 +74,7 @@ LQDataSources LCXmlModbusSourceBuilder::build(const QDomElement &_element, const
 
   if(rootElement.tagName() != "modbussources")
   {
-    qDebug() << "LCXmlModbusSources: wrong root element";
+    _app.messageDeploy("LCXmlModbusSources: wrong root element");
     return map;
   }
 
@@ -82,7 +82,7 @@ LQDataSources LCXmlModbusSourceBuilder::build(const QDomElement &_element, const
 
   if(nodes.isEmpty())
   {
-    qDebug() << "LCXmlModbusSources: no elements modbus masters";
+    _app.messageDeploy("LCXmlModbusSources: no elements modbus masters");
     return map;
   }
 
@@ -90,7 +90,7 @@ LQDataSources LCXmlModbusSourceBuilder::build(const QDomElement &_element, const
 
   if(masters.isEmpty())
   {
-    qDebug() << "LCXmlModbusSources: no valid modbus masters";
+    _app.messageDeploy("LCXmlModbusSources: no valid modbus masters");
     return map;
   }
 
@@ -98,17 +98,19 @@ LQDataSources LCXmlModbusSourceBuilder::build(const QDomElement &_element, const
 
   if(nodes.isEmpty())
   {
-    qDebug() << "LCXmlModbusSources: no elements modbus source";
+    _app.messageDeploy("LCXmlModbusSources: no elements modbus source");
     return map;
   }
 
-  createSources(nodes, masters, map);
+  createSources(nodes, masters, map, _app);
 
   return map;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-static int loadMemoryMap(LQModbusDataSource* _p_source, const QString& _filename);
+static int loadMemoryMap(LQModbusDataSource* _p_source, 
+    const QString& _filename,
+    const LIApplication& _app);
 
 //----------------------------------------------------------------------------------------------------------------------
 static const struct
@@ -123,7 +125,8 @@ static const struct
 //----------------------------------------------------------------------------------------------------------------------
 static void createSources(const QDomNodeList& nodes,
     LTMastersMap _masters,
-    LQDataSources& _sourcesmap)
+    LQDataSources& _sourcesmap,
+    const LIApplication& _app)
 {
   QString attr;
   QString attrName;
@@ -136,7 +139,6 @@ static void createSources(const QDomNodeList& nodes,
   for(int i = 0; i < nodes.size(); i++)
   {
     QDomElement el;
-    qDebug() << "createSources pass0";
     el = nodes.at(i).toElement();
     if(el.isNull()) continue;
 
@@ -164,7 +166,7 @@ static void createSources(const QDomNodeList& nodes,
 
     QSharedPointer<LQModbusDataSource> source = LQModbusDataSource::create(devid, itm.value());
 
-    if(loadMemoryMap(source.data(), attr) != 0)
+    if(loadMemoryMap(source.data(), attr, _app) != 0)
     {
       int updatetime;
       bool flag;
@@ -378,7 +380,9 @@ static const struct
 }__memoryMapItemElementNames;
 
 //----------------------------------------------------------------------------------------------------------------------
-static int loadMemoryMap(LQModbusDataSource* _p_source,  const QString& _filename)
+static int loadMemoryMap(LQModbusDataSource* _p_source,  
+    const QString& _filename, 
+    const LIApplication& _app)
 {
   QFile file(_filename);
 
@@ -391,8 +395,12 @@ static int loadMemoryMap(LQModbusDataSource* _p_source,  const QString& _filenam
 
   if(!domDoc.setContent(&file, true, &errorStr, &errorLine, &errorColumn))
   {
-    qDebug() << "LCXmlModbusSources: parse memory map file:" << _filename << " "
-      << errorLine << " column:" << errorColumn << " msg: " << errorStr;
+    _app.messageDeploy(
+        QString("LCXmlModbusSources: parse memory map file: %1 line: %2 column: %3 msg: %4")
+        .arg(_filename)
+        .arg(errorLine)
+        .arg(errorColumn) 
+        .arg(errorStr));
     return -1;
   }
 

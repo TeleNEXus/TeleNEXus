@@ -24,6 +24,8 @@
 #include "cqjsbinaryfile.h"
 #include "cqjsprocess.h"
 #include "applicationinterface.h"
+#include "jscriptcommon.h"
+#include "applicationinterface.h"
 
 #include <QDebug>
 #include <QThread>
@@ -106,6 +108,7 @@ LCQJScriptHiden::LCQJScriptHiden(
     const QMap<QString, QString>& _attributesMap,
     const QString& _fileName) : 
   QObject(nullptr),
+  mScriptFileName(_fileName),
   mpThread(new QThread),
   mTimerId(0)
 {
@@ -131,13 +134,13 @@ LCQJScriptHiden::LCQJScriptHiden(
 
   jsvalue = mJSEngine.evaluate(createScriptGlobal(_attributesMap, mId));
 
-  if(jsvalue.isError()) { emitError(jsvalue);}
+  if(jsvalue.isError()) { jscriptcommon::emitEvaluateError(jsvalue);}
 
-  jsvalue = mJSEngine.evaluate(_script, _fileName);
+  jsvalue = mJSEngine.evaluate(_script);
 
   if(jsvalue.isError())
   {
-    emitError(jsvalue);
+    jscriptcommon::emitEvaluateError(jsvalue, _fileName);
   }
 
   mJSEngine.collectGarbage();
@@ -205,7 +208,7 @@ void LCQJScriptHiden::scriptExecute()
 {
   QJSValue result = mCallScriptMain.call();
   if(result.isError()) { 
-    emitError(result);
+    jscriptcommon::emitEvaluateError(result, mScriptFileName);
   }
 }
 
@@ -224,20 +227,9 @@ void LCQJScriptHiden::customEvent(QEvent* _event)
 }
 
 //------------------------------------------------------------------------------
-void LCQJScriptHiden::emitError(const QJSValue& _value)
-{
-  debugOut(QString("Uncaught exception in file %1 at line %2: %3")
-      .arg(_value.property("fileName").toString())
-      .arg(_value.property(QStringLiteral("lineNumber")).toInt())
-      .arg(_value.toString()));
-}
-
-
-
-//------------------------------------------------------------------------------
 void LCQJScriptHiden::debugOut(const QString& _out)
 {
-  qDebug("%s", qPrintable(_out));
+  CApplicationInterface::getInstance().messageRuntime(_out);
 }
 
 //------------------------------------------------------------------------------
@@ -285,36 +277,7 @@ int LCQJScriptHiden::writeData(
 void LCQJScriptHiden::importModule(const QString& _fileName, 
     const QString& _propertyName)
 {
-  QJSValue jsmodule = mJSEngine.importModule(_fileName);
-
-  if(jsmodule.isError())
-  {
-    mJSEngine.throwError(QString("Can't import from file \"%1\" ").
-        arg(_fileName));
-    return;
-  }
-
-  if(_propertyName != QString())
-  {
-    QJSValue jsval = jsmodule.property(_propertyName);
-    if(jsval.isUndefined())
-    {
-      mJSEngine.throwError(
-          QString("Can't import property \"%1\" from module \"%2\" ").
-          arg(_propertyName).
-          arg(_fileName));
-      return;
-    }
-    mJSEngine.globalObject().setProperty(_propertyName, jsval);
-    return;
-  }
-
-  QJSValueIterator it(jsmodule);
-  while(it.hasNext())
-  {
-    it.next();
-    mJSEngine.globalObject().setProperty(it.name(), it.value());
-  }
+  jscriptcommon::importModule(mJSEngine, _fileName, _propertyName);
 }
 
 //------------------------------------------------------------------------------
@@ -343,7 +306,6 @@ void LCQJScriptHiden::sleepMSec(unsigned long _timems)
 //------------------------------------------------------------------------------
 void LCQJScriptHiden::collectGarbage()
 {
-  qDebug() << "Qt: Collect Garbage";
    mJSEngine.collectGarbage();
 }
 

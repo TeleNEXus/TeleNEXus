@@ -192,7 +192,6 @@ static void addItemBits(
     const QDomElement& _item_element)
 {
 
-  qDebug() << "Local source builder: add item bits";
   
   QString attr_id= _item_element.attribute(__slAttributes.id);
   if(attr_id.isNull()) return;

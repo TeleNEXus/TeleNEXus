@@ -18,32 +18,18 @@
  * You should have received a copy of the GNU General Public License
  * along with TeleNEXus.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef LCJSFORMATTER_H_
-#define LCJSFORMATTER_H_
 
-#include "LIDataFormatter.h"
-#include <QSharedPointer>
+#include <QString>
+
 class QJSValue;
-class LCJSFormatter : public LIDataFormatter
+class QJSEngine;
+
+namespace jscriptcommon
 {
-private:
-  void* mpData = nullptr;
-
-  LCJSFormatter() = delete;
-  LCJSFormatter(
-      const QString& _scriptFileName,
-      const QString& _script,
-      const QMap<QString, QString>& _attributes);
-
-public:
-  ~LCJSFormatter();
-  virtual QString     toString(const QByteArray& _data)override;
-  virtual QByteArray  toBytes(const QString& _str)override;
-  virtual QValidator* validator()override;
-
-  static QSharedPointer<LCJSFormatter> create(
-      const QString& _fileName,
-      const QMap<QString, QString>& _attributes);
-};
-
-#endif //LCJSFORMATTER_H_
+void emitEvaluateError(const QJSValue& _value, const QString& _fileName = QString());
+void emitRuntimeError(const QJSValue& _value, const QString& _fileName = QString());
+void importModule(
+    QJSEngine& _targetEngine, 
+    const QString& _fileName, 
+    const QString& _propertyName = QString());
+}

@@ -20,6 +20,7 @@
  */
 
 #include "xmlcommon.h"
+#include "applicationinterface.h"
 #include <QRegularExpression>
 #include <QDomDocument>
 #include <QFile>
@@ -371,11 +372,15 @@ QDomDocument loadDomDocument (const QString& _fileName)
 
   if(!domDoc.setContent(&file, true, &errorStr, &errorLine, &errorColumn))
   {
-    qDebug() << 
-      "Parse file "       << file.fileName() << 
-      " error at line:"   << errorLine <<
-      " column:"          << errorColumn << 
-      " msg: "            << errorStr;
+    CApplicationInterface::getInstance().messageDeploy(
+        QString("Parse file %1"       
+          " error at line: %2"   
+          " column: %3"          
+          " msg: %4")
+        .arg(file.fileName())
+        .arg(errorLine)
+        .arg(errorColumn)
+        .arg(errorStr));
   }
   return domDoc;
 }

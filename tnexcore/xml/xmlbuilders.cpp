@@ -19,7 +19,7 @@
  * along with TeleNEXus.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include "xmlbuilders.h"
-
+#include "applicationinterface.h"
 #include "LIXmlWidgetBuilder.h"
 #include "LIXmlLayoutBuilder.h"
 #include "LIXmlRemoteDataSourceBuilder.h"
@@ -29,7 +29,7 @@
 #include "lcxmllocalsourcebuilder.h"
 
 #include <QLibrary>
-#include <QDebug>
+/* #include <QDebug> */
 #include <QFile>
 
 //==============================================================================
@@ -218,7 +218,7 @@ static void load(
     return;
   }
 
-  fileName = _pathPrj + "/" + fileName;
+  fileName = _pathPrj + fileName;
 
   QFile file(fileName);
   QDomDocument domDoc;
@@ -228,24 +228,24 @@ static void load(
 
   if(!domDoc.setContent(&file, true, &errorStr, &errorLine, &errorColumn))
   {
-    qDebug() << 
+    CApplicationInterface::getInstance().messageDeploy(
       QString(
-          "ERROR[builder loader]: tag=%1 load parse file %2 error at line:%3 column:%4 msg: %5")
-      .arg(_rootTag).arg(fileName).arg(errorLine).arg(errorColumn).arg(errorStr);
+          "builder loader error: tag=%1 load parse file %2 error at line:%3 column:%4 msg: %5")
+      .arg(_rootTag).arg(fileName).arg(errorLine).arg(errorColumn).arg(errorStr));
     return;
   }
-
-  qDebug() << 
-    QString("MESSAGE[builder loader]: tag=%1 parce file %2")
-    .arg(_rootTag).arg(fileName);
+  
+  CApplicationInterface::getInstance().messageDeploy(
+      QString("builder loader message: tag=%1 parce file %2")
+      .arg(_rootTag).arg(fileName));
 
   QDomElement rootElement = domDoc.documentElement();
 
   if(rootElement.tagName() != _rootTag)
   {
-    qDebug() << 
-      QString("ERROR[builder loader %1 ]:file %2 wrong root element tag name")
-      .arg(_rootTag).arg(fileName);
+    CApplicationInterface::getInstance().messageDeploy(
+        QString("builder loader error %1 :file %2 wrong root element tag name")
+        .arg(_rootTag).arg(fileName));
     return;
   }
   loadBuilders(_rootTag, rootElement, _libPaths, _adder);
@@ -287,31 +287,31 @@ static void loadBuilders(
     for(int i = 0; i < _libPaths.size(); i++)
     {
 
-      qDebug() << QString("lib file: %1/%2").arg(_libPaths[i]).arg(libfilename);
-
       lib.setFileName(_libPaths[i] + "/" + libfilename);
 
       if(lib.isLoaded())
       {
 
-        qDebug() << QString("MESSAGE[builder loader]: tag=%1 library %2 is already loaded")
-          .arg(_rootTag).arg(lib.fileName());
+        CApplicationInterface::getInstance().messageDeploy(
+            QString("builder loader message: tag=%1 library %2 is already loaded")
+          .arg(_rootTag).arg(lib.fileName()));
         break;
       }
 
       if(lib.load())
       {
-        qDebug() << QString("MESSAGE[builder loader]: tag=%1 library %2 is loaded")
-          .arg(_rootTag).arg(lib.fileName());
+        CApplicationInterface::getInstance().messageDeploy(
+        QString("builder loader message: tag=%1 library %2 is loaded")
+          .arg(_rootTag).arg(lib.fileName()));
         break;
       }
     }
 
     if(!lib.isLoaded())
     {
-      qDebug() << 
-        QString("WARNING[builder loader]: tag=%1 can't load library %2 to load source builder %3")
-        .arg(_rootTag).arg(lib.fileName()).arg(el.tagName());
+      CApplicationInterface::getInstance().messageDeploy(
+          QString("builder loader warning: tag=%1 can't load library %2 to load source builder %3")
+          .arg(_rootTag).arg(lib.fileName()).arg(el.tagName()));
       node = node.nextSibling();
       continue;
     }
@@ -321,11 +321,11 @@ static void loadBuilders(
 
     if(!func)
     {
-      qDebug() << 
-        QString("WARNING[builder loader]: "
+      CApplicationInterface::getInstance().messageDeploy(
+          QString("builder loader warning: "
             "tag=%1 can't resolve access func %2 in library %3 "
             "to load remote source builder %4")
-        .arg(_rootTag).arg(libhandler).arg(lib.fileName()).arg(el.tagName());
+          .arg(_rootTag).arg(libhandler).arg(lib.fileName()).arg(el.tagName()));
 
       node = node.nextSibling();
       continue;
@@ -334,14 +334,16 @@ static void loadBuilders(
     switch(_adder(el.tagName(), func()))
     {
     case EAddResult::Added:
-      qDebug() << QString("MESSAGE[builder loader]: tag=%1 builder %2 "
-        "with access func %3 was added").arg(_rootTag).arg(el.tagName()).arg(libhandler);
+      CApplicationInterface::getInstance().messageDeploy(
+          QString("builder loader message: tag=%1 builder %2 "
+            "with access func %3 was added").arg(_rootTag).arg(el.tagName()).arg(libhandler));
       break;
 
     case EAddResult::Replaced:
-      qDebug() << QString("WARNING[builder loader]: tag=%1 builder %2 "
-        "with access func %3 was replaced")
-        .arg(_rootTag).arg(el.tagName()).arg(libhandler);
+      CApplicationInterface::getInstance().messageDeploy(
+          QString("builder loader warning: tag=%1 builder %2 "
+            "with access func %3 was replaced")
+          .arg(_rootTag).arg(el.tagName()).arg(libhandler));
       break;
     }
     node = node.nextSibling();

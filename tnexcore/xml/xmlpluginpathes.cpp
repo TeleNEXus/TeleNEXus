@@ -19,6 +19,7 @@
  * along with TeleNEXus.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include "xmlpluginpathes.h"
+#include "applicationinterface.h"
 #include <QDomElement>
 #include <QDir>
 #include <QDebug>
@@ -44,7 +45,13 @@ void upload(const QDomElement& _rootElement)
   QDomNodeList nodes = _rootElement.elementsByTagName(__slTags.rootTag); 
 
   auto element_pathes = _rootElement.firstChildElement(__slTags.rootTag);
-  if(element_pathes.isNull()) return;
+  if(element_pathes.isNull()) 
+  {
+    CApplicationInterface::getInstance().messageDeploy(
+        "Uploading the plugins pathes: "
+        "main file has no the plugins pathes element");
+    return;
+  }
 
 
   for(auto element_item = element_pathes.firstChildElement(__slTags.item);
@@ -54,6 +61,9 @@ void upload(const QDomElement& _rootElement)
     QString path = element_item.attribute(__slAttributes.path);
     if(path.isNull()) continue;
     __slPlaginLibPaths << path;
+    CApplicationInterface::getInstance().messageDeploy(
+        QString("Uploading the plugins pathes: "
+            "added plugins path '%1'").arg(path));
 
   }
 }

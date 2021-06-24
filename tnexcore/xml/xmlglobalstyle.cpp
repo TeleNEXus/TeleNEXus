@@ -44,14 +44,31 @@ namespace xmlglobalstyle
 void upload(const QDomElement& _rootElement, QApplication& _qapp)
 {
   auto element = _rootElement.firstChildElement(__slTags.rootTag);
-  if(element.isNull()) return;
 
+  if(element.isNull()) 
+  {
+    CApplicationInterface::getInstance()
+      .messageDeploy("Upload global style: main document has no global style element.");
+    return;
+  }
+  
   QString attr_file = element.attribute( __slAttributes.file);
-  if(attr_file.isNull()) return;
+  if(attr_file.isNull()) 
+  {
+    CApplicationInterface::getInstance()
+      .messageDeploy(QString("Upload global style: the file is not specified."));
+    return;
+  }
   QFile style_file(attr_file); 
   if(style_file.open(QFile::OpenModeFlag::ReadOnly))
   {
     _qapp.setStyleSheet(QLatin1String(style_file.readAll()));
+  }
+  else
+  {
+    CApplicationInterface::getInstance()
+      .messageDeploy(QString("Upload global style: file '%1' not find.")
+          .arg(attr_file));
   }
 }
 

@@ -107,6 +107,7 @@ jscripts/jscriptservice/cqjsprocess.cpp \
 jscripts/jscriptservice/jsappservice/lcqjsappservice.cpp \
 jscripts/jscriptservice/jsappservice/lcqreadfromsourcereq.cpp \
 jscripts/jscriptservice/jsappservice/lcqwritetosourcereq.cpp \
+jscripts/jscriptcommon.cpp \
 common/xmlcommon.cpp \
 xml/xmlbuilders.cpp \
 xml/xmljscripts.cpp \
@@ -205,6 +206,7 @@ jscripts/jscriptservice/cqjsprocess.h \
 jscripts/jscriptservice/jsappservice/lcqjsappservice.h \
 jscripts/jscriptservice/jsappservice/lcqreadfromsourcereq.h \
 jscripts/jscriptservice/jsappservice/lcqwritetosourcereq.h \
+jscripts/jscriptcommon.h \
 common/xmlcommon.h \
 xml/xmlbuilders.h \
 xml/xmldataformatters.h \

@@ -71,7 +71,6 @@ void LCQWriteToSource::CEventWrite::handle(LCQWriteToSource* _sender)
 //==============================================================================requestDeleter
 static void requestDeleter(LCQWriteToSource* _req)
 {
-  qDebug() << "Write Request Deleter";
   _req->deleteLater();
 }
 

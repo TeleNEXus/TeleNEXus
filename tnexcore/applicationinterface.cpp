@@ -26,11 +26,11 @@
 #include "xmlwindows.h"
 #include "xmlkeyboards.h"
 #include "xmlwidgetstyles.h"
-
 #include "lcxmlformatterfactory.h"
 #include "xmldataformatters.h"
 #include "xmljscripts.h"
 
+#include <QDebug>
 #include <QDir>
 
 //==============================================================================
@@ -156,4 +156,16 @@ QString CApplicationInterface::getWidgetStyle(const QString& _styleId) const
   return xmlwidgetstyles::getWidgetStyle(_styleId);
 }
 
+void CApplicationInterface::messageDeploy(const QString& _msg) const
+{
+  qDebug("%s", qPrintable( 
+    QString("deploy:> %1")
+    .arg(_msg)));
+}
 
+void CApplicationInterface::messageRuntime(const QString& _msg) const
+{
+  qDebug("%s", qPrintable( 
+    QString("runtime:> %1")
+    .arg(_msg)));
+}
