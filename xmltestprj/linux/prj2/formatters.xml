@@ -24,15 +24,15 @@
     <!-- format="xxx.x" --> 
     <!-- format="0000.xx" --> 
 
-    <script id="scaledInt32_xxx.x" file="scripts/formatters/scaledInt32.js">
-      <attributes min="-999.99" max="999.99" format="xxx.xx" />
-      <attributes file="scripts/formatters/scaledInt32.js" id="scaledInt32_xxx.x" />
-    </script>
+    <!-- <script id="scaledInt32_xxx.x" file="scripts/formatters/scaledInt32.js"> -->
+    <!--   <attributes min="-999.99" max="999.99" format="xxx.xx" /> -->
+    <!--   <attributes file="scripts/formatters/scaledInt32.js" id="scaledInt32_xxx.x" /> -->
+    <!-- </script> -->
 
-    <script id="scaledInt32_xxxxx.xxxx" file="scripts/formatters/scaledInt32.js">
-      <attributes min="-999.99" max="999.99" format="xxxxxx.xxxx" />
-      <attributes file="scripts/formatters/scaledInt32.js" id="scaledInt32_xxxxx.xxxx" />
-    </script>
+    <!-- <script id="scaledInt32_xxxxx.xxxx" file="scripts/formatters/scaledInt32.js"> -->
+    <!--   <attributes min="-999.99" max="999.99" format="xxxxxx.xxxx" /> -->
+    <!--   <attributes file="scripts/formatters/scaledInt32.js" id="scaledInt32_xxxxx.xxxx" /> -->
+    <!-- </script> -->
 
   <!-- <builder  id="int16_xx.x"         builder="formattersBuilder"       format="x.xxx" /> -->
 

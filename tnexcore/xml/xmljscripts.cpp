@@ -31,6 +31,9 @@
 #include <QDebug>
 #include <QFile>
 
+#define __smMessageHeader "JScripts:"
+#define __smMessageDeploy(message) CApplicationInterface::getInstance().messageDeploy(message)
+#define __smMessageRuntime(message) CApplicationInterface::getInstance().messageRuntime(message)
 
 static const struct
 {
@@ -53,7 +56,7 @@ static const struct
 
 static const struct
 {
-  QString baseTag     = "SCRIPTS";
+  QString rootTag     = "SCRIPTS";
   QString script      = "script";
   QString attributes  = "attributes";
   QString launch      = "launch";
@@ -186,15 +189,25 @@ namespace xmljscripts
 QSharedPointer<LIJScriptService> getScript(const QString& _scriptId)
 {
   auto it = __slScriptMap.find(_scriptId);
-  if(it == __slScriptMap.end()) return nullptr;
+  if(it == __slScriptMap.end()) 
+  {
+    __smMessageRuntime(QString("%1 can't find script with id '%2'")
+        .arg(__smMessageHeader).arg(_scriptId));
+    return nullptr;
+  }
   return it.value();
 }
 
 //------------------------------------------------------------------------------upload
 void upload( const QDomElement &_rootElement)
 {
-  QDomElement el = _rootElement.firstChildElement(__slTags.baseTag);
-  if(el.isNull()) return;
+  QDomElement el = _rootElement.firstChildElement(__slTags.rootTag);
+  if(el.isNull()) 
+  {
+    __smMessageDeploy(QString("%1 document element has no elements with tag %2")
+        .arg(__smMessageHeader).arg(__slTags.rootTag));
+    return;
+  }
   uploadLocal(el);
 }
 }

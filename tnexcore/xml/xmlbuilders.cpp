@@ -60,6 +60,10 @@ enum class EAddResult
   Replaced
 };
 
+#define __smMessageHeader "Builders loader:"
+#define __smMessageDeploy(message) CApplicationInterface::getInstance().messageDeploy(message)
+
+
 //==============================================================================
 template <typename T> QSharedPointer<T> findBuilder(
     const QString& _id, QMap<QString,QSharedPointer<T>> _map)
@@ -75,8 +79,8 @@ template <typename T> QSharedPointer<T> findBuilder(
 template <typename T> void Upload(
     QMap<QString, QSharedPointer<T>>& _map,
     const QString& _rootTag,
-    const QDomElement& _rootElement, 
-    const QString& _pathPrj, const QStringList& _libPaths)
+    const QDomElement& _documentElement, 
+    const QStringList& _libPaths)
 {
   auto adder = [&_map](const QString& _id, void* _builder)
   {
@@ -84,15 +88,13 @@ template <typename T> void Upload(
     _map.insert(_id, QSharedPointer<T>(static_cast<T*>(_builder)));
     return ret;
   };
-  load( _rootTag, _rootElement, _pathPrj, _libPaths, adder);
+  load( _rootTag, _documentElement,  _libPaths, adder);
 }
 
 //==============================================================================
-
 static void load(
     const QString& _rootTag,
-    const QDomElement& _rootElement, 
-    const QString& _pathPrj, 
+    const QDomElement& _documentElement, 
     const QStringList& _libPaths,
     std::function<EAddResult(const QString& _name, void* _builder)> _adder);
 
@@ -140,14 +142,12 @@ CInitMaps CInitMaps::instance;
 namespace widgets
 {
 //------------------------------------------------------------------------------
-void upload( const QDomElement& _rootElement, 
-    const QString& _pathPrj, const QStringList& _libPaths)
+void upload( const QDomElement& _documentElement, const QStringList& _libPaths)
 {
   Upload(
       __slBuilders, 
       __slRootTags.widgetBuilders, 
-      _rootElement, 
-      _pathPrj, 
+      _documentElement, 
       _libPaths);
 }
 
@@ -162,10 +162,9 @@ QSharedPointer<LIXmlWidgetBuilder> getBuilder(const QString _id)
 namespace layouts
 {
 //------------------------------------------------------------------------------
-void upload( const QDomElement& _rootElement, 
-    const QString& _pathPrj, const QStringList& _libPaths)
+void upload( const QDomElement& _documentElement, const QStringList& _libPaths)
 {
-  Upload(__slBuilders, __slRootTags.layoutBuilders, _rootElement, _pathPrj, _libPaths);
+  Upload(__slBuilders, __slRootTags.layoutBuilders, _documentElement, _libPaths);
 }
 //------------------------------------------------------------------------------
 QSharedPointer<LIXmlLayoutBuilder> getBuilder(const QString _id)
@@ -179,10 +178,13 @@ namespace sources
 {
 
 //------------------------------------------------------------------------------
-void upload( const QDomElement& _rootElement, 
-    const QString& _pathPrj, const QStringList& _libPaths)
+void upload( const QDomElement& _documentElement, const QStringList& _libPaths)
 {
-  Upload(__slBuilders, __slRootTags.sourceBuilders, _rootElement, _pathPrj, _libPaths);
+  Upload(
+      __slBuilders, 
+      __slRootTags.sourceBuilders, 
+      _documentElement, 
+      _libPaths);
 }
 
 //------------------------------------------------------------------------------
@@ -201,14 +203,20 @@ QSharedPointer<LIXmlRemoteDataSourceBuilder> getBuilder(const QString _id)
 //==============================================================================
 static void load(
     const QString& _rootTag,
-    const QDomElement& _rootElement, 
-    const QString& _pathPrj, 
+    const QDomElement& _documentElement, 
     const QStringList& _libPaths,
     std::function<EAddResult(const QString& _name, void* _builder)> _adder)
 {
 
-  auto element = _rootElement.firstChildElement(_rootTag);
-  if(element.isNull()) return;
+  auto element = _documentElement.firstChildElement(_rootTag);
+  if(element.isNull()) 
+  {
+    __smMessageDeploy(
+          QString("%1 "
+            "project root element has no element with tag '%1'")
+          .arg(__smMessageHeader));
+    return;
+  }
 
   QString fileName = element.attribute(__slAttributes.file);
 
@@ -218,8 +226,6 @@ static void load(
     return;
   }
 
-  fileName = _pathPrj + fileName;
-
   QFile file(fileName);
   QDomDocument domDoc;
   QString errorStr;
@@ -228,24 +234,33 @@ static void load(
 
   if(!domDoc.setContent(&file, true, &errorStr, &errorLine, &errorColumn))
   {
-    CApplicationInterface::getInstance().messageDeploy(
+    __smMessageDeploy(
       QString(
-          "builder loader error: tag=%1 load parse file %2 error at line:%3 column:%4 msg: %5")
-      .arg(_rootTag).arg(fileName).arg(errorLine).arg(errorColumn).arg(errorStr));
+          "%1 tag '%2' load parse file '%3' error at line:%4 column:%5 msg: '%6'")
+      .arg(__smMessageHeader)
+      .arg(_rootTag)
+      .arg(fileName)
+      .arg(errorLine)
+      .arg(errorColumn)
+      .arg(errorStr));
     return;
   }
   
-  CApplicationInterface::getInstance().messageDeploy(
-      QString("builder loader message: tag=%1 parce file %2")
-      .arg(_rootTag).arg(fileName));
+    __smMessageDeploy(
+      QString("%1 tag '%2' parce file '%3'")
+      .arg(__smMessageHeader)
+      .arg(_rootTag)
+      .arg(fileName));
 
   QDomElement rootElement = domDoc.documentElement();
 
   if(rootElement.tagName() != _rootTag)
   {
-    CApplicationInterface::getInstance().messageDeploy(
-        QString("builder loader error %1 :file %2 wrong root element tag name")
-        .arg(_rootTag).arg(fileName));
+    __smMessageDeploy(
+        QString("%1 file '%2' wrong root element tag name '%3'")
+        .arg(__smMessageHeader)
+        .arg(fileName)
+        .arg(_rootTag));
     return;
   }
   loadBuilders(_rootTag, rootElement, _libPaths, _adder);
@@ -283,7 +298,7 @@ static void loadBuilders(
 
     QLibrary lib;
 
-    //Поиск библиотеки по списку путей.
+    //find libraries
     for(int i = 0; i < _libPaths.size(); i++)
     {
 
@@ -292,40 +307,52 @@ static void loadBuilders(
       if(lib.isLoaded())
       {
 
-        CApplicationInterface::getInstance().messageDeploy(
-            QString("builder loader message: tag=%1 library %2 is already loaded")
-          .arg(_rootTag).arg(lib.fileName()));
+        __smMessageDeploy(
+            QString("%1 tag '%2' library '%3' is already loaded")
+          .arg(__smMessageHeader)
+          .arg(_rootTag)
+          .arg(lib.fileName()));
         break;
       }
 
       if(lib.load())
       {
-        CApplicationInterface::getInstance().messageDeploy(
-        QString("builder loader message: tag=%1 library %2 is loaded")
-          .arg(_rootTag).arg(lib.fileName()));
+        __smMessageDeploy(
+        QString("%1 tag '%2' library '%3' is loaded")
+          .arg(__smMessageHeader)
+          .arg(_rootTag)
+          .arg(lib.fileName()));
         break;
       }
     }
 
     if(!lib.isLoaded())
     {
-      CApplicationInterface::getInstance().messageDeploy(
-          QString("builder loader warning: tag=%1 can't load library %2 to load source builder %3")
-          .arg(_rootTag).arg(lib.fileName()).arg(el.tagName()));
+      __smMessageDeploy(
+          QString("%1 tag '%2' can't load library '%3' to load source builder '%4'")
+          .arg(__smMessageHeader)
+          .arg(_rootTag)
+          .arg(libfilename)
+          .arg(el.tagName()));
+
       node = node.nextSibling();
       continue;
     }
 
-    //Загрузка построителей объектов.
+    //load builders
     TLibAccessFunc func = (TLibAccessFunc)lib.resolve(libhandler.toStdString().c_str());
 
     if(!func)
     {
-      CApplicationInterface::getInstance().messageDeploy(
-          QString("builder loader warning: "
-            "tag=%1 can't resolve access func %2 in library %3 "
-            "to load remote source builder %4")
-          .arg(_rootTag).arg(libhandler).arg(lib.fileName()).arg(el.tagName()));
+      __smMessageDeploy(
+          QString("%1 "
+            "tag '%2' can't resolve access func '%3' in library '%4' "
+            "to load remote source builder '%5'")
+          .arg(__smMessageHeader)
+          .arg(_rootTag)
+          .arg(libhandler)
+          .arg(lib.fileName())
+          .arg(el.tagName()));
 
       node = node.nextSibling();
       continue;
@@ -334,16 +361,23 @@ static void loadBuilders(
     switch(_adder(el.tagName(), func()))
     {
     case EAddResult::Added:
-      CApplicationInterface::getInstance().messageDeploy(
-          QString("builder loader message: tag=%1 builder %2 "
-            "with access func %3 was added").arg(_rootTag).arg(el.tagName()).arg(libhandler));
+      __smMessageDeploy(
+          QString("%1 tag '%2' builder '%3' "
+            "with access func '%4' was added")
+          .arg(__smMessageHeader)
+          .arg(_rootTag)
+          .arg(el.tagName())
+          .arg(libhandler));
       break;
 
     case EAddResult::Replaced:
-      CApplicationInterface::getInstance().messageDeploy(
-          QString("builder loader warning: tag=%1 builder %2 "
-            "with access func %3 was replaced")
-          .arg(_rootTag).arg(el.tagName()).arg(libhandler));
+      __smMessageDeploy(
+          QString("%1 tag '%2' builder '%3' "
+            "with access func '%4' was replaced")
+          .arg(__smMessageHeader)
+          .arg(_rootTag).
+          arg(el.tagName()).
+          arg(libhandler));
       break;
     }
     node = node.nextSibling();

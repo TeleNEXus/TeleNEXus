@@ -33,23 +33,20 @@ namespace builders
 
 namespace widgets
 {
-void upload( const QDomElement& _rootElement, 
-    const QString& _pathPrj, const QStringList& _libPaths);
+void upload( const QDomElement& _rootElement, const QStringList& _libPaths);
 QSharedPointer<LIXmlWidgetBuilder> getBuilder(const QString _id);
 } /* namespace widget */ 
 
 namespace layouts
 {
-void upload( const QDomElement& _rootElement, 
-    const QString& _pathPrj, const QStringList& _libPaths);
+void upload( const QDomElement& _rootElement, const QStringList& _libPaths);
 
 QSharedPointer<LIXmlLayoutBuilder> getBuilder(const QString _name);
 } /* namespace layouts */
 
 namespace sources 
 {
-void upload( const QDomElement& _rootElement, 
-    const QString& _pathPrj, const QStringList& _libPaths);
+void upload( const QDomElement& _rootElement, const QStringList& _libPaths);
 
 QSharedPointer<LIXmlRemoteDataSourceBuilder> getBuilder(const QString _name);
 } /* namespace sources*/

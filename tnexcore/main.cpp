@@ -115,7 +115,7 @@ int main(int argc, char *argv[])
   auto it = lp.begin();
   while(it != lp.end())
   {
-    appinterface.messageDeploy( QString("add library path: %1").arg(*it));
+    appinterface.messageDeploy( QString("Add library path: %1").arg(*it));
     it++;
   }
 
@@ -173,7 +173,6 @@ int main(int argc, char *argv[])
   //----------------------------------------------------
   builders::sources::upload( 
       rootElement, 
-      __slParameters.projectPath, 
       xmlpluginpathes::getPlaginPathes());
   //----------------------------------------------------
   xmldatasources::upload(rootElement);
@@ -185,12 +184,10 @@ int main(int argc, char *argv[])
   //----------------------------------------------------
   builders::layouts::upload( 
       rootElement, 
-      __slParameters.projectPath, 
       xmlpluginpathes::getPlaginPathes());
   //----------------------------------------------------
   builders::widgets::upload( 
       rootElement, 
-      __slParameters.projectPath, 
       xmlpluginpathes::getPlaginPathes());
   //----------------------------------------------------
   xmlkeyboards::upload(rootElement);
@@ -204,7 +201,7 @@ int main(int argc, char *argv[])
 
   QObject::connect(&app, &QApplication::aboutToQuit,
       [&](){
-        appinterface.messageRuntime("QApplication::aboutToQuit");
+        appinterface.messageRuntime("quit from TeleNEXus");
       });
 
   return app.exec();

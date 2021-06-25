@@ -28,10 +28,12 @@
 #include <QMap>
 #include <QSharedPointer>
 
+#define __smMessageHeader "Data sources:"
+#define __smMessageDeploy(message) CApplicationInterface::getInstance().messageDeploy(message)
 //==============================================================================
 static const struct
 {
-  QString sources = "SOURCES";
+  QString rootTag = "SOURCES";
 }__slTags;
 
 static const struct
@@ -48,17 +50,26 @@ namespace xmldatasources
 
 void upload(const QDomElement& _rootElement)
 {
-  auto element = _rootElement.firstChildElement(__slTags.sources);
+  auto element = _rootElement.firstChildElement(__slTags.rootTag);
 
-  if(element.isNull()) return;
+  if(element.isNull()) 
+  {
+    __smMessageDeploy(QString("%1 document element has no elements with tag %2")
+        .arg(__smMessageHeader).arg(__slTags.rootTag));
+    return;
+  }
+
   QString attrFile = element.attribute(__slAttributes.file);
 
   if(!attrFile.isNull())
   {
     auto ddoc = xmlcommon::loadDomDocument(attrFile);
-    if(ddoc.isNull()) return;
+    if(ddoc.isNull()) 
+    {
+      return;
+    }
     element = xmlcommon::loadDomDocument(attrFile).documentElement();
-    if(element.tagName() != __slTags.sources) { return; }
+    if(element.tagName() != __slTags.rootTag) { return; }
   }
 
   //Добавление источников данных.
@@ -89,7 +100,12 @@ void upload(const QDomElement& _rootElement)
 QSharedPointer<LIRemoteDataSource> getSource(const QString& _id)
 {
   auto it = __slSources.find(_id);
-  if(it == __slSources.end()) return nullptr;
+  if(it == __slSources.end()) 
+  {
+    __smMessageDeploy(QString("%1 can't find data source with id '%2'")
+        .arg(__smMessageHeader).arg(_id));
+    return nullptr;
+  }
   return it.value();
 }
 

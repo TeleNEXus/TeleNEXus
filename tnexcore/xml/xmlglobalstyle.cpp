@@ -48,7 +48,10 @@ void upload(const QDomElement& _rootElement, QApplication& _qapp)
   if(element.isNull()) 
   {
     CApplicationInterface::getInstance()
-      .messageDeploy("Upload global style: main document has no global style element.");
+      .messageDeploy(
+          QString("Global style: "
+            "project root element has no element with tag '%1'")
+          .arg(__slTags.rootTag));
     return;
   }
   
@@ -56,7 +59,7 @@ void upload(const QDomElement& _rootElement, QApplication& _qapp)
   if(attr_file.isNull()) 
   {
     CApplicationInterface::getInstance()
-      .messageDeploy(QString("Upload global style: the file is not specified."));
+      .messageDeploy(QString("Global style: the file is not specified."));
     return;
   }
   QFile style_file(attr_file); 
@@ -67,7 +70,7 @@ void upload(const QDomElement& _rootElement, QApplication& _qapp)
   else
   {
     CApplicationInterface::getInstance()
-      .messageDeploy(QString("Upload global style: file '%1' not find.")
+      .messageDeploy(QString("Global style: file '%1' not find.")
           .arg(attr_file));
   }
 }
