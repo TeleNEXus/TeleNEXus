@@ -2,9 +2,9 @@
 
 <APPLICATION>
 
-  <!-- <PLAGINPATHES> -->
-  <!--   <item path="libs"/> -->
-  <!-- </PLAGINPATHES> -->
+  <PLAGINPATHES>
+    <item path="libs"/>
+  </PLAGINPATHES>
 
   <SOURCEBUILDERS file="sourcebuilders.xml"/>
 
@@ -25,7 +25,7 @@
 
   <WIDGETSTYLES file="widgetstyles.xml" />
 
-  <!-- <SCRIPTS file="scripts.xml"/> -->
+  <SCRIPTS file="scripts.xml"/>
 
   <DATAFORMATS file="formatters.xml"/>
 
