@@ -37,6 +37,7 @@
 #include <QRegularExpression>
 #include <QGuiApplication>
 #include <QScreen>
+#include <QShowEvent>
 
 #define __smMessageHeader "Windows:"
 #define __smMessageDeploy(message) CApplicationInterface::getInstance().messageDeploy(message)
