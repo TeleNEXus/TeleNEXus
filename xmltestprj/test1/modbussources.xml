@@ -2,9 +2,7 @@
 
 <modbussources>
     
-    <!-- <master  name="qtslavetcp" type="tcp" url="127.0.0.1:1502"/> -->
-    <master  name="qtslavetcp" type="tcp" url="10.0.2.15:1502"/>
-    
+    <master  name="qtslavetcp" type="tcp" url="127.0.0.1:1502"/>
     <master  name="bvitcp" type="tcp" url="192.168.0.2:502"/>
 
     <master  
