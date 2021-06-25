@@ -47,13 +47,13 @@ LCQDataCheckBox::LCQDataCheckBox(
         {
           if(_status != LIRemoteDataReader::EReadStatus::Valid)
           {
-            this->setEnabled(false);
+            setEnabled(false);
           }
           else
           {
             if(*_data == mCheckData) setChecked(true);
             else setChecked(false);
-            this->setEnabled(true);
+            setEnabled(true);
           }
         }
       });
