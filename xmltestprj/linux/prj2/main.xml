@@ -2,9 +2,9 @@
 
 <APPLICATION>
 
-  <PLAGINPATHES>
-    <item path="libs"/>
-  </PLAGINPATHES>
+  <!-- <PLAGINPATHES> -->
+  <!--   <item path="libs"/> -->
+  <!-- </PLAGINPATHES> -->
 
   <SOURCEBUILDERS file="sourcebuilders.xml"/>
 
@@ -25,13 +25,13 @@
 
   <WIDGETSTYLES file="widgetstyles.xml" />
 
-  <SCRIPTS file="scripts.xml"/>
+  <!-- <SCRIPTS file="scripts.xml"/> -->
 
   <DATAFORMATS file="formatters.xml"/>
 
 
     <KEYBOARD 
-      id="DigitalKeyboard" window="digitalkeyboard1"
+      id="DigitalKeyboard" window="digitalkeyboard1_"
       streamSource="localsource" streamName="keyboard_stream"
       dataSource="localsource" dataName="keyboard_data" />
 

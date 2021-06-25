@@ -24,6 +24,8 @@
 #include <QDir>
 #include <QDebug>
 
+#define __smMessageHeader "Pathes of plagins:"
+#define __smMessageDeploy(message) CApplicationInterface::getInstance().messageDeploy(message)
 
 static const struct
 {
@@ -48,8 +50,9 @@ void upload(const QDomElement& _rootElement)
   if(element_pathes.isNull()) 
   {
     CApplicationInterface::getInstance().messageDeploy(
-        "Uploading the plugins pathes: "
-        "main file has no the plugins pathes element");
+        QString("%1 project root element has no elements with tag %2")
+        .arg(__smMessageHeader)
+        .arg(__slTags.rootTag));
     return;
   }
 
@@ -62,8 +65,9 @@ void upload(const QDomElement& _rootElement)
     if(path.isNull()) continue;
     __slPlaginLibPaths << path;
     CApplicationInterface::getInstance().messageDeploy(
-        QString("Uploading the plugins pathes: "
-            "added plugins path '%1'").arg(path));
+        QString("%1 added plugins path '%2'")
+        .arg(__smMessageHeader)
+        .arg(path));
 
   }
 }

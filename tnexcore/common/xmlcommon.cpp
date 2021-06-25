@@ -24,6 +24,7 @@
 #include <QRegularExpression>
 #include <QDomDocument>
 #include <QFile>
+#include <QFileInfo>
 #include <QPixmap>
 #include <QDebug>
 
@@ -364,6 +365,14 @@ SDataSpecification parseDataSpecification(const QString _dataSpec,
 QDomDocument loadDomDocument (const QString& _fileName)
 {
   QFile file(_fileName);
+  QFileInfo fi;
+  if(!fi.exists(_fileName))
+  {
+    CApplicationInterface::getInstance().messageDeploy(
+        QString("Load DOM Document error: file '%1' is not exists")
+        .arg(_fileName));
+    return QDomDocument();
+  }
 
   QDomDocument domDoc;
   QString errorStr;
@@ -373,7 +382,7 @@ QDomDocument loadDomDocument (const QString& _fileName)
   if(!domDoc.setContent(&file, true, &errorStr, &errorLine, &errorColumn))
   {
     CApplicationInterface::getInstance().messageDeploy(
-        QString("Parse file %1"       
+        QString("Load DOM Document error: parse file %1"       
           " error at line: %2"   
           " column: %3"          
           " msg: %4")
@@ -382,6 +391,14 @@ QDomDocument loadDomDocument (const QString& _fileName)
         .arg(errorColumn)
         .arg(errorStr));
   }
+  else
+  {
+    CApplicationInterface::getInstance().messageDeploy(
+        QString("Load DOM Document: document with element '%1' from file '%2' is loaded")
+        .arg(domDoc.documentElement().tagName())
+        .arg(file.fileName()));
+  }
+
   return domDoc;
 }
 

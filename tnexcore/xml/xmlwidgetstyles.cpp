@@ -21,12 +21,17 @@
 
 #include "xmlwidgetstyles.h"
 #include "xmlcommon.h"
+#include "applicationinterface.h"
 #include <QFile>
 #include <QDomElement>
 #include <QMap>
 #include <QTextStream>
 #include <QRegularExpression>
 #include <QDebug>
+
+#define __smMessageHeader "Widgets styles:"
+#define __smMessageDeploy(message) CApplicationInterface::getInstance().messageDeploy(message)
+
 //==============================================================================__slAttributes
 static const struct
 {
@@ -55,14 +60,28 @@ void upload( const QDomElement &_rootElement)
 {
   if(_rootElement.isNull()) return;
   auto element = _rootElement.firstChildElement(__slTags.rootTag);
-  if(element.isNull()) return;
+  if(element.isNull()) 
+  {
+    __smMessageDeploy(
+          QString("%1 project root element has no element with tag '%2'")
+          .arg(__smMessageHeader)
+          .arg(__slTags.rootTag));
+    return;
+  }
   uploadElement(element);
 }
 
 QString getWidgetStyle(const QString& _styleId)
 {
   auto it = __slStylesMap.find(_styleId);
-  if(it == __slStylesMap.end()) return QString();
+  if(it == __slStylesMap.end()) 
+  {
+    __smMessageDeploy(
+          QString("%1 can't find widget style with id '%2'")
+          .arg(__smMessageHeader)
+          .arg(_styleId));
+    return QString();
+  }
   return it.value();
 }
 
