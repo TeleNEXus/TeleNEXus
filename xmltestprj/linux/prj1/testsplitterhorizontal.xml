@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-
-<splitterHorizontal>
-  <label text="Widget[ item0 ]" /> 
-  <label text="Widget[ item1 ]" /> 
-  <label text="Widget[ item2 ]" /> 
-  <label text="Widget[ item3 ]" /> 
-</splitterHorizontal>
