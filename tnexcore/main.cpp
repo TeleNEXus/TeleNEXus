@@ -49,12 +49,16 @@ static const struct
 //==============================================================================
 struct SParameters
 {
+  QString defaultPluginsPath;
   QString mainFileName;
   QString projectPath;
   QDir    projectDir;
   void parseCommandLine(char *argv[])
   {
     const LIApplication& app = CApplicationInterface::getInstance();
+    defaultPluginsPath = QString("%1/%2")
+      .arg(QDir::currentPath())
+      .arg(QStringLiteral("plugins"));
 
     QFileInfo fi(argv[0]);
 
@@ -169,7 +173,8 @@ int main(int argc, char *argv[])
   //----------------------------------------------------
   xmlglobalstyle::upload(rootElement, app);
   //----------------------------------------------------
-  xmlpluginpathes::upload(rootElement);
+  xmlpluginpathes::upload(rootElement,
+      __slParameters.defaultPluginsPath);
   //----------------------------------------------------
   builders::sources::upload( 
       rootElement, 
