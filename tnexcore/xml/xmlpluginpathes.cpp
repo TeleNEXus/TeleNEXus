@@ -42,10 +42,11 @@ static QStringList __slPlaginLibPaths;
 
 namespace xmlpluginpathes
 {
-void upload(const QDomElement& _rootElement)
+void upload(const QDomElement& _rootElement,
+    const QString& _defaultPluginsPath)
 {
+  __slPlaginLibPaths << _defaultPluginsPath;
   QDomNodeList nodes = _rootElement.elementsByTagName(__slTags.rootTag); 
-
   auto element_pathes = _rootElement.firstChildElement(__slTags.rootTag);
   if(element_pathes.isNull()) 
   {

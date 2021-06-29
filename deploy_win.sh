@@ -4,13 +4,11 @@ qmake=qmake.exe
 make=mingw32-make.exe
 
 
-
-v_modbussource_builds="`pwd`/plugins/modbussource/__builds/modbussource.dll"
-
-v_tnex_builds="`pwd`/tnexcore/__builds/tnexcore.exe"
+v_modbussource="`pwd`/plugins/modbussource/__builds/release/modbussource.dll"
+v_tnex="`pwd`/tnexcore/__builds/release/tnex.exe"
 
 
-v_deploy_path="`pwd`/deploy_win/"
+v_deploy_path="`pwd`/win_deploy/"
 
 
 v_offset_line="================================================"
@@ -48,18 +46,20 @@ fi
 createDir "$v_deploy_path"
 
 
-if ! cp $v_tnex_builds  $v_deploy_path/tnex.exe 
+if ! cp $v_tnex  $v_deploy_path/
 then
   exit 0
 fi 
 
-if ! cp $v_modbussource_builds $v_deploy_path/
+if ! cp $v_modbussource $v_deploy_path/
 then
   exit 0
 fi 
 
 cd "$v_deploy_path"
 
-# /mnt/d/Programs/Qt5.14.0/5.14.0/mingw73_32/bin/windeployqt.exe -compiler-runtime ./
-/mnt/d/Programs/Qt5.14.0/5.14.0/mingw73_32/bin/windeployqt.exe --compiler-runtime --no-translations --no-system-d3d-compiler --release --no-quick-import  ./tnex.exe
-# /mnt/d/Programs/Qt5.14.0/5.14.0/mingw73_32/bin/windeployqt.exe --no-translations --no-system-d3d-compiler --release --no-quick-import  ./modbussource.dll
+windeployqt.exe --compiler-runtime --no-translations --no-system-d3d-compiler --release --no-quick-import  ./tnex.exe
+windeployqt.exe --compiler-runtime --no-translations --no-system-d3d-compiler --release --no-quick-import  ./modbussource.dll
+
+createDir plugins
+mv ./modbussource.dll ./plugins/
