@@ -19,6 +19,7 @@
  * along with TeleNEXus.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include "modbussource.h"
+#include "version.h"
 
 #include "lcxmlmodbussourcebuilder.h"
 

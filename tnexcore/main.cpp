@@ -19,6 +19,7 @@
  * along with TeleNEXus.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include "version.h"
 #include "applicationinterface.h"
 #include "xmlbuilders.h"
 #include "xmldatasources.h"
@@ -30,12 +31,15 @@
 #include "xmlwidgetstyles.h"
 #include "xmlglobalstyle.h"
 
+#include <QLoggingCategory>
 #include <QDebug>
 #include <QApplication>
 #include <QFile>
 #include <QDomElement>
 #include <QDir>
 #include <QCommandLineParser>
+
+#define __lmVersionString (QString("TeleNEXus version: %1").arg(APPLICATION_VERSION))
 
 static const QString __slRootTag = "APPLICATION";
 
@@ -44,6 +48,7 @@ static const struct
 {
   QString xmlMainFileName = "xmlfile";
   QString xmlMainFilePath = "xmlpath";
+  QString version         = "version";
 } __slAppOptionsName;
 
 //==============================================================================
@@ -53,7 +58,7 @@ struct SParameters
   QString mainFileName;
   QString projectPath;
   QDir    projectDir;
-  void parseCommandLine(char *argv[])
+  bool parseCommandLine(char *argv[])
   {
     const LIApplication& app = CApplicationInterface::getInstance();
     defaultPluginsPath = QString("%1/%2")
@@ -74,11 +79,22 @@ struct SParameters
         __slAppOptionsName.xmlMainFilePath,
         fi.absolutePath());
 
+    QCommandLineOption version(__slAppOptionsName.version,
+        QStringLiteral("Version"),
+        __slAppOptionsName.version
+        );
+
     parser.addOption(fileName);
     parser.addOption(pathName);
+    parser.addOption(version);
 
     parser.parse(QApplication::arguments());
 
+    qDebug("%s", qPrintable(__lmVersionString));
+    if(parser.isSet(__slAppOptionsName.version))
+    {
+      return false;
+    }
 
     {
       QString file = parser.value(__slAppOptionsName.xmlMainFileName);
@@ -105,15 +121,20 @@ struct SParameters
         parser.showHelp(-1);
       }
     }
+    return true;
   }
 }__slParameters;
 
 //==============================================================================main
 int main(int argc, char *argv[])
 {
+  QLoggingCategory::setFilterRules("qt5ct.debug=false");
 
   const LIApplication& appinterface = CApplicationInterface::getInstance();
   QApplication app(argc, argv);
+
+  if(!__slParameters.parseCommandLine(argv)) return 0;
+
 
   auto lp = QCoreApplication::libraryPaths();
   auto it = lp.begin();
@@ -123,7 +144,6 @@ int main(int argc, char *argv[])
     it++;
   }
 
-  __slParameters.parseCommandLine(argv);
 
   CApplicationInterface::getInstance().setParameters(
       __slParameters.mainFileName,

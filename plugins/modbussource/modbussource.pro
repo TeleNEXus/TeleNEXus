@@ -55,7 +55,8 @@ SOURCES += \
     modbus/lqmodbusmasterrtu.cpp  \
     modbus/lqmodbusmastertcp.cpp  \
     builders/lcxmlmodbussourcebuilder.cpp \
-    modbussource.cpp
+    modbussource.cpp \
+    version.h 
 
 # Default rules for deployment.
 unix {

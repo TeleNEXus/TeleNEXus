@@ -221,5 +221,6 @@ xml/xmlglobalstyle.h \
 keyboard/lckeyboard.h \
 window/lcwindow.h \
 applicationinterface.h \
+version.h \
 
 
