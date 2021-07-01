@@ -60,6 +60,7 @@ struct SParameters
   QDir    projectDir;
   bool parseCommandLine(char *argv[])
   {
+
     const LIApplication& app = CApplicationInterface::getInstance();
     defaultPluginsPath = QString("%1/%2")
       .arg(QDir::currentPath())
@@ -113,11 +114,6 @@ struct SParameters
       }
       else
       {
-        app.messageDeploy(
-            QString(
-              "Main XML file not found, file location setting: %1/%2")
-            .arg(path)
-            .arg(file));
         parser.showHelp(-1);
       }
     }
