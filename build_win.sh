@@ -63,6 +63,8 @@ createDir $v_modbussource
 createDir $v_tnexcore
 createDir $v_examplewidgets
 
+./version.sh
+
 echo "$v_offset_line qmake"
 makePrg $v_modbussource $qmake
 makePrg $v_tnexcore $qmake
