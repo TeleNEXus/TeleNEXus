@@ -1,3 +1,3 @@
 #!/bin/bash
 cd ../../tnexcore/__builds/
-./tnexcore  --xmlpath=../../xmltestprj/test1
+./tnex  --xmlpath=../../xmltestprj/test1
