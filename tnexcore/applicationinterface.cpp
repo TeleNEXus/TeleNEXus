@@ -30,9 +30,11 @@
 #include "xmldataformatters.h"
 #include "xmljscripts.h"
 
+#include <QDateTime>
 #include <QDebug>
 #include <QDir>
 
+#define __smDateTimeFormat QStringLiteral("yyyy:MM:dd:hh:mm:ss")
 //==============================================================================
 static struct SLocalData
 {
@@ -156,23 +158,29 @@ QString CApplicationInterface::getWidgetStyle(const QString& _styleId) const
   return xmlwidgetstyles::getWidgetStyle(_styleId);
 }
 
+//------------------------------------------------------------------------------
 void CApplicationInterface::message(const QString& _msg) const
 {
   qDebug("%s", qPrintable( 
-    QString("message:> %1")
+    QString("M[%1]> %2")
+    .arg(QDateTime::currentDateTime().toString(__smDateTimeFormat))
     .arg(_msg)));
 }
 
+//------------------------------------------------------------------------------
 void CApplicationInterface::warning(const QString& _msg) const
 {
   qDebug("%s", qPrintable( 
-    QString("warning:> %1")
+    QString("W[%1]> %2")
+    .arg(QDateTime::currentDateTime().toString(__smDateTimeFormat))
     .arg(_msg)));
 }
 
+//------------------------------------------------------------------------------
 void CApplicationInterface::error(const QString& _msg) const
 {
   qDebug("%s", qPrintable( 
-    QString("error:> %1")
+    QString("E[%1]> %2")
+    .arg(QDateTime::currentDateTime().toString(__smDateTimeFormat))
     .arg(_msg)));
 }
