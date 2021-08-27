@@ -229,7 +229,7 @@ void LCQJScriptHiden::customEvent(QEvent* _event)
 //------------------------------------------------------------------------------
 void LCQJScriptHiden::debugOut(const QString& _out)
 {
-  CApplicationInterface::getInstance().messageRuntime(_out);
+  CApplicationInterface::getInstance().message(_out);
 }
 
 //------------------------------------------------------------------------------

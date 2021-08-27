@@ -61,7 +61,7 @@ enum class EAddResult
 };
 
 #define __smMessageHeader "Builders loader:"
-#define __smMessageDeploy(message) CApplicationInterface::getInstance().messageDeploy(message)
+#define __smMessage(msg) CApplicationInterface::getInstance().message(msg)
 
 
 //==============================================================================
@@ -211,7 +211,7 @@ static void load(
   auto element = _documentElement.firstChildElement(_rootTag);
   if(element.isNull()) 
   {
-    __smMessageDeploy(
+    __smMessage(
           QString("%1 "
             "project root element has no element with tag '%1'")
           .arg(__smMessageHeader));
@@ -234,7 +234,7 @@ static void load(
 
   if(!domDoc.setContent(&file, true, &errorStr, &errorLine, &errorColumn))
   {
-    __smMessageDeploy(
+    __smMessage(
       QString(
           "%1 tag '%2' load parse file '%3' error at line:%4 column:%5 msg: '%6'")
       .arg(__smMessageHeader)
@@ -246,7 +246,7 @@ static void load(
     return;
   }
   
-    __smMessageDeploy(
+    __smMessage(
       QString("%1 tag '%2' parce file '%3'")
       .arg(__smMessageHeader)
       .arg(_rootTag)
@@ -256,7 +256,7 @@ static void load(
 
   if(rootElement.tagName() != _rootTag)
   {
-    __smMessageDeploy(
+    __smMessage(
         QString("%1 file '%2' wrong root element tag name '%3'")
         .arg(__smMessageHeader)
         .arg(fileName)
@@ -306,8 +306,7 @@ static void loadBuilders(
 
       if(lib.isLoaded())
       {
-
-        __smMessageDeploy(
+        __smMessage(
             QString("%1 tag '%2' library '%3' is already loaded")
           .arg(__smMessageHeader)
           .arg(_rootTag)
@@ -317,7 +316,7 @@ static void loadBuilders(
 
       if(lib.load())
       {
-        __smMessageDeploy(
+        __smMessage(
         QString("%1 tag '%2' library '%3' is loaded")
           .arg(__smMessageHeader)
           .arg(_rootTag)
@@ -328,7 +327,7 @@ static void loadBuilders(
 
     if(!lib.isLoaded())
     {
-      __smMessageDeploy(
+      __smMessage(
           QString("%1 tag '%2' can't load library '%3' to load source builder '%4'")
           .arg(__smMessageHeader)
           .arg(_rootTag)
@@ -344,7 +343,7 @@ static void loadBuilders(
 
     if(!func)
     {
-      __smMessageDeploy(
+      __smMessage(
           QString("%1 "
             "tag '%2' can't resolve access func '%3' in library '%4' "
             "to load remote source builder '%5'")
@@ -361,7 +360,7 @@ static void loadBuilders(
     switch(_adder(el.tagName(), func()))
     {
     case EAddResult::Added:
-      __smMessageDeploy(
+      __smMessage(
           QString("%1 tag '%2' builder '%3' "
             "with access func '%4' was added")
           .arg(__smMessageHeader)
@@ -371,7 +370,7 @@ static void loadBuilders(
       break;
 
     case EAddResult::Replaced:
-      __smMessageDeploy(
+      __smMessage(
           QString("%1 tag '%2' builder '%3' "
             "with access func '%4' was replaced")
           .arg(__smMessageHeader)

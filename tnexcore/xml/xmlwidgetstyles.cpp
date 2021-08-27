@@ -30,7 +30,7 @@
 #include <QDebug>
 
 #define __smMessageHeader "Widgets styles:"
-#define __smMessageDeploy(message) CApplicationInterface::getInstance().messageDeploy(message)
+#define __smMessage(msg) CApplicationInterface::getInstance().message(msg)
 
 //==============================================================================__slAttributes
 static const struct
@@ -62,7 +62,7 @@ void upload( const QDomElement &_rootElement)
   auto element = _rootElement.firstChildElement(__slTags.rootTag);
   if(element.isNull()) 
   {
-    __smMessageDeploy(
+    __smMessage(
           QString("%1 project root element has no element with tag '%2'")
           .arg(__smMessageHeader)
           .arg(__slTags.rootTag));
@@ -76,7 +76,7 @@ QString getWidgetStyle(const QString& _styleId)
   auto it = __slStylesMap.find(_styleId);
   if(it == __slStylesMap.end()) 
   {
-    __smMessageDeploy(
+    __smMessage(
           QString("%1 can't find widget style with id '%2'")
           .arg(__smMessageHeader)
           .arg(_styleId));

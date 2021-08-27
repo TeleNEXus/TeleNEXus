@@ -28,7 +28,7 @@
 #include <QDebug>
 
 #define __smMessageHeader "Keyboards:"
-#define __smMessageDeploy(message) CApplicationInterface::getInstance().messageDeploy(message)
+#define __smMessage(msg) CApplicationInterface::getInstance().message(msg)
 
 static const struct
 {
@@ -119,7 +119,7 @@ QSharedPointer<LIKeyboard> getKeyboard(const QString& _keyboardId)
   auto it = __slKeyboards.find(_keyboardId);
   if(it == __slKeyboards.end()) 
   {
-    __smMessageDeploy(QString("%1 can't find keyboard with id '%2'")
+    __smMessage(QString("%1 can't find keyboard with id '%2'")
         .arg(__smMessageHeader).arg(_keyboardId));
     return QSharedPointer<LIKeyboard>();
   }

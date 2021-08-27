@@ -156,16 +156,23 @@ QString CApplicationInterface::getWidgetStyle(const QString& _styleId) const
   return xmlwidgetstyles::getWidgetStyle(_styleId);
 }
 
-void CApplicationInterface::messageDeploy(const QString& _msg) const
+void CApplicationInterface::message(const QString& _msg) const
 {
   qDebug("%s", qPrintable( 
-    QString("deploy:> %1")
+    QString("message:> %1")
     .arg(_msg)));
 }
 
-void CApplicationInterface::messageRuntime(const QString& _msg) const
+void CApplicationInterface::warning(const QString& _msg) const
 {
   qDebug("%s", qPrintable( 
-    QString("runtime:> %1")
+    QString("warning:> %1")
+    .arg(_msg)));
+}
+
+void CApplicationInterface::error(const QString& _msg) const
+{
+  qDebug("%s", qPrintable( 
+    QString("error:> %1")
     .arg(_msg)));
 }

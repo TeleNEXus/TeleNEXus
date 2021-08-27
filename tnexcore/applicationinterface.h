@@ -44,28 +44,40 @@ public:
 
   virtual QString getProjectPath() const override;
   virtual QDir getProjectDir() const override;
+
   virtual QSharedPointer<LIXmlRemoteDataSourceBuilder> 
     getDataSourceBuilder( const QString& _name) const override;
+
   virtual QSharedPointer<LIRemoteDataSource> 
     getDataSource(const QString& _name) const override;
+
   virtual QSharedPointer<LIXmlLayoutBuilder> 
     getLayoutBuilder(const QString& _name) const override;
+
   virtual QSharedPointer<LIXmlWidgetBuilder> 
     getWidgetBuilder(const QString& _name) const override;
+
   virtual QDomDocument 
     getDomDocument(const QString& _fileName) const override;
+
   virtual QSharedPointer<LIWindow> 
     getWindow(const QString& _windowId) const override;
+
   virtual QSharedPointer<LIKeyboard> 
     getKeyboard(const QString& _keyboardId) const override;
+
   virtual QSharedPointer<LIDataFormatter> 
     getDataFormatter(const QString& _formatter) const override;
+
   virtual QSharedPointer<LIJScriptService> 
     getScriptService(const QString& _scriptId) const override;
+
   virtual QString getWidgetStyle(const QString& _styleId) const override;
 
-  virtual void messageDeploy(const QString& _msg) const override;
-  virtual void messageRuntime(const QString& _msg) const override;
+  virtual void message(const QString& _msg) const override;
+  virtual void warning(const QString& _msg) const override;
+  virtual void error(const QString& _msg) const override;
+
 };
 
 #endif /* APPLICATIONINTERFACE_H_ */

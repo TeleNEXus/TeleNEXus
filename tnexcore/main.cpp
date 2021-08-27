@@ -110,7 +110,7 @@ struct SParameters
         projectPath  = fi.absolutePath() + "/";
         projectDir   = fi.absoluteDir();
         QDir::setCurrent(path);
-        app.messageDeploy(QString("Project current path: '%1'").arg(QDir::currentPath()));
+        app.message(QString("Project current path: '%1'").arg(QDir::currentPath()));
       }
       else
       {
@@ -136,7 +136,7 @@ int main(int argc, char *argv[])
   auto it = lp.begin();
   while(it != lp.end())
   {
-    appinterface.messageDeploy( QString("Add library path: %1").arg(*it));
+    appinterface.message( QString("Add library path: %1").arg(*it));
     it++;
   }
 
@@ -158,12 +158,12 @@ int main(int argc, char *argv[])
 
   if(!domDoc.setContent(&file, true, &errorStr, &errorLine, &errorColumn))
   {
-    appinterface.messageDeploy(
+    appinterface.message(
         QString("Application: parse error at line: %1 column: %2 msg: #3")
        .arg(errorLine)
        .arg(errorColumn)
        .arg(errorStr));
-    appinterface.messageDeploy("Exit programm");
+    appinterface.message("Exit programm");
     return -1;
   }
 
@@ -171,8 +171,8 @@ int main(int argc, char *argv[])
 
   if(rootElement.tagName() != __slRootTag)
   {
-    appinterface.messageDeploy("Application: wrong root element");
-    appinterface.messageDeploy("Exit programm");
+    appinterface.message("Application: wrong root element");
+    appinterface.message("Exit programm");
     return -1;
   }
 
@@ -180,8 +180,8 @@ int main(int argc, char *argv[])
 
   if(childNode.isNull())
   {
-    appinterface.messageDeploy("Application: no child elements");
-    appinterface.messageDeploy("Exit programm");
+    appinterface.message("Application: no child elements");
+    appinterface.message("Exit programm");
     return -1;
   }
 
@@ -222,7 +222,7 @@ int main(int argc, char *argv[])
 
   QObject::connect(&app, &QApplication::aboutToQuit,
       [&](){
-        appinterface.messageRuntime("quit from TeleNEXus");
+        appinterface.message("quit from TeleNEXus");
       });
 
   return app.exec();
