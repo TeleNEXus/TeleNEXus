@@ -29,7 +29,7 @@
 #include <QSharedPointer>
 
 #define __smMessageHeader "Data sources:"
-#define __smMessageDeploy(message) CApplicationInterface::getInstance().messageDeploy(message)
+#define __smMessage(msg) CApplicationInterface::getInstance().message(msg)
 //==============================================================================
 static const struct
 {
@@ -54,7 +54,7 @@ void upload(const QDomElement& _rootElement)
 
   if(element.isNull()) 
   {
-    __smMessageDeploy(QString("%1 document element has no elements with tag %2")
+    __smMessage(QString("%1 document element has no elements with tag %2")
         .arg(__smMessageHeader).arg(__slTags.rootTag));
     return;
   }
@@ -102,7 +102,7 @@ QSharedPointer<LIRemoteDataSource> getSource(const QString& _id)
   auto it = __slSources.find(_id);
   if(it == __slSources.end()) 
   {
-    __smMessageDeploy(QString("%1 can't find data source with id '%2'")
+    __smMessage(QString("%1 can't find data source with id '%2'")
         .arg(__smMessageHeader).arg(_id));
     return nullptr;
   }

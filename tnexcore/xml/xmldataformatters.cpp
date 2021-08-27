@@ -33,7 +33,7 @@
 #include <QFile>
 
 #define __smMessageHeader "Data formatters:"
-#define __smMessageDeploy(message) CApplicationInterface::getInstance().messageDeploy(message)
+#define __smMessage(msg) CApplicationInterface::getInstance().message(msg)
 
 static const struct
 {
@@ -141,7 +141,7 @@ void upload( const QDomElement &_rootElement)
   auto element = _rootElement.firstChildElement(__slTags.rootTag);
   if(element.isNull()) 
   {
-    __smMessageDeploy(QString("%1 document element has no elements with tag %2")
+    __smMessage(QString("%1 document element has no elements with tag %2")
         .arg(__smMessageHeader).arg(__slTags.rootTag));
     return;
   }
@@ -154,7 +154,7 @@ QSharedPointer<LIDataFormatter> getDataFormatter(const QString& _formatterId)
   auto it = __slFormattersMap.find(_formatterId);
   if(it == __slFormattersMap.end()) 
   {
-    __smMessageDeploy(QString("%1 can't find data formatter with id '%2'")
+    __smMessage(QString("%1 can't find data formatter with id '%2'")
         .arg(__smMessageHeader).arg(_formatterId));
     return nullptr;
   }

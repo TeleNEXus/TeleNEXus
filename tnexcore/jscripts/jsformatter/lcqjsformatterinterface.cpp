@@ -37,7 +37,7 @@ LCQJSFormatterInterface::create(QJSEngine* _engine)
 //------------------------------------------------------------------------------
 void LCQJSFormatterInterface::debugOut(const QString& _str)
 {
-  CApplicationInterface::getInstance().messageRuntime(_str);
+  CApplicationInterface::getInstance().message(_str);
 }
 
 //------------------------------------------------------------------------------

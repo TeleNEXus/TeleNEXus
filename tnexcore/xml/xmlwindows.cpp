@@ -40,7 +40,7 @@
 #include <QShowEvent>
 
 #define __smMessageHeader "Windows:"
-#define __smMessageDeploy(message) CApplicationInterface::getInstance().messageDeploy(message)
+#define __smMessage(msg) CApplicationInterface::getInstance().message(msg)
 //==============================================================================
 QMap<QString, QSharedPointer<LIWindow>> __slWindowsMap;
 QList<QSharedPointer<LIWindow>> __slNoNameWindows;
@@ -417,7 +417,7 @@ QSharedPointer<LIWindow> getWindow(const QString& _windowId)
   auto it = __slWindowsMap.find(_windowId); 
   if(it == __slWindowsMap.end()) 
   {
-    __smMessageDeploy(QString("%1 can't find window with id '%2'")
+    __smMessage(QString("%1 can't find window with id '%2'")
         .arg(__smMessageHeader).arg(_windowId));
     return nullptr;
   }
