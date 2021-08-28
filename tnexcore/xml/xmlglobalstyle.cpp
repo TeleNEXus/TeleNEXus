@@ -47,31 +47,33 @@ void upload(const QDomElement& _rootElement, QApplication& _qapp)
 
   if(element.isNull()) 
   {
-    CApplicationInterface::getInstance()
-      .message(
-          QString("Global style: "
-            "project root element has no element with tag '%1'")
-          .arg(__slTags.rootTag));
     return;
   }
+  QString message("Load global style:\n");
   
   QString attr_file = element.attribute( __slAttributes.file);
+
   if(attr_file.isNull()) 
   {
+    message += QStringLiteral("\tFile is not specified.\n");
     CApplicationInterface::getInstance()
-      .message(QString("Global style: the file is not specified."));
+      .warning(message);
     return;
   }
+
   QFile style_file(attr_file); 
   if(style_file.open(QFile::OpenModeFlag::ReadOnly))
   {
     _qapp.setStyleSheet(QLatin1String(style_file.readAll()));
+    message += QString("\tStyle sheet from file '%1' is installed").arg(attr_file);
+    CApplicationInterface::getInstance()
+      .message(message);
   }
   else
   {
+    message += QString("\tCan't open style sheet file '%1'").arg(attr_file);
     CApplicationInterface::getInstance()
-      .message(QString("Global style: file '%1' not find.")
-          .arg(attr_file));
+      .warning(message);
   }
 }
 

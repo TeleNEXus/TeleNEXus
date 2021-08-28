@@ -30,7 +30,7 @@
 static const struct
 {
   QString rootTag = "PLAGINPATHES";
-  QString item = "item";
+  QString add = "add";
 }__slTags;
 
 static const struct
@@ -45,32 +45,36 @@ namespace xmlpluginpathes
 void upload(const QDomElement& _rootElement,
     const QString& _defaultPluginsPath)
 {
-  __slPlaginLibPaths << _defaultPluginsPath;
+  QStringList added_pathes;
+
   QDomNodeList nodes = _rootElement.elementsByTagName(__slTags.rootTag); 
   auto element_pathes = _rootElement.firstChildElement(__slTags.rootTag);
+
   if(element_pathes.isNull()) 
   {
-    __smMessage(
-        QString("%1 project root element has no elements with tag %2")
-        .arg(__smMessageHeader)
-        .arg(__slTags.rootTag));
     return;
   }
 
-
-  for(auto element_item = element_pathes.firstChildElement(__slTags.item);
+  for(auto element_item = element_pathes.firstChildElement(__slTags.add);
       !element_item.isNull();
-      element_item = element_item.nextSiblingElement(__slTags.item))
+      element_item = element_item.nextSiblingElement(__slTags.add))
   {
     QString path = element_item.attribute(__slAttributes.path);
     if(path.isNull()) continue;
-    __slPlaginLibPaths << path;
-    __smMessage(
-        QString("%1 added plugins path '%2'")
-        .arg(__smMessageHeader)
-        .arg(path));
-
+    added_pathes << path;
   }
+
+  if(added_pathes.isEmpty()) return;
+
+  __slPlaginLibPaths << _defaultPluginsPath << added_pathes;
+
+  QString message("Add plugins pathes:\n");
+
+  for(auto it = added_pathes.begin(); it != added_pathes.end(); it++)
+  {
+    message += QString("\t%1\n").arg(*it);
+  }
+  __smMessage(message);
 }
 
 const QStringList& getPlaginPathes()

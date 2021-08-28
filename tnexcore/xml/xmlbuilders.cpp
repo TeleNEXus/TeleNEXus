@@ -29,8 +29,9 @@
 #include "lcxmllocalsourcebuilder.h"
 
 #include <QLibrary>
-/* #include <QDebug> */
+#include <QDebug>
 #include <QFile>
+#include <QFileInfo>
 
 //==============================================================================
 using TLibAccessFunc = void* (*)();
@@ -60,8 +61,9 @@ enum class EAddResult
   Replaced
 };
 
-#define __smMessageHeader "Builders loader:"
+#define __smMessageHeader "Load builder:\n"
 #define __smMessage(msg) CApplicationInterface::getInstance().message(msg)
+#define __smWarning(msg) CApplicationInterface::getInstance().warning(msg)
 
 
 //==============================================================================
@@ -98,12 +100,14 @@ static void load(
     const QStringList& _libPaths,
     std::function<EAddResult(const QString& _name, void* _builder)> _adder);
 
+
 static void loadBuilders(
     const QString& _rootTag, 
     const QDomElement& _element, 
     const QStringList& _libPaths,
-    std::function<EAddResult(const QString& _name, void* _builder)> _adder
-    );
+    std::function<EAddResult(const QString& _name, void* _builder)> _adder,
+    const QString& _message = QString());
+
 
 
 
@@ -211,18 +215,19 @@ static void load(
   auto element = _documentElement.firstChildElement(_rootTag);
   if(element.isNull()) 
   {
-    __smMessage(
-          QString("%1 "
-            "project root element has no element with tag '%1'")
-          .arg(__smMessageHeader));
     return;
   }
 
   QString fileName = element.attribute(__slAttributes.file);
 
+  QString message = 
+    QString( "%1\ttag '%2'\n")
+    .arg(__smMessageHeader)
+    .arg(_rootTag);
+
   if(fileName.isNull())
   {
-    loadBuilders(_rootTag, element, _libPaths, _adder);
+    loadBuilders(_rootTag, element, _libPaths, _adder, message);
     return;
   }
 
@@ -232,38 +237,44 @@ static void load(
   int errorLine;
   int errorColumn;
 
+
+  QFileInfo fi(file);
+
+  if(!fi.exists())
+  {
+    __smWarning(
+      QString("%1\tfile '%2' is not exist\n")
+      .arg(message)
+      .arg(fileName));
+    return;
+  }
+
+  message += QString("\tparce file '%1'\n").arg(fileName);
+
   if(!domDoc.setContent(&file, true, &errorStr, &errorLine, &errorColumn))
   {
-    __smMessage(
+    __smWarning(
       QString(
-          "%1 tag '%2' load parse file '%3' error at line:%4 column:%5 msg: '%6'")
-      .arg(__smMessageHeader)
-      .arg(_rootTag)
-      .arg(fileName)
+          "%1\terror at line:%2 column:%3 msg: '%4'")
+      .arg(message)
       .arg(errorLine)
       .arg(errorColumn)
       .arg(errorStr));
     return;
   }
-  
-    __smMessage(
-      QString("%1 tag '%2' parce file '%3'")
-      .arg(__smMessageHeader)
-      .arg(_rootTag)
-      .arg(fileName));
 
   QDomElement rootElement = domDoc.documentElement();
 
   if(rootElement.tagName() != _rootTag)
   {
-    __smMessage(
-        QString("%1 file '%2' wrong root element tag name '%3'")
-        .arg(__smMessageHeader)
-        .arg(fileName)
-        .arg(_rootTag));
+    __smWarning(
+        QString("%1\twrong root element tag name '%2'")
+        .arg(message)
+        .arg(rootElement.tagName()));
     return;
   }
-  loadBuilders(_rootTag, rootElement, _libPaths, _adder);
+
+  loadBuilders(_rootTag, rootElement, _libPaths, _adder, message);
 }
 
 //==============================================================================
@@ -271,10 +282,14 @@ static void loadBuilders(
     const QString& _rootTag, 
     const QDomElement& _element, 
     const QStringList& _libPaths,
-    std::function<EAddResult(const QString& _name, void* _builder)> _adder)
+    std::function<EAddResult(const QString& _name, void* _builder)> _adder,
+    const QString& _message)
 {
 
   QDomNode node = _element.firstChild();
+
+
+
 
   while(!node.isNull())
   {
@@ -297,6 +312,7 @@ static void loadBuilders(
 
 
     QLibrary lib;
+    QString msg = _message;
 
     //find libraries
     for(int i = 0; i < _libPaths.size(); i++)
@@ -306,21 +322,15 @@ static void loadBuilders(
 
       if(lib.isLoaded())
       {
-        __smMessage(
-            QString("%1 tag '%2' library '%3' is already loaded")
-          .arg(__smMessageHeader)
-          .arg(_rootTag)
-          .arg(lib.fileName()));
+        msg += QString("\tlibrary '%1' is already loaded\n")
+          .arg(lib.fileName());
         break;
       }
 
       if(lib.load())
       {
-        __smMessage(
-        QString("%1 tag '%2' library '%3' is loaded")
-          .arg(__smMessageHeader)
-          .arg(_rootTag)
-          .arg(lib.fileName()));
+        msg += QString("\tlibrary '%1' is loaded\n")
+          .arg(lib.fileName());
         break;
       }
     }
@@ -328,9 +338,8 @@ static void loadBuilders(
     if(!lib.isLoaded())
     {
       __smMessage(
-          QString("%1 tag '%2' can't load library '%3' to load source builder '%4'")
-          .arg(__smMessageHeader)
-          .arg(_rootTag)
+          QString("%1\tcan't load library '%2' to load source builder '%3'")
+          .arg(msg)
           .arg(libfilename)
           .arg(el.tagName()));
 
@@ -360,13 +369,17 @@ static void loadBuilders(
     switch(_adder(el.tagName(), func()))
     {
     case EAddResult::Added:
+      /* __smMessage( */
+      /*     QString("%1 tag '%2' builder '%3' " */
+      /*       "with access func '%4' was added") */
+      /*     .arg(__smMessageHeader) */
+      /*     .arg(_rootTag) */
+      /*     .arg(el.tagName()) */
+      /*     .arg(libhandler)); */
       __smMessage(
-          QString("%1 tag '%2' builder '%3' "
-            "with access func '%4' was added")
-          .arg(__smMessageHeader)
-          .arg(_rootTag)
-          .arg(el.tagName())
-          .arg(libhandler));
+
+          QString("%1\tbuilder '%2'\n\taccess func %3\n")
+          .arg(msg).arg(el.tagName()).arg(libhandler));
       break;
 
     case EAddResult::Replaced:
