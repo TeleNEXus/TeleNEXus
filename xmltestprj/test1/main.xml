@@ -3,68 +3,58 @@
 <APPLICATION>
 
   <PLAGINPATHES>
-    <item path="libs"/>
+    <add path="libs"/>
   </PLAGINPATHES>
 
+  <GLOBALSTYLE file="qstyles/Darkeum.qss"/>
+  <!-- <GLOBALSTYLE file="qstyles/Integrid.qss"/> -->
+
   <SOURCEBUILDERS file="sourcebuilders.xml"/>
+  <!-- <SOURCEBUILDERS file="sourcebuilders.xml"/> -->
 
-  <SOURCES file="sources.xml"/>
+  <!-- <SOURCES file="sources.xml"/> -->
 
-  <LAYOUTBUILDERS>
-    <!-- <layoutGrid     lib="basiclayouts" libhandler="getGridLayoutBuilder" /> -->
-    <!-- <layoutVBox     lib="basiclayouts" libhandler="getVBoxLayoutBuilder" /> -->
-    <!-- <layoutHBox     lib="basiclayouts" libhandler="getHBoxLayoutBuilder" /> -->
-  </LAYOUTBUILDERS>
+  <!-- <LAYOUTBUILDERS> -->
+  <!--   <layoutGrid     lib="basiclayouts" libhandler="getGridLayoutBuilder" /> -->
+  <!--   <layoutVBox     lib="basiclayouts" libhandler="getVBoxLayoutBuilder" /> -->
+  <!--   <layoutHBox     lib="basiclayouts" libhandler="getHBoxLayoutBuilder" /> -->
+  <!-- </LAYOUTBUILDERS> -->
 
   <WIDGETBUILDERS>
     <switchWidgetsList      lib="examplewidgets" handler="getSwitchWidgetsListBuilder"/>
   </WIDGETBUILDERS>
 
-  <!-- <GLOBALSTYLE file="qstyles/Darkeum.qss"/> -->
-  <!-- <GLOBALSTYLE file="qstyles/Integrid.qss"/> -->
 
-  <WIDGETSTYLES file="widgetstyles.xml" />
+  <!-- <WIDGETSTYLES file="widgetstyles.xml" /> -->
 
-  <SCRIPTS file="scripts.xml"/>
+  <!-- <SCRIPTS file="scripts.xml"/> -->
 
-  <DATAFORMATS file="formatters.xml"/>
+  <!-- <DATAFORMATS file="formatters.xml"/> -->
 
 
-    <KEYBOARD 
-      id="DigitalKeyboard" window="digitalkeyboard1_"
-      streamSource="localsource" streamName="keyboard_stream"
-      dataSource="localsource" dataName="keyboard_data" />
+  <!--   <KEYBOARD --> 
+  <!--     id="DigitalKeyboard" window="digitalkeyboard1_" -->
+  <!--     streamSource="localsource" streamName="keyboard_stream" -->
+  <!--     dataSource="localsource" dataName="keyboard_data" /> -->
 
-    <WINDOW 
-    file="testkeyboard/testdigitalkeyboard1.xml" 
-    id="digitalkeyboard1" 
-    visible="false"
-    title="Digital Keyboard" 
-    showMode="normal"
-    modality="true"
-    flags="stayOnTop" 
-    position="300;600" />
+  <!--   <WINDOW --> 
+  <!--   file="testkeyboard/testdigitalkeyboard1.xml" --> 
+  <!--   id="digitalkeyboard1" --> 
+  <!--   visible="false" -->
+  <!--   title="Digital Keyboard" --> 
+  <!--   showMode="normal" -->
+  <!--   modality="true" -->
+  <!--   flags="stayOnTop" --> 
+  <!--   position="300;600" /> -->
 
-    <!-- flags="stayOnTop;frameless" --> 
-    <!-- size="50;50" -->
-
-  <WINDOW 
-    file="testsformatscript/testformatscript.xml" 
-    id="testformat1" 
-    visible="true"
-    title="Test format script 1" 
-    showMode="normal"
-    modality="false"
-    flags="" 
-    size="300;300"
-    position="0;0"
-    />
+  <!--   <!-1- flags="stayOnTop;frameless" -1-> --> 
+  <!--   <!-1- size="50;50" -1-> -->
 
   <!-- <WINDOW --> 
-  <!--   file="testvisiblecontrol/testvisiblecontrol1.xml" --> 
-  <!--   id="testvisiblecontrol1" --> 
+  <!--   file="testsformatscript/testformatscript.xml" --> 
+  <!--   id="testformat1" --> 
   <!--   visible="true" -->
-  <!--   title="Test visible contorl 1" --> 
+  <!--   title="Test format script 1" --> 
   <!--   showMode="normal" -->
   <!--   modality="false" -->
   <!--   flags="" --> 
@@ -72,250 +62,56 @@
   <!--   position="0;0" -->
   <!--   /> -->
 
-  <!-- <WINDOW --> 
-  <!--   file="testvisiblecontrol/testvisiblecontrol2.xml" --> 
-  <!--   id="testvisiblecontrol2" --> 
-  <!--   visible="true" -->
-  <!--   title="Test visible contorl 2" --> 
-  <!--   showMode="normal" -->
-  <!--   modality="false" -->
-  <!--   flags="" --> 
-  <!--   size="300;300" -->
-  <!--   position="350;300" -->
-  <!--   /> -->
+  <!-- <!-1- <WINDOW -1-> --> 
+  <!-- <!-1-   file="testvisiblecontrol/testvisiblecontrol1.xml" -1-> --> 
+  <!-- <!-1-   id="testvisiblecontrol1" -1-> --> 
+  <!-- <!-1-   visible="true" -1-> -->
+  <!-- <!-1-   title="Test visible contorl 1" -1-> --> 
+  <!-- <!-1-   showMode="normal" -1-> -->
+  <!-- <!-1-   modality="false" -1-> -->
+  <!-- <!-1-   flags="" -1-> --> 
+  <!-- <!-1-   size="300;300" -1-> -->
+  <!-- <!-1-   position="0;0" -1-> -->
+  <!-- <!-1-   /> -1-> -->
+
+  <!-- <!-1- <WINDOW -1-> --> 
+  <!-- <!-1-   file="testvisiblecontrol/testvisiblecontrol2.xml" -1-> --> 
+  <!-- <!-1-   id="testvisiblecontrol2" -1-> --> 
+  <!-- <!-1-   visible="true" -1-> -->
+  <!-- <!-1-   title="Test visible contorl 2" -1-> --> 
+  <!-- <!-1-   showMode="normal" -1-> -->
+  <!-- <!-1-   modality="false" -1-> -->
+  <!-- <!-1-   flags="" -1-> --> 
+  <!-- <!-1-   size="300;300" -1-> -->
+  <!-- <!-1-   position="350;300" -1-> -->
+  <!-- <!-1-   /> -1-> -->
+
+  <!-- <!-1- <WINDOW -1-> --> 
+  <!-- <!-1-   file="testvisiblecontrol/testvisiblecontrol3.xml" -1-> --> 
+  <!-- <!-1-   id="testvisiblecontrol3" -1-> --> 
+  <!-- <!-1-   visible="true" -1-> -->
+  <!-- <!-1-   title="Test visible contorl 3" -1-> --> 
+  <!-- <!-1-   showMode="normal" -1-> -->
+  <!-- <!-1-   modality="false" -1-> -->
+  <!-- <!-1-   flags="" -1-> --> 
+  <!-- <!-1-   size="300;300" -1-> -->
+  <!-- <!-1-   position="700;300" -1-> -->
+  <!-- <!-1-   /> -1-> -->
+
+  <!-- <!-1- <WINDOW -1-> --> 
+  <!-- <!-1-   file="testkeyboard/testkeyboardinput1.xml" -1-> --> 
+  <!-- <!-1-   id="testkeyboardinput1" -1-> --> 
+  <!-- <!-1-   visible="true" -1-> -->
+  <!-- <!-1-   title="Test keyboard input" -1-> --> 
+  <!-- <!-1-   showMode="normal" -1-> -->
+  <!-- <!-1-   modality="false" -1-> -->
+  <!-- <!-1-   flags="" -1-> --> 
+  <!-- <!-1-   size="300;300" -1-> -->
+  <!-- <!-1-   position="100;100" -1-> -->
+  <!-- <!-1-   /> -1-> -->
 
   <!-- <WINDOW --> 
-  <!--   file="testvisiblecontrol/testvisiblecontrol3.xml" --> 
-  <!--   id="testvisiblecontrol3" --> 
-  <!--   visible="true" -->
-  <!--   title="Test visible contorl 3" --> 
-  <!--   showMode="normal" -->
-  <!--   modality="false" -->
-  <!--   flags="" --> 
-  <!--   size="300;300" -->
-  <!--   position="700;300" -->
-  <!--   /> -->
-
-  <!-- <WINDOW --> 
-  <!--   file="testkeyboard/testkeyboardinput1.xml" --> 
-  <!--   id="testkeyboardinput1" --> 
-  <!--   visible="true" -->
-  <!--   title="Test keyboard input" --> 
-  <!--   showMode="normal" -->
-  <!--   modality="false" -->
-  <!--   flags="" --> 
-  <!--   size="300;300" -->
-  <!--   position="100;100" -->
-  <!--   /> -->
-
-  <WINDOW 
-    file="testcheckbox/testcheckbox1.xml" 
-    id="testbutton" 
-    visible="true"
-    title="Test Buttons" 
-    showMode="normal"
-    modality="false"
-    flags="" 
-    size="300;50"
-    position="300;600"
-    />
-
-  <!-- <WINDOW --> 
-  <!--   file="testpusharea/testpusharea2.xml" --> 
-  <!--   id="test push area 2" --> 
-  <!--   visible="true" -->
-  <!--   title="Test push area 2" --> 
-  <!--   showMode="normal" -->
-  <!--   modality="false" -->
-  <!--   flags="" --> 
-  <!--   size="300;300" -->
-  <!--   screen="0" -->
-  <!--   position="0;0" -->
-  <!--   /> -->
-
-  <!-- <WINDOW --> 
-  <!--   file="testpusharea/testpusharea1.xml" --> 
-  <!--   id="test push area 1" --> 
-  <!--   visible="true" -->
-  <!--   title="Test push area 1" --> 
-  <!--   showMode="normal" -->
-  <!--   modality="false" -->
-  <!--   flags="" --> 
-  <!--   size="300;300" -->
-  <!--   screen="0" -->
-  <!--   position="0;0" -->
-  <!--   /> -->
-
-  <!-- <WINDOW --> 
-  <!--   file="teststackwidget/teststackwidget3.xml" --> 
-  <!--   id="test stack widget 3" --> 
-  <!--   visible="true" -->
-  <!--   title="Test Stack Widget 3" --> 
-  <!--   showMode="normal" -->
-  <!--   modality="false" -->
-  <!--   flags="" --> 
-  <!--   size="900;700" -->
-  <!--   screen="0" -->
-  <!--   position="0;0" -->
-  <!--   /> -->
-
-  <!-- <WINDOW --> 
-  <!--   file="teststackwidget/teststackwidget1.xml" --> 
-  <!--   id="test stack widget 1" --> 
-  <!--   visible="true" -->
-  <!--   title="Test Stack Widget 1" --> 
-  <!--   showMode="normal" -->
-  <!--   modality="false" -->
-  <!--   flags="" --> 
-  <!--   size="900;700" -->
-  <!--   screen="0" -->
-  <!--   position="0;0" -->
-  <!--   /> -->
-
-  <!-- <WINDOW --> 
-  <!--   file="testlistwidget/testlistwidget1.xml" --> 
-  <!--   id="test list widget 1" --> 
-  <!--   visible="true" -->
-  <!--   title="test list widget 1" --> 
-  <!--   showMode="normal" -->
-  <!--   modality="false" -->
-  <!--   flags="" --> 
-  <!--   size="900;700" -->
-  <!--   screen="0" -->
-  <!--   position="0;0" -->
-  <!--   /> -->
-
-  <!-- <WINDOW --> 
-  <!--   file="testscrollarea/testscrollarea1.xml" --> 
-  <!--   id="test scroll area 1" --> 
-  <!--   visible="true" -->
-  <!--   title="Test scroll area 1" --> 
-  <!--   showMode="normal" -->
-  <!--   modality="false" -->
-  <!--   flags="" --> 
-  <!--   size="300;300" -->
-  <!--   screen="0" -->
-  <!--   position="0;0" -->
-  <!--   /> -->
-
-  <!-- <WINDOW --> 
-  <!--   file="testtabwidget/testtabwidget.xml" --> 
-  <!--   id="test tab widget" --> 
-  <!--   visible="true" -->
-  <!--   title="Test Tab Widget" --> 
-  <!--   showMode="normal" -->
-  <!--   modality="false" -->
-  <!--   flags="" --> 
-  <!--   size="300;300" -->
-  <!--   screen="0" -->
-  <!--   position="0;0" -->
-  <!--   /> -->
-
-  <!-- <WINDOW --> 
-  <!--   file="testtabwidget/testtabwidget1.xml" --> 
-  <!--   id="test tab widget 1" --> 
-  <!--   visible="true" -->
-  <!--   title="Test Tab Widget 1" --> 
-  <!--   showMode="normal" -->
-  <!--   modality="false" -->
-  <!--   flags="" --> 
-  <!--   size="300;300" -->
-  <!--   screen="0" -->
-  <!--   position="310;0" -->
-  <!--   /> -->
-
-  <!-- <WINDOW --> 
-  <!--   file="testcombobox/testcombobox1.xml" --> 
-  <!--   id="test DataComboBox 1" --> 
-  <!--   visible="true" -->
-  <!--   title="Test DataComboBox" --> 
-  <!--   showMode="normal" -->
-  <!--   modality="false" -->
-  <!--   flags="" --> 
-  <!--   size="300;300" -->
-  <!--   screen="0" -->
-  <!--   position="0;0" -->
-  <!--   /> -->
-
-  <!-- <WINDOW --> 
-  <!--   file="testcombobox/testcombobox2.xml" --> 
-  <!--   id="test DataComboBox 2" --> 
-  <!--   visible="true" -->
-  <!--   title="Test DataComboBox" --> 
-  <!--   showMode="normal" -->
-  <!--   modality="false" -->
-  <!--   flags="" --> 
-  <!--   size="300;300" -->
-  <!--   screen="0" -->
-  <!--   position="550;150" -->
-  <!--   /> -->
-
-  <!-- <WINDOW --> 
-  <!--   file="testlineedit/testlineedit1.xml" --> 
-  <!--   id="testlineedit1" --> 
-  <!--   visible="true" -->
-  <!--   title="Test DataLineEdit" --> 
-  <!--   showMode="normal" -->
-  <!--   modality="false" -->
-  <!--   flags="" --> 
-  <!--   size="300;300" -->
-  <!--   screen="0" -->
-  <!--   position="550;150" -->
-  <!--   /> -->
-
-  <!-- <WINDOW --> 
-  <!--   file="testtable/testtable.xml" --> 
-  <!--   id="testtable1" --> 
-  <!--   visible="true" -->
-  <!--   title="Test table" --> 
-  <!--   showMode="normal" -->
-  <!--   modality="false" -->
-  <!--   flags="" --> 
-  <!--   size="300;300" -->
-  <!--   screen="0" -->
-  <!--   position="150;150" -->
-  <!--   /> -->
-
-  <!-- <WINDOW --> 
-  <!--   file="testtable/testtable2.xml" --> 
-  <!--   id="testtable2" --> 
-  <!--   visible="true" -->
-  <!--   title="Test table" --> 
-  <!--   showMode="normal" -->
-  <!--   modality="false" -->
-  <!--   flags="" --> 
-  <!--   size="600;600" -->
-  <!--   screen="0" -->
-  <!--   position="400;300" -->
-  <!--   /> -->
-
-  <!-- <WINDOW --> 
-  <!--   file="testlabels/testlabels1.xml" --> 
-  <!--   id="testlabel1" --> 
-  <!--   visible="true" -->
-  <!--   title="Test Label 1" --> 
-  <!--   showMode="normal" -->
-  <!--   modality="false" -->
-  <!--   flags="" --> 
-  <!--   size="300;300" -->
-  <!--   position="0;0" -->
-  <!--   /> -->
-
-  <!-- <WINDOW --> 
-  <!--   file="testlabels/testlabels2.xml" --> 
-  <!--   id="testlabel2" --> 
-  <!--   visible="true" -->
-  <!--   title="Test Data Labels 2" --> 
-  <!--   showMode="normal" -->
-  <!--   modality="false" -->
-  <!--   flags="" --> 
-  <!--   size="300;300" -->
-  <!--   position="300;300" -->
-  <!--   /> -->
-
-
-  <!-- <WINDOW --> 
-  <!--   file="testbutton/testbutton.xml" --> 
+  <!--   file="testcheckbox/testcheckbox1.xml" --> 
   <!--   id="testbutton" --> 
   <!--   visible="true" -->
   <!--   title="Test Buttons" --> 
@@ -326,47 +122,253 @@
   <!--   position="300;600" -->
   <!--   /> -->
 
-  <!-- <WINDOW --> 
-  <!--   file="testbutton/testbutton2.xml" --> 
-  <!--   id="testbutton2" --> 
-  <!--   visible="true" -->
-  <!--   title="Test Buttons" --> 
-  <!--   showMode="normal" -->
-  <!--   modality="false" -->
-  <!--   flags="" --> 
-  <!--   size="500;500" -->
-  <!--   screen="0" -->
-  <!--   position="600;100" -->
-  <!--   /> -->
+  <!-- <!-1- <WINDOW -1-> --> 
+  <!-- <!-1-   file="testpusharea/testpusharea2.xml" -1-> --> 
+  <!-- <!-1-   id="test push area 2" -1-> --> 
+  <!-- <!-1-   visible="true" -1-> -->
+  <!-- <!-1-   title="Test push area 2" -1-> --> 
+  <!-- <!-1-   showMode="normal" -1-> -->
+  <!-- <!-1-   modality="false" -1-> -->
+  <!-- <!-1-   flags="" -1-> --> 
+  <!-- <!-1-   size="300;300" -1-> -->
+  <!-- <!-1-   screen="0" -1-> -->
+  <!-- <!-1-   position="0;0" -1-> -->
+  <!-- <!-1-   /> -1-> -->
 
-  <!-- <WINDOW -->
-  <!--   id="TestWindow1" --> 
-  <!--   title="TestWindow1" --> 
-  <!--   visible="false" -->
-  <!--   showMode="normal" -->
-  <!--   modality="false" -->
-  <!--   flags="" --> 
-  <!--   size="200;50" -->
-  <!--   position="300;100"> -->
-  <!--   <mainWidget> -->
-  <!--     <Frame> -->
-  <!--     </Frame> -->
-  <!--   </mainWidget> -->
-  <!-- </WINDOW> -->
+  <!-- <!-1- <WINDOW -1-> --> 
+  <!-- <!-1-   file="testpusharea/testpusharea1.xml" -1-> --> 
+  <!-- <!-1-   id="test push area 1" -1-> --> 
+  <!-- <!-1-   visible="true" -1-> -->
+  <!-- <!-1-   title="Test push area 1" -1-> --> 
+  <!-- <!-1-   showMode="normal" -1-> -->
+  <!-- <!-1-   modality="false" -1-> -->
+  <!-- <!-1-   flags="" -1-> --> 
+  <!-- <!-1-   size="300;300" -1-> -->
+  <!-- <!-1-   screen="0" -1-> -->
+  <!-- <!-1-   position="0;0" -1-> -->
+  <!-- <!-1-   /> -1-> -->
 
-  <!-- <WINDOW -->
-  <!--   id="TestWindow2" --> 
-  <!--   title="TestWindow2" --> 
-  <!--   visible="false" -->
-  <!--   showMode="normal" -->
-  <!--   modality="false" -->
-  <!--   flags="" --> 
-  <!--   size="200;50" -->
-  <!--   position="500;100"> -->
-  <!--   <mainWidget> -->
-  <!--     <Frame> -->
-  <!--     </Frame> -->
-  <!--   </mainWidget> -->
-  <!-- </WINDOW> -->
+  <!-- <!-1- <WINDOW -1-> --> 
+  <!-- <!-1-   file="teststackwidget/teststackwidget3.xml" -1-> --> 
+  <!-- <!-1-   id="test stack widget 3" -1-> --> 
+  <!-- <!-1-   visible="true" -1-> -->
+  <!-- <!-1-   title="Test Stack Widget 3" -1-> --> 
+  <!-- <!-1-   showMode="normal" -1-> -->
+  <!-- <!-1-   modality="false" -1-> -->
+  <!-- <!-1-   flags="" -1-> --> 
+  <!-- <!-1-   size="900;700" -1-> -->
+  <!-- <!-1-   screen="0" -1-> -->
+  <!-- <!-1-   position="0;0" -1-> -->
+  <!-- <!-1-   /> -1-> -->
+
+  <!-- <!-1- <WINDOW -1-> --> 
+  <!-- <!-1-   file="teststackwidget/teststackwidget1.xml" -1-> --> 
+  <!-- <!-1-   id="test stack widget 1" -1-> --> 
+  <!-- <!-1-   visible="true" -1-> -->
+  <!-- <!-1-   title="Test Stack Widget 1" -1-> --> 
+  <!-- <!-1-   showMode="normal" -1-> -->
+  <!-- <!-1-   modality="false" -1-> -->
+  <!-- <!-1-   flags="" -1-> --> 
+  <!-- <!-1-   size="900;700" -1-> -->
+  <!-- <!-1-   screen="0" -1-> -->
+  <!-- <!-1-   position="0;0" -1-> -->
+  <!-- <!-1-   /> -1-> -->
+
+  <!-- <!-1- <WINDOW -1-> --> 
+  <!-- <!-1-   file="testlistwidget/testlistwidget1.xml" -1-> --> 
+  <!-- <!-1-   id="test list widget 1" -1-> --> 
+  <!-- <!-1-   visible="true" -1-> -->
+  <!-- <!-1-   title="test list widget 1" -1-> --> 
+  <!-- <!-1-   showMode="normal" -1-> -->
+  <!-- <!-1-   modality="false" -1-> -->
+  <!-- <!-1-   flags="" -1-> --> 
+  <!-- <!-1-   size="900;700" -1-> -->
+  <!-- <!-1-   screen="0" -1-> -->
+  <!-- <!-1-   position="0;0" -1-> -->
+  <!-- <!-1-   /> -1-> -->
+
+  <!-- <!-1- <WINDOW -1-> --> 
+  <!-- <!-1-   file="testscrollarea/testscrollarea1.xml" -1-> --> 
+  <!-- <!-1-   id="test scroll area 1" -1-> --> 
+  <!-- <!-1-   visible="true" -1-> -->
+  <!-- <!-1-   title="Test scroll area 1" -1-> --> 
+  <!-- <!-1-   showMode="normal" -1-> -->
+  <!-- <!-1-   modality="false" -1-> -->
+  <!-- <!-1-   flags="" -1-> --> 
+  <!-- <!-1-   size="300;300" -1-> -->
+  <!-- <!-1-   screen="0" -1-> -->
+  <!-- <!-1-   position="0;0" -1-> -->
+  <!-- <!-1-   /> -1-> -->
+
+  <!-- <!-1- <WINDOW -1-> --> 
+  <!-- <!-1-   file="testtabwidget/testtabwidget.xml" -1-> --> 
+  <!-- <!-1-   id="test tab widget" -1-> --> 
+  <!-- <!-1-   visible="true" -1-> -->
+  <!-- <!-1-   title="Test Tab Widget" -1-> --> 
+  <!-- <!-1-   showMode="normal" -1-> -->
+  <!-- <!-1-   modality="false" -1-> -->
+  <!-- <!-1-   flags="" -1-> --> 
+  <!-- <!-1-   size="300;300" -1-> -->
+  <!-- <!-1-   screen="0" -1-> -->
+  <!-- <!-1-   position="0;0" -1-> -->
+  <!-- <!-1-   /> -1-> -->
+
+  <!-- <!-1- <WINDOW -1-> --> 
+  <!-- <!-1-   file="testtabwidget/testtabwidget1.xml" -1-> --> 
+  <!-- <!-1-   id="test tab widget 1" -1-> --> 
+  <!-- <!-1-   visible="true" -1-> -->
+  <!-- <!-1-   title="Test Tab Widget 1" -1-> --> 
+  <!-- <!-1-   showMode="normal" -1-> -->
+  <!-- <!-1-   modality="false" -1-> -->
+  <!-- <!-1-   flags="" -1-> --> 
+  <!-- <!-1-   size="300;300" -1-> -->
+  <!-- <!-1-   screen="0" -1-> -->
+  <!-- <!-1-   position="310;0" -1-> -->
+  <!-- <!-1-   /> -1-> -->
+
+  <!-- <!-1- <WINDOW -1-> --> 
+  <!-- <!-1-   file="testcombobox/testcombobox1.xml" -1-> --> 
+  <!-- <!-1-   id="test DataComboBox 1" -1-> --> 
+  <!-- <!-1-   visible="true" -1-> -->
+  <!-- <!-1-   title="Test DataComboBox" -1-> --> 
+  <!-- <!-1-   showMode="normal" -1-> -->
+  <!-- <!-1-   modality="false" -1-> -->
+  <!-- <!-1-   flags="" -1-> --> 
+  <!-- <!-1-   size="300;300" -1-> -->
+  <!-- <!-1-   screen="0" -1-> -->
+  <!-- <!-1-   position="0;0" -1-> -->
+  <!-- <!-1-   /> -1-> -->
+
+  <!-- <!-1- <WINDOW -1-> --> 
+  <!-- <!-1-   file="testcombobox/testcombobox2.xml" -1-> --> 
+  <!-- <!-1-   id="test DataComboBox 2" -1-> --> 
+  <!-- <!-1-   visible="true" -1-> -->
+  <!-- <!-1-   title="Test DataComboBox" -1-> --> 
+  <!-- <!-1-   showMode="normal" -1-> -->
+  <!-- <!-1-   modality="false" -1-> -->
+  <!-- <!-1-   flags="" -1-> --> 
+  <!-- <!-1-   size="300;300" -1-> -->
+  <!-- <!-1-   screen="0" -1-> -->
+  <!-- <!-1-   position="550;150" -1-> -->
+  <!-- <!-1-   /> -1-> -->
+
+  <!-- <!-1- <WINDOW -1-> --> 
+  <!-- <!-1-   file="testlineedit/testlineedit1.xml" -1-> --> 
+  <!-- <!-1-   id="testlineedit1" -1-> --> 
+  <!-- <!-1-   visible="true" -1-> -->
+  <!-- <!-1-   title="Test DataLineEdit" -1-> --> 
+  <!-- <!-1-   showMode="normal" -1-> -->
+  <!-- <!-1-   modality="false" -1-> -->
+  <!-- <!-1-   flags="" -1-> --> 
+  <!-- <!-1-   size="300;300" -1-> -->
+  <!-- <!-1-   screen="0" -1-> -->
+  <!-- <!-1-   position="550;150" -1-> -->
+  <!-- <!-1-   /> -1-> -->
+
+  <!-- <!-1- <WINDOW -1-> --> 
+  <!-- <!-1-   file="testtable/testtable.xml" -1-> --> 
+  <!-- <!-1-   id="testtable1" -1-> --> 
+  <!-- <!-1-   visible="true" -1-> -->
+  <!-- <!-1-   title="Test table" -1-> --> 
+  <!-- <!-1-   showMode="normal" -1-> -->
+  <!-- <!-1-   modality="false" -1-> -->
+  <!-- <!-1-   flags="" -1-> --> 
+  <!-- <!-1-   size="300;300" -1-> -->
+  <!-- <!-1-   screen="0" -1-> -->
+  <!-- <!-1-   position="150;150" -1-> -->
+  <!-- <!-1-   /> -1-> -->
+
+  <!-- <!-1- <WINDOW -1-> --> 
+  <!-- <!-1-   file="testtable/testtable2.xml" -1-> --> 
+  <!-- <!-1-   id="testtable2" -1-> --> 
+  <!-- <!-1-   visible="true" -1-> -->
+  <!-- <!-1-   title="Test table" -1-> --> 
+  <!-- <!-1-   showMode="normal" -1-> -->
+  <!-- <!-1-   modality="false" -1-> -->
+  <!-- <!-1-   flags="" -1-> --> 
+  <!-- <!-1-   size="600;600" -1-> -->
+  <!-- <!-1-   screen="0" -1-> -->
+  <!-- <!-1-   position="400;300" -1-> -->
+  <!-- <!-1-   /> -1-> -->
+
+  <!-- <!-1- <WINDOW -1-> --> 
+  <!-- <!-1-   file="testlabels/testlabels1.xml" -1-> --> 
+  <!-- <!-1-   id="testlabel1" -1-> --> 
+  <!-- <!-1-   visible="true" -1-> -->
+  <!-- <!-1-   title="Test Label 1" -1-> --> 
+  <!-- <!-1-   showMode="normal" -1-> -->
+  <!-- <!-1-   modality="false" -1-> -->
+  <!-- <!-1-   flags="" -1-> --> 
+  <!-- <!-1-   size="300;300" -1-> -->
+  <!-- <!-1-   position="0;0" -1-> -->
+  <!-- <!-1-   /> -1-> -->
+
+  <!-- <!-1- <WINDOW -1-> --> 
+  <!-- <!-1-   file="testlabels/testlabels2.xml" -1-> --> 
+  <!-- <!-1-   id="testlabel2" -1-> --> 
+  <!-- <!-1-   visible="true" -1-> -->
+  <!-- <!-1-   title="Test Data Labels 2" -1-> --> 
+  <!-- <!-1-   showMode="normal" -1-> -->
+  <!-- <!-1-   modality="false" -1-> -->
+  <!-- <!-1-   flags="" -1-> --> 
+  <!-- <!-1-   size="300;300" -1-> -->
+  <!-- <!-1-   position="300;300" -1-> -->
+  <!-- <!-1-   /> -1-> -->
+
+
+  <!-- <!-1- <WINDOW -1-> --> 
+  <!-- <!-1-   file="testbutton/testbutton.xml" -1-> --> 
+  <!-- <!-1-   id="testbutton" -1-> --> 
+  <!-- <!-1-   visible="true" -1-> -->
+  <!-- <!-1-   title="Test Buttons" -1-> --> 
+  <!-- <!-1-   showMode="normal" -1-> -->
+  <!-- <!-1-   modality="false" -1-> -->
+  <!-- <!-1-   flags="" -1-> --> 
+  <!-- <!-1-   size="300;50" -1-> -->
+  <!-- <!-1-   position="300;600" -1-> -->
+  <!-- <!-1-   /> -1-> -->
+
+  <!-- <!-1- <WINDOW -1-> --> 
+  <!-- <!-1-   file="testbutton/testbutton2.xml" -1-> --> 
+  <!-- <!-1-   id="testbutton2" -1-> --> 
+  <!-- <!-1-   visible="true" -1-> -->
+  <!-- <!-1-   title="Test Buttons" -1-> --> 
+  <!-- <!-1-   showMode="normal" -1-> -->
+  <!-- <!-1-   modality="false" -1-> -->
+  <!-- <!-1-   flags="" -1-> --> 
+  <!-- <!-1-   size="500;500" -1-> -->
+  <!-- <!-1-   screen="0" -1-> -->
+  <!-- <!-1-   position="600;100" -1-> -->
+  <!-- <!-1-   /> -1-> -->
+
+  <!-- <!-1- <WINDOW -1-> -->
+  <!-- <!-1-   id="TestWindow1" -1-> --> 
+  <!-- <!-1-   title="TestWindow1" -1-> --> 
+  <!-- <!-1-   visible="false" -1-> -->
+  <!-- <!-1-   showMode="normal" -1-> -->
+  <!-- <!-1-   modality="false" -1-> -->
+  <!-- <!-1-   flags="" -1-> --> 
+  <!-- <!-1-   size="200;50" -1-> -->
+  <!-- <!-1-   position="300;100"> -1-> -->
+  <!-- <!-1-   <mainWidget> -1-> -->
+  <!-- <!-1-     <Frame> -1-> -->
+  <!-- <!-1-     </Frame> -1-> -->
+  <!-- <!-1-   </mainWidget> -1-> -->
+  <!-- <!-1- </WINDOW> -1-> -->
+
+  <!-- <!-1- <WINDOW -1-> -->
+  <!-- <!-1-   id="TestWindow2" -1-> --> 
+  <!-- <!-1-   title="TestWindow2" -1-> --> 
+  <!-- <!-1-   visible="false" -1-> -->
+  <!-- <!-1-   showMode="normal" -1-> -->
+  <!-- <!-1-   modality="false" -1-> -->
+  <!-- <!-1-   flags="" -1-> --> 
+  <!-- <!-1-   size="200;50" -1-> -->
+  <!-- <!-1-   position="500;100"> -1-> -->
+  <!-- <!-1-   <mainWidget> -1-> -->
+  <!-- <!-1-     <Frame> -1-> -->
+  <!-- <!-1-     </Frame> -1-> -->
+  <!-- <!-1-   </mainWidget> -1-> -->
+  <!-- <!-1- </WINDOW> -1-> -->
 
 </APPLICATION>

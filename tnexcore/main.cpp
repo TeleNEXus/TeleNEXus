@@ -39,6 +39,8 @@
 #include <QDir>
 #include <QCommandLineParser>
 
+
+
 #define __lmVersionString (QString("TeleNEXus version: %1").arg(APPLICATION_VERSION))
 
 static const QString __slRootTag = "APPLICATION";
@@ -60,8 +62,6 @@ struct SParameters
   QDir    projectDir;
   bool parseCommandLine(char *argv[])
   {
-
-    const LIApplication& app = CApplicationInterface::getInstance();
     defaultPluginsPath = QString("%1/%2")
       .arg(QDir::currentPath())
       .arg(QStringLiteral("plugins"));
@@ -110,7 +110,6 @@ struct SParameters
         projectPath  = fi.absolutePath() + "/";
         projectDir   = fi.absoluteDir();
         QDir::setCurrent(path);
-        app.message(QString("Project current path: '%1'").arg(QDir::currentPath()));
       }
       else
       {
@@ -121,25 +120,49 @@ struct SParameters
   }
 }__slParameters;
 
+
+
+
+#include <csignal>
+//------------------------------------------------------------------------------
+static void appExit(int _sig)
+{
+  Q_UNUSED(_sig);
+  QCoreApplication::exit(0);
+}
+
 //==============================================================================main
 int main(int argc, char *argv[])
 {
+
+  signal(SIGINT, appExit);
+  signal(SIGTERM, appExit);
+
+
   QLoggingCategory::setFilterRules("qt5ct.debug=false");
 
   const LIApplication& appinterface = CApplicationInterface::getInstance();
+
   QApplication app(argc, argv);
 
   if(!__slParameters.parseCommandLine(argv)) return 0;
 
+  appinterface.message(QString("Project current path:\n\t%1").arg(QDir::currentPath()));
+  appinterface.message(QString("Project main file:\n\t%1").arg(__slParameters.mainFileName));
 
-  auto lp = QCoreApplication::libraryPaths();
-  auto it = lp.begin();
-  while(it != lp.end())
   {
-    appinterface.message( QString("Add library path: %1").arg(*it));
-    it++;
-  }
+    QString str = QStringLiteral("Default plugins pathes: \n");
+    auto lp = QCoreApplication::libraryPaths();
+    auto it = lp.begin();
 
+    while(it != lp.end())
+    {
+      str += QString("\t%1\n").arg(*it); 
+      it++;
+    }
+
+    appinterface.message(str);
+  }
 
   CApplicationInterface::getInstance().setParameters(
       __slParameters.mainFileName,
@@ -151,6 +174,10 @@ int main(int argc, char *argv[])
   QString errorStr;
   int errorLine;
   int errorColumn;
+
+
+
+  appinterface.message(QStringLiteral("Project deploy begining..."));
 
 
 
@@ -185,12 +212,11 @@ int main(int argc, char *argv[])
     return -1;
   }
 
-
-  //----------------------------------------------------
-  xmlglobalstyle::upload(rootElement, app);
   //----------------------------------------------------
   xmlpluginpathes::upload(rootElement,
       __slParameters.defaultPluginsPath);
+  //----------------------------------------------------
+  xmlglobalstyle::upload(rootElement, app);
   //----------------------------------------------------
   builders::sources::upload( 
       rootElement, 
@@ -217,12 +243,14 @@ int main(int argc, char *argv[])
   //----------------------------------------------------
   xmljscripts::upload(rootElement);
 
+  appinterface.message(QStringLiteral("Project deploy end."));
+
   xmlkeyboards::init();
   xmlwindows::show();
 
   QObject::connect(&app, &QApplication::aboutToQuit,
       [&](){
-        appinterface.message("quit from TeleNEXus");
+        appinterface.message("Quit from TeleNEXus");
       });
 
   return app.exec();
