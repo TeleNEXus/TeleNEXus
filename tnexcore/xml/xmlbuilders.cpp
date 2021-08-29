@@ -102,7 +102,6 @@ static void load(
 
 
 static void loadBuilders(
-    const QString& _rootTag, 
     const QDomElement& _element, 
     const QStringList& _libPaths,
     std::function<EAddResult(const QString& _name, void* _builder)> _adder,
@@ -142,7 +141,7 @@ private:
 };
 CInitMaps CInitMaps::instance;
 
-//------------------------------------------------------------------------------
+//==============================================================================
 namespace widgets
 {
 //------------------------------------------------------------------------------
@@ -162,7 +161,7 @@ QSharedPointer<LIXmlWidgetBuilder> getBuilder(const QString _id)
 }
 } /* namespace widget */ 
 
-//------------------------------------------------------------------------------
+//==============================================================================
 namespace layouts
 {
 //------------------------------------------------------------------------------
@@ -170,6 +169,7 @@ void upload( const QDomElement& _documentElement, const QStringList& _libPaths)
 {
   Upload(__slBuilders, __slRootTags.layoutBuilders, _documentElement, _libPaths);
 }
+
 //------------------------------------------------------------------------------
 QSharedPointer<LIXmlLayoutBuilder> getBuilder(const QString _id)
 {
@@ -177,7 +177,7 @@ QSharedPointer<LIXmlLayoutBuilder> getBuilder(const QString _id)
 }
 } /* namespace layouts */
 
-//------------------------------------------------------------------------------
+//==============================================================================
 namespace sources 
 {
 
@@ -227,7 +227,7 @@ static void load(
 
   if(fileName.isNull())
   {
-    loadBuilders(_rootTag, element, _libPaths, _adder, message);
+    loadBuilders(element, _libPaths, _adder, message);
     return;
   }
 
@@ -274,12 +274,11 @@ static void load(
     return;
   }
 
-  loadBuilders(_rootTag, rootElement, _libPaths, _adder, message);
+  loadBuilders(rootElement, _libPaths, _adder, message);
 }
 
 //==============================================================================
 static void loadBuilders(
-    const QString& _rootTag, 
     const QDomElement& _element, 
     const QStringList& _libPaths,
     std::function<EAddResult(const QString& _name, void* _builder)> _adder,
@@ -287,9 +286,7 @@ static void loadBuilders(
 {
 
   QDomNode node = _element.firstChild();
-
-
-
+  QString msg = _message;
 
   while(!node.isNull())
   {
@@ -312,18 +309,16 @@ static void loadBuilders(
 
 
     QLibrary lib;
-    QString msg = _message;
 
     //find libraries
     for(int i = 0; i < _libPaths.size(); i++)
     {
-
       lib.setFileName(_libPaths[i] + "/" + libfilename);
 
       if(lib.isLoaded())
       {
-        msg += QString("\tlibrary '%1' is already loaded\n")
-          .arg(lib.fileName());
+        /* msg += QString("\tlibrary '%1' is already loaded\n") */
+        /*   .arg(lib.fileName()); */
         break;
       }
 
@@ -337,12 +332,9 @@ static void loadBuilders(
 
     if(!lib.isLoaded())
     {
-      __smMessage(
-          QString("%1\tcan't load library '%2' to load source builder '%3'")
-          .arg(msg)
+      msg += QString("\tcan't load library '%1' to load source builder '%2'\n")
           .arg(libfilename)
-          .arg(el.tagName()));
-
+          .arg(el.tagName());
       node = node.nextSibling();
       continue;
     }
@@ -352,15 +344,10 @@ static void loadBuilders(
 
     if(!func)
     {
-      __smMessage(
-          QString("%1 "
-            "tag '%2' can't resolve access func '%3' in library '%4' "
-            "to load remote source builder '%5'")
-          .arg(__smMessageHeader)
-          .arg(_rootTag)
-          .arg(libhandler)
-          .arg(lib.fileName())
-          .arg(el.tagName()));
+      msg += QString(
+          "\tbuilder '%1'\n\t\tcan't resolve access func '%2' in library '%3'\n")
+        .arg(el.tagName()).arg(libhandler)
+          .arg(libfilename);
 
       node = node.nextSibling();
       continue;
@@ -369,29 +356,16 @@ static void loadBuilders(
     switch(_adder(el.tagName(), func()))
     {
     case EAddResult::Added:
-      /* __smMessage( */
-      /*     QString("%1 tag '%2' builder '%3' " */
-      /*       "with access func '%4' was added") */
-      /*     .arg(__smMessageHeader) */
-      /*     .arg(_rootTag) */
-      /*     .arg(el.tagName()) */
-      /*     .arg(libhandler)); */
-      __smMessage(
-
-          QString("%1\tbuilder '%2'\n\taccess func %3\n")
-          .arg(msg).arg(el.tagName()).arg(libhandler));
+      msg += QString("\tbuilder '%1'\n\t\taccess func %2\n")
+        .arg(el.tagName()).arg(libhandler);
       break;
 
     case EAddResult::Replaced:
-      __smMessage(
-          QString("%1 tag '%2' builder '%3' "
-            "with access func '%4' was replaced")
-          .arg(__smMessageHeader)
-          .arg(_rootTag).
-          arg(el.tagName()).
-          arg(libhandler));
+      /* msg += QString("\taccess func '%1' was replaced\n") */
+      /*     .arg(libhandler); */
       break;
     }
     node = node.nextSibling();
   }
+  __smMessage(msg);
 }

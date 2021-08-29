@@ -222,13 +222,6 @@ int main(int argc, char *argv[])
       rootElement, 
       xmlpluginpathes::getPlaginPathes());
   //----------------------------------------------------
-  xmldatasources::upload(rootElement);
-  //----------------------------------------------------
-  xmlwidgetstyles::upload(rootElement);
-  
-  //----------------------------------------------------
-  xmldataformatters::upload(rootElement);
-  //----------------------------------------------------
   builders::layouts::upload( 
       rootElement, 
       xmlpluginpathes::getPlaginPathes());
@@ -236,6 +229,13 @@ int main(int argc, char *argv[])
   builders::widgets::upload( 
       rootElement, 
       xmlpluginpathes::getPlaginPathes());
+  //----------------------------------------------------
+  xmldatasources::upload(rootElement);
+  //----------------------------------------------------
+  xmlwidgetstyles::upload(rootElement);
+  
+  //----------------------------------------------------
+  xmldataformatters::upload(rootElement);
   //----------------------------------------------------
   xmlkeyboards::upload(rootElement);
   //----------------------------------------------------
