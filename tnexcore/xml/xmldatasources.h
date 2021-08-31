@@ -28,7 +28,8 @@ class QDomElement;
 
 namespace xmldatasources
 {
-void upload(const QDomElement& _rootElement);
+void 
+  upload(const QDomElement& _rootElement);
 QSharedPointer<LIRemoteDataSource> getSource(const QString& _id);
 } /* namespace xmldatasources */
 

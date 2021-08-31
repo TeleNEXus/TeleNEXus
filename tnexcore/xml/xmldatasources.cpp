@@ -50,12 +50,12 @@ namespace xmldatasources
 
 void upload(const QDomElement& _rootElement)
 {
+  __smMessage("Begin deploy of data sources.");
+
   auto element = _rootElement.firstChildElement(__slTags.rootTag);
 
   if(element.isNull()) 
   {
-    __smMessage(QString("%1 document element has no elements with tag %2")
-        .arg(__smMessageHeader).arg(__slTags.rootTag));
     return;
   }
 
@@ -68,14 +68,16 @@ void upload(const QDomElement& _rootElement)
     {
       return;
     }
-    element = xmlcommon::loadDomDocument(attrFile).documentElement();
+    element = ddoc.documentElement();
     if(element.tagName() != __slTags.rootTag) { return; }
   }
 
-  //Добавление источников данных.
+  //Addin data sources
   QDomNode node = element.firstChild();
 
-  while(!node.isNull())
+  for(auto node = element.firstChildElement(); 
+      !node.isNull(); 
+      node = node.nextSiblingElement())
   {
     QDomElement el = node.toElement();
     auto builder = builders::sources::getBuilder(el.tagName());
@@ -93,8 +95,12 @@ void upload(const QDomElement& _rootElement)
         it++;
       }
     }
-    node = node.nextSibling();
+    else
+    {
+      __smMessage(QString("Can't find builder for source %1").arg(el.tagName()));
+    }
   }
+  __smMessage("End deploy of data sources.");
 }
 
 QSharedPointer<LIRemoteDataSource> getSource(const QString& _id)

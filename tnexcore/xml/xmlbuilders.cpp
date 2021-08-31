@@ -61,7 +61,7 @@ enum class EAddResult
   Replaced
 };
 
-#define __smMessageHeader "Load builder:\n"
+#define __smMessageHeader "Load builders:\n"
 #define __smMessage(msg) CApplicationInterface::getInstance().message(msg)
 #define __smWarning(msg) CApplicationInterface::getInstance().warning(msg)
 
