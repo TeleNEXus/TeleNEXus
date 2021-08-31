@@ -229,13 +229,16 @@ int main(int argc, char *argv[])
   builders::widgets::upload( 
       rootElement, 
       xmlpluginpathes::getPlaginPathes());
+
   //----------------------------------------------------
   xmldatasources::upload(rootElement);
+
+  //----------------------------------------------------
+  xmldataformatters::upload(rootElement);
+
   //----------------------------------------------------
   xmlwidgetstyles::upload(rootElement);
   
-  //----------------------------------------------------
-  xmldataformatters::upload(rootElement);
   //----------------------------------------------------
   xmlkeyboards::upload(rootElement);
   //----------------------------------------------------

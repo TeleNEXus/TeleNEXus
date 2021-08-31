@@ -34,7 +34,7 @@
 #include <QDebug>
 #include <QDir>
 
-#define __smDateTimeFormat QStringLiteral("yyyy:MM:dd:hh:mm:ss")
+#define __smDateTimeFormat QStringLiteral("yyyy:MM:dd|hh:mm:ss")
 //==============================================================================
 static struct SLocalData
 {

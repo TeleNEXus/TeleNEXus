@@ -12,7 +12,7 @@
   <SOURCEBUILDERS file="sourcebuilders.xml"/>
   <!-- <SOURCEBUILDERS file="sourcebuilders.xml"/> -->
 
-  <!-- <SOURCES file="sources.xml"/> -->
+  <SOURCES file="sources.xml"/>
 
   <!-- <LAYOUTBUILDERS> -->
   <!--   <layoutGrid     lib="basiclayouts" libhandler="getGridLayoutBuilder" /> -->
