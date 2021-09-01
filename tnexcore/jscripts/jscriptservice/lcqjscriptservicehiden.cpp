@@ -227,9 +227,19 @@ void LCQJScriptHiden::customEvent(QEvent* _event)
 }
 
 //------------------------------------------------------------------------------
-void LCQJScriptHiden::debugOut(const QString& _out)
+void LCQJScriptHiden::message(const QString& _out)
 {
   CApplicationInterface::getInstance().message(_out);
+}
+//------------------------------------------------------------------------------
+void LCQJScriptHiden::warning(const QString& _out)
+{
+  CApplicationInterface::getInstance().warning(_out);
+}
+//------------------------------------------------------------------------------
+void LCQJScriptHiden::error(const QString& _out)
+{
+  CApplicationInterface::getInstance().error(_out);
 }
 
 //------------------------------------------------------------------------------
@@ -335,7 +345,9 @@ static QString createScriptGlobal(QMap<QString, QString> _attrMap,
 
   return QString(
       "%1"
-      "function DebugOut(str) {%2.debugOut(str)};"
+      "function Message(str)  {%2.message(str)};"
+      "function Warning(str)  {%2.warning(str)};"
+      "function Error(str)    {%2.error(str)};"
       "function DataSourceRead(_sourceId, _dataId) {"
       "return %2.readData(_sourceId, _dataId)};"
       "function DataSourceWrite(_sourceId, _dataId, _data) {"

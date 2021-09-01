@@ -104,7 +104,9 @@ private:
 //--------------------------------------------------------jsexports
 public slots:
 
-  void debugOut(const QString& _out);
+  void message(const QString& _out);
+  void warning(const QString& _out);
+  void error(const QString& _out);
 
   QString getProjectPath();
 

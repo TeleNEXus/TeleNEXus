@@ -1,14 +1,14 @@
 var attributes_keys = Object.keys(Attributes);
 
-DebugOut("All attributes------");
-DebugOut("Attrib valmin = " + Attributes.valmin);
+Message("All attributes------");
+Message("Attrib valmin = " + Attributes.valmin);
 var asd = { x:111, y:222};
-DebugOut("asd.x = " + asd.x);
-DebugOut("asd.y = " + asd.y);
+Message("asd.x = " + asd.x);
+Message("asd.y = " + asd.y);
 
 for(var i = 0; i < attributes_keys.length; i++)
 {
-  DebugOut("  Attributes." + attributes_keys[i] + " = " + Attributes[ attributes_keys[i] ]);
+  Message("  Attributes." + attributes_keys[i] + " = " + Attributes[ attributes_keys[i] ]);
 }
 
 function validate(val)
@@ -20,7 +20,7 @@ function validate(val)
   // var regExp = new RegExp("((^(0x){1,1})([a-fA-F0-9]*)$)|(^([0-9]*)$)");
 
   // if(regExp.test(val) === false) {
-  //   DebugOut("JS RegExpt fault.");
+  //   Message("JS RegExpt fault.");
   //   return Invalid;
   // }
   
@@ -31,14 +31,14 @@ function validate(val)
   // var data = parseDouble(val);
 
   if(isNaN(data)) {
-    DebugOut("JS data is NaN!");
+    Message("JS data is NaN!");
     return Invalid;
   }
   // data *= 0.1;
-  DebugOut("JS Validator data = " + data);
+  Message("JS Validator data = " + data);
 
   if((data > Attributes.valmax)||(data < Attributes.valmin)) return Invalid;
   return Acceptable;
 }
 
-DebugOut("Jave Script Evaluate");
+Message("Jave Script Evaluate");

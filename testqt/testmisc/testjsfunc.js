@@ -4,8 +4,8 @@ function validate(val)
   var sign = 1;
   
 
-  DebugOut("JS Validator valmin = " + Attributes.valmin);
-  DebugOut("JS Validator valmax = " + Attributes.valmax);
+  Message("JS Validator valmin = " + Attributes.valmin);
+  Message("JS Validator valmax = " + Attributes.valmax);
 
   if(typeof val !== "string") {return Invalid;}
 
@@ -15,7 +15,7 @@ function validate(val)
     sign = -1;
     // val = val.slice(1, val.length);
     val = val.slice(1);
-    DebugOut("JS Validator val = " + val);
+    Message("JS Validator val = " + val);
   }
 
   if(val.length === 0) return Intermediate;
@@ -25,15 +25,15 @@ function validate(val)
   var regExp = new RegExp("((^(0x){1,1})([a-fA-F0-9]*)$)|(^([0-9]*)$)");
 
   if(regExp.test(val) === false) {
-    DebugOut("JS RegExpt fault.");
+    Message("JS RegExpt fault.");
     return Invalid;
   }
 
   var data = parseInt(val);
 
-  DebugOut("JS Validator parse to int = " + sign*data);
+  Message("JS Validator parse to int = " + sign*data);
   if(isNaN(data)) {
-    DebugOut("JS data is NaN!");
+    Message("JS data is NaN!");
     return Invalid;
   }
 
@@ -41,4 +41,4 @@ function validate(val)
   return Acceptable;
 }
 
-DebugOut("Jave Script Evaluate");
+Message("Jave Script Evaluate");

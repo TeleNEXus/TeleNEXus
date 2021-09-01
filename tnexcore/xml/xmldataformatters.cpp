@@ -31,9 +31,10 @@
 #include <QMap>
 #include <QDebug>
 #include <QFile>
+#include <QFileInfo>
 
-#define __smMessageHeader "Data formatters:"
 #define __smMessage(msg) CApplicationInterface::getInstance().message(msg)
+#define __smWarning(msg) CApplicationInterface::getInstance().warning(msg)
 
 static const struct
 {
@@ -59,6 +60,14 @@ void uploadLocal(const QDomElement& _element)
 
   if(!attr_file.isNull())
   {
+
+    if(!QFileInfo::exists(attr_file))
+    {
+      __smWarning(QString("File '%1' is not exists.").arg(attr_file));
+      return;
+    }
+
+
     auto ddoc = xmlcommon::loadDomDocument(attr_file);
 
     if(!ddoc.isNull())
@@ -66,7 +75,20 @@ void uploadLocal(const QDomElement& _element)
       QDomElement el = ddoc.documentElement();
       if(!el.isNull())
       {
-        if(el.tagName() == __slTags.rootTag) uploadLocal(el);
+
+        if(el.tagName() == __slTags.rootTag) 
+        {
+          uploadLocal(el);
+        }
+        else
+        {
+          __smWarning(QString("Wrong root element '%1'").arg(el.tagName()));
+        }
+
+      }
+      else
+      {
+        __smWarning(QString("File '%1' has not root element.").arg(attr_file));
       }
     }
     return;
@@ -141,11 +163,11 @@ void upload( const QDomElement &_rootElement)
   auto element = _rootElement.firstChildElement(__slTags.rootTag);
   if(element.isNull()) 
   {
-    __smMessage(QString("%1 document element has no elements with tag %2")
-        .arg(__smMessageHeader).arg(__slTags.rootTag));
     return;
   }
+  __smMessage("\n\tBegining deploy of data formatters.");
   uploadLocal(element);
+  __smMessage("\n\tEnd deploy of data formatters.");
 }
 
 //------------------------------------------------------------------------------
@@ -154,8 +176,8 @@ QSharedPointer<LIDataFormatter> getDataFormatter(const QString& _formatterId)
   auto it = __slFormattersMap.find(_formatterId);
   if(it == __slFormattersMap.end()) 
   {
-    __smMessage(QString("%1 can't find data formatter with id '%2'")
-        .arg(__smMessageHeader).arg(_formatterId));
+    __smMessage(QString("Can't find data formatter with id '%1'")
+        .arg(_formatterId));
     return nullptr;
   }
   return it.value();

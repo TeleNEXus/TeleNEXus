@@ -31,8 +31,11 @@
 
 
 //------------------------------------------------------------------------------
-DebugOut(">>>>>>>>>>>>>>>>>>>>>>>>>>>> Formatter Script " + Attributes.id);
-DebugOut(">>>>>>>>>>>>>>>>>>>>>>>>>>>> Formatter Script File" + Attributes.file);
+// console.debug("Formatter Script " + Attributes.id);
+// console.debug("Formatter Script File" + Attributes.file);
+
+console.debug("Formatter Script " + Attributes.id);
+console.debug("Formatter Script File" + Attributes.file);
 
 ImportModule("scripts/testexportmodule1.js");
 //------------------------------------------------------------------------------
@@ -47,7 +50,7 @@ for(var i = 0; i < attributes_keys.length; i++) {
     + Attributes[ attributes_keys[i] ] 
     + "'");
 
-  // DebugOut("  Attributes[ " 
+  // console.debug("  Attributes[ " 
   //   + attributes_keys[i] 
   //   + "\t] = '" 
   //   + Attributes[ attributes_keys[i] ] 
@@ -151,7 +154,7 @@ function Validate(_val){
 
   testImportDebug("TestDebug");
 
-  DebugOut("Validate value = " + _val);
+  console.debug("Validate value = " + _val);
   var sign = 1;
   if(typeof _val !== "string") {
     return Invalid;
@@ -166,16 +169,16 @@ function Validate(_val){
     var data = parseInt(_val);
   }
   else {
-    DebugOut("gvFormat.scale = " + gvFormat.scale);
+    console.debug("gvFormat.scale = " + gvFormat.scale);
     if(!RegExp(/^-{0,1}([0-9]*)(\.{0,1})([0-9]*$)/).test(_val)) return Invalid;
     var data = parseFloat(_val);
   }
 
   if(isNaN(data)) {
-    DebugOut("Validate data is NaN!");
+    console.debug("Validate data is NaN!");
     return Invalid;
   }
-  DebugOut("Validate data = " + data);
+  console.debug("Validate data = " + data);
   if((data > valrange.max)||(data < valrange.min)) return Invalid;
   return Acceptable;
 }

@@ -77,7 +77,6 @@ public:
   virtual void message(const QString& _msg) const override;
   virtual void warning(const QString& _msg) const override;
   virtual void error(const QString& _msg) const override;
-
 };
 
 #endif /* APPLICATIONINTERFACE_H_ */
