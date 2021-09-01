@@ -236,7 +236,9 @@ static QString createScriptGlobal(const QMap<QString, QString>& _attributes)
       "var Acceptable   = %2;"
       "var Intermediate = %3;"
       "var Invalid      = %4;"
-      "function DebugOut(str) {%5.debugOut(str)};"
+      "function Message(str) {%5.message(str)};"
+      "function Warning(str) {%5.warning(str)};"
+      "function Error(str) {%5.error(str)};"
       "function ImportModule(_fileName, _property) {"
       "%5.importModule(_fileName, _property)};"
       )

@@ -15,7 +15,7 @@ function sleep(milliseconds) {
 //==============================================================================Main
 function Main(){
   var read_data = DataSourceRead(sourceId, dataId);
-  DebugOut("Read Data = " + read_data);
+  console.debug("Read Data = " + read_data);
   for(var i = 0; i < read_data.length; i++)
   {
     read_reg = (read_reg | (read_data[i] << (8 * i)));
@@ -28,6 +28,6 @@ function Main(){
   var write_size = DataSourceWrite(sourceId, dataId, write_data);
 }
 
-DebugOut("End Script");
+console.debug("End Script");
 
 

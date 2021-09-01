@@ -35,11 +35,20 @@ LCQJSFormatterInterface::create(QJSEngine* _engine)
 }
 
 //------------------------------------------------------------------------------
-void LCQJSFormatterInterface::debugOut(const QString& _str)
+void LCQJSFormatterInterface::message(const QString& _str)
 {
   CApplicationInterface::getInstance().message(_str);
 }
-
+//------------------------------------------------------------------------------
+void LCQJSFormatterInterface::warning(const QString& _str)
+{
+  CApplicationInterface::getInstance().warning(_str);
+}
+//------------------------------------------------------------------------------
+void LCQJSFormatterInterface::error(const QString& _str)
+{
+  CApplicationInterface::getInstance().error(_str);
+}
 //------------------------------------------------------------------------------
 void LCQJSFormatterInterface::importModule(
     const QString& _fileName,

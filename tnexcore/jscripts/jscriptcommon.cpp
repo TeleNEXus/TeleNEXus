@@ -42,7 +42,7 @@ void emitEvaluateError(const QJSValue& _value, const QString& _fileName)
     file_name = _value.property("fileName").toString();
   }
 
-  CApplicationInterface::getInstance().message(
+  CApplicationInterface::getInstance().warning(
       QString("jsengine: Uncaught exception in file '%1' at line %2 : \"%3\"")
       .arg(file_name)
       .arg(_value.property("lineNumber").toInt())
@@ -62,7 +62,7 @@ void emitRuntimeError(const QJSValue& _value, const QString& _fileName)
     file_name = _value.property("fileName").toString();
   }
 
-  CApplicationInterface::getInstance().message(
+  CApplicationInterface::getInstance().warning(
     QString("jsengine: Uncaught exception in file '%1' at line %2 : \"%3\"")
     .arg(file_name)
     .arg(_value.property("lineNumber").toInt())

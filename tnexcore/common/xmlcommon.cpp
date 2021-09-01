@@ -368,8 +368,8 @@ QDomDocument loadDomDocument (const QString& _fileName)
   QFileInfo fi;
   if(!fi.exists(_fileName))
   {
-    CApplicationInterface::getInstance().message(
-        QString("Load DOM Document error: file '%1' is not exists")
+    CApplicationInterface::getInstance().warning(
+        QString("Load DOM Document error:\n\tfile '%1' is not exists")
         .arg(_fileName));
     return QDomDocument();
   }
@@ -381,11 +381,12 @@ QDomDocument loadDomDocument (const QString& _fileName)
 
   if(!domDoc.setContent(&file, true, &errorStr, &errorLine, &errorColumn))
   {
-    CApplicationInterface::getInstance().message(
-        QString("Load DOM Document error: parse file %1"       
-          " error at line: %2"   
-          " column: %3"          
-          " msg: %4")
+    CApplicationInterface::getInstance().warning(
+        QString("Load DOM Document error:\n"
+          "\tparse file %1\n"       
+          "\terror at line: %2\n"   
+          "\tcolumn: %3\n"          
+          "\tmsg: %4\n")
         .arg(file.fileName())
         .arg(errorLine)
         .arg(errorColumn)
@@ -394,7 +395,7 @@ QDomDocument loadDomDocument (const QString& _fileName)
   else
   {
     CApplicationInterface::getInstance().message(
-        QString("Load DOM Document: document with element '%1' from file '%2' is loaded")
+        QString("Load DOM Document:\n\tdocument with element '%1' from file '%2' is loaded")
         .arg(domDoc.documentElement().tagName())
         .arg(file.fileName()));
   }

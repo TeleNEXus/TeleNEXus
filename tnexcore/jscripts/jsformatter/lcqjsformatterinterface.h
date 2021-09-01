@@ -21,7 +21,9 @@ public:
     create(QJSEngine* _engine);
 
 public slots:
-  void debugOut(const QString&);
+  void message(const QString&);
+  void warning(const QString&);
+  void error(const QString&);
 void importModule(
     const QString& _fileName,
     const QString& _propertyName = QString());

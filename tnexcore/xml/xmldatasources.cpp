@@ -24,12 +24,16 @@
 #include "LIRemoteDataSource.h"
 #include "LIXmlRemoteDataSourceBuilder.h"
 #include "applicationinterface.h"
+
+#include <QFileInfo>
 #include <QDomElement>
 #include <QMap>
 #include <QSharedPointer>
 
 #define __smMessageHeader "Data sources:"
 #define __smMessage(msg) CApplicationInterface::getInstance().message(msg)
+#define __smWarning(msg) CApplicationInterface::getInstance().warning(msg)
+/* #define __smError(msg) CApplicationInterface::getInstance().error(msg) */
 //==============================================================================
 static const struct
 {
@@ -50,26 +54,45 @@ namespace xmldatasources
 
 void upload(const QDomElement& _rootElement)
 {
-  __smMessage("Begin deploy of data sources.");
+
+  auto ret = []()
+     {
+        __smMessage(
+            QString("\n==================End deploy of data sources.\n"));
+     };
+   
+  __smMessage("\n==================Begin deploy of data sources.\n");
 
   auto element = _rootElement.firstChildElement(__slTags.rootTag);
 
   if(element.isNull()) 
   {
-    return;
+    return ret();
   }
 
-  QString attrFile = element.attribute(__slAttributes.file);
+  QString attr_file = element.attribute(__slAttributes.file);
 
-  if(!attrFile.isNull())
+  if(!attr_file.isNull())
   {
-    auto ddoc = xmlcommon::loadDomDocument(attrFile);
+    if(!QFileInfo::exists(attr_file))
+    {
+      __smWarning(QString("File %1 is not exist.").arg(attr_file));
+      return ret();
+    }
+
+    auto ddoc = xmlcommon::loadDomDocument(attr_file);
     if(ddoc.isNull()) 
     {
-      return;
+      return ret();
     }
+
     element = ddoc.documentElement();
-    if(element.tagName() != __slTags.rootTag) { return; }
+
+    if(element.tagName() != __slTags.rootTag) 
+    { 
+      __smWarning(QString("Wrong element tag name '%1' in file '%2'").arg(element.tagName()));
+      return ret(); 
+    }
   }
 
   //Addin data sources
@@ -80,27 +103,32 @@ void upload(const QDomElement& _rootElement)
       node = node.nextSiblingElement())
   {
     QDomElement el = node.toElement();
+    __smMessage(QString("Begining add sources type of %1").arg(el.tagName()));
     auto builder = builders::sources::getBuilder(el.tagName());
 
     if(!builder.isNull())
     {
       auto sources = builder->build(el, CApplicationInterface::getInstance());
       auto it = sources.begin();
-      while(it != sources.end())
+      if(it != sources.end())
       {
-        if(__slSources.find(it.key()) != sources.end())
+        while(it != sources.end())
         {
-          __slSources.insert(it.key(), it.value());
+          if(__slSources.find(it.key()) != sources.end())
+          {
+            __slSources.insert(it.key(), it.value());
+          }
+          it++;
         }
-        it++;
       }
     }
     else
     {
-      __smMessage(QString("Can't find builder for source %1").arg(el.tagName()));
+      __smWarning(QString("Can't find builder for source %1").arg(el.tagName()));
     }
+    __smMessage(QString("End add sources type of %1").arg(el.tagName()));
   }
-  __smMessage("End deploy of data sources.");
+  return ret();
 }
 
 QSharedPointer<LIRemoteDataSource> getSource(const QString& _id)

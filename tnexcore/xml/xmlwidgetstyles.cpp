@@ -22,6 +22,7 @@
 #include "xmlwidgetstyles.h"
 #include "xmlcommon.h"
 #include "applicationinterface.h"
+#include <QFileInfo>
 #include <QFile>
 #include <QDomElement>
 #include <QMap>
@@ -31,6 +32,7 @@
 
 #define __smMessageHeader "Widgets styles:"
 #define __smMessage(msg) CApplicationInterface::getInstance().message(msg)
+#define __smWarning(msg) CApplicationInterface::getInstance().warning(msg)
 
 //==============================================================================__slAttributes
 static const struct
@@ -62,13 +64,11 @@ void upload( const QDomElement &_rootElement)
   auto element = _rootElement.firstChildElement(__slTags.rootTag);
   if(element.isNull()) 
   {
-    __smMessage(
-          QString("%1 project root element has no element with tag '%2'")
-          .arg(__smMessageHeader)
-          .arg(__slTags.rootTag));
     return;
   }
+  __smMessage("\n\tBegining deploy of widgets styles.\n");
   uploadElement(element);
+  __smMessage("\n\tEnd deploy of widgets styles.\n");
 }
 
 QString getWidgetStyle(const QString& _styleId)
@@ -77,8 +77,7 @@ QString getWidgetStyle(const QString& _styleId)
   if(it == __slStylesMap.end()) 
   {
     __smMessage(
-          QString("%1 can't find widget style with id '%2'")
-          .arg(__smMessageHeader)
+          QString("Widget style '%1' not exists")
           .arg(_styleId));
     return QString();
   }
@@ -92,14 +91,19 @@ static void uploadElement(const QDomElement& _element)
 {
   QString attr_file = _element.attribute(__slAttributes.file);
 
-  if(attr_file.isNull())
+  if(!attr_file.isNull())
   {
-    uploadStyles(_element);
+    if(!QFileInfo::exists(attr_file))
+    {
+      __smWarning(QString("File '%1' is not exists").arg(attr_file));
+      return;
+    }
+    auto ddoc = xmlcommon::loadDomDocument(attr_file);
+    if(!ddoc.isNull()) uploadStyles(ddoc.documentElement());
   }
   else
   {
-    auto ddoc = xmlcommon::loadDomDocument(attr_file);
-    if(!ddoc.isNull()) uploadElement(ddoc.documentElement());
+    uploadStyles(_element);
   }
 }
 
@@ -107,25 +111,14 @@ static void uploadElement(const QDomElement& _element)
 static void uploadStyles(const QDomElement& _element)
 {
 
-  //-----------------------------------------------------------load_from_file[]
-  auto load_from_file = 
-    [](const QString& _fileName)
-    {
-      QFile style_file( _fileName);
-      if(style_file.open(QFile::OpenModeFlag::ReadOnly))
-      {
-        return QTextStream(&style_file).readAll();
-      }
-      return QString();
-    };
-
   //-----------------------------------------------------------add_style[]
   auto add_style = 
     [](const QString& _id, const QString& _style)
     {
       QTextStream so(stdout);
       const QRegularExpression rexpr(
-          QStringLiteral("(\\(\\.\\.\\.\\))([^\\{\\}\\(\\)]*)(\\{[^\\{\\}]*\\})"));
+          QStringLiteral(
+            "(\\(\\.\\.\\.\\))([^\\{\\}\\(\\)]*)(\\{[^\\{\\}]*\\})"));
       auto matches = rexpr.globalMatch(_style);
       QString style;
       while(matches.hasNext())
@@ -136,30 +129,48 @@ static void uploadStyles(const QDomElement& _element)
       if(!style.isNull())
       {
         __slStylesMap.insert(_id, style);
+        __smMessage(QString("Add widget style '%1'").arg(_id));
       }
     };
 
-  for(auto node = _element.firstChild();
-      !node.isNull();
-      node = node.nextSibling())
-  {
-    if(!node.isElement()) continue;
+  //-----------------------------------------------------------load_from_file[]
+  auto load_from_file = 
+    [&add_style](const QString& _tagName, const QString& _fileName)
+    {
+      QFile style_file( _fileName);
+      if(style_file.open(QFile::OpenModeFlag::ReadOnly))
+      {
+         add_style(_tagName, QTextStream(&style_file).readAll());
+      }
+      else
+      {
+        __smWarning(
+            QString("Can't open widget style file '%1'").arg(_fileName));
+      }
+    };
 
-    auto el = node.toElement();
+
+  for(auto el = _element.firstChildElement();
+      !el.isNull();
+      el = el.nextSiblingElement())
+  {
+    /* __smMessage(QString("Begining load widget style '%1'").arg(el.tagName())); */
 
     QString attr = el.attribute(__slAttributes.file);
 
     if(!attr.isNull())
     {
-      add_style(el.tagName(), load_from_file(attr));
-      continue;
+      load_from_file(el.tagName(), attr);
     }
-
-    attr = el.attribute(__slAttributes.style);
-
-    if(!attr.isNull())
+    else
     {
-      add_style(el.tagName(), attr);
+      attr = el.attribute(__slAttributes.style);
+      if(!attr.isNull())
+      {
+        add_style(el.tagName(), attr);
+      }
     }
+
+    /* __smMessage(QString("End load widget style '%1'").arg(el.tagName())); */
   }
 }

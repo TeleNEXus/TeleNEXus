@@ -162,9 +162,9 @@ QString CApplicationInterface::getWidgetStyle(const QString& _styleId) const
 void CApplicationInterface::message(const QString& _msg) const
 {
   qDebug("%s", qPrintable( 
-    QString("M[%1]> %2")
-    .arg(QDateTime::currentDateTime().toString(__smDateTimeFormat))
-    .arg(_msg)));
+        QString("M[%1]> %2")
+        .arg(QDateTime::currentDateTime().toString(__smDateTimeFormat))
+        .arg(_msg)));
 }
 
 //------------------------------------------------------------------------------

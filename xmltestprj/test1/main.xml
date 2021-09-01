@@ -24,12 +24,12 @@
     <switchWidgetsList      lib="examplewidgets" handler="getSwitchWidgetsListBuilder"/>
   </WIDGETBUILDERS>
 
+  <DATAFORMATS file="formatters.xml"/>
 
-  <!-- <WIDGETSTYLES file="widgetstyles.xml" /> -->
+  <WIDGETSTYLES file="widgetstyles.xml" />
 
   <!-- <SCRIPTS file="scripts.xml"/> -->
 
-  <!-- <DATAFORMATS file="formatters.xml"/> -->
 
 
   <!--   <KEYBOARD --> 
