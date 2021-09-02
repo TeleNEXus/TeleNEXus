@@ -6,7 +6,7 @@
     <add path="libs"/>
   </PLAGINPATHES>
 
-  <GLOBALSTYLE file="qstyles/Darkeum.qss"/>
+  <!-- <GLOBALSTYLE file="qstyles/Darkeum.qss"/> -->
   <!-- <GLOBALSTYLE file="qstyles/Integrid.qss"/> -->
 
   <SOURCEBUILDERS file="sourcebuilders.xml"/>
@@ -28,24 +28,40 @@
 
   <WIDGETSTYLES file="widgetstyles.xml" />
 
-  <!-- <SCRIPTS file="scripts.xml"/> -->
+  <SCRIPTS file="scripts.xml"/>
 
 
+    <KEYBOARD 
+      id="DigitalKeyboard" window="digitalkeyboard1"
+      streamSource="localsource" streamName="keyboard_stream"
+      dataSource="localsource" dataName="keyboard_data" />
 
-  <!--   <KEYBOARD --> 
-  <!--     id="DigitalKeyboard" window="digitalkeyboard1_" -->
-  <!--     streamSource="localsource" streamName="keyboard_stream" -->
-  <!--     dataSource="localsource" dataName="keyboard_data" /> -->
+    <!-- <KEYBOARD --> 
+    <!--   id="DigitalKeyboard" window="digitalkeyboard1" -->
+    <!--   streamSource="localsource" streamName="keyboard_stream" -->
+    <!--   dataSource="localsource" dataName="keyboard_data" /> -->
 
-  <!--   <WINDOW --> 
-  <!--   file="testkeyboard/testdigitalkeyboard1.xml" --> 
-  <!--   id="digitalkeyboard1" --> 
-  <!--   visible="false" -->
-  <!--   title="Digital Keyboard" --> 
-  <!--   showMode="normal" -->
-  <!--   modality="true" -->
-  <!--   flags="stayOnTop" --> 
-  <!--   position="300;600" /> -->
+    <WINDOW 
+    id="digitalkeyboard1" 
+    file="testkeyboard/testdigitalkeyboard1.xml" 
+    visible="false"
+    title="Digital Keyboard" 
+    showMode="normal"
+    modality="true"
+    flags="stayOnTop" 
+    position="300;600" />
+
+  <WINDOW 
+    file="testkeyboard/testkeyboardinput1.xml" 
+    id="testkeyboardinput1" 
+    visible="true"
+    title="Test keyboard input" 
+    showMode="normal"
+    modality="false"
+    flags="" 
+    size="300;300"
+    position="100;100"
+    />
 
   <!--   <!-1- flags="stayOnTop;frameless" -1-> --> 
   <!--   <!-1- size="50;50" -1-> -->
@@ -98,17 +114,6 @@
   <!-- <!-1-   position="700;300" -1-> -->
   <!-- <!-1-   /> -1-> -->
 
-  <!-- <!-1- <WINDOW -1-> --> 
-  <!-- <!-1-   file="testkeyboard/testkeyboardinput1.xml" -1-> --> 
-  <!-- <!-1-   id="testkeyboardinput1" -1-> --> 
-  <!-- <!-1-   visible="true" -1-> -->
-  <!-- <!-1-   title="Test keyboard input" -1-> --> 
-  <!-- <!-1-   showMode="normal" -1-> -->
-  <!-- <!-1-   modality="false" -1-> -->
-  <!-- <!-1-   flags="" -1-> --> 
-  <!-- <!-1-   size="300;300" -1-> -->
-  <!-- <!-1-   position="100;100" -1-> -->
-  <!-- <!-1-   /> -1-> -->
 
   <!-- <WINDOW --> 
   <!--   file="testcheckbox/testcheckbox1.xml" --> 

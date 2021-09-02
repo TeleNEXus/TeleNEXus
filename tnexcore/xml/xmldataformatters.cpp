@@ -176,13 +176,11 @@ QSharedPointer<LIDataFormatter> getDataFormatter(const QString& _formatterId)
   auto it = __slFormattersMap.find(_formatterId);
   if(it == __slFormattersMap.end()) 
   {
-    __smMessage(QString("Can't find data formatter with id '%1'")
-        .arg(_formatterId));
-    return nullptr;
+    return QSharedPointer<LIDataFormatter>();
   }
   return it.value();
 }
 
-}
+}//end namespace xmldataformatters
 
 

@@ -177,7 +177,7 @@ int main(int argc, char *argv[])
 
 
 
-  appinterface.message(QStringLiteral("Project deploy begining..."));
+  appinterface.message(QStringLiteral("\n\tBegining deploy of project\n"));
 
 
 
@@ -246,7 +246,7 @@ int main(int argc, char *argv[])
   //----------------------------------------------------
   xmljscripts::upload(rootElement);
 
-  appinterface.message(QStringLiteral("Project deploy end."));
+  appinterface.message(QStringLiteral("\n\tEnd deploy of project\n"));
 
   xmlkeyboards::init();
   xmlwindows::show();
