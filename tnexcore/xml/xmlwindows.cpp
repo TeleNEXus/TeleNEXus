@@ -25,6 +25,8 @@
 #include  "LIJScriptService.h"
 #include "xmlcommon.h"
 #include "lcwindow.h"
+
+#include <QFileInfo>
 #include <QDomElement>
 #include <QMap>
 #include <QList>
@@ -39,11 +41,18 @@
 #include <QScreen>
 #include <QShowEvent>
 
+
+
+#define __smApp (CApplicationInterface::getInstance())
+
+
+
 #define __smMessageHeader "Windows:"
-#define __smMessage(msg) CApplicationInterface::getInstance().message(msg)
+#define __smMessage(msg) __smApp.message(msg)
+#define __smWarning(msg) __smApp.warning(msg)
 //==============================================================================
 QMap<QString, QSharedPointer<LIWindow>> __slWindowsMap;
-QList<QSharedPointer<LIWindow>> __slNoNameWindows;
+QList<QSharedPointer<LIWindow>> __slUnonimousWindows;
 
 QList<std::function<void(void)>> __slShowList;
 
@@ -99,7 +108,7 @@ class CActionLoader
 private:
   QMap<QString, 
     std::function<
-      void(const QDomElement&, const LIApplication&, LIWindow*)>> mLoaders;
+      void(const QDomElement&, LIWindow*)>> mLoaders;
   QMap<QString,
     std::function<void(LIWindow*, LIWindow::TAction)>> mEventAdder;
 private:
@@ -121,7 +130,7 @@ private:
         });
 
     auto add_script_action = 
-      [this](const QDomElement& _el, const LIApplication& _app, LIWindow* _win, 
+      [this](const QDomElement& _el, LIWindow* _win, 
           std::function<void(QSharedPointer<LIJScriptService>)> _scriptAct)
       {
         QString attr_script_id = _el.attribute(__slAttributes.scriptId);
@@ -130,9 +139,9 @@ private:
         auto event_adder = mEventAdder.find(event);
         if(event_adder == mEventAdder.end()) return;
         event_adder.value()(_win,
-            [&_app, attr_script_id, _scriptAct]()
+            [attr_script_id, _scriptAct]()
             {
-              auto script = _app.getScriptService(attr_script_id);
+              auto script = __smApp.getScriptService(attr_script_id);
               if(script.isNull()) return;
               _scriptAct(script);
             });
@@ -140,9 +149,9 @@ private:
 
     mLoaders.insert(__slTags.scriptExecute,
         [add_script_action](
-          const QDomElement& _el, const LIApplication& _app, LIWindow* _win)
+          const QDomElement& _el, LIWindow* _win)
         {
-          add_script_action( _el, _app, _win,
+          add_script_action( _el, _win,
               [](QSharedPointer<LIJScriptService> _script)
               {
                 _script->execute();
@@ -152,7 +161,7 @@ private:
 
     mLoaders.insert(__slTags.scriptLaunch,
         [add_script_action](
-          const QDomElement& _el, const LIApplication& _app, LIWindow* _win)
+          const QDomElement& _el, LIWindow* _win)
         {
           QString attr_interval = _el.attribute(__slAttributes.interval);
           if(attr_interval.isNull()) return;
@@ -160,7 +169,7 @@ private:
           int interval = attr_interval.toInt(&flag);
           if(!flag) return;
 
-          add_script_action( _el, _app, _win,
+          add_script_action( _el, _win,
               [interval](QSharedPointer<LIJScriptService> _script)
               {
                 _script->launch(interval);
@@ -169,9 +178,9 @@ private:
 
     mLoaders.insert(__slTags.scriptStop,
         [add_script_action](
-          const QDomElement& _el, const LIApplication& _app, LIWindow* _win)
+          const QDomElement& _el, LIWindow* _win)
         {
-          add_script_action( _el, _app, _win,
+          add_script_action( _el, _win,
               [](QSharedPointer<LIJScriptService> _script)
               {
                 _script->stop();
@@ -187,64 +196,36 @@ public:
     return instance;
   }
 
-  void load(const QDomElement& _el, const LIApplication& _app, LIWindow* _win)
+  void load(const QDomElement& _el, LIWindow* _win)
   {
     for(auto act_el = _el.firstChildElement(__slTags.actions); 
         !act_el.isNull();
         act_el = act_el.nextSiblingElement(__slTags.actions))
     {
-      for(auto node = act_el.firstChild(); !node.isNull(); node = node.nextSibling())
+      for(auto element = act_el.firstChildElement(); 
+          !element.isNull(); element = element.nextSiblingElement())
       {
-        auto el = node.toElement();
-        if(el.isNull()) continue;
-        auto loader = mLoaders.find(el.tagName());
+        auto loader = mLoaders.find(element.tagName());
         if(loader == mLoaders.end()) continue;
-        loader.value()(el, _app, _win);
+        loader.value()(element, _win);
       }
     }
 
   };
 };
 
-//==============================================================================endElement
-static QDomElement endElement(
-    const QDomElement& _element,
-    const LIApplication& _app)
-{
-  QString attr_file =  _element.attribute(__slAttributes.file);
-
-  auto set_attr = 
-    [](const QDomElement& _elf, QDomElement _els)
-    {
-      auto attrs = _elf.attributes();
-      for(int i = 0; i < attrs.length(); i++)
-      {
-        auto att = attrs.item(i).toAttr();
-        if(att.name() != __slAttributes.file)
-        {
-          _els.setAttribute(att.name(), att.value());
-        }
-      }
-    };
-
-  if(!attr_file.isNull())
-  {
-    QDomElement el = _app.getDomDocument(attr_file).documentElement();
-    if(el.isNull()) return el;
-    if(el.tagName() != __slTags.window) return QDomElement();
-    set_attr(_element, el);
-    return endElement(el, _app);
-  }
-  return _element;
-}
 
 //==============================================================================uploadWidget
-static QWidget* uploadWidget(
-    const QDomElement& _element, const LIApplication& _app)
+static QWidget* uploadWidget(const QDomElement& _element)
 {
   QWidget* widget = nullptr;
 
   auto main_widget_element = _element.firstChildElement(__slTags.mainWidget);
+  if(main_widget_element.isNull())
+  {
+    __smWarning("Can't find main widget element");
+    return widget;
+  }
 
   for(auto node = main_widget_element.firstChild(); 
       !node.isNull(); 
@@ -253,13 +234,24 @@ static QWidget* uploadWidget(
     if(node.isElement())
     {
       auto el = node.toElement();
-      auto builder = _app.getWidgetBuilder(el.tagName());
+      auto builder = __smApp.getWidgetBuilder(el.tagName());
       if(!builder.isNull())
       {
-        widget = builder->build(el, _app);
-        if(widget) { break; }
+        widget = builder->build(el, __smApp);
+        if(widget) 
+        { 
+          __smMessage(
+              QString("Main widget element '%1' was created")
+              .arg(el.tagName()));
+          break; 
+        }
       }
     }
+  }
+
+  if(!widget)
+  {
+    __smWarning("Can't create main widget element");
   }
 
   return widget;
@@ -417,8 +409,6 @@ QSharedPointer<LIWindow> getWindow(const QString& _windowId)
   auto it = __slWindowsMap.find(_windowId); 
   if(it == __slWindowsMap.end()) 
   {
-    __smMessage(QString("%1 can't find window with id '%2'")
-        .arg(__smMessageHeader).arg(_windowId));
     return nullptr;
   }
   return it.value();
@@ -438,17 +428,63 @@ void show()
 void upload(
     const QDomElement &_rootElement)
 {
-  const auto upload_local = 
-    [](const QDomElement& _element, const LIApplication& _app)
+
+  auto  load_element = [](const QDomElement& _element)
+  {
+    QString attr_file =  _element.attribute(__slAttributes.file);
+
+    auto add_attrs = 
+      [](QDomElement& _element, const QDomNamedNodeMap& _attributes)
+      {
+        for(int i = 0; i < _attributes.length(); i++)
+        {
+          auto att = _attributes.item(i).toAttr();
+          if(att.name() != __slAttributes.file)
+          {
+            _element.setAttribute(att.name(), att.value());
+          }
+        }
+      };
+
+    if(!attr_file.isNull())
     {
-      QDomElement el = endElement(_element, _app);
-      QWidget* widget = uploadWidget(el, _app);
+      if(!QFileInfo::exists(attr_file))
+      {
+        __smWarning(
+            QString("Can't load file '%1'")
+            .arg(attr_file));
+        return QDomElement();
+      }
+
+      QDomElement el = __smApp.getDomDocument(attr_file).documentElement();
+      if(el.tagName() != __slTags.window)
+      {
+        __smWarning(
+            QString(
+              "Wrong root element tag '%1' in file '%2'")
+            .arg(el.tagName())
+            .arg(attr_file));
+        return QDomElement();
+      }
+      add_attrs(el, _element.attributes());
+      return el;
+    }
+    return _element;
+  };
+
+  const auto upload_local = 
+    [&load_element](const QDomElement& _element)
+    {
+      QDomElement el = load_element(_element);
+      if(el.isNull()) return;
+
+      QWidget* widget = uploadWidget(el);
 
       if(widget == nullptr) return;
 
       LCWindow*  window = uploadWindow(widget, _element);
 
-      CActionLoader::getInstance().load(el, _app, window);
+      CActionLoader::getInstance().load(el, window);
 
       QString attr_id = _element.attribute(__slAttributes.id);
 
@@ -460,7 +496,7 @@ void upload(
       }
       else
       {
-        __slNoNameWindows << sp_win; 
+        __slUnonimousWindows << sp_win;
       }
 
       //Show controll
@@ -481,13 +517,20 @@ void upload(
       }
     };
 
-  for(auto node = _rootElement.firstChildElement(__slTags.window); 
-      !node.isNull(); 
-      node = node.nextSiblingElement(__slTags.window))
+  __smMessage("\n\tBegining deploy of widows\n");
+
+  for(auto element = _rootElement.firstChildElement(__slTags.window); 
+      !element.isNull(); 
+      element = element.nextSiblingElement(__slTags.window))
   {
-    QDomElement el = node.toElement();
-    if(el.isNull()) continue;
-    upload_local(el, CApplicationInterface::getInstance());
+    __smMessage(
+        QString("\n\tBegining deploy window described in line %1")
+        .arg(element.lineNumber()));
+    upload_local(element);
+    __smMessage(
+        QString("\n\tEnd deploy window described in line %1\n")
+        .arg(element.lineNumber()));
   }
+  __smMessage("\n\tEnd deploy of widows\n");
 }
 } //namespace

@@ -275,6 +275,7 @@ struct SLocalData
   QWidget* pWidget;
   CQEventFilter eventFilter;
   LIWindow::EShowMode defaultShowMode = LIWindow::EShowMode::normal;
+  ~SLocalData(){pWidget->deleteLater();}
 };
 
 #define toLocalData(p) (reinterpret_cast<SLocalData*>(p))

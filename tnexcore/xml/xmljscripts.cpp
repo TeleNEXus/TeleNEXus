@@ -25,14 +25,16 @@
 #include "LIJScriptService.h"
 #include "applicationinterface.h"
 
+#include <QFileInfo>
+#include <QFile>
 #include <QDomElement>
 #include <QMap>
 #include <QWidget>
 #include <QDebug>
-#include <QFile>
 
-#define __smMessageHeader "JScripts:"
+
 #define __smMessage(msg) CApplicationInterface::getInstance().message(msg)
+#define __smWarning(msg) CApplicationInterface::getInstance().warning(msg)
 
 static const struct
 {
@@ -70,22 +72,37 @@ QMap<QString, QSharedPointer<LIJScriptService>> __slScriptMap;
 static void scriptUpload(const QDomElement &_element)
 {
 
-  for(QDomNode node = _element.firstChildElement(__slTags.script);
-      !node.isNull();
-      node = node.nextSiblingElement(__slTags.script))
+  const auto upload_script = [](const QDomElement& _scriptElement)
   {
-    QDomElement el = node.toElement();
+    QString attr_file = _scriptElement.attribute(__slAttributes.file);
 
-    QString attr_file = el.attribute(__slAttributes.file);
-    if(attr_file.isNull()) continue;
+    if(attr_file.isNull())
+    {
+      __smWarning("Script file is not specified\n");
+      return;
+    }
 
-    QString attr_id = el.attribute(__slAttributes.id);
-    if(attr_id.isNull()) continue;
+    if(!QFileInfo::exists(attr_file))
+    {
+      __smWarning(QString("Script file '%1' is not exist\n")
+          .arg(attr_file));
+      return;
+    }
+
+    QString attr_id = _scriptElement.attribute(__slAttributes.id);
+    if(attr_id.isNull())
+    {
+      __smWarning("Script id is not specified\n");
+      return;
+    }
 
     QFile scriptFile(attr_file);
     if (!scriptFile.open(QIODevice::ReadOnly)) 
     {
-      continue;
+      __smWarning(
+          QString("Can't open script file '%1' for read\n")
+          .arg(attr_file));
+      return;
     }
 
     QTextStream stream(&scriptFile);
@@ -94,16 +111,20 @@ static void scriptUpload(const QDomElement &_element)
 
     if(script_str.isNull()) 
     {
-      continue;
+      __smWarning(
+          QString("Script file '%1' is empty\n")
+          .arg(attr_file));
+      return;
     }
 
     //upload attributes.
     QMap<QString, QString> attributes_map;
-    for(QDomNode node = el.firstChildElement(__slTags.attributes);
-       !node.isNull();
-      node = node.nextSiblingElement(__slTags.attributes))
+
+    for(auto el = _scriptElement.firstChildElement(__slTags.attributes);
+       !el.isNull();
+      el= el.nextSiblingElement(__slTags.attributes))
     {
-      auto attributes = node.toElement().attributes();
+      auto attributes = el.attributes();
       for(int i = 0; i < attributes.count(); i++)
       {
         auto attr = attributes.item(i).toAttr();
@@ -114,48 +135,106 @@ static void scriptUpload(const QDomElement &_element)
     //create servece.
     auto jscriptservice = LCJScriptService::create(script_str, attributes_map, attr_file);
     __slScriptMap.insert(attr_id, jscriptservice);
+  };
+
+
+
+  for(auto el = _element.firstChildElement(__slTags.script);
+      !el.isNull();
+      el = el.nextSiblingElement(__slTags.script))
+  {
+    __smMessage(
+        QString("\n\tBegining deploy of script described in line %1\n")
+        .arg(el.lineNumber()));
+    upload_script(el);
+    __smMessage(
+        QString("\n\tEnd deploy of script described in line %1\n")
+        .arg(el.lineNumber()));
   }
 }
 
 //==============================================================================scriptLaunch
 static void scriptLaunch(const QDomElement &_element)
 {
-  for(auto el = _element.firstChildElement(__slTags.launch);
-      !el.isNull();
-      el = el.nextSiblingElement(__slTags.launch))
+  auto launch_script = [](const QDomElement& _element)
   {
-    QString attr = el.attribute(__slAttributes.interval);
-    if(attr.isNull()) continue;
+    QString attr = _element.attribute(__slAttributes.interval);
+    if(attr.isNull())
+    {
+      __smWarning("Script repetition interval is not specified");
+      return false;
+    }
 
     bool flag = false;
     int interval = attr.toInt(&flag);
 
-    if(!flag) continue; 
+    if(!flag)
+    {
+      __smWarning("Wrong value of script repetition interval");
+      return false;
+    }
 
-    attr = el.attribute(__slAttributes.scriptId);
-    if(attr.isNull()) continue;
+    attr = _element.attribute(__slAttributes.scriptId);
+    if(attr.isNull()) 
+    {
+      __smWarning("Script id is not specified");
+      return false;
+    }
     
     auto it = __slScriptMap.find(attr);
-    if(it == __slScriptMap.end()) continue;
+    if(it == __slScriptMap.end()) 
+    {
+      __smMessage(
+          QString("Script whith id '%1' is not exist")
+          .arg(attr));
+      return false;
+    }
 
     it.value()->launch(interval);
+    return true;
+  };
+
+  for(auto el = _element.firstChildElement(__slTags.launch);
+      !el.isNull();
+      el = el.nextSiblingElement(__slTags.launch))
+  {
+    __smMessage(QString("Launch script in line %1").arg(el.lineNumber()));
+    if(launch_script(el))
+    {
+      __smMessage(QString("Script in line %1 is launched").arg(el.lineNumber()));
+    }
   }
 }
 
 //==============================================================================scriptExecute
 static void scriptExecute(const QDomElement &_element)
 {
+  auto execute = [](const QDomElement& _element)
+  {
+    QString attr = _element.attribute(__slAttributes.scriptId);
+    if(attr.isNull())
+    {
+      __smWarning("Wrong script id");
+      return;
+    }
+    
+    auto it = __slScriptMap.find(attr);
+    if(it == __slScriptMap.end())
+    {
+      __smWarning(QString("Script with id '%1' is not exists").arg(attr));
+      return;
+    }
+
+    it.value()->execute();
+    return;
+  };
+
   for(auto el = _element.firstChildElement(__slTags.execute);
       !el.isNull();
       el = el.nextSiblingElement(__slTags.execute))
   {
-    QString attr = el.attribute(__slAttributes.scriptId);
-    if(attr.isNull()) continue;
-    
-    auto it = __slScriptMap.find(attr);
-    if(it == __slScriptMap.end()) continue;
-
-    it.value()->execute();
+    __smMessage(QString("Execute script in line %1").arg(el.lineNumber()));
+    execute(el);
   }
 }
 
@@ -163,18 +242,26 @@ static void uploadLocal(const QDomElement& _element)
 {
   static const LIApplication& app = CApplicationInterface::getInstance();
   QString attr_file = _element.attribute(__slAttributes.file);
+
   if(!attr_file.isNull())
   {
-    QDomElement el = app.getDomDocument(attr_file).documentElement();
-    if(!el.isNull())
+    if(!QFileInfo::exists(attr_file))
     {
-      if(el.tagName() == _element.tagName())
-      {
-        uploadLocal(el);
-      }
+      __smWarning("File '%1' is not exist");
+      return;
     }
-    return;
+    QDomElement el = app.getDomDocument(attr_file).documentElement();
+    if(el.isNull()) return;
+    if(el.tagName() != _element.tagName())
+    {
+      __smWarning(
+          QString("Wrong element tag name '%1'")
+          .arg(_element.tagName()));
+      return;
+    }
+    uploadLocal(el);
   }
+
   scriptUpload(_element);
   scriptLaunch(_element);
   scriptExecute(_element);
@@ -190,8 +277,6 @@ QSharedPointer<LIJScriptService> getScript(const QString& _scriptId)
   auto it = __slScriptMap.find(_scriptId);
   if(it == __slScriptMap.end()) 
   {
-    __smMessage(QString("%1 can't find script with id '%2'")
-        .arg(__smMessageHeader).arg(_scriptId));
     return nullptr;
   }
   return it.value();
@@ -203,11 +288,11 @@ void upload( const QDomElement &_rootElement)
   QDomElement el = _rootElement.firstChildElement(__slTags.rootTag);
   if(el.isNull()) 
   {
-    __smMessage(QString("%1 document element has no elements with tag %2")
-        .arg(__smMessageHeader).arg(__slTags.rootTag));
     return;
   }
+  __smMessage("\n\tBegining deploy of scripts\n");
   uploadLocal(el);
+  __smMessage("\n\tEnd deploy of scripts\n");
 }
 }
 

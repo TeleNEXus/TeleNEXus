@@ -29,6 +29,7 @@
 
 #define __smMessageHeader "Keyboards:"
 #define __smMessage(msg) CApplicationInterface::getInstance().message(msg)
+#define __smWarning(msg) CApplicationInterface::getInstance().warning(msg)
 
 static const struct
 {
@@ -43,7 +44,7 @@ static const struct
   QString dataSource = "dataSource";
   QString dataName = "dataName";
   QString window = "window";
-}__slAttribubes;
+}__slAttributes;
 
 QMap<QString, QSharedPointer<LIKeyboard>> __slKeyboards;
 
@@ -58,27 +59,84 @@ void upload( const QDomElement &_rootElement)
   const auto upload_local = [](const QDomElement _element)
   {
     const LIApplication& app = CApplicationInterface::getInstance();
-    QString attr_id = _element.attribute(__slAttribubes.id);
-    if(attr_id.isNull()) return;
+    QString attr_id = _element.attribute(__slAttributes.id);
+    if(attr_id.isNull()) 
+    {
+      __smWarning(
+          QString("Keyboard described in line %1 has no attribute %2")
+          .arg(_element.lineNumber())
+          .arg(__slAttributes.id));
+      return;
+    }
 
-    QString attr_stream_source = _element.attribute(__slAttribubes.streamSource);
-    if(attr_stream_source.isNull()) return;
+    QString attr_stream_source = _element.attribute(__slAttributes.streamSource);
+    if(attr_stream_source.isNull())
+    {
+      __smWarning(
+          QString("Keyboard described in line %1 has no attribute %2")
+          .arg(_element.lineNumber())
+          .arg(__slAttributes.streamSource));
+      return;
+    }
+
     auto stream_source = app.getDataSource(attr_stream_source);
-    if(stream_source.isNull()) return;
+    if(stream_source.isNull())
+    {
+      __smWarning(
+          QString("Can't find stream source '%1' for keyboard described in line %2")
+          .arg(attr_stream_source)
+          .arg(_element.lineNumber()));
+      return;
+    }
 
-    QString attr_stream_name = _element.attribute(__slAttribubes.streamName);
-    if(attr_stream_name.isNull()) return;
+    QString attr_stream_name = _element.attribute(__slAttributes.streamName);
+    if(attr_stream_name.isNull())
+    {
+      __smWarning(
+          QString("Keyboard described in line %1 has no attribute %2")
+          .arg(_element.lineNumber())
+          .arg(__slAttributes.streamName));
+      return;
+    }
 
-    QString attr_data_source = _element.attribute(__slAttribubes.dataSource);
-    if(attr_data_source.isNull()) return;
+    QString attr_data_source = _element.attribute(__slAttributes.dataSource);
+    if(attr_data_source.isNull())
+    {
+      __smWarning(
+          QString("Keyboard described in line %1 has no attribute %2")
+          .arg(_element.lineNumber())
+          .arg(__slAttributes.dataSource));
+      return;
+    }
     auto data_source = app.getDataSource(attr_data_source);
-    if(data_source.isNull()) return;
+    if(data_source.isNull())
+    {
+      __smWarning(
+          QString("Can't find data source '%1' for keyboard described in line %2")
+          .arg(attr_data_source)
+          .arg(_element.lineNumber()));
+      return;
+    }
 
-    QString attr_data_name = _element.attribute(__slAttribubes.dataName);
-    if(attr_data_name.isNull()) return;
+    QString attr_data_name = _element.attribute(__slAttributes.dataName);
+    if(attr_data_name.isNull())
+    {
+      __smWarning(
+          QString("Keyboard described in line %1 has no attribute %2")
+          .arg(_element.lineNumber())
+          .arg(__slAttributes.dataName));
+      return;
+    }
 
-    QString attr_window = _element.attribute(__slAttribubes.window);
-    if(attr_window.isNull()) return;
+    QString attr_window = _element.attribute(__slAttributes.window);
+    if(attr_window.isNull())
+    {
+      __smWarning(
+          QString("Keyboard described in line %1 has no attribute %2")
+          .arg(_element.lineNumber())
+          .arg(__slAttributes.window));
+      return;
+    }
 
     auto keyboard = LCKeyboard::create(
         attr_window, 
@@ -86,20 +144,43 @@ void upload( const QDomElement &_rootElement)
         stream_source, attr_stream_name, 
         data_source, attr_data_name);
 
-    if(keyboard.isNull()) return;
 
+    if(keyboard.isNull())
+    {
+      __smWarning(
+          QString("Can't create keyboard described in line %1")
+          .arg(_element.lineNumber()));
+      return;
+    }
+
+    __smMessage(
+      QString("Add keyboard with parameters:" 
+        "\n\tKeyboard id:\t%1"
+        "\n\tStream source:\t%2"
+        "\n\tStream name:\t%3"
+        "\n\tData source:\t%4"
+        "\n\tData name:\t%5"
+        "\n\tWindow:\t\t%6\n"
+        )
+      .arg(attr_id)
+      .arg(attr_stream_source)
+      .arg(attr_stream_name)
+      .arg(attr_data_source)
+      .arg(attr_data_name)
+      .arg(attr_window));
     __slKeyboards.insert(attr_id, keyboard);
   };
 
-  for(auto node = 
+  __smMessage(QString("\n\tBegining deploy of keyboards\n"));
+  for(auto element = 
       _rootElement.firstChildElement(__slTags.keyboard); 
-      !node.isNull(); 
-      node = node.nextSiblingElement(__slTags.keyboard))
+      !element.isNull(); 
+      element = element.nextSiblingElement(__slTags.keyboard))
   {
-    QDomElement el = node.toElement();
-    if(el.isNull()) continue;
-    upload_local(el);
+    if(element.isNull()) continue;
+    upload_local(element);
   }
+  __smMessage(QString("\n\tEnd deploy of keyboards\n"));
 }
 
 //------------------------------------------------------------------------------
@@ -119,8 +200,6 @@ QSharedPointer<LIKeyboard> getKeyboard(const QString& _keyboardId)
   auto it = __slKeyboards.find(_keyboardId);
   if(it == __slKeyboards.end()) 
   {
-    __smMessage(QString("%1 can't find keyboard with id '%2'")
-        .arg(__smMessageHeader).arg(_keyboardId));
     return QSharedPointer<LIKeyboard>();
   }
   return it.value();
