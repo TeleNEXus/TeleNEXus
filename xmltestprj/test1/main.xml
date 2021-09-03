@@ -52,16 +52,29 @@
     position="300;600" />
 
   <WINDOW 
-    file="testkeyboard/testkeyboardinput1.xml" 
-    id="testkeyboardinput1" 
+    file="testmodbus/testmodbustable.xml" 
+    id="testtable1" 
     visible="true"
-    title="Test keyboard input" 
+    title="Test table" 
     showMode="normal"
     modality="false"
     flags="" 
     size="300;300"
-    position="100;100"
+    screen="0"
+    position="150;150"
     />
+
+  <!-- <WINDOW --> 
+  <!--   file="testkeyboard/testkeyboardinput1.xml" --> 
+  <!--   id="testkeyboardinput1" --> 
+  <!--   visible="true" -->
+  <!--   title="Test keyboard input" --> 
+  <!--   showMode="normal" -->
+  <!--   modality="false" -->
+  <!--   flags="" --> 
+  <!--   size="300;300" -->
+  <!--   position="100;100" -->
+  <!--   /> -->
 
   <!--   <!-1- flags="stayOnTop;frameless" -1-> --> 
   <!--   <!-1- size="50;50" -1-> -->
@@ -257,44 +270,44 @@
   <!-- <!-1-   position="550;150" -1-> -->
   <!-- <!-1-   /> -1-> -->
 
-  <!-- <!-1- <WINDOW -1-> --> 
-  <!-- <!-1-   file="testlineedit/testlineedit1.xml" -1-> --> 
-  <!-- <!-1-   id="testlineedit1" -1-> --> 
-  <!-- <!-1-   visible="true" -1-> -->
-  <!-- <!-1-   title="Test DataLineEdit" -1-> --> 
-  <!-- <!-1-   showMode="normal" -1-> -->
-  <!-- <!-1-   modality="false" -1-> -->
-  <!-- <!-1-   flags="" -1-> --> 
-  <!-- <!-1-   size="300;300" -1-> -->
-  <!-- <!-1-   screen="0" -1-> -->
-  <!-- <!-1-   position="550;150" -1-> -->
-  <!-- <!-1-   /> -1-> -->
+  <!-- <WINDOW --> 
+  <!--   file="testlineedit/testlineedit1.xml" --> 
+  <!--   id="testlineedit1" --> 
+  <!--   visible="true" -->
+  <!--   title="Test DataLineEdit" --> 
+  <!--   showMode="normal" -->
+  <!--   modality="false" -->
+  <!--   flags="" --> 
+  <!--   size="300;300" -->
+  <!--   screen="0" -->
+  <!--   position="550;150" -->
+  <!--   /> -->
 
-  <!-- <!-1- <WINDOW -1-> --> 
-  <!-- <!-1-   file="testtable/testtable.xml" -1-> --> 
-  <!-- <!-1-   id="testtable1" -1-> --> 
-  <!-- <!-1-   visible="true" -1-> -->
-  <!-- <!-1-   title="Test table" -1-> --> 
-  <!-- <!-1-   showMode="normal" -1-> -->
-  <!-- <!-1-   modality="false" -1-> -->
-  <!-- <!-1-   flags="" -1-> --> 
-  <!-- <!-1-   size="300;300" -1-> -->
-  <!-- <!-1-   screen="0" -1-> -->
-  <!-- <!-1-   position="150;150" -1-> -->
-  <!-- <!-1-   /> -1-> -->
+  <!-- <WINDOW --> 
+  <!--   file="testtable/testtable.xml" --> 
+  <!--   id="testtable1" --> 
+  <!--   visible="true" -->
+  <!--   title="Test table" --> 
+  <!--   showMode="normal" -->
+  <!--   modality="false" -->
+  <!--   flags="" --> 
+  <!--   size="300;300" -->
+  <!--   screen="0" -->
+  <!--   position="150;150" -->
+  <!--   /> -->
 
-  <!-- <!-1- <WINDOW -1-> --> 
-  <!-- <!-1-   file="testtable/testtable2.xml" -1-> --> 
-  <!-- <!-1-   id="testtable2" -1-> --> 
-  <!-- <!-1-   visible="true" -1-> -->
-  <!-- <!-1-   title="Test table" -1-> --> 
-  <!-- <!-1-   showMode="normal" -1-> -->
-  <!-- <!-1-   modality="false" -1-> -->
-  <!-- <!-1-   flags="" -1-> --> 
-  <!-- <!-1-   size="600;600" -1-> -->
-  <!-- <!-1-   screen="0" -1-> -->
-  <!-- <!-1-   position="400;300" -1-> -->
-  <!-- <!-1-   /> -1-> -->
+  <!-- <WINDOW --> 
+  <!--   file="testtable/testtable2.xml" --> 
+  <!--   id="testtable2" --> 
+  <!--   visible="true" -->
+  <!--   title="Test table" --> 
+  <!--   showMode="normal" -->
+  <!--   modality="false" -->
+  <!--   flags="" --> 
+  <!--   size="600;600" -->
+  <!--   screen="0" -->
+  <!--   position="400;300" -->
+  <!--   /> -->
 
   <!-- <!-1- <WINDOW -1-> --> 
   <!-- <!-1-   file="testlabels/testlabels1.xml" -1-> --> 
