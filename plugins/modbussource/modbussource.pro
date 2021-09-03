@@ -38,6 +38,7 @@ HEADERS += \
     ../../tnexcommon/interfaces/xmlbuilders/LIXmlRemoteDataSourceBuilder.h \
     ../../tnexcommon/lqextendevent.h \
     modbus/lmodbusdefs.h \
+    modbus/lcmodbusdatamap.h \
     modbus/lqmodbusdatareader.h \
     modbus/lqmodbusdatasource.h \
     modbus/lqmodbusdatawriter.h \
@@ -48,6 +49,7 @@ HEADERS += \
     modbussource.h \
     modbussource_global.h
 SOURCES += \
+    modbus/lcmodbusdatamap.cpp \
     modbus/lqmodbusdatareader.cpp \
     modbus/lqmodbusdatasource.cpp \
     modbus/lqmodbusdatawriter.cpp \
