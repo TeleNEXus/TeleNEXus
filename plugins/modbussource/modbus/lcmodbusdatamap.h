@@ -39,48 +39,53 @@ private:
   using EWriteStatus= LIRemoteDataWriter::EWriteStatus;
 
   //-----------------------------------------------------------------CBitsDataItem
-  class CBitsDataItem
-  {
-  public:
-    quint16 mAddr;
-    quint16 mSize;
-    EReadStatus mStatus;
-    quint8 *mpData;
-    QLinkedList<QWeakPointer<LQModbusDataReader>> mReadersList;
-  public:
-    CBitsDataItem() = delete;
+  /* class CBitsDataItem */
+  /* { */
+  /* public: */
+  /*   quint16 mAddr; */
+  /*   quint16 mSize; */
+  /*   EReadStatus mStatus; */
+  /*   quint8 *mpData; */
+  /*   QLinkedList<QWeakPointer<LQModbusDataReader>> mReadersList; */
+  /* public: */
+  /*   CBitsDataItem() = delete; */
 
-    explicit CBitsDataItem(quint16 _addr, quint16 _size) :  mAddr(_addr),
-    mSize(_size),
-    mStatus(EReadStatus::Undef)
-    {
-      mpData = new quint8[_size];
-    }
-    ~CBitsDataItem(){delete [] mpData;}
-    void notifyReaders();
-  };
+  /*   explicit CBitsDataItem(quint16 _addr, quint16 _size) :  mAddr(_addr), */
+  /*   mSize(_size), */
+  /*   mStatus(EReadStatus::Undef) */
+  /*   { */
+  /*     mpData = new quint8[_size]; */
+  /*   } */
+  /*   ~CBitsDataItem(){delete [] mpData;} */
+  /*   void notifyReaders(); */
+  /* }; */
 
   //-----------------------------------------------------------------CRegistersDataItem
-  class CRegistersDataItem 
-  {
-  public:
-    quint16 mAddr;
-    quint16 mSize;
-    EReadStatus mStatus;
-    quint16 *mpData;
-    QLinkedList<QWeakPointer<LQModbusDataReader>> mReadersList;
-  public:
-    CRegistersDataItem() = delete;
+  /* class CRegistersDataItem */ 
+  /* { */
+  /* public: */
+  /*   quint16 mAddr; */
 
-    explicit CRegistersDataItem(quint16 _addr, quint16 _size) :  mAddr(_addr),
-    mSize(_size),
-    mStatus(EReadStatus::Undef)
-    {
-      mpData = new quint16[_size];
-    }
-    ~CRegistersDataItem(){delete [] mpData;}
-    void notifyReaders();
-  };
+  /*   quint16 mSize; */
+
+  /*   EReadStatus mStatus; */
+  /*   quint16 *mpData; */
+  /*   QLinkedList<QWeakPointer<LQModbusDataReader>> mReadersList; */
+  /* public: */
+  /*   CRegistersDataItem() = delete; */
+
+  /*   explicit CRegistersDataItem(quint16 _addr, quint16 _size) :  mAddr(_addr), */
+  /*   mSize(_size), */
+  /*   mStatus(EReadStatus::Undef) */
+  /*   { */
+  /*     mpData = new quint16[_size]; */
+  /*   } */
+  /*   ~CRegistersDataItem(){delete [] mpData;} */
+  /*   void notifyReaders(); */
+  /* }; */
+
+  class CDataMapItemRegsBase;
+  class CDataMapItemBitsBase;
 
   //----------------------------------------------------------------------------CControllerRegistersBase
   class CControllerRegistersBase
@@ -90,15 +95,15 @@ private:
   private:
     quint16* mRegBuff;
     QSharedPointer<LQModbusMasterBase> mspMaster;
-    QLinkedList<CRegistersDataItem*> mReadDataList;
+    QLinkedList<CDataMapItemRegsBase*> mReadDataList;
 
   public:
     CControllerRegistersBase(
         const quint8& _devId,
         QSharedPointer<LQModbusMasterBase> _master);
     ~CControllerRegistersBase();
-    void addReadDataItem(CRegistersDataItem* _dataItem);
-    void deleteReadDataItem(CRegistersDataItem* _dataItem);
+    void addReadDataItem(CDataMapItemRegsBase* _dataItem);
+    void deleteReadDataItem(CDataMapItemRegsBase* _dataItem);
 
     void read(
         quint16 _addr, 
@@ -157,14 +162,14 @@ private:
   private:
     quint8* mBitsBuff;
     QSharedPointer<LQModbusMasterBase> mspMaster;
-    QLinkedList<CBitsDataItem*> mReadDataList;
+    QLinkedList<CDataMapItemBitsBase*> mReadDataList;
 
   public:
     CControllerBitsBase(
         const quint8& _devId, QSharedPointer<LQModbusMasterBase> _master);
     ~CControllerBitsBase();
-    void addReadDataItem(CBitsDataItem* _dataItem);
-    void deleteReadDataItem(CBitsDataItem* _dataItem);
+    void addReadDataItem(CDataMapItemBitsBase* _dataItem);
+    void deleteReadDataItem(CDataMapItemBitsBase* _dataItem);
     void read(
         quint16 _addr, quint16 _size, QSharedPointer<LQModbusDataReader> _reader);
     void write(
@@ -211,28 +216,47 @@ private:
   //----------------------------------------------------------------------------CDataMapItemBase
   class CDataMapItemBase
   {
+  protected:
+    quint16 mAddr;
+    quint16 mSize;
+    QLinkedList<QWeakPointer<LQModbusDataReader>> mReadersList;
   public:
-    CDataMapItemBase(){}
+    CDataMapItemBase() = delete;
+
+    CDataMapItemBase(quint16 _addr, quint16 _size): 
+      mAddr(_addr),
+      mSize(_size)
+    {}
+
     virtual ~CDataMapItemBase(){}
     virtual void connectReader(QWeakPointer<LQModbusDataReader> _reader) = 0;
     virtual void disconnectReader(QWeakPointer<LQModbusDataReader> _reader) = 0;
     virtual void write(const QByteArray& _data,
         QSharedPointer<LQModbusDataWriter> _writer) = 0;
-
     virtual void read(QSharedPointer<LQModbusDataReader> _reader) = 0;
+
+    void    notifyReaders(EReadStatus _status, 
+        const QByteArray& _data = QByteArray());
+    quint16 getAddress(void){return mAddr;}
+    quint16 getSize(void){return mSize;}
+    bool hasNoReaders(void){return mReadersList.isEmpty();}
   };
 
   //----------------------------------------------------------------------------CDataMapItemRegsBase
   class CDataMapItemRegsBase : public CDataMapItemBase
   {
   protected:
-    CRegistersDataItem mDataItem;
     CControllerRegistersBase& mController;
   public:
+    CDataMapItemRegsBase() = delete;
     explicit CDataMapItemRegsBase(
-        quint16 _addr, quint16 _size, CControllerRegistersBase& _controller);
-    virtual ~CDataMapItemRegsBase();
+        quint16 _addr, 
+        quint16 _size, 
+        CControllerRegistersBase& _controller) :
+      CDataMapItemBase(_addr, _size),
+      mController(_controller){}
 
+    virtual ~CDataMapItemRegsBase();
     virtual void connectReader(
         QWeakPointer<LQModbusDataReader> _reader) override;
     virtual void disconnectReader(
@@ -266,7 +290,6 @@ private:
   class CDataMapItemBitsBase : public CDataMapItemBase
   {
   protected:
-    CBitsDataItem mDataItem;
     CControllerBitsBase& mController;
   public:
     explicit CDataMapItemBitsBase(
