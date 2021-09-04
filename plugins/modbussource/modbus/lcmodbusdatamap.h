@@ -38,52 +38,6 @@ private:
   using EReadStatus = LIRemoteDataReader::EReadStatus;
   using EWriteStatus= LIRemoteDataWriter::EWriteStatus;
 
-  //-----------------------------------------------------------------CBitsDataItem
-  /* class CBitsDataItem */
-  /* { */
-  /* public: */
-  /*   quint16 mAddr; */
-  /*   quint16 mSize; */
-  /*   EReadStatus mStatus; */
-  /*   quint8 *mpData; */
-  /*   QLinkedList<QWeakPointer<LQModbusDataReader>> mReadersList; */
-  /* public: */
-  /*   CBitsDataItem() = delete; */
-
-  /*   explicit CBitsDataItem(quint16 _addr, quint16 _size) :  mAddr(_addr), */
-  /*   mSize(_size), */
-  /*   mStatus(EReadStatus::Undef) */
-  /*   { */
-  /*     mpData = new quint8[_size]; */
-  /*   } */
-  /*   ~CBitsDataItem(){delete [] mpData;} */
-  /*   void notifyReaders(); */
-  /* }; */
-
-  //-----------------------------------------------------------------CRegistersDataItem
-  /* class CRegistersDataItem */ 
-  /* { */
-  /* public: */
-  /*   quint16 mAddr; */
-
-  /*   quint16 mSize; */
-
-  /*   EReadStatus mStatus; */
-  /*   quint16 *mpData; */
-  /*   QLinkedList<QWeakPointer<LQModbusDataReader>> mReadersList; */
-  /* public: */
-  /*   CRegistersDataItem() = delete; */
-
-  /*   explicit CRegistersDataItem(quint16 _addr, quint16 _size) :  mAddr(_addr), */
-  /*   mSize(_size), */
-  /*   mStatus(EReadStatus::Undef) */
-  /*   { */
-  /*     mpData = new quint16[_size]; */
-  /*   } */
-  /*   ~CRegistersDataItem(){delete [] mpData;} */
-  /*   void notifyReaders(); */
-  /* }; */
-
   class CDataMapItemRegsBase;
   class CDataMapItemBitsBase;
 
@@ -222,13 +176,12 @@ private:
     QLinkedList<QWeakPointer<LQModbusDataReader>> mReadersList;
   public:
     CDataMapItemBase() = delete;
-
     CDataMapItemBase(quint16 _addr, quint16 _size): 
       mAddr(_addr),
       mSize(_size)
     {}
-
     virtual ~CDataMapItemBase(){}
+
     virtual void connectReader(QWeakPointer<LQModbusDataReader> _reader) = 0;
     virtual void disconnectReader(QWeakPointer<LQModbusDataReader> _reader) = 0;
     virtual void write(const QByteArray& _data,
@@ -249,14 +202,14 @@ private:
     CControllerRegistersBase& mController;
   public:
     CDataMapItemRegsBase() = delete;
-    explicit CDataMapItemRegsBase(
+    CDataMapItemRegsBase(
         quint16 _addr, 
         quint16 _size, 
         CControllerRegistersBase& _controller) :
       CDataMapItemBase(_addr, _size),
       mController(_controller){}
 
-    virtual ~CDataMapItemRegsBase();
+    virtual ~CDataMapItemRegsBase(){}
     virtual void connectReader(
         QWeakPointer<LQModbusDataReader> _reader) override;
     virtual void disconnectReader(
@@ -268,7 +221,8 @@ private:
   class CDataMapItemHoldingRegs : public CDataMapItemRegsBase
   {
   public:
-    explicit CDataMapItemHoldingRegs(
+    CDataMapItemHoldingRegs() = delete;
+    CDataMapItemHoldingRegs(
         quint16 _addr, quint16 _size, CControllerHoldingRegisters& _controller);
     virtual ~CDataMapItemHoldingRegs();
     virtual void write(const QByteArray& _data,
@@ -279,9 +233,15 @@ private:
   class CDataMapItemInputRegs : public CDataMapItemRegsBase
   {
   public:
-    explicit CDataMapItemInputRegs(
-        quint16 _addr, quint16 _size, CControllerInputRegisters& _controller);
-    virtual ~CDataMapItemInputRegs();
+    CDataMapItemInputRegs() = delete;
+    CDataMapItemInputRegs(
+        quint16 _addr, 
+        quint16 _size, 
+        CControllerInputRegisters& _controller):
+      CDataMapItemRegsBase(_addr, _size, _controller)
+    {
+    }
+    virtual ~CDataMapItemInputRegs(){}
     virtual void write(const QByteArray& _data,
         QSharedPointer<LQModbusDataWriter> _writer) override;
   };
@@ -292,8 +252,16 @@ private:
   protected:
     CControllerBitsBase& mController;
   public:
-    explicit CDataMapItemBitsBase(
-        quint16 _addr, quint16 _size, CControllerBitsBase& _controller);
+    CDataMapItemBitsBase() = delete;
+    CDataMapItemBitsBase(
+        quint16 _addr, 
+        quint16 _size, 
+        CControllerBitsBase& _controller): 
+      CDataMapItemBase(_addr, _size),
+      mController(_controller)
+    {
+    }
+
     virtual ~CDataMapItemBitsBase();
 
     virtual void connectReader(
@@ -307,9 +275,14 @@ private:
   class CDataMapItemCoils : public CDataMapItemBitsBase
   {
   public:
-    explicit CDataMapItemCoils(
-        quint16 _addr, quint16 _size, CControllerBitsBase& _controller);
-    virtual ~CDataMapItemCoils();
+    CDataMapItemCoils() = delete;
+    CDataMapItemCoils(
+        quint16 _addr, 
+        quint16 _size, 
+        CControllerBitsBase& _controller):
+      CDataMapItemBitsBase(_addr, _size, _controller){}
+
+    virtual ~CDataMapItemCoils(){};
     virtual void write(const QByteArray& _data,
         QSharedPointer<LQModbusDataWriter> _writer) override;
   };
@@ -318,9 +291,13 @@ private:
   class CDataMapItemDiscreteInputs : public CDataMapItemBitsBase
   {
   public:
-    explicit CDataMapItemDiscreteInputs(
-        quint16 _addr, quint16 _size, CControllerBitsBase& _controller);
-    virtual ~CDataMapItemDiscreteInputs();
+    CDataMapItemDiscreteInputs() = delete;
+    CDataMapItemDiscreteInputs(
+        quint16 _addr, 
+        quint16 _size, 
+        CControllerBitsBase& _controller):
+      CDataMapItemBitsBase(_addr, _size, _controller){}
+    virtual ~CDataMapItemDiscreteInputs(){};
     virtual void write(const QByteArray& _data,
         QSharedPointer<LQModbusDataWriter> _writer) override;
   };
@@ -336,6 +313,7 @@ private:
   QMap<QString, CDataMapItemBase*> mMapItems;
 
 public:
+  LCModbusDataMap() = delete;
   LCModbusDataMap(const quint8& _devId, QSharedPointer<LQModbusMasterBase> _master);
   ~LCModbusDataMap();
 

@@ -21,38 +21,6 @@
 #include "lcmodbusdatamap.h"
 #include "lmodbusdefs.h"
 
-//==============================================================================CRegistersDataItem
-/* void LCModbusDataMap::CRegistersDataItem::notifyReaders( */
-/*     LCModbusDataMap::EReadStatus _status, */ 
-/*     const QByteArray& _data = QByteArray()) */
-/* { */
-/*   for(auto it = mReadersList.begin(); it != mReadersList.end(); it++) */
-/*   { */
-/*     auto sp = it->lock(); */
-/*     if(sp.isNull()) */
-/*     { */
-/*       mReadersList.erase(it); */
-/*       continue; */
-/*     } */
-/*     sp->notifyListener(QByteArray((char*)(mpData), mSize * 2), mStatus); */
-/*   } */
-/* } */
-
-/* //==============================================================================CBitsDataItem */
-/* void LCModbusDataMap::CBitsDataItem::notifyReaders() */
-/* { */
-/*   for(auto it = mReadersList.begin(); it != mReadersList.end(); it++) */
-/*   { */
-/*     auto sp = it->lock(); */
-/*     if(sp.isNull()) */
-/*     { */
-/*       mReadersList.erase(it); */
-/*       continue; */
-/*     } */
-/*     sp->notifyListener(QByteArray( (char*)(mpData), mSize), mStatus); */
-/*   } */
-/* } */
-
 //==============================================================================CControllerRegistersBase
 LCModbusDataMap::CControllerRegistersBase::CControllerRegistersBase(
     const quint8& _devId, QSharedPointer<LQModbusMasterBase> _master) :
@@ -469,20 +437,6 @@ void LCModbusDataMap::CDataMapItemHoldingRegs::write(
 }
 
 //==============================================================================CDataMapItemInputRegs
-LCModbusDataMap::CDataMapItemInputRegs::CDataMapItemInputRegs(
-    quint16 _addr,
-    quint16 _size,
-    CControllerInputRegisters& _controller):
-  CDataMapItemRegsBase(_addr, _size, _controller)
-{
-}
-
-//------------------------------------------------------------------------------
-LCModbusDataMap::CDataMapItemInputRegs::~CDataMapItemInputRegs()
-{
-}
-
-//------------------------------------------------------------------------------
 void LCModbusDataMap::CDataMapItemInputRegs::write(
     const QByteArray& _data,
     QSharedPointer<LQModbusDataWriter> _writer)
@@ -493,17 +447,6 @@ void LCModbusDataMap::CDataMapItemInputRegs::write(
 }
 
 //==============================================================================CDataMapItemBitsBase
-LCModbusDataMap::
-CDataMapItemBitsBase::
-CDataMapItemBitsBase(quint16 _addr,
-    quint16 _size,
-    CControllerBitsBase& _controller): 
-  CDataMapItemBase(_addr, _size),
-  mController(_controller)
-{
-}
-
-//------------------------------------------------------------------------------
 LCModbusDataMap::
 CDataMapItemBitsBase::
 ~CDataMapItemBitsBase()
@@ -538,20 +481,6 @@ CDataMapItemBitsBase::read(QSharedPointer<LQModbusDataReader> _reader)
 }
 
 //==============================================================================CDataMapItemCoils
-LCModbusDataMap::CDataMapItemCoils::CDataMapItemCoils(
-    quint16 _addr,
-    quint16 _size,
-    CControllerBitsBase& _controller):
-  CDataMapItemBitsBase(_addr, _size, _controller)
-{
-}
-
-//------------------------------------------------------------------------------
-LCModbusDataMap::CDataMapItemCoils::~CDataMapItemCoils()
-{
-}
-
-//------------------------------------------------------------------------------
 void LCModbusDataMap::
 CDataMapItemCoils::write(
     const QByteArray& _data, QSharedPointer<LQModbusDataWriter> _writer)
@@ -560,20 +489,6 @@ CDataMapItemCoils::write(
 }
 
 //==============================================================================CDataMapItemInputRegs
-LCModbusDataMap::CDataMapItemDiscreteInputs::CDataMapItemDiscreteInputs(
-    quint16 _addr,
-    quint16 _size,
-    CControllerBitsBase& _controller):
-  CDataMapItemBitsBase(_addr, _size, _controller)
-{
-}
-
-//------------------------------------------------------------------------------
-LCModbusDataMap::CDataMapItemDiscreteInputs::~CDataMapItemDiscreteInputs()
-{
-}
-
-//------------------------------------------------------------------------------
 void LCModbusDataMap::CDataMapItemDiscreteInputs::write(
     const QByteArray& _data,
     QSharedPointer<LQModbusDataWriter> _writer)
