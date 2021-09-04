@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<WINDOW>
+  <mainWidget>
+    <Table
+      styleTable  = "$(table1)"
+      styleHeader = "$(table1Header)"
+      styleCorner = "(...){background:yellow;}"
+      >
+
+
+      <col label="Data name">
+
+        <Label text="coil0" /> 
+        <Label text="coil1" /> 
+        <Label text="coil2" /> 
+        <Label text="coil3" /> 
+        <Label text="coil4" /> 
+        <Label text="coil5" /> 
+        <Label text="coil6" /> 
+        <Label text="coil7" /> 
+        <Label text="coil8" /> 
+        <Label text="coil9" /> 
+
+      </col>
+
+      <col label="Data labels">
+        <Label      data="qtslavetcp:coil0:bool"/>
+        <Label      data="qtslavetcp:coil1:bool"/>
+        <Label      data="qtslavetcp:coil2:bool"/>
+        <Label      data="qtslavetcp:coil3:bool"/>
+        <Label      data="qtslavetcp:coil4:bool"/>
+        <Label      data="qtslavetcp:coil5:bool"/>
+        <Label      data="qtslavetcp:coil6:bool"/>
+        <Label      data="qtslavetcp:coil7:bool"/>
+        <Label      data="qtslavetcp:coil8:bool"/>
+        <Label      data="qtslavetcp:coil9:bool"/>
+      </col>
+
+      <col label="Data edit">
+        <LineEdit    data="qtslavetcp:coil0:uint8"/>
+        <LineEdit    data="qtslavetcp:coil1:uint8"/>
+        <LineEdit    data="qtslavetcp:coil2:uint8"/>
+        <LineEdit    data="qtslavetcp:coil3:uint8"/>
+        <LineEdit    data="qtslavetcp:coil4:uint8"/>
+        <LineEdit    data="qtslavetcp:coil5:uint8"/>
+        <LineEdit    data="qtslavetcp:coil6:uint8"/>
+        <LineEdit    data="qtslavetcp:coil7:uint8"/>
+        <LineEdit    data="qtslavetcp:coil8:uint8"/>
+        <LineEdit    data="qtslavetcp:coil9:uint8"/>
+      </col>
+
+
+
+
+
+
+
+
+
+      <col label="Data name">
+
+        <Label text="hret0" /> 
+        <Label text="hret1" /> 
+        <Label text="hret2" /> 
+        <Label text="hret3" /> 
+        <Label text="hret4" /> 
+        <Label text="hret5" /> 
+        <Label text="hret6" /> 
+        <Label text="hret7" /> 
+        <Label text="hret8" /> 
+        <Label text="hret9" /> 
+
+      </col>
+
+      <col label="Data labels">
+        <Label      data="qtslavetcp:hreg0:uint16"/>
+        <Label      data="qtslavetcp:hreg1:uint16"/>
+        <Label      data="qtslavetcp:hreg2:uint16"/>
+        <Label      data="qtslavetcp:hreg3:uint16"/>
+        <Label      data="qtslavetcp:hreg4:uint16"/>
+        <Label      data="qtslavetcp:hreg5:uint16"/>
+        <Label      data="qtslavetcp:hreg6:uint16"/>
+        <Label      data="qtslavetcp:hreg7:uint16"/>
+        <Label      data="qtslavetcp:hreg8:uint16"/>
+        <Label      data="qtslavetcp:hreg9:uint16"/>
+      </col>
+
+      <col label="Data edit">
+        <LineEdit    data="qtslavetcp:hreg0:uint16"/>
+        <LineEdit    data="qtslavetcp:hreg1:uint16"/>
+        <LineEdit    data="qtslavetcp:hreg2:uint16"/>
+        <LineEdit    data="qtslavetcp:hreg3:uint16"/>
+        <LineEdit    data="qtslavetcp:hreg4:uint16"/>
+        <LineEdit    data="qtslavetcp:hreg5:uint16"/>
+        <LineEdit    data="qtslavetcp:hreg6:uint16"/>
+        <LineEdit    data="qtslavetcp:hreg7:uint16"/>
+        <LineEdit    data="qtslavetcp:hreg8:uint16"/>
+        <LineEdit    data="qtslavetcp:hreg9:uint16"/>
+      </col>
+    </Table>
+  </mainWidget>
+</WINDOW>
+
