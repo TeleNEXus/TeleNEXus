@@ -66,7 +66,6 @@ private:
 
     void write(
         quint16 _addr, 
-        quint16 _size, 
         const QByteArray& _data,
         QSharedPointer<LQModbusDataWriter> _writer);
 
@@ -206,7 +205,7 @@ private:
         quint16 _addr, 
         quint16 _size, 
         CControllerRegistersBase& _controller) :
-      CDataMapItemBase(_addr, _size),
+      CDataMapItemBase(_addr, _size * 2),
       mController(_controller){}
 
     virtual ~CDataMapItemRegsBase(){}
@@ -240,8 +239,7 @@ private:
         CControllerInputRegisters& _controller):
       CDataMapItemRegsBase(_addr, _size, _controller)
     {
-    }
-    virtual ~CDataMapItemInputRegs(){}
+    } virtual ~CDataMapItemInputRegs(){}
     virtual void write(const QByteArray& _data,
         QSharedPointer<LQModbusDataWriter> _writer) override;
   };
