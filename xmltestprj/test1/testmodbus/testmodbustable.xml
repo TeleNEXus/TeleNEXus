@@ -98,6 +98,50 @@
         <LineEdit    data="qtslavetcp:hreg8:uint16"/>
         <LineEdit    data="qtslavetcp:hreg9:uint16"/>
       </col>
+
+
+      <col label="Data name">
+
+        <Label text="inhreg0" /> 
+        <Label text="inhreg1" /> 
+        <Label text="inhreg2" /> 
+        <Label text="inhreg3" /> 
+        <Label text="inhreg4" /> 
+        <Label text="inhreg5" /> 
+        <Label text="inhreg6" /> 
+        <Label text="inhreg7" /> 
+        <Label text="inhreg8" /> 
+        <Label text="inhreg9" /> 
+
+      </col>
+
+      <col label="Data labels">
+        <Label      data="qtslavetcp:inhreg0:uint16"/>
+        <Label      data="qtslavetcp:inhreg1:uint16"/>
+        <Label      data="qtslavetcp:inhreg2:uint16"/>
+        <Label      data="qtslavetcp:inhreg3:uint16"/>
+        <Label      data="qtslavetcp:inhreg4:uint16"/>
+        <Label      data="qtslavetcp:inhreg5:uint16"/>
+        <Label      data="qtslavetcp:inhreg6:uint16"/>
+        <Label      data="qtslavetcp:inhreg7:uint16"/>
+        <Label      data="qtslavetcp:inhreg8:uint16"/>
+        <Label      data="qtslavetcp:inhreg9:uint16"/>
+      </col>
+
+      <col label="Data edit">
+        <LineEdit    data="qtslavetcp:inhreg0:uint16"/>
+        <LineEdit    data="qtslavetcp:inhreg1:uint16"/>
+        <LineEdit    data="qtslavetcp:inhreg2:uint16"/>
+        <LineEdit    data="qtslavetcp:inhreg3:uint16"/>
+        <LineEdit    data="qtslavetcp:inhreg4:uint16"/>
+        <LineEdit    data="qtslavetcp:inhreg5:uint16"/>
+        <LineEdit    data="qtslavetcp:inhreg6:uint16"/>
+        <LineEdit    data="qtslavetcp:inhreg7:uint16"/>
+        <LineEdit    data="qtslavetcp:inhreg8:uint16"/>
+        <LineEdit    data="qtslavetcp:inhreg9:uint16"/>
+      </col>
+
+
     </Table>
   </mainWidget>
 </WINDOW>

@@ -20,6 +20,7 @@
  */
 #include "lcmodbusdatamap.h"
 #include "lmodbusdefs.h"
+#include <QDebug>
 
 //==============================================================================CControllerRegistersBase
 LCModbusDataMap::CControllerRegistersBase::CControllerRegistersBase(
@@ -79,7 +80,6 @@ void LCModbusDataMap::CControllerRegistersBase::read(
 //------------------------------------------------------------------------------
 void LCModbusDataMap::CControllerRegistersBase::write(
     quint16 _addr,
-    quint16 _size,
     const QByteArray& _data,
     QSharedPointer<LQModbusDataWriter> _writer)
 {
@@ -87,19 +87,15 @@ void LCModbusDataMap::CControllerRegistersBase::write(
 
   if(_data.size() % 2 == 0)
   {
-    quint16 length = _data.size() >> 1;
-    if(length == _size)
+    if(!mspMaster.isNull())
     {
-      if(!mspMaster.isNull())
-      {
-        if(writeRegs(
-              mspMaster.data(),
-              _addr,
-              length,
-              ((quint16*)_data.constData())).status ==
-            LQModbusMasterBase::SReply::EStatus::OK)
-          status = EWriteStatus::Success;
-      }
+      if(writeRegs(
+            mspMaster.data(),
+            _addr,
+            _data.size() >> 1,
+            ((quint16*)_data.constData())).status ==
+          LQModbusMasterBase::SReply::EStatus::OK)
+        status = EWriteStatus::Success;
     }
   }
   _writer->notifyListener(status);
@@ -120,7 +116,7 @@ void LCModbusDataMap::CControllerRegistersBase::update()
     if(readRegs(
           mspMaster.data(),
           (*it)->getAddress(),
-          (*it)->getSize() >> 2,
+          (*it)->getSize() >> 1,
           mRegBuff).status == LQModbusMasterBase::SReply::EStatus::OK)
     {
       status = EReadStatus::Valid;
@@ -433,7 +429,7 @@ void LCModbusDataMap::CDataMapItemHoldingRegs::write(
     const QByteArray& _data,
     QSharedPointer<LQModbusDataWriter> _writer)
 {
-  mController.write(mAddr, mSize, _data, _writer);
+  mController.write(mAddr, _data, _writer);
 }
 
 //==============================================================================CDataMapItemInputRegs
