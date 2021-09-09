@@ -184,7 +184,7 @@ QWidget* buildWindow(const QApplication& _app)
         /*     "cmd /k start \"tnex\" .\\tnex.exe --xmlpath ..\\xmltestprj\\test1\\"); */
 
         QProcess::startDetached(
-            QString("cmd /k start \"tnex\" .\\tnex.exe --xmlpath %1 --xmlfile %2")
+            QString("cmd /C start /Wait \"tnex\" .\\tnex.exe --xmlpath %1 --xmlfile %2")
             .arg(fileinfo.absolutePath())
             .arg(fileinfo.fileName()));
 #else
