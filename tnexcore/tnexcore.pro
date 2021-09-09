@@ -6,8 +6,8 @@ QT += network
 QT += xml
 QT += qml 
 
-CONFIG += console c++11
-#CONFIG += c++11
+CONFIG += console
+CONFIG += c++11
 CONFIG -= app_bundle
 TARGET = tnex
 

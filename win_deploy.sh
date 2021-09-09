@@ -4,6 +4,7 @@ qmake=qmake.exe
 make=mingw32-make.exe
 
 
+v_win_launcher="`pwd`/win_launcher/__builds/release/launcher.exe"
 v_modbussource="`pwd`/plugins/modbussource/__builds/release/modbussource.dll"
 v_tnex="`pwd`/tnexcore/__builds/release/tnex.exe"
 
@@ -56,10 +57,15 @@ then
   exit 0
 fi 
 
+if ! cp $v_win_launcher $v_deploy_path/
+then
+  exit 0
+fi 
 cd "$v_deploy_path"
 
 windeployqt.exe --compiler-runtime --no-translations --no-system-d3d-compiler --release --no-quick-import  ./tnex.exe
 windeployqt.exe --compiler-runtime --no-translations --no-system-d3d-compiler --release --no-quick-import  ./modbussource.dll
+windeployqt.exe --compiler-runtime --no-translations --no-system-d3d-compiler --release --no-quick-import  ./win_launcher.exe
 
 createDir plugins
 mv ./modbussource.dll ./plugins/
