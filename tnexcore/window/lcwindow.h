@@ -43,11 +43,13 @@ public:
   virtual void addActionHide(TAction _action) override;
 
   void setTitle(const QString& _title);
+  void setIcon(const QIcon& _icon);
   void setShowMode(EShowMode _showMode);
   void setModality(bool _flag);
   void setFlags(Qt::WindowFlags _flags);
   void setSize(const QSize& _size);
   void setPosition(const QPoint& _pos);
+  
   QSize getSize();
 
   static EShowMode stringToShowMode(const QString& _modeString, bool* _flag = nullptr);

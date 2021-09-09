@@ -22,10 +22,12 @@
 #include "applicationinterface.h"
 #include "LIXmlWidgetBuilder.h"
 #include "LIKeyboard.h"
-#include  "LIJScriptService.h"
+#include "LIJScriptService.h"
 #include "xmlcommon.h"
 #include "lcwindow.h"
 
+
+#include <QIcon>
 #include <QFileInfo>
 #include <QDomElement>
 #include <QMap>
@@ -62,6 +64,7 @@ static const struct
 
   QString file = "file";
   QString title = "title";
+  QString icon  = "icon";
   QString id = "id";
   QString visible = "visible";
 
@@ -268,6 +271,14 @@ static LCWindow* uploadWindow(QWidget* _widget, const QDomElement& _element)
     return _element.attribute(__slAttributes.title);
   };
 
+  auto get_icon = 
+    [](const QDomElement& _element)
+    {
+      QString icon_name = _element.attribute(__slAttributes.icon);
+      if(icon_name.isNull()) return QIcon();
+      return QIcon(icon_name);
+    };
+
   auto get_show_mode = [](const QDomElement& _element)
   {
     return 
@@ -390,6 +401,7 @@ static LCWindow* uploadWindow(QWidget* _widget, const QDomElement& _element)
   };
 
   window->setTitle(get_title(_element));
+  window->setIcon(get_icon(_element));
   window->setShowMode(get_show_mode(_element));
   window->setModality(get_modality(_element));
   window->setFlags(get_flags(_element));
