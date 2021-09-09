@@ -65,7 +65,7 @@ cd "$v_deploy_path"
 
 windeployqt.exe --compiler-runtime --no-translations --no-system-d3d-compiler --release --no-quick-import  ./tnex.exe
 windeployqt.exe --compiler-runtime --no-translations --no-system-d3d-compiler --release --no-quick-import  ./modbussource.dll
-windeployqt.exe --compiler-runtime --no-translations --no-system-d3d-compiler --release --no-quick-import  ./win_launcher.exe
+windeployqt.exe --compiler-runtime --no-translations --no-system-d3d-compiler --release --no-quick-import  ./launcher.exe
 
 createDir plugins
 mv ./modbussource.dll ./plugins/
