@@ -42,11 +42,15 @@
 
 
 //==============================================================================main
-QWidget* buildWindow();
+QWidget* buildWindow(QProcess& _prc);
 int main(int argc, char *argv[])
 {
   QApplication app(argc, argv);
-  auto widget = buildWindow();
+
+  QProcess prc;
+
+  auto widget = buildWindow(prc);
+
   widget->setWindowTitle("TeleNEXus launcher");
 
 
@@ -61,7 +65,7 @@ int main(int argc, char *argv[])
   return app.exec();
 }
 
-QWidget* buildWindow()
+QWidget* buildWindow(QProcess& _prc)
 {
   QWidget* widget = new QWidget();
 
@@ -69,9 +73,7 @@ QWidget* buildWindow()
   QPushButton* buttonRemove = new QPushButton("Remove");
   QPushButton* buttonLaunch = new QPushButton("Launch");
 
-
   QListWidget* projectList = new QListWidget();
-
 
   QHBoxLayout* mainLayout = new QHBoxLayout();
   QVBoxLayout* buttonsLayout = new QVBoxLayout();
@@ -81,9 +83,6 @@ QWidget* buildWindow()
   buttonsLayout->addStretch();
   buttonsLayout->addWidget(buttonLaunch);
 
-
-
-
   mainLayout->addWidget(projectList);
   mainLayout->addLayout(buttonsLayout);
 
@@ -91,40 +90,53 @@ QWidget* buildWindow()
 
 
   QObject::connect(buttonAdd, &QPushButton::pressed, 
-      [widget]()
+      [&_prc]()
       {
         qDebug() << "Button 'Add' pressed";
-        auto file = 
-          QFileDialog::getOpenFileName(
-              widget, 
-              QStringLiteral("Open main xml file"), 
-              QString("/home/serg/pprj/tnex/xmltestprj/test1/main.xml"), 
-              QStringLiteral("Main file (main.xml)"));
-        if(file.isNull())
-        {
-          qDebug() << "File is not selected.";
-        }
-        else
-        {
-          qDebug() << QString("File '%1' is selected").arg(file);
-        }
+        /* QProcess::startDetached("calc"); */
+        /* QProcess::startDetached("cmd /C start"); */
+        /* QProcess::startDetached( */
+        /*     "cmd /k \".\\tnex.exe --xmlpath ..\\xmltestprj\\test1\\\""); */
 
-        QFileInfo fileinfo(file);
-        qDebug() << QString("Project path '%1'").arg(fileinfo.absolutePath());
-        if(
-            QProcess::startDetached(QString(
-            "../../tnexcore/__builds/tnex --xmlpath %1").arg(fileinfo.absolutePath()))
-            /* QProcess::startDetached( */
-            /* "../../tnexcore/__builds/tnex", */ 
-            /* QStringList() << QString("--xmlpath %1").arg(fileinfo.absoluteFilePath())) */
-          )
-        {
-          qDebug() << "Is started...";
-        }
-        else
-        {
-          qDebug() << "Start error";
-        }
+
+        QProcess::startDetached(
+            "cmd /k start \"tnex\" .\\tnex.exe --xmlpath ..\\xmltestprj\\test1\\");
+
+
+        /* _prc.start("cmd"); */
+        /* _prc.start("calc"); */
+
+        /* auto file = */ 
+        /*   QFileDialog::getOpenFileName( */
+        /*       widget, */ 
+        /*       QStringLiteral("Open main xml file"), */ 
+        /*       QString("../xmltestprj/test1/main.xml"), */ 
+        /*       QStringLiteral("Main file (main.xml)")); */
+        /* if(file.isNull()) */
+        /* { */
+        /*   qDebug() << "File is not selected."; */
+        /* } */
+        /* else */
+        /* { */
+        /*   qDebug() << QString("File '%1' is selected").arg(file); */
+        /* } */
+
+        /* QFileInfo fileinfo(file); */
+        /* qDebug() << QString("Project path '%1'").arg(fileinfo.absolutePath()); */
+
+        /* if( QProcess::startDetached("cmd")) */
+        /*     /1* "../../tnexcore/__builds/tnex --xmlpath %1").arg(fileinfo.absolutePath())) *1/ */
+        /*     /1* "cmd \"./tnex --xmlpath %1\"").arg(fileinfo.absolutePath())) *1/ */
+        /*     /1* QProcess::startDetached( *1/ */
+        /*     /1* "../../tnexcore/__builds/tnex", *1/ */ 
+        /*     /1* QStringList() << QString("--xmlpath %1").arg(fileinfo.absoluteFilePath())) *1/ */
+        /* { */
+        /*   qDebug() << "Is started..."; */
+        /* } */
+        /* else */
+        /* { */
+        /*   qDebug() << "Start error"; */
+        /* } */
       });
 
 
