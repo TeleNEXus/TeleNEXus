@@ -396,6 +396,12 @@ void LCWindow::setTitle(const QString& _title)
 }
 
 //------------------------------------------------------------------------------
+void LCWindow::setIcon(const QIcon& _icon)
+{
+  ld.pWidget->setWindowIcon(_icon);
+}
+
+//------------------------------------------------------------------------------
 void LCWindow::setShowMode(EShowMode _showMode)
 {
   ld.defaultShowMode = _showMode;
