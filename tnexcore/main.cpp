@@ -40,6 +40,7 @@
 #include <QCommandLineParser>
 
 
+#define __smQuitMessage QStringLiteral("Quit from TeleNEXus")
 
 #define __lmVersionString (QString("TeleNEXus version: %1").arg(APPLICATION_VERSION))
 
@@ -185,12 +186,12 @@ int main(int argc, char *argv[])
 
   if(!domDoc.setContent(&file, true, &errorStr, &errorLine, &errorColumn))
   {
-    appinterface.message(
+    appinterface.error(
         QString("Application: parse error at line: %1 column: %2 msg: #3")
        .arg(errorLine)
        .arg(errorColumn)
        .arg(errorStr));
-    appinterface.message("Exit programm");
+    appinterface.message(__smQuitMessage);
     return -1;
   }
 
@@ -198,8 +199,8 @@ int main(int argc, char *argv[])
 
   if(rootElement.tagName() != __slRootTag)
   {
-    appinterface.message("Application: wrong root element");
-    appinterface.message("Exit programm");
+    appinterface.error("Application: wrong root element");
+    appinterface.message(__smQuitMessage);
     return -1;
   }
 
@@ -207,8 +208,8 @@ int main(int argc, char *argv[])
 
   if(childNode.isNull())
   {
-    appinterface.message("Application: no child elements");
-    appinterface.message("Exit programm");
+    appinterface.error("Application: no child elements");
+    appinterface.message(__smQuitMessage);
     return -1;
   }
 
@@ -253,7 +254,7 @@ int main(int argc, char *argv[])
 
   QObject::connect(&app, &QApplication::aboutToQuit,
       [&](){
-        appinterface.message("Quit from TeleNEXus");
+        appinterface.message(__smQuitMessage);
       });
 
   return app.exec();
