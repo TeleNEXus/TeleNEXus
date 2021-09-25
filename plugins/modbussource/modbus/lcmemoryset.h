@@ -23,7 +23,6 @@
 #define LCMEMORYSET_H_
 
 #include <QLinkedList>
-/* #include <QList> */
 #include <QDebug>
 #include <QPair>
 
@@ -59,15 +58,17 @@ private:
   using CMemoryList = QLinkedList<CMemorySetItem>;
   using CMemoryListIterator = CMemoryList::Iterator;
 private:
+  qint32 mFragmentMaxSize;
   QLinkedList<CMemorySetItem> mList;
 
 public:
-  LCMemorySet();
+  explicit LCMemorySet(qint32 _fragmentMaxSize = 0);
   ~LCMemorySet();
 
 private:
   CMemoryListIterator findGreater(const CMemorySetItem& _item);
   void add(const CMemorySetItem& _item);
 };
+
 
 #endif  //LCMEMORYSET_H_
