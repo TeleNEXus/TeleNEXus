@@ -62,6 +62,7 @@ flags = [
              '-DQT_XML_LIB',
              '-DQT_CORE_LIB',
              '-I', '../tnexcore',
+             '-I', '../../plugins/modbussource/modbus',
              '-I', '.',
              '-I', '../common/interfaces',
              '-I', '../common/interfaces/remotedata',
