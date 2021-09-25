@@ -46,7 +46,8 @@ QDebug operator<<(QDebug _debug, const QLinkedList<CMemorySetItem>& _list)
 }
 
 //==============================================================================LCMemorySet
-LCMemorySet::LCMemorySet()
+LCMemorySet::LCMemorySet(qint32 _fragmentMaxSize) :
+  mFragmentMaxSize(_fragmentMaxSize)
 {
 
   add(CMemorySetItem(26, 30, 1));
@@ -56,19 +57,19 @@ LCMemorySet::LCMemorySet()
   add(CMemorySetItem(20, 22, 1));
 
 
-  add(CMemorySetItem(1, 1, 1));
-  add(CMemorySetItem(2, 2, 1));
-  add(CMemorySetItem(3, 3, 1));
-  add(CMemorySetItem(4, 4, 1));
-  add(CMemorySetItem(5, 5, 1));
-  add(CMemorySetItem(4, 4, 1));
-  add(CMemorySetItem(5, 5, 1));
-  add(CMemorySetItem(1, 1, 1));
-  add(CMemorySetItem(2, 2, 1));
-  add(CMemorySetItem(3, 5, 1));
-  add(CMemorySetItem(3, 3, 1));
+    add(CMemorySetItem(1, 1, 1));
+    add(CMemorySetItem(2, 2, 1));
+    add(CMemorySetItem(3, 3, 1));
+    add(CMemorySetItem(4, 4, 1));
+    add(CMemorySetItem(5, 5, 1));
+    add(CMemorySetItem(4, 4, 1));
+    add(CMemorySetItem(5, 5, 1));
+    add(CMemorySetItem(1, 1, 1));
+    add(CMemorySetItem(2, 2, 1));
+    add(CMemorySetItem(3, 5, 1));
+    add(CMemorySetItem(3, 3, 1));
+    add(CMemorySetItem(5, 5, 1));
 
-  add(CMemorySetItem(5, 5, 1));
   add(CMemorySetItem(6, 8, 1));
   add(CMemorySetItem(3, 3, 1));
   add(CMemorySetItem(2, 2, 1));
@@ -112,8 +113,6 @@ LCMemorySet::findGreater(const CMemorySetItem& _item)
   return mList.end();
 }
 
-#define maxsize 5
-
 //------------------------------------------------------------------------------
 void LCMemorySet::add(const CMemorySetItem& _item)
 {
@@ -135,11 +134,13 @@ void LCMemorySet::add(const CMemorySetItem& _item)
         auto second = 
           ((*it_before).second > _item.second) ? ((*it_before).second) : (_item.second);
 
-        if(maxsize < (second - first)) 
+        if(mFragmentMaxSize > 0)
         {
-          return false;
+          if(mFragmentMaxSize < (second - first)) 
+          {
+            return false;
+          }
         }
-
 
         CMemorySetItem new_item(
             first, 
@@ -160,10 +161,13 @@ void LCMemorySet::add(const CMemorySetItem& _item)
 
       if((_item.second >= (*_it).first) || (_item.second+1 == (*_it).first))
       {
-
         auto first = _item.first;
         auto second = (_item.second > (*_it).second) ? (_item.second) : ((*_it).second);
-        if((second - first) > maxsize) return false;
+
+        if(mFragmentMaxSize > 0)
+        {
+          if((second - first) > mFragmentMaxSize) return false;
+        }
 
         CMemorySetItem new_item(
             first,
@@ -193,3 +197,4 @@ void LCMemorySet::add(const CMemorySetItem& _item)
   mList.insert(it, _item);
   return ret();
 }
+

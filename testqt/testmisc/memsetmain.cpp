@@ -12,7 +12,8 @@ int main(int argc, char** argv)
 
   qDebug() << "===========================================";
   qDebug() << "Test Memory set";
-  LCMemorySet memoryset;
+  qDebug() << "===========================================";
+  LCMemorySet memoryset(5);
 
   return 0;
 }
