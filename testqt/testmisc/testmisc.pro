@@ -19,9 +19,13 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
     
 INCLUDEPATH +=                                  \
-       ./testjsdataformatter 
+../../plugins/modbussource/modbus \
+
+       # ./testjsdataformatter 
 
 
+SOURCES += ./memsetmain.cpp 
+SOURCES += ../../plugins/modbussource/modbus/lcmemoryset.cpp
 # SOURCES += testscreen.cpp \
 # SOURCES += main.cpp \
 # SOURCES +=  ./regexpr.cpp \
@@ -32,7 +36,7 @@ INCLUDEPATH +=                                  \
 # SOURCES +=  ./testlayout.cpp \
 # SOURCES +=  ./testgridlayout.cpp \
 # SOURCES +=  ./listwidget.cpp \
-SOURCES +=  ./testwidget.cpp \
+# SOURCES +=  ./testwidget.cpp \
 # SOURCES +=  ./testwidget1.cpp \
 # SOURCES +=  ./testtable.cpp \
 #
@@ -46,7 +50,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 HEADERS += \
-
+../../plugins/modbussource/modbus/lcmemoryset.h
     # ./jsclassfunc.h \
     # ./testjsdataformatter/jsvalidator.h
 
