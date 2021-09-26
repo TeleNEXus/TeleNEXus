@@ -25,6 +25,29 @@
 #include <QLinkedList>
 #include <QDebug>
 #include <QPair>
+#include <QSharedPointer>
+#include <QMap>
+#include <QSet>
+
+//==============================================================================
+class CMemoryDataItem
+{
+private:
+  qint32 mAddr;
+  qint32 mSize;
+public:
+  CMemoryDataItem() = delete;
+  CMemoryDataItem(qint32 _addr, qint32 _size);
+  qint32 getAddressBegin(void)const{ return mAddr;}
+  qint32 getAddressEnd(void)const{ return (mAddr + mSize - 1);}
+  qint32 getSize(void)const{ return mSize;}
+};
+
+bool operator<(const CMemoryDataItem& _first, const CMemoryDataItem& _second);
+bool operator>(const CMemoryDataItem& _first, const CMemoryDataItem& _second);
+bool operator==(const CMemoryDataItem& _first, const CMemoryDataItem& _second);
+
+QDebug operator<<(QDebug _debug, const CMemoryDataItem& _item);
 
 //==============================================================================
 class CMemorySetItem : public QPair<qint32, qint32>
@@ -32,13 +55,22 @@ class CMemorySetItem : public QPair<qint32, qint32>
 private:
   using CPair = QPair<qint32, qint32>;
   qint32 mData;
+  QSet<QSharedPointer<CMemoryDataItem>> mDataItems;
 
 public:
+
   CMemorySetItem() : CPair(-1, -1), mData(0){}
 
   explicit CMemorySetItem(
       quint32 _first, qint32 _second, qint32 _data = 0) :
     CPair(_first, _second), mData(_data){}
+
+  CMemorySetItem(QSharedPointer<CMemoryDataItem> _spDataItem)
+  {
+    mDataItems.insert(_spDataItem);
+    first = _spDataItem->getAddressBegin();
+    second = _spDataItem->getAddressEnd();
+  }
 
   bool isNull()
   { 
@@ -46,6 +78,7 @@ public:
   }
 
   qint32 getData(void)const{return mData;}
+
 };
 
 QDebug operator<<(QDebug _debug, const CMemorySetItem& _item);
@@ -55,19 +88,25 @@ QDebug operator<<(QDebug _debug, const QLinkedList<CMemorySetItem>& _list);
 class LCMemorySet
 {
 private:
-  using CMemoryList = QLinkedList<CMemorySetItem>;
-  using CMemoryListIterator = CMemoryList::Iterator;
+  using CMemorySetList = QLinkedList<CMemorySetItem>;
+
 private:
   qint32 mFragmentMaxSize;
-  QLinkedList<CMemorySetItem> mList;
+  CMemorySetList mList;
+  QMap<QSharedPointer<CMemoryDataItem>, CMemorySetList::iterator> mDataItemMap;
 
 public:
   explicit LCMemorySet(qint32 _fragmentMaxSize = 0);
   ~LCMemorySet();
 
+  void addDataItem(const CMemoryDataItem& _dataItem);
+
 private:
-  CMemoryListIterator findGreater(const CMemorySetItem& _item);
-  void add(const CMemorySetItem& _item);
+  void addSetItem(const CMemorySetItem& _item);
+  CMemorySetList::Iterator addItem(const CMemorySetItem& _item);
+
+public:
+  void addDataItem(QSharedPointer<CMemoryDataItem> _item);
 };
 
 
