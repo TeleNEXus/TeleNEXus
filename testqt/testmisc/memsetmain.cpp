@@ -1,7 +1,6 @@
 #include <QCoreApplication>
 #include <QDebug>
 #include "lcmemoryset.h"
-
 int main(int argc, char** argv)
 {
   Q_UNUSED(argc);
@@ -13,7 +12,7 @@ int main(int argc, char** argv)
   qDebug() << "===========================================";
   qDebug() << "Test Memory set";
   qDebug() << "===========================================";
-  LCMemorySet memoryset(100);
+  LCMemorySet memoryset(5);
 
   return 0;
 }
