@@ -23,7 +23,7 @@
 #include <QDebug>
 
 //==============================================================================CrossSegment
-template <class T> bool CrossSegment(T a1, T b1, T a2, T b2)
+template <class T> bool SegmentIsCrossed(T a1, T b1, T a2, T b2)
 {
   if((a1 >= a2) && (a1 <= b2)) return true;
   if((b1 >= a2) && (b1 <= b2)) return true;
@@ -32,6 +32,19 @@ template <class T> bool CrossSegment(T a1, T b1, T a2, T b2)
   return false;
 }
 
+//==============================================================================SgmentIsNeighbour
+template <class T> bool SegmentIsNeighbour(T a1, T b1, T a2, T b2)
+{
+  if(a1 < a2) 
+  {
+    if(b1+1 == a2) return true;
+  }
+  else if(a2 < a1)
+  {
+    if(b2+1 == a1) return true;
+  }
+  return false;
+}
 //==============================================================================FindGreaterItem
 template < typename T> typename QLinkedList<T>::Iterator FindGreaterItem(
     QLinkedList<T>& _list, 
@@ -97,6 +110,68 @@ QDebug operator<<(QDebug _debug, const CMemoryDataItem& _item)
 }
 
 //==============================================================================CMemorySetItem
+CMemorySetItem CMemorySetItem::unite(
+    const CMemorySetItem& _i1, 
+    const CMemorySetItem& _i2,
+    qint32 _uniteMaxSize)
+{
+  CMemorySetItem ji;
+
+  if(_i1.isNull() || _i2.isNull()) return ji;
+
+  /* if(!SegmentIsCrossed<qint32>( */
+  /*       _i1.first, _i1.second, _i2.first, _i2.second)) */
+  /*   return ji; */
+
+  /* if(_i1 < _i2) */
+  /* { */
+  /*   ji.first = _i1.first; */
+  /*   ji.second = _i2.second; */
+  /* } */
+  /* else if(_i1 > _i2) */
+  /* { */
+  /*   ji.first = _i2.first; */
+  /*   ji.second = _i1.second; */
+  /* } */
+  /* else */
+  /* { */
+  /*   qDebug() << "Unite 0"; */ 
+  /*   ji.first = _i1.first; */
+  /*   ji.second = _i1.second; */
+  /* } */
+
+
+  if(_i1.first < _i2.first)
+  {
+    ji.first = _i1.first; 
+  }
+  else
+  {
+    ji.first = _i2.first;
+  }
+
+  if(_i1.second > _i2.second)
+  {
+    ji.second = _i1.second;
+  }
+  else
+  {
+    ji.second = _i2.second;
+  }
+
+  if(_uniteMaxSize > 0)
+  {
+    if((ji.second - ji.first) > _uniteMaxSize)
+      return CMemorySetItem();
+  }
+  
+  ji.mDataItems = _i1.mDataItems + _i2.mDataItems;  
+  ji.mData = _i1.mData + _i2.mData;
+
+  return ji;
+}
+
+//------------------------------------------------------------------------------
 QDebug operator<<(QDebug _debug, const CMemorySetItem& _item)
 {
   _debug << qPrintable(QString("Item(%1, %2, %3)")
@@ -106,6 +181,7 @@ QDebug operator<<(QDebug _debug, const CMemorySetItem& _item)
   return _debug;
 }
 
+//------------------------------------------------------------------------------
 QDebug operator<<(QDebug _debug, const QLinkedList<CMemorySetItem>& _list)
 {
   _debug << "MemorySetList(\n";
@@ -124,9 +200,25 @@ LCMemorySet::LCMemorySet(qint32 _fragmentMaxSize) :
   mFragmentMaxSize(_fragmentMaxSize)
 {
 
-  addSetItem(CMemorySetItem(10, 14, 1));
-  addSetItem(CMemorySetItem(5, 8, 1));
-  addSetItem(CMemorySetItem(8, 10, 1));
+  addSetItem(CMemorySetItem(20, 21, 1));
+  addSetItem(CMemorySetItem(5, 6, 1));
+  addSetItem(CMemorySetItem(7, 8, 1));
+
+  addSetItem(CMemorySetItem(21, 28, 1));
+  addSetItem(CMemorySetItem(5, 6, 1));
+  addSetItem(CMemorySetItem(7, 8, 1));
+  addSetItem(CMemorySetItem(5, 6, 1));
+  addSetItem(CMemorySetItem(7, 8, 1));
+  /* addSetItem(CMemorySetItem(10, 14, 1)); */
+  /* addSetItem(CMemorySetItem(5, 8, 1)); */
+  /* addSetItem(CMemorySetItem(8, 10, 1)); */
+
+  addSetItem(CMemorySetItem(22, 24, 1));
+  addSetItem(CMemorySetItem(21, 24, 1));
+  addSetItem(CMemorySetItem(21, 28, 1));
+
+
+
 
   /* addSetItem(CMemorySetItem(26, 30, 1)); */
   /* addSetItem(CMemorySetItem(20, 25, 1)); */
@@ -165,33 +257,15 @@ LCMemorySet::LCMemorySet(qint32 _fragmentMaxSize) :
   /* addSetItem(CMemorySetItem(20, 25, 1)); */
 
   qDebug() << "=====================Result";
-  qDebug() << mList;
+  qDebug() << mListOrder;
 
   QLinkedList<CMemoryDataItem> list_data;
 
-  auto add_data_item = 
-    [&list_data](const CMemoryDataItem& _item)
-    {
-      auto it = FindGreaterItem<CMemoryDataItem>(list_data, _item);
-      list_data.insert(it, _item);
-    };
-
-  add_data_item(CMemoryDataItem(0, 1));
-  add_data_item(CMemoryDataItem(1, 2));
-  add_data_item(CMemoryDataItem(5, 1));
-  add_data_item(CMemoryDataItem(2, 3));
-  add_data_item(CMemoryDataItem(3, 1));
-  add_data_item(CMemoryDataItem(4, 1));
-  add_data_item(CMemoryDataItem(4, 4));
-  add_data_item(CMemoryDataItem(4, 1));
 
   qDebug() << "========================";
-  qDebug() << "List of data items";
+  qDebug() << "Compil order list";
   qDebug() << "========================";
-  for(auto it = list_data.constBegin(); it != list_data.constEnd(); it++)
-  {
-    qDebug() << *it;
-  }
+  compilOrderList();
 
 }
 
@@ -203,214 +277,180 @@ LCMemorySet::~LCMemorySet()
 //------------------------------------------------------------------------------
 void LCMemorySet::addSetItem(const CMemorySetItem& _item)
 {
+  /* auto insert = */ 
+  /*   [this]( */
+  /*       const CMemorySetItem& _item, */ 
+  /*       const CMemorySetList::Iterator& _insert_before) */
+  /*   { */
 
-  auto cross_top = 
-    [this](const CMemorySetItem& _item, const CMemorySetList::Iterator& _it)
+  /*     auto it = mListOrder.insert(_insert_before, _item); */
+
+  /*     auto unite = */
+  /*       [this](CMemorySetList::Iterator& _first) */
+  /*       { */
+  /*         auto second = _first + 1; */
+  /*         if(second == mListOrder.end()) */ 
+  /*         { */
+  /*           qDebug() << "insert x"; */
+  /*           return _first; */
+  /*         } */
+
+  /*         if( !SegmentIsCrossed<qint32>( */
+  /*               (*_first).first, (*_first).second, */
+  /*               (*second).first, (*second).second)) */
+  /*         { */
+  /*           if(!SegmentIsNeighbour<qint32>( */
+  /*               (*_first).first, (*_first).second, */
+  /*               (*second).first, (*second).second)) */
+  /*           { */
+  /*             qDebug() << "insert 0"; */
+  /*             return _first; */
+  /*           } */
+  /*         } */
+
+  /*         CMemorySetItem item = */ 
+  /*           CMemorySetItem::unite(*_first, *second, mFragmentMaxSize); */
+
+  /*         if(item.isNull()) */
+  /*         { */
+  /*           qDebug() << "insert 1"; */
+  /*           return _first; */
+  /*         } */
+          
+  /*         qDebug() << "-------erase" << " first " << *_first << " second " << *second; */
+  /*         qDebug() << "-------new item " << item; */
+  /*         auto it = mListOrder.erase(mListOrder.erase(_first)); */
+  /*         return mListOrder.insert(it, item); */
+  /*       }; */
+
+  /*     it--; */
+
+  /*     if( it != mListOrder.end()) */
+  /*     { */
+  /*       it = unite(it); */
+  /*           qDebug() << "insert 2"; */
+  /*     } */
+
+  /*     if( it != mListOrder.end()) */
+  /*     { */
+  /*       it = unite(it); */
+  /*           qDebug() << "insert 3"; */
+  /*     } */
+  /*   }; */
+
+
+
+
+
+
+  /* qDebug() << "--------------------Add item" << _item; */
+  auto it = FindGreaterItem<CMemorySetItem>(mListOrder, _item);
+  /* auto ret = */ 
+  /*   [this]() */
+  /*   { */
+  /*     qDebug() << "list = "; */
+  /*     qDebug() << mListOrder; */
+  /*   }; */
+
+  mListOrder.insert(it, _item);
+  /* insert(_item, it); */
+
+  /* return ret(); */
+  
+}
+
+//------------------------------------------------------------------------------
+void LCMemorySet::compilOrderList()
+{
+
+  if(mListOrder.size() == 0) return;
+
+  enum EState 
+  {
+    ST_1,
+    ST_2
+  }state;
+
+  CMemorySetList::Iterator oit = mListOrder.begin();
+  CMemorySetItem item_acc = *oit;
+  CMemorySetList::Iterator cit;
+
+  auto operate =
+    [&]()
     {
-      auto it_before = _it-1;
 
-      if(it_before == mList.end()) 
+      auto next_order = oit + 1;
+
+
+      if(next_order == mListOrder.end())
       {
-        return false;
-      }
-
-      if(!((_item.first <= (*it_before).second) || (_item.first-1 == (*it_before).second)))
-        return false;
-
-      auto first = (*it_before).first;
-      auto second = 
-        ((*it_before).second > _item.second) ? ((*it_before).second) : (_item.second);
-
-      if(mFragmentMaxSize > 0)
-      {
-        if(mFragmentMaxSize < (second - first)) 
-        {
-          return false;
-        }
-      }
-
-      CMemorySetItem new_item(
-          first, 
-          second,
-          (*it_before).getData() + _item.getData());
-      auto it = mList.erase(it_before);
-
-
-      it = mList.insert(it, new_item);
-
-      auto it_after = it-1;
-
-      if(it_after == mList.end()) return true;
-      
-
-
-
-
-      return false;
-    };
-
-  auto cross_bottom = 
-    [this](const CMemorySetItem& _item, const CMemorySetList::Iterator& _it)
-    {
-      if(_it == mList.end()) return false;
-
-      if((_item.second >= (*_it).first) || (_item.second+1 == (*_it).first))
-      {
-        auto first = _item.first;
-        auto second = (_item.second > (*_it).second) ? (_item.second) : ((*_it).second);
-
-        if(mFragmentMaxSize > 0)
-        {
-          if((second - first) > mFragmentMaxSize) return false;
-        }
-
-        CMemorySetItem new_item(
-            first,
-            second,
-            (*_it).getData() + _item.getData());
-        auto it = mList.erase(_it);
-        mList.insert(it, new_item);
         return true;
       }
-      return false;
+
+
+
+      if((SegmentIsCrossed<qint32>(
+              item_acc.first, item_acc.second,
+              (*next_order).first, (*next_order).second)) || 
+          SegmentIsNeighbour<qint32>(
+            item_acc.first, item_acc.second,
+            (*next_order).first, (*next_order).second))
+      {
+        auto item = CMemorySetItem::unite(item_acc, (*next_order));
+        if(!item.isNull())
+        {
+          item_acc = item;
+        }
+        else
+        {
+          mListCompil << item_acc;
+        }
+      }
+
+
+
+
+      bool ret = false;
+      switch(state)
+      {
+      case EState::ST_1:
+        oit++;
+        if(oit == mListOrder.end()) 
+        {
+          ret = true;
+        }
+        break;
+
+      case EState::ST_2:
+        break;
+
+      default:
+        break;
+      }
+      return ret;
     };
 
-  auto it = FindGreaterItem<CMemorySetItem>(mList, _item);
+  while(true)
+  {
+    if(operate()) break;
+  }
 
-  qDebug() << "--------------------Add item" << _item;
+  /* for(auto it = mListOrder.begin(); it != mListOrder.end(); it++) */
+  /* { */
+  /*   /1* qDebug() << "List Order item = " << *it; *1/ */
+  /* } */
 
-  auto ret = 
-    [this]()
-    {
-      qDebug() << "list = ";
-      qDebug() << mList;
-    };
 
-  if(cross_top(_item, it)) return ret();
-  if(cross_bottom(_item, it)) return ret();
-  mList.insert(it, _item);
-  return ret();
+
 }
+
 
 //------------------------------------------------------------------------------
 LCMemorySet::CMemorySetList::Iterator 
 LCMemorySet::addItem(const CMemorySetItem& _item)
 {
-//+++++++++++++++++++++++++++++++++++++++++++++++
-
-
-
-  auto cross_top = 
-    [this](const CMemorySetItem& _item, const CMemorySetList::Iterator& _it)
-    {
-      auto it_before = _it-1;
-
-      if(it_before == mList.end()) 
-      {
-        return mList.insert(it_before, _item);
-      }
-
-      if((_item.first <= (*it_before).second) || (_item.first-1 == (*it_before).second))
-      {
-
-        auto first = (*it_before).first;
-        auto second = 
-          ((*it_before).second > _item.second) ? ((*it_before).second) : (_item.second);
-
-        if(mFragmentMaxSize > 0)
-        {
-          if(mFragmentMaxSize < (second - first)) 
-          {
-            return mList.insert(it_before, _item);
-          }
-        }
-
-
-        CMemorySetItem new_item(
-            first, 
-            second,
-            (*it_before).getData() + _item.getData());
-
-
-
-
-        auto it = mList.erase(it_before);
-
-
-        mList.insert(it, new_item);
-        return it_before;
-      }
-
-      return it_before;
-    };
-
-
-
-  auto cross_bottom = 
-    [this](const CMemorySetItem& _item, const CMemorySetList::Iterator& _it)
-    {
-      if(_it == mList.end()) return false;
-
-      if((_item.second >= (*_it).first) || (_item.second+1 == (*_it).first))
-      {
-        auto first = _item.first;
-        auto second = (_item.second > (*_it).second) ? (_item.second) : ((*_it).second);
-
-        if(mFragmentMaxSize > 0)
-        {
-          if((second - first) > mFragmentMaxSize) return false;
-        }
-
-        CMemorySetItem new_item(
-            first,
-            second,
-            (*_it).getData() + _item.getData());
-        auto it = mList.erase(_it);
-        mList.insert(it, new_item);
-        return true;
-      }
-      return false;
-    };
-
-
-
-  auto ret = 
-    [this](const CMemorySetList::Iterator& _it_before, const CMemorySetItem& _item)
-    {
-      return mList.insert(_it_before, _item);
-    };
-
-
-  auto it_greater = FindGreaterItem<CMemorySetItem>(mList, _item);
-
-  if(it_greater == mList.end()) return ret(it_greater, _item);
-
-
-  qDebug() << "--------------------Add item" << _item;
-
-
-  /* auto ret = */ 
-  /*   [this]() */
-  /*   { */
-  /*     qDebug() << "list = "; */
-  /*     qDebug() << mList; */
-  /*   }; */
-
-  /* if(cross_top(_item, it)) return ret(); */
-  /* if(cross_bottom(_item, it)) return ret(); */
-  /* mList.insert(it, _item); */
-  /* return ret(); */
-
-
-
-
-
-
-
-//+++++++++++++++++++++++++++++++++++++++++++++++
-
-
-  return mList.insert(mList.end(), _item); 
+  Q_UNUSED(_item);
+  return mListOrder.begin();
 }
 
 //------------------------------------------------------------------------------

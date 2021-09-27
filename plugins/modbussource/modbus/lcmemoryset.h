@@ -56,7 +56,6 @@ private:
   using CPair = QPair<qint32, qint32>;
   qint32 mData;
   QSet<QSharedPointer<CMemoryDataItem>> mDataItems;
-
 public:
 
   CMemorySetItem() : CPair(-1, -1), mData(0){}
@@ -72,13 +71,28 @@ public:
     second = _spDataItem->getAddressEnd();
   }
 
-  bool isNull()
+  bool isNull() const
   { 
     return ((first < 0) || (second < 0)) ? (true) : (false);
   }
 
   qint32 getData(void)const{return mData;}
 
+  static CMemorySetItem unite(
+      const CMemorySetItem& _i1, 
+      const CMemorySetItem& _i2,
+      qint32 _uniteMaxSize = 0);
+  
+  /* CMemorySetItem& operator+=(const CMemorySetItem& _item) */
+  /* { */
+  /*   if(second + 1 < _item.first) return *this; */
+
+  /*   second = _item.second; */
+  /*   mData += _item.mData; */
+  /*   mDataItems += _item.mDataItems; */
+
+  /*   return *this; */
+  /* } */
 };
 
 QDebug operator<<(QDebug _debug, const CMemorySetItem& _item);
@@ -92,7 +106,9 @@ private:
 
 private:
   qint32 mFragmentMaxSize;
-  CMemorySetList mList;
+  CMemorySetList mListOrder;
+  CMemorySetList mListCompil;
+
   QMap<QSharedPointer<CMemoryDataItem>, CMemorySetList::iterator> mDataItemMap;
 
 public:
@@ -103,6 +119,8 @@ public:
 
 private:
   void addSetItem(const CMemorySetItem& _item);
+  void compilOrderList();
+
   CMemorySetList::Iterator addItem(const CMemorySetItem& _item);
 
 public:
