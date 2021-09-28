@@ -112,34 +112,11 @@ QDebug operator<<(QDebug _debug, const CMemoryDataItem& _item)
 //==============================================================================CMemorySetItem
 CMemorySetItem CMemorySetItem::unite(
     const CMemorySetItem& _i1, 
-    const CMemorySetItem& _i2,
-    qint32 _uniteMaxSize)
+    const CMemorySetItem& _i2)
 {
   CMemorySetItem ji;
 
   if(_i1.isNull() || _i2.isNull()) return ji;
-
-  /* if(!SegmentIsCrossed<qint32>( */
-  /*       _i1.first, _i1.second, _i2.first, _i2.second)) */
-  /*   return ji; */
-
-  /* if(_i1 < _i2) */
-  /* { */
-  /*   ji.first = _i1.first; */
-  /*   ji.second = _i2.second; */
-  /* } */
-  /* else if(_i1 > _i2) */
-  /* { */
-  /*   ji.first = _i2.first; */
-  /*   ji.second = _i1.second; */
-  /* } */
-  /* else */
-  /* { */
-  /*   qDebug() << "Unite 0"; */ 
-  /*   ji.first = _i1.first; */
-  /*   ji.second = _i1.second; */
-  /* } */
-
 
   if(_i1.first < _i2.first)
   {
@@ -157,12 +134,6 @@ CMemorySetItem CMemorySetItem::unite(
   else
   {
     ji.second = _i2.second;
-  }
-
-  if(_uniteMaxSize > 0)
-  {
-    if((ji.second - ji.first) > _uniteMaxSize)
-      return CMemorySetItem();
   }
   
   ji.mDataItems = _i1.mDataItems + _i2.mDataItems;  
@@ -204,59 +175,42 @@ LCMemorySet::LCMemorySet(qint32 _fragmentMaxSize) :
   addSetItem(CMemorySetItem(5, 6, 1));
   addSetItem(CMemorySetItem(7, 8, 1));
 
-  addSetItem(CMemorySetItem(21, 28, 1));
+  addSetItem(CMemorySetItem(21, 26, 1));
   addSetItem(CMemorySetItem(5, 6, 1));
   addSetItem(CMemorySetItem(7, 8, 1));
   addSetItem(CMemorySetItem(5, 6, 1));
   addSetItem(CMemorySetItem(7, 8, 1));
-  /* addSetItem(CMemorySetItem(10, 14, 1)); */
-  /* addSetItem(CMemorySetItem(5, 8, 1)); */
-  /* addSetItem(CMemorySetItem(8, 10, 1)); */
 
   addSetItem(CMemorySetItem(22, 24, 1));
   addSetItem(CMemorySetItem(21, 24, 1));
-  addSetItem(CMemorySetItem(21, 28, 1));
+  addSetItem(CMemorySetItem(21, 26, 1));
+  addSetItem(CMemorySetItem(22, 35, 1));
 
+  addSetItem(CMemorySetItem(30, 30, 1));
+  addSetItem(CMemorySetItem(31, 31, 1));
+  addSetItem(CMemorySetItem(32, 32, 1));
+  addSetItem(CMemorySetItem(33, 33, 1));
+  addSetItem(CMemorySetItem(34, 34, 1));
+  addSetItem(CMemorySetItem(35, 35, 1));
+  addSetItem(CMemorySetItem(36, 36, 1));
+  addSetItem(CMemorySetItem(37, 37, 1));
+  addSetItem(CMemorySetItem(38, 38, 1));
+  addSetItem(CMemorySetItem(39, 39, 1));
+  addSetItem(CMemorySetItem(40, 40, 1));
+  addSetItem(CMemorySetItem(41, 41, 1));
+  addSetItem(CMemorySetItem(42, 42, 1));
+  addSetItem(CMemorySetItem(43, 43, 1));
+  addSetItem(CMemorySetItem(44, 44, 1));
+  addSetItem(CMemorySetItem(45, 45, 1));
+  addSetItem(CMemorySetItem(46, 46, 1));
 
+  addSetItem(CMemorySetItem(22, 22, 1));
+  addSetItem(CMemorySetItem(23, 23, 1));
+  addSetItem(CMemorySetItem(24, 24, 1));
 
-
-  /* addSetItem(CMemorySetItem(26, 30, 1)); */
-  /* addSetItem(CMemorySetItem(20, 25, 1)); */
-
-  /* addSetItem(CMemorySetItem(23, 24, 1)); */
-  /* addSetItem(CMemorySetItem(20, 22, 1)); */
-
-
-  /* addSetItem(CMemorySetItem(1, 1, 1)); */
-  /* addSetItem(CMemorySetItem(2, 2, 1)); */
-  /* addSetItem(CMemorySetItem(3, 3, 1)); */
-  /* addSetItem(CMemorySetItem(4, 4, 1)); */
-  /* addSetItem(CMemorySetItem(5, 5, 1)); */
-  /* addSetItem(CMemorySetItem(4, 4, 1)); */
-  /* addSetItem(CMemorySetItem(5, 5, 1)); */
-  /* addSetItem(CMemorySetItem(1, 1, 1)); */
-  /* addSetItem(CMemorySetItem(2, 2, 1)); */
-  /* addSetItem(CMemorySetItem(3, 5, 1)); */
-  /* addSetItem(CMemorySetItem(3, 3, 1)); */
-  /* addSetItem(CMemorySetItem(5, 5, 1)); */
-
-  /* addSetItem(CMemorySetItem(6, 8, 1)); */
-  /* addSetItem(CMemorySetItem(3, 3, 1)); */
-  /* addSetItem(CMemorySetItem(2, 2, 1)); */
-
-  /* addSetItem(CMemorySetItem(5, 5, 1)); */
-  /* addSetItem(CMemorySetItem(6, 8, 1)); */
-  /* addSetItem(CMemorySetItem(8, 8, 1)); */
-  /* addSetItem(CMemorySetItem(9, 10, 1)); */
-  /* addSetItem(CMemorySetItem(11, 13, 1)); */
-  /* addSetItem(CMemorySetItem(14, 14, 1)); */
-
-  /* addSetItem(CMemorySetItem(3, 3, 1)); */
-  /* addSetItem(CMemorySetItem(2, 2, 1)); */
-
-  /* addSetItem(CMemorySetItem(20, 25, 1)); */
-
-  qDebug() << "=====================Result";
+  qDebug() << "========================";
+  qDebug() << "Order list";
+  qDebug() << "========================";
   qDebug() << mListOrder;
 
   QLinkedList<CMemoryDataItem> list_data;
@@ -266,6 +220,7 @@ LCMemorySet::LCMemorySet(qint32 _fragmentMaxSize) :
   qDebug() << "Compil order list";
   qDebug() << "========================";
   compilOrderList();
+  qDebug() << mListCompil;
 
 }
 
@@ -277,171 +232,81 @@ LCMemorySet::~LCMemorySet()
 //------------------------------------------------------------------------------
 void LCMemorySet::addSetItem(const CMemorySetItem& _item)
 {
-  /* auto insert = */ 
-  /*   [this]( */
-  /*       const CMemorySetItem& _item, */ 
-  /*       const CMemorySetList::Iterator& _insert_before) */
-  /*   { */
-
-  /*     auto it = mListOrder.insert(_insert_before, _item); */
-
-  /*     auto unite = */
-  /*       [this](CMemorySetList::Iterator& _first) */
-  /*       { */
-  /*         auto second = _first + 1; */
-  /*         if(second == mListOrder.end()) */ 
-  /*         { */
-  /*           qDebug() << "insert x"; */
-  /*           return _first; */
-  /*         } */
-
-  /*         if( !SegmentIsCrossed<qint32>( */
-  /*               (*_first).first, (*_first).second, */
-  /*               (*second).first, (*second).second)) */
-  /*         { */
-  /*           if(!SegmentIsNeighbour<qint32>( */
-  /*               (*_first).first, (*_first).second, */
-  /*               (*second).first, (*second).second)) */
-  /*           { */
-  /*             qDebug() << "insert 0"; */
-  /*             return _first; */
-  /*           } */
-  /*         } */
-
-  /*         CMemorySetItem item = */ 
-  /*           CMemorySetItem::unite(*_first, *second, mFragmentMaxSize); */
-
-  /*         if(item.isNull()) */
-  /*         { */
-  /*           qDebug() << "insert 1"; */
-  /*           return _first; */
-  /*         } */
-          
-  /*         qDebug() << "-------erase" << " first " << *_first << " second " << *second; */
-  /*         qDebug() << "-------new item " << item; */
-  /*         auto it = mListOrder.erase(mListOrder.erase(_first)); */
-  /*         return mListOrder.insert(it, item); */
-  /*       }; */
-
-  /*     it--; */
-
-  /*     if( it != mListOrder.end()) */
-  /*     { */
-  /*       it = unite(it); */
-  /*           qDebug() << "insert 2"; */
-  /*     } */
-
-  /*     if( it != mListOrder.end()) */
-  /*     { */
-  /*       it = unite(it); */
-  /*           qDebug() << "insert 3"; */
-  /*     } */
-  /*   }; */
-
-
-
-
-
-
-  /* qDebug() << "--------------------Add item" << _item; */
   auto it = FindGreaterItem<CMemorySetItem>(mListOrder, _item);
-  /* auto ret = */ 
-  /*   [this]() */
-  /*   { */
-  /*     qDebug() << "list = "; */
-  /*     qDebug() << mListOrder; */
-  /*   }; */
-
   mListOrder.insert(it, _item);
-  /* insert(_item, it); */
-
-  /* return ret(); */
-  
 }
 
 //------------------------------------------------------------------------------
 void LCMemorySet::compilOrderList()
 {
-
-  if(mListOrder.size() == 0) return;
-
-  enum EState 
+  enum class EState
   {
-    ST_1,
-    ST_2
-  }state;
+    st0,
+    st1
+  };
 
+  EState state = EState::st0;
   CMemorySetList::Iterator oit = mListOrder.begin();
-  CMemorySetItem item_acc = *oit;
-  CMemorySetList::Iterator cit;
+  CMemorySetItem item_acc;
 
-  auto operate =
+  auto pass = 
     [&]()
     {
-
-      auto next_order = oit + 1;
-
-
-      if(next_order == mListOrder.end())
-      {
-        return true;
-      }
-
-
-
-      if((SegmentIsCrossed<qint32>(
-              item_acc.first, item_acc.second,
-              (*next_order).first, (*next_order).second)) || 
-          SegmentIsNeighbour<qint32>(
-            item_acc.first, item_acc.second,
-            (*next_order).first, (*next_order).second))
-      {
-        auto item = CMemorySetItem::unite(item_acc, (*next_order));
-        if(!item.isNull())
-        {
-          item_acc = item;
-        }
-        else
-        {
-          mListCompil << item_acc;
-        }
-      }
-
-
-
-
-      bool ret = false;
       switch(state)
       {
-      case EState::ST_1:
-        oit++;
-        if(oit == mListOrder.end()) 
+      case EState::st0:
+        if(oit == mListOrder.end())
         {
-          ret = true;
+          return false;
         }
+        item_acc = (*oit);
+
+        state = EState::st1;
         break;
 
-      case EState::ST_2:
+      case EState::st1:
+        {
+          oit++;
+          CMemorySetItem next_item;
+
+          if(oit != mListOrder.end())
+          {
+            next_item = *oit;
+          }
+          else
+          {
+            mListCompil << item_acc;
+            return false;
+          }
+
+          if(SegmentIsCrossed<qint32>(
+                item_acc.first, item_acc.second,
+                next_item.first, next_item.second) || 
+              SegmentIsNeighbour<qint32>(
+                item_acc.first, item_acc.second,
+                next_item.first, next_item.second))
+          {
+            auto ibuff = CMemorySetItem::unite(item_acc, next_item);
+            if(!ibuff.isNull())
+            {
+              item_acc = ibuff;
+              break;
+            }
+          }
+          
+          mListCompil << item_acc;
+          state = EState::st0;
+        }
         break;
 
       default:
+        return false;
         break;
       }
-      return ret;
+      return true;
     };
 
-  while(true)
-  {
-    if(operate()) break;
-  }
-
-  /* for(auto it = mListOrder.begin(); it != mListOrder.end(); it++) */
-  /* { */
-  /*   /1* qDebug() << "List Order item = " << *it; *1/ */
-  /* } */
-
-
-
+  while(pass()){}
 }
 
 

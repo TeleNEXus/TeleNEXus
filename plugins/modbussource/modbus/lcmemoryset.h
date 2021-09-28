@@ -80,8 +80,7 @@ public:
 
   static CMemorySetItem unite(
       const CMemorySetItem& _i1, 
-      const CMemorySetItem& _i2,
-      qint32 _uniteMaxSize = 0);
+      const CMemorySetItem& _i2);
   
   /* CMemorySetItem& operator+=(const CMemorySetItem& _item) */
   /* { */
@@ -103,6 +102,7 @@ class LCMemorySet
 {
 private:
   using CMemorySetList = QLinkedList<CMemorySetItem>;
+  /* using CMemorySetMap = QMap<CMemorySetItem, int>; */
 
 private:
   qint32 mFragmentMaxSize;
