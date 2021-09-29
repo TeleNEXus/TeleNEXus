@@ -27,105 +27,88 @@
 #include <QPair>
 #include <QSharedPointer>
 #include <QMap>
-#include <QSet>
+#include <QByteArray>
+#include <functional>
 
-//==============================================================================
-class CMemoryDataItem
+//==============================================================================LCMemorySetAccess
+class LCMemorySetAccess
 {
-private:
-  qint32 mAddr;
-  qint32 mSize;
-public:
-  CMemoryDataItem() = delete;
-  CMemoryDataItem(qint32 _addr, qint32 _size);
-  qint32 getAddressBegin(void)const{ return mAddr;}
-  qint32 getAddressEnd(void)const{ return (mAddr + mSize - 1);}
-  qint32 getSize(void)const{ return mSize;}
-};
 
-bool operator<(const CMemoryDataItem& _first, const CMemoryDataItem& _second);
-bool operator>(const CMemoryDataItem& _first, const CMemoryDataItem& _second);
-bool operator==(const CMemoryDataItem& _first, const CMemoryDataItem& _second);
-
-QDebug operator<<(QDebug _debug, const CMemoryDataItem& _item);
-
-//==============================================================================
-class CMemorySetItem : public QPair<qint32, qint32>
-{
-private:
-  using CPair = QPair<qint32, qint32>;
-  qint32 mData;
-  QSet<QSharedPointer<CMemoryDataItem>> mDataItems;
 public:
 
-  CMemorySetItem() : CPair(-1, -1), mData(0){}
+  using CAddrPair = QPair<int,int>;
+  using FReader = std::function<int(int _addr, QByteArray& _data)>;
 
-  explicit CMemorySetItem(
-      quint32 _first, qint32 _second, qint32 _data = 0) :
-    CPair(_first, _second), mData(_data){}
-
-  CMemorySetItem(QSharedPointer<CMemoryDataItem> _spDataItem)
+  //----------------------------------------------------------------------------CIData
+  class CIData
   {
-    mDataItems.insert(_spDataItem);
-    first = _spDataItem->getAddressBegin();
-    second = _spDataItem->getAddressEnd();
-  }
+  public:
+    CIData(){}
+    virtual int getAddress() const = 0;
+    virtual int getSize() const = 0; 
+    virtual void setData(const QByteArray& _data, int status) = 0;
+  };
 
-  bool isNull() const
-  { 
-    return ((first < 0) || (second < 0)) ? (true) : (false);
-  }
+  //----------------------------------------------------------------------------CDataItem
+  class CDataItem : public QPair<int, int>
+  {
+  private:
+    QList<QWeakPointer<CIData>> mDataList;
+    int mUniteIndex;
+  public:
 
-  qint32 getData(void)const{return mData;}
+    CDataItem() : CAddrPair(-1, -1), mUniteIndex(1){}
 
-  static CMemorySetItem unite(
-      const CMemorySetItem& _i1, 
-      const CMemorySetItem& _i2);
-  
-  /* CMemorySetItem& operator+=(const CMemorySetItem& _item) */
-  /* { */
-  /*   if(second + 1 < _item.first) return *this; */
+    CDataItem(int _first, int _second) :
+      CAddrPair(_first, _second), mUniteIndex(1){}
 
-  /*   second = _item.second; */
-  /*   mData += _item.mData; */
-  /*   mDataItems += _item.mDataItems; */
+    CDataItem(int _first, int _second, QWeakPointer<CIData> _wp_data) :
+      CAddrPair(_first, _second), mUniteIndex(1){ mDataList << _wp_data;}
 
-  /*   return *this; */
-  /* } */
-};
+    bool isNull() const
+    { 
+      return ((first < 0) || (second < 0)) ? (true) : (false);
+    }
 
-QDebug operator<<(QDebug _debug, const CMemorySetItem& _item);
-QDebug operator<<(QDebug _debug, const QLinkedList<CMemorySetItem>& _list);
+    int getUniteIndex(void)const{return mUniteIndex;}
+    void updateData(FReader& _reader);
+    static CDataItem unite( const CDataItem& _i1, const CDataItem& _i2);
+    friend QDebug operator<<(QDebug _debug, const CDataItem& _item); 
+  };
 
-//==============================================================================
-class LCMemorySet
-{
-private:
-  using CMemorySetList = QLinkedList<CMemorySetItem>;
-  /* using CMemorySetMap = QMap<CMemorySetItem, int>; */
 
 private:
-  qint32 mFragmentMaxSize;
-  CMemorySetList mListOrder;
+  using CMemorySetList = QLinkedList<CDataItem>;
+  using CMemorySetMap  = QMultiMap<CDataItem, int>;
+  using CMemoryDataMap = QMultiMap<QPair<int,int>, QSharedPointer<CIData>>;
+
+private:
+  /* CMemorySetMap mMapOrder; */
   CMemorySetList mListCompil;
+  CMemoryDataMap mDataMap;
 
-  QMap<QSharedPointer<CMemoryDataItem>, CMemorySetList::iterator> mDataItemMap;
+  FReader mfReader;
+  bool mFlagForCompil;
 
 public:
-  explicit LCMemorySet(qint32 _fragmentMaxSize = 0);
-  ~LCMemorySet();
-
-  void addDataItem(const CMemoryDataItem& _dataItem);
+  LCMemorySetAccess() = delete;
+  LCMemorySetAccess(FReader _reader);
+  ~LCMemorySetAccess();
 
 private:
-  void addSetItem(const CMemorySetItem& _item);
-  void compilOrderList();
-
-  CMemorySetList::Iterator addItem(const CMemorySetItem& _item);
+  /* void addSetItem(const CDataItem& _item); */
+  /* void compilOrderList(); */
+  /* CMemorySetMap::Iterator addItem(const CDataItem& _item); */
+  void compilDataMap();
 
 public:
-  void addDataItem(QSharedPointer<CMemoryDataItem> _item);
+  void insert(QSharedPointer<CIData> _sp_data);
+  void remove(QSharedPointer<CIData> _sp_data);
+  void update();
 };
 
+QDebug operator<<(QDebug _debug, const LCMemorySetAccess::CDataItem& _item);
+QDebug operator<<(QDebug _debug, const QLinkedList<LCMemorySetAccess::CDataItem>& _list);
+QDebug operator<<(QDebug _debug, const LCMemorySetAccess::CIData& _data);
 
 #endif  //LCMEMORYSET_H_

@@ -45,200 +45,262 @@ template <class T> bool SegmentIsNeighbour(T a1, T b1, T a2, T b2)
   }
   return false;
 }
+
 //==============================================================================FindGreaterItem
-template < typename T> typename QLinkedList<T>::Iterator FindGreaterItem(
-    QLinkedList<T>& _list, 
-    const T& _item)
+/* template < typename T> typename QLinkedList<T>::Iterator FindGreaterItem( */
+/*     QLinkedList<T>& _list, */ 
+/*     const T& _item) */
+/* { */
+/*   auto it = _list.begin(); */
+/*   while(it != _list.end()) */
+/*   { */
+/*     if(*it > _item) */ 
+/*     { */
+/*       return it; */
+/*     } */
+/*     it++; */
+/*   }; */
+/*   return _list.end(); */
+/* } */
+
+
+
+//==============================================================================CDataItem
+using CDataItem = LCMemorySetAccess::CDataItem;
+
+//------------------------------------------------------------------------------
+void CDataItem::updateData(FReader& _reader)
 {
-  auto it = _list.begin();
-  while(it != _list.end())
+  int size = second - first;
+  QByteArray data(size, 0);
+
+  int read_status = _reader(first, data);
+
+  auto it = mDataList.begin();
+
+  while(it != mDataList.end())
   {
-    if(*it > _item) 
+    QSharedPointer<CIData> sp = (*it).lock();
+    if(sp.isNull())
     {
-      return it;
+      it = mDataList.erase(it);
     }
-    it++;
-  };
-  return _list.end();
-}
+    else
+    {
+      qDebug() << "setData";
+      sp->setData(data.mid(sp->getAddress(), sp->getSize()), read_status);
+      it++;
+    }
+  }
 
-//==============================================================================CMemoryDataItem
-CMemoryDataItem::CMemoryDataItem(qint32 _addr, qint32 _size):
-  mAddr(_addr), mSize(_size)
-{
-  if(_addr < 0) mAddr = 0;
-  else mAddr = _addr;
-  if(_size < 1) mSize = 1;
-  else mSize = _size;
-}
-
-//------------------------------------------------------------------------------
-bool operator<(const CMemoryDataItem& _first, const CMemoryDataItem& _second)
-{
-  if(_first.getAddressBegin() != _second.getAddressBegin())
-    return (_first.getAddressBegin() < _second.getAddressBegin());
-  else
-    return (_first.getAddressEnd() < _second.getAddressEnd());
+  if(mDataList.isEmpty())
+  {
+    *this = CDataItem();
+  }
 }
 
 //------------------------------------------------------------------------------
-bool operator>(const CMemoryDataItem& _first, const CMemoryDataItem& _second)
+CDataItem LCMemorySetAccess::CDataItem::unite(
+    const CDataItem& _i1, 
+    const CDataItem& _i2)
 {
-  if(_first.getAddressBegin() != _second.getAddressBegin())
-    return (_first.getAddressBegin() > _second.getAddressBegin());
-  else
-    return (_first.getAddressEnd() > _second.getAddressEnd());
-}
+  CDataItem ik;
 
-//------------------------------------------------------------------------------
-bool operator==(const CMemoryDataItem& _first, const CMemoryDataItem& _second)
-{
-  if((_first.getAddressBegin() == _second.getAddressBegin()) ||
-      (_first.getAddressEnd() == _second.getAddressEnd()))
-    return false;
-  else
-    return true;
-}
-
-QDebug operator<<(QDebug _debug, const CMemoryDataItem& _item)
-{
-  _debug << qPrintable(QString("DataItem(%1, %2, %3)")
-    .arg(_item.getAddressBegin())
-    .arg(_item.getAddressEnd())
-    .arg(_item.getSize()));
-  return _debug;
-}
-
-//==============================================================================CMemorySetItem
-CMemorySetItem CMemorySetItem::unite(
-    const CMemorySetItem& _i1, 
-    const CMemorySetItem& _i2)
-{
-  CMemorySetItem ji;
-
-  if(_i1.isNull() || _i2.isNull()) return ji;
+  if(_i1.isNull() || _i2.isNull()) return ik;
 
   if(_i1.first < _i2.first)
   {
-    ji.first = _i1.first; 
+    ik.first = _i1.first; 
   }
   else
   {
-    ji.first = _i2.first;
+    ik.first = _i2.first;
   }
 
   if(_i1.second > _i2.second)
   {
-    ji.second = _i1.second;
+    ik.second = _i1.second;
   }
   else
   {
-    ji.second = _i2.second;
+    ik.second = _i2.second;
   }
   
-  ji.mDataItems = _i1.mDataItems + _i2.mDataItems;  
-  ji.mData = _i1.mData + _i2.mData;
-
-  return ji;
+  ik.mUniteIndex = _i1.mUniteIndex + _i2.mUniteIndex;
+  ik.mDataList = _i1.mDataList + _i2.mDataList;
+  return ik;
 }
 
 //------------------------------------------------------------------------------
-QDebug operator<<(QDebug _debug, const CMemorySetItem& _item)
+QDebug operator<<(QDebug _debug, const CDataItem& _item)
 {
-  _debug << qPrintable(QString("Item(%1, %2, %3)")
+  _debug << qPrintable(QString("\nCDataItem(%1, %2, %3)")
     .arg(_item.first)
     .arg(_item.second)
-    .arg(_item.getData()));
+    .arg(_item.getUniteIndex()));
+
+  for(auto it = _item.mDataList.begin(); it != _item.mDataList.end(); it++)
+  {
+    auto sp = (*it).lock();
+    if(sp.isNull()) continue;
+    _debug << "\n" << *sp;
+  }
+
   return _debug;
 }
 
 //------------------------------------------------------------------------------
-QDebug operator<<(QDebug _debug, const QLinkedList<CMemorySetItem>& _list)
+QDebug operator<<(QDebug _debug, const QLinkedList<CDataItem>& _list)
 {
-  _debug << "MemorySetList(\n";
+  _debug << "MemorySetList(";
 
   for(auto it = _list.begin(); it != _list.end()-1; it++)
   {
     _debug << *it << ",\n";
   } 
   if(!_list.isEmpty()) _debug << _list.last();
-  _debug.nospace() << "\n)";
+  _debug.nospace() << ")";
   return _debug;
 }
 
-//==============================================================================LCMemorySet
-LCMemorySet::LCMemorySet(qint32 _fragmentMaxSize) :
-  mFragmentMaxSize(_fragmentMaxSize)
+//------------------------------------------------------------------------------
+QDebug operator<<(QDebug _debug, const QMultiMap<QPair<int, int>, 
+    QSharedPointer<LCMemorySetAccess::CIData>>& _map)
 {
+  _debug << "MemorySetDataMap(\n";
 
-  addSetItem(CMemorySetItem(20, 21, 1));
-  addSetItem(CMemorySetItem(5, 6, 1));
-  addSetItem(CMemorySetItem(7, 8, 1));
+  auto out_element =
+    [&_debug](QMultiMap<QPair<int, int>, QSharedPointer<LCMemorySetAccess::CIData>>::ConstIterator _it)
+    {
+      if(_it.value().isNull())
+      {
+        _debug << "(" << _it.key() << "," << "NULL" << ")\n";
+      }
+      else
+      {
+        _debug << "(" << _it.key() << "," << ( *_it.value() ) << ")\n";
+      }
+    };
 
-  addSetItem(CMemorySetItem(21, 26, 1));
-  addSetItem(CMemorySetItem(5, 6, 1));
-  addSetItem(CMemorySetItem(7, 8, 1));
-  addSetItem(CMemorySetItem(5, 6, 1));
-  addSetItem(CMemorySetItem(7, 8, 1));
+  for(auto it = _map.begin(); it != _map.end()-1; it++)
+  {
+    out_element(it);
+  } 
 
-  addSetItem(CMemorySetItem(22, 24, 1));
-  addSetItem(CMemorySetItem(21, 24, 1));
-  addSetItem(CMemorySetItem(21, 26, 1));
-  addSetItem(CMemorySetItem(22, 35, 1));
+  if(_map.size() > 0) out_element(--_map.end());
 
-  addSetItem(CMemorySetItem(30, 30, 1));
-  addSetItem(CMemorySetItem(31, 31, 1));
-  addSetItem(CMemorySetItem(32, 32, 1));
-  addSetItem(CMemorySetItem(33, 33, 1));
-  addSetItem(CMemorySetItem(34, 34, 1));
-  addSetItem(CMemorySetItem(35, 35, 1));
-  addSetItem(CMemorySetItem(36, 36, 1));
-  addSetItem(CMemorySetItem(37, 37, 1));
-  addSetItem(CMemorySetItem(38, 38, 1));
-  addSetItem(CMemorySetItem(39, 39, 1));
-  addSetItem(CMemorySetItem(40, 40, 1));
-  addSetItem(CMemorySetItem(41, 41, 1));
-  addSetItem(CMemorySetItem(42, 42, 1));
-  addSetItem(CMemorySetItem(43, 43, 1));
-  addSetItem(CMemorySetItem(44, 44, 1));
-  addSetItem(CMemorySetItem(45, 45, 1));
-  addSetItem(CMemorySetItem(46, 46, 1));
-
-  addSetItem(CMemorySetItem(22, 22, 1));
-  addSetItem(CMemorySetItem(23, 23, 1));
-  addSetItem(CMemorySetItem(24, 24, 1));
-
-  qDebug() << "========================";
-  qDebug() << "Order list";
-  qDebug() << "========================";
-  qDebug() << mListOrder;
-
-  QLinkedList<CMemoryDataItem> list_data;
-
-
-  qDebug() << "========================";
-  qDebug() << "Compil order list";
-  qDebug() << "========================";
-  compilOrderList();
-  qDebug() << mListCompil;
-
+  _debug.nospace() << ")";
+  return _debug;
 }
 
-//------------------------------------------------------------------------------
-LCMemorySet::~LCMemorySet()
+//==============================================================================LCMemorySetAccess
+LCMemorySetAccess::LCMemorySetAccess(FReader _reader) :
+  mfReader(_reader),
+  mFlagForCompil(false)
 {
 }
 
 //------------------------------------------------------------------------------
-void LCMemorySet::addSetItem(const CMemorySetItem& _item)
+LCMemorySetAccess::~LCMemorySetAccess()
 {
-  auto it = FindGreaterItem<CMemorySetItem>(mListOrder, _item);
-  mListOrder.insert(it, _item);
 }
 
+/* //------------------------------------------------------------------------------ */
+/* void LCMemorySetAccess::addSetItem(const CDataItem& _item) */
+/* { */
+/*   mMapOrder.insert(_item, 1); */
+/* } */
+
+/* //------------------------------------------------------------------------------ */
+/* void LCMemorySetAccess::compilOrderList() */
+/* { */
+/*   enum class EState */
+/*   { */
+/*     st0, */
+/*     st1 */
+/*   }; */
+
+/*   EState state = EState::st0; */
+/*   CMemorySetMap::Iterator oit = mMapOrder.begin(); */
+/*   CDataItem item_acc; */
+
+/*   auto pass = */ 
+/*     [&]() */
+/*     { */
+/*       switch(state) */
+/*       { */
+/*       case EState::st0: */
+/*         if(oit == mMapOrder.end()) */
+/*         { */
+/*           return false; */
+/*         } */
+/*         item_acc = oit.key(); */
+/* #pragma GCC diagnostic push */
+/* #pragma GCC diagnostic ignored "-Wimplicit-fallthrough" */
+/*         state = EState::st1; */
+/*       case EState::st1: */
+/* #pragma GCC diagnostic pop */
+/*         { */
+/*           oit++; */
+/*           CDataItem next_item; */
+
+/*           if(oit != mMapOrder.end()) */
+/*           { */
+/*             next_item = oit.key(); */
+/*           } */
+/*           else */
+/*           { */
+/*             mListCompil << item_acc; */
+/*             return false; */
+/*           } */
+
+/*           if(SegmentIsCrossed<qint32>( */
+/*                 item_acc.first, item_acc.second, */
+/*                 next_item.first, next_item.second) || */ 
+/*               SegmentIsNeighbour<qint32>( */
+/*                 item_acc.first, item_acc.second, */
+/*                 next_item.first, next_item.second)) */
+/*           { */
+/*             auto ibuff = CDataItem::unite(item_acc, next_item); */
+/*             if(!ibuff.isNull()) */
+/*             { */
+/*               item_acc = ibuff; */
+/*               break; */
+/*             } */
+/*           } */
+          
+/*           mListCompil << item_acc; */
+/*           state = EState::st0; */
+/*         } */
+/*         break; */
+
+/*       default: */
+/*         return false; */
+/*         break; */
+/*       } */
+/*       return true; */
+/*     }; */
+
+/*   while(pass()){} */
+/* } */
+
+
 //------------------------------------------------------------------------------
-void LCMemorySet::compilOrderList()
+/* LCMemorySetAccess::CMemorySetMap::Iterator */ 
+/* LCMemorySetAccess::addItem(const CDataItem& _item) */
+/* { */
+/*   Q_UNUSED(_item); */
+/*   return mMapOrder.begin(); */
+/* } */
+
+//------------------------------------------------------------------------------
+void LCMemorySetAccess::compilDataMap()
 {
+  qDebug() << "==============================";
+  qDebug() << "Compil Data Map";
+  qDebug() << "==============================";
+  qDebug() << mDataMap;
+
   enum class EState
   {
     st0,
@@ -246,8 +308,9 @@ void LCMemorySet::compilOrderList()
   };
 
   EState state = EState::st0;
-  CMemorySetList::Iterator oit = mListOrder.begin();
-  CMemorySetItem item_acc;
+  CMemoryDataMap::Iterator oit = mDataMap.begin();
+
+  CDataItem item_acc;
 
   auto pass = 
     [&]()
@@ -255,23 +318,23 @@ void LCMemorySet::compilOrderList()
       switch(state)
       {
       case EState::st0:
-        if(oit == mListOrder.end())
+        if(oit == mDataMap.end())
         {
           return false;
         }
-        item_acc = (*oit);
-
+        item_acc = CDataItem(oit.key().first, oit.key().second, oit.value());
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wimplicit-fallthrough"
         state = EState::st1;
-        break;
-
       case EState::st1:
+#pragma GCC diagnostic pop
         {
           oit++;
-          CMemorySetItem next_item;
+          CDataItem next_item;
 
-          if(oit != mListOrder.end())
+          if(oit != mDataMap.end())
           {
-            next_item = *oit;
+            next_item = CDataItem(oit.key().first, oit.key().second, oit.value());
           }
           else
           {
@@ -286,7 +349,7 @@ void LCMemorySet::compilOrderList()
                 item_acc.first, item_acc.second,
                 next_item.first, next_item.second))
           {
-            auto ibuff = CMemorySetItem::unite(item_acc, next_item);
+            auto ibuff = CDataItem::unite(item_acc, next_item);
             if(!ibuff.isNull())
             {
               item_acc = ibuff;
@@ -307,20 +370,85 @@ void LCMemorySet::compilOrderList()
     };
 
   while(pass()){}
-}
 
+
+  qDebug() << "==============================";
+  qDebug() << "List compil";
+  qDebug() << "==============================";
+
+
+  qDebug() << mListCompil;
+
+
+  mFlagForCompil = false;
+}
 
 //------------------------------------------------------------------------------
-LCMemorySet::CMemorySetList::Iterator 
-LCMemorySet::addItem(const CMemorySetItem& _item)
+using CIData = LCMemorySetAccess::CIData;
+
+//------------------------------------------------------------------------------
+void LCMemorySetAccess::insert(QSharedPointer<CIData> _sp_data)
 {
-  Q_UNUSED(_item);
-  return mListOrder.begin();
+  if(_sp_data->getSize() < 1) return;
+  if(_sp_data->getAddress() < 0) return;
+
+  CDataItem key(_sp_data->getAddress(), 
+        _sp_data->getAddress() + _sp_data->getSize() - 1);
+
+  if(mDataMap.contains(key, _sp_data)) return;
+
+  mDataMap.insert(key, _sp_data);
+
+  mFlagForCompil = true;
+
+  qDebug() << "insert(" << key << "," << *_sp_data << ")";
 }
 
 //------------------------------------------------------------------------------
-void LCMemorySet::addDataItem(QSharedPointer<CMemoryDataItem> _sp_data_item)
+void LCMemorySetAccess::remove(
+    QSharedPointer<CIData> _sp_data)
 {
-  if(mDataItemMap.find(_sp_data_item) != mDataItemMap.end()) return;
-  mDataItemMap.insert(_sp_data_item, addItem(CMemorySetItem()));
+  if( mDataMap.remove(
+        CDataItem(
+          _sp_data->getAddress(), 
+          _sp_data->getAddress() + _sp_data->getSize() - 1),
+        _sp_data) > 0) 
+  {
+    mFlagForCompil = true;
+  }
 }
+
+//------------------------------------------------------------------------------
+void LCMemorySetAccess::update()
+{
+  if(mFlagForCompil)
+  {
+    compilDataMap();
+  }
+
+  auto it = mListCompil.begin();
+
+  while(it != mListCompil.end())
+  {
+    if((*it).isNull())
+    {
+      it = mListCompil.erase(it);
+    }
+    else
+    {
+      (*it).updateData(mfReader);
+      it++;
+    }
+  }
+
+};
+
+//==============================================================================
+QDebug operator<<(QDebug _debug, const LCMemorySetAccess::CIData& _data)
+{
+  _debug << qPrintable(QString("CIData(%1, %2)")
+    .arg(_data.getAddress())
+    .arg(_data.getSize()));
+  return _debug;
+}
+
