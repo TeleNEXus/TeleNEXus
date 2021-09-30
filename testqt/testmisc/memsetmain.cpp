@@ -6,7 +6,6 @@
 QByteArray __sReadDataArray(50, 0);
 
 
-
 //==============================================================================CTestData
 class CTestData : public LCMemorySetAccess::CIData
 {
@@ -37,6 +36,7 @@ static QMap<QString, QSharedPointer<CTestData>> __slDataMap;
 //==============================================================================
 static void initDataMap();
 static void addItems(LCMemorySetAccess& _memorySetAccess);
+static void printData();
 
 //==============================================================================
 int main(int argc, char** argv)
@@ -50,6 +50,7 @@ int main(int argc, char** argv)
   {
     for(int i = 0; i < __sReadDataArray.size(); i++)
     {
+      /* __sReadDataArray[i] = i*1000; */
       __sReadDataArray[i] = i;
     }
   }();
@@ -86,6 +87,7 @@ int main(int argc, char** argv)
 
 
   memoryaccess.update();
+  printData();
   /* __slDataMap.remove("Data_05"); */
   /* __slDataMap.remove("Data_03"); */
   /* __slDataMap.remove("Data_09"); */
@@ -159,7 +161,7 @@ static void addItems(LCMemorySetAccess& _memorySetAccess)
   /* } */
   _memorySetAccess.insert(__slDataMap.find("Data_00").value());
   _memorySetAccess.insert(__slDataMap.find("Data_01").value());
-  _memorySetAccess.insert(__slDataMap.find("Data_02").value());
+  /* _memorySetAccess.insert(__slDataMap.find("Data_02").value()); */
   _memorySetAccess.insert(__slDataMap.find("Data_03").value());
   _memorySetAccess.insert(__slDataMap.find("Data_04").value());
   /* _memorySetAccess.insert(__slDataMap.find("Data_05").value()); */
@@ -180,5 +182,13 @@ static void addItems(LCMemorySetAccess& _memorySetAccess)
   _memorySetAccess.insert(__slDataMap.find("Data_37").value());
   _memorySetAccess.insert(__slDataMap.find("Data_38").value());
   _memorySetAccess.insert(__slDataMap.find("Data_39").value());
+}
+
+static void printData()
+{
+  for(auto it = __slDataMap.begin(); it != __slDataMap.end(); it++)
+  {
+    qDebug() << it.value()->getData().toHex(' ');
+  }
 }
 

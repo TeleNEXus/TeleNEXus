@@ -33,12 +33,8 @@
 //==============================================================================LCMemorySetAccess
 class LCMemorySetAccess
 {
-
 public:
-
-  using CAddrPair = QPair<int,int>;
   using FReader = std::function<int(int _addr, QByteArray& _data)>;
-
   //----------------------------------------------------------------------------CIData
   class CIData
   {
@@ -50,6 +46,8 @@ public:
     virtual QByteArray getData()const = 0;
   };
 
+private:
+  using CAddrPair = QPair<int,int>;
   //----------------------------------------------------------------------------CDataItem
   class CDataItem : public QPair<int, int>
   {
@@ -74,9 +72,7 @@ public:
     int getUniteIndex(void)const{return mUniteIndex;}
     bool updateData(FReader& _reader);
     static CDataItem unite( const CDataItem& _i1, const CDataItem& _i2);
-    friend QDebug operator<<(QDebug _debug, const CDataItem& _item); 
   };
-
 
 private:
   using CMemorySetList = QLinkedList<CDataItem>;
@@ -84,7 +80,6 @@ private:
   using CMemoryDataMap = QMultiMap<QPair<int,int>, QWeakPointer<CIData>>;
 
 private:
-  /* CMemorySetMap mMapOrder; */
   CMemorySetList mListCompil;
   CMemoryDataMap mDataMap;
 
@@ -97,9 +92,6 @@ public:
   ~LCMemorySetAccess();
 
 private:
-  /* void addSetItem(const CDataItem& _item); */
-  /* void compilOrderList(); */
-  /* CMemorySetMap::Iterator addItem(const CDataItem& _item); */
   void compilDataMap();
 
 public:
@@ -107,9 +99,5 @@ public:
   void remove(QWeakPointer<CIData> _sp_data);
   void update();
 };
-
-QDebug operator<<(QDebug _debug, const LCMemorySetAccess::CDataItem& _item);
-QDebug operator<<(QDebug _debug, const QLinkedList<LCMemorySetAccess::CDataItem>& _list);
-QDebug operator<<(QDebug _debug, const LCMemorySetAccess::CIData& _data);
 
 #endif  //LCMEMORYSET_H_
