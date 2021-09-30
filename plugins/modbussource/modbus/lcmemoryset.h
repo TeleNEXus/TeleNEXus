@@ -47,6 +47,7 @@ public:
     virtual int getAddress() const = 0;
     virtual int getSize() const = 0; 
     virtual void setData(const QByteArray& _data, int status) = 0;
+    virtual QByteArray getData()const = 0;
   };
 
   //----------------------------------------------------------------------------CDataItem
@@ -71,7 +72,7 @@ public:
     }
 
     int getUniteIndex(void)const{return mUniteIndex;}
-    void updateData(FReader& _reader);
+    bool updateData(FReader& _reader);
     static CDataItem unite( const CDataItem& _i1, const CDataItem& _i2);
     friend QDebug operator<<(QDebug _debug, const CDataItem& _item); 
   };
@@ -80,7 +81,7 @@ public:
 private:
   using CMemorySetList = QLinkedList<CDataItem>;
   using CMemorySetMap  = QMultiMap<CDataItem, int>;
-  using CMemoryDataMap = QMultiMap<QPair<int,int>, QSharedPointer<CIData>>;
+  using CMemoryDataMap = QMultiMap<QPair<int,int>, QWeakPointer<CIData>>;
 
 private:
   /* CMemorySetMap mMapOrder; */
@@ -102,8 +103,8 @@ private:
   void compilDataMap();
 
 public:
-  void insert(QSharedPointer<CIData> _sp_data);
-  void remove(QSharedPointer<CIData> _sp_data);
+  void insert(QWeakPointer<CIData> _sp_data);
+  void remove(QWeakPointer<CIData> _sp_data);
   void update();
 };
 
