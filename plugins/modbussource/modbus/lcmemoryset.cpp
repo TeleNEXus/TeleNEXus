@@ -69,12 +69,15 @@ template <class T> bool SegmentIsNeighbour(T a1, T b1, T a2, T b2)
 using CDataItem = LCMemorySetAccess::CDataItem;
 
 //------------------------------------------------------------------------------
-void CDataItem::updateData(FReader& _reader)
+bool CDataItem::updateData(FReader& _reader)
 {
-  int size = second - first;
+  int size = second - first + 1;
+
   QByteArray data(size, 0);
 
   int read_status = _reader(first, data);
+
+  /* qDebug() << "Read data = " << data; */
 
   auto it = mDataList.begin();
 
@@ -83,20 +86,28 @@ void CDataItem::updateData(FReader& _reader)
     QSharedPointer<CIData> sp = (*it).lock();
     if(sp.isNull())
     {
-      it = mDataList.erase(it);
+      /* qDebug() << "Erase from data list"; */
+      /* it = mDataList.erase(it); */
+      return false;
     }
-    else
-    {
-      qDebug() << "setData";
-      sp->setData(data.mid(sp->getAddress(), sp->getSize()), read_status);
+    /* else */
+    /* { */
+      int local_addr = sp->getAddress() - first;
+      /* qDebug() << "Addr = " << sp->getAddress() << "Size = " << sp->getSize(); */
+      /* qDebug() << "Addr local = " << local_addr << "Size = " << sp->getSize(); */
+
+      sp->setData(data.mid(local_addr, sp->getSize()), read_status);
       it++;
-    }
+    /* } */
   }
 
-  if(mDataList.isEmpty())
-  {
-    *this = CDataItem();
-  }
+  /* if(mDataList.isEmpty()) */
+  /* { */
+  /*   qDebug() << "Empty data"; */
+  /*   *this = CDataItem(); */
+  /*   return false; */
+  /* } */
+  return true;
 }
 
 //------------------------------------------------------------------------------
@@ -165,12 +176,12 @@ QDebug operator<<(QDebug _debug, const QLinkedList<CDataItem>& _list)
 
 //------------------------------------------------------------------------------
 QDebug operator<<(QDebug _debug, const QMultiMap<QPair<int, int>, 
-    QSharedPointer<LCMemorySetAccess::CIData>>& _map)
+    QWeakPointer<LCMemorySetAccess::CIData>>& _map)
 {
   _debug << "MemorySetDataMap(\n";
 
   auto out_element =
-    [&_debug](QMultiMap<QPair<int, int>, QSharedPointer<LCMemorySetAccess::CIData>>::ConstIterator _it)
+    [&_debug](QMultiMap<QPair<int, int>, QWeakPointer<LCMemorySetAccess::CIData>>::ConstIterator _it)
     {
       if(_it.value().isNull())
       {
@@ -178,7 +189,11 @@ QDebug operator<<(QDebug _debug, const QMultiMap<QPair<int, int>,
       }
       else
       {
-        _debug << "(" << _it.key() << "," << ( *_it.value() ) << ")\n";
+        auto sp = _it.value().lock();
+        if(!sp.isNull())
+        {
+          _debug << "(" << _it.key() << "," << ( *sp ) << ")\n";
+        }
       }
     };
 
@@ -296,10 +311,12 @@ LCMemorySetAccess::~LCMemorySetAccess()
 //------------------------------------------------------------------------------
 void LCMemorySetAccess::compilDataMap()
 {
-  qDebug() << "==============================";
-  qDebug() << "Compil Data Map";
-  qDebug() << "==============================";
-  qDebug() << mDataMap;
+  /* qDebug() << "=============================="; */
+  /* qDebug() << "Compil Data Map"; */
+  /* qDebug() << "=============================="; */
+  /* qDebug() << mDataMap; */
+
+  mListCompil.clear();
 
   enum class EState
   {
@@ -322,6 +339,13 @@ void LCMemorySetAccess::compilDataMap()
         {
           return false;
         }
+
+        if(oit.value().lock().isNull())
+        {
+          oit = mDataMap.erase(oit);
+          break;
+        }
+
         item_acc = CDataItem(oit.key().first, oit.key().second, oit.value());
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wimplicit-fallthrough"
@@ -332,15 +356,30 @@ void LCMemorySetAccess::compilDataMap()
           oit++;
           CDataItem next_item;
 
-          if(oit != mDataMap.end())
-          {
-            next_item = CDataItem(oit.key().first, oit.key().second, oit.value());
-          }
-          else
+          if(oit == mDataMap.end())
           {
             mListCompil << item_acc;
             return false;
           }
+
+          if(oit.value().lock().isNull())
+          {
+            oit = mDataMap.erase(oit);
+            oit--;
+            break;
+          }
+
+          next_item = CDataItem(oit.key().first, oit.key().second, oit.value());
+
+          /* if(oit != mDataMap.end()) */
+          /* { */
+          /*   next_item = CDataItem(oit.key().first, oit.key().second, oit.value()); */
+          /* } */
+          /* else */
+          /* { */
+          /*   mListCompil << item_acc; */
+          /*   return false; */
+          /* } */
 
           if(SegmentIsCrossed<qint32>(
                 item_acc.first, item_acc.second,
@@ -387,32 +426,36 @@ void LCMemorySetAccess::compilDataMap()
 using CIData = LCMemorySetAccess::CIData;
 
 //------------------------------------------------------------------------------
-void LCMemorySetAccess::insert(QSharedPointer<CIData> _sp_data)
+void LCMemorySetAccess::insert(QWeakPointer<CIData> _wp_data)
 {
-  if(_sp_data->getSize() < 1) return;
-  if(_sp_data->getAddress() < 0) return;
+  auto sp = _wp_data.lock();
+  if(sp.isNull())return;
 
-  CDataItem key(_sp_data->getAddress(), 
-        _sp_data->getAddress() + _sp_data->getSize() - 1);
+  if(sp->getSize() < 1) return;
+  if(sp->getAddress() < 0) return;
 
-  if(mDataMap.contains(key, _sp_data)) return;
+  CDataItem key(sp->getAddress(), 
+        sp->getAddress() + sp->getSize() - 1);
 
-  mDataMap.insert(key, _sp_data);
+  if(mDataMap.contains(key, sp)) return;
+
+  mDataMap.insert(key, sp);
 
   mFlagForCompil = true;
-
-  qDebug() << "insert(" << key << "," << *_sp_data << ")";
 }
 
 //------------------------------------------------------------------------------
-void LCMemorySetAccess::remove(
-    QSharedPointer<CIData> _sp_data)
+void LCMemorySetAccess::remove(QWeakPointer<CIData> _wp_data)
 {
+
+  auto sp = _wp_data.lock();
+  if(sp.isNull()) return;
+
   if( mDataMap.remove(
         CDataItem(
-          _sp_data->getAddress(), 
-          _sp_data->getAddress() + _sp_data->getSize() - 1),
-        _sp_data) > 0) 
+          sp->getAddress(), 
+          sp->getAddress() + sp->getSize() - 1),
+        sp) > 0) 
   {
     mFlagForCompil = true;
   }
@@ -423,7 +466,12 @@ void LCMemorySetAccess::update()
 {
   if(mFlagForCompil)
   {
+
+    qDebug() << "Before >>>>>" << mDataMap;
+
     compilDataMap();
+
+    qDebug() << "After >>>>>" << mDataMap;
   }
 
   auto it = mListCompil.begin();
@@ -436,10 +484,30 @@ void LCMemorySetAccess::update()
     }
     else
     {
-      (*it).updateData(mfReader);
+      if(!(*it).updateData(mfReader))
+      {
+        mFlagForCompil = true;
+        qDebug() << mDataMap;
+      }
+
       it++;
     }
   }
+
+
+  /* qDebug() << "=============================="; */
+  /* qDebug() << qPrintable("Updated data:"); */
+  /* qDebug() << "=============================="; */
+  /* for(auto it = mDataMap.begin(); it != mDataMap.end(); it++) */
+  /* { */
+    
+  /*   auto sp  = it.value().lock(); */
+  /*   if(sp.isNull()) continue; */
+  /*   qDebug() */ 
+  /*     << "Address = "<< sp->getAddress() */ 
+  /*     << "; Size = " << sp->getSize() */ 
+  /*     << "; Data = " << sp->getData().toHex(' ') << ";"; */
+  /* } */
 
 };
 
