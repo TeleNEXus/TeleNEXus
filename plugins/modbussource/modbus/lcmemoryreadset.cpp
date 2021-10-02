@@ -19,7 +19,7 @@
  * along with TeleNEXus.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "lcmemoryset.h"
+#include "lcmemoryreadset.h"
 #include <QDebug>
 
 //==============================================================================CrossSegment
@@ -246,18 +246,15 @@ void LCMemoryReadSet::insert(QWeakPointer<CIData> _wp_data)
 //------------------------------------------------------------------------------
 void LCMemoryReadSet::remove(QWeakPointer<CIData> _wp_data)
 {
-
   auto sp = _wp_data.lock();
-  if(sp.isNull()) return;
 
-  if( mDataMap.remove(
-        CDataItem(
-          sp->getAddress(), 
-          sp->getAddress() + sp->getSize() - 1),
-        sp) > 0) 
+  if(sp.isNull())
   {
-    mFlagForCompil = true;
+    mDataMap.remove(
+        CDataItem(sp->getAddress(), sp->getAddress() + sp->getSize() - 1), 
+        sp);
   }
+  mFlagForCompil = true;
 }
 
 //------------------------------------------------------------------------------

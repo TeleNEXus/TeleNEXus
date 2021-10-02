@@ -25,7 +25,7 @@ INCLUDEPATH +=                                  \
 
 
 SOURCES += ./memsetmain.cpp 
-SOURCES += ../../plugins/modbussource/modbus/lcmemoryset.cpp
+SOURCES += ../../plugins/modbussource/modbus/lcmemoryreadset.cpp
 # SOURCES += testscreen.cpp \
 # SOURCES += main.cpp \
 # SOURCES +=  ./regexpr.cpp \
@@ -50,7 +50,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 HEADERS += \
-../../plugins/modbussource/modbus/lcmemoryset.h
+../../plugins/modbussource/modbus/lcmemoryreadset.h
     # ./jsclassfunc.h \
     # ./testjsdataformatter/jsvalidator.h
 
