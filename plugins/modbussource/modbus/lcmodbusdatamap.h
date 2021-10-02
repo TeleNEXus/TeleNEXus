@@ -24,6 +24,7 @@
 #include "lqmodbusmasterbase.h"
 #include "lqmodbusdatawriter.h"
 #include "lqmodbusdatareader.h"
+#include "lcmemoryreadset.h"
 
 #include <QString>
 #include <QLinkedList>
@@ -44,12 +45,15 @@ private:
   //----------------------------------------------------------------------------CControllerRegistersBase
   class CControllerRegistersBase
   {
+
   protected:
     const quint8& mDevId;
   private:
-    quint16* mRegBuff;
+
     QSharedPointer<LQModbusMasterBase> mspMaster;
-    QLinkedList<CDataMapItemRegsBase*> mReadDataList;
+    /* QLinkedList<CDataMapItemRegsBase*> mReadDataList; */
+
+    LCMemoryReadSet mMemoryReadSet;
 
   public:
     CControllerRegistersBase(
@@ -114,7 +118,9 @@ private:
     const quint8& mDevId;
   private:
     quint8* mBitsBuff;
+
     QSharedPointer<LQModbusMasterBase> mspMaster;
+
     QLinkedList<CDataMapItemBitsBase*> mReadDataList;
 
   public:
@@ -167,7 +173,7 @@ private:
   };
 
   //----------------------------------------------------------------------------CDataMapItemBase
-  class CDataMapItemBase
+  class CDataMapItemBase : public LCMemoryReadSet::CIData
   {
   protected:
     quint16 mAddr;
@@ -180,6 +186,17 @@ private:
       mSize(_size)
     {}
     virtual ~CDataMapItemBase(){}
+  private:
+    void notifyReaders(
+        EReadStatus _status, 
+        const QByteArray& _data = QByteArray());
+  public:
+
+    virtual int getAddress(void) const override {return mAddr;}
+    virtual int getSize(void) const override {return mSize;}
+    virtual void setData(const QByteArray& _data, int status) override;
+
+    bool hasNoReaders(void){return mReadersList.isEmpty();}
 
     virtual void connectReader(QWeakPointer<LQModbusDataReader> _reader) = 0;
     virtual void disconnectReader(QWeakPointer<LQModbusDataReader> _reader) = 0;
@@ -187,11 +204,6 @@ private:
         QSharedPointer<LQModbusDataWriter> _writer) = 0;
     virtual void read(QSharedPointer<LQModbusDataReader> _reader) = 0;
 
-    void    notifyReaders(EReadStatus _status, 
-        const QByteArray& _data = QByteArray());
-    quint16 getAddress(void){return mAddr;}
-    quint16 getSize(void){return mSize;}
-    bool hasNoReaders(void){return mReadersList.isEmpty();}
   };
 
   //----------------------------------------------------------------------------CDataMapItemRegsBase
@@ -308,12 +320,13 @@ private:
   CControllerCoils            mControllerCoils;
   CControllerDiscreteInputs   mControllerDiscreteInputs;
 
-  QMap<QString, CDataMapItemBase*> mMapItems;
+  QMap<QString, QSharedPointer<CDataMapItemBase>> mMapItems;
 
 public:
   LCModbusDataMap() = delete;
-  LCModbusDataMap(const quint8& _devId, QSharedPointer<LQModbusMasterBase> _master);
-  ~LCModbusDataMap();
+  LCModbusDataMap(const quint8& _devId, 
+      QSharedPointer<LQModbusMasterBase> _master);
+  virtual ~LCModbusDataMap(){}
 
   void update();
 

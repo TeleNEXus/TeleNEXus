@@ -43,7 +43,6 @@ public:
     virtual int getAddress() const = 0;
     virtual int getSize() const = 0; 
     virtual void setData(const QByteArray& _data, int status) = 0;
-    virtual QByteArray getData()const = 0;
   };
 
 private:
