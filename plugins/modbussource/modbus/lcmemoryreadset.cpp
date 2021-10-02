@@ -68,7 +68,7 @@ template <class T> bool SegmentIsNeighbour(T a1, T b1, T a2, T b2)
 //==============================================================================CDataItem
 
 //------------------------------------------------------------------------------
-bool LCMemorySetAccess::CDataItem::updateData(FReader& _reader)
+bool LCMemoryReadSet::CDataItem::updateData(FReader& _reader)
 {
   QByteArray data(second - first + 1, 0);
   int read_status = _reader(first, data);
@@ -86,7 +86,7 @@ bool LCMemorySetAccess::CDataItem::updateData(FReader& _reader)
 }
 
 //------------------------------------------------------------------------------
-LCMemorySetAccess::CDataItem LCMemorySetAccess::CDataItem::unite(
+LCMemoryReadSet::CDataItem LCMemoryReadSet::CDataItem::unite(
     const CDataItem& _i1, 
     const CDataItem& _i2)
 {
@@ -117,21 +117,22 @@ LCMemorySetAccess::CDataItem LCMemorySetAccess::CDataItem::unite(
   return ik;
 }
 
-//==============================================================================LCMemorySetAccess
-LCMemorySetAccess::LCMemorySetAccess(FReader _reader) :
+//==============================================================================LCMemoryReadSet
+LCMemoryReadSet::LCMemoryReadSet(FReader _reader) :
   mfReader(_reader),
   mFlagForCompil(false)
 {
 }
 
 //------------------------------------------------------------------------------
-LCMemorySetAccess::~LCMemorySetAccess()
+LCMemoryReadSet::~LCMemoryReadSet()
 {
 }
 
 //------------------------------------------------------------------------------
-void LCMemorySetAccess::compilDataMap()
+void LCMemoryReadSet::compilDataMap()
 {
+
   mListCompil.clear();
 
   enum class EState
@@ -141,7 +142,7 @@ void LCMemorySetAccess::compilDataMap()
   };
 
   EState state = EState::st0;
-  CMemoryDataMap::Iterator oit = mDataMap.begin();
+  CMemoryDataMap::Iterator itdm = mDataMap.begin();
 
   CDataItem item_acc;
 
@@ -151,41 +152,42 @@ void LCMemorySetAccess::compilDataMap()
       switch(state)
       {
       case EState::st0:
-        if(oit == mDataMap.end())
+        if(itdm == mDataMap.end())
         {
           return false;
         }
 
-        if(oit.value().lock().isNull())
+        if(itdm.value().lock().isNull())
         {
-          oit = mDataMap.erase(oit);
+          itdm = mDataMap.erase(itdm);
           break;
         }
 
-        item_acc = CDataItem(oit.key().first, oit.key().second, oit.value());
+        item_acc = CDataItem(itdm.key().first, itdm.key().second, itdm.value());
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wimplicit-fallthrough"
         state = EState::st1;
       case EState::st1:
 #pragma GCC diagnostic pop
         {
-          oit++;
+          itdm++;
           CDataItem next_item;
 
-          if(oit == mDataMap.end())
+          if(itdm == mDataMap.end())
           {
             mListCompil << item_acc;
             return false;
           }
 
-          if(oit.value().lock().isNull())
+          if(itdm.value().lock().isNull())
           {
-            oit = mDataMap.erase(oit);
-            oit--;
+            itdm = mDataMap.erase(itdm);
+            itdm--;
             break;
           }
 
-          next_item = CDataItem(oit.key().first, oit.key().second, oit.value());
+          next_item = CDataItem(
+              itdm.key().first, itdm.key().second, itdm.value());
 
           if(SegmentIsCrossed<int>(
                 item_acc.first, item_acc.second,
@@ -220,10 +222,10 @@ void LCMemorySetAccess::compilDataMap()
 }
 
 //------------------------------------------------------------------------------
-using CIData = LCMemorySetAccess::CIData;
+using CIData = LCMemoryReadSet::CIData;
 
 //------------------------------------------------------------------------------
-void LCMemorySetAccess::insert(QWeakPointer<CIData> _wp_data)
+void LCMemoryReadSet::insert(QWeakPointer<CIData> _wp_data)
 {
   auto sp = _wp_data.lock();
   if(sp.isNull())return;
@@ -242,7 +244,7 @@ void LCMemorySetAccess::insert(QWeakPointer<CIData> _wp_data)
 }
 
 //------------------------------------------------------------------------------
-void LCMemorySetAccess::remove(QWeakPointer<CIData> _wp_data)
+void LCMemoryReadSet::remove(QWeakPointer<CIData> _wp_data)
 {
 
   auto sp = _wp_data.lock();
@@ -259,7 +261,7 @@ void LCMemorySetAccess::remove(QWeakPointer<CIData> _wp_data)
 }
 
 //------------------------------------------------------------------------------
-void LCMemorySetAccess::update()
+void LCMemoryReadSet::update()
 {
   if(mFlagForCompil)
   {
@@ -273,15 +275,14 @@ void LCMemorySetAccess::update()
     if((*it).isNull())
     {
       it = mListCompil.erase(it);
+      continue;
     }
-    else
+
+    if(!(*it).updateData(mfReader))
     {
-      if(!(*it).updateData(mfReader))
-      {
-        mFlagForCompil = true;
-      }
-      it++;
+      mFlagForCompil = true;
     }
+    it++;
   }
 };
 
