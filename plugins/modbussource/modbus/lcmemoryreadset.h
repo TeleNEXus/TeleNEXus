@@ -30,8 +30,8 @@
 #include <QByteArray>
 #include <functional>
 
-//==============================================================================LCMemorySetAccess
-class LCMemorySetAccess
+//==============================================================================LCMemoryReadSet
+class LCMemoryReadSet
 {
 public:
   using FReader = std::function<int(int _addr, QByteArray& _data)>;
@@ -87,9 +87,9 @@ private:
   bool mFlagForCompil;
 
 public:
-  LCMemorySetAccess() = delete;
-  LCMemorySetAccess(FReader _reader);
-  ~LCMemorySetAccess();
+  LCMemoryReadSet() = delete;
+  LCMemoryReadSet(FReader _reader);
+  ~LCMemoryReadSet();
 
 private:
   void compilDataMap();
