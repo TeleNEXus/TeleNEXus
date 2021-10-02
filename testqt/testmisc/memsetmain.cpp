@@ -1,6 +1,6 @@
 #include <QCoreApplication>
 #include <QDebug>
-#include "lcmemoryset.h"
+#include "lcmemoryreadset.h"
 
 
 QByteArray __sReadDataArray(50, 0);
