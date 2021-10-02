@@ -28,7 +28,7 @@ public:
     }
     mData.replace(0, mData.size(), _data);
   }
-  virtual QByteArray getData()const override { return mData; }
+  QByteArray getData()const{ return mData; }
 };
 
 static QMap<QString, QSharedPointer<CTestData>> __slDataMap;
@@ -201,7 +201,7 @@ static void printData()
   qDebug() << "----------------------print";
   for(auto it = __slDataMap.begin(); it != __slDataMap.end(); it++)
   {
-    qDebug() << it.value()->getData().toHex(' ');
+    /* qDebug() << it.value()->getData().toHex(' '); */
   }
 }
 
