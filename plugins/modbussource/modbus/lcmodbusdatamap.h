@@ -39,14 +39,11 @@ private:
   using EReadStatus = LIRemoteDataReader::EReadStatus;
   using EWriteStatus= LIRemoteDataWriter::EWriteStatus;
 
-  class CDataMapItemRegsBase;
-  class CDataMapItemBitsBase;
-
   class CAddressedDataMapItem;
-
 
   class CIAddressedDataController
   {
+
   public:
     CIAddressedDataController(){}
 
@@ -54,6 +51,7 @@ private:
 
     virtual void addReadDataItem(
         QSharedPointer<LCMemoryReadSet::CIData> _dataItem) = 0;
+
     virtual void deleteReadDataItem(
         QSharedPointer<LCMemoryReadSet::CIData> _dataItem) = 0;
 
@@ -79,6 +77,7 @@ private:
     LCMemoryReadSet mMemoryReadSet;
 
   public:
+    CControllerRegistersBase() = delete;
     CControllerRegistersBase(
         const quint8& _devId,
         QSharedPointer<LQModbusMasterBase> _master);
@@ -225,13 +224,12 @@ private:
     virtual void read(QSharedPointer<LQModbusDataReader> _reader) = 0;
   };
 
-
-
-
   //----------------------------------------------------------------------------CAddressedDataMapItem
-  class CAddressedDataMapItem : CIDataMapItem
+  class CAddressedDataMapItem : public CIDataMapItem
   {
+
   protected:
+
     class CReadSetData : public LCMemoryReadSet::CIData
     {
     protected:
@@ -250,7 +248,7 @@ private:
 
       virtual int getAddress() const override { return mAddress; }
       virtual int getSize() const override { return mSize; }
-      virtual void setData(const QByteArray& _data, int status) override;
+      virtual void setData(const QByteArray& _data, int _status) override;
     };
 
     QSharedPointer<LCMemoryReadSet::CIData> mspReadSetData;
@@ -263,7 +261,9 @@ private:
         quint16 _addr, 
         quint16 _size, 
         CIAddressedDataController& _controller);
+
     virtual ~CAddressedDataMapItem(){}
+
   private:
 
     void notifyReaders(

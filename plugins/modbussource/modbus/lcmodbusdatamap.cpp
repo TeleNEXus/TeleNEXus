@@ -62,15 +62,14 @@ LCModbusDataMap::CControllerRegistersBase::
 void LCModbusDataMap::CControllerRegistersBase::addReadDataItem(
     QSharedPointer<LCMemoryReadSet::CIData> _dataItem)
 {
-  /* if(mReadDataList.contains(_dataItem)) return; */
-  /* mReadDataList << _dataItem; */
+  mMemoryReadSet.insert(_dataItem);
 }
 
 //------------------------------------------------------------------------------
 void LCModbusDataMap::CControllerRegistersBase::deleteReadDataItem(
     QSharedPointer<LCMemoryReadSet::CIData> _dataItem)
 {
-  /* mReadDataList.removeOne(_dataItem); */
+  mMemoryReadSet.remove(_dataItem);
 }
 
 //------------------------------------------------------------------------------
@@ -419,7 +418,7 @@ LCModbusDataMap::CControllerDiscreteInputs::writeBits(
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-//==============================================================================CDataMapItemBase
+//==============================================================================CReadSetData
 void LCModbusDataMap::CAddressedDataMapItem::CReadSetData::setData(
     const QByteArray& _data, 
     int status)
@@ -427,7 +426,7 @@ void LCModbusDataMap::CAddressedDataMapItem::CReadSetData::setData(
   mNotifier(static_cast<EReadStatus>(status), _data);
 }
 
-
+//==============================================================================CAddressedDataMapItem
 LCModbusDataMap::
 CAddressedDataMapItem::
 CAddressedDataMapItem(
@@ -464,14 +463,6 @@ void LCModbusDataMap::CAddressedDataMapItem::notifyReaders(
     sp->notifyListener(_data, _status);
   }
 }
-
-//------------------------------------------------------------------------------
-void LCModbusDataMap::CAddressedDataMapItem::setData(
-    const QByteArray& _data, int _status)
-{
-  notifyReaders(static_cast<EReadStatus>(_status), _data);
-}
-
 
 //------------------------------------------------------------------------------
 void LCModbusDataMap::CAddressedDataMapItem::connectReader(
