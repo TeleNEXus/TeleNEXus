@@ -24,31 +24,42 @@
 
 //==============================================================================CControllerRegistersBase
 LCModbusDataMap::CControllerRegistersBase::CControllerRegistersBase(
-    const quint8& _devId, QSharedPointer<LQModbusMasterBase> _master) :
+    const quint8& _devId, QWeakPointer<LQModbusMasterBase> _master) :
   mDevId(_devId),
-  mspMaster(_master),
+  mwpMaster(_master),
   mMemoryReadSet(
       [this](int _addr, QByteArray& _data)
       {
         quint16 regs = _data.size() >> 1;
         quint16 data_buff[regs];
 
+        //regbase
+        qDebug() << "MemorySet Registars read";
+        qDebug() << "size = " << _data.size();
+
         if((regs << 1) != _data.size()) 
         {
           return static_cast<int>(EReadStatus::Wrong);
         }
 
-        if(mspMaster.isNull()) 
+        auto sp = mwpMaster.lock();
+
+        if(sp.isNull()) 
         {
           return static_cast<int>(EReadStatus::Wrong);
         }
 
-        if(readRegs(mspMaster.data(), _addr, regs, data_buff).status !=
+        if(readRegs(sp.data(), _addr, regs, data_buff).status !=
             LQModbusMasterBase::SReply::EStatus::OK)
         {
           return static_cast<int>(EReadStatus::Wrong);
         }
-        _data.replace(0, _data.size(), reinterpret_cast<char*>(data_buff));
+
+        for(int i = 0; i < _data.size(); i++)
+        {
+          _data[i] = data_buff[i];
+        }
+
         return static_cast<int>(EReadStatus::Valid);
       })
 {
@@ -59,14 +70,14 @@ LCModbusDataMap::CControllerRegistersBase::
 ~CControllerRegistersBase(){}
 
 //------------------------------------------------------------------------------
-void LCModbusDataMap::CControllerRegistersBase::addReadDataItem(
+void LCModbusDataMap::CControllerRegistersBase::inssertReadDataItem(
     QSharedPointer<LCMemoryReadSet::CIData> _dataItem)
 {
   mMemoryReadSet.insert(_dataItem);
 }
 
 //------------------------------------------------------------------------------
-void LCModbusDataMap::CControllerRegistersBase::deleteReadDataItem(
+void LCModbusDataMap::CControllerRegistersBase::removeReadDataItem(
     QSharedPointer<LCMemoryReadSet::CIData> _dataItem)
 {
   mMemoryReadSet.remove(_dataItem);
@@ -77,6 +88,7 @@ void LCModbusDataMap::CControllerRegistersBase::read(
     quint16 _addr, quint16 _size, QSharedPointer<LQModbusDataReader> _reader)
 {
   EReadStatus status = EReadStatus::Wrong;
+  auto sp = mwpMaster.lock();
 
   quint16 regs = _size >> 1;
   if((regs << 1) != _size) 
@@ -86,9 +98,9 @@ void LCModbusDataMap::CControllerRegistersBase::read(
 
   quint16 buff[regs];
 
-  if(!mspMaster.isNull())
+  if(!sp.isNull())
   {
-    if(readRegs(mspMaster.data(), _addr, regs, buff).status ==
+    if(readRegs(sp.data(), _addr, regs, buff).status ==
         LQModbusMasterBase::SReply::EStatus::OK)
     {
       status = EReadStatus::Valid;
@@ -104,21 +116,22 @@ void LCModbusDataMap::CControllerRegistersBase::write(
     const QByteArray& _data,
     QSharedPointer<LQModbusDataWriter> _writer)
 {
-
   auto ret_wrong =
     [&_writer]()
     {
       _writer->notifyListener(EWriteStatus::Failure);
     };
 
+  auto sp = mwpMaster.lock();
+
+  if(sp.isNull()) return ret_wrong();
+
   if(_data.size() != _size) return ret_wrong();
 
   if(_data.size() % 2 != 0) return ret_wrong();
 
-  if(mspMaster.isNull()) return ret_wrong();
-
   if(writeRegs(
-        mspMaster.data(),
+        sp.data(),
         _addr,
         _data.size() >> 1,
         ((quint16*)_data.constData())).status !=
@@ -226,9 +239,40 @@ writeRegs(
 //==============================================================================CControllerRegistersBase
 LCModbusDataMap::CControllerBitsBase::CControllerBitsBase(
     const quint8& _devId,
-    QSharedPointer<LQModbusMasterBase> _master) :
+    QWeakPointer<LQModbusMasterBase> _master) :
   mDevId(_devId),
-  mspMaster(_master)
+  mwpMaster(_master),
+  mMemoryReadSet(
+      [this](int _addr, QByteArray& _data)
+      {
+
+        //bitbase
+        qDebug() << "MemorySet Bits read";
+        qDebug() << "size = " << _data.size();
+
+        quint8 data_buff[_data.size()];
+
+        auto sp = mwpMaster.lock();
+
+        if(sp.isNull()) 
+        {
+          return static_cast<int>(EReadStatus::Wrong);
+        }
+
+        if(readBits(sp.data(), _addr, _data.size(), data_buff).status !=
+            LQModbusMasterBase::SReply::EStatus::OK)
+        {
+          return static_cast<int>(EReadStatus::Wrong);
+        }
+
+
+        for(int i = 0; i < _data.size(); i++)
+        {
+          _data[i] = data_buff[i];
+        }
+
+        return static_cast<int>(EReadStatus::Valid);
+      })
 {
 }
 
@@ -239,18 +283,17 @@ LCModbusDataMap::CControllerBitsBase::
 }
 
 //------------------------------------------------------------------------------
-void LCModbusDataMap::CControllerBitsBase::addReadDataItem(
+void LCModbusDataMap::CControllerBitsBase::inssertReadDataItem(
     QSharedPointer<LCMemoryReadSet::CIData> _dataItem)
 {
-  /* if(mReadDataList.contains(_dataItem)) return; */
-  /* mReadDataList << _dataItem; */
+  mMemoryReadSet.insert(_dataItem);
 }
 
 //------------------------------------------------------------------------------
-void LCModbusDataMap::CControllerBitsBase::deleteReadDataItem(
+void LCModbusDataMap::CControllerBitsBase::removeReadDataItem(
     QSharedPointer<LCMemoryReadSet::CIData> _dataItem)
 {
-  /* mReadDataList.removeOne(_dataItem); */
+  mMemoryReadSet.remove(_dataItem);
 }
 
 //------------------------------------------------------------------------------
@@ -259,11 +302,12 @@ void LCModbusDataMap::CControllerBitsBase::read(
 {
   EReadStatus status = EReadStatus::Wrong;
   quint8 buff[_size];
+  auto sp = mwpMaster.lock();
 
 
-  if(!mspMaster.isNull())
+  if(!sp.isNull())
   {
-    if(readBits(mspMaster.data(), _addr, _size, buff).status ==
+    if(readBits(sp.data(), _addr, _size, buff).status ==
         LQModbusMasterBase::SReply::EStatus::OK)
     {
       status = EReadStatus::Valid;
@@ -288,14 +332,16 @@ void LCModbusDataMap::CControllerBitsBase::write(
 
   if(_data.size() != _size) return ret_wrong();
 
-  if(mspMaster.isNull()) return ret_wrong();
+  auto sp = mwpMaster.lock();
+
+  if(sp.isNull()) return ret_wrong();
 
   if(writeBits(
-          mspMaster.data(),
-          _addr,
-          _data.size(),
-          ((quint8*)_data.constData())).status !=
-        LQModbusMasterBase::SReply::EStatus::OK) return ret_wrong();
+        sp.data(),
+        _addr,
+        _data.size(),
+        ((quint8*)_data.constData())).status !=
+      LQModbusMasterBase::SReply::EStatus::OK) return ret_wrong();
 
   _writer->notifyListener(EWriteStatus::Success);
 }
@@ -303,6 +349,8 @@ void LCModbusDataMap::CControllerBitsBase::write(
 //------------------------------------------------------------------------------
 void LCModbusDataMap::CControllerBitsBase::update()
 {
+  mMemoryReadSet.update();
+
   /* if(mspMaster.isNull()) return; */
   /* { */
   /*   //TODO: Проработать опережающий ответ */
@@ -468,7 +516,7 @@ void LCModbusDataMap::CAddressedDataMapItem::notifyReaders(
 void LCModbusDataMap::CAddressedDataMapItem::connectReader(
     QWeakPointer<LQModbusDataReader> _reader)
 {
-  if(mReadersList.isEmpty()) mController.addReadDataItem(mspReadSetData);
+  if(mReadersList.isEmpty()) mController.inssertReadDataItem(mspReadSetData);
   mReadersList << _reader;
 }
 
@@ -478,7 +526,7 @@ void LCModbusDataMap::CAddressedDataMapItem::disconnectReader(
 {
   mReadersList.removeAll(_reader);
   if(mReadersList.isEmpty())
-    mController.deleteReadDataItem(mspReadSetData);
+    mController.removeReadDataItem(mspReadSetData);
 }
 
 //------------------------------------------------------------------------------
