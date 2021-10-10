@@ -49,10 +49,10 @@ private:
 
     virtual ~CIAddressedDataController(){}
 
-    virtual void addReadDataItem(
+    virtual void inssertReadDataItem(
         QSharedPointer<LCMemoryReadSet::CIData> _dataItem) = 0;
 
-    virtual void deleteReadDataItem(
+    virtual void removeReadDataItem(
         QSharedPointer<LCMemoryReadSet::CIData> _dataItem) = 0;
 
     virtual void read(
@@ -73,20 +73,20 @@ private:
 
   protected:
     const quint8& mDevId;
-    QSharedPointer<LQModbusMasterBase> mspMaster;
+    QWeakPointer<LQModbusMasterBase> mwpMaster;
     LCMemoryReadSet mMemoryReadSet;
 
   public:
     CControllerRegistersBase() = delete;
     CControllerRegistersBase(
         const quint8& _devId,
-        QSharedPointer<LQModbusMasterBase> _master);
+        QWeakPointer<LQModbusMasterBase> _master);
     ~CControllerRegistersBase();
 
-    virtual void addReadDataItem(
+    virtual void inssertReadDataItem(
         QSharedPointer<LCMemoryReadSet::CIData>  _dataItem) override;
 
-    virtual void deleteReadDataItem(
+    virtual void removeReadDataItem(
         QSharedPointer<LCMemoryReadSet::CIData> _dataItem) override;
 
     virtual void read(
@@ -113,6 +113,7 @@ private:
   class CControllerHoldingRegisters : public CControllerRegistersBase
   {
   public:
+    CControllerHoldingRegisters() = delete;
     CControllerHoldingRegisters(
         const quint8& _devId,
         QSharedPointer<LQModbusMasterBase> _master);
@@ -145,16 +146,19 @@ private:
   {
   protected:
     const quint8& mDevId;
-  private:
-    QSharedPointer<LQModbusMasterBase> mspMaster;
+    QWeakPointer<LQModbusMasterBase> mwpMaster;
+    LCMemoryReadSet mMemoryReadSet;
+
   public:
+    CControllerBitsBase() = delete;
     CControllerBitsBase(
-        const quint8& _devId, QSharedPointer<LQModbusMasterBase> _master);
+        const quint8& _devId, QWeakPointer<LQModbusMasterBase> _master);
+
     ~CControllerBitsBase();
 
-    virtual void addReadDataItem(
+    virtual void inssertReadDataItem(
         QSharedPointer<LCMemoryReadSet::CIData> _dataItem) override;
-    virtual void deleteReadDataItem(
+    virtual void removeReadDataItem(
         QSharedPointer<LCMemoryReadSet::CIData> _dataItem) override;
 
     virtual void read(
@@ -308,10 +312,11 @@ public:
 
   void addItemHoldingRegs(const QString& _name, quint16 _addr, quint16 _size);
   void addItemInputRegs(const QString& _name, quint16 _addr, quint16 _size);
-  void addItemDiscreteInputs(const QString& _name, quint16 _addr, quint16 _size);
+  void addItemDiscreteInputs(
+      const QString& _name, quint16 _addr, quint16 _size);
   void addItemCoils(const QString& _name, quint16 _addr, quint16 _size);
-
-  void write(QSharedPointer<LQModbusDataWriter> _writer, const QByteArray& _data);
+  void write(
+      QSharedPointer<LQModbusDataWriter> _writer, const QByteArray& _data);
   void read(QSharedPointer<LQModbusDataReader> _reader);
   void connectReader(QSharedPointer<LQModbusDataReader> _reader);
   void disconnectReader(QSharedPointer<LQModbusDataReader> _reader);
