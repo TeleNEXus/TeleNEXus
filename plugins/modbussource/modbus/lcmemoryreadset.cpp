@@ -68,18 +68,23 @@ template <class T> bool SegmentIsNeighbour(T a1, T b1, T a2, T b2)
 //==============================================================================CDataItem
 
 //------------------------------------------------------------------------------
-bool LCMemoryReadSet::CDataItem::updateData(FReader& _reader)
+bool LCMemoryReadSet::CDataItem::updateData(FReader& _reader, int  _dataDimention)
 {
-  QByteArray data(second - first + 1, 0);
-  int read_status = _reader(first, data);
+  /* QByteArray data((second - first + 1) * _dataDimention, 0); */
+
+  QByteArray data;
+
+  int read_status = _reader(first, (second - first + 1), data);
+
   auto it = mDataList.begin();
+
   while(it != mDataList.end())
   {
     QSharedPointer<CIData> sp = (*it).lock();
     //Return false if weak pointer not locked (for recompil data map).
     if(sp.isNull()) return false;
-    int local_addr = sp->getAddress() - first;
-    sp->setData(data.mid(local_addr, sp->getSize()), read_status);
+    int local_addr = (sp->getAddress() - first) * _dataDimention;
+    sp->setData(data.mid(local_addr, sp->getSize() * _dataDimention), read_status);
     it++;
   }
   return true;
@@ -118,10 +123,12 @@ LCMemoryReadSet::CDataItem LCMemoryReadSet::CDataItem::unite(
 }
 
 //==============================================================================LCMemoryReadSet
-LCMemoryReadSet::LCMemoryReadSet(FReader _reader) :
+LCMemoryReadSet::LCMemoryReadSet(FReader _reader, int _dataDimention) :
   mfReader(_reader),
+  mDataDimention(_dataDimention),
   mFlagForCompil(false)
 {
+  if(mDataDimention < 1) mDataDimention = 1;
 }
 
 //------------------------------------------------------------------------------
@@ -233,8 +240,7 @@ void LCMemoryReadSet::insert(QWeakPointer<CIData> _wp_data)
   if(sp->getSize() < 1) return;
   if(sp->getAddress() < 0) return;
 
-  CDataItem key(sp->getAddress(), 
-        sp->getAddress() + sp->getSize() - 1);
+  CAddrPair key(sp->getAddress(), sp->getAddress() + sp->getSize() - 1);
 
   if(mDataMap.contains(key, sp)) return;
 
@@ -251,7 +257,7 @@ void LCMemoryReadSet::remove(QWeakPointer<CIData> _wp_data)
   if(sp.isNull())
   {
     mDataMap.remove(
-        CDataItem(sp->getAddress(), sp->getAddress() + sp->getSize() - 1), 
+        CAddrPair(sp->getAddress(), sp->getAddress() + sp->getSize() - 1), 
         sp);
   }
   mFlagForCompil = true;
@@ -275,7 +281,7 @@ void LCMemoryReadSet::update()
       continue;
     }
 
-    if(!(*it).updateData(mfReader))
+    if(!(*it).updateData(mfReader, mDataDimention))
     {
       mFlagForCompil = true;
     }
