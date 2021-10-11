@@ -28,19 +28,11 @@ LCModbusDataMap::CControllerRegistersBase::CControllerRegistersBase(
   mDevId(_devId),
   mwpMaster(_master),
   mMemoryReadSet(
-      [this](int _addr, QByteArray& _data)
+      [this](int _addr, int _size, QByteArray& _data)
       {
-        quint16 regs = _data.size() >> 1;
-        quint16 data_buff[regs];
-
-        //regbase
-        qDebug() << "MemorySet Registars read";
-        qDebug() << "size = " << _data.size();
-
-        if((regs << 1) != _data.size()) 
-        {
-          return static_cast<int>(EReadStatus::Wrong);
-        }
+        const int bytes = _size * 2;
+        char data_buff[bytes];
+        _data.resize(bytes);
 
         auto sp = mwpMaster.lock();
 
@@ -49,19 +41,19 @@ LCModbusDataMap::CControllerRegistersBase::CControllerRegistersBase(
           return static_cast<int>(EReadStatus::Wrong);
         }
 
-        if(readRegs(sp.data(), _addr, regs, data_buff).status !=
+        if(readRegs(sp.data(), _addr, _size, (quint16*)data_buff).status !=
             LQModbusMasterBase::SReply::EStatus::OK)
         {
           return static_cast<int>(EReadStatus::Wrong);
         }
 
-        for(int i = 0; i < _data.size(); i++)
+        for(int i = 0; i < bytes; i++)
         {
           _data[i] = data_buff[i];
         }
 
         return static_cast<int>(EReadStatus::Valid);
-      })
+      }, 2)
 {
 }
 
@@ -90,23 +82,18 @@ void LCModbusDataMap::CControllerRegistersBase::read(
   EReadStatus status = EReadStatus::Wrong;
   auto sp = mwpMaster.lock();
 
-  quint16 regs = _size >> 1;
-  if((regs << 1) != _size) 
-  {
-    _reader->notifyListener(QByteArray(), EReadStatus::Wrong);
-  }
-
-  quint16 buff[regs];
+  quint16 buff[_size];
 
   if(!sp.isNull())
   {
-    if(readRegs(sp.data(), _addr, regs, buff).status ==
+    if(readRegs(sp.data(), _addr, _size, buff).status ==
         LQModbusMasterBase::SReply::EStatus::OK)
     {
       status = EReadStatus::Valid;
     }
   }
-  _reader->notifyListener(QByteArray( (char*)buff, _size), status);
+
+  _reader->notifyListener(QByteArray( (char*)buff, _size * 2), status);
 }
 
 //------------------------------------------------------------------------------
@@ -126,14 +113,12 @@ void LCModbusDataMap::CControllerRegistersBase::write(
 
   if(sp.isNull()) return ret_wrong();
 
-  if(_data.size() != _size) return ret_wrong();
-
-  if(_data.size() % 2 != 0) return ret_wrong();
+  if(_data.size() != _size * 2) return ret_wrong();
 
   if(writeRegs(
         sp.data(),
         _addr,
-        _data.size() >> 1,
+        _size,
         ((quint16*)_data.constData())).status !=
       LQModbusMasterBase::SReply::EStatus::OK) return ret_wrong();
 
@@ -243,15 +228,9 @@ LCModbusDataMap::CControllerBitsBase::CControllerBitsBase(
   mDevId(_devId),
   mwpMaster(_master),
   mMemoryReadSet(
-      [this](int _addr, QByteArray& _data)
+      [this](int _addr, int _size, QByteArray& _data)
       {
-
-        //bitbase
-        qDebug() << "MemorySet Bits read";
-        qDebug() << "size = " << _data.size();
-
-        quint8 data_buff[_data.size()];
-
+        quint8 data_buff[_size];
         auto sp = mwpMaster.lock();
 
         if(sp.isNull()) 
@@ -259,14 +238,13 @@ LCModbusDataMap::CControllerBitsBase::CControllerBitsBase(
           return static_cast<int>(EReadStatus::Wrong);
         }
 
-        if(readBits(sp.data(), _addr, _data.size(), data_buff).status !=
+        if(readBits(sp.data(), _addr, _size, data_buff).status !=
             LQModbusMasterBase::SReply::EStatus::OK)
         {
           return static_cast<int>(EReadStatus::Wrong);
         }
 
-
-        for(int i = 0; i < _data.size(); i++)
+        for(int i = 0; i < _size; i++)
         {
           _data[i] = data_buff[i];
         }

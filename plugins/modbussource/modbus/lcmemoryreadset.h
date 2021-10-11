@@ -34,7 +34,7 @@
 class LCMemoryReadSet
 {
 public:
-  using FReader = std::function<int(int _addr, QByteArray& _data)>;
+  using FReader = std::function<int(int _addr, int _size, QByteArray& _data)>;
   //----------------------------------------------------------------------------CIData
   class CIData
   {
@@ -58,10 +58,12 @@ private:
     CDataItem() : CAddrPair(-1, -1), mUniteIndex(1){}
 
     CDataItem(int _first, int _second) :
-      CAddrPair(_first, _second), mUniteIndex(1){}
+      CAddrPair(_first, _second), 
+      mUniteIndex(1){}
 
-    CDataItem(int _first, int _second, QWeakPointer<CIData> _wp_data) :
-      CAddrPair(_first, _second), mUniteIndex(1){ mDataList << _wp_data;}
+    explicit CDataItem( int _first, int _second, QWeakPointer<CIData> _wpData) : 
+      CAddrPair(_first, _second), 
+      mUniteIndex(1) { mDataList << _wpData;}
 
     bool isNull() const
     { 
@@ -69,25 +71,25 @@ private:
     }
 
     int getUniteIndex(void)const{return mUniteIndex;}
-    bool updateData(FReader& _reader);
+    bool updateData(FReader& _reader, int _dataDimention);
     static CDataItem unite( const CDataItem& _i1, const CDataItem& _i2);
   };
 
 private:
   using CMemorySetList = QLinkedList<CDataItem>;
-  using CMemorySetMap  = QMultiMap<CDataItem, int>;
-  using CMemoryDataMap = QMultiMap<QPair<int,int>, QWeakPointer<CIData>>;
+  using CMemoryDataMap = QMultiMap<CAddrPair, QWeakPointer<CIData>>;
 
 private:
   CMemorySetList mListCompil;
   CMemoryDataMap mDataMap;
 
   FReader mfReader;
+  int mDataDimention;
   bool mFlagForCompil;
 
 public:
   LCMemoryReadSet() = delete;
-  LCMemoryReadSet(FReader _reader);
+  explicit LCMemoryReadSet(FReader _reader, int _dataDimention = 1);
   ~LCMemoryReadSet();
 
 private:
