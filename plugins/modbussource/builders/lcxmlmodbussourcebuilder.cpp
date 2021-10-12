@@ -123,6 +123,7 @@ static const struct
   QString deviceid        = "devid";
   QString updatetime      = "updatetime";
   QString memorymapfile   = "mapfile";
+  QString maxbytes        = "maxbytes";
 
 }__sourceAttributes;
 //------------------------------------------------------------------------------
@@ -137,6 +138,7 @@ static void createSources(const QDomNodeList& nodes,
   LTMastersMap::iterator itm;
 
   quint32 devid = 0;
+  quint16 maxbytes = 0;
   bool boolBuff = false;
 
   for(int i = 0; i < nodes.size(); i++)
@@ -164,11 +166,19 @@ static void createSources(const QDomNodeList& nodes,
     if(!boolBuff) continue;
     if(devid > 255) continue;
 
+    attr = el.attribute(__sourceAttributes.maxbytes);
+
+    maxbytes = attr.toUInt(&boolBuff);
+    if(!boolBuff)
+    {
+      maxbytes = 0;
+    }
+
     attr = el.attribute(__sourceAttributes.memorymapfile);
     if(attr.isNull()) continue;
 
     QSharedPointer<LQModbusDataSource> source = 
-      LQModbusDataSource::create(devid, itm.value());
+      LQModbusDataSource::create(devid, itm.value(), maxbytes);
 
     if(loadMemoryMap(source.data(), attr, _app) != 0)
     {

@@ -126,13 +126,14 @@ static void doDeleteLater(QObject* _obj)
 //==============================================================================LCQModbusDataSource
 LQModbusDataSource::LQModbusDataSource(
     quint8 _devId,
-    QSharedPointer<LQModbusMasterBase> _modbusMaster):
+    QSharedPointer<LQModbusMasterBase> _modbusMaster,
+    quint16 _maxBytesPerReq):
   QObject(nullptr),
   mDevId(_devId),
   mModbusMaster(_modbusMaster),
   mUpdateInterval(500),
   mTimer(this),
-  mDataMap(mDevId, _modbusMaster)
+  mDataMap(mDevId, _modbusMaster, _maxBytesPerReq)
 {
   connect(&mTimer, &QTimer::timeout,
       [=]()
@@ -149,10 +150,12 @@ LQModbusDataSource::~LQModbusDataSource()
 //------------------------------------------------------------------------------
 QSharedPointer<LQModbusDataSource> LQModbusDataSource::create(
     quint8 _devId,
-    QSharedPointer<LQModbusMasterBase> _modbusMaster)
+    QSharedPointer<LQModbusMasterBase> _modbusMaster,
+    quint16 _maxBytesPerReq)
 {
+  if(_maxBytesPerReq > 256) _maxBytesPerReq = 256;
   QSharedPointer<LQModbusDataSource> source(
-      new LQModbusDataSource( _devId, _modbusMaster), doDeleteLater);
+      new LQModbusDataSource( _devId, _modbusMaster, _maxBytesPerReq), doDeleteLater);
   source->mwpThis = source;
   return source;
 }

@@ -96,8 +96,8 @@ private:
   void compilDataMap();
 
 public:
-  void insert(QWeakPointer<CIData> _sp_data);
-  void remove(QWeakPointer<CIData> _sp_data);
+  void insert(QSharedPointer<CIData> _spData);
+  void remove(QSharedPointer<CIData> _spData);
   void update();
 };
 

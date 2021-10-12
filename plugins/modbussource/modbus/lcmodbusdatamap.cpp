@@ -22,9 +22,17 @@
 #include "lmodbusdefs.h"
 #include <QDebug>
 
+
+static void doInParts(
+    quint16 _startAddr, 
+    quint16 _size, 
+    quint16 _partSize, 
+    std::function<bool(quint16 _currAddr, quint16 _count, quint16 _shiftData)> _doer);
 //==============================================================================CControllerRegistersBase
 LCModbusDataMap::CControllerRegistersBase::CControllerRegistersBase(
-    const quint8& _devId, QWeakPointer<LQModbusMasterBase> _master) :
+    const quint8& _devId, 
+    QWeakPointer<LQModbusMasterBase> _master,
+    quint16 _maxBytesPerReq) :
   mDevId(_devId),
   mwpMaster(_master),
   mMemoryReadSet(
@@ -55,6 +63,14 @@ LCModbusDataMap::CControllerRegistersBase::CControllerRegistersBase(
         return static_cast<int>(EReadStatus::Valid);
       }, 2)
 {
+  if(_maxBytesPerReq % 2 == 0) 
+  {
+    mMaxRegsPerReq = _maxBytesPerReq;
+  }
+  else
+  {
+    mMaxRegsPerReq = (_maxBytesPerReq + 1) / 2;
+  }
 }
 
 //------------------------------------------------------------------------------
@@ -129,34 +145,14 @@ void LCModbusDataMap::CControllerRegistersBase::write(
 void LCModbusDataMap::CControllerRegistersBase::update()
 {
   mMemoryReadSet.update();
-
-  /* //    QSharedPointer<LCModbusMasterBase> master = mwpMaster.lock(); */
-  /* //TODO: Проработать опережающий ответ для всех */
-  /* //слушателей при нескольких таймаутах. */
-  /* // */
-  /* for(auto it = mReadDataList.begin(); */
-  /*     it != mReadDataList.end(); */
-  /*     it++) */
-  /* { */
-  /*   EReadStatus status = EReadStatus::Wrong; */
-  /*   if(readRegs( */
-  /*         mspMaster.data(), */
-  /*         (*it)->getAddress(), */
-  /*         (*it)->getSize() >> 1, */
-  /*         mRegBuff).status == LQModbusMasterBase::SReply::EStatus::OK) */
-  /*   { */
-  /*     status = EReadStatus::Valid; */
-  /*   } */
-  /*   (*it)->notifyReaders(status, QByteArray((char*)mRegBuff, (*it)->getSize())); */
-  /*   if((*it)->hasNoReaders()) mReadDataList.erase(it); */
-  /* } */
 }
 
 //==============================================================================CControllerHoldingRegisters
 LCModbusDataMap::CControllerHoldingRegisters::CControllerHoldingRegisters(
     const quint8& _devId,
-    QSharedPointer<LQModbusMasterBase> _master) :
-  CControllerRegistersBase(_devId, _master)
+    QSharedPointer<LQModbusMasterBase> _master,
+    quint16 _maxBytesPerReq) :
+  CControllerRegistersBase(_devId, _master, _maxBytesPerReq)
 {
 }
 
@@ -170,7 +166,19 @@ LQModbusMasterBase::SReply
 LCModbusDataMap::CControllerHoldingRegisters:: readRegs(
     LQModbusMasterBase* master, quint16 _addr, quint16 _size, quint16 _regs[])
 {
-  return master->readHoldingRegisters(mDevId, _addr, _size, _regs);
+  LQModbusMasterBase::SReply reply;
+
+  auto reader = 
+    [&](quint16 _currAddr, quint16 _count, quint16 _shiftData)
+    {
+      reply = master->readHoldingRegisters(mDevId, _currAddr, _count, &_regs[_shiftData]);
+      if(reply.status != LQModbusMasterBase::SReply::EStatus::OK) return false;
+      return true;
+    };
+
+  doInParts(_addr, _size, mMaxRegsPerReq, reader);
+
+  return reply;
 }
 
 //------------------------------------------------------------------------------
@@ -178,18 +186,31 @@ LQModbusMasterBase::SReply
 LCModbusDataMap::CControllerHoldingRegisters::writeRegs(
     LQModbusMasterBase* master, quint16 _addr, quint16 _size, quint16 _regs[])
 {
+
   if(_size == 1)
   {
     return master->writeSingleRegister( mDevId, _addr, _regs[0]);
   }
-  return master->writeMultipleRegisters( mDevId, _addr, _size, _regs);
+
+  LQModbusMasterBase::SReply reply;
+  auto writer = 
+    [&](quint16 _currAddr, quint16 _count, quint16 _shiftData)
+    {
+      reply = master->writeMultipleRegisters(mDevId, _currAddr, _count, &_regs[_shiftData]);
+      if(reply.status != LQModbusMasterBase::SReply::EStatus::OK) return false;
+      return true;
+    };
+
+  doInParts(_addr, _size, mMaxRegsPerReq, writer);
+  return reply;
 }
 
 //==============================================================================CControllerInputRegisters
 LCModbusDataMap::CControllerInputRegisters::CControllerInputRegisters(
     const quint8& _devId,
-    QWeakPointer<LQModbusMasterBase> _master) :
-  CControllerRegistersBase(_devId, _master)
+    QWeakPointer<LQModbusMasterBase> _master,
+    quint16 _maxBytesPerReq) :
+  CControllerRegistersBase(_devId, _master, _maxBytesPerReq)
 {
 }
 
@@ -204,7 +225,19 @@ LQModbusMasterBase::SReply
 LCModbusDataMap::CControllerInputRegisters::readRegs(
     LQModbusMasterBase* master, quint16 _addr, quint16 _size, quint16 _regs[])
 {
-  return master->readInputRegisters(mDevId, _addr, _size, _regs);
+  LQModbusMasterBase::SReply reply;
+
+  auto reader = 
+    [&](quint16 _currAddr, quint16 _count, quint16 _shiftData)
+    {
+      reply = master->readInputRegisters(mDevId, _currAddr, _count, &_regs[_shiftData]);
+      if(reply.status != LQModbusMasterBase::SReply::EStatus::OK) return false;
+      return true;
+    };
+
+  doInParts(_addr, _size, mMaxRegsPerReq, reader);
+
+  return reply;
 }
 
 //------------------------------------------------------------------------------
@@ -224,7 +257,8 @@ writeRegs(
 //==============================================================================CControllerRegistersBase
 LCModbusDataMap::CControllerBitsBase::CControllerBitsBase(
     const quint8& _devId,
-    QWeakPointer<LQModbusMasterBase> _master) :
+    QWeakPointer<LQModbusMasterBase> _master,
+    quint16 _maxBytesPerReq) :
   mDevId(_devId),
   mwpMaster(_master),
   mMemoryReadSet(
@@ -252,6 +286,7 @@ LCModbusDataMap::CControllerBitsBase::CControllerBitsBase(
         return static_cast<int>(EReadStatus::Valid);
       })
 {
+  mMaxBitsPerReq = _maxBytesPerReq * 8;
 }
 
 //------------------------------------------------------------------------------
@@ -328,34 +363,15 @@ void LCModbusDataMap::CControllerBitsBase::write(
 void LCModbusDataMap::CControllerBitsBase::update()
 {
   mMemoryReadSet.update();
-
-  /* if(mspMaster.isNull()) return; */
-  /* { */
-  /*   //TODO: Проработать опережающий ответ */
-  /*   //для всех слушателей при нескольких таймаутах. */
-  /*   for(auto it = mReadDataList.begin(); it != mReadDataList.end(); it++) */
-  /*   { */
-  /*     EReadStatus status = EReadStatus::Wrong; */
-  /*     if(readBits( */
-  /*           mspMaster.data(), */
-  /*           (*it)->getAddress(), */
-  /*           (*it)->getSize(), */
-  /*           mBitsBuff).status == */
-  /*         LQModbusMasterBase::SReply::EStatus::OK) */
-  /*     { */
-  /*       status = EReadStatus::Valid; */
-  /*     } */
-  /*     (*it)->notifyReaders(status, QByteArray((char*)mBitsBuff, (*it)->getSize())); */
-  /*     if((*it)->hasNoReaders()) mReadDataList.erase(it); */
-  /*   } */
-  /* } */
 }
 
 //==============================================================================CControllerDiscreteInputs
 LCModbusDataMap::CControllerCoils::
-CControllerCoils(const quint8& _devId,
-    QWeakPointer<LQModbusMasterBase> _master) :
-  CControllerBitsBase(_devId, _master)
+CControllerCoils(
+    const quint8& _devId,
+    QWeakPointer<LQModbusMasterBase> _master,
+    quint16 _maxBytesPerReq) :
+  CControllerBitsBase(_devId, _master, _maxBytesPerReq)
 {
 }
 
@@ -371,7 +387,19 @@ LCModbusDataMap::CControllerCoils::readBits(
     LQModbusMasterBase* master, quint16 _addr, quint16 _size, quint8 _bits[])
 {
 
-  return master->readCoils(mDevId, _addr, _size, _bits);
+  LQModbusMasterBase::SReply reply;
+
+  auto reader = 
+    [&](quint16 _currAddr, quint16 _count, quint16 _shiftData)
+    {
+      reply = master->readCoils(mDevId, _currAddr, _count, &_bits[_shiftData]);
+      if(reply.status != LQModbusMasterBase::SReply::EStatus::OK) return false;
+      return true;
+    };
+
+  doInParts(_addr, _size, mMaxBitsPerReq, reader);
+
+  return reply;
 }
 
 //------------------------------------------------------------------------------
@@ -383,14 +411,25 @@ LCModbusDataMap::CControllerCoils::writeBits(
   {
     return master->writeSingleCoils( mDevId, _addr, _bits[0]);
   }
-  return master->writeMultipleCoils( mDevId, _addr, _size, _bits);
+  LQModbusMasterBase::SReply reply;
+  auto writer = 
+    [&](quint16 _currAddr, quint16 _count, quint16 _shiftData)
+    {
+      reply = master->writeMultipleCoils(mDevId, _currAddr, _count, &_bits[_shiftData]);
+      if(reply.status != LQModbusMasterBase::SReply::EStatus::OK) return false;
+      return true;
+    };
+
+  doInParts(_addr, _size, mMaxBitsPerReq, writer);
+  return reply;
 }
 
 //==============================================================================CControllerDiscreteInputs
 LCModbusDataMap::CControllerDiscreteInputs::
 CControllerDiscreteInputs(const quint8& _devId,
-    QWeakPointer<LQModbusMasterBase> _master) :
-  CControllerBitsBase(_devId, _master)
+    QWeakPointer<LQModbusMasterBase> _master,
+    quint16 _maxBytesPerReq) :
+  CControllerBitsBase(_devId, _master, _maxBytesPerReq)
 {
 }
 
@@ -405,7 +444,19 @@ LQModbusMasterBase::SReply
 LCModbusDataMap::CControllerDiscreteInputs::readBits(
     LQModbusMasterBase* master, quint16 _addr, quint16 _size, quint8 _bits[])
 {
-  return master->readDiscreteInputs(mDevId, _addr, _size, _bits);
+  LQModbusMasterBase::SReply reply;
+
+  auto reader = 
+    [&](quint16 _currAddr, quint16 _count, quint16 _shiftData)
+    {
+      reply = master->readDiscreteInputs(mDevId, _currAddr, _count, &_bits[_shiftData]);
+      if(reply.status != LQModbusMasterBase::SReply::EStatus::OK) return false;
+      return true;
+    };
+
+  doInParts(_addr, _size, mMaxBitsPerReq, reader);
+
+  return reply;
 }
 
 //------------------------------------------------------------------------------
@@ -420,29 +471,6 @@ LCModbusDataMap::CControllerDiscreteInputs::writeBits(
   return LQModbusMasterBase::SReply(
       LQModbusMasterBase::SReply::EStatus::WRONG_REQ, 0);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 //==============================================================================CReadSetData
 void LCModbusDataMap::CAddressedDataMapItem::CReadSetData::setData(
@@ -504,7 +532,9 @@ void LCModbusDataMap::CAddressedDataMapItem::disconnectReader(
 {
   mReadersList.removeAll(_reader);
   if(mReadersList.isEmpty())
+  {
     mController.removeReadDataItem(mspReadSetData);
+  }
 }
 
 //------------------------------------------------------------------------------
@@ -532,11 +562,12 @@ void LCModbusDataMap::CAddressedDataMapItem::read(
 //==============================================================================CModbusDataMap
 LCModbusDataMap::LCModbusDataMap(
     const quint8& _devId,
-    QSharedPointer<LQModbusMasterBase> _master) :
-  mControllerHoldingRegs(_devId, _master),
-  mControllerInputRegs(_devId, _master),
-  mControllerCoils(_devId, _master),
-  mControllerDiscreteInputs(_devId, _master)
+    QSharedPointer<LQModbusMasterBase> _master,
+    quint16 _maxBytesPerReq) :
+  mControllerHoldingRegs(_devId, _master, _maxBytesPerReq),
+  mControllerInputRegs(_devId, _master, _maxBytesPerReq),
+  mControllerCoils(_devId, _master, _maxBytesPerReq),
+  mControllerDiscreteInputs(_devId, _master, _maxBytesPerReq)
 {
 }
 
@@ -628,4 +659,36 @@ void LCModbusDataMap::disconnectReader(
   auto it = mMapItems.find(_reader->getDataName());
   if(it == mMapItems.end()) return;
   (*it)->disconnectReader(_reader);
+}
+
+
+//==============================================================================doInParts
+static void doInParts(
+    quint16 _startAddr, 
+    quint16 _size, 
+    quint16 _partSize, 
+    std::function<bool(quint16 _currAddr, quint16 _count, quint16 _shiftData)> _doer)
+{
+  if(_partSize == 0) 
+  {
+    _doer(_startAddr, _size, 0);
+    return;
+  }
+
+  quint16 curr_addr = _startAddr;
+  quint16 count = _partSize;
+
+  while(true)
+  {
+    bool break_flag = false;
+    if((curr_addr + count) >= (_startAddr + _size))
+    {
+      break_flag = true;
+      count = (_startAddr + _size) - curr_addr;
+    } 
+
+    break_flag |= !_doer(curr_addr, count, (curr_addr - _startAddr));
+    curr_addr += _partSize;
+    if(break_flag) break;
+  }
 }

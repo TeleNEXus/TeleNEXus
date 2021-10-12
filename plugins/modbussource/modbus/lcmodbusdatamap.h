@@ -74,13 +74,15 @@ private:
   protected:
     const quint8& mDevId;
     QWeakPointer<LQModbusMasterBase> mwpMaster;
+    quint16 mMaxRegsPerReq;
     LCMemoryReadSet mMemoryReadSet;
 
   public:
     CControllerRegistersBase() = delete;
     CControllerRegistersBase(
         const quint8& _devId,
-        QWeakPointer<LQModbusMasterBase> _master);
+        QWeakPointer<LQModbusMasterBase> _master,
+        quint16 _maxBytesPerReq);
     ~CControllerRegistersBase();
 
     virtual void inssertReadDataItem(
@@ -116,7 +118,8 @@ private:
     CControllerHoldingRegisters() = delete;
     CControllerHoldingRegisters(
         const quint8& _devId,
-        QSharedPointer<LQModbusMasterBase> _master);
+        QSharedPointer<LQModbusMasterBase> _master,
+        quint16 _maxBytesPerReq);
     ~CControllerHoldingRegisters();
     virtual LQModbusMasterBase::SReply readRegs(LQModbusMasterBase* master,
         quint16 _addr, quint16 _size, quint16 _regs[]) override;
@@ -132,7 +135,8 @@ private:
   public:
     CControllerInputRegisters(
         const quint8& _devId,
-        QWeakPointer<LQModbusMasterBase> _master);
+        QWeakPointer<LQModbusMasterBase> _master,
+        quint16 _maxBytesPerReq);
     ~CControllerInputRegisters();
     virtual LQModbusMasterBase::SReply readRegs(LQModbusMasterBase* master,
         quint16 _addr, quint16 _size, quint16 _regs[]) override;
@@ -147,12 +151,15 @@ private:
   protected:
     const quint8& mDevId;
     QWeakPointer<LQModbusMasterBase> mwpMaster;
+    quint16 mMaxBitsPerReq;
     LCMemoryReadSet mMemoryReadSet;
 
   public:
     CControllerBitsBase() = delete;
     CControllerBitsBase(
-        const quint8& _devId, QWeakPointer<LQModbusMasterBase> _master);
+        const quint8& _devId, 
+        QWeakPointer<LQModbusMasterBase> _master,
+        quint16 _maxBytesPerReq);
 
     ~CControllerBitsBase();
 
@@ -187,7 +194,8 @@ private:
   {
   public:
     CControllerCoils(
-        const quint8& _devId, QWeakPointer<LQModbusMasterBase> _master);
+        const quint8& _devId, QWeakPointer<LQModbusMasterBase> _master,
+        quint16 _maxBytesPerReq);
     ~CControllerCoils();
     virtual LQModbusMasterBase::SReply readBits(LQModbusMasterBase* master,
         quint16 _addr, quint16 _size, quint8 _bits[]) override;
@@ -202,7 +210,8 @@ private:
 
   public:
     CControllerDiscreteInputs(
-        const quint8& _devId, QWeakPointer<LQModbusMasterBase> _master);
+        const quint8& _devId, QWeakPointer<LQModbusMasterBase> _master,
+        quint16 _maxBytesPerReq);
     ~CControllerDiscreteInputs();
     virtual LQModbusMasterBase::SReply readBits(LQModbusMasterBase* master,
         quint16 _addr, quint16 _size, quint8 _bits[]) override;
@@ -305,7 +314,8 @@ private:
 public:
   LCModbusDataMap() = delete;
   LCModbusDataMap(const quint8& _devId, 
-      QSharedPointer<LQModbusMasterBase> _master);
+      QSharedPointer<LQModbusMasterBase> _master,
+      quint16 _maxBytesPerReq);
   virtual ~LCModbusDataMap(){}
 
   void update();

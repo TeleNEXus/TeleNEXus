@@ -669,7 +669,6 @@ void LQModbusMasterBase::customEvent(QEvent* _event)
 
   if(_event->type() == CQEventDataRequest::msExtendedEventType)
   {
-
     static_cast<CQEventDataRequest*>(_event)->mpReq->handle(getMaster());
   }
   else
