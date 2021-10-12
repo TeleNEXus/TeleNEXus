@@ -52,7 +52,7 @@
     position="300;600" />
 
   <WINDOW 
-    file="testmodbus/testmodbustable.xml" 
+    file="testmodbus/testmodbus.xml" 
     id="testtable1" 
     visible="true"
     title="Test table" 
@@ -60,10 +60,24 @@
     showMode="normal"
     modality="false"
     flags="" 
-    size="300;300"
+    size="500;300"
     screen="0"
     position="150;150"
     />
+
+  <!-- <WINDOW --> 
+  <!--   file="testmodbus/testmodbustable.xml" --> 
+  <!--   id="testtable1" --> 
+  <!--   visible="true" -->
+  <!--   title="Test table" --> 
+  <!--   icon="./picture/tklogo1.png" -->
+  <!--   showMode="normal" -->
+  <!--   modality="false" -->
+  <!--   flags="" --> 
+  <!--   size="300;300" -->
+  <!--   screen="0" -->
+  <!--   position="150;150" -->
+  <!--   /> -->
 
   <!-- <WINDOW --> 
   <!--   file="testkeyboard/testkeyboardinput1.xml" --> 

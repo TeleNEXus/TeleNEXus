@@ -124,9 +124,12 @@ private:
   LCModbusDataMap mDataMap;
   QSharedPointer<QThread> mspThread;
   QWeakPointer<LQModbusDataSource> mwpThis;
+
 private:
-  explicit LQModbusDataSource(quint8 _devId,
-      QSharedPointer<LQModbusMasterBase> _modbusMaster);
+  explicit LQModbusDataSource(
+      quint8 _devId,
+      QSharedPointer<LQModbusMasterBase> _modbusMaster,
+      quint16 _maxBytesPerReq);
 
   LQModbusDataSource(const LQModbusDataSource&) = delete;
   LQModbusDataSource& operator=(const LQModbusDataSource&) = delete;
@@ -134,7 +137,8 @@ public:
   virtual ~LQModbusDataSource();
   static QSharedPointer<LQModbusDataSource> create(
       quint8 _devId,
-      QSharedPointer<LQModbusMasterBase> _modbusMaster);
+      QSharedPointer<LQModbusMasterBase> _modbusMaster,
+      quint16 _maxBytesPerReq);
   void addDataItemHoldingRegs(    const QString& _name, quint16 _addr, quint16 _size);
   void addDataItemInputRegs(      const QString& _name, quint16 _addr, quint16 _size);
   void addDataItemDiscreteInputs( const QString& _name, quint16 _addr, quint16 _size);

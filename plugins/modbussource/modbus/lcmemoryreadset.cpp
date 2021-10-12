@@ -70,18 +70,12 @@ template <class T> bool SegmentIsNeighbour(T a1, T b1, T a2, T b2)
 //------------------------------------------------------------------------------
 bool LCMemoryReadSet::CDataItem::updateData(FReader& _reader, int  _dataDimention)
 {
-  /* QByteArray data((second - first + 1) * _dataDimention, 0); */
-
   QByteArray data;
-
   int read_status = _reader(first, (second - first + 1), data);
-
   auto it = mDataList.begin();
-
   while(it != mDataList.end())
   {
     QSharedPointer<CIData> sp = (*it).lock();
-    //Return false if weak pointer not locked (for recompil data map).
     if(sp.isNull()) return false;
     int local_addr = (sp->getAddress() - first) * _dataDimention;
     sp->setData(data.mid(local_addr, sp->getSize() * _dataDimention), read_status);
@@ -232,34 +226,27 @@ void LCMemoryReadSet::compilDataMap()
 using CIData = LCMemoryReadSet::CIData;
 
 //------------------------------------------------------------------------------
-void LCMemoryReadSet::insert(QWeakPointer<CIData> _wp_data)
+void LCMemoryReadSet::insert(QSharedPointer<CIData> _spData)
 {
-  auto sp = _wp_data.lock();
-  if(sp.isNull())return;
 
-  if(sp->getSize() < 1) return;
-  if(sp->getAddress() < 0) return;
+  if(_spData->getSize() < 1) return;
+  if(_spData->getAddress() < 0) return;
 
-  CAddrPair key(sp->getAddress(), sp->getAddress() + sp->getSize() - 1);
+  CAddrPair key(_spData->getAddress(), _spData->getAddress() + _spData->getSize() - 1);
 
-  if(mDataMap.contains(key, sp)) return;
+  if(mDataMap.contains(key, _spData.toWeakRef())) return;
 
-  mDataMap.insert(key, sp);
+  mDataMap.insert(key, _spData.toWeakRef());
 
   mFlagForCompil = true;
 }
 
 //------------------------------------------------------------------------------
-void LCMemoryReadSet::remove(QWeakPointer<CIData> _wp_data)
+void LCMemoryReadSet::remove(QSharedPointer<CIData> _spData)
 {
-  auto sp = _wp_data.lock();
-
-  if(sp.isNull())
-  {
-    mDataMap.remove(
-        CAddrPair(sp->getAddress(), sp->getAddress() + sp->getSize() - 1), 
-        sp);
-  }
+  mDataMap.remove(
+      CAddrPair(_spData->getAddress(), _spData->getAddress() + _spData->getSize() - 1), 
+      _spData.toWeakRef());
   mFlagForCompil = true;
 }
 

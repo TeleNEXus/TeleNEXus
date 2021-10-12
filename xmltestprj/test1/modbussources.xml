@@ -15,7 +15,13 @@
         stopbits="1" 
         timeout="100" />
     
-    <source  name="qtslavetcp" master="qtslavetcp" devid="7" mapfile="mmap1.xml" updatetime="500"/>
+    <source  
+      name="qtslavetcp" 
+      master="qtslavetcp" 
+      devid="7" 
+      mapfile="mmap1.xml" 
+      maxbytes="7" 
+      updatetime="500"/>
     
     <source  name="bvitcp" master="bvitcp" devid="7" mapfile="mmap2.xml" updatetime="500"/>
     <source  name="bvirtu" master="bvirtu" devid="7" mapfile="mmap2.xml" updatetime="500"/>
