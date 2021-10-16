@@ -24,7 +24,7 @@
 #include <QDir>
 #include <QDebug>
 
-#define __smMessageHeader "Pathes of plagins:"
+#define __smMessageHeader "Pathes of plugins:"
 #define __smMessage(msg) CApplicationInterface::getInstance().message(msg)
 
 static const struct
@@ -64,9 +64,13 @@ void upload(const QDomElement& _rootElement,
     added_pathes << path;
   }
 
-  if(added_pathes.isEmpty()) return;
+  if(added_pathes.isEmpty())
+  {
+    __slPlaginLibPaths << _defaultPluginsPath;
+    return;
+  }
 
-  __slPlaginLibPaths << _defaultPluginsPath << added_pathes;
+  __slPlaginLibPaths << added_pathes << _defaultPluginsPath;
 
   QString message("Add plugins pathes:\n");
 

@@ -3,7 +3,7 @@
 <APPLICATION>
 
   <PLAGINPATHES>
-    <add path="libs/"/>
+    <!-- <add path="libs/"/> -->
   </PLAGINPATHES>
 
   <!-- <GLOBALSTYLE file="qstyles/Darkeum.qss"/> -->

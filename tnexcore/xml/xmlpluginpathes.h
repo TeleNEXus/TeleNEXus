@@ -23,6 +23,7 @@
 #define XMLPLAGINPATHES_H_
 
 #include <QString>
+#include <QStringList>
 
 class QDomElement;
 
