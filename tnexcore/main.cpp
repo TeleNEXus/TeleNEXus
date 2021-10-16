@@ -63,9 +63,12 @@ struct SParameters
   QDir    projectDir;
   bool parseCommandLine(char *argv[])
   {
+
     defaultPluginsPath = QString("%1/%2")
-      .arg(QDir::currentPath())
-      .arg(QStringLiteral("plugins"));
+      .arg(QApplication::applicationDirPath())
+      .arg("plugins");
+
+
 
     QFileInfo fi(argv[0]);
 
@@ -146,22 +149,18 @@ int main(int argc, char *argv[])
 
   QApplication app(argc, argv);
 
+
+  qDebug() << "Current path = " << QApplication::applicationDirPath();
+
+
   if(!__slParameters.parseCommandLine(argv)) return 0;
 
   appinterface.message(QString("Project current path:\n\t%1").arg(QDir::currentPath()));
   appinterface.message(QString("Project main file:\n\t%1").arg(__slParameters.mainFileName));
 
   {
-    QString str = QStringLiteral("Default plugins pathes: \n");
-    auto lp = QCoreApplication::libraryPaths();
-    auto it = lp.begin();
-
-    while(it != lp.end())
-    {
-      str += QString("\t%1\n").arg(*it); 
-      it++;
-    }
-
+    QString str = QStringLiteral("Default plugins path: \n");
+    str += QString("\t%1\n").arg(__slParameters.defaultPluginsPath);
     appinterface.message(str);
   }
 
