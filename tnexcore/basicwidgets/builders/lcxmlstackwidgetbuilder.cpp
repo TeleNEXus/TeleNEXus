@@ -32,6 +32,7 @@
 #include <QTouchEvent>
 #include <QKeyEvent>
 #include <qnamespace.h>
+#include <QLabel>
 
 //------------------------------------------------------------------------------
 static const struct
@@ -80,8 +81,12 @@ LCXmlStackWidgetBuilder::~LCXmlStackWidgetBuilder()
 QWidget* LCXmlStackWidgetBuilder::buildLocal(
     const QDomElement& _element, const LIApplication& _app)
 {
-
-  auto ret_wrong = [](){return new QStackedWidget;};
+  auto ret_wrong = [](){
+    auto widget = new QStackedWidget();
+    auto label = new QLabel(QStringLiteral("StatckedWidget"), widget);
+    widget->addWidget(label);
+    return widget;
+  };
 
   bool err_flag = false;
 
@@ -94,15 +99,23 @@ QWidget* LCXmlStackWidgetBuilder::buildLocal(
 
   if(err_flag) return ret_wrong();
 
-
   auto source = _app.getDataSource(data_spec.sourceId);
-  if(source.isNull()) return ret_wrong();
+  /* if(source.isNull()) return ret_wrong(); */
 
   auto format = _app.getDataFormatter(data_spec.formatterId);
-  if(format.isNull()) return ret_wrong();
+  /* if(format.isNull()) return ret_wrong(); */
 
 
-  auto stacked_widget = new LCQStackWidget(source, data_spec.dataId); 
+  LCQStackWidget* stacked_widget = nullptr;
+
+  if(source.isNull() || format.isNull())
+  {
+    stacked_widget = new LCQStackWidget(); 
+  }
+  else
+  {
+    stacked_widget = new LCQStackWidget(source, data_spec.dataId); 
+  }
 
   
   TActions actions_press;

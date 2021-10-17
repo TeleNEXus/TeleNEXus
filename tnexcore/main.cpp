@@ -66,9 +66,7 @@ struct SParameters
 
     defaultPluginsPath = QString("%1/%2")
       .arg(QApplication::applicationDirPath())
-      .arg("plugins/");
-
-
+      .arg("plugins");
 
     QFileInfo fi(argv[0]);
 
