@@ -41,7 +41,7 @@ private:
 
 public:
 
-  explicit LCQStackWidget() = delete;
+  explicit LCQStackWidget(QWidget* _parent = nullptr);
 
   explicit LCQStackWidget(
       QSharedPointer<LIRemoteDataSource> _source,

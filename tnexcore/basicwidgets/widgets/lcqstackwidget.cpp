@@ -61,6 +61,12 @@ public:
 #define ld  (*(reinterpret_cast<CLocalData*>(mpLocal)))
 
 //==============================================================================
+LCQStackWidget::LCQStackWidget(QWidget* _parent) : 
+  LCQStackWidget(nullptr, QString(), _parent)
+{
+}
+
+//------------------------------------------------------------------------------
 LCQStackWidget::LCQStackWidget(
     QSharedPointer<LIRemoteDataSource> _source,
     QString _data,
@@ -91,6 +97,7 @@ LCQStackWidget::LCQStackWidget(
         setCurrentIndex(it.value());
       };
 
+  if(_source.isNull()) return;
   ld.mDataReader = _source->createReader(_data);
 
   if(ld.mDataReader.isNull()) return;
