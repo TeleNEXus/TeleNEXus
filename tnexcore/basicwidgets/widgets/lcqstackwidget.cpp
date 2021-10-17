@@ -79,7 +79,6 @@ LCQStackWidget::LCQStackWidget(
       [this](QSharedPointer<QByteArray> _data, 
           LIRemoteDataReader::EReadStatus _dataStatus)
       {
-
         if(_dataStatus != LIRemoteDataReader::EReadStatus::Valid) 
         {
           setCurrentIndex(ld.indexUndef);

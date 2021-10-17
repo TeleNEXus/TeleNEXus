@@ -231,7 +231,8 @@ QWidget* LCXmlStackWidgetBuilder::buildLocal(
     QString attr_matching = el.attribute(__slAttributes.matching);
     if(attr_matching.isNull()) continue;
     auto matching = format->toBytes(attr_matching);
-    if(matching.isNull()) continue;
+    if(matching.isNull()) continue
+      ;
     add_widget(el, matching, add_item);
   }
 
