@@ -65,7 +65,7 @@ LCModbusDataMap::CControllerRegistersBase::CControllerRegistersBase(
 {
   if(_maxBytesPerReq % 2 == 0) 
   {
-    mMaxRegsPerReq = _maxBytesPerReq;
+    mMaxRegsPerReq = _maxBytesPerReq / 2;
   }
   else
   {
