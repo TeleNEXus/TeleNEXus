@@ -46,11 +46,12 @@ public:
   explicit LCQStackWidget(
       QSharedPointer<LIRemoteDataSource> _source,
       QString _data,
+      QSharedPointer<LIDataFormatter> _formatter,
       QWidget* _parent = nullptr);
 
   virtual ~LCQStackWidget();
 
-  void addWidget(QWidget* _widget, const QByteArray& _matching);
+  void addWidget(QWidget* _widget, const QString& _matching);
   void addWidgetUndef(QWidget* _widget);
   void addWidgetWrong(QWidget* _widget);
   void setPushDelay(int _msec);
