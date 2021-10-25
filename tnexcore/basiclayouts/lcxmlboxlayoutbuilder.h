@@ -53,7 +53,7 @@ public:
     struct STags
     {
         QString widgets     = "widgets";
-        QString layout      = "layout";
+        QString layout      = "layouts";
         QString spacing     = "spacing"; 
         QString stretch     = "stretch";
     };

@@ -25,7 +25,7 @@
             </ListWidget>
           </widgets>
 
-          <layout>
+          <layouts>
             <LayoutVBox>
               <widgets>
                 <DataLabel    data="localsource:listwidgetitem:string" />
@@ -33,7 +33,7 @@
               </widgets>
               <stretch/>
             </LayoutVBox>
-          </layout>
+          </layouts>
         </LayoutHBox>
       </layout>
     </Frame>

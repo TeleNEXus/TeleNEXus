@@ -44,7 +44,7 @@ public:
         QString row         = "row";
         QString column      = "col";
         QString widgets     = "widgets";
-        QString layout      = "layout";
+        QString layout      = "layouts";
         QString stretch     = "stretch"; 
     };
 
