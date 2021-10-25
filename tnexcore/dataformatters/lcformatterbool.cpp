@@ -19,6 +19,7 @@
  * along with TeleNEXus.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include "lcformatterbool.h"
+#include "QDebug"
 
 LCFormatterBool::LCFormatterBool(const QString& _strFalse,
     const QString& _strTrue) :  mStrFalse(_strFalse),
@@ -42,7 +43,10 @@ QString LCFormatterBool::toString(const QByteArray& _data)
   {
     byte |= _data[i];
   }
-  if(byte != 0) return mStrTrue;
+  if(byte != 0) 
+  {
+    return mStrTrue;
+  }
   return mStrFalse;
 }
 

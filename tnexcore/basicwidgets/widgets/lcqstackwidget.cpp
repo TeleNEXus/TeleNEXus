@@ -46,7 +46,8 @@ class CLocalData
 {
 public:
   QSharedPointer<LIRemoteDataReader> mDataReader;
-  QMap<QByteArray, int> mValueIndex;
+  QSharedPointer<LIDataFormatter> mDataFormatter;
+  QMap<QString, int> mValueIndex;
   int indexUndef = -1;
   int indexWrong = -1;
   QTimer timer;
@@ -62,7 +63,7 @@ public:
 
 //==============================================================================
 LCQStackWidget::LCQStackWidget(QWidget* _parent) : 
-  LCQStackWidget(nullptr, QString(), _parent)
+  LCQStackWidget(nullptr, QString(), nullptr, _parent)
 {
 }
 
@@ -70,6 +71,7 @@ LCQStackWidget::LCQStackWidget(QWidget* _parent) :
 LCQStackWidget::LCQStackWidget(
     QSharedPointer<LIRemoteDataSource> _source,
     QString _data,
+    QSharedPointer<LIDataFormatter> _formatter,
     QWidget* _parent) :
   QStackedWidget(_parent)
 {
@@ -85,7 +87,7 @@ LCQStackWidget::LCQStackWidget(
           return;
         }
 
-        auto it = ld.mValueIndex.find(*_data);
+        auto it = ld.mValueIndex.find(ld.mDataFormatter->toString(*_data));
 
         if(it == ld.mValueIndex.end())
         {
@@ -100,6 +102,7 @@ LCQStackWidget::LCQStackWidget(
   ld.mDataReader = _source->createReader(_data);
 
   if(ld.mDataReader.isNull()) return;
+  ld.mDataFormatter = _formatter;
 
   ld.mDataReader->setHandler(read_handler);
   ld.mDataReader->connectToSource();
@@ -128,7 +131,7 @@ LCQStackWidget::~LCQStackWidget()
 }
 
 //------------------------------------------------------------------------------
-void LCQStackWidget::addWidget(QWidget* _widget, const QByteArray& _matching)
+void LCQStackWidget::addWidget(QWidget* _widget, const QString& _matching)
 {
   ld.mValueIndex.insert(_matching, QStackedWidget::addWidget(_widget));
   _widget->installEventFilter(this);

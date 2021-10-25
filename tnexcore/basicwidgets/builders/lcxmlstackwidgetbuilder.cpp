@@ -100,11 +100,8 @@ QWidget* LCXmlStackWidgetBuilder::buildLocal(
   if(err_flag) return ret_wrong();
 
   auto source = _app.getDataSource(data_spec.sourceId);
-  /* if(source.isNull()) return ret_wrong(); */
 
   auto format = _app.getDataFormatter(data_spec.formatterId);
-  /* if(format.isNull()) return ret_wrong(); */
-
 
   LCQStackWidget* stacked_widget = nullptr;
 
@@ -114,7 +111,7 @@ QWidget* LCXmlStackWidgetBuilder::buildLocal(
   }
   else
   {
-    stacked_widget = new LCQStackWidget(source, data_spec.dataId); 
+    stacked_widget = new LCQStackWidget(source, data_spec.dataId, format); 
   }
 
   
@@ -167,9 +164,9 @@ QWidget* LCXmlStackWidgetBuilder::buildLocal(
   auto add_widget = 
     [&_app](
         const QDomElement _element,
-        const QByteArray& _matching,
+        const QString& _matching,
         std::function<void(QWidget* _widget, 
-          const QByteArray& _matching)> _adder)
+          const QString& _matching)> _adder)
     {
 
       for(auto node = _element.firstChild(); 
@@ -190,7 +187,7 @@ QWidget* LCXmlStackWidgetBuilder::buildLocal(
     };
 
   auto add_item = 
-    [&stacked_widget](QWidget* _widget, const QByteArray& _matching)
+    [&stacked_widget](QWidget* _widget, const QString& _matching)
     {
       stacked_widget->addWidget(_widget, _matching);
     };
@@ -201,8 +198,8 @@ QWidget* LCXmlStackWidgetBuilder::buildLocal(
   {
     auto el = _element.firstChildElement(__slTags.itemUndef);
     if(el.isNull()) return;
-    add_widget(el, QByteArray(), 
-        [&stacked_widget](QWidget* _widget, const QByteArray)
+    add_widget(el, QString(), 
+        [&stacked_widget](QWidget* _widget, const QString)
         {
           stacked_widget->addWidgetUndef(_widget);
         });
@@ -213,8 +210,8 @@ QWidget* LCXmlStackWidgetBuilder::buildLocal(
   {
     auto el = _element.firstChildElement(__slTags.itemWrong);
     if(el.isNull()) return;
-    add_widget(el, QByteArray(), 
-        [&stacked_widget](QWidget* _widget, const QByteArray)
+    add_widget(el, QString(), 
+        [&stacked_widget](QWidget* _widget, const QString)
         {
           stacked_widget->addWidgetWrong(_widget);
         });
@@ -230,10 +227,11 @@ QWidget* LCXmlStackWidgetBuilder::buildLocal(
     if(el.isNull()) continue;
     QString attr_matching = el.attribute(__slAttributes.matching);
     if(attr_matching.isNull()) continue;
-    auto matching = format->toBytes(attr_matching);
-    if(matching.isNull()) continue
-      ;
-    add_widget(el, matching, add_item);
+    auto matching_bytes = format->toBytes(attr_matching);
+    if(matching_bytes.isNull()) continue;
+    auto matching_string = format->toString(matching_bytes);
+    if(matching_string.isNull()) continue;
+    add_widget(el, matching_string, add_item);
   }
 
   setWidgetName(      _element, stacked_widget);
