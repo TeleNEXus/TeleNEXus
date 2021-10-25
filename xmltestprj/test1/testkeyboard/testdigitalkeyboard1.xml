@@ -15,7 +15,7 @@
 
           <stretch/>
 
-          <layout>
+          <layouts>
             <LayoutHBox>
               <widgets>
 
@@ -51,10 +51,10 @@
               </widgets>
 
             </LayoutHBox>
-          </layout>
+          </layouts>
 
 
-          <layout>
+          <layouts>
             <LayoutHBox>
               <widgets>
 
@@ -98,11 +98,11 @@
               </widgets>
 
             </LayoutHBox>
-          </layout>
+          </layouts>
 
 
 
-          <layout>
+          <layouts>
             <LayoutHBox>
               <widgets>
 
@@ -129,9 +129,9 @@
               <stretch/>
 
             </LayoutHBox>
-          </layout>
+          </layouts>
 
-          <layout>
+          <layouts>
             <LayoutHBox>
               <widgets>
 
@@ -166,7 +166,7 @@
                 </Button>
               </widgets>
             </LayoutHBox>
-          </layout>
+          </layouts>
 
         </LayoutVBox>
       </layout>

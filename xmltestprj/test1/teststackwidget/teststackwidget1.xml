@@ -55,7 +55,7 @@
           </StackWidget>
         </widgets>
 
-        <layout>
+        <layouts>
           <LayoutVBox>
             <widgets>
               <Label    data="localsource:listwidgetitem:string" />
@@ -63,7 +63,7 @@
             </widgets>
             <stretch/>
           </LayoutVBox>
-        </layout>
+        </layouts>
       </LayoutHBox>
     </layout>
   </Frame>
