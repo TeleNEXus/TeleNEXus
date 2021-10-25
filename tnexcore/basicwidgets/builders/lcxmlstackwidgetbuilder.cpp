@@ -169,6 +169,8 @@ QWidget* LCXmlStackWidgetBuilder::buildLocal(
           const QString& _matching)> _adder)
     {
 
+      QWidget* widget = nullptr;
+
       for(auto node = _element.firstChild(); 
           !node.isNull(); 
           node = node.nextSibling())
@@ -177,12 +179,17 @@ QWidget* LCXmlStackWidgetBuilder::buildLocal(
         if(!we.isElement()) continue;
         auto builder = _app.getWidgetBuilder(we.tagName());
         if(builder.isNull()) continue;
-        QWidget* widget = builder->build(we, _app);
+        widget = builder->build(we, _app);
         if(widget)
         {
           _adder(widget, _matching);
           break;
         }
+      }
+
+      if(widget == nullptr)
+      {
+        _adder(new QLabel(QString("No widget")), _matching);
       }
     };
 
