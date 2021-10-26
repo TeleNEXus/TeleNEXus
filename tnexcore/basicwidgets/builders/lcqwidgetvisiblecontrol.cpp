@@ -62,9 +62,9 @@ static const struct
 class CLocalData
 {
 private:
-  QWidget* mpWidget = nullptr;
 
 public:
+  QWidget* mpWidget = nullptr;
   enum class EVisibleStatus
   {
     show,
@@ -109,13 +109,14 @@ public:
 
 //==============================================================================
 #define toLocalData(p) (reinterpret_cast<CLocalData*>(p))
+#define ld (*(toLocalData(mpLocal)))
 
 //==============================================================================
 LCQWidgetVisibleControl::LCQWidgetVisibleControl(QWidget* _widget) :
   QObject(_widget)
 {
   mpLocal = new CLocalData;
-  toLocalData(mpLocal)->setWidget(_widget);
+  ld.setWidget(_widget);
 }
 
 LCQWidgetVisibleControl::~LCQWidgetVisibleControl()
@@ -153,14 +154,14 @@ bool LCQWidgetVisibleControl::build(const QDomElement& _element,
   QString attr_source = attr_values.value(__slVisibleAttributes.sourceId,   QString());
   QString attr_data   = attr_values.value(__slVisibleAttributes.dataId,     QString());
   QString attr_format = attr_values.value(__slVisibleAttributes.format,     QString());
-  QString attr_show   = attr_values.value(__slVisibleAttributes.showValue,  QString());
-  QString attr_hide   = attr_values.value(__slVisibleAttributes.hideValue,  QString());
+  QString attr_show_value   = attr_values.value(__slVisibleAttributes.showValue,  QString());
+  QString attr_hide_value   = attr_values.value(__slVisibleAttributes.hideValue,  QString());
 
 
   if( attr_source.isNull() ||
       attr_data.isNull() ||
       attr_format.isNull() ||
-      (attr_show.isNull() && attr_hide.isNull()))
+      (attr_show_value.isNull() && attr_hide_value.isNull()))
     return ret_wrong();
 
   auto source = _app.getDataSource(attr_source);
@@ -171,7 +172,10 @@ bool LCQWidgetVisibleControl::build(const QDomElement& _element,
 
   if(format.isNull()) return ret_wrong();
 
+
   ctrl = new LCQWidgetVisibleControl(_widget);
+
+
 
   QString attr_undef   = attr_values.value(__slVisibleAttributes.undefState, QString());
   if(!attr_undef.isNull())
@@ -233,21 +237,23 @@ bool LCQWidgetVisibleControl::build(const QDomElement& _element,
       toLocalData(ctrl->mpLocal)->showWidget();
   };
 
-  if(!attr_show.isNull())
+
+  if(!attr_show_value.isNull())
   {
     toLocalData(ctrl->mpLocal)->mCompareData =
-      format->toBytes(attr_show);
+      format->toBytes(attr_show_value);
     toLocalData(ctrl->mpLocal)->mfAction = action_show;
   }
   else
   {
     toLocalData(ctrl->mpLocal)->mCompareData =
-      format->toBytes(attr_hide);
+      format->toBytes(attr_hide_value);
     toLocalData(ctrl->mpLocal)->mfAction = action_hide;
   }
 
-  //--------------------------------------------action_read_data
-  auto action_read_data = [ctrl](
+
+  //--------------------------------------------read_handler
+  auto read_handler = [ctrl](
       QSharedPointer<QByteArray> _data,
       EReadStatus _status)
   {
@@ -256,10 +262,9 @@ bool LCQWidgetVisibleControl::build(const QDomElement& _element,
 
   toLocalData(ctrl->mpLocal)->mDataReader = source->createReader(attr_data);
 
-
   if((!toLocalData(ctrl->mpLocal)->mDataReader.isNull())&&(!format.isNull()))
   {
-    toLocalData(ctrl->mpLocal)->mDataReader->setHandler(action_read_data);
+    toLocalData(ctrl->mpLocal)->mDataReader->setHandler(read_handler);
     toLocalData(ctrl->mpLocal)->mFormatter = format;
     toLocalData(ctrl->mpLocal)->mDataReader->connectToSource();
   }

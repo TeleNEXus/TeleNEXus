@@ -23,6 +23,7 @@
 #include "LIXmlWidgetBuilder.h"
 
 #include "lcxmlframebuilder.h"
+#include "lcxmlgroupboxbuilder.h"
 #include "lcxmllabelbuilder.h"
 #include "lcxmlbuttonbuilder.h"
 #include "lcxmltablewidgetbuilder.h"
@@ -51,6 +52,7 @@ QMap<QString, QSharedPointer<LIXmlWidgetBuilder>> getBuilders()
     };
 
   add_builder(QStringLiteral("Frame"              ),  new LCXmlFrameBuilder());
+  add_builder(QStringLiteral("GroupBox"           ),  new LCXmlGroupBoxBuilder());
   add_builder(QStringLiteral("Button"             ),  new LCXmlButtonBuilder());
   add_builder(QStringLiteral("Label"              ),  new LCXmlLabelBuilder());
   add_builder(QStringLiteral("Table"              ),  new LCXmlTableWidgetBuilder());

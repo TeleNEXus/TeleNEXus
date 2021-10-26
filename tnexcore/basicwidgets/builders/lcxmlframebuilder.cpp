@@ -40,21 +40,23 @@ static const struct
 } __slAttributes;
 
 //==============================================================================
-class LCWidget : public QFrame
+namespace
 {
-private:
-  QSize mSizeHint;
-public:
-  explicit LCWidget(QWidget* _parent=nullptr); 
-  virtual QSize sizeHint() const override;
-  void addWidget(QWidget* _widget);
-};
+class LCWidget : public QFrame
+  {
+  private:
+    QSize mSizeHint;
+  public:
+    explicit LCWidget(QWidget* _parent=nullptr); 
+    virtual QSize sizeHint() const override;
+    void addWidget(QWidget* _widget);
+  };
 
 //------------------------------------------------------------------------------
 LCWidget::LCWidget(QWidget* _parent) : 
   QFrame(_parent)
-{
-}
+  {
+  }
 
 //------------------------------------------------------------------------------
 QSize LCWidget::sizeHint() const 
@@ -80,6 +82,7 @@ void LCWidget::addWidget(QWidget* _widget)
     height = _widget->geometry().bottomRight().y();
   }
   mSizeHint = QSize(width, height);
+}
 }
 
 
