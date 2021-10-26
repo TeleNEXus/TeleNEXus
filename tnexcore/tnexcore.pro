@@ -66,6 +66,7 @@ basicwidgets/widgets/lcqdatalineedit.cpp \
 basicwidgets/builders/lcqwidgetvisiblecontrol.cpp \
 basicwidgets/builders/lcxmlbuilderbase.cpp \
 basicwidgets/builders/lcxmlframebuilder.cpp \
+basicwidgets/builders/lcxmlgroupboxbuilder.cpp \
 basicwidgets/builders/lcxmlbuttonbuilder.cpp \
 basicwidgets/builders/lcxmllabelbuilder.cpp \
 basicwidgets/builders/lcxmltablewidgetbuilder.cpp \
@@ -166,6 +167,7 @@ basicwidgets/builders/lcxmldatalineeditbuilder.h \
 basicwidgets/builders/lcxmllabelbuilder.h \
 basicwidgets/builders/lcxmldatalineeditbuilder.h \
 basicwidgets/builders/lcxmlframebuilder.h \
+basicwidgets/builders/lcxmlgroupboxbuilder.h \
 basicwidgets/builders/lcxmldatacomboboxbuilder.h \
 basicwidgets/builders/lcxmltablewidgetbuilder.h \
 basicwidgets/builders/lcxmltabwidgetbuilder.h \

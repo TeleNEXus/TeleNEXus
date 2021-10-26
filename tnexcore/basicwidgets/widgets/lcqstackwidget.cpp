@@ -105,7 +105,7 @@ LCQStackWidget::LCQStackWidget(
   ld.mDataFormatter = _formatter;
 
   ld.mDataReader->setHandler(read_handler);
-  ld.mDataReader->connectToSource();
+  /* ld.mDataReader->connectToSource(); */
 
   connect(&(ld.timer), &QTimer::timeout, 
       [this]()
@@ -271,4 +271,39 @@ bool LCQStackWidget::eventFilter(QObject*, QEvent* _event)
 
 
 
+void LCQStackWidget::setActive(bool _flag)
+{
+  if(_flag)
+  {
+    ld.mDataReader->connectToSource();
+  }
+  else
+  {
+    /* setCurrentIndex(ld.indexUndef); */
+    ld.mDataReader->disconnectFromSource();
+  }
+}
 
+
+bool LCQStackWidget::event(QEvent *_event)
+{
+  bool ret = false;
+  switch(_event->type())
+  {
+  case QEvent::Type::Show:
+    setActive(true);
+    ret = true;
+    break;
+
+  case QEvent::Type::Hide:
+    setActive(false);
+    ret = true;
+    break;
+
+  default:
+    ret = QStackedWidget::event(_event);
+    break;
+  }
+  return ret;
+  /* return QStackedWidget::event(_event); */
+}
