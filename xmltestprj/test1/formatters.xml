@@ -19,6 +19,8 @@
 
   <std id="hex_sparate_size_4" format="hex" size="4" separator=" " />
 
+  <std id="bool_yes_no" true="YES" false="NO"/>
+
     <!-- min="-10000" -->
     <!-- max="10000" -->
     <!-- format="xxx.x" --> 
