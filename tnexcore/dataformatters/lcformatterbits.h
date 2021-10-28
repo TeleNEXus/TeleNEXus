@@ -18,8 +18,8 @@
  * You should have received a copy of the GNU General Public License
  * along with TeleNEXus.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef LCSTRINGDATAFORMATTERBITS_H
-#define LCSTRINGDATAFORMATTERBITS_H
+#ifndef LCFORMATTERBITS_H
+#define LCFORMATTERBITS_H
 
 #include "lcformatterbase.h"
 #include <QValidator>
@@ -27,7 +27,7 @@
 class LCFormatterBits : public LCFormatterBase
 {
 private:
-  //Валидатор вводимых данных.
+
   class CValidator : public QValidator
   {
   public:
@@ -46,7 +46,7 @@ private:
   };
 
 private:
-  CValidator  mValidator;      //Валидатор.
+  CValidator  mValidator;
 public:
 
   explicit LCFormatterBits(    
@@ -67,6 +67,6 @@ public:
   void setSeparator(QChar _separator);
 };
 
-#endif // LCSTRINGDATAFORMATTERBITS_H
+#endif // LCFORMATTERBITS_H
 
 
