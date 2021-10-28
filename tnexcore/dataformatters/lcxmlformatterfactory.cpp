@@ -96,7 +96,41 @@ public:
     __slStdFormattersMap.insert(__slStdFormatterNames.format_string  ,   TFormatter( new LCFormatterString()));
     __slStdFormattersMap.insert(__slStdFormatterNames.format_textstream, TFormatter( new LCFormatterTextStream()));
 
-    //TODO: Добавить подключение сепаратора для форматтеров.
+
+    auto int_format_params = 
+      [](const QDomElement& _element, LCFormatterIntBase* _formatter)
+      {
+        QString attr = _element.attribute(QStringLiteral("fieldWidth"));
+
+        if(!attr.isNull())
+        {
+          bool flag = false;
+          int width = attr.toInt(&flag);
+          if(flag)
+          {
+            _formatter->setFieldWidth(width);
+          }
+        }
+
+        attr = _element.attribute(QStringLiteral("base"));
+        if(!attr.isNull())
+        {
+          bool flag = false;
+          int base = attr.toInt(&flag);
+          if(flag)
+          {
+            _formatter->setFieldWidth(base);
+          }
+        }
+
+        attr = _element.attribute(QStringLiteral("fillChar"));
+        if(!attr.isNull())
+        {
+          _formatter->setFillChar(attr.at(0).toLatin1());
+        }
+
+      };
+
 
     //--------------------------------------------------------------------------bitfield
     __formatterCreators.insert(__slStdFormatterNames.format_bitfield,
@@ -247,20 +281,17 @@ public:
     __formatterCreators.insert( __slStdFormatterNames.format_bool, 
         [](const QDomElement& _element) 
         { 
-          /* Q_UNUSED(_element); */ 
-          /* return __slStdFormattersMap.value(__slStdFormatterNames.format_bool); */
-
           LCFormatterBool *formatter = 
             new LCFormatterBool();
 
           //Получение значения размера данных в байтах.
-          QString attr = _element.attribute("true");
+          QString attr = _element.attribute(QStringLiteral("true"));
           if(!attr.isNull())
           {
             formatter->setTrueString(attr);
           }
 
-          attr = _element.attribute("false");
+          attr = _element.attribute(QStringLiteral("false"));
           if(!attr.isNull())
           {
             formatter->setFalseString(attr);
@@ -270,57 +301,60 @@ public:
         });
 
     __formatterCreators.insert( __slStdFormatterNames.format_uint8, 
-        [](const QDomElement& _element)
+        [&int_format_params](const QDomElement& _element)
         { 
-          Q_UNUSED(_element); 
-          return __slStdFormattersMap.value(__slStdFormatterNames.format_uint8);
+          LCFormatterU8* formatter = new LCFormatterU8();
+          int_format_params(_element, formatter);
+          return QSharedPointer<LIDataFormatter>(formatter); 
         });
 
     __formatterCreators.insert( __slStdFormatterNames.format_int8, 
-        [](const QDomElement& _element)
+        [&int_format_params](const QDomElement& _element)
         { 
-          Q_UNUSED(_element); 
-          return __slStdFormattersMap.value(__slStdFormatterNames.format_int8);
+          LCFormatterS8* formatter = new LCFormatterS8();
+          int_format_params(_element, formatter);
+          return QSharedPointer<LIDataFormatter>(formatter); 
         });
 
     __formatterCreators.insert( __slStdFormatterNames.format_uint16, 
-        [](const QDomElement& _element)
+        [&int_format_params](const QDomElement& _element)
         { 
-          Q_UNUSED(_element); 
-          return __slStdFormattersMap.value(__slStdFormatterNames.format_uint16);
+          LCFormatterU16* formatter = new LCFormatterU16();
+          int_format_params(_element, formatter);
+          return QSharedPointer<LIDataFormatter>(formatter); 
         });
 
     __formatterCreators.insert( __slStdFormatterNames.format_int16, 
-        [](const QDomElement& _element)
+        [&int_format_params](const QDomElement& _element)
         { 
-          Q_UNUSED(_element); 
-          return __slStdFormattersMap.value(__slStdFormatterNames.format_int16);
+          LCFormatterS16* formatter = new LCFormatterS16();
+          int_format_params(_element, formatter);
+          return QSharedPointer<LIDataFormatter>(formatter); 
         });
 
     __formatterCreators.insert( __slStdFormatterNames.format_uint32, 
-        [](const QDomElement& _element)
+        [&int_format_params](const QDomElement& _element)
         { 
-          Q_UNUSED(_element); 
-          return __slStdFormattersMap.value(__slStdFormatterNames.format_uint32);
+          LCFormatterU32* formatter = new LCFormatterU32();
+          int_format_params(_element, formatter);
+          return QSharedPointer<LIDataFormatter>(formatter); 
         });
 
     __formatterCreators.insert( __slStdFormatterNames.format_int32, 
-        [](const QDomElement& _element)
+        [&int_format_params](const QDomElement& _element)
         { 
-          Q_UNUSED(_element); 
-          return __slStdFormattersMap.value(__slStdFormatterNames.format_int32);
+          LCFormatterS32* formatter = new LCFormatterS32();
+          int_format_params(_element, formatter);
+          return QSharedPointer<LIDataFormatter>(formatter); 
         });
 
     __formatterCreators.insert( __slStdFormatterNames.format_float32, 
         [](const QDomElement& _element)
         { 
-          /* Q_UNUSED(_element); */ 
-          /* return __slStdFormattersMap.value(__slStdFormatterNames.format_float32); */
           LCFormatterF32 *formatter = 
             new LCFormatterF32();
 
-          //Получение значения размера данных в байтах.
-          QString attr = _element.attribute("fieldWidth");
+          QString attr = _element.attribute(QStringLiteral("fieldWidth"));
 
           if(!attr.isNull())
           {
@@ -329,7 +363,7 @@ public:
             if(flag) formatter->setFieldWidth(width);
           }
 
-          attr = _element.attribute("precision");
+          attr = _element.attribute(QStringLiteral("precision"));
           if(!attr.isNull())
           {
             bool flag = false;
@@ -337,18 +371,17 @@ public:
             if(flag) formatter->setPrecision(prec);
           }
 
-          attr = _element.attribute("fillChar");
+          attr = _element.attribute(QStringLiteral("fillChar"));
           if(!attr.isNull())
           {
             formatter->setFillChar(attr.at(0));
           }
 
-          attr = _element.attribute("mode");
+          attr = _element.attribute(QStringLiteral("mode"));
           if(!attr.isNull())
           {
             formatter->setFormat(attr.at(0).toLatin1());
           }
-
 
           return QSharedPointer<LIDataFormatter>(formatter); 
           
