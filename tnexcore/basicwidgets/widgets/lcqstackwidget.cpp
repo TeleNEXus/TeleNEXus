@@ -276,6 +276,7 @@ void LCQStackWidget::setActive(bool _flag)
   if(_flag)
   {
     ld.mDataReader->connectToSource();
+    /* ld.mDataReader->readRequest(); */
   }
   else
   {
@@ -287,23 +288,18 @@ void LCQStackWidget::setActive(bool _flag)
 
 bool LCQStackWidget::event(QEvent *_event)
 {
-  bool ret = false;
   switch(_event->type())
   {
   case QEvent::Type::Show:
     setActive(true);
-    ret = true;
     break;
 
   case QEvent::Type::Hide:
     setActive(false);
-    ret = true;
     break;
 
   default:
-    ret = QStackedWidget::event(_event);
     break;
   }
-  return ret;
-  /* return QStackedWidget::event(_event); */
+  return QStackedWidget::event(_event);
 }
