@@ -32,6 +32,7 @@ private:
     char    mFormat;
     int     mPrecision;
     QChar   mFillChar;          //Символ заполнения выравнивания.
+    float   mLessIsZero;
 
     QDoubleValidator mValidator;   //Контроллер диапазона ввода.
 
@@ -40,7 +41,8 @@ public:
                                           char    _format         = 'g',
                                           int     _precision      = -1,
                                           int     _decimals       = 1000,
-                                          QChar   _fillChar       = QChar(' '));
+                                          QChar   _fillChar       = QChar(' '),
+                                          float   _lessIsZero     = 0.0f);
     virtual ~LCFormatterF32();
     virtual QString     toString(const QByteArray& _data) override;
     virtual QByteArray  toBytes(const QString& _str) override;
@@ -50,6 +52,7 @@ public:
     void setFillChar(QChar _c){mFillChar = _c;}
     void setFormat(char _format){mFormat = _format;}
     void setPrecision(int _precision){mPrecision = _precision;}
+    void setLessIsZero(float _lessIsZero);
 };
 
 

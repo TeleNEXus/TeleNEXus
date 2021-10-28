@@ -19,6 +19,7 @@
  * along with TeleNEXus.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include "lcformatterf32.h"
+#include "math.h"
 
 
 //==============================================================================LCQDataStringFormatterFloat32
@@ -27,10 +28,12 @@ LCFormatterF32::LCFormatterF32(
     char    _format,
     int     _precision,
     int     _decimals,
-    QChar   _fillChar) :   mFieldWidth(_fieldWidth),
+    QChar   _fillChar,
+    float   _lessIsZero) :   mFieldWidth(_fieldWidth),
   mFormat(_format),
   mPrecision(_precision),
-  mFillChar(_fillChar)
+  mFillChar(_fillChar),
+  mLessIsZero(fabs(_lessIsZero))
 {
   mValidator.setRange(
       (-1.0f)*std::numeric_limits<float>::max(), 
@@ -54,9 +57,14 @@ QString LCFormatterF32::toString(const QByteArray& _data)
     return str;
   }
 
-  return QString("%1").arg(
-      ((float*)_data.constData())[0], 
-      mFieldWidth, mFormat, mPrecision, mFillChar);
+  float data = *((float*)(_data.constData()));
+
+  if(mLessIsZero != 0.0f)
+  {
+    if(fabs(data) < mLessIsZero) data = 0.0f;
+  }
+
+  return QString("%1").arg(data, mFieldWidth, mFormat, mPrecision, mFillChar);
 }
 
 
@@ -73,5 +81,12 @@ QByteArray LCFormatterF32::toBytes(const QString& _str)
 QValidator* LCFormatterF32::validator()
 {
   return &mValidator;
+}
+
+//------------------------------------------------------------------------------setLessIsZero
+void LCFormatterF32::setLessIsZero(float _lessIsZero)
+
+{
+  mLessIsZero = fabs(_lessIsZero);
 }
 

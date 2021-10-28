@@ -383,6 +383,14 @@ public:
             formatter->setFormat(attr.at(0).toLatin1());
           }
 
+          attr = _element.attribute(QStringLiteral("lessIsZero"));
+          if(!attr.isNull())
+          {
+            bool flag = false;
+            float data = attr.toFloat(&flag);
+            if(flag) formatter->setLessIsZero(data);
+          }
+
           return QSharedPointer<LIDataFormatter>(formatter); 
           
         });
