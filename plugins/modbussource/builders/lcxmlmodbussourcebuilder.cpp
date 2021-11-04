@@ -193,11 +193,11 @@ static void createSources(const QDomNodeList& nodes,
 
       if(flag)
       {
-        source->start(QSharedPointer<QThread>(new QThread), updatetime);
+        source->start(updatetime);
       }
       else
       {
-        source->start(QSharedPointer<QThread>(new QThread));
+        source->start();
       }
     }
   }
