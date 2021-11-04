@@ -18,8 +18,8 @@
  * You should have received a copy of the GNU General Public License
  * along with TeleNEXus.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef LCQWRITETOSOURCE_H_
-#define LCQWRITETOSOURCE_H_
+#ifndef LCQWRITESYNCREQ_H_
+#define LCQWRITESYNCREQ_H_
 
 #include "lqextendevent.h"
 
@@ -33,56 +33,45 @@
 
 class QThread;
 
-class LCQWriteToSource  : public QObject
+class LQWriteSyncReq  : public QObject
 {
   Q_OBJECT;
+public:
+  using EWriteStatus = LIRemoteDataSource::EWriteStatus;
+
 private:
 
-  //----------------------------------------------------------------------------CEventBase
-  class CEventBase : public QEvent
+  //----------------------------------------------------------------------------CEventWrite
+  class CEventWrite : public QEvent
   {
     __LQ_EXTENDED_QEVENT_DECLARATION
   public:
-      CEventBase();
-      virtual void handle(LCQWriteToSource* _sender) = 0;
+      CEventWrite();
   };
-
-  //----------------------------------------------------------------------------CEventBase
-  class CEventWrite: public CEventBase 
-  {
-  public:
-    CEventWrite();
-    virtual void handle(LCQWriteToSource* _sender);
-  };
-
-  QString     mSourceId;
-  QString     mDataId;
-
-  const QByteArray& edWriteData;
-
-  int mWriteDataSize;
 
   QSharedPointer<LIRemoteDataWriter>    mspDataWriter;
+  QWeakPointer<LIRemoteDataSource>      mwpDataSource;
+
+  QString mDataId;
+  const QByteArray* mpWriteData;
+  EWriteStatus mWriteStatus;
 
   QMutex          mMutexEvent;
   QWaitCondition  mWaitCond;
 
-  LCQWriteToSource(
-      const QString&      _sourceId, 
-      const QString&      _dataId,
-      const QByteArray&   _writeData
-      );
+  LQWriteSyncReq(
+      QSharedPointer<LIRemoteDataSource> _source,
+      const QString&      _dataId);
 
 public:
-  virtual ~LCQWriteToSource();
+  virtual ~LQWriteSyncReq();
 
-  static QSharedPointer<LCQWriteToSource> create(
-      const QString&      _sourceId,
+  static QSharedPointer<LQWriteSyncReq> create(
+      QSharedPointer<LIRemoteDataSource> _source,
       const QString&      _dataId,
-      const QByteArray&   _writeData,
       QThread* _thread);
 
-  int writeData();
+   EWriteStatus writeSync(const QByteArray& _data);
 
 private:
   virtual void customEvent(QEvent*) override; 

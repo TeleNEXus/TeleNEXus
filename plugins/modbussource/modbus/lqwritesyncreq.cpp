@@ -18,121 +18,103 @@
  * You should have received a copy of the GNU General Public License
  * along with TeleNEXus.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "lcqwritetosourcereq.h"
-#include "applicationinterface.h"
+#include "lqwritesyncreq.h"
 
 #include <QCoreApplication>
 #include <QDebug>
 
-//==============================================================================CEventBase
-__LQ_EXTENDED_QEVENT_IMPLEMENTATION(LCQWriteToSource::CEventBase);
+//==============================================================================CEventWrite
+__LQ_EXTENDED_QEVENT_IMPLEMENTATION(LQWriteSyncReq::CEventWrite);
 
-LCQWriteToSource::CEventBase::CEventBase() : 
+LQWriteSyncReq::CEventWrite::CEventWrite() : 
   QEvent(__LQ_EXTENDED_QEVENT_REGISTERED)
 {
 }
 
-//==============================================================================CEventRead
-LCQWriteToSource::CEventWrite::CEventWrite()
-{
-}
-
-//------------------------------------------------------------------------------
-void LCQWriteToSource::CEventWrite::handle(LCQWriteToSource* _sender)
-{
-  using EWriteStatus = LIRemoteDataWriter::EWriteStatus;
-  auto source = 
-    CApplicationInterface::getInstance().getDataSource(_sender->mSourceId);
-  if(source.isNull()) 
-  {
-    _sender->mWaitCond.wakeOne();
-    return;
-  }
-
-  auto write_handler = 
-    [_sender](EWriteStatus _status)
-    {
-      if(_status == EWriteStatus::Success) 
-      {
-        _sender->mWriteDataSize = _sender->edWriteData.size();
-      }
-      _sender->mWaitCond.wakeOne();
-    };
-
-  _sender->mspDataWriter = source->createWriter(_sender->mDataId);
-
-  if(!_sender->mspDataWriter.isNull())
-  {
-    _sender->mspDataWriter->setHandler(write_handler);
-    _sender->mspDataWriter->writeRequest(_sender->edWriteData);
-  }
-}
-
 //==============================================================================requestDeleter
-static void requestDeleter(LCQWriteToSource* _req)
+static void requestDeleter(LQWriteSyncReq* _req)
 {
   _req->deleteLater();
 }
 
-//==============================================================================LCQWriteToSource
-LCQWriteToSource::LCQWriteToSource(
-    const QString&      _sourceId,
-    const QString&      _dataId,
-    const QByteArray&   _writeData
-    ) :
+//==============================================================================LQWriteSyncReq
+LQWriteSyncReq::LQWriteSyncReq(
+    QSharedPointer<LIRemoteDataSource> _source,
+    const QString&      _dataId) :
   QObject(nullptr),
-  mSourceId(_sourceId),
+  mwpDataSource(_source),
   mDataId(_dataId),
-  edWriteData(_writeData),
-  mWriteDataSize(0)
+  mpWriteData(nullptr),
+  mWriteStatus(EWriteStatus::Failure)
 {
 }
 
 //------------------------------------------------------------------------------
-QSharedPointer<LCQWriteToSource> LCQWriteToSource::create(
-    const QString&      _sourceId,
+QSharedPointer<LQWriteSyncReq> LQWriteSyncReq::create(
+    QSharedPointer<LIRemoteDataSource> _source,
     const QString&      _dataId,
-    const QByteArray&   _writeData,
     QThread* _thread)
 {
-  LCQWriteToSource* req = new LCQWriteToSource(_sourceId, _dataId, _writeData);
+  LQWriteSyncReq* req = new LQWriteSyncReq(_source, _dataId);
   req->moveToThread(_thread);
-  return QSharedPointer<LCQWriteToSource>(req, requestDeleter);
+  return QSharedPointer<LQWriteSyncReq>(req, requestDeleter);
 }
 
 
 //------------------------------------------------------------------------------
-LCQWriteToSource::~LCQWriteToSource()
+LQWriteSyncReq::~LQWriteSyncReq()
 {
 }
 
 //------------------------------------------------------------------------------
-int LCQWriteToSource::writeData()
+LQWriteSyncReq::EWriteStatus LQWriteSyncReq::writeSync(const QByteArray& _data)
 {
   mMutexEvent.lock();
+
+  mpWriteData = &_data;
 
   QCoreApplication::postEvent(this, new CEventWrite());
   mWaitCond.wait(&mMutexEvent);
 
   mMutexEvent.unlock();
 
-  return mWriteDataSize;
+  return mWriteStatus;
 }
 
 //------------------------------------------------------------------------------
-void LCQWriteToSource::customEvent(QEvent* _event)
+void LQWriteSyncReq::customEvent(QEvent* _event)
 {
   mMutexEvent.lock();
   mMutexEvent.unlock();
 
-  if(_event->type() == CEventBase::msExtendedEventType)
-  {
-    CEventBase* e = dynamic_cast<CEventBase*>(_event);
-    if(e == nullptr)
+
+  auto write_handler = 
+    [this](EWriteStatus _status)
     {
-      return;
-    }
-    e->handle(this);
+      mWriteStatus = _status;
+      mWaitCond.wakeOne();
+    };
+
+  auto handle_normal = 
+    [this, &write_handler]()
+    {
+      auto source = mwpDataSource.lock();
+
+      if(source.isNull()) {return write_handler(EWriteStatus::Failure);}
+
+      mspDataWriter = source->createWriter(mDataId);
+
+      if(mspDataWriter.isNull()) { return write_handler(EWriteStatus::Failure); }
+
+      mspDataWriter->setHandler(write_handler);
+      mspDataWriter->writeRequest(*(mpWriteData));
+    };
+
+  if(_event->type() == CEventWrite::msExtendedEventType)
+  {
+    CEventWrite* e = dynamic_cast<CEventWrite*>(_event);
+    if(e == nullptr) { return write_handler(EWriteStatus::Failure);}
+    handle_normal();
   }
 }
 

@@ -46,6 +46,8 @@ HEADERS += \
     modbus/lqmodbusmasterbase.h \
     modbus/lqmodbusmasterrtu.h  \
     modbus/lqmodbusmastertcp.h  \
+    modbus/lqreadsyncreq.h \
+    modbus/lqwritesyncreq.h \
     builders/lcxmlmodbussourcebuilder.h  \
     modbussource.h \
     modbussource_global.h
@@ -59,6 +61,8 @@ SOURCES += \
     modbus/lqmodbusmasterbase.cpp \
     modbus/lqmodbusmasterrtu.cpp  \
     modbus/lqmodbusmastertcp.cpp  \
+    modbus/lqreadsyncreq.cpp \
+    modbus/lqwritesyncreq.cpp \
     builders/lcxmlmodbussourcebuilder.cpp \
     modbussource.cpp \
     version.h 

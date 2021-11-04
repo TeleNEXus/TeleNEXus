@@ -81,7 +81,7 @@ void LQModbusDataReader::readRequest()
 {
     auto sp = mwpDataSource.lock();
     if(sp.isNull()) return;
-    sp.data()->read(mwpThis);
+    sp.data()->readerRead(mwpThis);
 }
 
 //------------------------------------------------------------------------------

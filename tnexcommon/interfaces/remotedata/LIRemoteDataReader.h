@@ -32,8 +32,7 @@ class LIRemoteDataReader
 public:
 
   using EReadStatus = LIRemoteDataSource::EReadStatus;
-
-  using THandler = std::function<void(QSharedPointer<QByteArray>, EReadStatus)>;
+  using THandler = LIRemoteDataSource::TReadHandler;
   
   LIRemoteDataReader(){}
   ~LIRemoteDataReader(){}

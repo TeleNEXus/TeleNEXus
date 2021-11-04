@@ -18,108 +18,56 @@
  * You should have received a copy of the GNU General Public License
  * along with TeleNEXus.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "lcqreadfromsourcereq.h"
-#include "applicationinterface.h"
+#include "lqreadsyncreq.h"
 
 #include <QCoreApplication>
 #include <QDebug>
 
 using EReadStatus = LIRemoteDataReader::EReadStatus;
-//==============================================================================CReaderStub
-class CReaderStub : public LIRemoteDataReader
-{
-public:
-  CReaderStub(){}
-  virtual void readRequest()override {}
-  virtual void connectToSource()override {}
-  virtual void disconnectFromSource()override {}
-  virtual void setHandler(THandler)override {}
-};
 
-//==============================================================================CEventBase
-__LQ_EXTENDED_QEVENT_IMPLEMENTATION(LCQReadFromSourceReq::CEventBase);
-
-LCQReadFromSourceReq::CEventBase::CEventBase() : 
-  QEvent(__LQ_EXTENDED_QEVENT_REGISTERED)
-{
-}
-
-//==============================================================================CEventRead
-LCQReadFromSourceReq::CEventRead::CEventRead()
-{
-}
-
-//------------------------------------------------------------------------------
-void LCQReadFromSourceReq::CEventRead::handle(LCQReadFromSourceReq* _sender)
-{
-
-  auto source = 
-    CApplicationInterface::getInstance().getDataSource(_sender->mSourceId);
-
-  if(source.isNull()) 
-  {
-    _sender->mWaitCond.wakeOne();
-    return;
-  }
-
-
-  auto read_handler = 
-      [_sender](QSharedPointer<QByteArray> _data, EReadStatus _status)
-      {
-        if(_status == EReadStatus::Valid) 
-        {
-          _sender->mRetData = *_data.data();
-        }
-        _sender->mWaitCond.wakeOne();
-      };
-
-  _sender->mspDataReader = source->createReader(_sender->mDataId);
-
-  if(!_sender->mspDataReader.isNull())
-  {
-    _sender->mspDataReader->setHandler(read_handler);
-    _sender->mspDataReader->readRequest();
-  }
-  else
-  {
-    _sender->mspDataReader = QSharedPointer<LIRemoteDataReader>(new CReaderStub);
-  }
-}
-
-static void requestDeleter(LCQReadFromSourceReq* _req)
+//==============================================================================
+static void requestDeleter(LQReadSyncReq* _req)
 {
   _req->deleteLater();
 }
 
-//==============================================================================LCQReadFromSourceReq
-LCQReadFromSourceReq::LCQReadFromSourceReq(
-    const QString& _sourceId,
+//==============================================================================CEventRead
+__LQ_EXTENDED_QEVENT_IMPLEMENTATION(LQReadSyncReq::CEventRead);
+
+LQReadSyncReq::CEventRead::CEventRead() : 
+  QEvent(__LQ_EXTENDED_QEVENT_REGISTERED)
+{
+}
+
+//==============================================================================LQReadSyncReq
+LQReadSyncReq::LQReadSyncReq(
+    QSharedPointer<LIRemoteDataSource> _source,
     const QString& _dataId) :
   QObject(nullptr),
-  mSourceId(_sourceId),
-  mDataId(_dataId)
+  mwpDataSource(_source),
+  mDataId(_dataId),
+  mRetStatus(EReadStatus::Undef)
 {
 }
 
 //------------------------------------------------------------------------------
-QSharedPointer<LCQReadFromSourceReq> LCQReadFromSourceReq::create(
-    const QString& _sourceId,
+QSharedPointer<LQReadSyncReq> LQReadSyncReq::create(
+    QSharedPointer<LIRemoteDataSource> _source,
     const QString& _dataId,
     QThread* _thread)
 {
-  LCQReadFromSourceReq* req = new LCQReadFromSourceReq(_sourceId, _dataId);
+  LQReadSyncReq* req = new LQReadSyncReq(_source, _dataId);
   req->moveToThread(_thread);
-  return QSharedPointer<LCQReadFromSourceReq>(req, requestDeleter);
+  return QSharedPointer<LQReadSyncReq>(req, requestDeleter);
 }
 
-
 //------------------------------------------------------------------------------
-LCQReadFromSourceReq::~LCQReadFromSourceReq()
+LQReadSyncReq::~LQReadSyncReq()
 {
 }
 
 //------------------------------------------------------------------------------
-QByteArray LCQReadFromSourceReq::readData()
+QByteArray LQReadSyncReq::readSync(EReadStatus* _status)
 {
   mMutexEvent.lock();
 
@@ -128,23 +76,53 @@ QByteArray LCQReadFromSourceReq::readData()
 
   mMutexEvent.unlock();
 
+  if(_status != nullptr) *_status = mRetStatus;
+
   return mRetData;
 }
 
 //------------------------------------------------------------------------------
-void LCQReadFromSourceReq::customEvent(QEvent* _event)
+void LQReadSyncReq::customEvent(QEvent* _event)
 {
   mMutexEvent.lock();
   mMutexEvent.unlock();
 
-  if(_event->type() == CEventBase::msExtendedEventType)
-  {
-    CEventBase* e = dynamic_cast<CEventBase*>(_event);
-    if(e == nullptr)
+  auto read_handler = 
+    [this](QSharedPointer<QByteArray> _data, EReadStatus _status)
     {
-      return;
-    }
-    e->handle(this);
+      if(_status == EReadStatus::Valid) 
+      {
+        if(!_data.isNull()) mRetData = *_data.data();
+      }
+      mRetStatus = _status;
+      mWaitCond.wakeOne();
+    };
+
+  auto handler_normal = 
+    [this, &read_handler]()
+    {
+      auto source = mwpDataSource.lock();
+
+      if(source.isNull()) 
+      {
+        mWaitCond.wakeOne();
+        return;
+      }
+
+      mspDataReader = source->createReader(mDataId);
+
+      if(mspDataReader.isNull()){ return read_handler(nullptr, EReadStatus::Undef); }
+
+      mspDataReader->setHandler(read_handler);
+      mspDataReader->readRequest();
+
+    };
+
+  if(_event->type() == CEventRead::msExtendedEventType)
+  {
+    CEventRead* e = dynamic_cast<CEventRead*>(_event);
+    if(e == nullptr) { return read_handler(nullptr, EReadStatus::Undef); }
+    handler_normal();
   }
 }
 

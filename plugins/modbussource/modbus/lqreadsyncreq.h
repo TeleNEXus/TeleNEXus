@@ -18,8 +18,8 @@
  * You should have received a copy of the GNU General Public License
  * along with TeleNEXus.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef LCQREADFROMSOURCEREQ_H_
-#define LCQREADFROMSOURCEREQ_H_
+#ifndef LCQREADSYNCREQ_H_
+#define LCQREADSYNCREQ_H_
 
 #include "lqextendevent.h"
 
@@ -33,49 +33,47 @@
 
 class QThread;
 
-class LCQReadFromSourceReq  : public QObject
+class LQReadSyncReq  : public QObject
 {
-  Q_OBJECT
+  Q_OBJECT;
+public:
+  using EReadStatus = LIRemoteDataSource::EReadStatus;
+
 private:
 
-  //----------------------------------------------------------------------------CEventBase
-  class CEventBase : public QEvent
+  //----------------------------------------------------------------------------CEventRead
+  class CEventRead : public QEvent
   {
   __LQ_EXTENDED_QEVENT_DECLARATION
   public:
-      CEventBase();
-      virtual void handle(LCQReadFromSourceReq* _sender) = 0;
+      CEventRead();
   };
 
-  //----------------------------------------------------------------------------CEventBase
-  class CEventRead: public CEventBase 
-  {
-  public:
-      CEventRead();
-      virtual void handle(LCQReadFromSourceReq* _sender);
-  };
+  QWeakPointer<LIRemoteDataSource>    mwpDataSource;
+  QSharedPointer<LIRemoteDataReader>  mspDataReader;
 
   QString     mSourceId;
   QString     mDataId;
   QByteArray  mRetData;
-
-  QSharedPointer<LIRemoteDataReader>  mspDataReader;
+  EReadStatus mRetStatus;
 
   QMutex          mMutexEvent;
   QWaitCondition  mWaitCond;
 
-  LCQReadFromSourceReq(const QString& _sourceId, const QString& _dataId);
+  LQReadSyncReq(QSharedPointer<LIRemoteDataSource> _source, const QString& _dataId);
 
 public:
-  virtual ~LCQReadFromSourceReq();
+  virtual ~LQReadSyncReq();
 
-  static QSharedPointer<LCQReadFromSourceReq> create(
-      const QString& _sourceId,
+  static QSharedPointer<LQReadSyncReq> create(
+      QSharedPointer<LIRemoteDataSource> _source,
       const QString& _dataId,
       QThread* _thread);
 
-  QByteArray readData();
+  QByteArray readSync(EReadStatus* _status = nullptr);
+
 private:
   virtual void customEvent(QEvent*) override; 
 };
+
 #endif
