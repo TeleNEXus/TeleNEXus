@@ -32,8 +32,7 @@ class LIRemoteDataWriter
 public:
 
   using EWriteStatus = LIRemoteDataSource::EWriteStatus;
-
-  using THandler = std::function<void(EWriteStatus)>;
+  using THandler = LIRemoteDataSource::TWriteHandler;
 
   LIRemoteDataWriter(){}
   virtual ~LIRemoteDataWriter(){}

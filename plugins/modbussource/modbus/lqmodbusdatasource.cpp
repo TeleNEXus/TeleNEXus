@@ -29,7 +29,8 @@
 
 #include "lqmodbusdatareader.h"
 #include "lqmodbusdatawriter.h"
-
+#include "lqreadsyncreq.h"
+#include "lqwritesyncreq.h"
 
 using EWriteStatus = LIRemoteDataSource::EWriteStatus;
 //==============================================================================CQEventBase
@@ -228,13 +229,13 @@ void LQModbusDataSource::disconnectReader(
 }
 
 //------------------------------------------------------------------------------
-void LQModbusDataSource::read(QSharedPointer<LQModbusDataReader> _reader)
+void LQModbusDataSource::readerRead(QSharedPointer<LQModbusDataReader> _reader)
 {
   QCoreApplication::postEvent(this, new CQEventReqRead(_reader));
 }
 
 //------------------------------------------------------------------------------
-void LQModbusDataSource::write(
+void LQModbusDataSource::writerWrite(
     QSharedPointer<LQModbusDataWriter> _writer, const QByteArray& _data)
 {
   QCoreApplication::postEvent( this, new CQEventReqWrite(_writer, _data));
@@ -263,15 +264,48 @@ QSharedPointer<LIRemoteDataWriter> LQModbusDataSource::createWriter(
   return LQModbusDataWriter::create(_dataName, mwpThis);
 }
 
-/* //------------------------------------------------------------------------------ */
-/* QByteArray LQModbusDataSource::readSync( */
-/*     const QString& _dataId, EReadStatus* _status) */
-/* { */
-/* } */
+//------------------------------------------------------------------------------
+QByteArray LQModbusDataSource::read(
+    const QString& _dataId, EReadStatus* _status)
+{
+  auto req = LQReadSyncReq::create(mwpThis.lock(), _dataId, this->thread());
+  return req->readSync(_status);
+}
 
-/* //------------------------------------------------------------------------------ */
-/* EWriteStatus LQModbusDataSource::writeSync( */
-/*     const QString& _dataId, const QByteArray& _data) */
-/* { */
-/* } */
+//------------------------------------------------------------------------------
+EWriteStatus LQModbusDataSource::write(
+    const QString& _dataId, const QByteArray& _data)
+{
+  auto req = LQWriteSyncReq::create(mwpThis.lock(), _dataId, thread());
+  return req->writeSync(_data);
+}
 
+//------------------------------------------------------------------------------
+void LQModbusDataSource::read(
+      const QString& _dataId, TReadHandler _handler)
+{
+  auto reader = LQModbusDataReader::create(_dataId, mwpThis);
+  if(reader.isNull())
+  {
+    _handler(QSharedPointer<QByteArray>(new QByteArray), EReadStatus::Undef);
+    return;
+  }
+  reader->setHandler(_handler);
+  reader->readRequest();
+}
+
+//------------------------------------------------------------------------------
+void LQModbusDataSource::write(
+      const QString& _dataId, 
+      const QByteArray& _data,
+      TWriteHandler _handler)
+{
+  auto writer = LQModbusDataWriter::create(_dataId, mwpThis);
+  if(writer.isNull())
+  {
+    _handler(EWriteStatus::Failure);
+    return;
+  }
+  writer->setHandler(_handler);
+  writer->writeRequest(_data);
+}

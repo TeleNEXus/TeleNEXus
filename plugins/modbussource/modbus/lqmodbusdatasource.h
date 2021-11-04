@@ -151,8 +151,8 @@ public:
 private:
   void connectReader(QSharedPointer<LQModbusDataReader> _reader);
   void disconnectReader(QSharedPointer<LQModbusDataReader> _reader);
-  void read(QSharedPointer<LQModbusDataReader> _reader);
-  void write(QSharedPointer<LQModbusDataWriter> _writer,
+  void readerRead(QSharedPointer<LQModbusDataReader> _reader);
+  void writerWrite(QSharedPointer<LQModbusDataWriter> _writer,
       const QByteArray& _data);
   virtual void customEvent(QEvent* _event) override;
 
@@ -164,8 +164,21 @@ public:
   virtual QSharedPointer<LIRemoteDataWriter> createWriter(
       const QString& _dataName) override;
 
-  /* virtual QByteArray readSync(const QString& _dataId, EReadStatus* _status = nullptr) override; */
-  /* virtual EWriteStatus writeSync(const QString& _dataId, const QByteArray& _data) override; */
+  //Synchronous call.
+  virtual QByteArray read(
+      const QString& _dataId, EReadStatus* _status = nullptr) override;
+
+  virtual EWriteStatus write(
+      const QString& _dataId, const QByteArray& _data) override;
+
+  //Asynchronous call.
+  virtual void read(
+      const QString& _dataId, TReadHandler _handler) override;
+
+  virtual void write(
+      const QString& _dataId, 
+      const QByteArray& _data, 
+      TWriteHandler _handler) override;
 
   friend class LQModbusDataReader;
   friend class LQModbusDataWriter;

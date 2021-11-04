@@ -32,6 +32,7 @@ class LIRemoteDataSource
 {
 public:
 
+
   enum class EReadStatus
   {
     Undef,
@@ -45,6 +46,9 @@ public:
     Failure
   };
 
+  using TReadHandler = std::function<void(QSharedPointer<QByteArray>, EReadStatus)>;
+  using TWriteHandler = std::function<void(EWriteStatus)>;
+
   LIRemoteDataSource(){}
   virtual ~LIRemoteDataSource(){}
 
@@ -54,8 +58,21 @@ public:
   virtual QSharedPointer<LIRemoteDataWriter> createWriter(
       const QString& _dataName) = 0;
 
-  /* virtual QByteArray readSync(const QString& _dataId, EReadStatus* _status = nullptr) = 0; */
-  /* virtual EWriteStatus writeSync(const QString& _dataId, const QByteArray& _data) = 0; */
+  //Synchronous call.
+  virtual QByteArray read(
+      const QString& _dataId, EReadStatus* _status = nullptr) = 0;
+
+  virtual EWriteStatus write(
+      const QString& _dataId, const QByteArray& _data) = 0;
+
+  //Asynchronous call.
+  virtual void read(
+      const QString& _dataId, TReadHandler _handler) = 0;
+
+  virtual void write(
+      const QString& _dataId, 
+      const QByteArray& _data, 
+      TWriteHandler _handler) = 0;
 
 };
 

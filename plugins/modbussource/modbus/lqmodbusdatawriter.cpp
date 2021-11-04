@@ -80,7 +80,7 @@ void LQModbusDataWriter::writeRequest(const QByteArray& _data)
   }
   else
   {
-    sp.data()->write(mwpThis.lock(), _data);
+    sp.data()->writerWrite(mwpThis.lock(), _data);
   }
 }
 
