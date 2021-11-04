@@ -21,6 +21,7 @@
 #ifndef LIREMOTEDATAWRITER_H
 #define LIREMOTEDATAWRITER_H
 
+#include "LIRemoteDataSource.h"
 #include <functional>
 #include <QSharedPointer>
 
@@ -30,11 +31,7 @@ class LIRemoteDataWriter
 {
 public:
 
-  enum class EWriteStatus
-  {
-    Success,
-    Failure
-  };
+  using EWriteStatus = LIRemoteDataSource::EWriteStatus;
 
   using THandler = std::function<void(EWriteStatus)>;
 
@@ -42,6 +39,8 @@ public:
   virtual ~LIRemoteDataWriter(){}
   virtual void writeRequest( const QByteArray& _data) = 0;
   virtual void setHandler(THandler _handler) = 0;
+
+  /* virtual EWriteStatus writeSync(const QByteArray& _data) = 0; */
 };
 
 #endif // LIREMOTEDATAWRITER_H

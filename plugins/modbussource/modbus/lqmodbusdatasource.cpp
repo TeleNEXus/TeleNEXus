@@ -22,6 +22,7 @@
 #include <typeinfo>
 #include <QCoreApplication>
 #include <QDebug>
+#include <QMutexLocker>
 
 #include "lqmodbusdatasource.h"
 #include "lmodbusdefs.h"
@@ -30,6 +31,7 @@
 #include "lqmodbusdatawriter.h"
 
 
+using EWriteStatus = LIRemoteDataSource::EWriteStatus;
 //==============================================================================CQEventBase
 __LQ_EXTENDED_QEVENT_IMPLEMENTATION(LQModbusDataSource::CQEventBase);
 
@@ -191,17 +193,13 @@ void LQModbusDataSource::addDataItemCoils(
 //------------------------------------------------------------------------------
 void LQModbusDataSource::start(int _updateIntervalMs)
 {
-  QCoreApplication::postEvent(this, new CQEventStart(_updateIntervalMs));
-}
+  QMutexLocker locker(&mStartMutex);
 
-void LQModbusDataSource::start(
-    QSharedPointer<QThread> _thread, int _updateIntervalMs)
-{
   if(!mspThread.isNull()) return;
 
-  mspThread = _thread;
+  mspThread.reset(new QThread, doDeleteLater);
   moveToThread(mspThread.data());
-  if(!mspThread->isRunning()) mspThread->start();
+  mspThread->start();
 
   _updateIntervalMs = (_updateIntervalMs > 50) ? (_updateIntervalMs) : (50);
 
@@ -264,4 +262,16 @@ QSharedPointer<LIRemoteDataWriter> LQModbusDataSource::createWriter(
 {
   return LQModbusDataWriter::create(_dataName, mwpThis);
 }
+
+/* //------------------------------------------------------------------------------ */
+/* QByteArray LQModbusDataSource::readSync( */
+/*     const QString& _dataId, EReadStatus* _status) */
+/* { */
+/* } */
+
+/* //------------------------------------------------------------------------------ */
+/* EWriteStatus LQModbusDataSource::writeSync( */
+/*     const QString& _dataId, const QByteArray& _data) */
+/* { */
+/* } */
 

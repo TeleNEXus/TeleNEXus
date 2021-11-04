@@ -21,6 +21,7 @@
 #ifndef LIREMOTEDATAREADER_H
 #define LIREMOTEDATAREADER_H
 
+#include "LIRemoteDataSource.h"
 #include <functional>
 #include <QSharedPointer>
 
@@ -29,12 +30,8 @@ class QByteArray;
 class LIRemoteDataReader
 {
 public:
-  enum class EReadStatus
-  {
-    Undef,
-    Valid,
-    Wrong
-  };
+
+  using EReadStatus = LIRemoteDataSource::EReadStatus;
 
   using THandler = std::function<void(QSharedPointer<QByteArray>, EReadStatus)>;
   
@@ -44,6 +41,9 @@ public:
   virtual void connectToSource() = 0;
   virtual void disconnectFromSource() = 0;
   virtual void setHandler(THandler _handler) = 0;
+
+  /* virtual QByteArray readSync(EReadStatus* _status = nullptr) = 0; */
+
 };
 
 #endif // LIREMOTEDATAREADER_H

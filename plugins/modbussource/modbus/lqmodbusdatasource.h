@@ -26,6 +26,7 @@
 #include <QLinkedList>
 #include <QMap>
 #include <QTimerEvent>
+#include <QMutex>
 
 #include "lqextendevent.h"
 #include "lqmodbusmasterbase.h"
@@ -120,6 +121,7 @@ private:
   QSharedPointer<LQModbusMasterBase> mModbusMaster;
   int mUpdateInterval;
   QTimer mTimer;
+  QMutex mStartMutex;
 
   LCModbusDataMap mDataMap;
   QSharedPointer<QThread> mspThread;
@@ -144,9 +146,7 @@ public:
   void addDataItemDiscreteInputs( const QString& _name, quint16 _addr, quint16 _size);
   void addDataItemCoils(          const QString& _name, quint16 _addr, quint16 _size);
   void start(int _updateIntervalMs = 500);
-  void start(QSharedPointer<QThread> _thread, int _updateIntervalMs = 500);
   void stop();
-
 
 private:
   void connectReader(QSharedPointer<LQModbusDataReader> _reader);
@@ -161,9 +161,11 @@ public:
   virtual QSharedPointer<LIRemoteDataReader> createReader(
       const QString& _dataName) override;
 
-
   virtual QSharedPointer<LIRemoteDataWriter> createWriter(
       const QString& _dataName) override;
+
+  /* virtual QByteArray readSync(const QString& _dataId, EReadStatus* _status = nullptr) override; */
+  /* virtual EWriteStatus writeSync(const QString& _dataId, const QByteArray& _data) override; */
 
   friend class LQModbusDataReader;
   friend class LQModbusDataWriter;

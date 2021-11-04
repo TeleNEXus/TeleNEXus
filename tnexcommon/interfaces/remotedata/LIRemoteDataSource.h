@@ -20,16 +20,10 @@
  */
 #ifndef LIREMOTEDATASOURCE_H
 #define LIREMOTEDATASOURCE_H
+#pragma once
 
 #include <QSharedPointer>
 #include <functional>
-
-/* enum class LERemoteDataStatus */
-/* { */
-/*   Undef, */ 
-/*   Valid, */
-/*   Wrong */ 
-/* }; */
 
 class LIRemoteDataReader;
 class LIRemoteDataWriter;
@@ -38,26 +32,31 @@ class LIRemoteDataSource
 {
 public:
 
-  /* using LTWriteAction = std::function<void(LERemoteDataStatus)>; */
-  /* using LTReadAction = */ 
-  /*   std::function<void(QSharedPointer<QByteArray>, LERemoteDataStatus)>; */ 
+  enum class EReadStatus
+  {
+    Undef,
+    Valid,
+    Wrong
+  };
+
+  enum class EWriteStatus
+  {
+    Success,
+    Failure
+  };
 
   LIRemoteDataSource(){}
   virtual ~LIRemoteDataSource(){}
-
-  /* virtual QSharedPointer<LIRemoteDataReader> createReader( */
-  /*     const QString& _dataName, */
-  /*     LTReadAction _readAction) = 0; */
-
-  /* virtual QSharedPointer<LIRemoteDataWriter> createWriter( */
-  /*     const QString& _dataName, */
-  /*     LTWriteAction _writeAction = [](LERemoteDataStatus){}) = 0; */
 
   virtual QSharedPointer<LIRemoteDataReader> createReader(
       const QString& _dataName) = 0;
 
   virtual QSharedPointer<LIRemoteDataWriter> createWriter(
       const QString& _dataName) = 0;
+
+  /* virtual QByteArray readSync(const QString& _dataId, EReadStatus* _status = nullptr) = 0; */
+  /* virtual EWriteStatus writeSync(const QString& _dataId, const QByteArray& _data) = 0; */
+
 };
 
 #endif // LIREMOTEDATASOURCE_H
