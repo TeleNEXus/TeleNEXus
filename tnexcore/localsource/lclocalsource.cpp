@@ -22,6 +22,8 @@
 #include "lcqlocaldatareader.h"
 #include "lcqlocaldatawriter.h"
 #include "lcqlocalsourcehiden.h"
+#include "lqreadsync.h"
+#include "lqwritesync.h"
 
 #include <QThread>
 
@@ -29,6 +31,7 @@
 struct SLocalData
 {
   QThread* mpThread;
+  QWeakPointer<LCLocalDataSource> mwpThis;
   QSharedPointer<LCQLocalSourceHiden> mspLocalSourceHiden;
   SLocalData() :
     mpThread(new QThread)
@@ -47,7 +50,9 @@ struct SLocalData
 };
 
 //------------------------------------------------------------------------------
+#define toLocal(p) (static_cast<SLocalData*>(p))
 #define mpLocalData (static_cast<SLocalData*>(mpData))
+#define ld (*mpLocalData)
 
 //==============================================================================LCLocalDataSource
 LCLocalDataSource::LCLocalDataSource()
@@ -64,7 +69,9 @@ LCLocalDataSource::~LCLocalDataSource()
 //------------------------------------------------------------------------------
 QSharedPointer<LCLocalDataSource> LCLocalDataSource::create()
 {
-  return QSharedPointer<LCLocalDataSource>(new LCLocalDataSource());
+  QSharedPointer<LCLocalDataSource> source(new LCLocalDataSource());
+  toLocal(source->mpData)->mwpThis = source;
+  return source;
 }
 
 //------------------------------------------------------------------------------
@@ -108,4 +115,49 @@ QSharedPointer<LIRemoteDataWriter> LCLocalDataSource::createWriter(
   return mpLocalData->mspLocalSourceHiden->createWriter( _dataName);
 }
 
+//------------------------------------------------------------------------------
+QByteArray LCLocalDataSource::read(
+    const QString& _dataId, EReadStatus* _status)
+{
+  auto req = LQReadSyncReq::create(ld.mwpThis.lock(), _dataId, ld.mpThread);
+  return req->readSync(_status);
+}
 
+//------------------------------------------------------------------------------
+LCLocalDataSource::EWriteStatus LCLocalDataSource::write(
+    const QString& _dataId, const QByteArray& _data)
+{
+  auto req = LQWriteSyncReq::create(ld.mwpThis.lock(), _dataId, ld.mpThread);
+  return req->writeSync(_data);
+}
+
+//------------------------------------------------------------------------------
+void LCLocalDataSource::read(
+    const QString& _dataId, TReadHandler _handler)
+{
+  auto reader = LCQLocalDataReader::create(_dataId, ld.mspLocalSourceHiden);
+  if(reader.isNull())
+  {
+    _handler(QSharedPointer<QByteArray>(new QByteArray), EReadStatus::Undef);
+    return;
+  }
+  reader->setHandler(_handler);
+  reader->readRequest();
+}
+
+//------------------------------------------------------------------------------
+void LCLocalDataSource::write(
+    const QString& _dataId, 
+    const QByteArray& _data, 
+    TWriteHandler _handler)
+{
+
+  auto writer = LCQLocalDataWriter::create(_dataId, ld.mspLocalSourceHiden);
+  if(writer.isNull())
+  {
+    _handler(EWriteStatus::Failure);
+    return;
+  }
+  writer->setHandler(_handler);
+  writer->writeRequest(_data);
+}

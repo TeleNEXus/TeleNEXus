@@ -29,8 +29,8 @@
 
 #include "lqmodbusdatareader.h"
 #include "lqmodbusdatawriter.h"
-#include "lqreadsyncreq.h"
-#include "lqwritesyncreq.h"
+#include "lqreadsync.h"
+#include "lqwritesync.h"
 
 using EWriteStatus = LIRemoteDataSource::EWriteStatus;
 //==============================================================================CQEventBase

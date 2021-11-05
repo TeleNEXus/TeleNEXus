@@ -18,7 +18,7 @@
  * You should have received a copy of the GNU General Public License
  * along with TeleNEXus.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "lqreadsyncreq.h"
+#include "lqreadsync.h"
 
 #include <QCoreApplication>
 #include <QDebug>
@@ -111,7 +111,10 @@ void LQReadSyncReq::customEvent(QEvent* _event)
 
       mspDataReader = source->createReader(mDataId);
 
-      if(mspDataReader.isNull()){ return read_handler(nullptr, EReadStatus::Undef); }
+      if(mspDataReader.isNull())
+      { 
+        return read_handler(nullptr, EReadStatus::Undef); 
+      }
 
       mspDataReader->setHandler(read_handler);
       mspDataReader->readRequest();

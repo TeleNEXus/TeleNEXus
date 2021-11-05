@@ -84,7 +84,7 @@ void LCQLocalDataReader::readRequest()
 {
   auto sp = mwpDataSource.lock();
   if(sp.isNull()) return;
-  sp->read(mwpThis.lock());
+  sp->readerRead(mwpThis.lock());
 }
 
 //------------------------------------------------------------------------------

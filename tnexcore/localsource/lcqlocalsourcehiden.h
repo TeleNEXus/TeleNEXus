@@ -114,13 +114,35 @@ public:
   QSharedPointer<LCQLocalDataWriter> createWriter(
       const QString& _dataName);
 
+  using EReadStatus = LIRemoteDataSource::EReadStatus;
+  using EWriteStatus = LIRemoteDataSource::EWriteStatus;
+  using TReadHandler = LIRemoteDataSource::TReadHandler;
+  using TWriteHandler = LIRemoteDataSource::TWriteHandler;;
+
+  /* //Synchronous call. */
+  /* QByteArray read( */
+  /*     const QString& _dataId, EReadStatus* _status = nullptr); */
+
+  /* EWriteStatus write( */
+  /*     const QString& _dataId, const QByteArray& _data); */
+
+  /* //Asynchronous call. */
+  /* void read( */
+  /*     const QString& _dataId, TReadHandler _handler); */
+
+  /* void write( */
+  /*     const QString& _dataId, */ 
+  /*     const QByteArray& _data, */ 
+  /*     TWriteHandler _handler); */
+
+
 private:
   int counter = 0;
 
   void connectReader(QSharedPointer<LCQLocalDataReader> _sp_reader);
   void disconnectReader(QSharedPointer<LCQLocalDataReader> _sp_reader);
-  void read(QSharedPointer<LCQLocalDataReader> _ps_reader);
-  void write(
+  void readerRead(QSharedPointer<LCQLocalDataReader> _ps_reader);
+  void writerWrite(
       const QByteArray& _data, 
       QSharedPointer<LCQLocalDataWriter> _sp_writer);
 

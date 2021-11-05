@@ -77,7 +77,7 @@ void LCQLocalDataWriter::writeRequest(const QByteArray& _data)
   }
   else
   {
-    sp->write(_data, mwpThis);
+    sp->writerWrite(_data, mwpThis);
   }
 }
 
