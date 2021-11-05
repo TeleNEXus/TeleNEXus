@@ -46,6 +46,22 @@ public:
 
   virtual QSharedPointer<LIRemoteDataWriter> 
     createWriter(const QString& _dataName) override;
+
+  //Synchronous call.
+  virtual QByteArray read(
+      const QString& _dataId, EReadStatus* _status = nullptr) override;
+
+  virtual EWriteStatus write(
+      const QString& _dataId, const QByteArray& _data) override;
+
+  //Asynchronous call.
+  virtual void read(
+      const QString& _dataId, TReadHandler _handler) override;
+
+  virtual void write(
+      const QString& _dataId, 
+      const QByteArray& _data, 
+      TWriteHandler _handler) override;
 };
 
 #endif //LCLOCALSOURCE_H_

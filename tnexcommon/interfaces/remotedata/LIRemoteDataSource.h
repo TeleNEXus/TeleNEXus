@@ -73,7 +73,6 @@ public:
       const QString& _dataId, 
       const QByteArray& _data, 
       TWriteHandler _handler) = 0;
-
 };
 
 #endif // LIREMOTEDATASOURCE_H

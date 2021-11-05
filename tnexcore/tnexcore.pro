@@ -45,12 +45,14 @@ INCLUDEPATH +=                          \
 
 
 SOURCES += \
-localsource/lcdataitemmap.cpp              \
-localsource/lclocalsource.cpp              \
-localsource/lcqlocaldatareader.cpp         \
-localsource/lcqlocaldatawriter.cpp         \
-localsource/lcqlocalsourcehiden.cpp        \
-localsource/lcxmllocalsourcebuilder.cpp    \
+localsource/lcdataitemmap.cpp               \
+localsource/lclocalsource.cpp               \
+localsource/lcqlocaldatareader.cpp          \
+localsource/lcqlocaldatawriter.cpp          \
+localsource/lcqlocalsourcehiden.cpp         \
+localsource/lcxmllocalsourcebuilder.cpp     \
+localsource/lqreadsync.cpp                  \
+localsource/lqwritesync.cpp                 \
 basiclayouts/commonbuilderslayout.cpp \
 basiclayouts/lcxmlboxlayoutbuilder.cpp  \
 basiclayouts/lcxmlgridlayoutbuilder.cpp \
@@ -151,6 +153,8 @@ localsource/lcqlocaldatareader.h           \
 localsource/lcqlocaldatawriter.h           \
 localsource/lcqlocalsourcehiden.h          \
 localsource/lcxmllocalsourcebuilder.h      \
+localsource/lqreadsync.h                  \
+localsource/lqwritesync.h                 \
 basiclayouts/commonbuilderslayout.h \
 basiclayouts/lcxmlboxlayoutbuilder.h    \
 basiclayouts/lcxmlgridlayoutbuilder.h   \

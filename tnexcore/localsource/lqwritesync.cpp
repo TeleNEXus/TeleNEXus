@@ -18,7 +18,7 @@
  * You should have received a copy of the GNU General Public License
  * along with TeleNEXus.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "lqwritesyncreq.h"
+#include "lqwritesync.h"
 
 #include <QCoreApplication>
 #include <QDebug>
@@ -86,7 +86,6 @@ void LQWriteSyncReq::customEvent(QEvent* _event)
 {
   mMutexEvent.lock();
   mMutexEvent.unlock();
-
 
   auto write_handler = 
     [this](EWriteStatus _status)
