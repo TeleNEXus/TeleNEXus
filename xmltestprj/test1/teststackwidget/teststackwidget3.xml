@@ -6,8 +6,18 @@
 
       <ScrollArea style="(...){background:green; qproperty-alignment: AlignCenter;}">
         <Frame size="500;450" style="(...){}">
-          <widgets>
 
+          <actions>
+            <!-- <scriptExecute event="show" scriptId=""                /> -->
+            <!-- <scriptLaunch  event="show" scriptId="" interval="500" /> -->
+            <!-- <scriptStop    event="show" scriptId=""                /> -->
+
+            <!-- <scriptExecute event="hide" scriptId=""                /> -->
+            <!-- <scriptLaunch  event="hide" scriptId="" interval="500" /> -->
+            <!-- <scriptStop    event="hide" scriptId=""                /> -->
+          </actions>
+
+          <widgets>
             <StackWidget
               position="100;100" style="(...){ color:yellow; background:red;}" data="localsource:listwidgetitem:string">
 

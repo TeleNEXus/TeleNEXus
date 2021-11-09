@@ -23,6 +23,8 @@
 #include "lcxmlstdactionbuilder.h"
 #include "widgets/lcqpushlabel.h"
 
+#include "cqeventsfilter.h"
+
 #include "LIApplication.h"
 #include "LIMovieAccess.h"
 
@@ -33,8 +35,8 @@
 
 static const struct
 {
-  QString picture = "picture";
-  QString movie = "movie";
+  QString picture   = "picture";
+  QString movie     = "movie";
   QString pushDelay = "pushDelay";
 }__slAttributes;
 
@@ -46,6 +48,15 @@ static const struct
   QString pressed = "pressed";
   QString released = "released";
 }__slTags;
+
+static const struct
+{
+  QString actions = "events";
+  QString press   = "press";
+  QString release = "release";
+}__slEventsTags;
+
+
 
 //==============================================================================
 using TActions = LCXmlStdActionBuilder::TActions;
@@ -70,13 +81,21 @@ QWidget* LCXmlPushAreaBuilder::buildLocal(
   TActions actions_press;
   TActions actions_release;
 
+  qDebug() << "++++++++++++++++++++++++++++++++++++++++++++k build local 0";
+
   struct SCommonData
   {
     QSharedPointer<LIMovieAccess> spCurrentMovieAccess;
     SCommonData(){}
   };
 
+  qDebug() << "++++++++++++++++++++++++++++++++++++++++++++k build local 0";
+
   LCQPushLabel* push_label = new LCQPushLabel();
+
+
+  CQEventsFilter::install(push_label, _element, _app);
+
 
   auto common_data = QSharedPointer<SCommonData>(new SCommonData());
 

@@ -8,16 +8,44 @@
 
             <PushArea fixedSize="100;100" 
               style="(...){border: 2px solid green; background: red}">
-              <actions>
-                <press>
+
+
+            <events>
+
+                <press delay="250">
                   <controlScript scriptId="testlaunch1" scriptAction="launch(500)"/>
                   <writeData data="localsource:test_string:string" value="PushLabel press"/>
                 </press>
+
                 <release>
                   <controlScript scriptId="testlaunch1" scriptAction="stop"/>
                   <writeData data="localsource:test_string:string" value="PushLabel release"/>
                 </release>
-              </actions>
+
+                <show>
+                  <controlScript scriptId="testlaunch1" scriptAction="launch(500)"/>
+                </show>
+
+                <hide>
+                  <controlScript scriptId="testlaunch1" scriptAction="stop"/>
+                </hide>
+
+            </events>
+
+              <!-- <actions> -->
+              <!--   <press> -->
+              <!--     <controlScript scriptId="testlaunch1" scriptAction="launch(500)"/> -->
+              <!--     <writeData data="localsource:test_string:string" value="PushLabel press"/> -->
+              <!--   </press> -->
+              <!--   <release> -->
+              <!--     <controlScript scriptId="testlaunch1" scriptAction="stop"/> -->
+              <!--     <writeData data="localsource:test_string:string" value="PushLabel release"/> -->
+              <!--   </release> -->
+              <!-- </actions> -->
+
+
+
+
               <!-- <released movie="movies/10_11_12_13.gif"/> -->
               <pressed movie="movies/20_21_22_23.gif" />
               <!-- <pressed movie="movies/10_11_12_13.gif"/> -->
