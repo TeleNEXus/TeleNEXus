@@ -112,8 +112,10 @@ private:
   QMap<QString, 
     std::function<
       void(const QDomElement&, LIWindow*)>> mLoaders;
+
   QMap<QString,
     std::function<void(LIWindow*, LIWindow::TAction)>> mEventAdder;
+
 private:
   CActionLoader(const CActionLoader&) = delete;
   CActionLoader& operator=(const CActionLoader&) = delete;

@@ -51,19 +51,45 @@
     flags="stayOnTop" 
     position="300;600" />
 
+  <!-- <WINDOW --> 
+  <!--   file="testpusharea/testpusharea2.xml" --> 
+  <!--   id="test push area 2" --> 
+  <!--   visible="true" -->
+  <!--   title="Test push area 2" --> 
+  <!--   showMode="normal" -->
+  <!--   modality="false" -->
+  <!--   flags="" --> 
+  <!--   size="300;300" -->
+  <!--   screen="0" -->
+  <!--   position="0;0" -->
+  <!--   /> -->
+
   <WINDOW 
-    file="testmodbus/testmodbus.xml" 
-    id="testtable1" 
+    file="testpusharea/testpusharea1.xml" 
+    id="test push area 1" 
     visible="true"
-    title="Test table" 
-    icon="./picture/tklogo1.png"
+    title="Test push area 1" 
     showMode="normal"
     modality="false"
     flags="" 
-    size="500;300"
+    size="300;300"
     screen="0"
-    position="150;150"
+    position="0;0"
     />
+
+  <!-- <WINDOW --> 
+  <!--   file="testmodbus/testmodbus.xml" --> 
+  <!--   id="testtable1" --> 
+  <!--   visible="true" -->
+  <!--   title="Test table" --> 
+  <!--   icon="./picture/tklogo1.png" -->
+  <!--   showMode="normal" -->
+  <!--   modality="false" -->
+  <!--   flags="" --> 
+  <!--   size="500;300" -->
+  <!--   screen="0" -->
+  <!--   position="150;150" -->
+  <!--   /> -->
 
   <!-- <WINDOW --> 
   <!--   file="testmodbus/testmodbustable.xml" --> 
@@ -155,44 +181,19 @@
   <!--   position="300;600" -->
   <!--   /> -->
 
-  <!-- <!-1- <WINDOW -1-> --> 
-  <!-- <!-1-   file="testpusharea/testpusharea2.xml" -1-> --> 
-  <!-- <!-1-   id="test push area 2" -1-> --> 
-  <!-- <!-1-   visible="true" -1-> -->
-  <!-- <!-1-   title="Test push area 2" -1-> --> 
-  <!-- <!-1-   showMode="normal" -1-> -->
-  <!-- <!-1-   modality="false" -1-> -->
-  <!-- <!-1-   flags="" -1-> --> 
-  <!-- <!-1-   size="300;300" -1-> -->
-  <!-- <!-1-   screen="0" -1-> -->
-  <!-- <!-1-   position="0;0" -1-> -->
-  <!-- <!-1-   /> -1-> -->
 
-  <!-- <!-1- <WINDOW -1-> --> 
-  <!-- <!-1-   file="testpusharea/testpusharea1.xml" -1-> --> 
-  <!-- <!-1-   id="test push area 1" -1-> --> 
-  <!-- <!-1-   visible="true" -1-> -->
-  <!-- <!-1-   title="Test push area 1" -1-> --> 
-  <!-- <!-1-   showMode="normal" -1-> -->
-  <!-- <!-1-   modality="false" -1-> -->
-  <!-- <!-1-   flags="" -1-> --> 
-  <!-- <!-1-   size="300;300" -1-> -->
-  <!-- <!-1-   screen="0" -1-> -->
-  <!-- <!-1-   position="0;0" -1-> -->
-  <!-- <!-1-   /> -1-> -->
-
-  <WINDOW 
-    file="teststackwidget/teststackwidget3.xml" 
-    id="test stack widget 3" 
-    visible="true"
-    title="Test Stack Widget 3" 
-    showMode="normal"
-    modality="false"
-    flags="" 
-    size="900;700"
-    screen="0"
-    position="0;0"
-    />
+  <!-- <WINDOW --> 
+  <!--   file="teststackwidget/teststackwidget3.xml" --> 
+  <!--   id="test stack widget 3" --> 
+  <!--   visible="true" -->
+  <!--   title="Test Stack Widget 3" --> 
+  <!--   showMode="normal" -->
+  <!--   modality="false" -->
+  <!--   flags="" --> 
+  <!--   size="900;700" -->
+  <!--   screen="0" -->
+  <!--   position="0;0" -->
+  <!--   /> -->
 
   <!-- <!-1- <WINDOW -1-> --> 
   <!-- <!-1-   file="teststackwidget/teststackwidget1.xml" -1-> --> 

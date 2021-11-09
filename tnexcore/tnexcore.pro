@@ -42,6 +42,7 @@ INCLUDEPATH +=                          \
 ./basicwidgets                          \
 ./basicwidgets/builders                 \
 ./basicwidgets/widgets                  \
+./basicwidgets/builders/events          \
 
 
 SOURCES += \
@@ -65,6 +66,7 @@ basicwidgets/widgets/lcqpushlabel.cpp \
 basicwidgets/widgets/lcqpushbutton.cpp \
 basicwidgets/widgets/lcqdatacheckbox.cpp \
 basicwidgets/widgets/lcqdatalineedit.cpp \
+basicwidgets/builders/events/cqeventsfilter.cpp \
 basicwidgets/builders/lcqwidgetvisiblecontrol.cpp \
 basicwidgets/builders/lcxmlbuilderbase.cpp \
 basicwidgets/builders/lcxmlframebuilder.cpp \
@@ -184,6 +186,7 @@ basicwidgets/builders/lcxmlsplitterbuilder.h \
 basicwidgets/builders/lcxmlstdactionbuilder.h \
 basicwidgets/builders/lcxmlpushareabuilder.h \
 basicwidgets/builders/lcxmlcheckboxbuilder.h\
+basicwidgets/builders/events/cqeventsfilter.h \
 basicwidgets/basicwidgetbuilders.h \
 dataformatters/lcformatterbase.h \
 dataformatters/lcformatterbitfield.h \
