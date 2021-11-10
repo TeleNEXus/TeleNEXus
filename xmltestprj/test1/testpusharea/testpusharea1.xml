@@ -9,10 +9,8 @@
             <PushArea fixedSize="100;100" 
               style="(...){border: 2px solid green; background: red}">
 
-
             <events>
-
-                <press delay="250">
+                <press delay="1000">
                   <controlScript scriptId="testlaunch1" scriptAction="launch(500)"/>
                   <writeData data="localsource:test_string:string" value="PushLabel press"/>
                 </press>

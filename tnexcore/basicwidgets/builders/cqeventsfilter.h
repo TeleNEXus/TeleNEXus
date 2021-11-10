@@ -21,8 +21,12 @@
 #ifndef CQEVENTSFILTER_H_
 #define CQEVENTSFILTER_H_
 
+#include "lcxmlstdactionbuilder.h"
 #include <QObject>
+#include <QSharedPointer>
+#include <QEvent>
 
+class QTimer;
 class QDomElement;
 class LIApplication;
 
@@ -30,8 +34,15 @@ class CQEventsFilter : public QObject
 {
   Q_OBJECT;
 private:
-  void* mpLocalData;
-  CQEventsFilter(QObject* _parent = nullptr);
+
+  using TActions = LCXmlStdActionBuilder::TActions;
+  using TActionsMap = QMap<QEvent::Type, TActions>;
+
+  TActionsMap mActionsMap;
+  QTimer* mpTimer;
+
+  CQEventsFilter() = delete;
+  CQEventsFilter(const TActionsMap& _actionsMap, QObject* _parent = nullptr);
 public:
   virtual ~CQEventsFilter();
   virtual bool eventFilter(QObject* _obj, QEvent* _event) override;
