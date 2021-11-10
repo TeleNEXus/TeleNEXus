@@ -37,32 +37,22 @@ static const struct
 {
   QString picture   = "picture";
   QString movie     = "movie";
-  QString pushDelay = "pushDelay";
 }__slAttributes;
 
 static const struct 
 {
-  QString actions = "actions";
-  QString press   = "press";
-  QString release = "release";
-  QString pressed = "pressed";
+  QString pressed  = "pressed";
   QString released = "released";
 }__slTags;
 
-static const struct
-{
-  QString actions = "events";
-  QString press   = "press";
-  QString release = "release";
-}__slEventsTags;
 
 
 
-//==============================================================================
-using TActions = LCXmlStdActionBuilder::TActions;
+/* //============================================================================== */
+/* using TActions = LCXmlStdActionBuilder::TActions; */
 
-//==============================================================================
-static void performActions(TActions _actions);
+/* //============================================================================== */
+/* static void performActions(TActions _actions); */
 
 //==============================================================================
 LCXmlPushAreaBuilder::LCXmlPushAreaBuilder()
@@ -78,10 +68,8 @@ LCXmlPushAreaBuilder::~LCXmlPushAreaBuilder()
 QWidget* LCXmlPushAreaBuilder::buildLocal(
     const QDomElement& _element, const LIApplication& _app)
 {
-  TActions actions_press;
-  TActions actions_release;
-
-  qDebug() << "++++++++++++++++++++++++++++++++++++++++++++k build local 0";
+  /* TActions actions_press; */
+  /* TActions actions_release; */
 
   struct SCommonData
   {
@@ -89,53 +77,116 @@ QWidget* LCXmlPushAreaBuilder::buildLocal(
     SCommonData(){}
   };
 
-  qDebug() << "++++++++++++++++++++++++++++++++++++++++++++k build local 0";
-
   LCQPushLabel* push_label = new LCQPushLabel();
-
 
   CQEventsFilter::install(push_label, _element, _app);
 
-
   auto common_data = QSharedPointer<SCommonData>(new SCommonData());
 
+  /* auto create_handler = */ 
+  /*   [&_element, common_data, push_label](const QString& _tag, const TActions& _actions) */
+  /*   { */
+  /*     using TRet = std::function<void(QLabel*)>; */
 
-  auto element_actions = _element.firstChildElement(__slTags.actions);
-  if(!element_actions.isNull())
-  {
-    QString attr_push_delay = element_actions.attribute(__slAttributes.pushDelay);
+  /*     auto ret_show_void = */
+  /*       [&_actions, common_data, push_label]() */
+  /*       { */
+  /*         push_label->setPixmap(QPixmap()); */
+  /*         push_label->setMovie(nullptr); */
 
-    if(!attr_push_delay.isNull())
-    {
-      bool flag = false;
-      int delay = attr_push_delay.toInt(&flag);
-      if(flag)
-      {
-        push_label->setPushDelay(delay);
-      }
-    }
+  /*         return */ 
+  /*           (TRet)[_actions, common_data](QLabel* _label) */
+  /*           { */
+  /*             if(!common_data->spCurrentMovieAccess.isNull()) */
+  /*             { */
+  /*               common_data->spCurrentMovieAccess->stop(); */
+  /*               common_data->spCurrentMovieAccess.clear(); */
+  /*             } */
 
-    actions_press = LCXmlStdActionBuilder::instance().
-      build(element_actions.firstChildElement(__slTags.press), _app);
+  /*             _label->setPixmap(QPixmap()); */
+  /*             _label->setMovie(nullptr); */
+  /*             _label->update(); */
 
-    actions_release = LCXmlStdActionBuilder::instance().
-      build(element_actions.firstChildElement(__slTags.release), _app);
-  }
+  /*             performActions(_actions); */
+  /*           }; */
+  /*       }; */
 
+  /*     auto state_element = _element.firstChildElement(_tag); */
+
+  /*     if(state_element.isNull()) */ 
+  /*     { */
+  /*       return ret_show_void(); */
+  /*     } */
+
+  /*     QString attr = state_element.attribute(__slAttributes.picture); */
+  /*     if(!attr.isNull()) */
+  /*     { */
+  /*       auto picture = LCXmlBuilderBase::parsePixmap(attr); */
+  /*       if(picture.isNull()) */ 
+  /*       { */
+  /*         return ret_show_void(); */
+  /*       } */
+  /*       push_label->setPixmap(picture); */ 
+  /*       if(!common_data->spCurrentMovieAccess.isNull()) */
+  /*       { */
+  /*         common_data->spCurrentMovieAccess->stop(); */
+  /*         common_data->spCurrentMovieAccess.clear(); */
+  /*       } */
+  /*       return */ 
+  /*         (TRet)[picture, _actions, common_data](QLabel* _label) */
+  /*         { */
+  /*           if(!common_data->spCurrentMovieAccess.isNull()) */
+  /*           { */
+  /*             common_data->spCurrentMovieAccess->stop(); */
+  /*             common_data->spCurrentMovieAccess.clear(); */
+  /*           } */
+  /*           _label->setPixmap(picture); */
+  /*           _label->update(); */
+  /*           performActions(_actions); */
+  /*         }; */
+  /*     } */
+
+  /*     attr = state_element.attribute(__slAttributes.movie); */
+
+  /*     if(!attr.isNull()) */
+  /*     { */
+  /*       auto movie = LCXmlBuilderBase::getMovie(attr); */
+  /*       if(movie.isNull()) return ret_show_void(); */
+  /*       push_label->setMovie(movie->getMovie()); */
+  /*       movie->start(); */
+  /*       common_data->spCurrentMovieAccess = movie; */
+  /*       return */ 
+  /*         (TRet)[movie, _actions, common_data](QLabel* _label) */
+  /*         { */
+  /*           if(!common_data->spCurrentMovieAccess.isNull()) */
+  /*           { */
+  /*             common_data->spCurrentMovieAccess->stop(); */
+  /*           } */
+  /*           common_data->spCurrentMovieAccess = movie; */
+  /*           _label->setPixmap(QPixmap()); */
+  /*           _label->setMovie(movie->getMovie()); */
+  /*           movie->start(); */
+  /*           _label->update(); */
+  /*           performActions(_actions); */
+  /*         }; */
+  /*     } */
+
+  /*     return ret_show_void(); */
+  /*   }; */
 
   auto create_handler = 
-    [&_element, common_data, push_label](const QString& _tag, const TActions& _actions)
+    [&_element, common_data, push_label](const QString& _tag)
     {
       using TRet = std::function<void(QLabel*)>;
 
       auto ret_show_void =
-        [&_actions, common_data, push_label]()
+        [common_data, push_label]()
         {
           push_label->setPixmap(QPixmap());
           push_label->setMovie(nullptr);
 
           return 
-            (TRet)[_actions, common_data](QLabel* _label)
+            (TRet)[common_data](QLabel* _label)
             {
               if(!common_data->spCurrentMovieAccess.isNull())
               {
@@ -146,8 +197,6 @@ QWidget* LCXmlPushAreaBuilder::buildLocal(
               _label->setPixmap(QPixmap());
               _label->setMovie(nullptr);
               _label->update();
-
-              performActions(_actions);
             };
         };
 
@@ -173,7 +222,7 @@ QWidget* LCXmlPushAreaBuilder::buildLocal(
           common_data->spCurrentMovieAccess.clear();
         }
         return 
-          (TRet)[picture, _actions, common_data](QLabel* _label)
+          (TRet)[picture, common_data](QLabel* _label)
           {
             if(!common_data->spCurrentMovieAccess.isNull())
             {
@@ -182,7 +231,6 @@ QWidget* LCXmlPushAreaBuilder::buildLocal(
             }
             _label->setPixmap(picture);
             _label->update();
-            performActions(_actions);
           };
       }
 
@@ -196,7 +244,7 @@ QWidget* LCXmlPushAreaBuilder::buildLocal(
         movie->start();
         common_data->spCurrentMovieAccess = movie;
         return 
-          (TRet)[movie, _actions, common_data](QLabel* _label)
+          (TRet)[movie, common_data](QLabel* _label)
           {
             if(!common_data->spCurrentMovieAccess.isNull())
             {
@@ -207,14 +255,11 @@ QWidget* LCXmlPushAreaBuilder::buildLocal(
             _label->setMovie(movie->getMovie());
             movie->start();
             _label->update();
-            performActions(_actions);
           };
       }
 
       return ret_show_void();
     };
-
-
 
   QObject::connect(push_label, &LCQPushLabel::shown, 
       [common_data](QLabel*)
@@ -234,11 +279,10 @@ QWidget* LCXmlPushAreaBuilder::buildLocal(
         }
       });
 
-  auto handler_press = create_handler(__slTags.pressed, actions_press);
-  auto handler_release = create_handler(__slTags.released, actions_release);
+  auto handler_press = create_handler(__slTags.pressed);
+  auto handler_release = create_handler(__slTags.released);
 
   QObject::connect(push_label, &LCQPushLabel::press, handler_press);
-
   QObject::connect(push_label, &LCQPushLabel::release, handler_release);
 
   setWidgetName(      _element, push_label);
@@ -252,13 +296,13 @@ QWidget* LCXmlPushAreaBuilder::buildLocal(
   return push_label;
 }
 
-//==============================================================================
-static void performActions(TActions _actions)
-{
-  for(auto it = _actions.begin(); it != _actions.end(); it++)
-  {
-    (*it)();
-  }
-}
+/* //============================================================================== */
+/* static void performActions(TActions _actions) */
+/* { */
+/*   for(auto it = _actions.begin(); it != _actions.end(); it++) */
+/*   { */
+/*     (*it)(); */
+/*   } */
+/* } */
 
 

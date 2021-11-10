@@ -18,6 +18,7 @@
  * You should have received a copy of the GNU General Public License
  * along with TeleNEXus.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 #ifndef LCXMLSTDACTIONBUILDER_H_
 #define LCXMLSTDACTIONBUILDER_H_
 
