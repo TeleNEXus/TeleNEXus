@@ -23,8 +23,6 @@
 
 #include "widgets/lcqpushlabel.h"
 
-#include "cqeventsfilter.h"
-
 #include "LIApplication.h"
 #include "LIMovieAccess.h"
 
@@ -60,6 +58,7 @@ QWidget* LCXmlPushAreaBuilder::buildLocal(
     const QDomElement& _element, const LIApplication& _app)
 {
 
+  Q_UNUSED(_app);
   struct SCommonData
   {
     QSharedPointer<LIMovieAccess> spCurrentMovieAccess;
@@ -68,7 +67,6 @@ QWidget* LCXmlPushAreaBuilder::buildLocal(
 
   LCQPushLabel* push_label = new LCQPushLabel();
 
-  CQEventsFilter::install(push_label, _element, _app);
 
   auto common_data = QSharedPointer<SCommonData>(new SCommonData());
 

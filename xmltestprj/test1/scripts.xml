@@ -4,7 +4,7 @@
 
   <script id="testlaunch1" file="scripts/testlaunch.js"/>
   <!-- <launch scriptId="testlaunch1" interval="500"/> -->
-  <execute scriptId="testlaunch1"/>
+  <!-- <execute scriptId="testlaunch1"/> -->
   <!-- <script id="testwrite1" file="scripts/writedatatosource.js"/> -->
 
   <!-- <script id="testattr1" file="scripts/testattributes.js"> -->

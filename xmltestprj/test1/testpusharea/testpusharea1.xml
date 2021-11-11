@@ -14,6 +14,11 @@
                 <press delay="1000">
                   <controlScript scriptId="testlaunch1" scriptAction="launch(500)"/>
                   <writeData data="localsource:test_string:string" value="PushLabel press"/>
+                  <controlWindow windowId="digitalkeyboard1" action="hide"/>
+                  <!-- <controlWindow windowId="digitalkeyboard1" action="show(normal)"/> -->
+                  <!-- <controlWindow windowId="digitalkeyboard1" action="show(fullScreen)"/> -->
+                  <!-- <controlWindow windowId="digitalkeyboard1" action="show(minimized)"/> -->
+                  <!-- <controlWindow windowId="digitalkeyboard1" action="show(maximized)"/> -->
                 </press>
 
                 <release>

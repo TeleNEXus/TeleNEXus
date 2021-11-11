@@ -66,7 +66,7 @@ basicwidgets/widgets/lcqpushlabel.cpp \
 basicwidgets/widgets/lcqpushbutton.cpp \
 basicwidgets/widgets/lcqdatacheckbox.cpp \
 basicwidgets/widgets/lcqdatalineedit.cpp \
-basicwidgets/builders/cqeventsfilter.cpp \
+basicwidgets/builders/lqeventsfilter.cpp \
 basicwidgets/builders/lcqwidgetvisiblecontrol.cpp \
 basicwidgets/builders/lcxmlbuilderbase.cpp \
 basicwidgets/builders/lcxmlframebuilder.cpp \
@@ -186,7 +186,7 @@ basicwidgets/builders/lcxmlsplitterbuilder.h \
 basicwidgets/builders/lcxmlstdactionbuilder.h \
 basicwidgets/builders/lcxmlpushareabuilder.h \
 basicwidgets/builders/lcxmlcheckboxbuilder.h\
-basicwidgets/builders/cqeventsfilter.h \
+basicwidgets/builders/lqeventsfilter.h \
 basicwidgets/basicwidgetbuilders.h \
 dataformatters/lcformatterbase.h \
 dataformatters/lcformatterbitfield.h \

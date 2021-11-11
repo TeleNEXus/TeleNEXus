@@ -19,7 +19,7 @@
  * along with TeleNEXus.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "cqeventsfilter.h"
+#include "lqeventsfilter.h"
 #include <QDebug>
 #include <functional>
 #include <QMap>
@@ -56,7 +56,7 @@ void doDeleteLater(QObject* _obj)
 /*   QSharedPointer<QMap<QEvent::Type, TActions>> mspEventActions; */
 /*   QTimer* mpTimer; */
 /*   SLocalData() = delete; */
-/*   SLocalData(CQEventsFilter* _filter) */
+/*   SLocalData(LQEventsFilter* _filter) */
 /*   { */
 /*     mpTimer = new QTimer(_filter); */
 /*   } */
@@ -65,8 +65,8 @@ void doDeleteLater(QObject* _obj)
 /* #define toLocalData(p) (reinterpret_cast<SLocalData*>(p)) */
 /* #define ld  (*(toLocalData(mpLocalData))) */
 
-//==============================================================================CQEventsFilter
-CQEventsFilter::CQEventsFilter( 
+//==============================================================================LQEventsFilter
+LQEventsFilter::LQEventsFilter( 
     const TActionsMap& _actionsMap, QObject* _parent) : 
   QObject(_parent)
   ,mActionsMap(_actionsMap)
@@ -75,12 +75,12 @@ CQEventsFilter::CQEventsFilter(
 }
 
 //------------------------------------------------------------------------------
-CQEventsFilter::~CQEventsFilter()
+LQEventsFilter::~LQEventsFilter()
 {
 }
 
 //------------------------------------------------------------------------------
-void CQEventsFilter::install(
+void LQEventsFilter::install(
     QObject* _target, const QDomElement& _element, const LIApplication& _app) 
 {
   QDomElement events_element = _element.firstChildElement(__slTags.events);
@@ -141,7 +141,7 @@ void CQEventsFilter::install(
 
   if(actions_map.size() == 0) return;
 
-  CQEventsFilter* filter = new CQEventsFilter(actions_map, _target);
+  LQEventsFilter* filter = new LQEventsFilter(actions_map, _target);
 
   //delay for press
   [&filter, &events_element]()
@@ -191,7 +191,7 @@ void CQEventsFilter::install(
 }
 
 //------------------------------------------------------------------------------
-bool CQEventsFilter::eventFilter(QObject* _obj, QEvent* _event)
+bool LQEventsFilter::eventFilter(QObject* _obj, QEvent* _event)
 {
   Q_UNUSED(_obj);
   auto it = mActionsMap.find(_event->type());

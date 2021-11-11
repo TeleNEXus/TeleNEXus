@@ -30,7 +30,7 @@ class QTimer;
 class QDomElement;
 class LIApplication;
 
-class CQEventsFilter : public QObject
+class LQEventsFilter : public QObject
 {
   Q_OBJECT;
 private:
@@ -41,10 +41,10 @@ private:
   TActionsMap mActionsMap;
   QTimer* mpTimer;
 
-  CQEventsFilter() = delete;
-  CQEventsFilter(const TActionsMap& _actionsMap, QObject* _parent = nullptr);
+  LQEventsFilter() = delete;
+  LQEventsFilter(const TActionsMap& _actionsMap, QObject* _parent = nullptr);
 public:
-  virtual ~CQEventsFilter();
+  virtual ~LQEventsFilter();
   virtual bool eventFilter(QObject* _obj, QEvent* _event) override;
   static void install(QObject* _target, const QDomElement& _element, const LIApplication& _app);
 };

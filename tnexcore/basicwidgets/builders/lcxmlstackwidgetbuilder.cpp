@@ -21,7 +21,6 @@
 
 #include "lcxmlstackwidgetbuilder.h"
 #include "widgets/lcqstackwidget.h"
-#include "cqeventsfilter.h"
 #include "xmlcommon.h"
 #include "LIApplication.h"
 #include "LIDataFormatter.h"
@@ -175,8 +174,6 @@ QWidget* LCXmlStackWidgetBuilder::buildLocal(
     if(matching_string.isNull()) continue;
     add_widget(el, matching_string, add_item);
   }
-
-  CQEventsFilter::install(stacked_widget, _element, _app);
 
   setWidgetName(      _element, stacked_widget);
   setWidgetStyle(     _element, stacked_widget);
