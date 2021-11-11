@@ -15,23 +15,23 @@
 
               <events>
 
-                  <press delay="1000">
-                    <controlScript scriptId="testlaunch1" scriptAction="launch(500)"/>
-                    <writeData data="localsource:test_string:string" value="PushLabel press"/>
+                  <press delay="500">
+                    <!-- <controlScript scriptId="testlaunch1" scriptAction="launch(500)"/> -->
+                    <writeData data="localsource:test_string1:string" value="stack widget press"/>
                   </press>
 
                   <release>
-                    <controlScript scriptId="testlaunch1" scriptAction="stop"/>
-                    <writeData data="localsource:test_string:string" value="PushLabel release"/>
+                    <!-- <controlScript scriptId="testlaunch1" scriptAction="stop"/> -->
+                    <writeData data="localsource:test_string1:string" value="stack widget release"/>
                   </release>
 
-                  <show>
-                    <controlScript scriptId="testlaunch1" scriptAction="launch(500)"/>
-                  </show>
+                  <!-- <show> -->
+                  <!--   <controlScript scriptId="testlaunch1" scriptAction="launch(500)"/> -->
+                  <!-- </show> -->
 
-                  <hide>
-                    <controlScript scriptId="testlaunch1" scriptAction="stop"/>
-                  </hide>
+                  <!-- <hide> -->
+                  <!--   <controlScript scriptId="testlaunch1" scriptAction="stop"/> -->
+                  <!-- </hide> -->
 
               </events>
 
@@ -65,10 +65,77 @@
 
                 <!-- <Button text="write data" style="$(buttonCrazy) (...){color:green}" icon="file='picture/icon1.png'; size=(150, 50)"> -->
 
-                  <Button text="" style=
+            <PushArea fixedSize="100;100" 
+              style="(...){border: 2px solid green; background: red}">
+
+            <!-- <events> -->
+
+            <!--     <press delay="500"> -->
+            <!--       <controlScript scriptId="testlaunch1" scriptAction="launch(500)"/> -->
+            <!--       <writeData data="localsource:test_string:string" value="PushArea press"/> -->
+            <!--       <!-1- <controlWindow windowId="digitalkeyboard1" action="hide"/> -1-> -->
+            <!--       <!-1- <controlWindow windowId="digitalkeyboard1" action="show(normal)"/> -1-> -->
+            <!--       <!-1- <controlWindow windowId="digitalkeyboard1" action="show(fullScreen)"/> -1-> -->
+            <!--       <!-1- <controlWindow windowId="digitalkeyboard1" action="show(minimized)"/> -1-> -->
+            <!--       <!-1- <controlWindow windowId="digitalkeyboard1" action="show(maximized)"/> -1-> -->
+            <!--     </press> -->
+
+            <!--     <release> -->
+            <!--       <controlScript scriptId="testlaunch1" scriptAction="stop"/> -->
+            <!--       <writeData data="localsource:test_string:string" value="PushArea release"/> -->
+            <!--     </release> -->
+
+            <!--     <!-1- <show> -1-> -->
+            <!--     <!-1-   <controlScript scriptId="testlaunch1" scriptAction="launch(500)"/> -1-> -->
+            <!--     <!-1- </show> -1-> -->
+
+            <!--     <!-1- <hide> -1-> -->
+            <!--     <!-1-   <controlScript scriptId="testlaunch1" scriptAction="stop"/> -1-> -->
+            <!--     <!-1- </hide> -1-> -->
+
+            <!-- </events> -->
+
+
+              <!-- <released movie="movies/10_11_12_13.gif"/> -->
+              <pressed movie="movies/20_21_22_23.gif" />
+              <!-- <pressed movie="movies/10_11_12_13.gif"/> -->
+              <released picture="file=picture/picture_1.png; size=(100,100)" />
+              <!-- <released movie="movies/10_11_12_13.gif"/> -->
+              <!-- <pressed picture="file=picture/picture_1.png; size=(100,100)" /> -->
+
+            </PushArea>
+
+              </item>
+
+              <item matching="item5">
+                  <Button text="" pushDelay="500" style=
                     "(...){border-image: url(picture/picture_1.png)}
                     (...):pressed {border-image: url(picture/picture_2.png)}
                     (...):focus{padding: 10px; margin: 10px}">
+                  <!-- <events> -->
+
+<!--                   <press delay="500"> -->
+<!--                     <!-1- <controlScript scriptId="testlaunch1" scriptAction="launch(500)"/> -1-> -->
+<!--                     <!-1- <writeData data="localsource:test_string1:string" value="stack widget press"/> -1-> -->
+<!--                     <writeData data="localsource:test_string:string" value="Button press 1"/> -->
+<!--                   </press> -->
+
+<!--                   <release> -->
+<!--                     <!-1- <controlScript scriptId="testlaunch1" scriptAction="stop"/> -1-> -->
+<!--                     <!-1- <writeData data="localsource:test_string1:string" value="stack widget release"/> -1-> -->
+<!--                     <writeData data="localsource:test_string:string" value="Button release 1"/> -->
+<!--                   </release> -->
+
+
+<!--                     <show> -->
+<!--                       <controlScript scriptId="testlaunch1" scriptAction="launch(500)"/> -->
+<!--                     </show> -->
+
+<!--                     <hide> -->
+<!--                       <controlScript scriptId="testlaunch1" scriptAction="stop"/> -->
+<!--                     </hide> -->
+<!--                   </events> -->
+
                   <!-- <press> -->
                   <!--   <controlScript scriptId="testlaunch1" scriptAction="launch(500)"/> -->
                   <!--   <writeData data="localsource:test_string:string" value="Button press 1"/> -->
@@ -78,13 +145,7 @@
                   <!--   <controlScript scriptId="testlaunch1" scriptAction="stop"/> -->
                   <!--   <writeData data="localsource:test_string:string" value="Button release 1"/> -->
                   <!-- </release> -->
-
                 </Button>
-
-              </item>
-
-              <item matching="item5">
-                <Label text="Widget item 5" />
               </item>
 
               <item matching="item6">
@@ -106,6 +167,7 @@
               <Label    data="localsource:listwidgetitem:string" />
               <LineEdit data="localsource:listwidgetitem:string" />
               <Label    data="localsource:test_string:string" />
+              <Label    data="localsource:test_string1:string" />
             </widgets>
             <stretch/>
           </LayoutVBox>

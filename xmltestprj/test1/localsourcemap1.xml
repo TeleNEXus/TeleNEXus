@@ -36,6 +36,7 @@
   <!-- <bytes id="bytes_string16"  type="string16"   defval="TestStringβαΩ¥₦16"/> -->
   <bytes id="bytes_string"    type="string"     defval="Bytes String Test"/>
   <string id="test_string" defval="Проверка TβαΩ¥₦16est String"/>
+  <string id="test_string1" defval="test_string1"/>
 
   <!-- <bytes id="listwidgetitem"    type="uint16"     defval="3"/> -->
   <bytes id="listwidgetitem"    type="string"     defval="item0"/>

@@ -20,19 +20,28 @@
  */
 #ifndef LCQPUSHBUTTON_H_
 #define LCQPUSHBUTTON_H_
+
 #include <QPushButton>
+#include <QList>
+#include <functional>
 
 class LCQPushButton : public QPushButton
 {
+public:
+  using TActionsList = QList<std::function<void(void)>>;
 private:
   void* mpLocal;
 public:
-  explicit LCQPushButton(QWidget* _parent = nullptr);
-  explicit LCQPushButton(const QString& _text, 
-      QWidget* _parent = nullptr);
+  LCQPushButton() = delete;
+
+  explicit LCQPushButton(
+      const QString& _text,
+      const TActionsList& _pushActions,
+      const TActionsList& _releaseActions,
+      int _pushDelay);
+
   virtual ~LCQPushButton();
   virtual bool event(QEvent* _event) override;
-  void setPushDelay(int _msec);
 };
 
 #endif /* LCQPUSHBUTTON_H_ */

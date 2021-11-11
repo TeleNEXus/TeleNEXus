@@ -69,14 +69,16 @@ LCQPushLabel::~LCQPushLabel()
 bool LCQPushLabel::event(QEvent* _event)
 {
 
+  bool ret = false;
   //---------------------------------------state_released[]
   auto state_released = 
-    [this](QEvent* _event)
+    [this, &ret](QEvent* _event)
     {
       auto to_state_pressed = 
-        [this]()
+        [this, &ret, _event]()
         {
           ld.timer.start();
+          ret = true;
           return EState::pressed;
         };
 
@@ -106,16 +108,17 @@ bool LCQPushLabel::event(QEvent* _event)
 
   //---------------------------------------state_pressed[]
   auto state_pressed = 
-    [this](QEvent* _event)
+    [this, &ret](QEvent* _event)
     {
       auto to_state_released = 
-        [this]()
+        [this, &ret, _event]()
         {
           if(!(ld.timer.isActive()))
           {
             emit release(this);
           }
           ld.timer.stop();
+          ret = true;
           return EState::released;
         };
 
@@ -157,7 +160,6 @@ bool LCQPushLabel::event(QEvent* _event)
       return EState::pressed;
     };
 
-
   switch(ld.state)
   {
   case EState::released:
@@ -169,7 +171,9 @@ bool LCQPushLabel::event(QEvent* _event)
     break;
   }
 
-  return QLabel::event(_event);
+  if(!ret) QLabel::event(_event);
+
+  return ret;
 }
 
 //------------------------------------------------------------------------------
