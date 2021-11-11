@@ -48,8 +48,6 @@ static const struct
 }__slAttributes;
 
 using TActions = LCXmlStdActionBuilder::TActions;
-//==============================================================================
-static void performActions(const TActions& _actions);
 
 //==============================================================================LCXmlButtonBuilder
 LCXmlButtonBuilder::LCXmlButtonBuilder()
@@ -66,24 +64,6 @@ QWidget* LCXmlButtonBuilder::buildLocal(
 const QDomElement& _element, const LIApplication& _app)
 {
 
-  QString attr = _element.attribute(__slAttributes.text);
-  if(attr.isNull())
-  {
-    attr = QStringLiteral("Button");
-  }
-
-  LCQPushButton* button = new LCQPushButton(attr);
-
-  attr = _element.attribute(__slAttributes.pushDelay);
-  if(!attr.isNull())
-  {
-    bool flag = false;
-    int delay = attr.toInt(&flag);
-    if(flag)
-    {
-      if(delay >= 0) button->setPushDelay(delay);
-    }
-  }
 
   TActions actions_pressed = LCXmlStdActionBuilder::instance().build(
       _element.firstChildElement(__slTags.press), _app);
@@ -91,25 +71,27 @@ const QDomElement& _element, const LIApplication& _app)
   TActions actions_released = LCXmlStdActionBuilder::instance().build(
       _element.firstChildElement(__slTags.release), _app);
 
-  if(actions_pressed.size() > 0)
-  {
-    QObject::connect(button, &QPushButton::pressed,
-        [actions_pressed]()
-        {
-          performActions(actions_pressed);
-        });
-  }
-
-  if(actions_released.size() > 0)
-  {
-    QObject::connect(button, &QPushButton::released,
-        [actions_released]()
-        {
-          performActions(actions_released);
-        });
-  }
 
   auto pixmap = parsePixmap(_element.attribute(__slAttributes.icon));
+
+  int push_delay = 0;
+  QString attr = _element.attribute(__slAttributes.pushDelay);
+  if(!attr.isNull())
+  {
+    bool flag = false;
+    push_delay = attr.toInt(&flag);
+    if(!flag)
+    {
+      push_delay = 0;
+    }
+  }
+
+  attr = _element.attribute(__slAttributes.text);
+  LCQPushButton* button = new LCQPushButton(
+      attr, 
+      actions_pressed, 
+      actions_released,
+      push_delay);
 
   if(!pixmap.isNull())
   {
@@ -122,14 +104,7 @@ const QDomElement& _element, const LIApplication& _app)
   setWidgetSize(      _element, button);
   setWidgetPosition(  _element, button);
   setWidgetFixedSize( _element, button);
+
   return button;
 }
 
-//==============================================================================
-static void performActions(const TActions& _actions)
-{
-  for(auto it = _actions.begin(); it != _actions.end(); it++)
-  {
-    (*it)();
-  }
-}

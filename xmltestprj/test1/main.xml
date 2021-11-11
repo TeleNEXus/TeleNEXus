@@ -53,31 +53,31 @@
     position="300;600" />
 
 
-  <WINDOW 
-    file="testframe/testframe1.xml" 
-    id="test frame 1" 
-    visible="true"
-    title="Test frame 1" 
-    showMode="normal"
-    modality="false"
-    flags="" 
-    size="500;500"
-    screen="0"
-    position="0;0"
-    />
-
   <!-- <WINDOW --> 
-  <!--   file="teststackwidget/teststackwidget3.xml" --> 
-  <!--   id="test stack widget 3" --> 
+  <!--   file="testframe/testframe1.xml" --> 
+  <!--   id="test frame 1" --> 
   <!--   visible="true" -->
-  <!--   title="Test Stack Widget 3" --> 
+  <!--   title="Test frame 1" --> 
   <!--   showMode="normal" -->
   <!--   modality="false" -->
   <!--   flags="" --> 
-  <!--   size="900;700" -->
+  <!--   size="500;500" -->
   <!--   screen="0" -->
   <!--   position="0;0" -->
   <!--   /> -->
+
+  <WINDOW 
+    file="teststackwidget/teststackwidget3.xml" 
+    id="test stack widget 3" 
+    visible="true"
+    title="Test Stack Widget 3" 
+    showMode="normal"
+    modality="false"
+    flags="" 
+    size="900;700"
+    screen="0"
+    position="0;0"
+    />
 
   <!-- <!-1- <WINDOW -1-> --> 
   <!-- <!-1-   file="teststackwidget/teststackwidget1.xml" -1-> --> 

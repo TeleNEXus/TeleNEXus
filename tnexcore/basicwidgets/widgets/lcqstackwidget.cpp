@@ -269,7 +269,6 @@ bool LCQStackWidget::eventFilter(QObject*, QEvent* _event)
 }
 
 
-
 void LCQStackWidget::setActive(bool _flag)
 {
   if(_flag)
@@ -281,7 +280,6 @@ void LCQStackWidget::setActive(bool _flag)
     ld.mDataReader->disconnectFromSource();
   }
 }
-
 
 bool LCQStackWidget::event(QEvent *_event)
 {
