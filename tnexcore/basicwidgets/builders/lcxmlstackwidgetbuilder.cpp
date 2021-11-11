@@ -21,10 +21,11 @@
 
 #include "lcxmlstackwidgetbuilder.h"
 #include "widgets/lcqstackwidget.h"
-#include "lcxmlstdactionbuilder.h"
+#include "cqeventsfilter.h"
 #include "xmlcommon.h"
 #include "LIApplication.h"
 #include "LIDataFormatter.h"
+
 #include <QDomElement>
 #include <QDebug>
 #include <QEvent>
@@ -37,36 +38,17 @@
 //------------------------------------------------------------------------------
 static const struct
 {
-
-
-  QString pushDelay = "pushDelay";
   QString data = "data";
   QString matching = "matching";
-
-
 }__slAttributes;
 
 static const struct
 {
-  QString actions = "actions";
-  QString press   = "press";
-  QString release = "release";
   QString item = "item";
   QString itemUndef = "itemUndef";
   QString itemWrong = "itemWrong";
 } __slTags;
 
-//==============================================================================
-using TActions = LCXmlStdActionBuilder::TActions;
-
-//==============================================================================
-void performActions(const TActions& _actions)
-{
-  for(auto it = _actions.begin(); it != _actions.end(); it++)
-  {
-    (*it)();
-  }
-}
 
 //==============================================================================
 LCXmlStackWidgetBuilder::LCXmlStackWidgetBuilder()
@@ -100,7 +82,6 @@ QWidget* LCXmlStackWidgetBuilder::buildLocal(
   if(err_flag) return ret_wrong();
 
   auto source = _app.getDataSource(data_spec.sourceId);
-
   auto format = _app.getDataFormatter(data_spec.formatterId);
 
   LCQStackWidget* stacked_widget = nullptr;
@@ -114,52 +95,6 @@ QWidget* LCXmlStackWidgetBuilder::buildLocal(
     stacked_widget = new LCQStackWidget(source, data_spec.dataId, format); 
   }
 
-  
-  TActions actions_press;
-  TActions actions_release;
-
-  [&_element, &actions_press, &actions_release, &_app, &stacked_widget]()
-  {
-    auto actions_element = _element.firstChildElement(__slTags.actions);
-    if(actions_element.isNull()) return;
-
-    actions_press = LCXmlStdActionBuilder::instance().
-      build( actions_element.firstChildElement(__slTags.press), _app);
-
-    actions_release = LCXmlStdActionBuilder::instance().build(
-        actions_element.firstChildElement(__slTags.release), _app);
-
-    QString attr_push_delay = 
-      actions_element.attribute(__slAttributes.pushDelay);
-
-    if(!attr_push_delay.isNull())
-    {
-      bool flag = false;
-      int delay = attr_push_delay.toInt(&flag);
-      if(flag)
-      {
-        stacked_widget->setPushDelay(delay);
-      }
-    }
-  }();
-
-  if(actions_press.size() != 0)
-  {
-    QObject::connect(stacked_widget, &LCQStackWidget::press,
-        [actions_press]()
-        {
-          performActions(actions_press);
-        });
-  }
-
-  if(actions_release.size() != 0)
-  {
-    QObject::connect(stacked_widget, &LCQStackWidget::release,
-        [actions_release]()
-        {
-          performActions(actions_release);
-        });
-  }
 
   auto add_widget = 
     [&_app](
@@ -240,6 +175,8 @@ QWidget* LCXmlStackWidgetBuilder::buildLocal(
     if(matching_string.isNull()) continue;
     add_widget(el, matching_string, add_item);
   }
+
+  CQEventsFilter::install(stacked_widget, _element, _app);
 
   setWidgetName(      _element, stacked_widget);
   setWidgetStyle(     _element, stacked_widget);

@@ -6,31 +6,34 @@
 
       <ScrollArea style="(...){background:green; qproperty-alignment: AlignCenter;}">
         <Frame size="500;450" style="(...){}">
-
-          <actions>
-            <!-- <scriptExecute event="show" scriptId=""                /> -->
-            <!-- <scriptLaunch  event="show" scriptId="" interval="500" /> -->
-            <!-- <scriptStop    event="show" scriptId=""                /> -->
-
-            <!-- <scriptExecute event="hide" scriptId=""                /> -->
-            <!-- <scriptLaunch  event="hide" scriptId="" interval="500" /> -->
-            <!-- <scriptStop    event="hide" scriptId=""                /> -->
-          </actions>
-
           <widgets>
-            <StackWidget
-              position="100;100" style="(...){ color:yellow; background:red;}" data="localsource:listwidgetitem:string">
 
-              <actions>
-                <press>
-                  <controlScript scriptId="testlaunch1" scriptAction="launch(500)"/>
-                  <writeData data="localsource:test_string:string" value="press write string 2"/>
-                </press>
-                <release>
+            <StackWidget
+              position="100;100" 
+              style="(...){ color:yellow; background:red;}" 
+              data="localsource:listwidgetitem:string">
+
+              <events>
+
+                  <press delay="1000">
+                    <controlScript scriptId="testlaunch1" scriptAction="launch(500)"/>
+                    <writeData data="localsource:test_string:string" value="PushLabel press"/>
+                  </press>
+
+                  <release>
                     <controlScript scriptId="testlaunch1" scriptAction="stop"/>
-                    <writeData data="localsource:test_string:string" value="press write string 3"/>
-                </release>
-              </actions>
+                    <writeData data="localsource:test_string:string" value="PushLabel release"/>
+                  </release>
+
+                  <show>
+                    <controlScript scriptId="testlaunch1" scriptAction="launch(500)"/>
+                  </show>
+
+                  <hide>
+                    <controlScript scriptId="testlaunch1" scriptAction="stop"/>
+                  </hide>
+
+              </events>
 
               <itemUndef>
                 <Label text="Undefined Item" />

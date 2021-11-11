@@ -10,6 +10,7 @@
               style="(...){border: 2px solid green; background: red}">
 
             <events>
+
                 <press delay="1000">
                   <controlScript scriptId="testlaunch1" scriptAction="launch(500)"/>
                   <writeData data="localsource:test_string:string" value="PushLabel press"/>
@@ -30,19 +31,6 @@
 
             </events>
 
-              <!-- <actions> -->
-              <!--   <press> -->
-              <!--     <controlScript scriptId="testlaunch1" scriptAction="launch(500)"/> -->
-              <!--     <writeData data="localsource:test_string:string" value="PushLabel press"/> -->
-              <!--   </press> -->
-              <!--   <release> -->
-              <!--     <controlScript scriptId="testlaunch1" scriptAction="stop"/> -->
-              <!--     <writeData data="localsource:test_string:string" value="PushLabel release"/> -->
-              <!--   </release> -->
-              <!-- </actions> -->
-
-
-
 
               <!-- <released movie="movies/10_11_12_13.gif"/> -->
               <pressed movie="movies/20_21_22_23.gif" />
@@ -50,6 +38,7 @@
               <released picture="file=picture/picture_1.png; size=(100,100)" />
               <!-- <released movie="movies/10_11_12_13.gif"/> -->
               <!-- <pressed picture="file=picture/picture_1.png; size=(100,100)" /> -->
+
             </PushArea>
             <Label data="localsource:test_string:string"/>
           </widgets>
