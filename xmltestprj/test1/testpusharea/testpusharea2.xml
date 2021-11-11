@@ -1,39 +1,39 @@
 <?xml version="1.0" encoding="UTF-8" ?>
+
 <WINDOW>
   <mainWidget>
     <Frame>
-          <widgets>
-            <!-- <PushArea fixedSize="150;150" position="100;100" -->
-            <PushArea  position="100;100"
+      <widgets>
 
-              style="(...){border: 2px solid green; background: grey}
-              (...):focus{border: 10px solid yellow; padding: 10px}
-              ">
-              <actions pushDelay="250">
-                <press>
-                  <controlScript scriptId="testlaunch1" scriptAction="launch(500)"/>
-                  <writeData data="localsource:test_string:string" value="PushLabel press"/>
-                </press>
-                <release>
-                  <controlScript scriptId="testlaunch1" scriptAction="stop"/>
-                  <writeData data="localsource:test_string:string" value="PushLabel release"/>
-                </release>
-              </actions>
-              <!-- <released movie="movies/10_11_12_13.gif"/> -->
-              <pressed movie="movies/20_21_22_23.gif" />
-              <!-- <pressed movie="movies/10_11_12_13.gif"/> -->
-              <released picture="file=picture/picture_1.png; size=(150,100)" />
-              <!-- <released movie="movies/10_11_12_13.gif"/> -->
-              <!-- <pressed picture="file=picture/picture_1.png; size=(100,100)" /> -->
-            </PushArea>
-            <Label data="localsource:test_string:string"/>
-              <!-- style="(...){border: 2px solid green; background: red; qproperty-alignment:right}" -->
-<!-- size="250;20" -->
-            <Label text="localsource:test_string:string" position="30;30"/>
-            <LineEdit data="localsource:test_string:string" position="60;60"/>
-          </widgets>
-          <stretch/>
+        <PushArea  position="100;100" fixedSize="100;100"
+          style="(...){border: 2px solid green; background: grey}
+          (...):focus{border: 10px solid yellow; padding: 10px}"
+          >
+
+          <events>
+            <press delay="250">
+              <controlScript scriptId="testlaunch1" scriptAction="launch(500)"/>
+              <writeData data="localsource:test_string:string" value="PushLabel press"/>
+            </press>
+
+            <release>
+              <controlScript scriptId="testlaunch1" scriptAction="stop"/>
+              <writeData data="localsource:test_string:string" value="PushLabel release"/>
+            </release>
+          </events>
+
+          <pressed movie="movies/20_21_22_23.gif" />
+          <released picture="file=picture/picture_1.png; size=(100,100)" />
+        </PushArea>
+
+        <Label data="localsource:test_string:string"/>
+        <Label text="localsource:test_string:string" position="30;30"/>
+
+      </widgets>
     </Frame>
   </mainWidget>
 </WINDOW>
 
+        <!-- <PushArea fixedSize="150;150" position="100;100" -->
+          <!-- style="(...){border: 2px solid green; background: grey} -->
+          <!-- (...):focus{border: 10px solid yellow; padding: 10px}" -->

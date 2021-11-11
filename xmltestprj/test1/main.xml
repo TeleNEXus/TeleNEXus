@@ -41,6 +41,7 @@
     <!--   streamSource="localsource" streamName="keyboard_stream" -->
     <!--   dataSource="localsource" dataName="keyboard_data" /> -->
 
+
     <WINDOW 
     id="digitalkeyboard1" 
     file="testkeyboard/testdigitalkeyboard1.xml" 
@@ -50,6 +51,35 @@
     modality="true"
     flags="stayOnTop" 
     position="300;600" />
+
+
+
+  <WINDOW 
+    file="teststackwidget/teststackwidget3.xml" 
+    id="test stack widget 3" 
+    visible="true"
+    title="Test Stack Widget 3" 
+    showMode="normal"
+    modality="false"
+    flags="" 
+    size="900;700"
+    screen="0"
+    position="0;0"
+    />
+
+  <!-- <!-1- <WINDOW -1-> --> 
+  <!-- <!-1-   file="teststackwidget/teststackwidget1.xml" -1-> --> 
+  <!-- <!-1-   id="test stack widget 1" -1-> --> 
+  <!-- <!-1-   visible="true" -1-> -->
+  <!-- <!-1-   title="Test Stack Widget 1" -1-> --> 
+  <!-- <!-1-   showMode="normal" -1-> -->
+  <!-- <!-1-   modality="false" -1-> -->
+  <!-- <!-1-   flags="" -1-> --> 
+  <!-- <!-1-   size="900;700" -1-> -->
+  <!-- <!-1-   screen="0" -1-> -->
+  <!-- <!-1-   position="0;0" -1-> -->
+  <!-- <!-1-   /> -1-> -->
+
 
   <!-- <WINDOW --> 
   <!--   file="testpusharea/testpusharea2.xml" --> 
@@ -64,18 +94,18 @@
   <!--   position="0;0" -->
   <!--   /> -->
 
-  <WINDOW 
-    file="testpusharea/testpusharea1.xml" 
-    id="test push area 1" 
-    visible="true"
-    title="Test push area 1" 
-    showMode="normal"
-    modality="false"
-    flags="" 
-    size="300;300"
-    screen="0"
-    position="0;0"
-    />
+  <!-- <WINDOW --> 
+  <!--   file="testpusharea/testpusharea1.xml" --> 
+  <!--   id="test push area 1" --> 
+  <!--   visible="true" -->
+  <!--   title="Test push area 1" --> 
+  <!--   showMode="normal" -->
+  <!--   modality="false" -->
+  <!--   flags="" --> 
+  <!--   size="300;300" -->
+  <!--   screen="0" -->
+  <!--   position="0;0" -->
+  <!--   /> -->
 
   <!-- <WINDOW --> 
   <!--   file="testmodbus/testmodbus.xml" --> 
@@ -182,31 +212,6 @@
   <!--   /> -->
 
 
-  <!-- <WINDOW --> 
-  <!--   file="teststackwidget/teststackwidget3.xml" --> 
-  <!--   id="test stack widget 3" --> 
-  <!--   visible="true" -->
-  <!--   title="Test Stack Widget 3" --> 
-  <!--   showMode="normal" -->
-  <!--   modality="false" -->
-  <!--   flags="" --> 
-  <!--   size="900;700" -->
-  <!--   screen="0" -->
-  <!--   position="0;0" -->
-  <!--   /> -->
-
-  <!-- <!-1- <WINDOW -1-> --> 
-  <!-- <!-1-   file="teststackwidget/teststackwidget1.xml" -1-> --> 
-  <!-- <!-1-   id="test stack widget 1" -1-> --> 
-  <!-- <!-1-   visible="true" -1-> -->
-  <!-- <!-1-   title="Test Stack Widget 1" -1-> --> 
-  <!-- <!-1-   showMode="normal" -1-> -->
-  <!-- <!-1-   modality="false" -1-> -->
-  <!-- <!-1-   flags="" -1-> --> 
-  <!-- <!-1-   size="900;700" -1-> -->
-  <!-- <!-1-   screen="0" -1-> -->
-  <!-- <!-1-   position="0;0" -1-> -->
-  <!-- <!-1-   /> -1-> -->
 
   <!-- <!-1- <WINDOW -1-> --> 
   <!-- <!-1-   file="testlistwidget/testlistwidget1.xml" -1-> --> 

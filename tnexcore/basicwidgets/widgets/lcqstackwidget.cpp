@@ -34,13 +34,13 @@
 #include <QGuiApplication>
 
 
-
 //==============================================================================
 enum class EState
 {
   released,
   pressed
 };
+
 //==============================================================================
 class CLocalData
 {
@@ -105,7 +105,6 @@ LCQStackWidget::LCQStackWidget(
   ld.mDataFormatter = _formatter;
 
   ld.mDataReader->setHandler(read_handler);
-  /* ld.mDataReader->connectToSource(); */
 
   connect(&(ld.timer), &QTimer::timeout, 
       [this]()
@@ -276,11 +275,9 @@ void LCQStackWidget::setActive(bool _flag)
   if(_flag)
   {
     ld.mDataReader->connectToSource();
-    /* ld.mDataReader->readRequest(); */
   }
   else
   {
-    /* setCurrentIndex(ld.indexUndef); */
     ld.mDataReader->disconnectFromSource();
   }
 }
