@@ -18,23 +18,18 @@
  * You should have received a copy of the GNU General Public License
  * along with TeleNEXus.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "xmlwindows.h"
 #include "applicationinterface.h"
-#include "LIXmlWidgetBuilder.h"
-#include "LIKeyboard.h"
-#include "LIJScriptService.h"
+#include "xmlwindows.h"
 #include "xmlcommon.h"
 #include "lcwindow.h"
-
+#include "LIXmlWidgetBuilder.h"
 
 #include <QIcon>
 #include <QFileInfo>
 #include <QDomElement>
 #include <QMap>
-#include <QList>
 #include <QWidget>
 #include <QDebug>
-#include <LIRemoteDataWriter.h>
 #include <QEvent>
 #include <functional>
 #include <qnamespace.h>
@@ -43,11 +38,7 @@
 #include <QScreen>
 #include <QShowEvent>
 
-
-
 #define __smApp (CApplicationInterface::getInstance())
-
-
 
 #define __smMessageHeader "Windows:"
 #define __smMessage(msg) __smApp.message(msg)
@@ -92,11 +83,7 @@ static const struct
 static const struct
 {
   QString window        = "WINDOW";
-  /* QString actions       = "actions"; */
   QString mainWidget    = "mainWidget";
-  /* QString scriptExecute = "scriptExecute"; */
-  /* QString scriptLaunch  = "scriptLaunch"; */
-  /* QString scriptStop    = "scriptStop"; */
 }__slTags;
 
 static const struct
@@ -104,121 +91,6 @@ static const struct
   QString stayOnTop = "stayOnTop";
   QString frameless = "frameless";
 }__slWindowFlags;
-
-//==============================================================================ActionLoader
-/* class CActionLoader */
-/* { */
-/* private: */
-/*   QMap<QString, */ 
-/*     std::function< */
-/*       void(const QDomElement&, LIWindow*)>> mLoaders; */
-
-/*   QMap<QString, */
-/*     std::function<void(LIWindow*, LIWindow::TAction)>> mEventAdder; */
-
-/* private: */
-/*   CActionLoader(const CActionLoader&) = delete; */
-/*   CActionLoader& operator=(const CActionLoader&) = delete; */
-/*   CActionLoader() */
-/*   { */
-
-/*     mEventAdder.insert(__slAttributes.event.vals.show, */
-/*         [](LIWindow* _win, LIWindow::TAction _act) */
-/*         { */
-/*           _win->addActionShow(_act); */
-/*         }); */
-
-/*     mEventAdder.insert(__slAttributes.event.vals.hide, */
-/*         [](LIWindow* _win, LIWindow::TAction _act) */
-/*         { */
-/*           _win->addActionHide(_act); */
-/*         }); */
-
-/*     auto add_script_action = */ 
-/*       [this](const QDomElement& _el, LIWindow* _win, */ 
-/*           std::function<void(QSharedPointer<LIJScriptService>)> _scriptAct) */
-/*       { */
-/*         QString attr_script_id = _el.attribute(__slAttributes.scriptId); */
-/*         QString event = _el.attribute(__slAttributes.event.attribute); */
-/*         if(event.isNull()) return; */
-/*         auto event_adder = mEventAdder.find(event); */
-/*         if(event_adder == mEventAdder.end()) return; */
-/*         event_adder.value()(_win, */
-/*             [attr_script_id, _scriptAct]() */
-/*             { */
-/*               auto script = __smApp.getScriptService(attr_script_id); */
-/*               if(script.isNull()) return; */
-/*               _scriptAct(script); */
-/*             }); */
-/*       }; */
-
-/*     mLoaders.insert(__slTags.scriptExecute, */
-/*         [add_script_action]( */
-/*           const QDomElement& _el, LIWindow* _win) */
-/*         { */
-/*           add_script_action( _el, _win, */
-/*               [](QSharedPointer<LIJScriptService> _script) */
-/*               { */
-/*                 _script->execute(); */
-/*               }); */
-/*         }); */
-
-
-/*     mLoaders.insert(__slTags.scriptLaunch, */
-/*         [add_script_action]( */
-/*           const QDomElement& _el, LIWindow* _win) */
-/*         { */
-/*           QString attr_interval = _el.attribute(__slAttributes.interval); */
-/*           if(attr_interval.isNull()) return; */
-/*           bool flag = false; */
-/*           int interval = attr_interval.toInt(&flag); */
-/*           if(!flag) return; */
-
-/*           add_script_action( _el, _win, */
-/*               [interval](QSharedPointer<LIJScriptService> _script) */
-/*               { */
-/*                 _script->launch(interval); */
-/*               }); */
-/*         }); */
-
-/*     mLoaders.insert(__slTags.scriptStop, */
-/*         [add_script_action]( */
-/*           const QDomElement& _el, LIWindow* _win) */
-/*         { */
-/*           add_script_action( _el, _win, */
-/*               [](QSharedPointer<LIJScriptService> _script) */
-/*               { */
-/*                 _script->stop(); */
-/*               }); */
-/*         }); */
-/*   }; */
-
-/* public: */
-
-/*   static CActionLoader& getInstance() */
-/*   { */
-/*     static CActionLoader instance; */
-/*     return instance; */
-/*   } */
-
-/*   void load(const QDomElement& _el, LIWindow* _win) */
-/*   { */
-/*     for(auto act_el = _el.firstChildElement(__slTags.actions); */ 
-/*         !act_el.isNull(); */
-/*         act_el = act_el.nextSiblingElement(__slTags.actions)) */
-/*     { */
-/*       for(auto element = act_el.firstChildElement(); */ 
-/*           !element.isNull(); element = element.nextSiblingElement()) */
-/*       { */
-/*         auto loader = mLoaders.find(element.tagName()); */
-/*         if(loader == mLoaders.end()) continue; */
-/*         loader.value()(element, _win); */
-/*       } */
-/*     } */
-
-/*   }; */
-/* }; */
-
 
 //==============================================================================uploadWidget
 static QWidget* uploadWidget(const QDomElement& _element)
@@ -311,7 +183,6 @@ static LCWindow* uploadWindow(QWidget* _widget, const QDomElement& _element)
 
       return flags;
     };
-
 
   //----------------------------------------------------widget_size[]
   auto get_size = [](const QDomElement& _element, const QSize _oldSize)
@@ -498,7 +369,6 @@ void upload(
 
       LCWindow*  window = uploadWindow(widget, _element);
 
-      /* CActionLoader::getInstance().load(el, window); */
 
       QString attr_id = _element.attribute(__slAttributes.id);
 
