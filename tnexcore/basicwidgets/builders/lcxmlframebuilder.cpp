@@ -33,12 +33,6 @@ static const struct
   QString widgets = "widgets";
 } __slTags;
 
-//------------------------------------------------------------------------------
-static const struct
-{
-  QString style = "style";
-} __slAttributes;
-
 //==============================================================================
 namespace
 {
@@ -129,6 +123,7 @@ QWidget* LCXmlFrameBuilder::buildLocal(
       buildFromWidgets(widget, node.toElement(), _app);
     }
   }
+
   setWidgetSize(_element, widget);
   setWidgetPosition(_element, widget);
   setWidgetFixedSize(_element, widget);

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<WINDOW>
+  <mainWidget>
+    <Frame>
+      <!-- <events> -->
+      <!--   <press delay="1000"> -->
+      <!--     <controlScript scriptId="testlaunch1" scriptAction="launch(500)"/> -->
+      <!--     <writeData data="localsource:test_string:string" value="PushLabel press"/> -->
+      <!--     <!-1- <controlWindow windowId="digitalkeyboard1" action="show(normal)"/> -1-> -->
+      <!--     <!-1- <controlWindow windowId="digitalkeyboard1" action="show(fullScreen)"/> -1-> -->
+      <!--     <!-1- <controlWindow windowId="digitalkeyboard1" action="show(minimized)"/> -1-> -->
+      <!--     <!-1- <controlWindow windowId="digitalkeyboard1" action="show(maximized)"/> -1-> -->
+      <!--   </press> -->
+
+      <!--   <release> -->
+      <!--     <controlScript scriptId="testlaunch1" scriptAction="stop"/> -->
+      <!--     <writeData data="localsource:test_string:string" value="PushLabel release"/> -->
+      <!--   </release> -->
+
+      <!--   <show> -->
+      <!--     <controlScript scriptId="testlaunch1" scriptAction="launch(500)"/> -->
+      <!--   </show> -->
+
+      <!--   <hide> -->
+      <!--     <controlScript scriptId="testlaunch1" scriptAction="stop"/> -->
+      <!--   </hide> -->
+      <!-- </events> -->
+      <layout>
+        <LayoutVBox>
+          <widgets>
+            <Label text="Text label">
+              <events>
+                <press delay="1000">
+                  <controlScript scriptId="testlaunch1" scriptAction="launch(500)"/>
+                  <writeData data="localsource:test_string:string" value="PushLabel press"/>
+                  <!-- <controlWindow windowId="digitalkeyboard1" action="show(normal)"/> -->
+                  <!-- <controlWindow windowId="digitalkeyboard1" action="show(fullScreen)"/> -->
+                  <!-- <controlWindow windowId="digitalkeyboard1" action="show(minimized)"/> -->
+                  <!-- <controlWindow windowId="digitalkeyboard1" action="show(maximized)"/> -->
+                </press>
+
+                <release>
+                  <controlScript scriptId="testlaunch1" scriptAction="stop"/>
+                  <writeData data="localsource:test_string:string" value="PushLabel release"/>
+                </release>
+
+                <show>
+                  <controlScript scriptId="testlaunch1" scriptAction="launch(500)"/>
+                </show>
+
+                <hide>
+                  <controlScript scriptId="testlaunch1" scriptAction="stop"/>
+                </hide>
+              </events>
+            </Label>
+          </widgets>
+        </LayoutVBox>
+      </layout>
+      <!-- <widgets> -->
+      <!-- </widgets> -->
+    </Frame>
+  </mainWidget>
+</WINDOW>
+
+
+
+

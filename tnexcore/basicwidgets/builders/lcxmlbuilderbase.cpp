@@ -25,6 +25,7 @@
 #include "LIMovieAccess.h"
 #include "applicationinterface.h"
 #include "lcqwidgetvisiblecontrol.h"
+#include "lqeventsfilter.h"
 #include "xmlcommon.h"
 
 #include <QWidget>
@@ -141,6 +142,7 @@ QWidget* LCXmlBuilderBase::build( const QDomElement& _element,
   auto ret = [&_element, &_app](QWidget* _w)
   {
     LCQWidgetVisibleControl::build(_element, _w, _app);
+    LQEventsFilter::install(_w, _element, _app);
     return _w;
   };
 
