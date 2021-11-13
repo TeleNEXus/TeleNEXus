@@ -165,5 +165,5 @@ bool LQEventsFilter::eventFilter(QObject* _obj, QEvent* _event)
   {
     (*handle_it)();
   }
-  return true;
+  return false;
 }
