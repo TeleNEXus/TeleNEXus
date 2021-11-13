@@ -54,12 +54,7 @@ public:
   void addWidget(QWidget* _widget, const QString& _matching);
   void addWidgetUndef(QWidget* _widget);
   void addWidgetWrong(QWidget* _widget);
-  void setPushDelay(int _msec);
-  virtual bool eventFilter(QObject* _obj, QEvent* _event) override;
   virtual bool event(QEvent *e) override;
-signals:
-  void press(void);
-  void release(void);
 private:
   void setActive(bool _flag);
 };
