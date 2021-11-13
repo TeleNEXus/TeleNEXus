@@ -2,19 +2,12 @@
 <WINDOW>
   <mainWidget>
     <Frame>
-      <layout>
-        <LayoutVBox>
-          <widgets>
-
-            <PushArea fixedSize="100;100" 
-              style="(...){border: 2px solid green; background: red}">
-
             <events>
 
-                <press delay="1000">
-                  <controlScript scriptId="testlaunch1" scriptAction="launch(500)"/>
-                  <writeData data="localsource:test_string:string" value="PushLabel press"/>
-                  <controlWindow windowId="digitalkeyboard1" action="hide"/>
+                <press>
+                  <!-- <controlScript scriptId="testlaunch1" scriptAction="launch(500)"/> -->
+                  <writeData data="localsource:test_string1:string" value="frame press global"/>
+                  <!-- <controlWindow windowId="digitalkeyboard1" action="hide"/> -->
                   <!-- <controlWindow windowId="digitalkeyboard1" action="show(normal)"/> -->
                   <!-- <controlWindow windowId="digitalkeyboard1" action="show(fullScreen)"/> -->
                   <!-- <controlWindow windowId="digitalkeyboard1" action="show(minimized)"/> -->
@@ -22,30 +15,80 @@
                 </press>
 
                 <release>
-                  <controlScript scriptId="testlaunch1" scriptAction="stop"/>
-                  <writeData data="localsource:test_string:string" value="PushLabel release"/>
+                  <!-- <controlScript scriptId="testlaunch1" scriptAction="stop"/> -->
+                  <writeData data="localsource:test_string1:string" value="frame release global"/>
                 </release>
 
                 <show>
-                  <controlScript scriptId="testlaunch1" scriptAction="launch(500)"/>
+                  <writeData data="localsource:test_string1:string" value="frame show global"/>
                 </show>
 
                 <hide>
-                  <controlScript scriptId="testlaunch1" scriptAction="stop"/>
+                  <writeData data="localsource:test_string1:string" value="frame hide global"/>
                 </hide>
 
             </events>
+      <layout>
+        <LayoutVBox>
+          <widgets>
 
+            <PushArea fixedSize="100;100" 
+              style="(...){border: 2px solid green; background: red}">
 
-              <!-- <released movie="movies/10_11_12_13.gif"/> -->
-              <pressed movie="movies/20_21_22_23.gif" />
-              <!-- <pressed movie="movies/10_11_12_13.gif"/> -->
-              <released picture="file=picture/picture_1.png; size=(100,100)" />
-              <!-- <released movie="movies/10_11_12_13.gif"/> -->
-              <!-- <pressed picture="file=picture/picture_1.png; size=(100,100)" /> -->
+            <!-- <events> -->
+
+            <!--     <press> -->
+            <!--       <!-1- <controlScript scriptId="testlaunch1" scriptAction="launch(500)"/> -1-> -->
+            <!--       <writeData data="localsource:test_string1:string" value="PushLabel press global"/> -->
+            <!--       <!-1- <controlWindow windowId="digitalkeyboard1" action="hide"/> -1-> -->
+            <!--       <!-1- <controlWindow windowId="digitalkeyboard1" action="show(normal)"/> -1-> -->
+            <!--       <!-1- <controlWindow windowId="digitalkeyboard1" action="show(fullScreen)"/> -1-> -->
+            <!--       <!-1- <controlWindow windowId="digitalkeyboard1" action="show(minimized)"/> -1-> -->
+            <!--       <!-1- <controlWindow windowId="digitalkeyboard1" action="show(maximized)"/> -1-> -->
+            <!--     </press> -->
+
+            <!--     <release> -->
+            <!--       <!-1- <controlScript scriptId="testlaunch1" scriptAction="stop"/> -1-> -->
+            <!--       <writeData data="localsource:test_string1:string" value="PushLabel release global"/> -->
+            <!--     </release> -->
+
+            <!--     <show> -->
+            <!--       <writeData data="localsource:test_string1:string" value="PushLabel show global"/> -->
+            <!--     </show> -->
+
+            <!--     <hide> -->
+            <!--       <writeData data="localsource:test_string1:string" value="PushLabel hide global"/> -->
+            <!--     </hide> -->
+
+            <!-- </events> -->
+
+              <press movie="movies/20_21_22_23.gif" delay="500">
+
+                <controlScript scriptId="testlaunch1" scriptAction="launch(500)"/>
+                <writeData data="localsource:test_string:string" value="PushLabel press"/>
+                <!-- <controlWindow windowId="digitalkeyboard1" action="hide"/> -->
+                <!-- <controlWindow windowId="digitalkeyboard1" action="show(normal)"/> -->
+                <!-- <controlWindow windowId="digitalkeyboard1" action="show(fullScreen)"/> -->
+                <!-- <controlWindow windowId="digitalkeyboard1" action="show(minimized)"/> -->
+                <!-- <controlWindow windowId="digitalkeyboard1" action="show(maximized)"/> -->
+              </press>
+
+              <release picture="file=picture/picture_1.png; size=(100,100)">
+                <controlScript scriptId="testlaunch1" scriptAction="stop"/>
+                <writeData data="localsource:test_string:string" value="PushLabel release"/>
+              </release>
+
+              <!-- <!-1- <released movie="movies/10_11_12_13.gif"/> -1-> -->
+              <!-- <pressed movie="movies/20_21_22_23.gif" /> -->
+              <!-- <!-1- <pressed movie="movies/10_11_12_13.gif"/> -1-> -->
+              <!-- <released picture="file=picture/picture_1.png; size=(100,100)" /> -->
+              <!-- <!-1- <released movie="movies/10_11_12_13.gif"/> -1-> -->
+              <!-- <!-1- <pressed picture="file=picture/picture_1.png; size=(100,100)" /> -1-> -->
 
             </PushArea>
+
             <Label data="localsource:test_string:string"/>
+            <Label data="localsource:test_string1:string"/>
           </widgets>
           <stretch/>
         </LayoutVBox>

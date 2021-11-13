@@ -20,6 +20,7 @@
  */
 
 #include "lcxmlpushareabuilder.h"
+#include "lcxmlstdactionbuilder.h"
 
 #include "widgets/lcqpushlabel.h"
 
@@ -35,12 +36,13 @@ static const struct
 {
   QString picture   = "picture";
   QString movie     = "movie";
+  QString delay     = "delay";
 }__slAttributes;
 
 static const struct 
 {
-  QString pressed  = "pressed";
-  QString released = "released";
+  QString pressed  = "press";
+  QString released = "release";
 }__slTags;
 
 //==============================================================================
@@ -53,133 +55,139 @@ LCXmlPushAreaBuilder::~LCXmlPushAreaBuilder()
 {
 }
 
+
 //------------------------------------------------------------------------------
 QWidget* LCXmlPushAreaBuilder::buildLocal(
     const QDomElement& _element, const LIApplication& _app)
 {
 
   Q_UNUSED(_app);
-  struct SCommonData
-  {
-    QSharedPointer<LIMovieAccess> spCurrentMovieAccess;
-    SCommonData(){}
-  };
 
-  LCQPushLabel* push_label = new LCQPushLabel();
+  using TChangeView = LCQPushLabel::TChangeView;
+  auto sp_movie_access_list = 
+    QSharedPointer<QList<QSharedPointer<LIMovieAccess>>>(
+        new QList<QSharedPointer<LIMovieAccess>>);
 
-
-  auto common_data = QSharedPointer<SCommonData>(new SCommonData());
-
-  auto create_handler = 
-    [&_element, common_data, push_label](const QString& _tag)
+  auto get_view_setter = 
+    [sp_movie_access_list](const QDomElement _element)
     {
-      using TRet = std::function<void(QLabel*)>;
 
-      auto ret_show_void =
-        [common_data, push_label]()
+      auto stop_movies = 
+        [sp_movie_access_list]()
         {
-          push_label->setPixmap(QPixmap());
-          push_label->setMovie(nullptr);
-
-          return 
-            (TRet)[common_data](QLabel* _label)
-            {
-              if(!common_data->spCurrentMovieAccess.isNull())
-              {
-                common_data->spCurrentMovieAccess->stop();
-                common_data->spCurrentMovieAccess.clear();
-              }
-
-              _label->setPixmap(QPixmap());
-              _label->setMovie(nullptr);
-              _label->update();
-            };
+          for(auto it = (*sp_movie_access_list).begin();
+              it != (*sp_movie_access_list).end();
+              it++)
+          {
+            (*it)->stop();
+          }
         };
 
-      auto state_element = _element.firstChildElement(_tag);
-
-      if(state_element.isNull()) 
-      {
-        return ret_show_void();
-      }
-
-      QString attr = state_element.attribute(__slAttributes.picture);
-      if(!attr.isNull())
-      {
-        auto picture = LCXmlBuilderBase::parsePixmap(attr);
-        if(picture.isNull()) 
+      TChangeView empty_setter = 
+        [stop_movies](QLabel* _label)
         {
-          return ret_show_void();
-        }
-        push_label->setPixmap(picture); 
-        if(!common_data->spCurrentMovieAccess.isNull())
-        {
-          common_data->spCurrentMovieAccess->stop();
-          common_data->spCurrentMovieAccess.clear();
-        }
-        return 
-          (TRet)[picture, common_data](QLabel* _label)
-          {
-            if(!common_data->spCurrentMovieAccess.isNull())
-            {
-              common_data->spCurrentMovieAccess->stop();
-              common_data->spCurrentMovieAccess.clear();
-            }
-            _label->setPixmap(picture);
-            _label->update();
-          };
-      }
+          stop_movies();
+          _label->setPixmap(QPixmap());
+          _label->setMovie(nullptr);
+          _label->update();
+        };
 
-      attr = state_element.attribute(__slAttributes.movie);
-
-      if(!attr.isNull())
+      if(_element.isNull()) 
       {
-        auto movie = LCXmlBuilderBase::getMovie(attr);
-        if(movie.isNull()) return ret_show_void();
-        push_label->setMovie(movie->getMovie());
-        movie->start();
-        common_data->spCurrentMovieAccess = movie;
-        return 
-          (TRet)[movie, common_data](QLabel* _label)
-          {
-            if(!common_data->spCurrentMovieAccess.isNull())
-            {
-              common_data->spCurrentMovieAccess->stop();
-            }
-            common_data->spCurrentMovieAccess = movie;
-            _label->setPixmap(QPixmap());
-            _label->setMovie(movie->getMovie());
-            movie->start();
-            _label->update();
-          };
+        return empty_setter;
       }
 
-      return ret_show_void();
+      auto get_picture_setter = 
+        [&empty_setter, stop_movies](QString _attr)
+        {
+          TChangeView ret;
+          QPixmap picture = LCXmlBuilderBase::parsePixmap(_attr);
+          if(picture.isNull())
+          {
+            ret = empty_setter;
+          }
+          else
+          {
+            ret = 
+              [picture, stop_movies](QLabel* _label)
+              {
+                stop_movies();
+                _label->setMovie(nullptr);
+                _label->setPixmap(picture);
+                _label->update();
+              };
+          }
+          return ret;
+        };
+
+      auto get_movie_setter = 
+        [&empty_setter, sp_movie_access_list, stop_movies](QString _attr)
+        {
+          TChangeView ret;
+
+          auto movie_access = LCXmlBuilderBase::getMovie(_attr);
+          if(movie_access.isNull()) 
+          {
+            ret = empty_setter;
+          }
+          else
+          {
+            *sp_movie_access_list << movie_access;
+            ret = 
+              [movie_access, stop_movies](QLabel* _label)
+              {
+                stop_movies();
+                _label->setPixmap(QPixmap());
+                _label->setMovie(movie_access->getMovie());
+                movie_access->start();
+                _label->update();
+              };
+          }
+          return ret;
+        };
+
+      QString attr = _element.attribute(__slAttributes.picture);
+      if(!attr.isNull()) return get_picture_setter(attr);
+      attr = _element.attribute(__slAttributes.movie);
+      return get_movie_setter(attr);
     };
 
-  QObject::connect(push_label, &LCQPushLabel::shown, 
-      [common_data](QLabel*)
-      {
-        if(!common_data->spCurrentMovieAccess.isNull())
-        {
-          common_data->spCurrentMovieAccess->start();
-        }
-      });
+  QDomElement el_press = _element.firstChildElement(__slTags.pressed);
+  QDomElement el_release = _element.firstChildElement(__slTags.released);
 
-  QObject::connect(push_label, &LCQPushLabel::hidden, 
-      [common_data](QLabel*)
-      {
-        if(!common_data->spCurrentMovieAccess.isNull())
-        {
-          common_data->spCurrentMovieAccess->stop();
-        }
-      });
 
-  auto handler_press = create_handler(__slTags.pressed);
-  auto handler_release = create_handler(__slTags.released);
+  TChangeView push_veiw_setter = get_view_setter(el_press);
+  TChangeView release_veiw_setter = get_view_setter(el_release);
 
-  QObject::connect(push_label, &LCQPushLabel::press, handler_press);
-  QObject::connect(push_label, &LCQPushLabel::release, handler_release);
+  LCQPushLabel::TActionsList push_actions;
+  LCQPushLabel::TActionsList release_actions;
+
+  if(!el_press.isNull())
+  {
+    push_actions = 
+      LCXmlStdActionBuilder::instance().build(el_press, _app);
+  }
+
+  if(!el_release.isNull())
+  {
+    release_actions = 
+      LCXmlStdActionBuilder::instance().build(el_release, _app);
+  }
+
+  bool flag = false;
+  int push_delay = el_press.attribute(__slAttributes.delay).toInt(&flag);
+
+  if(!flag) 
+  {
+    push_delay = 0;
+  }
+
+  LCQPushLabel* push_label = new LCQPushLabel(
+      push_veiw_setter, 
+      release_veiw_setter, 
+      push_actions, 
+      release_actions, 
+      push_delay);
 
   setWidgetName(      _element, push_label);
   setWidgetStyle(     _element, push_label);
@@ -191,4 +199,5 @@ QWidget* LCXmlPushAreaBuilder::buildLocal(
 
   return push_label;
 }
+
 

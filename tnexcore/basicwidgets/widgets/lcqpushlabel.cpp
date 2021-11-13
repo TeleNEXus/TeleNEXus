@@ -26,80 +26,67 @@
 #include <QTimer>
 
 //==============================================================================
-enum EState 
-{
-  released,
-  pressed
-};
+using TActionsList = LCQPushLabel::TActionsList;
 //==============================================================================
-struct SLocalData
-{
-  EState state;
-  QTimer timer;
-  SLocalData()
-  {
-    state = EState::released;
-    timer.setSingleShot(true);
-  }
-};
+static bool s_ActionsExecute(const TActionsList& _actions);
 
-#define toLocalData(p) (static_cast<SLocalData*>(p))
-
-#define ld (*(toLocalData(mpLocal)))
 //==============================================================================
-LCQPushLabel::LCQPushLabel(QWidget* _widget) :
-  QLabel(_widget),
-  mpLocal(new SLocalData())
+LCQPushLabel::LCQPushLabel(
+      TChangeView _setViewPush, 
+      TChangeView _setViewRelease,
+      const TActionsList& _actionsPush, 
+      const TActionsList& _actionsRelease,
+      int _pushDelay) : 
+  QLabel(nullptr)
+  ,mSetViewPush(_setViewPush)
+  ,mSetViewRelease(_setViewRelease)
+  ,mActionsPush(_actionsPush)
+  ,mActionsRelease(_actionsRelease)
+  ,mpTimer(new QTimer(this))
+  ,mState(EState::released)
 {
-  connect(&(ld.timer), &QTimer::timeout, 
+  mpTimer->setSingleShot(true);
+  mpTimer->setInterval(_pushDelay);
+  mSetViewRelease(this);
+
+  connect(mpTimer, &QTimer::timeout, 
       [this]()
       {
-        emit press(this);
+        s_ActionsExecute(mActionsPush);
       });
-  this->setFocusPolicy(Qt::FocusPolicy::StrongFocus);
 }
 
 //------------------------------------------------------------------------------
 LCQPushLabel::~LCQPushLabel()
 {
-  delete toLocalData(mpLocal);
 }
 
 //------------------------------------------------------------------------------
 bool LCQPushLabel::event(QEvent* _event)
 {
-
   bool ret = false;
   //---------------------------------------state_released[]
   auto state_released = 
     [this, &ret](QEvent* _event)
     {
       auto to_state_pressed = 
-        [this, &ret, _event]()
+        [this, &ret]()
         {
-          ld.timer.start();
-          ret = true;
+          mSetViewPush(this);
+          if(mActionsPush.size() != 0)
+          {
+            mpTimer->start();
+            ret = true;
+          }
           return EState::pressed;
         };
 
       switch(_event->type())
       {
-      case QEvent::Type::MouseButtonDblClick:
       case QEvent::Type::MouseButtonPress:
-        if(static_cast<QMouseEvent*>(_event)->button() == Qt::MouseButton::LeftButton)
-        {
+      case QEvent::Type::TouchBegin:
           return to_state_pressed();
-        }
         break;
-
-      case QEvent::Type::KeyPress:
-        {
-          QKeyEvent& ke = *(static_cast<QKeyEvent*>(_event));
-          if(ke.key() == Qt::Key::Key_Space)
-          {
-            return to_state_pressed();
-          }
-        }
       default:
         break;
       }
@@ -111,47 +98,19 @@ bool LCQPushLabel::event(QEvent* _event)
     [this, &ret](QEvent* _event)
     {
       auto to_state_released = 
-        [this, &ret, _event]()
+        [this, &ret]()
         {
-          if(!(ld.timer.isActive()))
-          {
-            emit release(this);
-          }
-          ld.timer.stop();
-          ret = true;
+          mpTimer->stop();
+          mSetViewRelease(this);
+          ret = s_ActionsExecute(mActionsRelease);
           return EState::released;
         };
 
       switch(_event->type())
       {
+      case QEvent::Type::TouchEnd:
       case QEvent::Type::MouseButtonRelease:
-        if(static_cast<QMouseEvent*>(_event)->button() == Qt::MouseButton::LeftButton)
-        {
           return to_state_released();
-        }
-        break;
-
-      case QEvent::Type::MouseMove:
-        {
-          QMouseEvent& me = *(static_cast<QMouseEvent*>(_event));
-          if((me.localPos().x() < 0.0) || 
-              (me.localPos().y() < 0.0) ||
-              (me.localPos().x() > this->size().width()) ||
-              (me.localPos().y() > this->size().height()))
-          {
-            return to_state_released();
-          }
-        }
-        break;
-
-      case QEvent::Type::KeyRelease:
-        {
-          QKeyEvent& ke = *(static_cast<QKeyEvent*>(_event));
-          if((ke.key() == Qt::Key::Key_Space) && (!ke.isAutoRepeat()))
-          {
-            return to_state_released();
-          }
-        }
         break;
 
       default:
@@ -160,14 +119,15 @@ bool LCQPushLabel::event(QEvent* _event)
       return EState::pressed;
     };
 
-  switch(ld.state)
+  switch(mState)
   {
+
   case EState::released:
-    ld.state = state_released(_event);
+    mState = state_released(_event);
     break;
 
   case EState::pressed:
-    ld.state = state_pressed(_event);
+    mState = state_pressed(_event);
     break;
   }
 
@@ -176,9 +136,14 @@ bool LCQPushLabel::event(QEvent* _event)
   return ret;
 }
 
-//------------------------------------------------------------------------------
-void LCQPushLabel::setPushDelay(int _msec)
+//==============================================================================
+static bool s_ActionsExecute(const TActionsList& _actions)
 {
-  if(_msec >= 0) ld.timer.setInterval(_msec);
+  if(_actions.size() == 0) return false;
+  for(auto it = _actions.begin(); it != _actions.end(); it++)
+  {
+    (*it)();
+  }
+  return true;
 }
 

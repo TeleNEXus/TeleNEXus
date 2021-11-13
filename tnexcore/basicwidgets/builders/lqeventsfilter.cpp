@@ -50,21 +50,6 @@ void doDeleteLater(QObject* _obj)
   _obj->deleteLater();
 }
 
-//==============================================================================
-/* struct SLocalData */
-/* { */
-/*   QSharedPointer<QMap<QEvent::Type, TActions>> mspEventActions; */
-/*   QTimer* mpTimer; */
-/*   SLocalData() = delete; */
-/*   SLocalData(LQEventsFilter* _filter) */
-/*   { */
-/*     mpTimer = new QTimer(_filter); */
-/*   } */
-/* }; */
-
-/* #define toLocalData(p) (reinterpret_cast<SLocalData*>(p)) */
-/* #define ld  (*(toLocalData(mpLocalData))) */
-
 //==============================================================================LQEventsFilter
 LQEventsFilter::LQEventsFilter( 
     const TActionsMap& _actionsMap, QObject* _parent) : 
@@ -107,32 +92,6 @@ void LQEventsFilter::install(
       actions_map.insert(_event_type, actions);
     };
 
-  /* auto action_press_with_delay = */
-  /*   [&get_actions, &_app, &events_element]() */
-  /*   { */
-  /*     QDomElement el = events_element.firstChildElement(__slTags.press); */
-  /*     if(el.isNull()) return false; */
-  /*     QString attr_delay = el.attribute(__slAttributes.delay); */
-  /*     if(attr_delay.isNull()) return false; */
-
-  /*     bool flag = false; */
-  /*     int delay = attr_delay.toInt(&flag); */
-  /*     if(flag == false) return false; */
-  /*     if(delay <= 0) return false; */
-
-
-  /*     TActions actions_press = get_actions(__slTags.press); */
-  /*     if(actions_press.size() == 0) return false; */
-
-  /*     TActions actions_press_handle; */ 
-  /*     /1* actions_press_handle << [&actions_press]() *1/ */ 
-  /*     /1* { *1/ */ 
-  /*     /1* }; *1/ */
-
-  /*     return true; */
-  /*   }; */
-
-
   install_actions(__slTags.press,   QEvent::MouseButtonPress);
   install_actions(__slTags.release, QEvent::MouseButtonRelease);
 
@@ -149,7 +108,8 @@ void LQEventsFilter::install(
     auto it_press_actions = filter->mActionsMap.find(QEvent::MouseButtonPress);
     if(it_press_actions == filter->mActionsMap.end()) return;
     TActions press_actions = it_press_actions.value();
-    QDomElement press_element = events_element.firstChildElement(__slTags.press);
+    QDomElement press_element = 
+      events_element.firstChildElement(__slTags.press);
     QString attr_delay = press_element.attribute(__slAttributes.delay);
     if(attr_delay.isNull()) return;
     bool flag = false;
@@ -177,9 +137,11 @@ void LQEventsFilter::install(
         filter->mpTimer->start();
       };
 
-    filter->mActionsMap[QEvent::MouseButtonPress] = press_actions;
+    filter->mActionsMap[QEvent::TouchBegin] =
+      filter->mActionsMap[QEvent::MouseButtonPress] = press_actions;
 
-    filter->mActionsMap[QEvent::MouseButtonRelease] = 
+    filter->mActionsMap[QEvent::TouchEnd] = 
+      filter->mActionsMap[QEvent::MouseButtonRelease] = 
       filter->mActionsMap[QEvent::MouseButtonRelease] << 
       [filter]()
       {
@@ -203,5 +165,5 @@ bool LQEventsFilter::eventFilter(QObject* _obj, QEvent* _event)
   {
     (*handle_it)();
   }
-  return false;
+  return true;
 }
