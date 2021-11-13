@@ -18,30 +18,52 @@
  * You should have received a copy of the GNU General Public License
  * along with TeleNEXus.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef LCQPUSHAREA_H_
-#define LCQPUSHAREA_H_
+
+#ifndef LCQPUSLABEL_H_
+#define LCQPUSLABEL_H_
 
 #include <QLabel>
+#include <QList>
 #include <functional>
+
+class QTimer;
 
 class LCQPushLabel : public QLabel
 {
   Q_OBJECT;
+public:
+  using TChangeView = std::function<void(QLabel* _label)>;
+  using TActionsList = QList<std::function<void(void)>>;
+
 private:
-  void* mpLocal;
+
+  enum class EState 
+  {
+    released,
+    pressed
+  };
+
+  TChangeView mSetViewPush;
+  TChangeView mSetViewRelease;
+  TActionsList mActionsPush;
+  TActionsList mActionsRelease;
+
+  QTimer* mpTimer;
+  EState mState;
 
 public:
 
-  explicit LCQPushLabel(QWidget* _widget = nullptr);
+  LCQPushLabel() = delete;
+
+  LCQPushLabel(
+      TChangeView _statePush, 
+      TChangeView _releaseState,
+      const TActionsList& _actionsPush, 
+      const TActionsList& _actionsRelease,
+      int _pushDelay);
+
   virtual ~LCQPushLabel();
-
   virtual bool event(QEvent* _event) override;
-  void setPushDelay(int _msec);
-
-signals:
-  void press(QLabel* _label);
-  void release(QLabel* _label);
-  void shown(QLabel* _label);
-  void hidden(QLabel* _label);
 };
-#endif /* LCQPUSHAREA_H_ */
+
+#endif /* LCQPUSLABEL_H_ */

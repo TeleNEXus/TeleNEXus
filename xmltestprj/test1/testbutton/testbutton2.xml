@@ -1,20 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <WINDOW>
-  <actions>
-    <!-- <scriptExecute event="show" scriptId=""                /> -->
-    <!-- <scriptLaunch  event="show" scriptId="" interval="500" /> -->
-    <!-- <scriptStop    event="show" scriptId=""                /> -->
-
-    <!-- <scriptExecute event="hide" scriptId=""                /> -->
-    <!-- <scriptLaunch  event="hide" scriptId="" interval="500" /> -->
-    <!-- <scriptStop    event="hide" scriptId=""                /> -->
-  </actions>
-
   <mainWidget>
-    <Frame
-      name="testname"
-      >
+    <Frame name="testname">
       <!-- style="(...){background-image: url(picture/fon1.png)}" -->
           <widgets>
             <Button test="write data" 
@@ -36,10 +24,12 @@
               position="100;100"
               style="(...)(background-image: url(:/home/serg/pprj/tnex/xmltestprj/linux/prj2/picture/fon1.png))"
               >
-              <press>
+
+              <press delay="0">
                 <!-- <controlWindow windowId="TestWindow1" action="show(fullScreen)"/> -->
                 <controlWindow windowId="TestWindow1" action="show()"/>
               </press>
+
             </Button>
 
             <Button text="hide window 1"

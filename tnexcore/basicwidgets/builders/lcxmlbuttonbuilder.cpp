@@ -44,7 +44,7 @@ static const struct
 {
   QString icon="icon";
   QString text="text";
-  QString pushDelay = "pushDelay";
+  QString pushDelay = "delay";
 }__slAttributes;
 
 using TActions = LCXmlStdActionBuilder::TActions;
@@ -64,29 +64,27 @@ QWidget* LCXmlButtonBuilder::buildLocal(
 const QDomElement& _element, const LIApplication& _app)
 {
 
+  TActions actions_pressed;
+  TActions actions_released;
+  int push_delay = 0;
+  QDomElement el_press = _element.firstChildElement(__slTags.press);
+  if(!el_press.isNull())
+  {
+    actions_pressed = LCXmlStdActionBuilder::instance().build(
+        _element.firstChildElement(__slTags.press), _app);
+    bool flag = false;
+    push_delay = el_press.attribute(__slAttributes.pushDelay).toInt(&flag);
+    if(!flag) push_delay = 0;
+  }
 
-  TActions actions_pressed = LCXmlStdActionBuilder::instance().build(
-      _element.firstChildElement(__slTags.press), _app);
-
-  TActions actions_released = LCXmlStdActionBuilder::instance().build(
+  actions_released = LCXmlStdActionBuilder::instance().build(
       _element.firstChildElement(__slTags.release), _app);
 
 
   auto pixmap = parsePixmap(_element.attribute(__slAttributes.icon));
 
-  int push_delay = 0;
-  QString attr = _element.attribute(__slAttributes.pushDelay);
-  if(!attr.isNull())
-  {
-    bool flag = false;
-    push_delay = attr.toInt(&flag);
-    if(!flag)
-    {
-      push_delay = 0;
-    }
-  }
 
-  attr = _element.attribute(__slAttributes.text);
+  QString attr = _element.attribute(__slAttributes.text);
   LCQPushButton* button = new LCQPushButton(
       attr, 
       actions_pressed, 

@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <WINDOW>
-  <actions>
+
+  <!-- <actions> -->
     <!-- <scriptExecute event="show" scriptId=""                /> -->
     <!-- <scriptLaunch  event="show" scriptId="" interval="500" /> -->
     <!-- <scriptStop    event="show" scriptId=""                /> -->
@@ -9,7 +10,7 @@
     <!-- <scriptExecute event="hide" scriptId=""                /> -->
     <!-- <scriptLaunch  event="hide" scriptId="" interval="500" /> -->
     <!-- <scriptStop    event="hide" scriptId=""                /> -->
-  </actions>
+  <!-- </actions> -->
 
   <mainWidget>
     <Frame
@@ -21,9 +22,9 @@
 
             <Button text = "write data" 
               style = "$(buttonCrazy) (...){color:green}"
-              icon = "file='picture/icon1.png'; size=(150, 50)" pushDelay="100">
+              icon = "file='picture/icon1.png'; size=(150, 50)">
 
-              <press>
+              <press delay="100">
                 <controlScript scriptId="testlaunch1" scriptAction="launch(500)"/>
                 <writeData data="localsource:test_string:string" value="Push button press"/>
               </press>

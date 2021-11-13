@@ -97,23 +97,17 @@ bool LCQPushButton::event(QEvent* _event)
 
   case QEvent::Type::MouseButtonPress:
     if(ld.pushActions.size() == 0) break;
-    if(static_cast<QMouseEvent*>(_event)->button() == Qt::MouseButton::LeftButton)
-    {
       ld.timer.start();
       ret = true;
-    }
     break;
 
   case QEvent::Type::MouseButtonRelease:
-    if(static_cast<QMouseEvent*>(_event)->button() == Qt::MouseButton::LeftButton)
-    {
       ld.timer.stop();
       if(ld.pushActions.size() != 0) 
       {
         s_ActionsExecute(ld.releaseActions);
         ret = true;
       }
-    }
     break;
 
   case QEvent::Type::TouchBegin:
@@ -135,6 +129,6 @@ bool LCQPushButton::event(QEvent* _event)
   }
 
   QPushButton::event(_event); 
-  return ret;
+  return  ret;
 }
 
