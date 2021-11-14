@@ -133,7 +133,8 @@ static void scriptUpload(const QDomElement &_element)
     } 
 
     //create servece.
-    auto jscriptservice = LCJScriptService::create(script_str, attributes_map, attr_file);
+    auto jscriptservice = LCJScriptService::create(
+        script_str, attributes_map, attr_file, attr_id);
     __slScriptMap.insert(attr_id, jscriptservice);
   };
 
