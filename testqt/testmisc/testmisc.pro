@@ -24,8 +24,9 @@ INCLUDEPATH +=                                  \
        # ./testjsdataformatter 
 
 
-SOURCES += ./memsetmain.cpp 
-SOURCES += ../../plugins/modbussource/modbus/lcmemoryreadset.cpp
+# SOURCES += ./memsetmain.cpp 
+# SOURCES += ../../plugins/modbussource/modbus/lcmemoryreadset.cpp
+SOURCES += testtouchscreen.cpp \
 # SOURCES += testscreen.cpp \
 # SOURCES += main.cpp \
 # SOURCES +=  ./regexpr.cpp \

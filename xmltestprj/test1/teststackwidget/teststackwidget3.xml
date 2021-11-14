@@ -7,15 +7,15 @@
       <ScrollArea style="(...){background:green; qproperty-alignment: AlignCenter;}">
         <Frame size="500;450" style="(...){}">
 
-          <events>
-            <press delay="500">
-              <writeData data="localsource:test_string:string" value="Frame widget press"/>
-            </press>
+          <!-- <events> -->
+          <!--   <press delay="500"> -->
+          <!--     <writeData data="localsource:test_string:string" value="Frame widget press"/> -->
+          <!--   </press> -->
 
-            <release>
-              <writeData data="localsource:test_string:string" value="Frame widget release"/>
-            </release>
-          </events>
+          <!--   <release> -->
+          <!--     <writeData data="localsource:test_string:string" value="Frame widget release"/> -->
+          <!--   </release> -->
+          <!-- </events> -->
 
 
           <widgets>
@@ -25,27 +25,27 @@
               style="(...){ color:yellow; background:red;}" 
               data="localsource:listwidgetitem:string">
 
-              <events>
+              <!-- <events> -->
 
-                  <press delay="500">
-                    <!-- <controlScript scriptId="testlaunch1" scriptAction="launch(500)"/> -->
-                    <writeData data="localsource:test_string1:string" value="stack widget press"/>
-                  </press>
+              <!--     <press delay="500"> -->
+              <!--       <!-1- <controlScript scriptId="testlaunch1" scriptAction="launch(500)"/> -1-> -->
+              <!--       <writeData data="localsource:test_string1:string" value="stack widget press"/> -->
+              <!--     </press> -->
 
-                  <release>
-                    <!-- <controlScript scriptId="testlaunch1" scriptAction="stop"/> -->
-                    <writeData data="localsource:test_string1:string" value="stack widget release"/>
-                  </release>
+              <!--     <release> -->
+              <!--       <!-1- <controlScript scriptId="testlaunch1" scriptAction="stop"/> -1-> -->
+              <!--       <writeData data="localsource:test_string1:string" value="stack widget release"/> -->
+              <!--     </release> -->
 
-                  <!-- <show> -->
-                  <!--   <controlScript scriptId="testlaunch1" scriptAction="launch(500)"/> -->
-                  <!-- </show> -->
+              <!--     <!-1- <show> -1-> -->
+              <!--     <!-1-   <controlScript scriptId="testlaunch1" scriptAction="launch(500)"/> -1-> -->
+              <!--     <!-1- </show> -1-> -->
 
-                  <!-- <hide> -->
-                  <!--   <controlScript scriptId="testlaunch1" scriptAction="stop"/> -->
-                  <!-- </hide> -->
+              <!--     <!-1- <hide> -1-> -->
+              <!--     <!-1-   <controlScript scriptId="testlaunch1" scriptAction="stop"/> -1-> -->
+              <!--     <!-1- </hide> -1-> -->
 
-              </events>
+              <!-- </events> -->
 
               <itemUndef>
                 <Label text="Undefined Item" />
@@ -144,6 +144,7 @@
               <Label    data="localsource:test_string1:string" />
               <Label    data="localsource:test_string2:string" />
               <Label    data="localsource:test_string3:string" />
+              <Button text="PressButton"/>
             </widgets>
             <stretch/>
           </LayoutVBox>
