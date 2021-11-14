@@ -23,6 +23,7 @@
 #include <QMouseEvent>
 #include <QTimer>
 #include <qnamespace.h>
+#include <QDebug>
 
 //==============================================================================
 using TActionsList = LCQPushButton::TActionsList;
@@ -42,6 +43,7 @@ static void s_ActionsExecute(const TActionsList _actions)
 struct SLocalData
 {
   QTimer timer;
+  int counter = 0;
 
   TActionsList pushActions;
   TActionsList releaseActions;
@@ -95,34 +97,64 @@ bool LCQPushButton::event(QEvent* _event)
   switch(_event->type())
   {
 
+  case QEvent::Type::TouchCancel:
+    qDebug() << "Button touch cancel.";
+    break;
+
+  case QEvent::Type::TouchUpdate:
+    qDebug() << "Button touch Update.";
+    break;
+
+  case QEvent::Type::TouchEnd:
+    qDebug() << "Button touch End.";
+    break;
+
+  case QEvent::Type::TouchBegin:
+    qDebug() << "Button touch Begin.";
+    break;
+
+  case QEvent::Type::KeyPress:
+    qDebug() << "Button Key press";
+    break;
+
+  case QEvent::Type::KeyRelease:
+    qDebug() << "Button Key release";
+    break;
+
   case QEvent::Type::MouseButtonPress:
+    ld.counter++;
+    qDebug() << "Button mouse press." << ld.counter;
     if(ld.pushActions.size() == 0) break;
       ld.timer.start();
       ret = true;
     break;
 
   case QEvent::Type::MouseButtonRelease:
+      qDebug() << "Button mouse release."<< ld.counter;
       ld.timer.stop();
       if(ld.pushActions.size() != 0) 
       {
         s_ActionsExecute(ld.releaseActions);
         ret = true;
       }
-    break;
 
-  case QEvent::Type::TouchBegin:
-    if(ld.pushActions.size() == 0) break;
-    ld.timer.start();
-    return true;
+      break;
 
-  case QEvent::Type::TouchEnd:
-    ld.timer.stop();
-    if(ld.pushActions.size() != 0) 
-    {
-      s_ActionsExecute(ld.releaseActions);
-      ret = true;
-    }
-    break;
+  /* case QEvent::Type::TouchUpdate: */
+  /* case QEvent::Type::TouchBegin: */
+  /*   if(ld.pushActions.size() == 0) break; */
+  /*   ld.timer.start(); */
+  /*   ret = true; */
+  /*   break; */
+
+  /* case QEvent::Type::TouchEnd: */
+  /*   ld.timer.stop(); */
+  /*   if(ld.pushActions.size() != 0) */ 
+  /*   { */
+  /*     s_ActionsExecute(ld.releaseActions); */
+  /*     ret = true; */
+  /*   } */
+  /*   break; */
 
   default:
     break;

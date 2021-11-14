@@ -84,7 +84,7 @@ bool LCQPushLabel::event(QEvent* _event)
       switch(_event->type())
       {
       case QEvent::Type::MouseButtonPress:
-      case QEvent::Type::TouchBegin:
+      /* case QEvent::Type::TouchBegin: */
           return to_state_pressed();
         break;
       default:
@@ -108,7 +108,7 @@ bool LCQPushLabel::event(QEvent* _event)
 
       switch(_event->type())
       {
-      case QEvent::Type::TouchEnd:
+      /* case QEvent::Type::TouchEnd: */
       case QEvent::Type::MouseButtonRelease:
           return to_state_released();
         break;
