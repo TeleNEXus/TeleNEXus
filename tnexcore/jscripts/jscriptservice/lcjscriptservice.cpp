@@ -38,8 +38,9 @@ public:
   CLocalData(
       const QString& _script, 
       const QMap<QString, QString> _attributes,
-      const QString& _fileName):
-    mpScriptHiden(new LCQJScriptHiden(_script, _attributes, _fileName))
+      const QString& _fileName,
+      const QString& _scriptId):
+    mpScriptHiden(new LCQJScriptHiden(_script, _attributes, _fileName, _scriptId))
   {
     mActions.insert(QStringLiteral("launch"),
         [this](const QStringList& _param)
@@ -118,8 +119,9 @@ public:
 LCJScriptService::LCJScriptService(
     const QString& _script, 
     const QMap<QString, QString>& _attributes,
-    const QString& _fileName)  :
-  mpLocal( new CLocalData(_script, _attributes, _fileName) )
+    const QString& _fileName,
+    const QString& _scriptId)  :
+  mpLocal( new CLocalData(_script, _attributes, _fileName, _scriptId) )
 {
 }
 
@@ -133,10 +135,11 @@ LCJScriptService::~LCJScriptService()
 QSharedPointer<LIJScriptService> LCJScriptService::create(
     const QString& _script, 
     const QMap<QString, QString>& _attributes,
-    const QString& _fileName)
+    const QString& _fileName,
+    const QString& _scriptId)
 {
   return QSharedPointer<LCJScriptService>( 
-      new LCJScriptService(_script, _attributes, _fileName) );
+      new LCJScriptService(_script, _attributes, _fileName, _scriptId) );
 }
 
 //------------------------------------------------------------------------------

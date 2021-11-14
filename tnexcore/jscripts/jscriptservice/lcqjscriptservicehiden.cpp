@@ -42,8 +42,11 @@ static QMap<int, QJSEngine*> __slJSEngines;
 static int __slJSEngineCounter = 0;
 
 //==============================================================================
-static QString createScriptGlobal(QMap<QString, QString> _attrMap, 
-    int _engineId);
+static QString createScriptGlobal(
+    QMap<QString, QString> _attrMap, 
+    int _engineId, 
+    const QString& _scriptFileName, 
+    const QString& _scriptNameId);
 static void addMetaObjects(QJSEngine& _engine, QJSValue& _globalExport);
 
 
@@ -106,9 +109,11 @@ void LCQJScriptHiden::CEventExecute::handle(LCQJScriptHiden* _sender)
 LCQJScriptHiden::LCQJScriptHiden(
     const QString& _script, 
     const QMap<QString, QString>& _attributesMap,
-    const QString& _fileName) : 
+    const QString& _fileName,
+    const QString& _scriptId) : 
   QObject(nullptr),
   mScriptFileName(_fileName),
+  mScriptId(_scriptId),
   mpThread(new QThread),
   mTimerId(0)
 {
@@ -132,7 +137,8 @@ LCQJScriptHiden::LCQJScriptHiden(
   mJSEngine.globalObject().setProperty(
       __slPropNames.applicationGlobalExport, jsvalue);
 
-  jsvalue = mJSEngine.evaluate(createScriptGlobal(_attributesMap, mId));
+  jsvalue = mJSEngine.evaluate(createScriptGlobal(
+        _attributesMap, mId, mScriptFileName, mScriptId));
 
   if(jsvalue.isError()) { jscriptcommon::emitEvaluateError(jsvalue);}
 
@@ -329,7 +335,7 @@ QJSEngine* LCQJScriptHiden::getJSEngine(int _engineId)
 
 //==============================================================================
 static QString createScriptGlobal(QMap<QString, QString> _attrMap, 
-    int _engineId)
+    int _engineId, const QString& _scriptFileName, const QString& _scriptId)
 {
   QString obj_attributes = 
     QString("var %1 = { ").arg(__slPropNames.attributes);
@@ -370,8 +376,8 @@ static QString createScriptGlobal(QMap<QString, QString> _attrMap,
 /*1*/ .arg(obj_attributes)
 /*2*/ .arg(__slPropNames.applicationGlobalExport)
 /*3*/ .arg(_engineId)
-/*4*/ .arg(QString())
-/*5*/ .arg(QString());
+/*4*/ .arg(_scriptId)
+/*5*/ .arg(_scriptFileName);
 }
 
 

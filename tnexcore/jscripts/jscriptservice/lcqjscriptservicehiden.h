@@ -73,6 +73,7 @@ private:
   };
 
   QString     mScriptFileName;
+  QString     mScriptId;
   int         mId;
   QSharedPointer<LCQJSAppService> mspAppService;
   QJSEngine   mJSEngine;
@@ -86,7 +87,8 @@ public:
   explicit LCQJScriptHiden(
       const QString& _script, 
       const QMap<QString, QString>& _attributesMap,
-      const QString& _fileName);
+      const QString& _fileName,
+      const QString& _scriptId);
 
   virtual ~LCQJScriptHiden();
   void launch(int interval);
