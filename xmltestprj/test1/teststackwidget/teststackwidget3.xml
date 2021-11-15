@@ -7,15 +7,15 @@
       <ScrollArea style="(...){background:green; qproperty-alignment: AlignCenter;}">
         <Frame size="500;450" style="(...){}">
 
-          <!-- <events> -->
-          <!--   <press delay="500"> -->
-          <!--     <writeData data="localsource:test_string:string" value="Frame widget press"/> -->
-          <!--   </press> -->
+          <events>
+            <press delay="500">
+              <writeData data="localsource:test_string:string" value="Frame widget press"/>
+            </press>
 
-          <!--   <release> -->
-          <!--     <writeData data="localsource:test_string:string" value="Frame widget release"/> -->
-          <!--   </release> -->
-          <!-- </events> -->
+            <release>
+              <writeData data="localsource:test_string:string" value="Frame widget release"/>
+            </release>
+          </events>
 
 
           <widgets>
