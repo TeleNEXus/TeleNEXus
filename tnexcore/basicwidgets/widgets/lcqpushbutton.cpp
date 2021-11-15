@@ -25,33 +25,164 @@
 #include <qnamespace.h>
 #include <QDebug>
 
+
 //==============================================================================
 using TActionsList = LCQPushButton::TActionsList;
 
 //==============================================================================
-static void s_ActionsExecute(const TActionsList _actions)
+static void s_ActionsExecute(const TActionsList _actions);
+
+//==============================================================================CEventFilter
+class CEventFilter : public QObject
 {
-  for(auto it = _actions.begin(); 
-      it != _actions.end(); 
-      it++)
+private:
+  enum class EState
   {
-    (*it)();
+    released,
+    pressed
+  };
+
+  EState mState;
+
+  TActionsList mPressActions;
+  TActionsList mReleaseActions;
+
+public:
+  explicit CEventFilter() = delete;
+  explicit CEventFilter(
+      TActionsList _pressActions, 
+      TActionsList _releaseActions, QObject* _parent) : 
+    QObject(_parent)
+    ,mState(EState::released)
+    ,mPressActions(_pressActions)
+    ,mReleaseActions(_releaseActions)
+  {
   }
-}
+
+  virtual bool eventFilter(QObject* _obj, QEvent* _event) override
+  {
+    bool ret = false;
+
+    auto state_released = 
+      [this, _event, &ret, _obj]()
+      {
+
+        auto act_press = 
+          [this, _obj, &ret]()
+          {
+            ret = true;
+            (static_cast<QPushButton*>(_obj))->setDown(true);
+            s_ActionsExecute(mPressActions);
+            mState = EState::pressed;
+          };
+
+        switch(_event->type())
+        {
+        case QEvent::Type::TouchBegin:
+          act_press();
+          break;
+
+        case QEvent::Type::TouchEnd:
+          ret = true;
+          break;
+
+        case QEvent::Type::MouseButtonPress:
+          if(static_cast<QMouseEvent*>(_event)->source() != 
+              Qt::MouseEventSource::MouseEventNotSynthesized)
+          {
+            ret = true;
+            break;
+          }
+          act_press();
+          break;
+
+        case QEvent::Type::MouseButtonRelease:
+          ret = true;
+          break;
+
+        default:
+          break;
+        }
+      };
+
+    auto state_pressed = 
+      [this, _event, &ret, _obj]()
+      {
+        auto act_release = 
+          [this, _obj, &ret]()
+          {
+            ret = true;
+            (static_cast<QPushButton*>(_obj))->setDown(false);
+            s_ActionsExecute(mReleaseActions);
+            mState = EState::released;
+          };
+
+        switch(_event->type())
+        {
+        case QEvent::Type::TouchBegin:
+          ret = true;
+          break;
+
+        case QEvent::Type::TouchEnd:
+          act_release();
+          break;
+
+        case QEvent::Type::MouseButtonPress:
+          ret = true;
+          break;
+
+        case QEvent::Type::MouseButtonRelease:
+          if(static_cast<QMouseEvent*>(_event)->source() != 
+              Qt::MouseEventSource::MouseEventNotSynthesized)
+          {
+            ret = true;
+            break;
+          }
+          act_release();
+          break;
+
+        default:
+          break;
+        }
+      };
+
+    switch(mState)
+    {
+    case EState::released:
+      state_pressed();
+      break;
+
+    case EState::pressed:
+      state_released();
+      break;
+
+    default:
+      break;
+    }
+
+    return ret;
+  }
+};
+
+
+
+
+
+
 
 //==============================================================================
 struct SLocalData
 {
-  QTimer timer;
-  int counter = 0;
+  /* QTimer timer; */
+  /* int counter = 0; */
 
-  TActionsList pushActions;
-  TActionsList releaseActions;
+  /* TActionsList pushActions; */
+  /* TActionsList releaseActions; */
 
-  SLocalData()
-  {
-    timer.setSingleShot(true);
-  }
+  /* SLocalData() */
+  /* { */
+  /*   timer.setSingleShot(true); */
+  /* } */
 
 };
 
@@ -69,16 +200,18 @@ LCQPushButton::LCQPushButton(
   mpLocal(new SLocalData())
 {
 
-  ld.pushActions = _pushActions;
-  ld.releaseActions = _releaseActions;
-  ld.timer.setInterval(_pushDelay);
-  ld.timer.setSingleShot(true);
+  installEventFilter(new CEventFilter(_pushActions, _releaseActions, this));
 
-  connect(&(ld.timer), &QTimer::timeout, 
-      [this]()
-      {
-        s_ActionsExecute(ld.pushActions);
-      });
+  /* ld.pushActions = _pushActions; */
+  /* ld.releaseActions = _releaseActions; */
+  /* ld.timer.setInterval(_pushDelay); */
+  /* ld.timer.setSingleShot(true); */
+
+  /* connect(&(ld.timer), &QTimer::timeout, */ 
+  /*     [this]() */
+  /*     { */
+  /*       s_ActionsExecute(ld.pushActions); */
+  /*     }); */
 }
 
 
@@ -90,77 +223,87 @@ LCQPushButton::~LCQPushButton()
   delete toLocalData(mpLocal);
 }
 
-//------------------------------------------------------------------------------
-bool LCQPushButton::event(QEvent* _event)
+/* //------------------------------------------------------------------------------ */
+/* bool LCQPushButton::event(QEvent* _event) */
+/* { */
+/*   bool ret = false; */
+/*   switch(_event->type()) */
+/*   { */
+
+/*   case QEvent::Type::TouchCancel: */
+/*     qDebug() << "Button touch cancel."; */
+/*     break; */
+
+/*   case QEvent::Type::TouchUpdate: */
+/*     qDebug() << "Button touch Update."; */
+/*     break; */
+
+/*   case QEvent::Type::TouchEnd: */
+/*     qDebug() << "Button touch End."; */
+/*     break; */
+
+/*   case QEvent::Type::TouchBegin: */
+/*     qDebug() << "Button touch Begin."; */
+/*     break; */
+
+/*   case QEvent::Type::KeyPress: */
+/*     qDebug() << "Button Key press"; */
+/*     break; */
+
+/*   case QEvent::Type::KeyRelease: */
+/*     qDebug() << "Button Key release"; */
+/*     break; */
+
+/*   case QEvent::Type::MouseButtonPress: */
+/*     ld.counter++; */
+/*     qDebug() << "Button mouse press." << ld.counter; */
+/*     if(ld.pushActions.size() == 0) break; */
+/*       ld.timer.start(); */
+/*       ret = true; */
+/*     break; */
+
+/*   case QEvent::Type::MouseButtonRelease: */
+/*       qDebug() << "Button mouse release."<< ld.counter; */
+/*       ld.timer.stop(); */
+/*       if(ld.pushActions.size() != 0) */ 
+/*       { */
+/*         s_ActionsExecute(ld.releaseActions); */
+/*         ret = true; */
+/*       } */
+
+/*       break; */
+
+/*   /1* case QEvent::Type::TouchUpdate: *1/ */
+/*   /1* case QEvent::Type::TouchBegin: *1/ */
+/*   /1*   if(ld.pushActions.size() == 0) break; *1/ */
+/*   /1*   ld.timer.start(); *1/ */
+/*   /1*   ret = true; *1/ */
+/*   /1*   break; *1/ */
+
+/*   /1* case QEvent::Type::TouchEnd: *1/ */
+/*   /1*   ld.timer.stop(); *1/ */
+/*   /1*   if(ld.pushActions.size() != 0) *1/ */ 
+/*   /1*   { *1/ */
+/*   /1*     s_ActionsExecute(ld.releaseActions); *1/ */
+/*   /1*     ret = true; *1/ */
+/*   /1*   } *1/ */
+/*   /1*   break; *1/ */
+
+/*   default: */
+/*     break; */
+/*   } */
+
+/*   QPushButton::event(_event); */ 
+/*   return  ret; */
+/* } */
+
+//==============================================================================
+static void s_ActionsExecute(const TActionsList _actions)
 {
-  bool ret = false;
-  switch(_event->type())
+  for(auto it = _actions.begin(); 
+      it != _actions.end(); 
+      it++)
   {
-
-  case QEvent::Type::TouchCancel:
-    qDebug() << "Button touch cancel.";
-    break;
-
-  case QEvent::Type::TouchUpdate:
-    qDebug() << "Button touch Update.";
-    break;
-
-  case QEvent::Type::TouchEnd:
-    qDebug() << "Button touch End.";
-    break;
-
-  case QEvent::Type::TouchBegin:
-    qDebug() << "Button touch Begin.";
-    break;
-
-  case QEvent::Type::KeyPress:
-    qDebug() << "Button Key press";
-    break;
-
-  case QEvent::Type::KeyRelease:
-    qDebug() << "Button Key release";
-    break;
-
-  case QEvent::Type::MouseButtonPress:
-    ld.counter++;
-    qDebug() << "Button mouse press." << ld.counter;
-    if(ld.pushActions.size() == 0) break;
-      ld.timer.start();
-      ret = true;
-    break;
-
-  case QEvent::Type::MouseButtonRelease:
-      qDebug() << "Button mouse release."<< ld.counter;
-      ld.timer.stop();
-      if(ld.pushActions.size() != 0) 
-      {
-        s_ActionsExecute(ld.releaseActions);
-        ret = true;
-      }
-
-      break;
-
-  /* case QEvent::Type::TouchUpdate: */
-  /* case QEvent::Type::TouchBegin: */
-  /*   if(ld.pushActions.size() == 0) break; */
-  /*   ld.timer.start(); */
-  /*   ret = true; */
-  /*   break; */
-
-  /* case QEvent::Type::TouchEnd: */
-  /*   ld.timer.stop(); */
-  /*   if(ld.pushActions.size() != 0) */ 
-  /*   { */
-  /*     s_ActionsExecute(ld.releaseActions); */
-  /*     ret = true; */
-  /*   } */
-  /*   break; */
-
-  default:
-    break;
+    (*it)();
   }
-
-  QPushButton::event(_event); 
-  return  ret;
 }
-

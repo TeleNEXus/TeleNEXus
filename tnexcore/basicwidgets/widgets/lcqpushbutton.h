@@ -41,7 +41,7 @@ public:
       int _pushDelay);
 
   virtual ~LCQPushButton();
-  virtual bool event(QEvent* _event) override;
+  /* virtual bool event(QEvent* _event) override; */
 };
 
 #endif /* LCQPUSHBUTTON_H_ */
