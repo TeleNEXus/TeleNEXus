@@ -30,7 +30,17 @@ class LCQPushButton : public QPushButton
 public:
   using TActionsList = QList<std::function<void(void)>>;
 private:
-  void* mpLocal;
+  enum class EState
+  {
+    released,
+    pressed
+  };
+
+  EState mState;
+  QTimer* mpTimer;
+
+  TActionsList mPressActions;
+  TActionsList mReleaseActions;
 public:
   LCQPushButton() = delete;
 
@@ -41,6 +51,7 @@ public:
       int _pushDelay);
 
   virtual ~LCQPushButton();
+  virtual bool eventFilter(QObject* _obj, QEvent* _event) override;
 };
 
 #endif /* LCQPUSHBUTTON_H_ */

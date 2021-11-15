@@ -37,19 +37,19 @@ public:
 
 private:
 
-  /* enum class EState */ 
-  /* { */
-  /*   released, */
-  /*   pressed */
-  /* }; */
+  enum class EState
+  {
+    released,
+    pressed
+  };
 
-  /* TChangeView mSetViewPush; */
-  /* TChangeView mSetViewRelease; */
-  /* TActionsList mActionsPush; */
-  /* TActionsList mActionsRelease; */
+  EState mState;
+  QTimer* mpTimer;
 
-  /* QTimer* mpTimer; */
-  /* EState mState; */
+  TChangeView  mSetViewPressed;
+  TChangeView  mSetViewReleased;
+  TActionsList mPressActions;
+  TActionsList mReleaseActions;
 
 public:
 
@@ -63,7 +63,7 @@ public:
       int _pushDelay);
 
   virtual ~LCQPushLabel();
-  /* virtual bool event(QEvent* _event) override; */
+  virtual bool eventFilter(QObject* _obj, QEvent* _event);
 };
 
 #endif /* LCQPUSLABEL_H_ */
