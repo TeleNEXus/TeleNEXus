@@ -43,6 +43,7 @@ private:
   };
 
   EState mState;
+  QTimer* mpTimer;
 
   TActionsList mPressActions;
   TActionsList mReleaseActions;
@@ -51,12 +52,22 @@ public:
   explicit CEventFilter() = delete;
   explicit CEventFilter(
       TActionsList _pressActions, 
-      TActionsList _releaseActions, QObject* _parent) : 
+      TActionsList _releaseActions, 
+      int _pushDelay,
+      QObject* _parent) : 
     QObject(_parent)
     ,mState(EState::released)
+    ,mpTimer(new QTimer(this))
     ,mPressActions(_pressActions)
     ,mReleaseActions(_releaseActions)
   {
+    mpTimer->setInterval(_pushDelay);
+    mpTimer->setSingleShot(true);
+    connect(mpTimer, &QTimer::timeout, 
+        [this]()
+        {
+            s_ActionsExecute(mPressActions);
+        });
   }
 
   virtual bool eventFilter(QObject* _obj, QEvent* _event) override
@@ -71,8 +82,8 @@ public:
           [this, _obj, &ret]()
           {
             ret = true;
+            mpTimer->start();
             (static_cast<QPushButton*>(_obj))->setDown(true);
-            s_ActionsExecute(mPressActions);
             mState = EState::pressed;
           };
 
@@ -112,10 +123,20 @@ public:
         auto act_release = 
           [this, _obj, &ret]()
           {
+
             ret = true;
             (static_cast<QPushButton*>(_obj))->setDown(false);
-            s_ActionsExecute(mReleaseActions);
             mState = EState::released;
+
+            if(mpTimer->isActive()) 
+            {
+              mpTimer->stop();
+
+            }
+            else
+            {
+              s_ActionsExecute(mReleaseActions);
+            }
           };
 
         switch(_event->type())
@@ -205,7 +226,8 @@ LCQPushButton::LCQPushButton(
   setAttribute(Qt::WidgetAttribute::WA_AcceptTouchEvents, true);
 
 
-  installEventFilter(new CEventFilter(_pushActions, _releaseActions, this));
+  installEventFilter(
+      new CEventFilter(_pushActions, _releaseActions, _pushDelay, this));
 
   /* ld.pushActions = _pushActions; */
   /* ld.releaseActions = _releaseActions; */
