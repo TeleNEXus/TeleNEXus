@@ -13,6 +13,53 @@
 #include <QTouchDevice>
 #include <QList>
 
+
+//------------------------------------------------------------------------------
+class CTouchEvent : public QObject
+{
+public: 
+  explicit CTouchEvent(QObject* _parent = nullptr) : QObject(_parent)
+  {
+  }
+  virtual bool eventFilter(QObject* _obj, QEvent* _event) override
+  {
+    Q_UNUSED(_obj);
+
+    bool ret = false;
+    switch(_event->type())
+    {
+
+    case QEvent::Type::TouchBegin:
+      qDebug() << "Event = " << _event->type();
+      ret = true;
+      break;
+    case QEvent::Type::TouchEnd:
+      qDebug() << "Event = " << _event->type();
+      break;
+    case QEvent::Type::TouchUpdate:
+      qDebug() << "Event = " << _event->type();
+      break;
+    case QEvent::Type::TouchCancel:
+      qDebug() << "Event = " << _event->type();
+      break;
+
+    case QEvent::Type::MouseButtonPress:
+      qDebug() << "Event = " << _event->type();
+      break;
+
+    case QEvent::Type::MouseButtonRelease:
+      qDebug() << "Event = " << _event->type();
+      break;
+
+    default:
+      break;
+    }
+    return ret;
+  } 
+};
+
+
+
 class CButton : public QPushButton
 {
 public:
@@ -62,10 +109,15 @@ int main(int argc, char** argv)
 {
     QApplication app(argc, argv);
     /* app.setAttribute(Qt::AA_SynthesizeMouseForUnhandledTouchEvents, true); */
-    app.setAttribute(Qt::AA_SynthesizeTouchForUnhandledMouseEvents, false);
+    /* app.setAttribute(Qt::AA_SynthesizeTouchForUnhandledMouseEvents, false); */
 
     QFrame* frame = new QFrame();
-    QPushButton* button1 = new CButton("Button 1");
+    /* QPushButton* button1 = new CButton("Button 1"); */
+    QPushButton* button1 = new QPushButton("Button 1");
+
+    button1->installEventFilter(new CTouchEvent(button1));
+
+
     QPushButton* button2 = new QPushButton("Button 2");
 
     button1->setAttribute(Qt::WA_AcceptTouchEvents);
