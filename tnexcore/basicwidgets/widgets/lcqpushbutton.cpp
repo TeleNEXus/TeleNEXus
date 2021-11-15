@@ -149,11 +149,11 @@ public:
     switch(mState)
     {
     case EState::released:
-      state_pressed();
+      state_released();
       break;
 
     case EState::pressed:
-      state_released();
+      state_pressed();
       break;
 
     default:
