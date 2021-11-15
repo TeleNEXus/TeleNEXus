@@ -23,11 +23,13 @@ public:
   virtual bool event(QEvent* _event) override
   {
 
+    bool ret = false;
     switch(_event->type())
     {
 
     case QEvent::Type::TouchBegin:
       qDebug() << "Event = " << _event->type();
+      ret = true;
       break;
     case QEvent::Type::TouchEnd:
       qDebug() << "Event = " << _event->type();
@@ -50,7 +52,8 @@ public:
     default:
       break;
     }
-    return QPushButton::event(_event);
+    QPushButton::event(_event);
+    return ret;
   }
 
 };
@@ -58,7 +61,7 @@ public:
 int main(int argc, char** argv)
 {
     QApplication app(argc, argv);
-    /* app.setAttribute(Qt::AA_SynthesizeMouseForUnhandledTouchEvents, false); */
+    /* app.setAttribute(Qt::AA_SynthesizeMouseForUnhandledTouchEvents, true); */
     app.setAttribute(Qt::AA_SynthesizeTouchForUnhandledMouseEvents, false);
 
     QFrame* frame = new QFrame();
@@ -66,10 +69,10 @@ int main(int argc, char** argv)
     QPushButton* button2 = new QPushButton("Button 2");
 
     button1->setAttribute(Qt::WA_AcceptTouchEvents);
-    /* button1->setAttribute(Qt::WA_TouchPadAcceptSingleTouchEvents); */
+    button1->setAttribute(Qt::WA_TouchPadAcceptSingleTouchEvents);
 
     button2->setAttribute(Qt::WA_AcceptTouchEvents);
-    /* button2->setAttribute(Qt::WA_TouchPadAcceptSingleTouchEvents); */
+    button2->setAttribute(Qt::WA_TouchPadAcceptSingleTouchEvents);
 
     QVBoxLayout* layout = new QVBoxLayout();
 
@@ -79,10 +82,10 @@ int main(int argc, char** argv)
     frame->setLayout(layout);
 
     button1->setAttribute(Qt::WA_AcceptTouchEvents);
-    /* button1->setAttribute(Qt::WA_TouchPadAcceptSingleTouchEvents); */
+    button1->setAttribute(Qt::WA_TouchPadAcceptSingleTouchEvents);
 
     button2->setAttribute(Qt::WA_AcceptTouchEvents);
-    /* button2->setAttribute(Qt::WA_TouchPadAcceptSingleTouchEvents); */
+    button2->setAttribute(Qt::WA_TouchPadAcceptSingleTouchEvents);
 
     auto td = QTouchDevice::devices();
 
