@@ -87,6 +87,7 @@ public:
           break;
 
         case QEvent::Type::MouseButtonPress:
+        case QEvent::Type::MouseButtonDblClick:
           if(static_cast<QMouseEvent*>(_event)->source() != 
               Qt::MouseEventSource::MouseEventNotSynthesized)
           {
@@ -128,6 +129,7 @@ public:
           break;
 
         case QEvent::Type::MouseButtonPress:
+        case QEvent::Type::MouseButtonDblClick:
           ret = true;
           break;
 
