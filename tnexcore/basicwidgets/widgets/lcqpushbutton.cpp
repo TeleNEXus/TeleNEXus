@@ -200,6 +200,9 @@ LCQPushButton::LCQPushButton(
   mpLocal(new SLocalData())
 {
 
+  setAttribute(Qt::WidgetAttribute::WA_AcceptTouchEvents, true);
+
+
   installEventFilter(new CEventFilter(_pushActions, _releaseActions, this));
 
   /* ld.pushActions = _pushActions; */
