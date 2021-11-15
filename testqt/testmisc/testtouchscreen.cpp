@@ -26,6 +26,15 @@ public:
   {
 
 
+    auto get_point = 
+      [_event]()
+      {
+        QTouchEvent* te = dynamic_cast<QTouchEvent*>(_event);
+        if(te == nullptr) return QPointF(0.0, 0.0);
+        if(te->touchPoints().size() == 0) return QPointF(0.0, 0.0);
+        return (*(te->touchPoints().begin())).pos();
+      };
+
     static QMouseEvent mep(QEvent::MouseButtonPress, QPointF(0.0,0.0), 
         Qt::MouseButton::NoButton, 0, 0);
 
@@ -39,11 +48,13 @@ public:
 
     case QEvent::Type::TouchBegin:
       qDebug() << "Event = " << _event->type();
+      mep.setLocalPos(get_point());
       QApplication::sendEvent(_obj, &mep);
       ret = true;
       break;
     case QEvent::Type::TouchEnd:
       qDebug() << "Event = " << _event->type();
+      mer.setLocalPos(get_point());
       QApplication::sendEvent(_obj, &mer);
       ret = true;
       break;
