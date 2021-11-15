@@ -12,6 +12,7 @@
 #include <QDebug>
 #include <QTouchDevice>
 #include <QList>
+#include <QMouseEvent>
 
 
 //------------------------------------------------------------------------------
@@ -23,18 +24,28 @@ public:
   }
   virtual bool eventFilter(QObject* _obj, QEvent* _event) override
   {
-    Q_UNUSED(_obj);
+
+
+    static QMouseEvent mep(QEvent::MouseButtonPress, QPointF(0.0,0.0), 
+        Qt::MouseButton::NoButton, 0, 0);
+
+    static QMouseEvent mer(QEvent::MouseButtonRelease, QPointF(0.0, 0.0), 
+        Qt::MouseButton::NoButton, 0, 0);
 
     bool ret = false;
+
     switch(_event->type())
     {
 
     case QEvent::Type::TouchBegin:
       qDebug() << "Event = " << _event->type();
+      QApplication::sendEvent(_obj, &mep);
       ret = true;
       break;
     case QEvent::Type::TouchEnd:
       qDebug() << "Event = " << _event->type();
+      QApplication::sendEvent(_obj, &mer);
+      ret = true;
       break;
     case QEvent::Type::TouchUpdate:
       qDebug() << "Event = " << _event->type();
@@ -76,6 +87,8 @@ public:
 
     case QEvent::Type::TouchBegin:
       qDebug() << "Event = " << _event->type();
+
+
       ret = true;
       break;
     case QEvent::Type::TouchEnd:
