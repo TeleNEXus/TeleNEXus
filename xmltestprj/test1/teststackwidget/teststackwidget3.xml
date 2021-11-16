@@ -15,7 +15,16 @@
             <release>
               <writeData data="localsource:test_string:string" value="Frame widget release"/>
             </release>
+
+            <!-- <show> -->
+            <!--   <writeData data="localsource:test_string1:string" value="Frame widget show"/> -->
+            <!-- </show> -->
+
+            <!-- <hide> -->
+            <!--   <writeData data="localsource:test_string2:string" value="Frame widget hide"/> -->
+            <!-- </hide> -->
           </events>
+
 
 
           <widgets>
@@ -25,27 +34,23 @@
               style="(...){ color:yellow; background:red;}" 
               data="localsource:listwidgetitem:string">
 
-              <!-- <events> -->
+                  <events>
+                    <press delay="500">
+                      <writeData data="localsource:test_string:string" value="Stacked widget press"/>
+                    </press>
 
-              <!--     <press delay="500"> -->
-              <!--       <!-1- <controlScript scriptId="testlaunch1" scriptAction="launch(500)"/> -1-> -->
-              <!--       <writeData data="localsource:test_string1:string" value="stack widget press"/> -->
-              <!--     </press> -->
+                    <release>
+                      <writeData data="localsource:test_string:string" value="Stacked widget release"/>
+                    </release>
 
-              <!--     <release> -->
-              <!--       <!-1- <controlScript scriptId="testlaunch1" scriptAction="stop"/> -1-> -->
-              <!--       <writeData data="localsource:test_string1:string" value="stack widget release"/> -->
-              <!--     </release> -->
+                    <!-- <show> -->
+                    <!--   <writeData data="localsource:test_string1:string" value="Stacked widget show"/> -->
+                    <!-- </show> -->
 
-              <!--     <!-1- <show> -1-> -->
-              <!--     <!-1-   <controlScript scriptId="testlaunch1" scriptAction="launch(500)"/> -1-> -->
-              <!--     <!-1- </show> -1-> -->
-
-              <!--     <!-1- <hide> -1-> -->
-              <!--     <!-1-   <controlScript scriptId="testlaunch1" scriptAction="stop"/> -1-> -->
-              <!--     <!-1- </hide> -1-> -->
-
-              <!-- </events> -->
+                    <!-- <hide> -->
+                    <!--   <writeData data="localsource:test_string2:string" value="Stacked widget hide"/> -->
+                    <!-- </hide> -->
+                  </events>
 
               <itemUndef>
                 <Label text="Undefined Item" />

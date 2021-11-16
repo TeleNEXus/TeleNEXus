@@ -40,13 +40,20 @@ private:
 
   TActionsMap mActionsMap;
   QTimer* mpTimer;
+  enum class EStatePress
+  {
+    released,
+    pressed
+  };
+  EStatePress mStatePress;
+  QEvent* mpCurrentEvent;
 
   LQEventsFilter() = delete;
   LQEventsFilter(const TActionsMap& _actionsMap, QObject* _parent = nullptr);
 public:
   virtual ~LQEventsFilter();
   virtual bool eventFilter(QObject* _obj, QEvent* _event) override;
-  static void install(QObject* _target, const QDomElement& _element, const LIApplication& _app);
+  static void install(QWidget* _target, const QDomElement& _element, const LIApplication& _app);
 };
 
 #endif
