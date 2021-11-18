@@ -47,6 +47,7 @@ private:
   };
   EStatePress mStatePress;
   QEvent* mpCurrentEvent;
+  bool mReturnFlag;
 
   LQEventsFilter() = delete;
   LQEventsFilter(const TActionsMap& _actionsMap, QObject* _parent = nullptr);
