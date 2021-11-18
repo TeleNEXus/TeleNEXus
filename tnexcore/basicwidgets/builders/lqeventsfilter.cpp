@@ -166,25 +166,36 @@ void LQEventsFilter::install(
     auto press_handler = 
       [filter, press_actions]()
       {
-        filter->mStatePress = EStatePress::pressed;
+        /* filter->mStatePress = EStatePress::pressed; */
+        /* if(press_actions.size() != 0) */
+        /* { */
+        /*   filter->mpTimer->start(); */
+        /*   filter->mReturnFlag = true; */
+        /* } */
         filter->mpTimer->start();
+        filter->mReturnFlag = true;
       };
 
     auto release_handler = 
       [filter, release_actions]()
       {
         qDebug() << "Release handler 0";
-        filter->mStatePress = EStatePress::released;
+        /* filter->mStatePress = EStatePress::released; */
 
         if(filter->mpTimer->isActive())
         {
           qDebug() << "Release handler 1";
           filter->mpTimer->stop();
+          filter->mReturnFlag = true;
         }
         else
         {
           qDebug() << "Release handler 2";
-          s_ExecuteActions(release_actions);
+          if(release_actions.size() != 0)
+          {
+            s_ExecuteActions(release_actions);
+            filter->mReturnFlag = true;
+          }
         }
       };
 
@@ -207,8 +218,6 @@ void LQEventsFilter::install(
     TActions actions_mouse_press = TActions() << 
       [filter, press_handler]()
       {
-
-
 
         QMouseEvent* me = dynamic_cast<QMouseEvent*>(filter->mpCurrentEvent);
 
@@ -269,7 +278,9 @@ bool LQEventsFilter::eventFilter(QObject* _obj, QEvent* _event)
 
   mpCurrentEvent = _event;
 
+  mReturnFlag = false;
+
   s_ExecuteActions(actions_it.value());
 
-  return false;
+  return mReturnFlag;
 }

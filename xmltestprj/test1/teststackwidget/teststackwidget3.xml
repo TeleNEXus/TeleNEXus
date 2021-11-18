@@ -36,11 +36,11 @@
 
                   <events>
                     <press delay="500">
-                      <writeData data="localsource:test_string:string" value="Stacked widget press"/>
+                      <writeData data="localsource:test_string2:string" value="Stacked widget press"/>
                     </press>
 
                     <release>
-                      <writeData data="localsource:test_string:string" value="Stacked widget release"/>
+                      <writeData data="localsource:test_string2:string" value="Stacked widget release"/>
                     </release>
 
                     <!-- <show> -->
