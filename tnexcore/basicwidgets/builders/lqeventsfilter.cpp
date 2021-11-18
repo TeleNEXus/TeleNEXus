@@ -260,7 +260,9 @@ void LQEventsFilter::install(
 bool LQEventsFilter::eventFilter(QObject* _obj, QEvent* _event)
 {
   Q_UNUSED(_obj);
+
   auto actions_it = mActionsMap.find(_event->type());
+
   if(actions_it == mActionsMap.end()) return false;
 
   if(actions_it.value().size() == 0) return false;
@@ -269,5 +271,5 @@ bool LQEventsFilter::eventFilter(QObject* _obj, QEvent* _event)
 
   s_ExecuteActions(actions_it.value());
 
-  return true;
+  return false;
 }
