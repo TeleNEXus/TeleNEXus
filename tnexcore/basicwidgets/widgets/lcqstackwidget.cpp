@@ -77,13 +77,31 @@ LCQStackWidget::LCQStackWidget(
 {
   mpLocal = new CLocalData;
 
+  static int counter = 0;
   auto read_handler =
       [this](QSharedPointer<QByteArray> _data, 
           LIRemoteDataReader::EReadStatus _dataStatus)
       {
+
+        auto set_index = 
+          [this](int _index)
+          {
+            if(_index != currentIndex()) 
+            {
+              setCurrentIndex(_index);
+              counter++;
+            }
+            QWidget* cw = currentWidget();
+            if(cw != nullptr)
+            {
+              qDebug() << "Set current counter = " << counter;
+              /* cw->update(); */
+            }
+          };
+
         if(_dataStatus != LIRemoteDataReader::EReadStatus::Valid) 
         {
-          setCurrentIndex(ld.indexUndef);
+          set_index(ld.indexUndef);
           return;
         }
 
@@ -91,11 +109,10 @@ LCQStackWidget::LCQStackWidget(
 
         if(it == ld.mValueIndex.end())
         {
-          setCurrentIndex(ld.indexWrong);
+          set_index(ld.indexWrong);
           return;
         }
-
-        setCurrentIndex(it.value());
+        set_index(it.value());
       };
 
   if(_source.isNull()) return;
