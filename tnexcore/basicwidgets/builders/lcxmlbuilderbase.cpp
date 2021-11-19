@@ -44,23 +44,24 @@ static const struct
   QString style = "style";
 }__slAttributes;
 
-//==============================================================================CMovieAccess
-class CMovieAccess final : public LIMovieAccess
+
+//==============================================================================CMovieCtrl
+class CMovieCtrl
 {
 private:
   QMovie* mpMovie;
   int mStartCounter;
 public:
-  CMovieAccess() = delete;
-  CMovieAccess(QMovie* _movie) : 
+  CMovieCtrl() = delete;
+  CMovieCtrl(QMovie* _movie) : 
     mpMovie(_movie),
     mStartCounter(0)
   {
     mpMovie->jumpToFrame(0);
   }
-  virtual ~CMovieAccess(){ mpMovie->deleteLater(); }
-  virtual QMovie* getMovie() override { return mpMovie; }
-  virtual void start() override
+  ~CMovieCtrl(){ mpMovie->deleteLater(); }
+  QMovie* getMovie() { return mpMovie; }
+  void start() 
   {
     if(mStartCounter == 0) 
     {
@@ -69,13 +70,52 @@ public:
     mStartCounter++;
   }
 
-  virtual void stop() override
+  void stop()
   {
     mStartCounter--;
     if(mStartCounter <= 0)
     {
       mStartCounter = 0;
       mpMovie->stop();
+    }
+  }
+};
+
+//==============================================================================CMovieAccess
+class CMovieAccess final : public LIMovieAccess
+{
+private:
+  QSharedPointer<CMovieCtrl> mspMovieCtrl;
+  bool mStartFlag;
+
+public:
+  CMovieAccess() = delete;
+
+  CMovieAccess(QSharedPointer<CMovieCtrl> _movieCtrl) : 
+    mspMovieCtrl(_movieCtrl)
+    ,mStartFlag(false)
+  {
+  }
+
+  virtual ~CMovieAccess(){}
+
+  virtual QMovie* getMovie() override { return mspMovieCtrl->getMovie(); }
+
+  virtual void start() override
+  {
+    if(!mStartFlag) 
+    {
+      mspMovieCtrl->start();
+      mStartFlag = true;
+    }
+  }
+
+  virtual void stop() override
+  {
+    if(mStartFlag) 
+    {
+      mspMovieCtrl->stop();
+      mStartFlag = false;
     }
   }
 };
@@ -293,25 +333,29 @@ void LCXmlBuilderBase::setWidgetStyle(
 
 
 //==============================================================================
-static QMap<QString, QSharedPointer<CMovieAccess>> __slMovies;
+static QMap<QString, QSharedPointer<CMovieCtrl>> __slMovies;
 //------------------------------------------------------------------------------
-  QSharedPointer<LIMovieAccess> 
+QSharedPointer<LIMovieAccess> 
 LCXmlBuilderBase::getMovie(const QString& _movieFile)
 {
   auto it = __slMovies.find(_movieFile);
+
   if(it != __slMovies.end())
   {
-    return it.value();
+    return QSharedPointer<LIMovieAccess>(new CMovieAccess(it.value()));
   }
+
   QMovie* movie = new QMovie(_movieFile);
+
   if(!movie->isValid())
   {
     delete movie;
     return QSharedPointer<LIMovieAccess>();
   }
-  auto ret = QSharedPointer<CMovieAccess>(new CMovieAccess(movie));
-  __slMovies.insert(_movieFile, ret);
-  return ret;
+
+  auto movie_ctrl = QSharedPointer<CMovieCtrl>(new CMovieCtrl(movie));
+  __slMovies.insert(_movieFile, movie_ctrl);
+  return QSharedPointer<LIMovieAccess>(new CMovieAccess(movie_ctrl));
 }
 
 //==============================================================================
