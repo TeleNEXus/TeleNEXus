@@ -88,13 +88,13 @@ LCQStackWidget::LCQStackWidget(
           {
             if(_index != currentIndex()) 
             {
+              qDebug() << "Set current index counter = " << counter;
               setCurrentIndex(_index);
               counter++;
             }
             QWidget* cw = currentWidget();
             if(cw != nullptr)
             {
-              qDebug() << "Set current counter = " << counter;
               /* cw->update(); */
             }
           };
