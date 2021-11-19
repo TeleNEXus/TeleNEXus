@@ -92,11 +92,11 @@ LCQStackWidget::LCQStackWidget(
               setCurrentIndex(_index);
               counter++;
             }
-            QWidget* cw = currentWidget();
-            if(cw != nullptr)
-            {
-              /* cw->update(); */
-            }
+            /* QWidget* cw = currentWidget(); */
+            /* if(cw != nullptr) */
+            /* { */
+            /*   /1* cw->update(); *1/ */
+            /* } */
           };
 
         if(_dataStatus != LIRemoteDataReader::EReadStatus::Valid) 
