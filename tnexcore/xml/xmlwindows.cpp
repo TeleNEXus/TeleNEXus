@@ -275,11 +275,11 @@ static LCWindow* uploadWindow(QWidget* _widget, const QDomElement& _element)
 
   window->setTitle(get_title(_element));
   window->setIcon(get_icon(_element));
-  window->setShowMode(get_show_mode(_element));
   window->setModality(get_modality(_element));
   window->setFlags(get_flags(_element));
   window->setSize(get_size(_element, window->getSize()));
   window->setPosition(get_position(_element) + get_screen_origin(_element));
+  window->setShowMode(get_show_mode(_element));
 
   return window;
 }
