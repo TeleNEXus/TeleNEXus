@@ -76,8 +76,6 @@ LCQStackWidget::LCQStackWidget(
   QStackedWidget(_parent)
 {
   mpLocal = new CLocalData;
-
-  static int counter = 0;
   auto read_handler =
       [this](QSharedPointer<QByteArray> _data, 
           LIRemoteDataReader::EReadStatus _dataStatus)
@@ -88,15 +86,8 @@ LCQStackWidget::LCQStackWidget(
           {
             if(_index != currentIndex()) 
             {
-              qDebug() << "Set current index counter = " << counter;
               setCurrentIndex(_index);
-              counter++;
             }
-            /* QWidget* cw = currentWidget(); */
-            /* if(cw != nullptr) */
-            /* { */
-            /*   /1* cw->update(); *1/ */
-            /* } */
           };
 
         if(_dataStatus != LIRemoteDataReader::EReadStatus::Valid) 
@@ -122,23 +113,6 @@ LCQStackWidget::LCQStackWidget(
   ld.mDataFormatter = _formatter;
 
   ld.mDataReader->setHandler(read_handler);
-
-  /* connect(&(ld.timer), &QTimer::timeout, */ 
-  /*     [this]() */
-  /*     { */
-  /*       emit press(); */
-
-  /*       static QMouseEvent event = QMouseEvent( */
-  /*           QEvent::Type::MouseButtonPress, */
-  /*           QPointF(), */
-  /*           QPointF(), */
-  /*           Qt::MouseButton::LeftButton, */
-  /*           Qt::MouseButtons(), */
-  /*           Qt::KeyboardModifiers() */
-  /*           ); */
-  /*       QGuiApplication::sendEvent(this->currentWidget(), &event); */
-  /*     }); */
-  /* installEventFilter(this); */
 }
 
 LCQStackWidget::~LCQStackWidget()
