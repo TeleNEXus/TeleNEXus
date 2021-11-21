@@ -158,20 +158,12 @@ void LQEventsFilter::install(
     QObject::connect(filter->mpTimer, &QTimer::timeout, 
         [press_actions]()
         {
-          qDebug() << "Mouse delay action press.";
           s_ExecuteActions(press_actions);
         });
-
 
     auto press_handler = 
       [filter, press_actions]()
       {
-        /* filter->mStatePress = EStatePress::pressed; */
-        /* if(press_actions.size() != 0) */
-        /* { */
-        /*   filter->mpTimer->start(); */
-        /*   filter->mReturnFlag = true; */
-        /* } */
         filter->mpTimer->start();
         filter->mReturnFlag = true;
       };
@@ -179,18 +171,13 @@ void LQEventsFilter::install(
     auto release_handler = 
       [filter, release_actions]()
       {
-        qDebug() << "Release handler 0";
-        /* filter->mStatePress = EStatePress::released; */
-
         if(filter->mpTimer->isActive())
         {
-          qDebug() << "Release handler 1";
           filter->mpTimer->stop();
           filter->mReturnFlag = true;
         }
         else
         {
-          qDebug() << "Release handler 2";
           if(release_actions.size() != 0)
           {
             s_ExecuteActions(release_actions);
@@ -230,14 +217,12 @@ void LQEventsFilter::install(
         {
           return;
         }
-        qDebug() << "Mouse action press.";
         press_handler();
       };
 
     TActions actions_mouse_release = TActions() << 
       [filter, release_handler]()
       {
-        qDebug() << "Mouse action release 0";
         QMouseEvent* me = dynamic_cast<QMouseEvent*>(filter->mpCurrentEvent);
 
         if(me == nullptr) 
@@ -245,13 +230,11 @@ void LQEventsFilter::install(
           return;
         }
 
-        qDebug() << "Mouse action release 1";
         if(me->source() != Qt::MouseEventSource::MouseEventNotSynthesized) 
         {
           return;
         }
 
-        qDebug() << "Mouse action release 2";
         release_handler();
       };
 

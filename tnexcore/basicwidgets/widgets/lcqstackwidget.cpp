@@ -76,6 +76,9 @@ LCQStackWidget::LCQStackWidget(
   QStackedWidget(_parent)
 {
   mpLocal = new CLocalData;
+
+
+
   auto read_handler =
       [this](QSharedPointer<QByteArray> _data, 
           LIRemoteDataReader::EReadStatus _dataStatus)
@@ -113,6 +116,7 @@ LCQStackWidget::LCQStackWidget(
   ld.mDataFormatter = _formatter;
 
   ld.mDataReader->setHandler(read_handler);
+  this->installEventFilter(this);
 }
 
 LCQStackWidget::~LCQStackWidget()
@@ -143,32 +147,22 @@ void LCQStackWidget::addWidgetWrong(QWidget* _widget)
   _widget->installEventFilter(this);
 }
 
-void LCQStackWidget::setActive(bool _flag)
+bool LCQStackWidget::eventFilter(QObject* _obj, QEvent* _event)
 {
-  if(_flag)
-  {
-    ld.mDataReader->connectToSource();
-  }
-  else
-  {
-    ld.mDataReader->disconnectFromSource();
-  }
-}
-
-bool LCQStackWidget::event(QEvent *_event)
-{
+  Q_UNUSED(_obj);
   switch(_event->type())
   {
   case QEvent::Type::Show:
-    setActive(true);
+    ld.mDataReader->connectToSource();
     break;
 
   case QEvent::Type::Hide:
-    setActive(false);
+    ld.mDataReader->disconnectFromSource();
     break;
 
   default:
     break;
   }
-  return QStackedWidget::event(_event);
+  return false;
 }
+
