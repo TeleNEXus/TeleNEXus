@@ -54,8 +54,6 @@ public:
   void addWidget(QWidget* _widget, const QString& _matching);
   void addWidgetUndef(QWidget* _widget);
   void addWidgetWrong(QWidget* _widget);
-  virtual bool event(QEvent *e) override;
-private:
-  void setActive(bool _flag);
+  virtual bool eventFilter(QObject* _obj, QEvent* _event) override;
 };
 #endif /*LCQSTACKEDWIDGET_H_ */
