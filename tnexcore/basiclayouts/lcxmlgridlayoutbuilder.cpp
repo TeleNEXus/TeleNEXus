@@ -83,17 +83,41 @@ QLayout* LCXmlGridLayoutBuilder::build(
     QGridLayout* layout = new QGridLayout;
     CBuildData buildData(layout);
 
+
     //Глобальная инициализация компоновщика.
-    QString attr = _element.attribute(mAttributes.spacing);
+    QString attr = _element.attribute(mAttributes.vspacing);
     if(!attr.isNull())
     {
         bool flag = false;
         int spacing = attr.toInt(&flag);
         if(flag)
         {
-            buildData.mpLayout->setSpacing(spacing);
+            buildData.mpLayout->setVerticalSpacing(spacing);
         }
     }
+
+    attr = _element.attribute(mAttributes.hspacing);
+    if(!attr.isNull())
+    {
+        bool flag = false;
+        int spacing = attr.toInt(&flag);
+        if(flag)
+        {
+            buildData.mpLayout->setHorizontalSpacing(spacing);
+        }
+    }
+
+
+    /* QString attr = _element.attribute(mAttributes.spacing); */
+    /* if(!attr.isNull()) */
+    /* { */
+    /*     bool flag = false; */
+    /*     int spacing = attr.toInt(&flag); */
+    /*     if(flag) */
+    /*     { */
+    /*         buildData.mpLayout->setSpacing(spacing); */
+    /*     } */
+    /* } */
 
     for(    QDomNode node = _element.firstChild(); 
             !node.isNull(); 
