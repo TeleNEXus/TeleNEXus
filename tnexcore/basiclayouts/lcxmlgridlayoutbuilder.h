@@ -31,7 +31,6 @@ class LCXmlGridLayoutBuilder : public LIXmlLayoutBuilder
 public:
     struct SAttributes
     {
-        QString spacing     = "spacing";
         QString hspacing    = "hspacing";
         QString vspacing    = "vspacing";
         QString value       = "value";

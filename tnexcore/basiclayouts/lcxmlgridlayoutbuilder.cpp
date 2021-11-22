@@ -107,18 +107,6 @@ QLayout* LCXmlGridLayoutBuilder::build(
         }
     }
 
-
-    /* QString attr = _element.attribute(mAttributes.spacing); */
-    /* if(!attr.isNull()) */
-    /* { */
-    /*     bool flag = false; */
-    /*     int spacing = attr.toInt(&flag); */
-    /*     if(flag) */
-    /*     { */
-    /*         buildData.mpLayout->setSpacing(spacing); */
-    /*     } */
-    /* } */
-
     for(    QDomNode node = _element.firstChild(); 
             !node.isNull(); 
             node = node.nextSiblingElement())
