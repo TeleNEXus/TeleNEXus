@@ -37,13 +37,20 @@
 #include <qnamespace.h>
 
 //==============================================================================
-const struct
+static const struct
 {
   QString data = "data";
   QString dataRead = "dataRead";
   QString dataWrite = "dataWrite";
   QString keyboard = "keyboard";
+  QString echoMode = "echoMode";
 } __slAttributes;
+
+static const struct
+{
+  QString normal = "normal";
+  QString password = "password";
+}__slEchoModes;
 
 //==============================================================================
 LCXmlDataLineEditBuilder::LCXmlDataLineEditBuilder()
@@ -66,6 +73,7 @@ QWidget* LCXmlDataLineEditBuilder::buildLocal(
   QSharedPointer<LIRemoteDataWriter> data_writer;
   QSharedPointer<LIDataFormatter> read_formatter;
   QSharedPointer<LIDataFormatter> write_formatter;
+  QString echo_mode;
 
   auto ret_wrong = 
     []()
@@ -86,6 +94,17 @@ QWidget* LCXmlDataLineEditBuilder::buildLocal(
           read_formatter, 
           data_writer, 
           write_formatter);
+
+      //set echo mode
+      QString attr_echo_mode = _element.attribute(__slAttributes.echoMode);
+
+      if(!attr_echo_mode.isNull())
+      {
+        if(attr_echo_mode == __slEchoModes.password)
+        {
+          data_line_edit->setEchoMode(QLineEdit::EchoMode::Password);
+        }
+      }
 
       //install keyboard
       QString attr_keyboard = _element.attribute(__slAttributes.keyboard);

@@ -50,7 +50,7 @@
     visible="false"
     title="Digital Keyboard" 
     showMode="normal"
-    modality="true"
+    modality="false"
     flags="stayOnTop" 
     position="300;600" />
 

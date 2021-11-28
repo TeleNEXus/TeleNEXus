@@ -71,7 +71,7 @@ LCQDataLineEdit::LCQDataLineEdit(
       _readFormatter, 
       _dataWriter, 
       _writeFormatter);
-
+  
   QString str = "Undef";
   setText(str);
   setValidator(ld.writeFormatter->validator());
