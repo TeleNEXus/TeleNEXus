@@ -46,6 +46,7 @@
 
   <string id="keyboard_data" defval="Keyboard data"/>
   <stream id="keyboard_stream"/>
+  <string id="empty_string" defval=""/>
 
   <stream id="test_stream"/>
 

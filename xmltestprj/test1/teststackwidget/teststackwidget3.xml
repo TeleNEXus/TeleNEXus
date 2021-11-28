@@ -144,6 +144,18 @@
           <LayoutVBox>
             <widgets>
               <Label    data="localsource:listwidgetitem:string" />
+
+              <LineEdit dataWrite="localsource:keyboard_stream:string" 
+                dataRead="localsource:empty_string:string"
+                echoMode="password">
+                <events>
+                  <press delay="0">
+                    <!-- <controlScript scriptId="testlaunch1" scriptAction="launch(500)"/> -->
+                    <writeData data="localsource:test_string3:string" value="Line Edit press"/>
+                  </press>
+                </events>
+              </LineEdit>
+
               <LineEdit data="localsource:listwidgetitem:string" >
                 <events>
                   <press delay="0">
