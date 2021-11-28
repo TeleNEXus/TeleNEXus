@@ -32,13 +32,13 @@
 #include <QValidator>
 
 using TWindow = QWeakPointer<LIWindow>; 
-using TRemoteSource = LCKeyboard::TRemoteSource;
+using TSource = LCKeyboard::TSource;
 
 using LTAction = LCKeyboard::LTAction;
 
 
-using TRemoteReader = QSharedPointer<LIRemoteDataReader>;
-using TRemoteWriter = QSharedPointer<LIRemoteDataWriter>;
+using TReader = QSharedPointer<LIRemoteDataReader>;
+using TWriter = QSharedPointer<LIRemoteDataWriter>;
 
 using EReadStatus = LIRemoteDataReader::EReadStatus;
 
@@ -60,8 +60,8 @@ struct SLocalData
   const LIApplication& application;
   QString windowId;
   TWindow wpWindow;
-  TRemoteReader streamReader; 
-  TRemoteWriter dataWriter;
+  TReader streamReader; 
+  TWriter dataWriter;
   QString currentData;
   QWeakPointer<LCKeyboardListener> listener;
   QWeakPointer<LCKeyboard> ownPointer;
@@ -104,10 +104,10 @@ public:
 };
 
 //==============================================================================LCKeyboard
-LCKeyboard::LCKeyboard( const QString& _windowId, 
+LCKeyboard::LCKeyboard( 
+    const QString& _windowId, 
     const LIApplication& _app,
-    TRemoteSource _streamSource, const QString& _streamName,
-    TRemoteSource _dataSource, const QString& _dataName)
+    TSource _source, const QString& _stream, const QString& _data)
 {
   mpLocalData = new SLocalData(_app);
 
@@ -197,11 +197,12 @@ LCKeyboard::LCKeyboard( const QString& _windowId,
         listener->mfActionChange(ld.currentData);
       };
 
-  ld.streamReader = _streamSource->createReader(_streamName);
+  ld.streamReader = _source->createReader(_stream);
+
   if(!ld.streamReader.isNull())
   {
     ld.streamReader->setHandler(stream_read_handler);
-    ld.dataWriter = _dataSource->createWriter(_dataName);
+    ld.dataWriter = _source->createWriter(_data);
   }
   else
   {
@@ -274,14 +275,12 @@ bool LCKeyboard::init()
 QSharedPointer<LCKeyboard> LCKeyboard::create(
     const QString& _windowId, 
     const LIApplication& _app,
-    TRemoteSource _streamSource, const QString& _streamName,
-    TRemoteSource _dataSource, const QString& _dataName)
+    TSource _source, const QString& _stream, const QString& _data)
 {
   auto keyboard = QSharedPointer<LCKeyboard>(
       new LCKeyboard(_windowId, 
         _app,
-        _streamSource, _streamName, 
-        _dataSource, _dataName));
+        _source, _stream, _data));
   toLocalData(keyboard->mpLocalData)->ownPointer = keyboard;
   return keyboard;
 }

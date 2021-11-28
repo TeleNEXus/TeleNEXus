@@ -31,15 +31,16 @@ class LIApplication;
 class LCKeyboard : public LIKeyboard
 {
 public:
-  using TRemoteSource = QSharedPointer<LIRemoteDataSource>;
+  using TSource = QSharedPointer<LIRemoteDataSource>;
 private:
   void* mpLocalData;
 private:
     LCKeyboard() = delete;
     LCKeyboard( const QString& _windowId, 
         const LIApplication& _app,
-        TRemoteSource _streamSource, const QString& _streamName,
-        TRemoteSource _dataSource, const QString& _dataName);
+        TSource _source, 
+        const QString& _stream, 
+        const QString& _data);
 public:
     virtual ~LCKeyboard();
     virtual QSharedPointer<LIKeyboardListener> 
@@ -54,8 +55,9 @@ public:
     static QSharedPointer<LCKeyboard> create(
         const QString& _windowId, 
         const LIApplication& _app,
-        TRemoteSource _streamSource, const QString& _streamName,
-        TRemoteSource _dataSource, const QString& _dataName);
+        TSource _source, 
+        const QString& _stream,
+        const QString& _data);
 
     friend class LCKeyboardListener;
 };
