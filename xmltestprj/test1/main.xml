@@ -30,13 +30,19 @@
 
   <SCRIPTS file="scripts.xml"/>
 
+  <KEYBOARD 
+    id="DigitalKeyboard" 
+    window="digitalkeyboard1"
+    source="localsource" 
+    stream="keyboard_stream"
+    data="keyboard_data" />
 
-    <KEYBOARD 
-      id="DigitalKeyboard" 
-      window="digitalkeyboard1"
-      source="localsource" 
-      stream="keyboard_stream"
-      data="keyboard_data" />
+
+  <SECURITY>
+    <access id="user"  level="0" password="puser"/>
+    <access id="admin" level="1" password="padmin"/>
+  </SECURITY>
+
 
     <!-- <KEYBOARD --> 
     <!--   id="DigitalKeyboard" window="digitalkeyboard1" -->
@@ -54,6 +60,18 @@
     flags="stayOnTop" 
     position="300;600" />
 
+  <WINDOW 
+    file="testsecurity/security1.xml" 
+    id="test security 1" 
+    visible="true"
+    title="Test security 1" 
+    showMode="normal"
+    modality="false"
+    flags="" 
+    size="200;300"
+    screen="0"
+    position="0;0"
+    />
 
   <!-- <WINDOW --> 
   <!--   file="testframe/testframe1.xml" --> 
@@ -68,18 +86,18 @@
   <!--   position="0;0" -->
   <!--   /> -->
 
-  <WINDOW 
-    file="teststackwidget/teststackwidget3.xml" 
-    id="test stack widget 3" 
-    visible="true"
-    title="Test Stack Widget 3" 
-    showMode="normal"
-    modality="false"
-    flags="" 
-    size="900;700"
-    screen="0"
-    position="0;0"
-    />
+  <!-- <WINDOW --> 
+  <!--   file="teststackwidget/teststackwidget3.xml" --> 
+  <!--   id="test stack widget 3" --> 
+  <!--   visible="true" -->
+  <!--   title="Test Stack Widget 3" --> 
+  <!--   showMode="normal" -->
+  <!--   modality="false" -->
+  <!--   flags="" --> 
+  <!--   size="900;700" -->
+  <!--   screen="0" -->
+  <!--   position="0;0" -->
+  <!--   /> -->
 
   <!-- <!-1- <WINDOW -1-> --> 
   <!-- <!-1-   file="teststackwidget/teststackwidget1.xml" -1-> --> 
@@ -149,17 +167,17 @@
   <!--   position="150;150" -->
   <!--   /> -->
 
-  <WINDOW 
-    file="testkeyboard/testkeyboardinput1.xml" 
-    id="testkeyboardinput1" 
-    visible="true"
-    title="Test keyboard input" 
-    showMode="normal"
-    modality="false"
-    flags="" 
-    size="300;300"
-    position="100;100"
-    />
+  <!-- <WINDOW --> 
+  <!--   file="testkeyboard/testkeyboardinput1.xml" --> 
+  <!--   id="testkeyboardinput1" --> 
+  <!--   visible="true" -->
+  <!--   title="Test keyboard input" --> 
+  <!--   showMode="normal" -->
+  <!--   modality="false" -->
+  <!--   flags="" --> 
+  <!--   size="300;300" -->
+  <!--   position="100;100" -->
+  <!--   /> -->
 
   <!--   <!-1- flags="stayOnTop;frameless" -1-> --> 
   <!--   <!-1- size="50;50" -1-> -->
