@@ -85,6 +85,8 @@ flags = [
              '-isystem',
              '/usr/include/x86_64-linux-gnu/qt5/QtQml',
              '-isystem',
+             '/usr/include/x86_64-linux-gnu/qt5/QtMultimedia',
+             '-isystem',
              '/usr/include/x86_64-linux-gnu/qt5/QtScript',
              '-I', '.',
              '-isystem',

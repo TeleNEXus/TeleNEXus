@@ -1,6 +1,8 @@
 QT += gui
 QT += widgets
 QT += qml 
+QT += multimedia
+
 # QT += script
 
 CONFIG += console c++11
@@ -26,7 +28,8 @@ INCLUDEPATH +=                                  \
 
 # SOURCES += ./memsetmain.cpp 
 # SOURCES += ../../plugins/modbussource/modbus/lcmemoryreadset.cpp
-SOURCES += testtouchscreen.cpp \
+# SOURCES += testtouchscreen.cpp \
+SOURCES += testsound.cpp \
 # SOURCES += testscreen.cpp \
 # SOURCES += main.cpp \
 # SOURCES +=  ./regexpr.cpp \

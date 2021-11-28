@@ -39,10 +39,9 @@ static const struct
 static const struct
 {
   QString id = "id";
-  QString streamSource = "streamSource"; 
-  QString streamName = "streamName";
-  QString dataSource = "dataSource";
-  QString dataName = "dataName";
+  QString source = "source"; 
+  QString stream = "stream";
+  QString data = "data";
   QString window = "window";
 }__slAttributes;
 
@@ -69,62 +68,43 @@ void upload( const QDomElement &_rootElement)
       return;
     }
 
-    QString attr_stream_source = _element.attribute(__slAttributes.streamSource);
-    if(attr_stream_source.isNull())
+    QString attr_source = _element.attribute(__slAttributes.source);
+    if(attr_source.isNull())
     {
       __smWarning(
           QString("Keyboard described in line %1 has no attribute %2")
           .arg(_element.lineNumber())
-          .arg(__slAttributes.streamSource));
+          .arg(__slAttributes.source));
       return;
     }
 
-    auto stream_source = app.getDataSource(attr_stream_source);
-    if(stream_source.isNull())
+    auto source = app.getDataSource(attr_source);
+    if(source.isNull())
     {
       __smWarning(
           QString("Can't find stream source '%1' for keyboard described in line %2")
-          .arg(attr_stream_source)
+          .arg(attr_source)
           .arg(_element.lineNumber()));
       return;
     }
 
-    QString attr_stream_name = _element.attribute(__slAttributes.streamName);
+    QString attr_stream_name = _element.attribute(__slAttributes.stream);
     if(attr_stream_name.isNull())
     {
       __smWarning(
           QString("Keyboard described in line %1 has no attribute %2")
           .arg(_element.lineNumber())
-          .arg(__slAttributes.streamName));
+          .arg(__slAttributes.stream));
       return;
     }
 
-    QString attr_data_source = _element.attribute(__slAttributes.dataSource);
-    if(attr_data_source.isNull())
-    {
-      __smWarning(
-          QString("Keyboard described in line %1 has no attribute %2")
-          .arg(_element.lineNumber())
-          .arg(__slAttributes.dataSource));
-      return;
-    }
-    auto data_source = app.getDataSource(attr_data_source);
-    if(data_source.isNull())
-    {
-      __smWarning(
-          QString("Can't find data source '%1' for keyboard described in line %2")
-          .arg(attr_data_source)
-          .arg(_element.lineNumber()));
-      return;
-    }
-
-    QString attr_data_name = _element.attribute(__slAttributes.dataName);
+    QString attr_data_name = _element.attribute(__slAttributes.data);
     if(attr_data_name.isNull())
     {
       __smWarning(
           QString("Keyboard described in line %1 has no attribute %2")
           .arg(_element.lineNumber())
-          .arg(__slAttributes.dataName));
+          .arg(__slAttributes.data));
       return;
     }
 
@@ -141,8 +121,7 @@ void upload( const QDomElement &_rootElement)
     auto keyboard = LCKeyboard::create(
         attr_window, 
         app,
-        stream_source, attr_stream_name, 
-        data_source, attr_data_name);
+        source, attr_stream_name, attr_data_name);
 
 
     if(keyboard.isNull())
@@ -156,16 +135,14 @@ void upload( const QDomElement &_rootElement)
     __smMessage(
       QString("Add keyboard with parameters:" 
         "\n\tKeyboard id:\t%1"
-        "\n\tStream source:\t%2"
-        "\n\tStream name:\t%3"
-        "\n\tData source:\t%4"
-        "\n\tData name:\t%5"
-        "\n\tWindow:\t\t%6\n"
+        "\n\tsource:\t%2"
+        "\n\tStream :\t%3"
+        "\n\tData name:\t%4"
+        "\n\tWindow:\t\t%5\n"
         )
       .arg(attr_id)
-      .arg(attr_stream_source)
+      .arg(attr_source)
       .arg(attr_stream_name)
-      .arg(attr_data_source)
       .arg(attr_data_name)
       .arg(attr_window));
     __slKeyboards.insert(attr_id, keyboard);

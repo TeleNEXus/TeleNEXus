@@ -32,9 +32,11 @@
 
 
     <KEYBOARD 
-      id="DigitalKeyboard" window="digitalkeyboard1"
-      streamSource="localsource" streamName="keyboard_stream"
-      dataSource="localsource" dataName="keyboard_data" />
+      id="DigitalKeyboard" 
+      window="digitalkeyboard1"
+      source="localsource" 
+      stream="keyboard_stream"
+      data="keyboard_data" />
 
     <!-- <KEYBOARD --> 
     <!--   id="DigitalKeyboard" window="digitalkeyboard1" -->
@@ -147,17 +149,17 @@
   <!--   position="150;150" -->
   <!--   /> -->
 
-  <!-- <WINDOW --> 
-  <!--   file="testkeyboard/testkeyboardinput1.xml" --> 
-  <!--   id="testkeyboardinput1" --> 
-  <!--   visible="true" -->
-  <!--   title="Test keyboard input" --> 
-  <!--   showMode="normal" -->
-  <!--   modality="false" -->
-  <!--   flags="" --> 
-  <!--   size="300;300" -->
-  <!--   position="100;100" -->
-  <!--   /> -->
+  <WINDOW 
+    file="testkeyboard/testkeyboardinput1.xml" 
+    id="testkeyboardinput1" 
+    visible="true"
+    title="Test keyboard input" 
+    showMode="normal"
+    modality="false"
+    flags="" 
+    size="300;300"
+    position="100;100"
+    />
 
   <!--   <!-1- flags="stayOnTop;frameless" -1-> --> 
   <!--   <!-1- size="50;50" -1-> -->
