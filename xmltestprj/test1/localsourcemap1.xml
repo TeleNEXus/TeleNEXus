@@ -47,11 +47,12 @@
   <string id="keyboard_data" defval="Keyboard data"/>
   <stream id="keyboard_stream"/>
 
-
   <stream id="test_stream"/>
 
   <stream id="security_password_stream"/>
-  <string id="security_access_id" defval="user"/>
+  <stream id="security_command_stream"/>
+  <string id="security_access_id" defval=""/>
+  <string id="security_message" defval=""/>
   <string id="empty_string" defval=""/>
 
 </localsourcemap>
