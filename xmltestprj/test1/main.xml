@@ -37,9 +37,16 @@
     stream="keyboard_stream"
     data="keyboard_data" />
 
-  <SECURITY source="localsource" password="security_password_stream" access="security_access_id">
+  <SECURITY 
+    source="localsource" 
+    password="security_password_stream" 
+    access="security_access_id"
+    command="security_command_stream"
+    message="security_message">
+
     <access id="user"  level="0" password="puser"/>
     <access id="admin" level="1" password="padmin"/>
+
   </SECURITY>
 
 
@@ -68,10 +75,10 @@
     showMode="normal"
     modality="false"
     flags="" 
-    size="200;300"
     screen="0"
     position="300;0"
     />
+    <!-- size="250;150" -->
 
 
   <!-- <WINDOW --> 
