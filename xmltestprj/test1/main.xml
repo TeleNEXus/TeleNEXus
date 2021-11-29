@@ -37,8 +37,7 @@
     stream="keyboard_stream"
     data="keyboard_data" />
 
-
-  <SECURITY>
+  <SECURITY source="localsource" password="security_password_stream" access="security_access_id">
     <access id="user"  level="0" password="puser"/>
     <access id="admin" level="1" password="padmin"/>
   </SECURITY>
@@ -60,18 +59,33 @@
     flags="stayOnTop" 
     position="300;600" />
 
+
   <WINDOW 
-    file="testsecurity/security1.xml" 
-    id="test security 1" 
+    file="testsecurity/accesswindow1.xml" 
+    id="access_window_1" 
     visible="true"
-    title="Test security 1" 
+    title="Access window 1" 
     showMode="normal"
     modality="false"
     flags="" 
     size="200;300"
     screen="0"
-    position="0;0"
+    position="300;0"
     />
+
+
+  <!-- <WINDOW --> 
+  <!--   file="testsecurity/security1.xml" --> 
+  <!--   id="test security 1" --> 
+  <!--   visible="true" -->
+  <!--   title="Test security 1" --> 
+  <!--   showMode="normal" -->
+  <!--   modality="false" -->
+  <!--   flags="" --> 
+  <!--   size="200;300" -->
+  <!--   screen="0" -->
+  <!--   position="0;0" -->
+  <!--   /> -->
 
   <!-- <WINDOW --> 
   <!--   file="testframe/testframe1.xml" --> 

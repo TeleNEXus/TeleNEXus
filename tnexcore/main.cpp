@@ -30,6 +30,8 @@
 #include "xmlpluginpathes.h"
 #include "xmlwidgetstyles.h"
 #include "xmlglobalstyle.h"
+#include "xmlsecurity.h"
+
 
 #include <QLoggingCategory>
 #include <QDebug>
@@ -243,6 +245,8 @@ int main(int argc, char *argv[])
   xmlwindows::upload(rootElement);
   //----------------------------------------------------
   xmljscripts::upload(rootElement);
+  //----------------------------------------------------
+  xmlsecurity::upload(rootElement);
 
   appinterface.message(QStringLiteral("\n\tEnd deploy of project\n"));
 

@@ -27,10 +27,13 @@
 #include <QEvent>
 #include <QPair>
 #include <QMap>
+#include <QSharedPointer>
 
 class QDomElement;
 class LIApplication;
 class QTimer;
+
+class LIRemoteDataReader;
 
 class LCSecurity
 {
@@ -38,8 +41,12 @@ private:
 
   bool mFlagInit;
   int mCurrentLevel;
-  QMap<QString, QPair<int, QByteArray>> mAccess;
+  QString mAccessId;
+  QMap<QString, QPair<int, QByteArray>> mAccesses;
   QTimer* mpTimer;
+
+  QSharedPointer<LIRemoteDataReader> mspPasswordReader;
+  QSharedPointer<LIRemoteDataReader> mspAccessIdReader;
 
 private:
   LCSecurity();
@@ -52,7 +59,7 @@ public:
   void init(const QDomElement& _element, const LIApplication& _app);
   QObject* createEventFilter(const QDomElement& _element, const QSet<QEvent::Type>& _events) const;
 
-  bool checkAccessLevel(const QString& _accessId);
+  bool checkAccess(const QString& _accessId);
 
 private:
   void autorize(const QString& _accessId, const QString& _password);

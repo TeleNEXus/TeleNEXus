@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<WINDOW>
+  <mainWidget>
+    <Frame>
+      <layout>
+        <LayoutVBox>
+          <widgets>
+
+            <LineEdit data="localsource:security_access_id:string"/>
+
+            <LineEdit 
+              dataWrite="localsource:security_password_stream:string" 
+              dataRead="localsource:empty_string:string"/>
+
+          </widgets>
+          <stretch/>
+        </LayoutVBox>
+      </layout>
+    </Frame>
+  </mainWidget>
+</WINDOW>
+

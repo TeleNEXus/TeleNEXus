@@ -29,6 +29,7 @@ INCLUDEPATH +=                          \
 ../tnexcommon/interfaces/keyboard           \
 ../tnexcommon/                              \
 ./localsource                           \
+./security                              \
 ./window                                \
 ./xml                                   \
 ./common                                \
@@ -54,6 +55,8 @@ localsource/lcqlocalsourcehiden.cpp         \
 localsource/lcxmllocalsourcebuilder.cpp     \
 localsource/lqreadsync.cpp                  \
 localsource/lqwritesync.cpp                 \
+security/lcsecurity.cpp \
+security/lqsecurityfilter.cpp \
 basiclayouts/commonbuilderslayout.cpp \
 basiclayouts/lcxmlboxlayoutbuilder.cpp  \
 basiclayouts/lcxmlgridlayoutbuilder.cpp \
@@ -123,6 +126,7 @@ xml/xmlkeyboards.cpp \
 xml/xmlwindows.cpp \
 xml/xmlpluginpathes.cpp \
 xml/xmlwidgetstyles.cpp \
+xml/xmlsecurity.cpp \
 xml/xmlglobalstyle.cpp \
 keyboard/lckeyboard.cpp \
 window/lcwindow.cpp \
@@ -157,6 +161,8 @@ localsource/lcqlocalsourcehiden.h          \
 localsource/lcxmllocalsourcebuilder.h      \
 localsource/lqreadsync.h                  \
 localsource/lqwritesync.h                 \
+security/lcsecurity.h \
+security/lqsecurityfilter.h \
 basiclayouts/commonbuilderslayout.h \
 basiclayouts/lcxmlboxlayoutbuilder.h    \
 basiclayouts/lcxmlgridlayoutbuilder.h   \
@@ -226,6 +232,7 @@ xml/xmlkeyboards.h \
 xml/xmlwindows.h \
 xml/xmlpluginpathes.h \
 xml/xmlwidgetstyles.h \
+xml/xmlsecurity.h \
 xml/xmlglobalstyle.h \
 keyboard/lckeyboard.h \
 window/lcwindow.h \
