@@ -258,6 +258,7 @@ private:
         mAddress(_addr),
         mSize(_size),
         mNotifier(_notifier){}
+      virtual ~CReadSetData(){}
 
       virtual int getAddress() const override { return mAddress; }
       virtual int getSize() const override { return mSize; }
