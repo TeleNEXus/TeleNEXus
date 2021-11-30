@@ -97,8 +97,18 @@ public:
     if(window.isNull()) return false;
     window->show();
     kd->listener = mwpOwn;
-    kd->dataWriter->writeRequest(_currData.toUtf8());
-    kd->currentData = _currData;
+
+    if(_currData.isNull())
+    {
+      kd->currentData.clear();
+      kd->dataWriter->writeRequest(QStringLiteral("\0").toUtf8());
+    }
+    else
+    {
+      kd->dataWriter->writeRequest(_currData.toUtf8());
+      kd->currentData = _currData;
+    }
+
     return true;
   }
 };

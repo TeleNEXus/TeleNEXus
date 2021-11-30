@@ -37,33 +37,43 @@
     stream="keyboard_stream"
     data="keyboard_data" />
 
+  <KEYBOARD 
+    id="AccessKeyboard" 
+    window="AccessKeyboard"
+    source="localsource" 
+    stream="security_keyboard_stream"
+    data="security_keyboard_data" />
+
+  <!-- <SECURITY --> 
+  <!--   window="access_window_1" -->
+  <!--   resetTime="30" -->
+  <!--   source="localsource" --> 
+  <!--   passwordStream="security_password_stream" --> 
+  <!--   requiredAccess="security_required_access_id" -->
+  <!--   currentAccess="security_current_access_id" -->
+  <!--   command="security_command_stream" -->
+  <!--   noAccess="No authorization"> -->
+
+  <!--   <access id="user"  level="0" password="uuu"/> -->
+  <!--   <access id="admin" level="1" password="aaa"/> -->
+
+  <!-- </SECURITY> -->
+
   <SECURITY 
-    window="access_window_1"
+    window="AccessKeyboard"
     resetTime="30"
     source="localsource" 
-    password="security_password_stream" 
+    passwordKeyboard="AccessKeyboard" 
+    passwordStream="security_password_stream" 
     requiredAccess="security_required_access_id"
     currentAccess="security_current_access_id"
     command="security_command_stream"
     noAccess="No authorization">
 
-  <SECURITY 
-    window="access_window_1"
-    resetTime="30"
-    source="localsource" 
-
-    password="security_password_stream" 
-
-    requiredAccess="security_required_access_id"
-    currentAccess="security_current_access_id"
-    command="security_command_stream"
-    noAccess="No authorization">
-
-    <access id="user"  level="0" password="uuu"/>
-    <access id="admin" level="1" password="aaa"/>
+    <access id="user"  level="0" password="111"/>
+    <access id="admin" level="1" password="222"/>
 
   </SECURITY>
-
 
     <!-- <KEYBOARD --> 
     <!--   id="DigitalKeyboard" window="digitalkeyboard1" -->
@@ -81,6 +91,15 @@
     flags="stayOnTop" 
     position="300;600" />
 
+    <WINDOW 
+    id="AccessKeyboard" 
+    file="testsecurity/accesskeyboard.xml" 
+    visible="false"
+    title="Password Digital Keyboard" 
+    showMode="normal"
+    modality="true"
+    flags="stayOnTop" 
+    position="300;600" />
 
   <WINDOW 
     file="testsecurity/accesswindow1.xml" 

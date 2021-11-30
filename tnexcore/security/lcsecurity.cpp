@@ -25,6 +25,8 @@
 #include "lqsecurityfilter.h"
 #include "applicationinterface.h"
 #include "LIWindow.h"
+#include "LIKeyboard.h"
+#include "LIKeyboardListener.h"
 
 #include <limits>
 #include <QTimer>
@@ -52,6 +54,7 @@ static const struct
 
   QString source          = "source";
   QString passwordStream  = "passwordStream";
+  QString passwordKeyboard = "passwordKeyboard";
   QString command         = "command";
   QString password        = "password";
   QString id              = "id";
@@ -107,7 +110,8 @@ void LCSecurity::init(const QDomElement& _element)
   QString attr;
 
   mWindowId = _element.attribute(__slAttributes.window);
-  if(mWindowId.isNull()) return;
+
+  /* if(mWindowId.isNull()) return; */
 
   //get reset time
   attr = _element.attribute(__slAttributes.resetTime);
@@ -139,11 +143,21 @@ void LCSecurity::init(const QDomElement& _element)
 
   if(source.isNull()) return;
 
+  //get keyboard 
+  attr = _element.attribute(__slAttributes.passwordKeyboard);
+  if(!attr.isNull())
+  {
+    installKeyboard(attr);
+  }
+
   //get password stream
   attr = _element.attribute(__slAttributes.passwordStream);
-  if(attr.isNull()) return;
-  mspPasswordReader = source->createReader(attr);
-  if(this->mspPasswordReader.isNull()) return;
+  if(!attr.isNull()) 
+  {
+    mspPasswordReader = source->createReader(attr);
+  }
+
+  if(mspPasswordReader.isNull() && mspKeyboardListener.isNull()) return;
 
   //get required access data reader
   attr = _element.attribute(__slAttributes.requiredAccess);
@@ -180,15 +194,20 @@ void LCSecurity::init(const QDomElement& _element)
         qDebug() << "Set new access id : " << mAccessId;
       });
 
-  mspPasswordReader->setHandler(
-      [this](QSharedPointer<QByteArray> _data, EReadStatus _status)
-      {
-        if(_status != EReadStatus::Valid) return;
-        QString password = QString::fromUtf8(*_data);
-        qDebug() << "Set password : " << password;
-        if(checkAccess(mAccessId) == true) return;
-        autorize(mAccessId, password);
-      });
+
+  if(!mspPasswordReader.isNull())
+  {
+    mspPasswordReader->setHandler(
+        [this](QSharedPointer<QByteArray> _data, EReadStatus _status)
+        {
+          if(_status != EReadStatus::Valid) return;
+          QString password = QString::fromUtf8(*_data);
+          qDebug() << "Set password : " << password;
+          if(checkAccess(mAccessId) == true) return;
+          autorize(mAccessId, password);
+        });
+    mspPasswordReader->connectToSource();
+  }
 
   mspCommandReader->setHandler(
       [this](QSharedPointer<QByteArray> _data, EReadStatus _status)
@@ -203,7 +222,6 @@ void LCSecurity::init(const QDomElement& _element)
       });
 
   mspRequiredAccessIdReader->connectToSource();
-  mspPasswordReader->connectToSource();
   mspCommandReader->connectToSource();
 
   auto add_access = 
@@ -268,18 +286,13 @@ QObject* LCSecurity::createEventFilter(
       if(checkAccess(_accessId)) 
       {
         qDebug() << "Security filter : access is already avaliable.";
+        mpTimer->start(mResetTime);
         return false;
       }
       qDebug() << "Security filter : access required.";
-      auto window = CApplicationInterface::getInstance().getWindow(mWindowId);
-      if(window.isNull())
-      {
-        qDebug() << 
-          QString("Security filter : Can't find autorize window '%1'").arg(mWindowId);
-        return false;
-      }
       mspRequiredAccessIdWriter->writeRequest(_accessId.toUtf8());
-      window->show();
+
+      showAccessWindow();
       return true;
     };
 
@@ -323,12 +336,9 @@ void LCSecurity::autorize(const QString& _accessId, const QString& _password)
 
   mCurrentLevel = access_it.value().first;
   mspCurrentAccessIdWriter->writeRequest(_accessId.toUtf8());
-  auto window = CApplicationInterface::getInstance().getWindow(mWindowId);
 
-  if(!window.isNull())
-  {
-    window->hide();
-  }
+
+  hideAccessWindow();
 
   if(mResetTime < 0) return;
   mpTimer->start(mResetTime);
@@ -340,4 +350,70 @@ void LCSecurity::resetAccess()
 {
   mCurrentLevel = std::numeric_limits<int>::min();
   mspCurrentAccessIdWriter->writeRequest(mNoAccess.toUtf8());
+}
+
+//------------------------------------------------------------------------------
+void LCSecurity::installKeyboard(const QString& _keyboardId)
+{
+  auto keyboard = CApplicationInterface::getInstance().getKeyboard(_keyboardId);
+
+  if(keyboard.isNull()) return;
+
+  auto action_change =
+    [](const QString&){};
+
+  auto action_enter =
+    [this](const QString& _str)
+    {
+      autorize(mAccessId, _str);
+    };
+
+  auto action_disconnect =
+    [](const QString&)
+    {
+    };
+
+  QValidator* validator = nullptr; 
+
+  mspKeyboardListener = keyboard->createListener(
+      action_change, action_enter, action_disconnect, validator);
+}
+
+//------------------------------------------------------------------------------
+void LCSecurity::showAccessWindow() const
+{
+
+  if(!mspKeyboardListener.isNull())
+  {
+    mspKeyboardListener->connect(QString());
+    return;
+  }
+
+  auto window = CApplicationInterface::getInstance().getWindow(mWindowId);
+  if(window.isNull())
+  {
+    qDebug() << 
+      QString(
+          "Security filter : Can't find autorize window '%1'").arg(mWindowId);
+  }
+  else
+  {
+    window->show();
+  }
+}
+
+//------------------------------------------------------------------------------
+void LCSecurity::hideAccessWindow() const
+{
+  auto window = CApplicationInterface::getInstance().getWindow(mWindowId);
+
+  if(window.isNull())
+  {
+    qDebug() << 
+      QString("Security filter : Can't find autorize window '%1'").arg(mWindowId);
+  }
+  else
+  {
+    window->hide();
+  }
 }
