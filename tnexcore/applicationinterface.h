@@ -77,6 +77,10 @@ public:
   virtual void message(const QString& _msg) const override;
   virtual void warning(const QString& _msg) const override;
   virtual void error(const QString& _msg) const override;
+
+  virtual QObject* createSecurityEventFilter(
+      const QString& _accessId,
+      const QSet<QEvent::Type>& _events) const override;
 };
 
 #endif /* APPLICATIONINTERFACE_H_ */

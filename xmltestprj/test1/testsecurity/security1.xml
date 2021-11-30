@@ -7,11 +7,37 @@
         <LayoutVBox>
           <widgets>
 
-            <LineEdit data="localsource:test_string1:string"/>
-
-            <Button text="Security button" security="admin">
-
+            <Label data="localsource:test_string1:string"/>
+            <Button text="Security button" access="user">
+              <press>
+                <writeData data="localsource:test_string1:string" value="pressed user button"/>
+              </press>
+              <release>
+                <writeData data="localsource:test_string1:string" value="released user button"/>
+              </release>
             </Button>
+
+            <Label data="localsource:test_string2:string"/>
+            <Button text="Security button" access="admin">
+              <press>
+                <writeData data="localsource:test_string2:string" value="pressed admin button"/>
+              </press>
+              <release>
+                <writeData data="localsource:test_string2:string" value="released admin button"/>
+              </release>
+            </Button>
+
+            <Label data="localsource:test_string3:string"/>
+            <Label text="User pressed label">
+              <events access="user">
+                <press>
+                  <writeData data="localsource:test_string3:string" value="pressed user label"/>
+                </press>
+                <release>
+                <writeData data="localsource:test_string3:string" value="released user label"/>
+                </release>
+              </events>
+            </Label>
 
           </widgets>
           <stretch/>

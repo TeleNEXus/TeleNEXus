@@ -22,6 +22,7 @@
 #define LIAPPLICATION_H
 
 #include <QSharedPointer>
+#include <QEvent>
 
 class QString;
 class QDir;
@@ -102,6 +103,9 @@ public:
   virtual void warning(const QString& _msg) const = 0;
   virtual void error(const QString& _msg) const = 0;
 
+  virtual QObject* createSecurityEventFilter(
+      const QString& _accessId,
+      const QSet<QEvent::Type>& _events) const = 0;
 };
 
 #endif // LIAPPLICATION_H

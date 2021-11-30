@@ -29,6 +29,7 @@
 #include "lcxmlformatterfactory.h"
 #include "xmldataformatters.h"
 #include "xmljscripts.h"
+#include "lcsecurity.h"
 
 #include <QDateTime>
 #include <QDebug>
@@ -191,3 +192,12 @@ void CApplicationInterface::error(const QString& _msg) const
     .arg(QDateTime::currentDateTime().toString(__smDateTimeFormat))
     .arg(_msg)));
 }
+
+//------------------------------------------------------------------------------
+QObject* CApplicationInterface::createSecurityEventFilter(
+      const QString& _accessId,
+      const QSet<QEvent::Type>& _events) const
+{
+  return LCSecurity::instance().createEventFilter(_accessId, _events);
+}
+

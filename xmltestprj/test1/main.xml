@@ -38,14 +38,21 @@
     data="keyboard_data" />
 
   <SECURITY 
+
+    window="access_window_1"
+    resetTime="30"
     source="localsource" 
     password="security_password_stream" 
-    access="security_access_id"
+    requiredAccess="security_required_access_id"
+    currentAccess="security_current_access_id"
     command="security_command_stream"
+
+    noAccess="No authorization"
+
     message="security_message">
 
-    <access id="user"  level="0" password="puser"/>
-    <access id="admin" level="1" password="padmin"/>
+    <access id="user"  level="0" password="uuu"/>
+    <access id="admin" level="1" password="aaa"/>
 
   </SECURITY>
 
@@ -70,29 +77,29 @@
   <WINDOW 
     file="testsecurity/accesswindow1.xml" 
     id="access_window_1" 
-    visible="true"
+    visible="false"
     title="Access window 1" 
     showMode="normal"
-    modality="false"
-    flags="" 
+    modality="true"
+    flags="stayOnTop" 
     screen="0"
     position="300;0"
     />
     <!-- size="250;150" -->
 
 
-  <!-- <WINDOW --> 
-  <!--   file="testsecurity/security1.xml" --> 
-  <!--   id="test security 1" --> 
-  <!--   visible="true" -->
-  <!--   title="Test security 1" --> 
-  <!--   showMode="normal" -->
-  <!--   modality="false" -->
-  <!--   flags="" --> 
-  <!--   size="200;300" -->
-  <!--   screen="0" -->
-  <!--   position="0;0" -->
-  <!--   /> -->
+  <WINDOW 
+    file="testsecurity/security1.xml" 
+    id="test security 1" 
+    visible="true"
+    title="Test security 1" 
+    showMode="normal"
+    modality="false"
+    flags="" 
+    size="200;300"
+    screen="0"
+    position="0;0"
+    />
 
   <!-- <WINDOW --> 
   <!--   file="testframe/testframe1.xml" --> 

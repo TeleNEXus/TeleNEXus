@@ -20,9 +20,11 @@
  */
 
 #include "lcsecurity.h"
-#include "LIApplication.h"
 #include "LIRemoteDataReader.h"
 #include "LIRemoteDataWriter.h"
+#include "lqsecurityfilter.h"
+#include "applicationinterface.h"
+#include "LIWindow.h"
 
 #include <limits>
 #include <QTimer>
@@ -39,7 +41,15 @@ static const struct
 
 static const struct
 {
+  QString window          = "window";
+  QString resetTime       = "resetTime";
+
   QString access          = "access";
+  QString noAccess        = "noAccess";
+
+  QString requiredAccess  = "requiredAccess";
+  QString currentAccess   = "currentAccess";
+
   QString source          = "source";
   QString passwordStream  = "password";
   QString command         = "command";
@@ -60,17 +70,14 @@ LCSecurity::LCSecurity() :
   mFlagInit(false)
   ,mCurrentLevel(std::numeric_limits<int>::min())
   ,mpTimer(new QTimer)
+  ,mResetTime(-1)
 {
   mpTimer->setSingleShot(true);
-  /* mpTimer->setInterval(5 * 60 * 1000); //5min */
-
-  mpTimer->setInterval(10 * 1000); //5min
 
   QObject::connect(mpTimer, &QTimer::timeout,
       [this]()
       {
-        mCurrentLevel = std::numeric_limits<int>::min();
-        writeMessage("No autorized access");
+        resetAccess();
         qDebug() << "Clear access autorized.";
       });
 }
@@ -91,17 +98,46 @@ LCSecurity& LCSecurity::instance()
 }
 
 //------------------------------------------------------------------------------
-void LCSecurity::init(const QDomElement& _element, const LIApplication& _app)
+void LCSecurity::init(const QDomElement& _element)
 {
 
   using EReadStatus = LIRemoteDataSource::EReadStatus;
 
   if(mFlagInit) return;
 
+  QString attr;
+
+  mWindowId = _element.attribute(__slAttributes.window);
+  if(mWindowId.isNull()) return;
+
+  //get reset time
+  attr = _element.attribute(__slAttributes.resetTime);
+
+  if(!attr.isNull())
+  {
+    bool flag = false;
+    int time = attr.toInt(&flag);
+    if(flag)
+    {
+      if(time >= 0)
+      {
+        mResetTime = time * 1000;
+      }
+    }
+  }
+
+  mNoAccess = _element.attribute(__slAttributes.noAccess);
+  if(mNoAccess.isNull())
+  {
+    mNoAccess = QStringLiteral("defaul");
+  }
+
   //get source
-  QString attr = _element.attribute(__slAttributes.source);
+  attr = _element.attribute(__slAttributes.source);
   if(attr.isNull()) return;
-  auto source = _app.getDataSource(attr);
+
+  auto source = CApplicationInterface::getInstance().getDataSource(attr);
+
   if(source.isNull()) return;
 
   //get password stream
@@ -110,19 +146,31 @@ void LCSecurity::init(const QDomElement& _element, const LIApplication& _app)
   mspPasswordReader = source->createReader(attr);
   if(this->mspPasswordReader.isNull()) return;
 
-  //get access data
-  attr = _element.attribute(__slAttributes.access);
+  //get required access data reader
+  attr = _element.attribute(__slAttributes.requiredAccess);
   if(attr.isNull()) return;
 
-  mspAccessIdReader = source->createReader(attr);
-  if(mspAccessIdReader.isNull()) return;
+  mspRequiredAccessIdReader = source->createReader(attr);
+  if(mspRequiredAccessIdReader.isNull()) return;
+
+  //get required access data writer 
+  mspRequiredAccessIdWriter = source->createWriter(attr);
+  if(mspRequiredAccessIdWriter.isNull()) return;
+
+  //get current access data writer 
+  attr = _element.attribute(__slAttributes.currentAccess);
+  if(attr.isNull()) return;
+
+  mspCurrentAccessIdWriter = source->createWriter(attr);
+  if(mspCurrentAccessIdWriter.isNull()) return;
+  mspCurrentAccessIdWriter->writeRequest(mNoAccess.toUtf8());
 
   //get command
   attr = _element.attribute(__slAttributes.command);
   if(attr.isNull()) return;
 
   mspCommandReader = source->createReader(attr);
-  if(mspAccessIdReader.isNull()) return;
+  if(mspRequiredAccessIdReader.isNull()) return;
 
   //get message 
   attr = _element.attribute(__slAttributes.message);
@@ -132,7 +180,9 @@ void LCSecurity::init(const QDomElement& _element, const LIApplication& _app)
     writeMessage("No autorized access");
   }
 
-  mspAccessIdReader->setHandler(
+
+
+  mspRequiredAccessIdReader->setHandler(
       [this](QSharedPointer<QByteArray> _data, EReadStatus _status)
       {
         if(_status != EReadStatus::Valid) return;
@@ -156,14 +206,13 @@ void LCSecurity::init(const QDomElement& _element, const LIApplication& _app)
         if(_status != EReadStatus::Valid) return;
         if(QString::fromUtf8(*_data) == QStringLiteral("reset"))
         {
-          mCurrentLevel = std::numeric_limits<int>::min();
-          writeMessage("No autorized access");
+          resetAccess();
           mpTimer->stop();
-          qDebug() << "Reset access livel to min.";
+          qDebug() << "Reset access level to min.";
         }
       });
 
-  mspAccessIdReader->connectToSource();
+  mspRequiredAccessIdReader->connectToSource();
   mspPasswordReader->connectToSource();
   mspCommandReader->connectToSource();
 
@@ -200,7 +249,55 @@ void LCSecurity::init(const QDomElement& _element, const LIApplication& _app)
 }
 
 //------------------------------------------------------------------------------
-bool LCSecurity::checkAccess(const QString& _accessId)
+QObject* LCSecurity::createEventFilter(
+    const QDomElement& _element, const QSet<QEvent::Type>& _events) const
+{
+  QString access_id = _element.attribute(__slAttributes.access);
+  if(access_id.isNull()) return nullptr;
+  return createEventFilter(access_id, _events);
+}
+
+//------------------------------------------------------------------------------
+QObject* LCSecurity::createEventFilter(
+    const QString& _accessId, 
+    const QSet<QEvent::Type>& _events) const
+{
+  if(mFlagInit == false) return nullptr;
+
+  auto handler = 
+    [this, _events, _accessId](QObject*, QEvent* _event)
+    {
+
+      if(!_events.contains(_event->type())) 
+      {
+        return false;
+      }
+
+      qDebug() << "Security filter : event = " << _event->type();
+
+      if(checkAccess(_accessId)) 
+      {
+        qDebug() << "Security filter : access is already avaliable.";
+        return false;
+      }
+      qDebug() << "Security filter : access required.";
+      auto window = CApplicationInterface::getInstance().getWindow(mWindowId);
+      if(window.isNull())
+      {
+        qDebug() << 
+          QString("Security filter : Can't find autorize window '%1'").arg(mWindowId);
+        return false;
+      }
+      mspRequiredAccessIdWriter->writeRequest(_accessId.toUtf8());
+      window->show();
+      return true;
+    };
+
+  return new LQSecurityFilter(handler);
+}
+
+//------------------------------------------------------------------------------
+bool LCSecurity::checkAccess(const QString& _accessId) const
 {
   auto access_it = mAccesses.find(_accessId);
   if(access_it == mAccesses.end()) return false;
@@ -221,6 +318,7 @@ void LCSecurity::autorize(const QString& _accessId, const QString& _password)
     qDebug() << "Security: can't find access id '" << _accessId << "'";
     return;
   }
+
   if(access_it.value().first <= mCurrentLevel) 
   {
     qDebug() << "Security: current level '" << mCurrentLevel << 
@@ -246,8 +344,10 @@ void LCSecurity::autorize(const QString& _accessId, const QString& _password)
   mCurrentLevel = access_it.value().first;
 
   writeMessage(QString("Autorized access in \"%1\"").arg(_accessId));
+  mspCurrentAccessIdWriter->writeRequest(_accessId.toUtf8());
 
-  mpTimer->start();
+  if(mResetTime < 0) return;
+  mpTimer->start(mResetTime);
   qDebug() << "End autorize.";
 }
 
@@ -258,3 +358,10 @@ void LCSecurity::writeMessage(const QString& _message)
   mspMessageWriter->writeRequest(_message.toUtf8());
 }
 
+//------------------------------------------------------------------------------
+void LCSecurity::resetAccess()
+{
+  mCurrentLevel = std::numeric_limits<int>::min();
+  writeMessage("No autorized access");
+  mspCurrentAccessIdWriter->writeRequest(mNoAccess.toUtf8());
+}

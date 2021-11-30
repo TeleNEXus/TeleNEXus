@@ -242,11 +242,11 @@ int main(int argc, char *argv[])
   //----------------------------------------------------
   xmlkeyboards::upload(rootElement);
   //----------------------------------------------------
+  xmlsecurity::upload(rootElement);
+  //----------------------------------------------------
   xmlwindows::upload(rootElement);
   //----------------------------------------------------
   xmljscripts::upload(rootElement);
-  //----------------------------------------------------
-  xmlsecurity::upload(rootElement);
 
   appinterface.message(QStringLiteral("\n\tEnd deploy of project\n"));
 
