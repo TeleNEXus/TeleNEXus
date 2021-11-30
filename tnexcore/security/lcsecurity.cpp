@@ -51,7 +51,7 @@ static const struct
   QString currentAccess   = "currentAccess";
 
   QString source          = "source";
-  QString passwordStream  = "password";
+  QString passwordStream  = "passwordStream";
   QString command         = "command";
   QString password        = "password";
   QString id              = "id";
