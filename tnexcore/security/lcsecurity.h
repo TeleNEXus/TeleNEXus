@@ -54,7 +54,6 @@ private:
   QSharedPointer<LIRemoteDataWriter> mspRequiredAccessIdWriter;
   QSharedPointer<LIRemoteDataWriter> mspCurrentAccessIdWriter;
   QSharedPointer<LIRemoteDataReader> mspCommandReader;
-  QSharedPointer<LIRemoteDataWriter> mspMessageWriter;
 
 private:
   LCSecurity();
@@ -72,7 +71,6 @@ public:
 
 private:
   void autorize(const QString& _accessId, const QString& _password);
-  void writeMessage(const QString& _message);
   void resetAccess();
 };
 
