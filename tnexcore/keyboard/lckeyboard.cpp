@@ -47,6 +47,7 @@ class CReaderStub : public LIRemoteDataReader
 {
 public:
   CReaderStub(){}
+  ~CReaderStub(){}
   virtual void readRequest()override {}
   virtual void connectToSource()override {}
   virtual void disconnectFromSource()override {}
