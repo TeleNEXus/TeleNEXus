@@ -53,7 +53,6 @@ static const struct
   QString source          = "source";
   QString passwordStream  = "password";
   QString command         = "command";
-  QString message         = "message";
   QString password        = "password";
   QString id              = "id";
   QString level           = "level";
@@ -171,15 +170,6 @@ void LCSecurity::init(const QDomElement& _element)
 
   mspCommandReader = source->createReader(attr);
   if(mspRequiredAccessIdReader.isNull()) return;
-
-  //get message 
-  attr = _element.attribute(__slAttributes.message);
-  if(!attr.isNull()) 
-  {
-    mspMessageWriter = source->createWriter(attr);
-    writeMessage("No autorized access");
-  }
-
 
 
   mspRequiredAccessIdReader->setHandler(
@@ -328,23 +318,17 @@ void LCSecurity::autorize(const QString& _accessId, const QString& _password)
 
   if(__GetHash(_password.toUtf8()) != access_it.value().second) 
   {
-    qDebug() << "Wrong password.";
-    writeMessage("Wrong password");
-    QTimer::singleShot(2000, 
-        [this]()
-        {
-          if(mCurrentLevel == std::numeric_limits<int>::min()) 
-          {
-            writeMessage("No autorized access");
-          }
-        });
     return;
   }
 
   mCurrentLevel = access_it.value().first;
-
-  writeMessage(QString("Autorized access in \"%1\"").arg(_accessId));
   mspCurrentAccessIdWriter->writeRequest(_accessId.toUtf8());
+  auto window = CApplicationInterface::getInstance().getWindow(mWindowId);
+
+  if(!window.isNull())
+  {
+    window->hide();
+  }
 
   if(mResetTime < 0) return;
   mpTimer->start(mResetTime);
@@ -352,16 +336,8 @@ void LCSecurity::autorize(const QString& _accessId, const QString& _password)
 }
 
 //------------------------------------------------------------------------------
-void LCSecurity::writeMessage(const QString& _message)
-{
-  if(mspMessageWriter.isNull()) return;
-  mspMessageWriter->writeRequest(_message.toUtf8());
-}
-
-//------------------------------------------------------------------------------
 void LCSecurity::resetAccess()
 {
   mCurrentLevel = std::numeric_limits<int>::min();
-  writeMessage("No autorized access");
   mspCurrentAccessIdWriter->writeRequest(mNoAccess.toUtf8());
 }

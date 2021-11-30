@@ -38,7 +38,6 @@
     data="keyboard_data" />
 
   <SECURITY 
-
     window="access_window_1"
     resetTime="30"
     source="localsource" 
@@ -46,10 +45,7 @@
     requiredAccess="security_required_access_id"
     currentAccess="security_current_access_id"
     command="security_command_stream"
-
-    noAccess="No authorization"
-
-    message="security_message">
+    noAccess="No authorization">
 
     <access id="user"  level="0" password="uuu"/>
     <access id="admin" level="1" password="aaa"/>

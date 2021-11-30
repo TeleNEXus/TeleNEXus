@@ -14,15 +14,7 @@
               </widgets>
               <stretch/>
               <widgets>
-                <LineEdit 
-                  data="localsource:security_required_access_id:string" 
-                  style="(...){min-width: 100; max-width: 100}"/>
-                <!-- <ComboBox --> 
-                <!--   data="localsource:security_required_access_id:string" --> 
-                <!--   style="(...){min-width: 100; max-width: 100}"> -->
-                <!--   <item value="admin"/> -->
-                <!--   <item value="user"/> -->
-                <!-- </ComboBox> -->
+                <Label data="localsource:security_required_access_id:string" />
               </widgets>
             </LayoutHBox>
 
@@ -47,36 +39,7 @@
               </widgets>
               <stretch/>
               <widgets>
-
-                <!-- <StackWidget data="localsource:security_current_access_id:string"> -->
-                <!--   <itemUndef> -->
-                <!--     <Label text="Undefined Item" /> -->
-                <!--   </itemUndef> -->
-
-                <!--   <itemWrong> -->
-                <!--     <Label data="localsource:security_current_access_id:string" /> -->
-                <!--   </itemWrong> -->
-
-                <!--   <item matching=""> -->
-                <!--     <Label text="??????"/> -->
-                <!--   </item> -->
-
-                <!-- </StackWidget> -->
-
-
                 <Label data="localsource:security_current_access_id:string"/>
-              </widgets>
-            </LayoutHBox>
-
-            <LayoutHBox>
-              <widgets>
-                <Label text="Status:"/>
-              </widgets>
-
-              <stretch/>
-
-              <widgets>
-                <Label data="localsource:security_message:string"/>
               </widgets>
             </LayoutHBox>
 
@@ -90,7 +53,6 @@
             </Button>
           </widgets>
 
-          <!-- <stretch/> -->
         </LayoutVBox>
       </layout>
     </Frame>
