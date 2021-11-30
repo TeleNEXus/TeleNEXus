@@ -35,6 +35,7 @@ class QTimer;
 
 class LIRemoteDataReader;
 class LIRemoteDataWriter;
+class LIKeyboardListener;
 
 class LCSecurity
 {
@@ -54,6 +55,7 @@ private:
   QSharedPointer<LIRemoteDataWriter> mspRequiredAccessIdWriter;
   QSharedPointer<LIRemoteDataWriter> mspCurrentAccessIdWriter;
   QSharedPointer<LIRemoteDataReader> mspCommandReader;
+  QSharedPointer<LIKeyboardListener> mspKeyboardListener;
 
 private:
   LCSecurity();
@@ -72,6 +74,9 @@ public:
 private:
   void autorize(const QString& _accessId, const QString& _password);
   void resetAccess();
+  void installKeyboard(const QString& _keyboardId);
+  void showAccessWindow() const;
+  void hideAccessWindow() const;
 };
 
 #endif
