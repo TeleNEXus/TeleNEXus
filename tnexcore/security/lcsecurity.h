@@ -45,9 +45,14 @@ private:
   QString mAccessId;
   QMap<QString, QPair<int, QByteArray>> mAccesses;
   QTimer* mpTimer;
+  int mResetTime;
+  QString mWindowId;
+  QString mNoAccess;
 
   QSharedPointer<LIRemoteDataReader> mspPasswordReader;
-  QSharedPointer<LIRemoteDataReader> mspAccessIdReader;
+  QSharedPointer<LIRemoteDataReader> mspRequiredAccessIdReader;
+  QSharedPointer<LIRemoteDataWriter> mspRequiredAccessIdWriter;
+  QSharedPointer<LIRemoteDataWriter> mspCurrentAccessIdWriter;
   QSharedPointer<LIRemoteDataReader> mspCommandReader;
   QSharedPointer<LIRemoteDataWriter> mspMessageWriter;
 
@@ -60,13 +65,15 @@ private:
 public:
 
   static LCSecurity& instance();
-  void init(const QDomElement& _element, const LIApplication& _app);
+  void init(const QDomElement& _element);
   QObject* createEventFilter(const QDomElement& _element, const QSet<QEvent::Type>& _events) const;
-  bool checkAccess(const QString& _accessId);
+  QObject* createEventFilter(const QString& _accessId, const QSet<QEvent::Type>& _events) const;
+  bool checkAccess(const QString& _accessId) const;
 
 private:
   void autorize(const QString& _accessId, const QString& _password);
   void writeMessage(const QString& _message);
+  void resetAccess();
 };
 
 #endif

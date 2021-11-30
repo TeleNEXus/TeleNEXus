@@ -66,7 +66,7 @@ void upload(const QDomElement& _rootElement)
     if(element.isNull()) { return end_upload(); }
   }
 
-  LCSecurity::instance().init(element, CApplicationInterface::getInstance());
+  LCSecurity::instance().init(element);
   end_upload();
 }
 

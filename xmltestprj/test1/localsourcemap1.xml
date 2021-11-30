@@ -51,7 +51,9 @@
 
   <stream id="security_password_stream"/>
   <stream id="security_command_stream"/>
-  <string id="security_access_id" defval=""/>
+
+  <string id="security_required_access_id" defval=""/>
+  <string id="security_current_access_id" defval=""/>
   <string id="security_message" defval=""/>
   <string id="empty_string" defval=""/>
 

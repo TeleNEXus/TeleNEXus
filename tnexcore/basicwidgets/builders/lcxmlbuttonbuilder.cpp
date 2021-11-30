@@ -25,6 +25,7 @@
 #include "xmlcommon.h"
 #include "lcxmlstdactionbuilder.h"
 #include "lcqpushbutton.h"
+#include "lcsecurity.h"
 
 /* #include <QPushButton> */
 #include <QSharedPointer>
@@ -102,6 +103,23 @@ const QDomElement& _element, const LIApplication& _app)
   setWidgetSize(      _element, button);
   setWidgetPosition(  _element, button);
   setWidgetFixedSize( _element, button);
+
+  QSet<QEvent::Type> events;
+
+  events 
+    << QEvent::Type::MouseButtonPress
+    << QEvent::Type::MouseButtonDblClick
+    << QEvent::Type::TouchBegin;
+
+
+  QObject* security_filter =  
+    LCSecurity::instance().createEventFilter(_element, events);
+  qDebug() << "+++ Button add security 0";
+  if(security_filter != nullptr)
+  {
+    qDebug() << "+++ Button add security 1";
+    button->installEventFilter(security_filter);
+  }
 
   return button;
 }
