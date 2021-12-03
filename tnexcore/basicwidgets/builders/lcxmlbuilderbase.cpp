@@ -28,11 +28,12 @@
 #include "lqeventsfilter.h"
 #include "xmlcommon.h"
 
+#include <QBuffer>
 #include <QWidget>
 #include <QMovie>
 #include <QDomElement>
 #include <QDebug>
-
+#include <QByteArray>
 //==============================================================================__slAttributes
 static const struct
 {
@@ -335,6 +336,11 @@ void LCXmlBuilderBase::setWidgetStyle(
 //==============================================================================
 static QMap<QString, QSharedPointer<CMovieCtrl>> __slMovies;
 //------------------------------------------------------------------------------
+static void deleter(QIODevice* _d)
+{
+  _d->deleteLater();
+}
+
 QSharedPointer<LIMovieAccess> 
 LCXmlBuilderBase::getMovie(const QString& _movieFile)
 {
@@ -345,7 +351,29 @@ LCXmlBuilderBase::getMovie(const QString& _movieFile)
     return QSharedPointer<LIMovieAccess>(new CMovieAccess(it.value()));
   }
 
-  QMovie* movie = new QMovie(_movieFile);
+  QSharedPointer<QIODevice> fd =
+    CApplicationInterface::getInstance().getFileDevice(_movieFile);
+
+
+  if(fd.isNull()) return QSharedPointer<LIMovieAccess>();
+  
+
+  if(!fd->open(QIODevice::OpenModeFlag::ReadOnly)) 
+    return QSharedPointer<LIMovieAccess>();
+
+  QByteArray* data = new QByteArray();
+
+  *data = fd->readAll();
+
+  QBuffer* buffer = new QBuffer(data);
+  QObject::connect(buffer, &QBuffer::destroyed,
+      [data](QObject*)
+      {
+        delete data;
+      });
+
+  QMovie* movie = new QMovie(buffer);
+  buffer->setParent(movie);
 
   if(!movie->isValid())
   {
@@ -359,10 +387,15 @@ LCXmlBuilderBase::getMovie(const QString& _movieFile)
 }
 
 //==============================================================================
+#include "QImageReader"
 QPixmap LCXmlBuilderBase::getPixmap(const QString& _pixmapFile)
 {
-  QPixmap pixmap(_pixmapFile);
-  return pixmap;
+
+  auto fd = CApplicationInterface::getInstance().getFileDevice(_pixmapFile);
+  if(fd.isNull()) return QPixmap();
+  QImageReader ir(fd.data());
+
+  return QPixmap::fromImage(ir.read());
 }
 
 //------------------------------------------------------------------------------

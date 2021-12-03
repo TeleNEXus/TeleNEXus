@@ -23,6 +23,7 @@
 #include <QDomElement>
 #include <QDir>
 #include <QDebug>
+#include <QApplication>
 
 #define __smMessageHeader "Pathes of plugins:"
 #define __smMessage(msg) CApplicationInterface::getInstance().message(msg)
@@ -42,18 +43,21 @@ static QStringList __slPlaginLibPaths;
 
 namespace xmlpluginpathes
 {
-void upload(const QDomElement& _rootElement,
-    const QString& _defaultPluginsPath)
+void upload(const QDomElement& _rootElement)
 {
+  QString default_plugin_path = QString("%1/%2")
+      .arg(QApplication::applicationDirPath())
+      .arg("plugins");
+
   QStringList added_pathes;
 
   QDomNodeList nodes = _rootElement.elementsByTagName(__slTags.rootTag); 
   auto element_pathes = _rootElement.firstChildElement(__slTags.rootTag);
 
   auto add_path = 
-    [&added_pathes, &_defaultPluginsPath]()
+    [&added_pathes, &default_plugin_path]()
     {
-      __slPlaginLibPaths << added_pathes << _defaultPluginsPath;
+      __slPlaginLibPaths << added_pathes << default_plugin_path;
     };
 
 

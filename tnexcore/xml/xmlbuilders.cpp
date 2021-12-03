@@ -30,8 +30,6 @@
 
 #include <QLibrary>
 #include <QDebug>
-#include <QFile>
-#include <QFileInfo>
 
 //==============================================================================
 using TLibAccessFunc = void* (*)();
@@ -220,7 +218,7 @@ static void load(
 
   QString fileName = element.attribute(__slAttributes.file);
 
-  QString message = 
+  const QString message = 
     QString( "%1\ttag '%2'\n")
     .arg(__smMessageHeader)
     .arg(_rootTag);
@@ -231,37 +229,15 @@ static void load(
     return;
   }
 
-  QFile file(fileName);
   QDomDocument domDoc;
   QString errorStr;
-  int errorLine;
-  int errorColumn;
 
+  CApplicationInterface::getInstance().message(
+      QString("%1\tparce file '%2'\n").arg(message).arg(fileName));
 
-  QFileInfo fi(file);
+  domDoc = CApplicationInterface::getInstance().getDomDocument(fileName);
+  if(domDoc.isNull()) return;
 
-  if(!fi.exists())
-  {
-    __smWarning(
-      QString("%1\tfile '%2' is not exist\n")
-      .arg(message)
-      .arg(fileName));
-    return;
-  }
-
-  message += QString("\tparce file '%1'\n").arg(fileName);
-
-  if(!domDoc.setContent(&file, true, &errorStr, &errorLine, &errorColumn))
-  {
-    __smWarning(
-      QString(
-          "%1\terror at line:%2 column:%3 msg: '%4'")
-      .arg(message)
-      .arg(errorLine)
-      .arg(errorColumn)
-      .arg(errorStr));
-    return;
-  }
 
   QDomElement rootElement = domDoc.documentElement();
 

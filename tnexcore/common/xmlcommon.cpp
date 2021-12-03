@@ -28,6 +28,7 @@
 #include <QPixmap>
 #include <QDebug>
 
+
 //==============================================================================removeSpaces
 static QString removeSpaces(
     const QString& _instr, const QChar& _ignor_border, 
@@ -364,12 +365,13 @@ SDataSpecification parseDataSpecification(const QString _dataSpec,
 //------------------------------------------------------------------------------
 QDomDocument loadDomDocument (const QString& _fileName)
 {
-  QFile file(_fileName);
-  QFileInfo fi;
-  if(!fi.exists(_fileName))
+
+  auto fd = CApplicationInterface::getInstance().getFileDevice(_fileName);
+
+  if(fd.isNull())
   {
     CApplicationInterface::getInstance().warning(
-        QString("Load DOM Document error:\n\tfile '%1' is not exists")
+        QString("Load DOM Document error:\n\t from file '%1'")
         .arg(_fileName));
     return QDomDocument();
   }
@@ -379,7 +381,7 @@ QDomDocument loadDomDocument (const QString& _fileName)
   int errorLine;
   int errorColumn;
 
-  if(!domDoc.setContent(&file, true, &errorStr, &errorLine, &errorColumn))
+  if(!domDoc.setContent(fd.data(), true, &errorStr, &errorLine, &errorColumn))
   {
     CApplicationInterface::getInstance().warning(
         QString("Load DOM Document error:\n"
@@ -387,7 +389,7 @@ QDomDocument loadDomDocument (const QString& _fileName)
           "\terror at line: %2\n"   
           "\tcolumn: %3\n"          
           "\tmsg: %4\n")
-        .arg(file.fileName())
+        .arg(_fileName)
         .arg(errorLine)
         .arg(errorColumn)
         .arg(errorStr));
@@ -397,7 +399,7 @@ QDomDocument loadDomDocument (const QString& _fileName)
     CApplicationInterface::getInstance().message(
         QString("Load DOM Document:\n\tdocument with element '%1' from file '%2' is loaded")
         .arg(domDoc.documentElement().tagName())
-        .arg(file.fileName()));
+        .arg(_fileName));
   }
 
   return domDoc;

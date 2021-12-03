@@ -30,8 +30,6 @@
 #include <QDomElement>
 #include <QMap>
 #include <QDebug>
-#include <QFile>
-#include <QFileInfo>
 
 #define __smMessage(msg) CApplicationInterface::getInstance().message(msg)
 #define __smWarning(msg) CApplicationInterface::getInstance().warning(msg)
@@ -60,12 +58,6 @@ void uploadLocal(const QDomElement& _element)
 
   if(!attr_file.isNull())
   {
-
-    if(!QFileInfo::exists(attr_file))
-    {
-      __smWarning(QString("File '%1' is not exists.").arg(attr_file));
-      return;
-    }
 
 
     auto ddoc = xmlcommon::loadDomDocument(attr_file);

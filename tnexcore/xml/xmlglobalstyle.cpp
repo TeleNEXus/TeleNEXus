@@ -24,7 +24,6 @@
 
 #include <QDomElement>
 #include <QTextStream>
-#include <QFile>
 #include <QApplication>
 #include <QDebug>
 
@@ -61,10 +60,14 @@ void upload(const QDomElement& _rootElement, QApplication& _qapp)
     return;
   }
 
-  QFile style_file(attr_file); 
-  if(style_file.open(QFile::OpenModeFlag::ReadOnly))
+  auto style_file = 
+    CApplicationInterface::getInstance().getFileDevice(attr_file);
+
+  if(style_file.isNull()) return; 
+
+  if(style_file->open(QIODevice::OpenModeFlag::ReadOnly))
   {
-    _qapp.setStyleSheet(QLatin1String(style_file.readAll()));
+    _qapp.setStyleSheet(QLatin1String(style_file->readAll()));
     message += QString("\tStyle sheet from file '%1' is installed").arg(attr_file);
     CApplicationInterface::getInstance()
       .message(message);

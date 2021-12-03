@@ -30,20 +30,26 @@
 #include "xmldataformatters.h"
 #include "xmljscripts.h"
 #include "lcsecurity.h"
+#include "projectsource.h"
 
 #include <QDateTime>
 #include <QDebug>
 #include <QDir>
 #include <iostream>
 #include <QBuffer>
+#include <QFileInfo>
 
 #define __smDateTimeFormat QStringLiteral("yyyy:MM:dd|hh:mm:ss")
+
 //==============================================================================
 static struct SLocalData
 {
-  QString xmlMainFileName;
-  QString xmlProjectPath;
-  QDir    xmlProjectDir;
+  /* QString xmlMainFileName; */
+  /* QString xmlProjectPath; */
+  /* QDir    xmlProjectDir; */
+
+  QSharedPointer<LIProjectSource> mspProjectSource;
+
 } __slLocalData;
 
 
@@ -65,26 +71,34 @@ CApplicationInterface& CApplicationInterface::getInstance()
 }
 
 //------------------------------------------------------------------------------
-void CApplicationInterface::setParameters(
-    const QString& _mainFileName, 
-    const QString& _projectPath,
-    const QDir& _projectDir)
+void CApplicationInterface::setProjectSource(
+    QSharedPointer<LIProjectSource> _prjSource)
 {
-  __slLocalData.xmlMainFileName = _mainFileName;
-  __slLocalData.xmlProjectPath = _projectPath;
-  __slLocalData.xmlProjectDir = _projectDir;
+  __slLocalData.mspProjectSource = _prjSource;
 }
+
+/* void CApplicationInterface::setParameters( */
+/*     const QString& _mainFileName, */ 
+/*     const QString& _projectPath, */
+/*     const QDir& _projectDir) */
+/* { */
+/*   __slLocalData.xmlMainFileName = _mainFileName; */
+/*   __slLocalData.xmlProjectPath = _projectPath; */
+/*   __slLocalData.xmlProjectDir = _projectDir; */
+/* } */
 
 //------------------------------------------------------------------------------
 QString CApplicationInterface::getProjectPath() const
 {
-  return __slLocalData.xmlProjectPath;
+  return __slLocalData.mspProjectSource->getProjectDir().absolutePath();
 }
 
 //------------------------------------------------------------------------------
 QDir CApplicationInterface::getProjectDir() const
 {
-  return __slLocalData.xmlProjectDir;
+  QDir prjd = __slLocalData.mspProjectSource->getProjectDir();
+  prjd.makeAbsolute();
+  return prjd;
 }
 
 //------------------------------------------------------------------------------
@@ -203,10 +217,9 @@ QObject* CApplicationInterface::createSecurityEventFilter(
 }
 
 //------------------------------------------------------------------------------
-QByteArray CApplicationInterface::getFileData(
+QSharedPointer<QIODevice> CApplicationInterface::getFileDevice(
     const QString& _fileName) const
 {
-  Q_UNUSED(_fileName);
-  return QByteArray();
+  return __slLocalData.mspProjectSource->getFileDevice(_fileName);
 }
 

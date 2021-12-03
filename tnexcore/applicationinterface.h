@@ -25,6 +25,8 @@
 #include "LIApplication.h"
 #include <QDir>
 
+class LIProjectSource;
+
 class CApplicationInterface : public LIApplication
 {
 public:
@@ -38,9 +40,12 @@ private:
 public:
   static CApplicationInterface& getInstance();
 
-  void setParameters(const QString& _mainFileName, 
-      const QString& _projectPath,
-      const QDir& _projectDir);
+
+  void setProjectSource(QSharedPointer<LIProjectSource> _prjSource);
+
+  /* void setParameters(const QString& _mainFileName, */ 
+  /*     const QString& _projectPath, */
+  /*     const QDir& _projectDir); */
 
   virtual QString getProjectPath() const override;
   virtual QDir getProjectDir() const override;
@@ -83,7 +88,7 @@ public:
       const QString& _accessId,
       const QSet<QEvent::Type>& _events) const override;
 
-  virtual QByteArray getFileData(const QString& _fileName) const override;
+  virtual QSharedPointer<QIODevice> getFileDevice(const QString& _fileName) const override;
 };
 
 #endif /* APPLICATIONINTERFACE_H_ */

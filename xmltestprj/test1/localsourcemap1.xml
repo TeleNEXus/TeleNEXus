@@ -57,7 +57,7 @@
   <string id="security_message" defval=""/>
   <string id="empty_string" defval=""/>
 
-  <string id="security_keyboard_data" defval="aaa"/>
+  <string id="security_keyboard_data" defval=""/>
   <stream id="security_keyboard_stream"/>
 
 
