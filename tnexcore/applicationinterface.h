@@ -60,6 +60,7 @@ public:
   virtual QDomDocument 
     getDomDocument(const QString& _fileName) const override;
 
+
   virtual QSharedPointer<LIWindow> 
     getWindow(const QString& _windowId) const override;
 
@@ -81,6 +82,8 @@ public:
   virtual QObject* createSecurityEventFilter(
       const QString& _accessId,
       const QSet<QEvent::Type>& _events) const override;
+
+  virtual QByteArray getFileData(const QString& _fileName) const override;
 };
 
 #endif /* APPLICATIONINTERFACE_H_ */
