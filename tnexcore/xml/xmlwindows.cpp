@@ -25,7 +25,6 @@
 #include "LIXmlWidgetBuilder.h"
 
 #include <QIcon>
-#include <QFileInfo>
 #include <QDomElement>
 #include <QMap>
 #include <QWidget>
@@ -333,14 +332,6 @@ void upload(
 
     if(!attr_file.isNull())
     {
-      if(!QFileInfo::exists(attr_file))
-      {
-        __smWarning(
-            QString("Can't load file '%1'")
-            .arg(attr_file));
-        return QDomElement();
-      }
-
       QDomElement el = __smApp.getDomDocument(attr_file).documentElement();
       if(el.tagName() != __slTags.window)
       {
