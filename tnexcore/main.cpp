@@ -31,7 +31,7 @@
 #include "xmlwidgetstyles.h"
 #include "xmlglobalstyle.h"
 #include "xmlsecurity.h"
-
+#include "projectsource.h"
 
 #include <QLoggingCategory>
 #include <QDebug>
@@ -45,15 +45,18 @@
 #define __smQuitMessage QStringLiteral("Quit from TeleNEXus")
 
 #define __lmVersionString (QString("TeleNEXus version: %1").arg(APPLICATION_VERSION))
+#define __lmApplicationDescription "TeleNEXus is a simple SCADA"
 
 static const QString __slRootTag = "APPLICATION";
 
 //==============================================================================
 static const struct
 {
-  QString xmlMainFileName = "xmlfile";
-  QString xmlMainFilePath = "xmlpath";
-  QString version         = "version";
+  QString file = "file";
+  QString path = "path";
+  QString version = "version";
+  QString compil = "compil";
+  QString target = "target";
 } __slAppOptionsName;
 
 //==============================================================================
@@ -63,63 +66,67 @@ struct SParameters
   QString mainFileName;
   QString projectPath;
   QDir    projectDir;
-  bool parseCommandLine(char *argv[])
+
+  bool setParameters(const QCommandLineParser& _parser, char** _argv)
   {
 
     defaultPluginsPath = QString("%1/%2")
       .arg(QApplication::applicationDirPath())
       .arg("plugins");
 
-    QFileInfo fi(argv[0]);
+    QFileInfo fi(_argv[0]);
 
-    QCommandLineParser parser;
+    /* QCommandLineParser parser; */
 
-    QCommandLineOption fileName(__slAppOptionsName.xmlMainFileName,
-        QStringLiteral("Main XML filename."),
-        __slAppOptionsName.xmlMainFileName,
-        QStringLiteral("main.xml"));
+    /* QCommandLineOption fileName(__slAppOptionsName.xmlMainFileName, */
+    /*     QStringLiteral("Main XML filename."), */
+    /*     __slAppOptionsName.xmlMainFileName, */
+    /*     QStringLiteral("main.xml")); */
 
-    QCommandLineOption pathName(__slAppOptionsName.xmlMainFilePath,
-        QStringLiteral("Root path XML files"),
-        __slAppOptionsName.xmlMainFilePath,
-        fi.absolutePath());
+    /* QCommandLineOption pathName(__slAppOptionsName.xmlMainFilePath, */
+    /*     QStringLiteral("Root path XML files"), */
+    /*     __slAppOptionsName.xmlMainFilePath, */
+    /*     fi.absolutePath()); */
 
-    QCommandLineOption version(__slAppOptionsName.version,
-        QStringLiteral("Version"),
-        __slAppOptionsName.version
-        );
+    /* QCommandLineOption version(__slAppOptionsName.version, */
+    /*     QStringLiteral("Version"), */
+    /*     __slAppOptionsName.version */
+    /*     ); */
 
-    parser.addOption(fileName);
-    parser.addOption(pathName);
-    parser.addOption(version);
+    /* parser.addOption(fileName); */
+    /* parser.addOption(pathName); */
+    /* parser.addOption(version); */
 
-    parser.parse(QApplication::arguments());
+    /* parser.parse(QApplication::arguments()); */
 
-    qDebug("%s", qPrintable(__lmVersionString));
-    if(parser.isSet(__slAppOptionsName.version))
-    {
-      return false;
-    }
+    /* qDebug("%s", qPrintable(__lmVersionString)); */
+    /* if(_parser.isSet(__slAppOptionsName.version)) */
+    /* { */
+    /*   return false; */
+    /* } */
 
-    {
-      QString file = parser.value(__slAppOptionsName.xmlMainFileName);
-      QString path = parser.value(__slAppOptionsName.xmlMainFilePath);
+    /* { */
 
-      QDir dir(path);
+    /*   QString file = _parser.value(__slAppOptionsName.xmlMainFileName); */
+    /*   QString path = _parser.value(__slAppOptionsName.xmlMainFilePath); */
 
-      fi.setFile(path + "/" + file);
-      if(dir.exists() && fi.exists())
-      {
-        mainFileName = fi.fileName();
-        projectPath  = fi.absolutePath() + "/";
-        projectDir   = fi.absoluteDir();
-        QDir::setCurrent(path);
-      }
-      else
-      {
-        parser.showHelp(-1);
-      }
-    }
+    /*   QDir dir(path); */
+
+
+    /*   fi.setFile(path + "/" + file); */
+
+    /*   if(dir.exists() && fi.exists()) */
+    /*   { */
+    /*     mainFileName = fi.fileName(); */
+    /*     projectPath  = fi.absolutePath() + "/"; */
+    /*     projectDir   = fi.absoluteDir(); */
+    /*     QDir::setCurrent(path); */
+    /*   } */
+    /*   else */
+    /*   { */
+    /*     _parser.showHelp(-1); */
+    /*   } */
+    /* } */
     return true;
   }
 }__slParameters;
@@ -128,6 +135,26 @@ struct SParameters
 
 
 #include <csignal>
+
+
+enum class EParseCommandLineResult
+{
+  CommandLineError,
+
+  CommandLineCompileRequest,
+  CommandLineLaunch,
+  CommandLineHelpRequest,
+  CommandLineVersionRequest,
+  CommandLineIsEmpty
+};
+//------------------------------------------------------------------------------
+static EParseCommandLineResult __s_parseCommandLine(
+    QCommandLineParser& _parser, QStringList& _params, QString& _msg);
+
+//------------------------------------------------------------------------------
+static int __s_projectDeploy(QApplication& _app);
+//------------------------------------------------------------------------------
+static bool __s_compilProject(char** _argv);
 //------------------------------------------------------------------------------
 static void appExit(int _sig)
 {
@@ -141,49 +168,169 @@ int main(int argc, char *argv[])
 
   signal(SIGINT, appExit);
   signal(SIGTERM, appExit);
-
-
   QLoggingCategory::setFilterRules("qt5ct.debug=false");
-
   const LIApplication& appinterface = CApplicationInterface::getInstance();
-
   QApplication app(argc, argv);
 
+  app.setApplicationName("TeleNEXus");
+  app.setApplicationVersion(
+      QString("%1").arg(APPLICATION_VERSION));
 
-  qDebug() << "Current path = " << QApplication::applicationDirPath();
+  QCommandLineParser parser;
+  QString msg;
+  QStringList params_list;
+
+  QSharedPointer<LIProjectSource> prjsource;
 
 
-  if(!__slParameters.parseCommandLine(argv)) return 0;
-
-  appinterface.message(QString("Project current path:\n\t%1").arg(QDir::currentPath()));
-  appinterface.message(QString("Project main file:\n\t%1").arg(__slParameters.mainFileName));
-
+  switch(__s_parseCommandLine(parser, params_list, msg))
   {
-    QString str = QStringLiteral("Default plugins path: \n");
-    str += QString("\t%1\n").arg(__slParameters.defaultPluginsPath);
-    appinterface.message(str);
+  case EParseCommandLineResult::CommandLineError:
+    qDebug().noquote() << msg;
+    return 0;
+  case EParseCommandLineResult::CommandLineIsEmpty:
+  case EParseCommandLineResult::CommandLineHelpRequest:
+    parser.showHelp();
+  case EParseCommandLineResult::CommandLineVersionRequest:
+    parser.showVersion();
+
+  /* case EParseCommandLineResult::CommandLineCompileRequest: */
+  /* case EParseCommandLineResult::CommandLineLaunchFromProjectRequest: */
+  case EParseCommandLineResult::CommandLineLaunch:
+    {
+      qDebug() << "Launch from path = " << params_list;
+      QString launch_param = params_list.at(0);
+      prjsource = LCDirProjectSource::create(launch_param, msg);
+      qDebug() << msg;
+      if(prjsource.isNull()) 
+      {
+        return -1;
+      }
+
+      QFileInfo fi(launch_param);
+
+      if(fi.dir().isAbsolute())
+      {
+        qDebug() << "Set current dir = " << QDir::currentPath();
+        QDir::setCurrent(launch_param);
+      }
+
+      qDebug() << 
+        QString("Project source from path '%1' is created").arg(launch_param);
+
+      CApplicationInterface::getInstance().setProjectSource(prjsource);
+
+    }
+    break;
+
+  default:
+    break;
   }
 
-  CApplicationInterface::getInstance().setParameters(
-      __slParameters.mainFileName,
-      __slParameters.projectPath,
-      __slParameters.projectDir);
+  /* return 0; */
 
+  /* QString default_plugin_path = QString("%1/%2") */
+  /*     .arg(QApplication::applicationDirPath()) */
+  /*     .arg("plugins"); */
+
+  if(__s_projectDeploy(app) < 0) return -1;
+
+
+  QObject::connect(&app, &QApplication::aboutToQuit,
+      [&](){
+        appinterface.message(__smQuitMessage);
+      });
+
+  return app.exec();
+}
+
+//------------------------------------------------------------------------------
+static EParseCommandLineResult 
+__s_parseCommandLine(
+    QCommandLineParser& _parser, QStringList& _params, QString& _msg)
+{
+
+  _parser.setApplicationDescription(__lmApplicationDescription);
+
+  QCommandLineOption file("file", QStringLiteral("Project file"), "file");
+
+  QCommandLineOption launch("launch",
+      QStringLiteral("Launch TeleNEXus project"),
+      "launch");
+
+
+  QCommandLineOption compil("compil",
+      QStringLiteral("Compil directory path"),
+      "compil");
+
+  QCommandLineOption target("target",
+      QStringLiteral("Compil target file name"),
+      "target");
+
+  QCommandLineOption version = _parser.addVersionOption();
+
+  QCommandLineOption help = _parser.addHelpOption();
+
+  _parser.addOption(file);
+  _parser.addOption(launch);
+  _parser.addOption(compil);
+  _parser.addOption(target);
+
+  if(!_parser.parse(QApplication::arguments()))
+  {
+    _msg = _parser.errorText();
+    return EParseCommandLineResult::CommandLineError;
+  }
+
+  if(_parser.isSet(version)) 
+  {
+    return EParseCommandLineResult::CommandLineVersionRequest;
+  }
+
+  if(_parser.isSet(help)) 
+  {
+    return EParseCommandLineResult::CommandLineHelpRequest;
+  }
+
+  if(_parser.optionNames().size() == 0) 
+  {
+    return EParseCommandLineResult::CommandLineIsEmpty;
+  }
+
+  if(_parser.isSet(launch))
+  {
+    _params << _parser.value(launch);
+    return EParseCommandLineResult::CommandLineLaunch;
+  }
+
+  return EParseCommandLineResult::CommandLineIsEmpty;
+}
+
+//------------------------------------------------------------------------------
+static int __s_projectDeploy(QApplication& _app)
+{
+  const CApplicationInterface& appinterface = 
+    CApplicationInterface::getInstance();
 
   QDomDocument domDoc;
   QString errorStr;
   int errorLine;
   int errorColumn;
 
-
-
   appinterface.message(QStringLiteral("\n\tBegining deploy of project\n"));
 
 
+  /* QFile file(__slParameters.projectPath + __slParameters.mainFileName); */
 
-  QFile file(__slParameters.projectPath + __slParameters.mainFileName);
+  auto main_file = appinterface.getFileDevice("main.xml");
 
-  if(!domDoc.setContent(&file, true, &errorStr, &errorLine, &errorColumn))
+  if(main_file.isNull()) 
+  {
+    appinterface.message(__smQuitMessage);
+    return -1;
+  }
+
+  if(!domDoc.setContent(main_file.data(), true, &errorStr, &errorLine, &errorColumn))
   {
     appinterface.error(
         QString("Application: parse error at line: %1 column: %2 msg: #3")
@@ -195,6 +342,7 @@ int main(int argc, char *argv[])
   }
 
   QDomElement rootElement = domDoc.documentElement();
+
 
   if(rootElement.tagName() != __slRootTag)
   {
@@ -213,10 +361,9 @@ int main(int argc, char *argv[])
   }
 
   //----------------------------------------------------
-  xmlpluginpathes::upload(rootElement,
-      __slParameters.defaultPluginsPath);
+  xmlpluginpathes::upload(rootElement);
   //----------------------------------------------------
-  xmlglobalstyle::upload(rootElement, app);
+  xmlglobalstyle::upload(rootElement, _app);
   //----------------------------------------------------
   builders::sources::upload( 
       rootElement, 
@@ -252,13 +399,11 @@ int main(int argc, char *argv[])
 
   xmlkeyboards::init();
   xmlwindows::show();
-
-  QObject::connect(&app, &QApplication::aboutToQuit,
-      [&](){
-        appinterface.message(__smQuitMessage);
-      });
-
-  return app.exec();
+  return 0;
 }
 
-
+//------------------------------------------------------------------------------
+static bool __s_compilProject(char** _argv)
+{
+  return false;
+}

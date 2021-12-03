@@ -29,8 +29,7 @@ class QDomElement;
 
 namespace xmlpluginpathes
 {
-void upload(const QDomElement& _rootElement, 
-    const QString& _defaultPluginsPath);
+void upload(const QDomElement& _rootElement);
 const QStringList& getPlaginPathes();
 }
 

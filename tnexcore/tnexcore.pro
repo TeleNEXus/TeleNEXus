@@ -131,6 +131,7 @@ xml/xmlglobalstyle.cpp \
 keyboard/lckeyboard.cpp \
 window/lcwindow.cpp \
 applicationinterface.cpp \
+projectsource.cpp \
 main.cpp \
 
 
@@ -237,6 +238,7 @@ xml/xmlglobalstyle.h \
 keyboard/lckeyboard.h \
 window/lcwindow.h \
 applicationinterface.h \
+projectsource.h \
 version.h \
 
 

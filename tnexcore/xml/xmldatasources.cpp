@@ -25,7 +25,6 @@
 #include "LIXmlRemoteDataSourceBuilder.h"
 #include "applicationinterface.h"
 
-#include <QFileInfo>
 #include <QDomElement>
 #include <QMap>
 #include <QSharedPointer>
@@ -74,12 +73,6 @@ void upload(const QDomElement& _rootElement)
 
   if(!attr_file.isNull())
   {
-    if(!QFileInfo::exists(attr_file))
-    {
-      __smWarning(QString("File %1 is not exist.").arg(attr_file));
-      return ret();
-    }
-
     auto ddoc = xmlcommon::loadDomDocument(attr_file);
     if(ddoc.isNull()) 
     {

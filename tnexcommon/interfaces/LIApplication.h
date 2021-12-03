@@ -35,6 +35,7 @@ class LIKeyboard;
 class QDomDocument;
 class LIDataFormatter;
 class LIJScriptService;
+class QIODevice;
 
 #include "LIRemoteDataSource.h"
 
@@ -107,7 +108,7 @@ public:
       const QString& _accessId,
       const QSet<QEvent::Type>& _events) const = 0;
 
-  virtual QByteArray getFileData(const QString& _fileName) const = 0;
+  virtual QSharedPointer<QIODevice> getFileDevice(const QString& _fileName) const = 0;
 };
 
 #endif // LIAPPLICATION_H
