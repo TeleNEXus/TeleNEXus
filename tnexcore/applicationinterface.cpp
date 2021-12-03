@@ -35,6 +35,7 @@
 #include <QDebug>
 #include <QDir>
 #include <iostream>
+#include <QBuffer>
 
 #define __smDateTimeFormat QStringLiteral("yyyy:MM:dd|hh:mm:ss")
 //==============================================================================
@@ -199,5 +200,13 @@ QObject* CApplicationInterface::createSecurityEventFilter(
       const QSet<QEvent::Type>& _events) const
 {
   return LCSecurity::instance().createEventFilter(_accessId, _events);
+}
+
+//------------------------------------------------------------------------------
+QByteArray CApplicationInterface::getFileData(
+    const QString& _fileName) const
+{
+  Q_UNUSED(_fileName);
+  return QByteArray();
 }
 

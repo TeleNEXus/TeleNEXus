@@ -106,6 +106,8 @@ public:
   virtual QObject* createSecurityEventFilter(
       const QString& _accessId,
       const QSet<QEvent::Type>& _events) const = 0;
+
+  virtual QByteArray getFileData(const QString& _fileName) const = 0;
 };
 
 #endif // LIAPPLICATION_H
