@@ -93,11 +93,6 @@ static void uploadElement(const QDomElement& _element)
 
   if(!attr_file.isNull())
   {
-    if(!QFileInfo::exists(attr_file))
-    {
-      __smWarning(QString("File '%1' is not exists").arg(attr_file));
-      return;
-    }
     auto ddoc = xmlcommon::loadDomDocument(attr_file);
     if(!ddoc.isNull()) uploadStyles(ddoc.documentElement());
   }
