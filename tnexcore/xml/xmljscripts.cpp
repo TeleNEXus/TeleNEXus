@@ -25,8 +25,6 @@
 #include "LIJScriptService.h"
 #include "applicationinterface.h"
 
-#include <QFileInfo>
-#include <QFile>
 #include <QDomElement>
 #include <QMap>
 #include <QWidget>
@@ -82,13 +80,6 @@ static void scriptUpload(const QDomElement &_element)
       return;
     }
 
-    if(!QFileInfo::exists(attr_file))
-    {
-      __smWarning(QString("Script file '%1' is not exist\n")
-          .arg(attr_file));
-      return;
-    }
-
     QString attr_id = _scriptElement.attribute(__slAttributes.id);
     if(attr_id.isNull())
     {
@@ -96,8 +87,10 @@ static void scriptUpload(const QDomElement &_element)
       return;
     }
 
-    QFile scriptFile(attr_file);
-    if (!scriptFile.open(QIODevice::ReadOnly)) 
+    auto fd = CApplicationInterface::getInstance().getFileDevice(attr_file);
+    if(fd.isNull()) return;
+
+    if (!fd->open(QIODevice::ReadOnly)) 
     {
       __smWarning(
           QString("Can't open script file '%1' for read\n")
@@ -105,9 +98,9 @@ static void scriptUpload(const QDomElement &_element)
       return;
     }
 
-    QTextStream stream(&scriptFile);
+    QTextStream stream(fd.data());
     QString script_str = stream.readAll();
-    scriptFile.close();
+    fd->close();
 
     if(script_str.isNull()) 
     {
@@ -246,11 +239,6 @@ static void uploadLocal(const QDomElement& _element)
 
   if(!attr_file.isNull())
   {
-    if(!QFileInfo::exists(attr_file))
-    {
-      __smWarning("File '%1' is not exist");
-      return;
-    }
     QDomElement el = app.getDomDocument(attr_file).documentElement();
     if(el.isNull()) return;
     if(el.tagName() != _element.tagName())

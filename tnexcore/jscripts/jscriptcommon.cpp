@@ -23,7 +23,6 @@
 #include <QJSValue>
 #include <QJSEngine>
 #include <QJSValueIterator>
-#include <QFile>
 #include "applicationinterface.h"
 
 namespace jscriptcommon
@@ -78,12 +77,14 @@ void importModule(
 
   QJSEngine engine;
 
-  QFile file(_fileName);
   QString script;
-  if (file.open(QIODevice::ReadOnly)) 
+
+  auto fd = CApplicationInterface::getInstance().getFileDevice(_fileName);
+
+  if (fd->open(QIODevice::ReadOnly)) 
   {
-    script = QString(file.readAll());
-    file.close();
+    script = QString(fd->readAll());
+    fd->close();
   }
   else
   {

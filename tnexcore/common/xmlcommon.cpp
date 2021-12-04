@@ -23,8 +23,6 @@
 #include "applicationinterface.h"
 #include <QRegularExpression>
 #include <QDomDocument>
-#include <QFile>
-#include <QFileInfo>
 #include <QPixmap>
 #include <QDebug>
 

@@ -26,7 +26,6 @@
 
 #include "LIApplication.h"
 
-#include <QFile>
 #include <QDebug>
 #include <QDomElement>
 
@@ -54,24 +53,14 @@ LQDataSources LCXmlModbusSourceBuilder::build(
 {
   Q_UNUSED(_app);
   LQDataSources map;
-  QFile file;
+
   QString xmlfilename = _element.attribute("file");
 
   if(xmlfilename.isNull()) return map;
-  file.setFileName(xmlfilename);
 
-  QDomDocument domDoc;
-  QString errorStr;
-  int errorLine;
-  int errorColumn;
+  QDomDocument domDoc = _app.getDomDocument(xmlfilename);
 
-  if(!domDoc.setContent(&file, true, &errorStr, &errorLine, &errorColumn))
-  {
-    _app.message(
-        QString("LCXmlModbusSources: parse error at line: %1 column %2 msg: %3")
-      .arg(errorLine).arg( errorColumn).arg(errorStr));
-    return map;
-  }
+  if(domDoc.isNull()) return map;
 
   QDomElement rootElement = domDoc.documentElement();
 
@@ -403,27 +392,11 @@ static int loadMemoryMap(LQModbusDataSource* _p_source,
     const QString& _filename, 
     const LIApplication& _app)
 {
-  QFile file(_filename);
+  QDomDocument domDoc = _app.getDomDocument(_filename);
+  if(domDoc.isNull()) return -1;
 
-  QDomDocument domDoc;
   QDomNodeList itemnodes;
-  QString errorStr;
-  int errorLine;
-  int errorColumn;
   int itemsCounter = 0;
-
-  if(!domDoc.setContent(&file, true, &errorStr, &errorLine, &errorColumn))
-  {
-    _app.message(
-        QString("LCXmlModbusSources: "
-          "parse memory map file: %1 line: %2 column: %3 msg: %4")
-        .arg(_filename)
-        .arg(errorLine)
-        .arg(errorColumn) 
-        .arg(errorStr));
-    return -1;
-  }
-
   QDomElement rootElement = domDoc.documentElement();
 
   if(rootElement.tagName() != "memorymap")
