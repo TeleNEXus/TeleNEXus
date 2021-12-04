@@ -40,102 +40,21 @@
 #include <QDomElement>
 #include <QDir>
 #include <QCommandLineParser>
+#include <QDirIterator>
+#include <QDataStream>
+#include <QCryptographicHash>
 
-
+#define __smCompressLevel 3
 #define __smQuitMessage QStringLiteral("Quit from TeleNEXus")
-
+#define __smHashAlgorithm (QCryptographicHash::Sha256) 
+#define __smPacketFileVersion (1)
+#define __smPacketFileMagicNumber (0xA0B1C2D3)
 #define __lmVersionString (QString("TeleNEXus version: %1").arg(APPLICATION_VERSION))
 #define __lmApplicationDescription "TeleNEXus is a simple SCADA"
 
 static const QString __slRootTag = "APPLICATION";
 
-//==============================================================================
-static const struct
-{
-  QString file = "file";
-  QString path = "path";
-  QString version = "version";
-  QString compil = "compil";
-  QString target = "target";
-} __slAppOptionsName;
-
-//==============================================================================
-struct SParameters
-{
-  QString defaultPluginsPath;
-  QString mainFileName;
-  QString projectPath;
-  QDir    projectDir;
-
-  bool setParameters(const QCommandLineParser& _parser, char** _argv)
-  {
-
-    defaultPluginsPath = QString("%1/%2")
-      .arg(QApplication::applicationDirPath())
-      .arg("plugins");
-
-    QFileInfo fi(_argv[0]);
-
-    /* QCommandLineParser parser; */
-
-    /* QCommandLineOption fileName(__slAppOptionsName.xmlMainFileName, */
-    /*     QStringLiteral("Main XML filename."), */
-    /*     __slAppOptionsName.xmlMainFileName, */
-    /*     QStringLiteral("main.xml")); */
-
-    /* QCommandLineOption pathName(__slAppOptionsName.xmlMainFilePath, */
-    /*     QStringLiteral("Root path XML files"), */
-    /*     __slAppOptionsName.xmlMainFilePath, */
-    /*     fi.absolutePath()); */
-
-    /* QCommandLineOption version(__slAppOptionsName.version, */
-    /*     QStringLiteral("Version"), */
-    /*     __slAppOptionsName.version */
-    /*     ); */
-
-    /* parser.addOption(fileName); */
-    /* parser.addOption(pathName); */
-    /* parser.addOption(version); */
-
-    /* parser.parse(QApplication::arguments()); */
-
-    /* qDebug("%s", qPrintable(__lmVersionString)); */
-    /* if(_parser.isSet(__slAppOptionsName.version)) */
-    /* { */
-    /*   return false; */
-    /* } */
-
-    /* { */
-
-    /*   QString file = _parser.value(__slAppOptionsName.xmlMainFileName); */
-    /*   QString path = _parser.value(__slAppOptionsName.xmlMainFilePath); */
-
-    /*   QDir dir(path); */
-
-
-    /*   fi.setFile(path + "/" + file); */
-
-    /*   if(dir.exists() && fi.exists()) */
-    /*   { */
-    /*     mainFileName = fi.fileName(); */
-    /*     projectPath  = fi.absolutePath() + "/"; */
-    /*     projectDir   = fi.absoluteDir(); */
-    /*     QDir::setCurrent(path); */
-    /*   } */
-    /*   else */
-    /*   { */
-    /*     _parser.showHelp(-1); */
-    /*   } */
-    /* } */
-    return true;
-  }
-}__slParameters;
-
-
-
-
 #include <csignal>
-
 
 enum class EParseCommandLineResult
 {
@@ -154,7 +73,11 @@ static EParseCommandLineResult __s_parseCommandLine(
 //------------------------------------------------------------------------------
 static int __s_projectDeploy(QApplication& _app);
 //------------------------------------------------------------------------------
-static bool __s_compilProject(char** _argv);
+static int __s_compilProject(
+    const QString& _sourcePath, const QString& _targetFileName);
+//------------------------------------------------------------------------------
+static QSharedPointer<QMap<QString, QByteArray>> 
+__s_readPacketFile(const QString& _fileName);
 //------------------------------------------------------------------------------
 static void appExit(int _sig)
 {
@@ -188,38 +111,47 @@ int main(int argc, char *argv[])
   case EParseCommandLineResult::CommandLineError:
     qDebug().noquote() << msg;
     return 0;
+
   case EParseCommandLineResult::CommandLineIsEmpty:
   case EParseCommandLineResult::CommandLineHelpRequest:
     parser.showHelp();
+
   case EParseCommandLineResult::CommandLineVersionRequest:
     parser.showVersion();
 
-  /* case EParseCommandLineResult::CommandLineCompileRequest: */
-  /* case EParseCommandLineResult::CommandLineLaunchFromProjectRequest: */
+  case EParseCommandLineResult::CommandLineCompileRequest:
+    return __s_compilProject(params_list.at(0), params_list.at(1));
+
   case EParseCommandLineResult::CommandLineLaunch:
     {
-      qDebug() << "Launch from path = " << params_list;
       QString launch_param = params_list.at(0);
-      prjsource = LCDirProjectSource::create(launch_param, msg);
-      qDebug() << msg;
-      if(prjsource.isNull()) 
-      {
-        return -1;
-      }
-
       QFileInfo fi(launch_param);
 
-      if(fi.dir().isAbsolute())
+      if(fi.isFile())
       {
-        qDebug() << "Set current dir = " << QDir::currentPath();
-        QDir::setCurrent(launch_param);
+        qDebug().noquote() << QString("Launch using a packet file '%1'").arg(fi.absoluteFilePath());
+        QDir::setCurrent(fi.absolutePath());
+        auto files_data = __s_readPacketFile(fi.absoluteFilePath());
+        if(!files_data.isNull())
+        {
+          qDebug().noquote() << QString("Files numbers = '%1'").arg(files_data->size());
+        }
+        return 0;
       }
-
-      qDebug() << 
-        QString("Project source from path '%1' is created").arg(launch_param);
-
-      CApplicationInterface::getInstance().setProjectSource(prjsource);
-
+      else
+      {
+        qDebug().noquote() << QString("Launch from dir '%1'").arg(fi.absoluteFilePath());
+        QDir::setCurrent(fi.absolutePath());
+        prjsource = LCDirProjectSource::create(fi.absoluteFilePath(), msg);
+        qDebug().noquote() << msg;
+        if(prjsource.isNull()) 
+        {
+          return -1;
+        }
+        qDebug().noquote()<< 
+          QString("Project source from path '%1' is created").arg(fi.absolutePath());
+        CApplicationInterface::getInstance().setProjectSource(prjsource);
+      }
     }
     break;
 
@@ -227,14 +159,7 @@ int main(int argc, char *argv[])
     break;
   }
 
-  /* return 0; */
-
-  /* QString default_plugin_path = QString("%1/%2") */
-  /*     .arg(QApplication::applicationDirPath()) */
-  /*     .arg("plugins"); */
-
   if(__s_projectDeploy(app) < 0) return -1;
-
 
   QObject::connect(&app, &QApplication::aboutToQuit,
       [&](){
@@ -254,16 +179,15 @@ __s_parseCommandLine(
 
   QCommandLineOption file("file", QStringLiteral("Project file"), "file");
 
-  QCommandLineOption launch("launch",
+  QCommandLineOption launch(QStringList() << "l" << "launch",
       QStringLiteral("Launch TeleNEXus project"),
       "launch");
 
-
-  QCommandLineOption compil("compil",
+  QCommandLineOption compil(QStringList() << "c" << "compil",
       QStringLiteral("Compil directory path"),
       "compil");
 
-  QCommandLineOption target("target",
+  QCommandLineOption target(QStringList() << "t" << "target",
       QStringLiteral("Compil target file name"),
       "target");
 
@@ -303,6 +227,18 @@ __s_parseCommandLine(
     return EParseCommandLineResult::CommandLineLaunch;
   }
 
+  if(_parser.isSet(compil))
+  {
+
+    if(_parser.value(target).isNull())
+    {
+      _msg = "The target file for compilation is not specified.";
+      return EParseCommandLineResult::CommandLineError;
+    }
+    _params << _parser.value(compil) << _parser.value(target);
+    return EParseCommandLineResult::CommandLineCompileRequest;
+  }
+
   return EParseCommandLineResult::CommandLineIsEmpty;
 }
 
@@ -314,29 +250,15 @@ static int __s_projectDeploy(QApplication& _app)
 
   QDomDocument domDoc;
   QString errorStr;
-  int errorLine;
-  int errorColumn;
 
   appinterface.message(QStringLiteral("\n\tBegining deploy of project\n"));
 
+  appinterface.message("Opening the main project file...");
 
-  /* QFile file(__slParameters.projectPath + __slParameters.mainFileName); */
+  domDoc = CApplicationInterface::getInstance().getDomDocument("main.xml");
 
-  auto main_file = appinterface.getFileDevice("main.xml");
-
-  if(main_file.isNull()) 
+  if(domDoc.isNull())
   {
-    appinterface.message(__smQuitMessage);
-    return -1;
-  }
-
-  if(!domDoc.setContent(main_file.data(), true, &errorStr, &errorLine, &errorColumn))
-  {
-    appinterface.error(
-        QString("Application: parse error at line: %1 column: %2 msg: #3")
-       .arg(errorLine)
-       .arg(errorColumn)
-       .arg(errorStr));
     appinterface.message(__smQuitMessage);
     return -1;
   }
@@ -403,7 +325,135 @@ static int __s_projectDeploy(QApplication& _app)
 }
 
 //------------------------------------------------------------------------------
-static bool __s_compilProject(char** _argv)
+static int __s_compilProject(
+    const QString& _sourcePath, const QString& _targetFileName)
 {
-  return false;
+  qDebug() << 
+    QString("Start compil project dir with path '%1' to target file '%2'")
+    .arg(_sourcePath).arg(_targetFileName);
+
+  QDir::setCurrent(QFileInfo(_sourcePath).absoluteFilePath());
+  QDir curr_dir("./");
+
+  QFile target_file(_targetFileName);
+
+  if(!target_file.open(QFile::OpenModeFlag::WriteOnly))
+  {
+    qDebug() << 
+      QString("Can't open target file '%1' for write.").arg(_targetFileName);
+    return -1;
+  }
+
+  QDataStream dstream(&target_file);
+
+  QDir::Filters dir_filter =  QDir::Filter::NoDotAndDotDot | 
+    QDir::Filter::Files;
+  QDirIterator it("./", dir_filter, QDirIterator::IteratorFlag::Subdirectories);
+
+  //----------------------------------------------------------------
+  dstream << (quint32)__smPacketFileMagicNumber;  //magic number
+  dstream << (quint32)__smPacketFileVersion;      //packet file version
+  //----------------------------------------------------------------
+
+  while(it.hasNext())
+  {
+    QString file_name = curr_dir.relativeFilePath(it.next());
+    qDebug() << file_name; 
+    QByteArray data = file_name.toUtf8();
+    QByteArray hash = 
+      QCryptographicHash::hash( data, __smHashAlgorithm);
+
+    dstream << qCompress(data,__smCompressLevel) << hash;
+
+    QFile file(file_name);
+
+    if(!file.open(QFile::OpenModeFlag::ReadOnly))
+    {
+      qDebug() << QString("Can't open project file '%1' for read.").arg(file_name);
+      target_file.close();
+      target_file.remove();
+      return -1;
+    }
+
+    data = file.readAll();
+    hash =
+      QCryptographicHash::hash( data, __smHashAlgorithm);
+    dstream << qCompress(data, __smCompressLevel) << hash;
+  }
+
+  return 0;
+}
+
+//------------------------------------------------------------------------------
+static QSharedPointer<QMap<QString, QByteArray>> 
+__s_readPacketFile(const QString& _fileName)
+{
+  QFile file(_fileName);
+  if(!file.open(QFile::OpenModeFlag::ReadOnly))
+  {
+    qDebug() << QString("Can't open packet file '%1' for read.").arg(_fileName);
+    return nullptr;
+  }
+  QDataStream dstream(&file);
+  //----------------------------------------
+  quint32 magic_number = 0;
+  quint32 file_version = 0;
+
+  dstream >> magic_number >> file_version;
+
+  if(magic_number != __smPacketFileMagicNumber)
+  {
+    qDebug() << QString("Wrong packet file format.");
+    return nullptr;
+  }
+
+  if(file_version != __smPacketFileVersion)
+  {
+    qDebug() << 
+      QString("Wrong packet file version '%1', required version '%2'")
+      .arg(file_version).arg(__smPacketFileVersion);
+    return nullptr;
+  }
+  //----------------------------------------
+
+  auto check_hash = 
+    [&_fileName](const QByteArray& readed_data, const QByteArray& readed_hash)
+    {
+      if(readed_hash != 
+          QCryptographicHash::hash(readed_data, __smHashAlgorithm))
+      {
+        qDebug() << QString("Error read packet file '%1'.").arg(_fileName);
+        return false;
+      }
+      return true;
+    };
+
+  auto files_data = 
+    QSharedPointer<QMap<QString,QByteArray>>(new QMap<QString,QByteArray>());
+
+  while(!dstream.atEnd())
+  {
+    QByteArray read_data;
+    QByteArray read_hash;
+    QByteArray hash;
+
+    dstream >> read_data;
+    dstream >> read_hash;
+    read_data = qUncompress(read_data);
+
+    if(!check_hash(read_data, read_hash)) return nullptr;
+
+    QString file_name = QString::fromUtf8(read_data);
+
+    dstream >> read_data;
+    dstream >> read_hash;
+    read_data = qUncompress(read_data);
+
+    if(!check_hash(read_data, read_hash)) return nullptr;
+
+    files_data->insert(file_name, read_data);
+
+  }
+
+  return files_data;
 }
