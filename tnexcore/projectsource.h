@@ -32,7 +32,7 @@ public:
   LIProjectSource(){}
   virtual ~LIProjectSource(){}
   virtual QDir getProjectDir() const = 0;
-  virtual QSharedPointer<QIODevice> getFileDevice(const QString& _fileName) = 0;
+  virtual QSharedPointer<QIODevice> getFileDevice(const QString& _fileName) const = 0;
 };
 
 //==============================================================================
@@ -66,7 +66,7 @@ public:
 
   virtual QDir getProjectDir() const override;
   virtual QSharedPointer<QIODevice> 
-    getFileDevice(const QString& _fileName) override;
+    getFileDevice(const QString& _fileName) const override;
 };
 
 #endif

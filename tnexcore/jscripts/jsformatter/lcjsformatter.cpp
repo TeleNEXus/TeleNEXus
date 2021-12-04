@@ -2,15 +2,14 @@
 #include "LIApplication.h"
 #include "lcqjsformatterinterface.h"
 #include "jscriptcommon.h"
+#include "applicationinterface.h"
 
 #include <QValidator>
 #include <QDomElement>
 #include <QStringList>
-#include <QFile>
 #include <QJSValue>
 #include <QJSEngine>
 #include <QSharedPointer>
-#include <QFile>
 #include <QDebug>
 
 //==============================================================================__slPropNames
@@ -203,12 +202,13 @@ QSharedPointer<LCJSFormatter> LCJSFormatter::create(
     const QString& _fileName,
     const QMap<QString, QString>& _attributes)
 {
-  auto ret_wrong = [](){ return QSharedPointer<LCJSFormatter>(); };
 
-  QFile file(_fileName);
-  if (!file.open(QIODevice::ReadOnly)) return ret_wrong();
-  QString script(file.readAll());
-  file.close();
+  auto ret_wrong = [](){ return QSharedPointer<LCJSFormatter>(); };
+  auto fd = CApplicationInterface::getInstance().getFileDevice(_fileName);
+  if(fd.isNull()) return ret_wrong();
+
+  if (!fd->open(QIODevice::ReadOnly)) return ret_wrong();
+  QString script(fd->readAll());
 
   if(script.isNull()) return ret_wrong();
 

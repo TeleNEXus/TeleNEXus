@@ -22,8 +22,6 @@
 #include "xmlwidgetstyles.h"
 #include "xmlcommon.h"
 #include "applicationinterface.h"
-#include <QFileInfo>
-#include <QFile>
 #include <QDomElement>
 #include <QMap>
 #include <QTextStream>
@@ -132,10 +130,11 @@ static void uploadStyles(const QDomElement& _element)
   auto load_from_file = 
     [&add_style](const QString& _tagName, const QString& _fileName)
     {
-      QFile style_file( _fileName);
-      if(style_file.open(QFile::OpenModeFlag::ReadOnly))
+      auto fd = CApplicationInterface::getInstance().getFileDevice(_fileName);
+      if(fd.isNull()) return;
+      if(fd->open(QIODevice::OpenModeFlag::ReadOnly))
       {
-         add_style(_tagName, QTextStream(&style_file).readAll());
+         add_style(_tagName, QTextStream(fd.data()).readAll());
       }
       else
       {

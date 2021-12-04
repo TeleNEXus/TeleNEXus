@@ -442,17 +442,17 @@
   <!-- <!-1-   /> -1-> -->
 
 
-  <!-- <!-1- <WINDOW -1-> --> 
-  <!-- <!-1-   file="testbutton/testbutton.xml" -1-> --> 
-  <!-- <!-1-   id="testbutton" -1-> --> 
-  <!-- <!-1-   visible="true" -1-> -->
-  <!-- <!-1-   title="Test Buttons" -1-> --> 
-  <!-- <!-1-   showMode="normal" -1-> -->
-  <!-- <!-1-   modality="false" -1-> -->
-  <!-- <!-1-   flags="" -1-> --> 
-  <!-- <!-1-   size="300;50" -1-> -->
-  <!-- <!-1-   position="300;600" -1-> -->
-  <!-- <!-1-   /> -1-> -->
+  <WINDOW 
+    file="testbutton/testbutton.xml" 
+    id="testbutton" 
+    visible="true"
+    title="Test Buttons" 
+    showMode="normal"
+    modality="false"
+    flags="" 
+    size="300;50"
+    position="300;600"
+    />
 
   <!-- <!-1- <WINDOW -1-> --> 
   <!-- <!-1-   file="testbutton/testbutton2.xml" -1-> --> 

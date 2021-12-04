@@ -23,7 +23,6 @@
 #include "LIXmlLayoutBuilder.h"
 #include <QFrame>
 #include <QDomElement>
-#include <QFile>
 #include <QDebug>
 
 //==============================================================================

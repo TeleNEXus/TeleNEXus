@@ -28,10 +28,7 @@
 #include <QDir>
 #include <QCommandLineParser>
 
-
-
 #include <csignal>
-
 
 #include <QVBoxLayout>
 #include <QHBoxLayout>

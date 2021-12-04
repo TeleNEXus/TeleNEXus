@@ -66,7 +66,7 @@ QDir LCDirProjectSource::getProjectDir() const
 
 //------------------------------------------------------------------------------
 QSharedPointer<QIODevice> LCDirProjectSource::getFileDevice(
-    const QString& _fileName)
+    const QString& _fileName) const
 {
 
   QFileInfo fi(_fileName);
