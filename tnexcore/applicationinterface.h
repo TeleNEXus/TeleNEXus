@@ -43,12 +43,7 @@ public:
 
   void setProjectSource(QSharedPointer<LIProjectSource> _prjSource);
 
-  /* void setParameters(const QString& _mainFileName, */ 
-  /*     const QString& _projectPath, */
-  /*     const QDir& _projectDir); */
-
   virtual QString getProjectPath() const override;
-  virtual QDir getProjectDir() const override;
 
   virtual QSharedPointer<LIXmlRemoteDataSourceBuilder> 
     getDataSourceBuilder( const QString& _name) const override;

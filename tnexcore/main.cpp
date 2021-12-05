@@ -50,7 +50,7 @@
 #define __smPacketFileVersion (1)
 #define __smPacketFileMagicNumber (0xA0B1C2D3)
 #define __lmVersionString (QString("TeleNEXus version: %1").arg(APPLICATION_VERSION))
-#define __lmApplicationDescription "TeleNEXus is a simple SCADA"
+#define __lmApplicationDescription "TeleNEXus is a simple SCADA."
 
 static const QString __slRootTag = "APPLICATION";
 
@@ -69,7 +69,6 @@ enum class EParseCommandLineResult
 //------------------------------------------------------------------------------
 static EParseCommandLineResult __s_parseCommandLine(
     QCommandLineParser& _parser, QStringList& _params, QString& _msg);
-
 //------------------------------------------------------------------------------
 static int __s_projectDeploy(QApplication& _app);
 //------------------------------------------------------------------------------
@@ -77,7 +76,7 @@ static int __s_compilProject(
     const QString& _sourcePath, const QString& _targetFileName);
 //------------------------------------------------------------------------------
 static QSharedPointer<QMap<QString, QByteArray>> 
-__s_readPacketFile(const QString& _fileName);
+__s_readPacketFile(const QString& _fileName, QString& _msg);
 //------------------------------------------------------------------------------
 static void appExit(int _sig)
 {
@@ -127,14 +126,22 @@ int main(int argc, char *argv[])
       QString launch_param = params_list.at(0);
       QFileInfo fi(launch_param);
 
+      if(!fi.exists())
+      {
+        qDebug().noquote() << QString("Path '%1' is not exists.").arg(fi.absoluteFilePath());
+        return -1;
+      }
+
       if(fi.isFile())
       {
         qDebug().noquote() << QString("Launch using a packet file '%1'").arg(fi.absoluteFilePath());
         QDir::setCurrent(fi.absolutePath());
-        auto files_data = __s_readPacketFile(fi.absoluteFilePath());
-        if(!files_data.isNull())
+        QString error_msg;
+        auto files_data = __s_readPacketFile(fi.absoluteFilePath(), error_msg);
+        if(files_data.isNull())
         {
-          qDebug().noquote() << QString("Files numbers = '%1'").arg(files_data->size());
+          qDebug().noquote() << error_msg;
+          return -1;
         }
         return 0;
       }
@@ -177,28 +184,24 @@ __s_parseCommandLine(
 
   _parser.setApplicationDescription(__lmApplicationDescription);
 
-  QCommandLineOption file("file", QStringLiteral("Project file"), "file");
-
   QCommandLineOption launch(QStringList() << "l" << "launch",
-      QStringLiteral("Launch TeleNEXus project"),
+      QStringLiteral("Launch TeleNEXus project."),
       "launch");
 
   QCommandLineOption compil(QStringList() << "c" << "compil",
-      QStringLiteral("Compil directory path"),
+      QStringLiteral("Compil directory path."),
       "compil");
 
   QCommandLineOption target(QStringList() << "t" << "target",
-      QStringLiteral("Compil target file name"),
+      QStringLiteral("Compil target file name."),
       "target");
 
-  QCommandLineOption version = _parser.addVersionOption();
 
-  QCommandLineOption help = _parser.addHelpOption();
-
-  _parser.addOption(file);
   _parser.addOption(launch);
   _parser.addOption(compil);
   _parser.addOption(target);
+  QCommandLineOption version = _parser.addVersionOption();
+  QCommandLineOption help = _parser.addHelpOption();
 
   if(!_parser.parse(QApplication::arguments()))
   {
@@ -332,14 +335,16 @@ static int __s_compilProject(
     QString("Start compil project dir with path '%1' to target file '%2'")
     .arg(_sourcePath).arg(_targetFileName);
 
-  QDir::setCurrent(QFileInfo(_sourcePath).absoluteFilePath());
+  QFileInfo fi(_sourcePath);
+
+  QDir::setCurrent(fi.absolutePath());
   QDir curr_dir("./");
 
   QFile target_file(_targetFileName);
 
   if(!target_file.open(QFile::OpenModeFlag::WriteOnly))
   {
-    qDebug() << 
+    qDebug().noquote() << 
       QString("Can't open target file '%1' for write.").arg(_targetFileName);
     return -1;
   }
@@ -355,10 +360,17 @@ static int __s_compilProject(
   dstream << (quint32)__smPacketFileVersion;      //packet file version
   //----------------------------------------------------------------
 
+  qDebug().noquote() << "--------------------------------------";
+  qDebug().noquote() << "Packing project files...";
+  qDebug().noquote() << "--------------------------------------";
+
+  int file_counter = 0;
   while(it.hasNext())
   {
     QString file_name = curr_dir.relativeFilePath(it.next());
-    qDebug() << file_name; 
+
+    qDebug().noquote() << file_name; 
+
     QByteArray data = file_name.toUtf8();
     QByteArray hash = 
       QCryptographicHash::hash( data, __smHashAlgorithm);
@@ -369,7 +381,7 @@ static int __s_compilProject(
 
     if(!file.open(QFile::OpenModeFlag::ReadOnly))
     {
-      qDebug() << QString("Can't open project file '%1' for read.").arg(file_name);
+      qDebug().noquote() << QString("Can't open project file '%1' for read.").arg(file_name);
       target_file.close();
       target_file.remove();
       return -1;
@@ -379,19 +391,20 @@ static int __s_compilProject(
     hash =
       QCryptographicHash::hash( data, __smHashAlgorithm);
     dstream << qCompress(data, __smCompressLevel) << hash;
+    file_counter++;
   }
-
+  qDebug().noquote() << QString("Total packed files count '%1'").arg(file_counter);
   return 0;
 }
 
 //------------------------------------------------------------------------------
 static QSharedPointer<QMap<QString, QByteArray>> 
-__s_readPacketFile(const QString& _fileName)
+__s_readPacketFile(const QString& _fileName, QString& _errorMsg)
 {
   QFile file(_fileName);
   if(!file.open(QFile::OpenModeFlag::ReadOnly))
   {
-    qDebug() << QString("Can't open packet file '%1' for read.").arg(_fileName);
+    _errorMsg =  QString("Can't open packet file '%1' for read.").arg(_fileName);
     return nullptr;
   }
   QDataStream dstream(&file);
@@ -403,13 +416,13 @@ __s_readPacketFile(const QString& _fileName)
 
   if(magic_number != __smPacketFileMagicNumber)
   {
-    qDebug() << QString("Wrong packet file format.");
+    _errorMsg =  QString("Wrong packet file format.");
     return nullptr;
   }
 
   if(file_version != __smPacketFileVersion)
   {
-    qDebug() << 
+    _errorMsg =
       QString("Wrong packet file version '%1', required version '%2'")
       .arg(file_version).arg(__smPacketFileVersion);
     return nullptr;
@@ -417,12 +430,13 @@ __s_readPacketFile(const QString& _fileName)
   //----------------------------------------
 
   auto check_hash = 
-    [&_fileName](const QByteArray& readed_data, const QByteArray& readed_hash)
+    [&_fileName, &_errorMsg]( const QByteArray& readed_data, 
+        const QByteArray& readed_hash)
     {
       if(readed_hash != 
           QCryptographicHash::hash(readed_data, __smHashAlgorithm))
       {
-        qDebug() << QString("Error read packet file '%1'.").arg(_fileName);
+        _errorMsg =  QString("Error read packet file '%1'.").arg(_fileName);
         return false;
       }
       return true;
@@ -431,9 +445,14 @@ __s_readPacketFile(const QString& _fileName)
   auto files_data = 
     QSharedPointer<QMap<QString,QByteArray>>(new QMap<QString,QByteArray>());
 
+  qDebug().noquote() << "----------------------------------------";
+  qDebug().noquote() << "Unpack files...";
+  qDebug().noquote() << "----------------------------------------";
+
   while(!dstream.atEnd())
   {
     QByteArray read_data;
+  
     QByteArray read_hash;
     QByteArray hash;
 
@@ -452,8 +471,10 @@ __s_readPacketFile(const QString& _fileName)
     if(!check_hash(read_data, read_hash)) return nullptr;
 
     files_data->insert(file_name, read_data);
-
+    qDebug().noquote() << QString("'%1'").arg(file_name);
   }
+  qDebug().noquote() << "----------------------------------------";
+  qDebug().noquote() << QString("Total unpacked files: '%1'").arg(files_data->size());
 
   return files_data;
 }

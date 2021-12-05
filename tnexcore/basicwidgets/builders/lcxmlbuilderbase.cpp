@@ -336,10 +336,11 @@ void LCXmlBuilderBase::setWidgetStyle(
 //==============================================================================
 static QMap<QString, QSharedPointer<CMovieCtrl>> __slMovies;
 //------------------------------------------------------------------------------
-static void deleter(QIODevice* _d)
-{
-  _d->deleteLater();
-}
+
+/* static void deleter(QIODevice* _d) */
+/* { */
+/*   _d->deleteLater(); */
+/* } */
 
 QSharedPointer<LIMovieAccess> 
 LCXmlBuilderBase::getMovie(const QString& _movieFile)

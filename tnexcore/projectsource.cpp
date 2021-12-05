@@ -58,11 +58,11 @@ QSharedPointer<LCDirProjectSource> LCDirProjectSource::create(
     QSharedPointer<LCDirProjectSource>(new LCDirProjectSource(QDir(_prjPath)));
 }
 
-//------------------------------------------------------------------------------
-QDir LCDirProjectSource::getProjectDir() const
-{
-  return mProjectDir;
-}
+/* //------------------------------------------------------------------------------ */
+/* QDir LCDirProjectSource::getProjectDir() const */
+/* { */
+/*   return mProjectDir; */
+/* } */
 
 //------------------------------------------------------------------------------
 QSharedPointer<QIODevice> LCDirProjectSource::getFileDevice(
