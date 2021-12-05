@@ -32,6 +32,7 @@
 #include "lcsecurity.h"
 #include "projectsource.h"
 
+#include <QApplication>
 #include <QDateTime>
 #include <QDebug>
 #include <QDir>
@@ -77,28 +78,10 @@ void CApplicationInterface::setProjectSource(
   __slLocalData.mspProjectSource = _prjSource;
 }
 
-/* void CApplicationInterface::setParameters( */
-/*     const QString& _mainFileName, */ 
-/*     const QString& _projectPath, */
-/*     const QDir& _projectDir) */
-/* { */
-/*   __slLocalData.xmlMainFileName = _mainFileName; */
-/*   __slLocalData.xmlProjectPath = _projectPath; */
-/*   __slLocalData.xmlProjectDir = _projectDir; */
-/* } */
-
 //------------------------------------------------------------------------------
 QString CApplicationInterface::getProjectPath() const
 {
-  return __slLocalData.mspProjectSource->getProjectDir().absolutePath();
-}
-
-//------------------------------------------------------------------------------
-QDir CApplicationInterface::getProjectDir() const
-{
-  QDir prjd = __slLocalData.mspProjectSource->getProjectDir();
-  prjd.makeAbsolute();
-  return prjd;
+  return QDir::currentPath();
 }
 
 //------------------------------------------------------------------------------

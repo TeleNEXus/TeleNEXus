@@ -31,24 +31,21 @@ class LIProjectSource
 public:
   LIProjectSource(){}
   virtual ~LIProjectSource(){}
-  virtual QDir getProjectDir() const = 0;
   virtual QSharedPointer<QIODevice> getFileDevice(const QString& _fileName) const = 0;
 };
 
 //==============================================================================
-/* class LCCompilProjectSource : public LIProjectSource */
+/* class LCPacketProjectSource : public LIProjectSource */
 /* { */
 /* private: */
-/*   QString mMessage; */
-/*   LCCompilProjectSource(){} */
+/*   LCPacketProjectSource(){} */
 /* public: */
-/*   virtual ~LCCompilProjectSource(){} */
-/*   static QSharedPointer<LCCompilProjectSource> create(const QString& _fileName); */
-/*   QString getMessage(){ return mMessage;} */
+/*   virtual ~LCPacketProjectSource(){} */
+/*   static QSharedPointer<LCPacketProjectSource> */ 
+/*     create(QSharedPointer<QMap<QString,QByteArray>> _filesMap); */
 
-/*   virtual QDir getProjectDir() const override; */
 /*   virtual QSharedPointer<QIODevice> */ 
-/*     getFileDevice(const QString& _fileName) override; */
+/*     getFileDevice(const QString& _fileName) const override; */
 /* }; */
 
 //==============================================================================
@@ -64,7 +61,6 @@ public:
   static QSharedPointer<LCDirProjectSource> 
     create(const QString& _prjPath, QString& _msg);
 
-  virtual QDir getProjectDir() const override;
   virtual QSharedPointer<QIODevice> 
     getFileDevice(const QString& _fileName) const override;
 };
