@@ -74,7 +74,10 @@ QWidget* buildWindow(const QApplication& _app)
 {
   QWidget* widget = new QWidget();
 
-  QPushButton* buttonAdd = new QPushButton("Add");
+  QPushButton* buttonAddDir = new QPushButton("Add project path");
+
+  QPushButton* buttonAddFile = new QPushButton("Add pack file");
+
   QPushButton* buttonRemove = new QPushButton("Remove");
   QPushButton* buttonLaunch = new QPushButton("Launch");
 
@@ -83,7 +86,8 @@ QWidget* buildWindow(const QApplication& _app)
   QHBoxLayout* mainLayout = new QHBoxLayout();
   QVBoxLayout* buttonsLayout = new QVBoxLayout();
 
-  buttonsLayout->addWidget(buttonAdd);
+  buttonsLayout->addWidget(buttonAddDir);
+  buttonsLayout->addWidget(buttonAddFile);
   buttonsLayout->addWidget(buttonRemove);
   buttonsLayout->addStretch();
   buttonsLayout->addWidget(buttonLaunch);
@@ -117,19 +121,46 @@ QWidget* buildWindow(const QApplication& _app)
     }
   }
 
-  QObject::connect(buttonAdd, &QPushButton::pressed, 
+  QObject::connect(buttonAddDir, &QPushButton::pressed, 
+      [widget, projectList]()
+      {
+        qDebug() << "Button 'Add path' pressed";
+
+        auto dir = QFileDialog::getExistingDirectory(widget, QString("Open project directory"));
+
+        /* auto file = */ 
+        /*   QFileDialog::getOpenFileName( */
+        /*       widget, */ 
+        /*       QStringLiteral("Open main xml file"), */ 
+        /*       QString(""), */ 
+        /*       QStringLiteral("Main file (main.xml);;xml files (*.xml)")); */
+
+        if(dir.isNull())
+        {
+          qDebug() << "Directory is not selected.";
+        }
+        else
+        {
+          qDebug() << QString("Directory '%1' is selected").arg(dir);
+        }
+
+        QFileInfo fileinfo(dir);
+
+        if(!dir.isNull()) projectList->addItem(dir);
+      });
+
+  QObject::connect(buttonAddFile, &QPushButton::pressed, 
       [widget, projectList]()
       {
 
-        qDebug() << "Button 'Add' pressed";
-
+        qDebug() << "Button 'Add pack file' pressed";
 
         auto file = 
           QFileDialog::getOpenFileName(
               widget, 
               QStringLiteral("Open main xml file"), 
               QString(""), 
-              QStringLiteral("Main file (main.xml);;xml files (*.xml)"));
+              QStringLiteral("Pack files (*.pack);;All files (*.*)"));
 
         if(file.isNull())
         {
@@ -146,7 +177,6 @@ QWidget* buildWindow(const QApplication& _app)
         qDebug() << QString("Project main file '%1'").arg(fileinfo.fileName());
         if(!file.isNull()) projectList->addItem(file);
       });
-
 
   QObject::connect(buttonRemove, &QPushButton::pressed,
       [projectList]()
@@ -166,14 +196,13 @@ QWidget* buildWindow(const QApplication& _app)
         auto list_item = projectList->currentItem();
         if(list_item == nullptr) return;
 
-        QString project_string = projectList->currentItem()->text();
-        qDebug() << "Project string = " << project_string;
+        QString project_string = list_item->text();
 
-        QFileInfo fileinfo(project_string);
+        qDebug() << "Launch: " << project_string;
 
+        QFileInfo fi(project_string);
+        if(fi.isDir()) project_string += "/";
 
-        qDebug() << "Project path = " << fileinfo.absolutePath();
-        qDebug() << "Profect main file name = " << fileinfo.fileName();
 
 #ifdef Q_OS_WIN
         //windows
@@ -181,15 +210,13 @@ QWidget* buildWindow(const QApplication& _app)
         /*     "cmd /k start \"tnex\" .\\tnex.exe --xmlpath ..\\xmltestprj\\test1\\"); */
 
         QProcess::startDetached(
-            QString("cmd /C start /Wait \"tnex\" .\\tnex.exe --xmlpath %1 --xmlfile %2")
-            .arg(fileinfo.absolutePath())
-            .arg(fileinfo.fileName()));
+            QString("cmd /C start /Wait \"tnex\" .\\tnex.exe %1")
+            .arg(project_string);
 #else
 
         QProcess::startDetached(
-            QString("../tnex --xmlpath %1 --xmlfile %2")
-            .arg(fileinfo.absolutePath())
-            .arg(fileinfo.fileName()));
+            QString("tnex  %1")
+            .arg(project_string));
 #endif
       });
 
