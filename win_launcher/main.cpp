@@ -211,7 +211,7 @@ QWidget* buildWindow(const QApplication& _app)
 
         QProcess::startDetached(
             QString("cmd /C start /Wait \"tnex\" .\\tnex.exe %1")
-            .arg(project_string);
+            .arg(project_string));
 #else
 
         QProcess::startDetached(
