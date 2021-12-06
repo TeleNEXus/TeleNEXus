@@ -42,6 +42,14 @@ class QIODevice;
 class LIApplication
 {
 public:
+
+  enum class EMessageType
+  {
+    Untyped,
+    Deploy,
+    Runtime
+  };
+
   LIApplication(){}
   virtual QString getProjectPath() const = 0;
 
@@ -74,9 +82,12 @@ public:
 
   virtual QString getWidgetStyle(const QString& _styleId) const = 0;
 
-  virtual void message(const QString& _msg) const = 0;
-  virtual void warning(const QString& _msg) const = 0;
-  virtual void error(const QString& _msg) const = 0;
+  virtual void message(const QString& _msg, 
+      EMessageType _mt = EMessageType::Untyped) const = 0;
+  virtual void warning(const QString& _msg, 
+      EMessageType _mt = EMessageType::Untyped) const = 0;
+  virtual void error(const QString& _msg, 
+      EMessageType _mt = EMessageType::Untyped) const = 0;
 
   virtual QObject* createSecurityEventFilter(
       const QString& _accessId,

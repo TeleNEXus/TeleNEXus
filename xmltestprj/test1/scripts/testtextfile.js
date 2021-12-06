@@ -22,7 +22,7 @@ function read_file(){
   let File = NewTextFile();
   // let File = NewTextFile('temp/test_text_file_read.txt');
   // let File = new TextFile('temp/test_text_file_read.txt');
-  File.setFileName('temp/test_text_file_read.txt');
+  File.setFileName('temp/test_text_file_write.txt');
   File.open('r');
 
   console.debug("\nText file read all 1");
@@ -61,13 +61,13 @@ function read_file(){
 //test text file write
 (function(){
 
-  read_file();
-  read_file();
-  read_file();
-  read_file();
-  read_file();
-  read_file();
-  read_file();
+  // read_file();
+  // read_file();
+  // read_file();
+  // read_file();
+  // read_file();
+  // read_file();
+  // read_file();
   console.debug("Test text file write");
   // let File = NewTextFile('~/test_text_file_write.txt');
   // let File = NewTextFile('/home/serg/test_text_file_write.txt');
@@ -98,11 +98,11 @@ function read_file(){
     console.warn("In " + error.fileName + ": " + error.lineNumber + ": " + error.message);
   }
 })();
-(function(){
-  let File = NewTextFile('temp/test_text_file_write.txt');
-  // File.open('r');
-  File.copy('temp/test_text_file_write1.txt');
-})();
+// (function(){
+//   let File = NewTextFile('temp/test_text_file_write.txt');
+//   // File.open('r');
+//   File.copy('temp/test_text_file_write1.txt');
+// })();
 
 CollectGarbage();
 // if(textFile.rename(newFileName)) console.debug("textFile is renamed");

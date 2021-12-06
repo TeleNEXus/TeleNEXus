@@ -35,18 +35,20 @@ public:
 };
 
 //==============================================================================
-/* class LCPacketProjectSource : public LIProjectSource */
-/* { */
-/* private: */
-/*   LCPacketProjectSource(){} */
-/* public: */
-/*   virtual ~LCPacketProjectSource(){} */
-/*   static QSharedPointer<LCPacketProjectSource> */ 
-/*     create(QSharedPointer<QMap<QString,QByteArray>> _filesMap); */
+class LCPacketProjectSource : public LIProjectSource
+{
+private:
+  QSharedPointer<QMap<QString,QByteArray>> mFilesMap;
+  LCPacketProjectSource() = delete;
+  LCPacketProjectSource(QSharedPointer<QMap<QString,QByteArray>> _filesMap);
+public:
+  virtual ~LCPacketProjectSource(){}
+  static QSharedPointer<LCPacketProjectSource> 
+    create(QSharedPointer<QMap<QString,QByteArray>> _filesMap);
 
-/*   virtual QSharedPointer<QIODevice> */ 
-/*     getFileDevice(const QString& _fileName) const override; */
-/* }; */
+  virtual QSharedPointer<QIODevice> 
+    getFileDevice(const QString& _fileName) const override;
+};
 
 //==============================================================================
 class LCDirProjectSource : public LIProjectSource

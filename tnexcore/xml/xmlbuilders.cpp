@@ -289,7 +289,7 @@ static void loadBuilders(
     //find libraries
     for(int i = 0; i < _libPaths.size(); i++)
     {
-      lib.setFileName(_libPaths[i] + "/" + libfilename);
+      lib.setFileName(_libPaths[i] + libfilename);
 
       if(lib.isLoaded())
       {
