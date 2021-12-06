@@ -2,7 +2,7 @@
 
 <SCRIPTS>
 
-  <script id="testlaunch1" file="scripts/testlaunch.js"/>
+  <!-- <script id="testlaunch1" file="scripts/testlaunch.js"/> -->
   <!-- <launch scriptId="testlaunch1" interval="500"/> -->
   <!-- <execute scriptId="testlaunch1"/> -->
   <!-- <script id="testwrite1" file="scripts/writedatatosource.js"/> -->
@@ -44,10 +44,10 @@
 
 
 
-  <!-- <script id="testtextfile" file="scripts/testtextfile.js"/> -->
+  <script id="testtextfile" file="scripts/testtextfile.js"/>
 
   <!-- <script id="testtextfile" file="scripts/testbinaryfile.js"/> -->
-  <!-- <launch scriptId="testtextfile" interval="1000"/> -->
+  <launch scriptId="testtextfile" interval="1000"/>
 
   <!-- <execute scriptId="testtextfile" /> -->
 

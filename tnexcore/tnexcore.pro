@@ -44,6 +44,7 @@ INCLUDEPATH +=                          \
 ./basicwidgets/builders                 \
 ./basicwidgets/widgets                  \
 ./basicwidgets/builders/events          \
+./projectsource                         \
 
 
 SOURCES += \
@@ -131,7 +132,8 @@ xml/xmlglobalstyle.cpp \
 keyboard/lckeyboard.cpp \
 window/lcwindow.cpp \
 applicationinterface.cpp \
-projectsource.cpp \
+projectsource/projectsource.cpp \
+projectsource/lqrobuffer.cpp \
 main.cpp \
 
 
@@ -238,7 +240,8 @@ xml/xmlglobalstyle.h \
 keyboard/lckeyboard.h \
 window/lcwindow.h \
 applicationinterface.h \
-projectsource.h \
+projectsource/projectsource.h \
+projectsource/lqrobuffer.h \
 version.h \
 
 

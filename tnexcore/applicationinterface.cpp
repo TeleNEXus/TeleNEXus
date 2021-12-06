@@ -45,12 +45,8 @@
 //==============================================================================
 static struct SLocalData
 {
-  /* QString xmlMainFileName; */
-  /* QString xmlProjectPath; */
-  /* QDir    xmlProjectDir; */
-
+  bool mFlagMessageOn = true;
   QSharedPointer<LIProjectSource> mspProjectSource;
-
 } __slLocalData;
 
 
@@ -69,6 +65,12 @@ CApplicationInterface& CApplicationInterface::getInstance()
 {
   static CApplicationInterface instance;
   return instance;
+}
+
+//------------------------------------------------------------------------------
+void CApplicationInterface::setMessageOn(bool _flag)
+{
+  __slLocalData.mFlagMessageOn = _flag;
 }
 
 //------------------------------------------------------------------------------
@@ -159,14 +161,11 @@ QString CApplicationInterface::getWidgetStyle(const QString& _styleId) const
 }
 
 //------------------------------------------------------------------------------
-void CApplicationInterface::message(const QString& _msg) const
+void CApplicationInterface::message(const QString& _msg, 
+    EMessageType _mt) const
 {
-  /* std::cout << */ 
-  /*   ( */
-  /*       QString("M[%1]> %2") */
-  /*       .arg(QDateTime::currentDateTime().toString(__smDateTimeFormat)) */
-  /*       .arg(_msg) */
-  /*   ).toStdString(); */
+  Q_UNUSED(_mt);
+  if(!__slLocalData.mFlagMessageOn) return;
   qDebug("%s", qPrintable( 
         QString("M[%1]> %2")
         .arg(QDateTime::currentDateTime().toString(__smDateTimeFormat))
@@ -174,8 +173,11 @@ void CApplicationInterface::message(const QString& _msg) const
 }
 
 //------------------------------------------------------------------------------
-void CApplicationInterface::warning(const QString& _msg) const
+void CApplicationInterface::warning(const QString& _msg,
+    EMessageType _mt) const
 {
+  Q_UNUSED(_mt);
+  if(!__slLocalData.mFlagMessageOn) return;
   qDebug("%s", qPrintable( 
     QString("W[%1]> %2")
     .arg(QDateTime::currentDateTime().toString(__smDateTimeFormat))
@@ -183,8 +185,11 @@ void CApplicationInterface::warning(const QString& _msg) const
 }
 
 //------------------------------------------------------------------------------
-void CApplicationInterface::error(const QString& _msg) const
+void CApplicationInterface::error(const QString& _msg, 
+    EMessageType _mt) const
 {
+  Q_UNUSED(_mt);
+  if(!__slLocalData.mFlagMessageOn) return;
   qDebug("%s", qPrintable( 
     QString("E[%1]> %2")
     .arg(QDateTime::currentDateTime().toString(__smDateTimeFormat))

@@ -47,7 +47,7 @@ void upload(const QDomElement& _rootElement)
 {
   QString default_plugin_path = QString("%1/%2")
       .arg(QApplication::applicationDirPath())
-      .arg("plugins");
+      .arg("plugins/");
 
   QStringList added_pathes;
 

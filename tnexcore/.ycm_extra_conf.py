@@ -81,6 +81,7 @@ flags = [
              '-I', '../tnexcore/keyboard',
              '-I', '../tnexcore/common',
              '-I', '../tnexcore/xml',
+             '-I', '../tnexcore/projectsource',
              '-I', '../tnexcore/dataformatters',
              '-I', '../tnexcore/jscripts',
              '-I', '../tnexcore/jscripts/jsformatter',

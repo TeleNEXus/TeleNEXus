@@ -61,7 +61,6 @@ enum class EParseCommandLineResult
   CommandLineError,
 
   CommandLineCompileRequest,
-  CommandLineLaunch,
   CommandLineHelpRequest,
   CommandLineVersionRequest,
   CommandLineIsEmpty
@@ -111,7 +110,6 @@ int main(int argc, char *argv[])
     qDebug().noquote() << msg;
     return 0;
 
-  case EParseCommandLineResult::CommandLineIsEmpty:
   case EParseCommandLineResult::CommandLineHelpRequest:
     parser.showHelp();
 
@@ -121,8 +119,17 @@ int main(int argc, char *argv[])
   case EParseCommandLineResult::CommandLineCompileRequest:
     return __s_compilProject(params_list.at(0), params_list.at(1));
 
-  case EParseCommandLineResult::CommandLineLaunch:
+  case EParseCommandLineResult::CommandLineIsEmpty:
     {
+      if(argc < 2) 
+      {
+        params_list = QStringList() << QString("./");
+      }
+      else
+      {
+        params_list = QStringList() << QString(argv[1]);
+      }
+
       QString launch_param = params_list.at(0);
       QFileInfo fi(launch_param);
 
@@ -143,7 +150,12 @@ int main(int argc, char *argv[])
           qDebug().noquote() << error_msg;
           return -1;
         }
-        return 0;
+
+        prjsource = LCPacketProjectSource::create(files_data);
+        CApplicationInterface::getInstance().setProjectSource(prjsource);
+        CApplicationInterface::getInstance().setMessageOn(false);
+
+        /* return 0; */
       }
       else
       {
@@ -184,10 +196,6 @@ __s_parseCommandLine(
 
   _parser.setApplicationDescription(__lmApplicationDescription);
 
-  QCommandLineOption launch(QStringList() << "l" << "launch",
-      QStringLiteral("Launch TeleNEXus project."),
-      "launch");
-
   QCommandLineOption compil(QStringList() << "c" << "compil",
       QStringLiteral("Compil directory path."),
       "compil");
@@ -197,7 +205,6 @@ __s_parseCommandLine(
       "target");
 
 
-  _parser.addOption(launch);
   _parser.addOption(compil);
   _parser.addOption(target);
   QCommandLineOption version = _parser.addVersionOption();
@@ -222,12 +229,6 @@ __s_parseCommandLine(
   if(_parser.optionNames().size() == 0) 
   {
     return EParseCommandLineResult::CommandLineIsEmpty;
-  }
-
-  if(_parser.isSet(launch))
-  {
-    _params << _parser.value(launch);
-    return EParseCommandLineResult::CommandLineLaunch;
   }
 
   if(_parser.isSet(compil))
@@ -272,7 +273,7 @@ static int __s_projectDeploy(QApplication& _app)
   if(rootElement.tagName() != __slRootTag)
   {
     appinterface.error("Application: wrong root element");
-    appinterface.message(__smQuitMessage);
+    appinterface.message(__smQuitMessage, LIApplication::EMessageType::Deploy);
     return -1;
   }
 
@@ -320,7 +321,9 @@ static int __s_projectDeploy(QApplication& _app)
   //----------------------------------------------------
   xmljscripts::upload(rootElement);
 
-  appinterface.message(QStringLiteral("\n\tEnd deploy of project\n"));
+  appinterface.message(QStringLiteral("\n\tEnd deploy of project\n"), 
+      LIApplication::EMessageType::Deploy);
+  appinterface.getInstance().setMessageOn(true);
 
   xmlkeyboards::init();
   xmlwindows::show();
@@ -335,17 +338,19 @@ static int __s_compilProject(
     QString("Start compil project dir with path '%1' to target file '%2'")
     .arg(_sourcePath).arg(_targetFileName);
 
-  QFileInfo fi(_sourcePath);
+  QFileInfo fi_source(_sourcePath);
+  QFileInfo fi_target(_targetFileName);
+  QString targer_file_name = fi_target.absoluteFilePath();
 
-  QDir::setCurrent(fi.absolutePath());
+  QDir::setCurrent(fi_source.absoluteFilePath());
   QDir curr_dir("./");
 
-  QFile target_file(_targetFileName);
+  QFile target_file(targer_file_name);
 
   if(!target_file.open(QFile::OpenModeFlag::WriteOnly))
   {
     qDebug().noquote() << 
-      QString("Can't open target file '%1' for write.").arg(_targetFileName);
+      QString("Can't open target file '%1' for write.").arg(targer_file_name);
     return -1;
   }
 
@@ -445,9 +450,9 @@ __s_readPacketFile(const QString& _fileName, QString& _errorMsg)
   auto files_data = 
     QSharedPointer<QMap<QString,QByteArray>>(new QMap<QString,QByteArray>());
 
-  qDebug().noquote() << "----------------------------------------";
-  qDebug().noquote() << "Unpack files...";
-  qDebug().noquote() << "----------------------------------------";
+  /* qDebug().noquote() << "----------------------------------------"; */
+  /* qDebug().noquote() << "Unpack files..."; */
+  /* qDebug().noquote() << "----------------------------------------"; */
 
   while(!dstream.atEnd())
   {
@@ -471,10 +476,12 @@ __s_readPacketFile(const QString& _fileName, QString& _errorMsg)
     if(!check_hash(read_data, read_hash)) return nullptr;
 
     files_data->insert(file_name, read_data);
-    qDebug().noquote() << QString("'%1'").arg(file_name);
+
+    /* qDebug().noquote() << QString("'%1'").arg(file_name); */
   }
-  qDebug().noquote() << "----------------------------------------";
-  qDebug().noquote() << QString("Total unpacked files: '%1'").arg(files_data->size());
+
+  /* qDebug().noquote() << "----------------------------------------"; */
+  /* qDebug().noquote() << QString("Total unpacked files: '%1'").arg(files_data->size()); */
 
   return files_data;
 }

@@ -41,6 +41,8 @@ public:
   static CApplicationInterface& getInstance();
 
 
+  void setMessageOn(bool _flag);
+
   void setProjectSource(QSharedPointer<LIProjectSource> _prjSource);
 
   virtual QString getProjectPath() const override;
@@ -75,15 +77,21 @@ public:
 
   virtual QString getWidgetStyle(const QString& _styleId) const override;
 
-  virtual void message(const QString& _msg) const override;
-  virtual void warning(const QString& _msg) const override;
-  virtual void error(const QString& _msg) const override;
+  virtual void message(const QString& _msg, 
+      EMessageType _mt = EMessageType::Untyped) const override;
+
+  virtual void warning(const QString& _msg, 
+      EMessageType _mt = EMessageType::Untyped) const override;
+
+  virtual void error(const QString& _msg, 
+      EMessageType _mt = EMessageType::Untyped) const override;
 
   virtual QObject* createSecurityEventFilter(
       const QString& _accessId,
       const QSet<QEvent::Type>& _events) const override;
 
   virtual QSharedPointer<QIODevice> getFileDevice(const QString& _fileName) const override;
+
 };
 
 #endif /* APPLICATIONINTERFACE_H_ */

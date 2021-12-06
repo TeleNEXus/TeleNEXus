@@ -115,18 +115,18 @@
     <!-- size="250;150" -->
 
 
-  <WINDOW 
-    file="testsecurity/security1.xml" 
-    id="test security 1" 
-    visible="true"
-    title="Test security 1" 
-    showMode="normal"
-    modality="false"
-    flags="" 
-    size="200;300"
-    screen="0"
-    position="0;0"
-    />
+  <!-- <WINDOW --> 
+  <!--   file="testsecurity/security1.xml" --> 
+  <!--   id="test security 1" --> 
+  <!--   visible="true" -->
+  <!--   title="Test security 1" --> 
+  <!--   showMode="normal" -->
+  <!--   modality="false" -->
+  <!--   flags="" --> 
+  <!--   size="200;300" -->
+  <!--   screen="0" -->
+  <!--   position="0;0" -->
+  <!--   /> -->
 
   <!-- <WINDOW --> 
   <!--   file="testframe/testframe1.xml" --> 
@@ -141,18 +141,18 @@
   <!--   position="0;0" -->
   <!--   /> -->
 
-  <WINDOW 
-    file="teststackwidget/teststackwidget3.xml" 
-    id="test stack widget 3" 
-    visible="true"
-    title="Test Stack Widget 3" 
-    showMode="normal"
-    modality="false"
-    flags="" 
-    size="900;700"
-    screen="0"
-    position="0;0"
-    />
+  <!-- <WINDOW --> 
+  <!--   file="teststackwidget/teststackwidget3.xml" --> 
+  <!--   id="test stack widget 3" --> 
+  <!--   visible="true" -->
+  <!--   title="Test Stack Widget 3" --> 
+  <!--   showMode="normal" -->
+  <!--   modality="false" -->
+  <!--   flags="" --> 
+  <!--   size="900;700" -->
+  <!--   screen="0" -->
+  <!--   position="0;0" -->
+  <!--   /> -->
 
   <!-- <!-1- <WINDOW -1-> --> 
   <!-- <!-1-   file="teststackwidget/teststackwidget1.xml" -1-> --> 
@@ -442,17 +442,17 @@
   <!-- <!-1-   /> -1-> -->
 
 
-  <WINDOW 
-    file="testbutton/testbutton.xml" 
-    id="testbutton" 
-    visible="true"
-    title="Test Buttons" 
-    showMode="normal"
-    modality="false"
-    flags="" 
-    size="300;50"
-    position="300;600"
-    />
+  <!-- <WINDOW --> 
+  <!--   file="testbutton/testbutton.xml" --> 
+  <!--   id="testbutton" --> 
+  <!--   visible="true" -->
+  <!--   title="Test Buttons" --> 
+  <!--   showMode="normal" -->
+  <!--   modality="false" -->
+  <!--   flags="" --> 
+  <!--   size="300;50" -->
+  <!--   position="300;600" -->
+  <!--   /> -->
 
   <!-- <!-1- <WINDOW -1-> --> 
   <!-- <!-1-   file="testbutton/testbutton2.xml" -1-> --> 
