@@ -41,7 +41,7 @@
         /* QProcess::startDetached( */
         /*     "cmd /k start \"tnex\" .\\tnex.exe --xmlpath ..\\xmltestprj\\test1\\"); */
 
-#define __smHistoryFile QStringLiteral("./projectlist.ini")
+#define __smHistoryFileName QStringLiteral("projectlist.ini")
 
 //==============================================================================main
 QWidget* buildWindow(const QApplication& _app);
@@ -73,6 +73,9 @@ int main(int argc, char *argv[])
 QWidget* buildWindow(const QApplication& _app)
 {
   QWidget* widget = new QWidget();
+
+  QString history_file = QString("%1/%2")
+    .arg(QApplication::applicationDirPath()).arg(__smHistoryFileName);
 
   QPushButton* buttonAddDir = new QPushButton("Add project path");
 
@@ -112,9 +115,9 @@ QWidget* buildWindow(const QApplication& _app)
       }
     };
 
-  if(QFileInfo::exists(__smHistoryFile))
+  if(QFileInfo::exists(history_file))
   {
-    QFile file(__smHistoryFile);
+    QFile file(history_file);
     if(file.open(QFile::OpenModeFlag::ReadOnly))
     {
       load_project_list(file);
@@ -221,7 +224,7 @@ QWidget* buildWindow(const QApplication& _app)
       });
 
   QObject::connect(&_app, &QApplication::aboutToQuit,
-      [projectList]()
+      [projectList, &history_file]()
       {
 
         auto write_list_data = 
@@ -234,10 +237,11 @@ QWidget* buildWindow(const QApplication& _app)
             }
           };
 
+
         if(projectList->count() != 0)
         {
-          QFile::remove(__smHistoryFile);
-          QFile file(__smHistoryFile);
+          QFile::remove(history_file);
+          QFile file(history_file);
           if(file.open(QFile::OpenModeFlag::Append))
           {
             write_list_data(file);
