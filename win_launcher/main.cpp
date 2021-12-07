@@ -64,8 +64,6 @@ int main(int argc, char *argv[])
   widget->setWindowTitle("TeleNEXus launcher");
 
 
-
-
   widget->show();
   return app.exec();
 }

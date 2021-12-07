@@ -121,17 +121,18 @@ int main(int argc, char *argv[])
 
   case EParseCommandLineResult::CommandLineIsEmpty:
     {
+      QString launch_param;
       if(argc < 2) 
       {
-        params_list = QStringList() << QString("./");
+        launch_param = QString("./");
       }
       else
       {
-        params_list = QStringList() << QString(argv[1]);
+        launch_param = QString(argv[1]);
       }
 
-      QString launch_param = params_list.at(0);
       QFileInfo fi(launch_param);
+      qDebug() << "Launch param = " << launch_param;
 
       if(!fi.exists())
       {
