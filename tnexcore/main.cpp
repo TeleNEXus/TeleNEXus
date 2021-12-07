@@ -169,7 +169,7 @@ int main(int argc, char *argv[])
           return -1;
         }
         qDebug().noquote()<< 
-          QString("Project source from path '%1' is created").arg(fi.absolutePath());
+          QString("Project source from path '%1' is created").arg(fi.absoluteFilePath());
         CApplicationInterface::getInstance().setProjectSource(prjsource);
       }
     }
