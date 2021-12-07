@@ -6,7 +6,7 @@ QT += widgets
 # QT += xml
 # QT += qml 
 
-# CONFIG += console
+CONFIG += console
 CONFIG += c++11
 CONFIG += release
 CONFIG -= app_bundle
