@@ -161,7 +161,7 @@ int main(int argc, char *argv[])
       else
       {
         qDebug().noquote() << QString("Launch from dir '%1'").arg(fi.absoluteFilePath());
-        QDir::setCurrent(fi.absolutePath());
+        QDir::setCurrent(fi.absoluteFilePath());
         prjsource = LCDirProjectSource::create(fi.absoluteFilePath(), msg);
         qDebug().noquote() << msg;
         if(prjsource.isNull()) 
