@@ -160,7 +160,7 @@ QWidget* LCXmlTableWidgetBuilder::buildLocal(
           buildData.mpTable, 
           QString("QTableWidget#%1 > %2 ")
           .arg(buildData.mpTable->objectName())
-          .arg(QStringLiteral("QHeaderView")));
+          .arg(QStringLiteral("QHeaderView::section")));
     };
 
   auto set_style_corner = 
@@ -174,7 +174,7 @@ QWidget* LCXmlTableWidgetBuilder::buildLocal(
           buildData.mpTable, 
           QString("QTableWidget#%1 > %2 ")
           .arg(buildData.mpTable->objectName())
-          .arg(QStringLiteral("QTableCornerButton")));
+          .arg(QStringLiteral("QTableCornerButton::section")));
     };
 
   setWidgetName(      _element, buildData.mpTable);

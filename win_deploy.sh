@@ -61,6 +61,7 @@ if ! cp $v_win_launcher $v_deploy_path/
 then
   exit 0
 fi 
+
 cd "$v_deploy_path"
 
 windeployqt.exe --compiler-runtime --no-translations --no-system-d3d-compiler --release --no-quick-import  ./tnex.exe

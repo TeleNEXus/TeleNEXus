@@ -116,7 +116,6 @@ bool LCQPushButton::eventFilter(QObject* _obj, QEvent* _event)
       auto act_release = 
         [this, &ret]()
         {
-
           ret = true;
           setDown(false);
           mState = EState::released;
@@ -148,13 +147,15 @@ bool LCQPushButton::eventFilter(QObject* _obj, QEvent* _event)
         break;
 
       case QEvent::Type::MouseButtonRelease:
-        if(static_cast<QMouseEvent*>(_event)->source() != 
+        if(static_cast<QMouseEvent*>(_event)->source() == 
             Qt::MouseEventSource::MouseEventNotSynthesized)
         {
-          ret = true;
-          break;
+          act_release();
         }
-        act_release();
+        else
+        {
+          ret = true;
+        }
         break;
 
       default:
