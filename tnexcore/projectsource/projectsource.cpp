@@ -74,6 +74,7 @@ QSharedPointer<QIODevice> LCDirProjectSource::getFileDevice(
     const QString& _fileName) const
 {
 
+  qDebug() << "getFileDevice current dir = " << QDir::currentPath();
   QFileInfo fi(_fileName);
 
   if(!fi.exists())
