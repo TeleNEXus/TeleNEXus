@@ -74,6 +74,7 @@ QWidget* buildWindow(const QApplication& _app)
 
   QString history_file = QString("%1/%2")
     .arg(QApplication::applicationDirPath()).arg(__smHistoryFileName);
+  qDebug() << "History file = " << history_file;
 
   QPushButton* buttonAddDir = new QPushButton("Add project path");
 
@@ -210,9 +211,16 @@ QWidget* buildWindow(const QApplication& _app)
         /* QProcess::startDetached( */
         /*     "cmd /k start \"tnex\" .\\tnex.exe --xmlpath ..\\xmltestprj\\test1\\"); */
 
+        qDebug() << "Start from string : " << project_string;
         QProcess::startDetached(
-            QString("cmd /C start /Wait \"tnex\" .\\tnex.exe %1")
+            /* QString("cmd /C start /Wait \"tnex\" .\\tnex.exe %1") */
+            /* QString("cmd /C start tnex.exe %1") */
+            QString("cmd /C start tnex.exe %1")
             .arg(project_string));
+
+        /* QProcess::startDetached( */
+        /*     QString("tnex.exe %1") */
+        /*     .arg(project_string)); */
 #else
 
         QProcess::startDetached(
@@ -222,9 +230,35 @@ QWidget* buildWindow(const QApplication& _app)
       });
 
   QObject::connect(&_app, &QApplication::aboutToQuit,
-      [projectList, &history_file]()
+      [projectList, history_file]()
       {
 
+        /* auto write_list_data = */ 
+        /*   [projectList](QFile& _file) */
+        /*   { */
+        /*     QTextStream text_stream(&_file); */
+        /*     for(int i = 0; i < projectList->count(); i++) */
+        /*     { */
+        /*       text_stream << projectList->item(i)->text() << "\n"; */
+        /*     } */
+        /*   }; */
+
+
+        /* if(projectList->count() != 0) */
+        /* { */
+        /*   QFile::remove(history_file); */
+        /*   QFile file(history_file); */
+        /*   if(file.open(QFile::OpenModeFlag::Append)) */
+        /*   { */
+        /*     write_list_data(file); */
+        /*   } */
+        /* } */
+        qDebug() << "Quit from TeleNEXus launcher++++.";
+      });
+
+  QObject::connect(&_app, &QApplication::lastWindowClosed, 
+      [projectList, history_file]()
+      {
         auto write_list_data = 
           [projectList](QFile& _file)
           {
@@ -236,16 +270,28 @@ QWidget* buildWindow(const QApplication& _app)
           };
 
 
+        QFile::remove(history_file);
+        QFile file(history_file);
+        if(file.open(QFile::OpenModeFlag::Append))
+        {
+          qDebug() << QString( "Can't open ini file '%1' for write." ).arg(history_file);
+        }
         if(projectList->count() != 0)
         {
-          QFile::remove(history_file);
-          QFile file(history_file);
-          if(file.open(QFile::OpenModeFlag::Append))
+          if(file.isOpen())
           {
             write_list_data(file);
           }
+          else
+          {
+            qDebug() << QString("Can't aopen ini file '%1'").arg(history_file);
+          }
         }
-        qDebug() << "Quit from TeleNEXus launcher.";
+        else
+        {
+          qDebug() << "Project list count = 0";
+        }
+        qDebug() << "Last widndow closed";
       });
 
   return widget;
