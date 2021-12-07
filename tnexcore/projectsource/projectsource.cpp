@@ -23,6 +23,7 @@
 #include "applicationinterface.h"
 #include "lqrobuffer.h"
 
+#include <QDebug>
 #include <QMap>
 #include <QBuffer>
 //==============================================================================
@@ -40,21 +41,27 @@ LCDirProjectSource::~LCDirProjectSource()
 QSharedPointer<LCDirProjectSource> LCDirProjectSource::create(
     const QString& _prjPath, QString& _msg)
 {
-  QFileInfo dir_info(_prjPath);
+  QString path = _prjPath;
+  if(!_prjPath.contains(QRegExp("\\/$")))
+  {
+    path += QString("/");
+    qDebug() << "Path  ==============" << path;
+  }
+  QFileInfo dir_info(path);
 
   if(!dir_info.exists()) 
   {
-    _msg = QString("Directory with path '%1' is not exists").arg(_prjPath);
+    _msg = QString("Directory with path '%1' is not exists").arg(path);
     return nullptr;
   }
 
   if(!dir_info.isDir()) 
   {
-    _msg = QString("There is no directory on the path '%1'").arg(_prjPath);
+    _msg = QString("There is no directory on the path '%1'").arg(path);
     return nullptr;
   }
 
-  QDir pd(_prjPath);
+  QDir pd(path);
 
   _msg = QString("Create project source with path '%1'").arg(pd.absolutePath());
 
