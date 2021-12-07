@@ -218,6 +218,25 @@ void LCQDataLineEdit::installKeyboard(QSharedPointer<LIKeyboard> _keyboard)
       });
 
   ld.eventMap.insert(QEvent::Type::MouseButtonPress,
+      [this](QEvent* _event)
+      {
+
+        if(static_cast<QMouseEvent*>(_event)->source() == 
+            Qt::MouseEventSource::MouseEventNotSynthesized)
+        {
+          if(ld.keyboardListener->connect(text())) setActive(false);
+          return true;
+        }
+        return false;
+      });
+
+  ld.eventMap.insert(QEvent::Type::TouchEnd,
+      [this](QEvent*)
+      {
+        return true;
+      });
+
+  ld.eventMap.insert(QEvent::Type::TouchBegin,
       [this](QEvent*)
       {
         if(ld.keyboardListener->connect(text())) setActive(false);

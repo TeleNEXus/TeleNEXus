@@ -25,6 +25,7 @@ public:
   virtual bool eventFilter(QObject* _obj, QEvent* _event) override
   {
 
+    QPushButton* button = dynamic_cast<QPushButton*>(_obj);
 
     auto get_point = 
       [_event]()
@@ -48,14 +49,18 @@ public:
 
     case QEvent::Type::TouchBegin:
       qDebug() << "Event = " << _event->type();
-      mep.setLocalPos(get_point());
-      QApplication::sendEvent(_obj, &mep);
+      button->setDown(true);
+      /* mep.setLocalPos(get_point()); */
+      /* qDebug() << "Touch point = " << get_point(); */
+      /* QApplication::sendEvent(_obj, &mep); */
       ret = true;
       break;
     case QEvent::Type::TouchEnd:
       qDebug() << "Event = " << _event->type();
-      mer.setLocalPos(get_point());
-      QApplication::sendEvent(_obj, &mer);
+      button->setDown(false);
+      /* mer.setLocalPos(get_point()); */
+      /* qDebug() << "Touch point = " << get_point(); */
+      /* QApplication::sendEvent(_obj, &mer); */
       ret = true;
       break;
     case QEvent::Type::TouchUpdate:
@@ -66,11 +71,22 @@ public:
       break;
 
     case QEvent::Type::MouseButtonPress:
-      qDebug() << "Event = " << _event->type();
+      qDebug() << "Event = " << _event->type() << " source = " << (dynamic_cast<QMouseEvent*>(_event))->source();
+
+      if((dynamic_cast<QMouseEvent*>(_event))->source() != 
+          Qt::MouseEventSource::MouseEventNotSynthesized)
+      {
+        ret = true;
+      }
       break;
 
     case QEvent::Type::MouseButtonRelease:
-      qDebug() << "Event = " << _event->type();
+      qDebug() << "Event = " << _event->type() << " source = " << (dynamic_cast<QMouseEvent*>(_event))->source();
+      if((dynamic_cast<QMouseEvent*>(_event))->source() != 
+          Qt::MouseEventSource::MouseEventNotSynthesized)
+      {
+        ret = true;
+      }
       break;
 
     default:
