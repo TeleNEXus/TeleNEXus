@@ -55,10 +55,11 @@ QSharedPointer<LCDirProjectSource> LCDirProjectSource::create(
   }
 
   QDir pd(_prjPath);
-  _msg = QString("Create project source with path '%1'").arg(_prjPath);
+
+  _msg = QString("Create project source with path '%1'").arg(pd.absolutePath());
 
   return 
-    QSharedPointer<LCDirProjectSource>(new LCDirProjectSource(QDir(_prjPath)));
+    QSharedPointer<LCDirProjectSource>(new LCDirProjectSource(pd));
 }
 
 //------------------------------------------------------------------------------
