@@ -73,16 +73,19 @@ int main(int argc, char *argv[])
     translate_file = "main_en.qm";
   }
 
-  translator.load(translate_file, QApplication::applicationFilePath());
+
+  qDebug() <<"Application path : " << QApplication::applicationDirPath();
+
+  translator.load(translate_file, QApplication::applicationDirPath());
 
   app.installTranslator(&translator);
 
   auto widget = buildWindow(app);
 
   widget->setWindowTitle("TeleNEXus launcher");
-
-
+   
   widget->show();
+  widget->resize(widget->width() + 200, widget->height());
   return app.exec();
 }
 
