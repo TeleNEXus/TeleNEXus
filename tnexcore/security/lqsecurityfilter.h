@@ -30,6 +30,7 @@ class LIApplication;
 
 class LQSecurityFilter : public QObject
 {
+  Q_OBJECT;
 public:
   using THandler = std::function<bool(QObject*, QEvent*)>;
 private:

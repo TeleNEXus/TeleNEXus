@@ -43,7 +43,7 @@ private:
 
   bool mFlagInit;
   int mCurrentLevel;
-  QString mAccessId;
+  QString mRequiredAccessId;
   QMap<QString, QPair<int, QByteArray>> mAccesses;
   QTimer* mpTimer;
   int mResetTime;

@@ -79,8 +79,8 @@ LCSecurity::LCSecurity() :
   QObject::connect(mpTimer, &QTimer::timeout,
       [this]()
       {
+        //Reset access.
         resetAccess();
-        qDebug() << "Clear access autorized.";
       });
 }
 
@@ -190,8 +190,7 @@ void LCSecurity::init(const QDomElement& _element)
       [this](QSharedPointer<QByteArray> _data, EReadStatus _status)
       {
         if(_status != EReadStatus::Valid) return;
-        mAccessId = QString::fromUtf8(*_data);
-        qDebug() << "Set new access id : " << mAccessId;
+        mRequiredAccessId = QString::fromUtf8(*_data);
       });
 
 
@@ -202,9 +201,8 @@ void LCSecurity::init(const QDomElement& _element)
         {
           if(_status != EReadStatus::Valid) return;
           QString password = QString::fromUtf8(*_data);
-          qDebug() << "Set password : " << password;
-          if(checkAccess(mAccessId) == true) return;
-          autorize(mAccessId, password);
+          if(checkAccess(mRequiredAccessId) == true) return;
+          autorize(mRequiredAccessId, password);
         });
     mspPasswordReader->connectToSource();
   }
@@ -217,7 +215,6 @@ void LCSecurity::init(const QDomElement& _element)
         {
           resetAccess();
           mpTimer->stop();
-          qDebug() << "Reset access level to min.";
         }
       });
 
@@ -237,12 +234,6 @@ void LCSecurity::init(const QDomElement& _element)
       attr = _accessElement.attribute(__slAttributes.password);
       if(attr.isNull()) return;
       QByteArray hash = __GetHash(attr.toUtf8()); 
-
-      qDebug() << "++Security add access : \n\tid = " << id << 
-        ",\n\tlevel = " << level << 
-        ",\n\tpassword = " << attr << 
-        ",\n\thash = " << QString::fromLatin1(hash.toHex()).toUpper();
-
       mAccesses.insert(id, QPair<int, QByteArray>(level, hash));
     };
 
@@ -281,15 +272,12 @@ QObject* LCSecurity::createEventFilter(
         return false;
       }
 
-      qDebug() << "Security filter : event = " << _event->type();
-
       if(checkAccess(_accessId)) 
       {
-        qDebug() << "Security filter : access is already avaliable.";
+        //Access avaliable.
         mpTimer->start(mResetTime);
         return false;
       }
-      qDebug() << "Security filter : access required.";
       mspRequiredAccessIdWriter->writeRequest(_accessId.toUtf8());
 
       showAccessWindow();
@@ -306,26 +294,22 @@ bool LCSecurity::checkAccess(const QString& _accessId) const
   if(access_it == mAccesses.end()) return false;
   if(access_it.value().first == std::numeric_limits<int>::min()) return false;
   if(access_it.value().first > mCurrentLevel) return false;
-  qDebug() << "Security: current level '" << mCurrentLevel << 
-    "' is mor or equal than desired level '" << access_it.value().first << "'";
   return true;
 }
 
 //------------------------------------------------------------------------------
 void LCSecurity::autorize(const QString& _accessId, const QString& _password)
 {
-  qDebug() << "Start autorize.";
   auto access_it = mAccesses.find(_accessId);
   if(access_it == mAccesses.end()) 
   {
-    qDebug() << "Security: can't find access id '" << _accessId << "'";
+    //No required access id.
     return;
   }
 
   if(access_it.value().first <= mCurrentLevel) 
   {
-    qDebug() << "Security: current level '" << mCurrentLevel << 
-      "' is mor or equal than desired level '" << access_it.value().first << "'";
+    //Current security level is mor or equal than desired level.
     return;
   }
 
@@ -336,13 +320,13 @@ void LCSecurity::autorize(const QString& _accessId, const QString& _password)
 
   mCurrentLevel = access_it.value().first;
   mspCurrentAccessIdWriter->writeRequest(_accessId.toUtf8());
-
+  CApplicationInterface::getInstance().message(
+      QString("Set autorized access '%1'").arg(_accessId));
 
   hideAccessWindow();
 
   if(mResetTime < 0) return;
   mpTimer->start(mResetTime);
-  qDebug() << "End autorize.";
 }
 
 //------------------------------------------------------------------------------
@@ -350,6 +334,8 @@ void LCSecurity::resetAccess()
 {
   mCurrentLevel = std::numeric_limits<int>::min();
   mspCurrentAccessIdWriter->writeRequest(mNoAccess.toUtf8());
+  CApplicationInterface::getInstance().message(
+      "Reset autorized access.");
 }
 
 //------------------------------------------------------------------------------
@@ -365,7 +351,7 @@ void LCSecurity::installKeyboard(const QString& _keyboardId)
   auto action_enter =
     [this](const QString& _str)
     {
-      autorize(mAccessId, _str);
+      autorize(mRequiredAccessId, _str);
     };
 
   auto action_disconnect =
@@ -390,13 +376,7 @@ void LCSecurity::showAccessWindow() const
   }
 
   auto window = CApplicationInterface::getInstance().getWindow(mWindowId);
-  if(window.isNull())
-  {
-    qDebug() << 
-      QString(
-          "Security filter : Can't find autorize window '%1'").arg(mWindowId);
-  }
-  else
+  if(!window.isNull())
   {
     window->show();
   }
@@ -407,12 +387,7 @@ void LCSecurity::hideAccessWindow() const
 {
   auto window = CApplicationInterface::getInstance().getWindow(mWindowId);
 
-  if(window.isNull())
-  {
-    qDebug() << 
-      QString("Security filter : Can't find autorize window '%1'").arg(mWindowId);
-  }
-  else
+  if(!window.isNull())
   {
     window->hide();
   }
