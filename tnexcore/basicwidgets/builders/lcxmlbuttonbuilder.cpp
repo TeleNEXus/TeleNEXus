@@ -114,10 +114,8 @@ const QDomElement& _element, const LIApplication& _app)
 
   QObject* security_filter =  
     LCSecurity::instance().createEventFilter(_element, events);
-  qDebug() << "+++ Button add security 0";
   if(security_filter != nullptr)
   {
-    qDebug() << "+++ Button add security 1";
     button->installEventFilter(security_filter);
   }
 

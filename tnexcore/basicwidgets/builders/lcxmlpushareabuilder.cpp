@@ -26,6 +26,7 @@
 
 #include "LIApplication.h"
 #include "LIMovieAccess.h"
+#include "lcsecurity.h"
 
 #include <QDebug>
 #include <QDomElement>
@@ -194,6 +195,22 @@ QWidget* LCXmlPushAreaBuilder::buildLocal(
   setWidgetSize(      _element, push_label);
   setWidgetPosition(  _element, push_label);
   setWidgetFixedSize( _element, push_label);
+
+  QSet<QEvent::Type> events;
+
+  events 
+    << QEvent::Type::MouseButtonPress
+    << QEvent::Type::MouseButtonDblClick
+    << QEvent::Type::TouchBegin;
+
+
+  QObject* security_filter =  
+    LCSecurity::instance().createEventFilter(_element, events);
+  if(security_filter != nullptr)
+  {
+    push_label->installEventFilter(security_filter);
+  }
+
 
   push_label->setAlignment(Qt::AlignmentFlag::AlignCenter);
 
