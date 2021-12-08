@@ -44,6 +44,7 @@
     stream="security_keyboard_stream"
     data="security_keyboard_data" />
 
+
   <!-- <SECURITY --> 
   <!--   window="access_window_1" -->
   <!--   resetTime="30" -->
@@ -54,8 +55,8 @@
   <!--   command="security_command_stream" -->
   <!--   noAccess="No authorization"> -->
 
-  <!--   <access id="user"  level="0" password="uuu"/> -->
-  <!--   <access id="admin" level="1" password="aaa"/> -->
+  <!--   <access id="user"  level="0" password="111"/> -->
+  <!--   <access id="admin" level="1" password="222"/> -->
 
   <!-- </SECURITY> -->
 
@@ -64,7 +65,6 @@
     resetTime="30"
     source="localsource" 
     passwordKeyboard="AccessKeyboard" 
-    passwordStream="security_password_stream" 
     requiredAccess="security_required_access_id"
     currentAccess="security_current_access_id"
     command="security_command_stream"
@@ -115,18 +115,18 @@
     <!-- size="250;150" -->
 
 
-  <!-- <WINDOW --> 
-  <!--   file="testsecurity/security1.xml" --> 
-  <!--   id="test security 1" --> 
-  <!--   visible="true" -->
-  <!--   title="Test security 1" --> 
-  <!--   showMode="normal" -->
-  <!--   modality="false" -->
-  <!--   flags="" --> 
-  <!--   size="200;300" -->
-  <!--   screen="0" -->
-  <!--   position="0;0" -->
-  <!--   /> -->
+  <WINDOW 
+    file="testsecurity/security1.xml" 
+    id="test security 1" 
+    visible="true"
+    title="Test security 1" 
+    showMode="normal"
+    modality="false"
+    flags="" 
+    size="200;300"
+    screen="0"
+    position="0;0"
+    />
 
   <!-- <WINDOW --> 
   <!--   file="testframe/testframe1.xml" --> 
@@ -391,31 +391,31 @@
   <!--   position="550;150" -->
   <!--   /> -->
 
-  <WINDOW 
-    file="testtable/testtable.xml" 
-    id="testtable1" 
-    visible="true"
-    title="Test table" 
-    showMode="normal"
-    modality="false"
-    flags="" 
-    size="300;300"
-    screen="0"
-    position="150;150"
-    />
+  <!-- <WINDOW --> 
+  <!--   file="testtable/testtable.xml" --> 
+  <!--   id="testtable1" --> 
+  <!--   visible="true" -->
+  <!--   title="Test table" --> 
+  <!--   showMode="normal" -->
+  <!--   modality="false" -->
+  <!--   flags="" --> 
+  <!--   size="300;300" -->
+  <!--   screen="0" -->
+  <!--   position="150;150" -->
+  <!--   /> -->
 
-  <WINDOW 
-    file="testtable/testtable2.xml" 
-    id="testtable2" 
-    visible="true"
-    title="Test table" 
-    showMode="normal"
-    modality="false"
-    flags="" 
-    size="600;600"
-    screen="0"
-    position="400;300"
-    />
+  <!-- <WINDOW --> 
+  <!--   file="testtable/testtable2.xml" --> 
+  <!--   id="testtable2" --> 
+  <!--   visible="true" -->
+  <!--   title="Test table" --> 
+  <!--   showMode="normal" -->
+  <!--   modality="false" -->
+  <!--   flags="" --> 
+  <!--   size="600;600" -->
+  <!--   screen="0" -->
+  <!--   position="400;300" -->
+  <!--   /> -->
 
   <!-- <!-1- <WINDOW -1-> --> 
   <!-- <!-1-   file="testlabels/testlabels1.xml" -1-> --> 
