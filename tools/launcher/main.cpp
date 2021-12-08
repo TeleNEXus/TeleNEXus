@@ -19,6 +19,7 @@
  * along with TeleNEXus.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+
 #include <QDebug>
 #include <QWidget>
 #include <QApplication>
@@ -49,15 +50,18 @@ int main(int argc, char *argv[])
 {
 
 #ifdef Q_OS_WIN
-  qDebug().noquote() << "TeleNEXus launcher started in Windows";
-  QString history_file = QString("%1/%2")
-    .arg(QApplication::applicationDirPath()).arg(__smHistoryFileName);
+  /* qDebug().noquote() << "TeleNEXus launcher started in Windows"; */
+  /* QString history_file = QString("%1/%2") */
+  /*   .arg(QApplication::applicationDirPath()).arg(__smHistoryFileName); */
 
   qDebug() << "Window home path: " << QDir::homePath();
 
 #endif
 #ifdef Q_OS_LINUX
   qDebug().noquote() << "TeleNEXus launcher started in Linux";
+
+#endif
+
   QString history_file;
 
   {
@@ -77,7 +81,6 @@ int main(int argc, char *argv[])
       .arg(home_dir.absolutePath()).arg(__smHistoryFileName);
   }
 
-#endif
 
   qDebug().noquote() << "History file = " << history_file;
 

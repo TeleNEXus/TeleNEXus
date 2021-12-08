@@ -52,6 +52,8 @@ createDir "$v_deploy_path"
 cp $v_tnex  $v_deploy_path/
 cp $v_modbussource $v_deploy_path/
 cp $v_launcher_exe $v_deploy_path/
+
+
 cp $v_launcher_lang_ru $v_deploy_path/
 cp $v_launcher_lang_en $v_deploy_path/
 
@@ -63,3 +65,4 @@ windeployqt.exe --compiler-runtime --no-translations --no-system-d3d-compiler --
 
 createDir plugins
 mv ./modbussource.dll ./plugins/
+mv ./launcher.exe ./tnexlauncher.exe
