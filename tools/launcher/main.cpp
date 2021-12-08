@@ -245,7 +245,8 @@ QWidget* buildWindow(const QApplication& _app, const QString& _history_file)
         else
         {
           QProcess::startDetached(
-              QString("tnex.exe %1")
+              QString("%1/tnex.exe %2")
+              .arg(QApplication::applicationDirPath())
               .arg(project_string));
         }
 #else
