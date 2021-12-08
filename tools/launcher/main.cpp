@@ -56,22 +56,25 @@ int main(int argc, char *argv[])
 
   QTranslator translator;
 
-
-
   QApplication app(argc, argv);
 
   QLocale locale = QLocale::system();
 
+  QString translate_file;
+
   if(locale.country() == QLocale::Country::Russia)
   {
     qDebug().noquote() << "Set language 'Russian'";
-    translator.load("main_ru.qm", "../");
+    translate_file = "main_ru.qm";
   }
   else
   {
     qDebug().noquote() << "Set lanuage 'English'";
-    translator.load("main_en.qm", "../");
+    translate_file = "main_en.qm";
   }
+
+  translator.load(translate_file, ".");
+
   app.installTranslator(&translator);
 
   auto widget = buildWindow(app);
