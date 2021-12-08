@@ -60,7 +60,6 @@ void upload(const QDomElement& _rootElement)
       __slPlaginLibPaths << added_pathes << default_plugin_path;
     };
 
-
   if(element_pathes.isNull()) { return add_path(); }
 
   for(auto element_item = element_pathes.firstChildElement(__slTags.add);
@@ -69,6 +68,12 @@ void upload(const QDomElement& _rootElement)
   {
     QString path = element_item.attribute(__slAttributes.path);
     if(path.isNull()) continue;
+
+    path = QDir(path).absolutePath();
+    if(!path.contains(QRegExp("\\/$")))
+    {
+      path += "/";
+    }
     added_pathes << path;
   }
 
