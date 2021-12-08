@@ -119,6 +119,7 @@ QWidget* LCXmlDataLineEditBuilder::buildLocal(
         }
       }
 
+
       setWidgetName(      _element, data_line_edit);
       setWidgetStyle(     _element, data_line_edit);
       setWidgetSize(      _element, data_line_edit);
@@ -127,12 +128,11 @@ QWidget* LCXmlDataLineEditBuilder::buildLocal(
 
       QSet<QEvent::Type> events;
 
+
       events 
         << QEvent::Type::KeyPress
-        /* << QEvent::Type::FocusIn */
         << QEvent::Type::MouseButtonPress
-        << QEvent::Type::TouchBegin
-        ;
+        << QEvent::Type::TouchBegin;
 
 
       QObject* security_filter =  
