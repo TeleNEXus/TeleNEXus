@@ -4,24 +4,29 @@
 <context>
     <name>QObject</name>
     <message>
-        <location filename="main.cpp" line="74"/>
+        <location filename="main.cpp" line="127"/>
         <source>Add project path</source>
         <translation>Add project path</translation>
     </message>
     <message>
-        <location filename="main.cpp" line="75"/>
+        <location filename="main.cpp" line="128"/>
         <source>Add pack file</source>
         <translation>Add pack file</translation>
     </message>
     <message>
-        <location filename="main.cpp" line="76"/>
+        <location filename="main.cpp" line="129"/>
         <source>Remove</source>
         <translation>Remove</translation>
     </message>
     <message>
-        <location filename="main.cpp" line="77"/>
+        <location filename="main.cpp" line="130"/>
         <source>Launch</source>
         <translation>Launch</translation>
+    </message>
+    <message>
+        <location filename="main.cpp" line="131"/>
+        <source>Launch in terminal</source>
+        <translation>Launch in terminal</translation>
     </message>
 </context>
 </TS>
