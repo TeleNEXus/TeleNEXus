@@ -40,6 +40,7 @@
 #include <QProcess>
 #include <QLocale>
 #include <QTranslator>
+#include <QCheckBox>
 
 #define __smHistoryFileName QStringLiteral("projectlist.ini")
 #define __smLinuxTnexHomeDir ".tnex"
@@ -127,6 +128,7 @@ QWidget* buildWindow(const QApplication& _app, const QString& _history_file)
   QPushButton* buttonAddFile = new QPushButton(QObject::tr("Add pack file"));
   QPushButton* buttonRemove = new QPushButton(QObject::tr("Remove"));
   QPushButton* buttonLaunch = new QPushButton(QObject::tr("Launch"));
+  QCheckBox* terminalCheckBox = new QCheckBox(QObject::tr("Launch in terminal"));
 
   QListWidget* projectList = new QListWidget();
 
@@ -136,6 +138,7 @@ QWidget* buildWindow(const QApplication& _app, const QString& _history_file)
   buttonsLayout->addWidget(buttonAddDir);
   buttonsLayout->addWidget(buttonAddFile);
   buttonsLayout->addWidget(buttonRemove);
+  buttonsLayout->addWidget(terminalCheckBox);
   buttonsLayout->addStretch();
   buttonsLayout->addWidget(buttonLaunch);
 
@@ -215,7 +218,7 @@ QWidget* buildWindow(const QApplication& _app, const QString& _history_file)
       });
 
   QObject::connect(buttonLaunch, &QPushButton::pressed,
-      [projectList]()
+      [projectList, terminalCheckBox]()
       {
 
         auto list_item = projectList->currentItem();
@@ -232,14 +235,35 @@ QWidget* buildWindow(const QApplication& _app, const QString& _history_file)
 #ifdef Q_OS_WIN
 
         qDebug().noquote() << "Start from string : " << project_string;
-        QProcess::startDetached(
-            QString("cmd /C start tnex.exe %1")
-            .arg(project_string));
-#else
 
-        QProcess::startDetached(
-            QString("tnex  %1")
-            .arg(project_string));
+        if(terminalCheckBox->isChecked())
+        {
+          QProcess::startDetached(
+              QString("cmd /C start tnex.exe %1")
+              .arg(project_string));
+        }
+        else
+        {
+          QProcess::startDetached(
+              QString("tnex.exe %1")
+              .arg(project_string));
+        }
+#else
+        /* Q_UNUSED(terminalCheckBox); */
+        if(terminalCheckBox->isChecked())
+        {
+          QProcess::startDetached(
+              /* QString("xterm -hold -e tnex  %1 &") */
+              /* QString("xterm -sl 3000 -e tnex  %1 &") */
+              QString("xterm -e tnex  %1 &")
+              .arg(project_string));
+        }
+        else
+        {
+          QProcess::startDetached(
+              QString("tnex  %1")
+              .arg(project_string));
+        }
 #endif
       });
 
