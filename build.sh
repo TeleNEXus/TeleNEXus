@@ -1,5 +1,6 @@
 #!/bin/bash
 
+v_launcher="`pwd`/tools/launcher"
 v_modbussource="`pwd`/plugins/modbussource"
 v_tnexcore="`pwd`/tnexcore"
 v_examplewidgets="`pwd`/examples/plugin/widgets"
@@ -50,25 +51,28 @@ makePrg ()
 if [ "$1" == "--clear" ]
 then
     echo "$v_offset_line Clear builds"
+    deleteDir $v_launcher
     deleteDir "$v_modbussource"
     deleteDir "$v_tnexcore"
     deleteDir "$v_examplewidgets"
     exit 0
 fi
 
+createDir "$v_launcher"
 createDir "$v_modbussource"
 createDir "$v_tnexcore"
 createDir "$v_examplewidgets"
 
 # ./version.sh
 
-
 echo "$v_offset_line qmake"
+makePrg "$v_launcher" "qmake"
 makePrg "$v_modbussource" "qmake"
 makePrg "$v_tnexcore" "qmake"
 makePrg "$v_examplewidgets" "qmake"
 
 echo "$v_offset_line make $1"
+makePrg "$v_launcher" "make" "$1"
 makePrg "$v_modbussource" "make" "$1"
 makePrg "$v_tnexcore" "make" "$1"
 makePrg "$v_examplewidgets" "make" "$1"
