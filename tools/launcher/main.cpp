@@ -73,7 +73,7 @@ int main(int argc, char *argv[])
     translate_file = "main_en.qm";
   }
 
-  translator.load(translate_file, ".");
+  translator.load(translate_file, QApplication::applicationFilePath());
 
   app.installTranslator(&translator);
 
