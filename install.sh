@@ -37,24 +37,46 @@ mkdir "$v_install_path$v_plugins_path"
 if [ ! -f "./tnexcore/__builds/tnex" ]
 then
   echo "Can't find executable TeleNEXus file \"tnex\"";
+  uninstall;
   exit -1;
 fi
 
 echo "Copy TeleNEXus executable file."
 cp "./tnexcore/__builds/tnex" "/opt/tnex/"
 
-if [ ! -f "./plugins/modbussource/__builds/libmodbussource.so" ]
-then
-  echo "Can't find MODBUS plugin library file \"libmodbussource\"";
-  exit -1;
-fi
-
-echo "Copy MODBUS plugin library file."
-cp ./plugins/modbussource/__builds/libmodbussource.so /opt/tnex/plugins/
-
-
-
 
 echo "Create program link \"tnex\" in \"/usr/bin/\""
 ln -s -f /opt/tnex/tnex /usr/bin/tnex
+
+if [ ! -f "./plugins/modbussource/__builds/libmodbussource.so" ]
+then
+  echo "Can't find MODBUS plugin library file \"libmodbussource\"";
+fi
+
+echo "Copy MODBUS plugin library file."
+cp "./plugins/modbussource/__builds/libmodbussource.so" "/opt/tnex/plugins/"
+
+
+echo "Copy files of the TeleNEXus launcher."
+
+
+if ! cp "./tools/launcher/main_en.qm" "/opt/tnex"
+then
+  echo "Can't copy endglish language map file."
+fi 
+
+if ! cp "./tools/launcher/main_ru.qm" "/opt/tnex"
+then
+  echo "Can't copy russian language map file."
+fi 
+
+if ! cp "./tools/launcher/__builds/launcher" "/opt/tnex"
+then
+  echo "Can't copy executable TeleNEXus launcher file"
+else 
+  echo "Create program link \"tnexlauncher\" in \"/usr/bin/\""
+  ln -s -f /opt/tnex/launcher /usr/bin/tnexlauncher
+fi
+
+
 echo "End install TeleNEXus."

@@ -41,18 +41,45 @@
 #include <QTranslator>
 
 #define __smHistoryFileName QStringLiteral("projectlist.ini")
+#define __smLinuxTnexHomeDir ".tnex"
 
 //==============================================================================main
-QWidget* buildWindow(const QApplication& _app);
+QWidget* buildWindow(const QApplication& _app, const QString& _historyFile);
 int main(int argc, char *argv[])
 {
 
 #ifdef Q_OS_WIN
   qDebug().noquote() << "TeleNEXus launcher started in Windows";
+  QString history_file = QString("%1/%2")
+    .arg(QApplication::applicationDirPath()).arg(__smHistoryFileName);
+
+  qDebug() << "Window home path: " << QDir::homePath();
+
 #endif
 #ifdef Q_OS_LINUX
   qDebug().noquote() << "TeleNEXus launcher started in Linux";
+  QString history_file;
+
+  {
+    QDir home_dir(QString("%1/%2")
+        .arg(QDir::homePath()).arg(__smLinuxTnexHomeDir));
+
+    qDebug().noquote() << 
+      QString("TeleNEXus home dir '%1'").arg(home_dir.absolutePath());
+
+    if(!home_dir.exists())
+    {
+      qDebug() << "Create home dir";
+      home_dir.mkdir(home_dir.absolutePath());
+    }
+
+    history_file = QString("%1/%2")
+      .arg(home_dir.absolutePath()).arg(__smHistoryFileName);
+  }
+
 #endif
+
+  qDebug().noquote() << "History file = " << history_file;
 
   QTranslator translator;
 
@@ -80,7 +107,7 @@ int main(int argc, char *argv[])
 
   app.installTranslator(&translator);
 
-  auto widget = buildWindow(app);
+  auto widget = buildWindow(app, history_file);
 
   widget->setWindowTitle("TeleNEXus launcher");
    
@@ -89,13 +116,9 @@ int main(int argc, char *argv[])
   return app.exec();
 }
 
-QWidget* buildWindow(const QApplication& _app)
+QWidget* buildWindow(const QApplication& _app, const QString& _history_file)
 {
   QWidget* widget = new QWidget();
-
-  QString history_file = QString("%1/%2")
-    .arg(QApplication::applicationDirPath()).arg(__smHistoryFileName);
-  qDebug().noquote() << "History file = " << history_file;
 
   QPushButton* buttonAddDir = new QPushButton(QObject::tr("Add project path"));
   QPushButton* buttonAddFile = new QPushButton(QObject::tr("Add pack file"));
@@ -133,9 +156,9 @@ QWidget* buildWindow(const QApplication& _app)
       }
     };
 
-  if(QFileInfo::exists(history_file))
+  if(QFileInfo::exists(_history_file))
   {
-    QFile file(history_file);
+    QFile file(_history_file);
     if(file.open(QFile::OpenModeFlag::ReadOnly))
     {
       load_project_list(file);
@@ -218,13 +241,13 @@ QWidget* buildWindow(const QApplication& _app)
       });
 
   QObject::connect(&_app, &QApplication::aboutToQuit,
-      [projectList, history_file]()
+      []()
       {
-        qDebug().noquote() << "Quit from TeleNEXus launcher++++.";
+        qDebug().noquote() << "Quit from TeleNEXus launcher.";
       });
 
   QObject::connect(&_app, &QApplication::lastWindowClosed, 
-      [projectList, history_file]()
+      [projectList, _history_file]()
       {
         auto write_list_data = 
           [projectList](QFile& _file)
@@ -236,13 +259,13 @@ QWidget* buildWindow(const QApplication& _app)
             }
           };
 
-        QFile::remove(history_file);
-        QFile file(history_file);
+        QFile::remove(_history_file);
+        QFile file(_history_file);
 
         if(!file.open(QFile::OpenModeFlag::Append))
         {
           qDebug().noquote() << 
-            QString( "Can't open ini file '%1' for write." ).arg(history_file);
+            QString( "Can't open ini file '%1' for write." ).arg(_history_file);
           return;
         }
 
@@ -254,7 +277,8 @@ QWidget* buildWindow(const QApplication& _app)
           }
           else
           {
-            qDebug().noquote() << QString("Can't open ini file '%1'").arg(history_file);
+            qDebug().noquote() << 
+              QString("Can't open ini file '%1'").arg(_history_file);
           }
         }
       });
