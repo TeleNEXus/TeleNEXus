@@ -50,8 +50,10 @@
               </release>
             </PushArea>
 
+              <!-- keyboard="DigitalKeyboard" -->
             <Label data="localsource:test_string4:string"/>
-            <LineEdit data="localsource:test_string4:string" access="user"/>
+            <LineEdit data="localsource:test_string4:string" access="user" 
+              />
 
           </widgets>
           <stretch/>
