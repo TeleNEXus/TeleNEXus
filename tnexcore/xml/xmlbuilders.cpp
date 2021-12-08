@@ -291,6 +291,7 @@ static void loadBuilders(
     {
       lib.setFileName(_libPaths[i] + libfilename);
 
+
       if(lib.isLoaded())
       {
         /* msg += QString("\tlibrary '%1' is already loaded\n") */

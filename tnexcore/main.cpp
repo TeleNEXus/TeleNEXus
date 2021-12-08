@@ -136,14 +136,17 @@ int main(int argc, char *argv[])
 
       if(!fi.exists())
       {
-        qDebug().noquote() << QString("Path '%1' is not exists.").arg(fi.absoluteFilePath());
+        qDebug().noquote() << 
+          QString("Path '%1' is not exists.").arg(fi.absoluteFilePath());
         return -1;
       }
 
       if(fi.isFile())
       {
-        qDebug().noquote() << QString("Launch using a packet file '%1'").arg(fi.absoluteFilePath());
+        qDebug().noquote() << 
+          QString("Launch using a packet file '%1'").arg(fi.absoluteFilePath());
         QDir::setCurrent(fi.absolutePath());
+        qDebug().noquote() << "Current path = " << QDir::currentPath();
         QString error_msg;
         auto files_data = __s_readPacketFile(fi.absoluteFilePath(), error_msg);
         if(files_data.isNull())
@@ -160,7 +163,8 @@ int main(int argc, char *argv[])
       }
       else
       {
-        qDebug().noquote() << QString("Launch from dir '%1'").arg(fi.absoluteFilePath());
+        qDebug().noquote() << 
+          QString("Launch from dir '%1'").arg(fi.absoluteFilePath());
         QDir::setCurrent(fi.absoluteFilePath());
         prjsource = LCDirProjectSource::create(fi.absoluteFilePath(), msg);
         qDebug().noquote() << msg;
@@ -169,7 +173,8 @@ int main(int argc, char *argv[])
           return -1;
         }
         qDebug().noquote()<< 
-          QString("Project source from path '%1' is created").arg(fi.absoluteFilePath());
+          QString("Project source from path '%1' is created")
+          .arg(fi.absoluteFilePath());
         CApplicationInterface::getInstance().setProjectSource(prjsource);
       }
     }
