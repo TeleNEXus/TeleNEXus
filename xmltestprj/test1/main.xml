@@ -391,31 +391,31 @@
   <!--   position="550;150" -->
   <!--   /> -->
 
-  <!-- <WINDOW --> 
-  <!--   file="testtable/testtable.xml" --> 
-  <!--   id="testtable1" --> 
-  <!--   visible="true" -->
-  <!--   title="Test table" --> 
-  <!--   showMode="normal" -->
-  <!--   modality="false" -->
-  <!--   flags="" --> 
-  <!--   size="300;300" -->
-  <!--   screen="0" -->
-  <!--   position="150;150" -->
-  <!--   /> -->
+  <WINDOW 
+    file="testtable/testtable.xml" 
+    id="testtable1" 
+    visible="true"
+    title="Test table" 
+    showMode="normal"
+    modality="false"
+    flags="" 
+    size="300;300"
+    screen="0"
+    position="150;150"
+    />
 
-  <!-- <WINDOW --> 
-  <!--   file="testtable/testtable2.xml" --> 
-  <!--   id="testtable2" --> 
-  <!--   visible="true" -->
-  <!--   title="Test table" --> 
-  <!--   showMode="normal" -->
-  <!--   modality="false" -->
-  <!--   flags="" --> 
-  <!--   size="600;600" -->
-  <!--   screen="0" -->
-  <!--   position="400;300" -->
-  <!--   /> -->
+  <WINDOW 
+    file="testtable/testtable2.xml" 
+    id="testtable2" 
+    visible="true"
+    title="Test table" 
+    showMode="normal"
+    modality="false"
+    flags="" 
+    size="600;600"
+    screen="0"
+    position="400;300"
+    />
 
   <!-- <!-1- <WINDOW -1-> --> 
   <!-- <!-1-   file="testlabels/testlabels1.xml" -1-> --> 

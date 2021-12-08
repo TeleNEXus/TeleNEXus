@@ -52,6 +52,9 @@ fi
 echo "Copy MODBUS plugin library file."
 cp ./plugins/modbussource/__builds/libmodbussource.so /opt/tnex/plugins/
 
+
+
+
 echo "Create program link \"tnex\" in \"/usr/bin/\""
 ln -s -f /opt/tnex/tnex /usr/bin/tnex
 echo "End install TeleNEXus."
