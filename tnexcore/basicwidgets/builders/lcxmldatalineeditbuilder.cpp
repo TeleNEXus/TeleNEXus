@@ -27,6 +27,7 @@
 #include "LIRemoteDataWriter.h"
 #include "LIRemoteDataReader.h"
 #include "lcqdatalineedit.h"
+#include "lcsecurity.h"
 
 #include <QLineEdit>
 #include <QDomElement>
@@ -123,6 +124,24 @@ QWidget* LCXmlDataLineEditBuilder::buildLocal(
       setWidgetSize(      _element, data_line_edit);
       setWidgetPosition(  _element, data_line_edit);
       setWidgetFixedSize( _element, data_line_edit);
+
+      QSet<QEvent::Type> events;
+
+      events 
+        << QEvent::Type::KeyPress
+        /* << QEvent::Type::FocusIn */
+        << QEvent::Type::MouseButtonPress
+        << QEvent::Type::TouchBegin
+        ;
+
+
+      QObject* security_filter =  
+        LCSecurity::instance().createEventFilter(_element, events);
+      if(security_filter != nullptr)
+      {
+        data_line_edit->installEventFilter(security_filter);
+      }
+
       return data_line_edit;
     };
 
