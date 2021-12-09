@@ -28,6 +28,7 @@
 #include "LIKeyboard.h"
 #include "LIKeyboardListener.h"
 
+#include <QMouseEvent>
 #include <limits>
 #include <QTimer>
 #include <QDomElement>
@@ -35,6 +36,7 @@
 #include <QDebug>
 #include <iostream>
 #include <ostream>
+#include <QEvent>
 
 static const struct
 {
@@ -266,6 +268,17 @@ QObject* LCSecurity::createEventFilter(
   auto handler = 
     [this, _events, _accessId](QObject*, QEvent* _event)
     {
+
+      //When using touchscreen, it prevents false events. 
+      if(_event->type() == QEvent::Type::MouseButtonPress)
+      {
+        if(static_cast<QMouseEvent*>(_event)->source() != 
+            Qt::MouseEventSource::MouseEventNotSynthesized)
+        {
+          return false;
+        }
+      }
+
 
       if(!_events.contains(_event->type())) 
       {
