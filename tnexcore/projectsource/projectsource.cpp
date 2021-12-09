@@ -45,7 +45,6 @@ QSharedPointer<LCDirProjectSource> LCDirProjectSource::create(
   if(!_prjPath.contains(QRegExp("\\/$")))
   {
     path += QString("/");
-    qDebug() << "Path  ==============" << path;
   }
   QFileInfo dir_info(path);
 
@@ -74,7 +73,6 @@ QSharedPointer<QIODevice> LCDirProjectSource::getFileDevice(
     const QString& _fileName) const
 {
 
-  qDebug() << "getFileDevice current dir = " << QDir::currentPath();
   QFileInfo fi(_fileName);
 
   if(!fi.exists())

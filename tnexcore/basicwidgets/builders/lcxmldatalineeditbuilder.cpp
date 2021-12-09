@@ -128,12 +128,11 @@ QWidget* LCXmlDataLineEditBuilder::buildLocal(
 
       QSet<QEvent::Type> events;
 
-
       events 
         << QEvent::Type::KeyPress
         << QEvent::Type::MouseButtonPress
-        << QEvent::Type::TouchBegin;
-
+        << QEvent::Type::TouchBegin
+        << QEvent::Type::ContextMenu;
 
       QObject* security_filter =  
         LCSecurity::instance().createEventFilter(_element, events);
