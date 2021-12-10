@@ -30,6 +30,12 @@
 
   <SCRIPTS file="scripts.xml"/>
 
+  <SOUNDS>
+    <sound file="sounds/beep_001.wav"   control="localsource:sound_ctrl_beep_001_0:string" repeat="0"   />
+    <sound file="sounds/beep_001.wav"   control="localsource:sound_ctrl_beep_001_2:string" repeat="1"   />
+    <sound file="sounds/sirena_001.wav" control="localsource:sound_ctrl_sirena_001:string" repeat="inf" />
+  </SOUNDS>
+
   <KEYBOARD 
     id="DigitalKeyboard" 
     window="digitalkeyboard1"
