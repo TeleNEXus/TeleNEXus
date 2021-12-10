@@ -231,7 +231,7 @@ void LCQDataLineEdit::installKeyboard(QSharedPointer<LIKeyboard> _keyboard)
       });
 
   ld.eventMap.insert(QEvent::Type::TouchEnd,
-      [this](QEvent*)
+      [](QEvent*)
       {
         return true;
       });
