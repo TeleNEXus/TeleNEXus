@@ -27,8 +27,8 @@
 #include <QDomDocument>
 #include <QDebug>
 
-#define __smMessage(msg) CApplicationInterface::getInstance().message(msg)
-#define __smWarning(msg) CApplicationInterface::getInstance().warning(msg)
+#define __smMessage(msg) CApplicationInterface::getInstance().message(msg, LIApplication::EMessageType::Deploy)
+#define __smWarning(msg) CApplicationInterface::getInstance().warning(msg, LIApplication::EMessageType::Deploy)
 
 static const struct
 {
@@ -48,14 +48,15 @@ void upload(const QDomElement& _rootElement)
   auto end_upload = 
     []()
     {
-      __smMessage("\n\t++++End deploy security.\n");
+      __smMessage("\n\tEnd deploy security.\n");
     };
 
-  __smMessage("\n\t++++Begin deploy security.\n");
+  __smMessage( "\n\tBegin deploy security.\n");
+
   QDomElement element = _rootElement.firstChildElement(__slTags.security);
   if(element.isNull()) 
   {
-    __smMessage("\n\t++++Project has no security block.\n");
+    __smMessage("\n\tProject has no security block.\n");
     end_upload();
     return;
   }

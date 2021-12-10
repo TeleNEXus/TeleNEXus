@@ -5,6 +5,7 @@ QT += network
 #QT += serialbus
 QT += xml
 QT += qml 
+QT += multimedia
 
 CONFIG += console
 CONFIG += c++11
