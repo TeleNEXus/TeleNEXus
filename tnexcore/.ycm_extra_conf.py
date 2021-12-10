@@ -105,6 +105,8 @@ flags = [
              '/usr/include/x86_64-linux-gnu/qt5/QtSerialPort',
              '-isystem',
              '/usr/include/x86_64-linux-gnu/qt5/QtQml',
+             '-isystem',
+             '/usr/include/x86_64-linux-gnu/qt5/QtMultimedia',
              '-I', '.',
              '-isystem',
              '/usr/include/libdrm',
