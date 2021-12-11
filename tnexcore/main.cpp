@@ -31,6 +31,7 @@
 #include "xmlwidgetstyles.h"
 #include "xmlglobalstyle.h"
 #include "xmlsecurity.h"
+#include "xmlsounds.h"
 #include "projectsource.h"
 
 #include <QLoggingCategory>
@@ -314,6 +315,9 @@ static int __s_projectDeploy(QApplication& _app)
 
   //----------------------------------------------------
   xmldataformatters::upload(rootElement);
+
+  //----------------------------------------------------
+  xmlsounds::upload(rootElement);
 
   //----------------------------------------------------
   xmlwidgetstyles::upload(rootElement);

@@ -20,45 +20,6 @@
 #include <QBuffer>
 
 
-class LQBuffer : public QBuffer
-{
-public:
-  using QBuffer::QBuffer;
-
-
-  virtual bool atEnd() const override
-  {
-    return false;
-  }
-
-  virtual bool seek(qint64 pos) override
-  {
-    QBuffer::seek(pos);
-    return true;
-  }
-
-  virtual qint64	readData(char *data, qint64 len) override
-  {
-    qint64 rd1 = QBuffer::readData(data, len);
-
-    if(rd1 == len)
-    {
-      return rd1;
-    }
-
-    QBuffer::seek(44);
-    /* seek(44 + (len - rd1)); */
-    qint64 rd2 = QBuffer::readData(&data[rd1], len-rd1);
-
-    return len;
-
-  }
-};
-
-
-
-
-
 class LQPlaySound : QObject
 {
 public:
@@ -117,11 +78,7 @@ public:
 
             if(mLoops == static_cast<int>(ELoop::Infinite))
             {
-              /* startPrivate(); */
-
-    mpDevice->seek(44);
-    mpAOut->resume();
-
+              startPrivate();
               break;
             } 
 
@@ -134,9 +91,7 @@ public:
             mLoopsCounter--;
             if(mLoopsCounter >= 0)
             {
-              /* startPrivate(); */
-    mpDevice->seek(44);
-    mpAOut->resume();
+              startPrivate();
             }
             else
             {
@@ -210,7 +165,6 @@ private:
   }
 };
 
-static void test();
 
 int main(int argc, char** argv)
 {
@@ -238,13 +192,13 @@ int main(int argc, char** argv)
 
   for(int i = 0; i < avail.size(); i++)
   {
-    qDebug().noquote() << avail[i].deviceName();
+    qDebug().noquote() << QString("[%1] : %2").arg(i).arg(avail[i].deviceName());
   }
 
-
+  QFile sound_file("../k1.wav");
   /* QFile sound_file("../sirena1.wav"); */
   /* QFile sound_file("../sirena_001.wav"); */
-  QFile sound_file("../discord-sounds.wav");
+  /* QFile sound_file("../discord-sounds.wav"); */
   /* QFile sound_file("../sirena_003.wav"); */
   /* QFile sound_file("../beep-07a.wav"); */
   if(!sound_file.open(QFile::OpenModeFlag::ReadOnly)) 
@@ -252,15 +206,8 @@ int main(int argc, char** argv)
     qDebug() << "Can't open sound file.";
   }
 
-  /* QByteArray sound_data = sound_file.readAll(); */
-
-  /* LQBuffer sound_buffer(&sound_data); */
-  /* sound_buffer.open(QIODevice::ReadOnly); */
-
-  /* LQPlaySound* play_sound = new LQPlaySound(&sound_buffer); */
   LQPlaySound* play_sound = new LQPlaySound(&sound_file);
 
-  /* play_sound->setLoops(3); */
   qDebug() << "Play loops = " << play_sound->loops();
 
   QObject::connect(loops_edit, &QLineEdit::editingFinished,
@@ -290,9 +237,6 @@ int main(int argc, char** argv)
       [play_sound]()
       {
         qDebug() << "-----------------Play sound";
-
-        /* file.seek(44); */
-        /* audioOutput->start(&file); */
         play_sound->play();
       });
 
@@ -305,7 +249,6 @@ int main(int argc, char** argv)
       [play_sound]()
       {
         qDebug() << "-----------------Stop sound";
-        /* audioOutput->stop(); */
         play_sound->stop();
       });
 
@@ -318,26 +261,3 @@ int main(int argc, char** argv)
   frame->show();
   return app.exec();
 }
-//------------------------------------------------
-static void test()
-{ 
-
-  static QFile file("../sirena1.wav");
-  qDebug() << file.open(QIODevice::ReadOnly);
-  file.seek(44); // Length of wav header
-
-  static QAudioFormat format;
-
-  format.setSampleSize(16);
-  format.setSampleRate(44100);
-  //format.setChannelCount(1);    // mono
-  format.setChannelCount(2); // stereo
-  format.setCodec("audio/pcm");
-  format.setByteOrder(QAudioFormat::LittleEndian);
-  format.setSampleType(QAudioFormat::SignedInt);
-
-  static QAudioOutput audioOutput(format);
-  audioOutput.start(&file);
-  qDebug() << audioOutput.state();
-}
-

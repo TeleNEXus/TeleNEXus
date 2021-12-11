@@ -60,5 +60,8 @@
   <string id="security_keyboard_data" defval=""/>
   <stream id="security_keyboard_stream"/>
 
+  <stream id="sound_ctrl_beep_001_0"/>
+  <stream id="sound_ctrl_beep_001_2"/>
+  <stream id="sound_ctrl_sirena_001"/>
 
 </localsourcemap>

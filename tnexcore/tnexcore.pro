@@ -46,6 +46,7 @@ INCLUDEPATH +=                          \
 ./basicwidgets/widgets                  \
 ./basicwidgets/builders/events          \
 ./projectsource                         \
+./sound                                 \
 
 
 SOURCES += \
@@ -129,12 +130,15 @@ xml/xmlwindows.cpp \
 xml/xmlpluginpathes.cpp \
 xml/xmlwidgetstyles.cpp \
 xml/xmlsecurity.cpp \
+xml/xmlsounds.cpp \
 xml/xmlglobalstyle.cpp \
 keyboard/lckeyboard.cpp \
 window/lcwindow.cpp \
 applicationinterface.cpp \
 projectsource/projectsource.cpp \
 projectsource/lqrobuffer.cpp \
+sound/lcsounds.cpp \
+sound/lqplaysound.cpp \
 main.cpp \
 
 
@@ -237,12 +241,15 @@ xml/xmlwindows.h \
 xml/xmlpluginpathes.h \
 xml/xmlwidgetstyles.h \
 xml/xmlsecurity.h \
+xml/xmlsounds.h \
 xml/xmlglobalstyle.h \
 keyboard/lckeyboard.h \
 window/lcwindow.h \
 applicationinterface.h \
 projectsource/projectsource.h \
 projectsource/lqrobuffer.h \
+sound/lcsounds.h \
+sound/lqplaysound.h \
 version.h \
 
 
