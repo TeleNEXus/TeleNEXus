@@ -20,6 +20,22 @@
 #include <QBuffer>
 
 
+class LQBuffer : public QBuffer
+{
+public:
+  using QBuffer::QBuffer;
+  virtual qint64	readData(char *data, qint64 len) override
+  {
+    /* if(atEnd()) seek(44); */
+    if(atEnd()) seek(44);
+    return QBuffer::readData(data, len);
+  }
+};
+
+
+
+
+
 class LQPlaySound : QObject
 {
 public:
@@ -78,7 +94,11 @@ public:
 
             if(mLoops == static_cast<int>(ELoop::Infinite))
             {
-              startPrivate();
+              /* startPrivate(); */
+
+    mpDevice->seek(44);
+    mpAOut->resume();
+
               break;
             } 
 
@@ -91,7 +111,9 @@ public:
             mLoopsCounter--;
             if(mLoopsCounter >= 0)
             {
-              startPrivate();
+              /* startPrivate(); */
+    mpDevice->seek(44);
+    mpAOut->resume();
             }
             else
             {
@@ -197,13 +219,19 @@ int main(int argc, char** argv)
   }
 
 
-  QFile sound_file("../sirena_001.wav");
+  QFile sound_file("../sirena1.wav");
+  /* QFile sound_file("../beep-07a.wav"); */
   if(!sound_file.open(QFile::OpenModeFlag::ReadOnly)) 
   {
     qDebug() << "Can't open sound file.";
   }
 
-  LQPlaySound* play_sound = new LQPlaySound(&sound_file);
+  QByteArray sound_data = sound_file.readAll();
+
+  LQBuffer sound_buffer(&sound_data);
+  sound_buffer.open(QIODevice::ReadOnly);
+
+  LQPlaySound* play_sound = new LQPlaySound(&sound_buffer);
 
   /* play_sound->setLoops(3); */
   qDebug() << "Play loops = " << play_sound->loops();
