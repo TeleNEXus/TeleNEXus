@@ -14,18 +14,13 @@
 #include <QTouchDevice>
 #include <QList>
 #include <QMouseEvent>
-
+#include <QLineEdit>
 #include <QAudioOutput>
 #include <QAudioDeviceInfo>
 #include <QBuffer>
 
-#include <limits>
 
-
-
-
-
-class LCPlaySound : QObject
+class LQPlaySound : QObject
 {
 public:
   enum ELoop{ Infinite = -1 };
@@ -35,38 +30,33 @@ private:
   int mLoopsCounter;
   QAudioOutput* mpAOut;
 public:
-  LCPlaySound() = delete;
-  explicit LCPlaySound(QIODevice* _device, QObject *parent = nullptr) :
+  LQPlaySound() = delete;
+  explicit LQPlaySound(QIODevice* _device, QObject *parent = nullptr) :
     QObject(parent)
     ,mpDevice(_device)
-    ,mLoops(-1)
+    ,mLoops(0)
     ,mLoopsCounter(0)
     ,mpAOut(nullptr)
   {
-    if(mpDevice == nullptr) return;
-    if(!mpDevice->open(QIODevice::OpenModeFlag::ReadOnly))
+    if(!mpDevice->isOpen()) return;
+
+    QByteArray wav_header_data = mpDevice->read(44);
+
+    if(wav_header_data.isNull()) 
     {
       return;
     }
 
-    QByteArray data = mpDevice->read(44);
-
-    if(data.isNull()) 
-    {
-      return;
-    }
-
-
-    QString descr_riff = QString::fromLatin1(data.data(), 4);
-    QString descr_wave = QString::fromLatin1(&data.data()[8], 4);
+    QString descr_riff = QString::fromLatin1(wav_header_data.data(), 4);
+    QString descr_wave = QString::fromLatin1(&wav_header_data.data()[8], 4);
 
     if(descr_riff != QString("RIFF"))  return;
     if(descr_wave != QString("WAVE"))  return;
 
-    quint16 num_channels = *((quint16*)(&(data.data()[22])));
-    quint32 sample_rate = *((quint32*)(&(data.data()[24])));
+    quint16 num_channels = *((quint16*)(&(wav_header_data.data()[22])));
+    quint32 sample_rate = *((quint32*)(&(wav_header_data.data()[24])));
     /* quint32 byte_rate = *((quint32*)(&(data.data()[28]))); */
-    quint16 bits_per_sample = *((quint16*)(&(data.data()[34])));
+    quint16 bits_per_sample = *((quint16*)(&(wav_header_data.data()[34])));
 
     QAudioFormat format;
 
@@ -89,20 +79,23 @@ public:
             if(mLoops == static_cast<int>(ELoop::Infinite))
             {
               startPrivate();
+              break;
             } 
 
             if(mLoops == 0) 
             {
               mpAOut->stop();
+              break;
             }
 
             mLoopsCounter--;
-            if(mLoopsCounter > 0)
+            if(mLoopsCounter >= 0)
             {
               startPrivate();
             }
             else
             {
+              mLoopsCounter = 0;
               mpAOut->stop();
             }
             break;
@@ -115,7 +108,12 @@ public:
 
   }
 
-  virtual ~LCPlaySound() {}
+  virtual ~LQPlaySound()
+  {
+    if(mpAOut != nullptr) return;
+    mpAOut->stop();
+    mpAOut->deleteLater();
+  }
 
   QIODevice* device() const {return mpDevice;}
 
@@ -133,15 +131,23 @@ public:
 
   void setLoops(int _number)
   {
-    if(_number < 0) mLoops = ELoop::Infinite;
-    else mLoops = _number;
+    if(_number < 0) 
+    {
+      mLoops = ELoop::Infinite;
+      mLoopsCounter = 0;
+    }
+    else 
+    {
+      mLoops = _number;
+      mLoopsCounter = mLoops;
+    }
   }
 
   void play()
   {
     if(mpAOut == nullptr) return;
-    mLoopsCounter = mLoops;
     startPrivate();
+    mLoopsCounter = mLoops;
   }
 
   void stop()
@@ -159,88 +165,6 @@ private:
   }
 };
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-class CLoopBuffer: public QBuffer 
-{
-public:
-  using QBuffer::QBuffer;
-
-virtual bool	atEnd() const override
-{
-  qDebug() << "atEnd";
-  return QBuffer::atEnd();
-}
-
-virtual bool	canReadLine() const override
-{
-  qDebug() << "canReadLine";
-  return QBuffer::canReadLine();
-}
-
-/* virtual void	close() override; */
-
-/* virtual bool	open(QIODevice::OpenMode flags) override; */
-
-virtual qint64	pos() const override
-{
-  /* qDebug() << "pos"; */
-  return QBuffer::pos();
-}
-
-virtual bool	seek(qint64 pos) override
-{
-  /* qDebug() << QString("seek(%1)").arg(pos); */
-  return QBuffer::seek(pos);
-}
-
-protected:
-
-virtual qint64	readData(char *data, qint64 len) override
-{
-
-  /* /1* qDebug() << QString("readData len = %1").arg(len); *1/ */
-
-  /* /1* if(QBuffer::atEnd()) QBuffer::seek(0); *1/ */
-  /* qint64 rl = QBuffer::readData(data, len); */
-  /* qint64 rl2 = 0; */
-
-  /* if(rl != len) */
-  /* { */
-  /*   QBuffer::seek(0); */
-  /*   rl2 = QBuffer::readData(&data[rl+1], len-rl); */
-  /* } */
-
-
-  /* /1* if(QBuffer::atEnd()) QBuffer::seek(0); *1/ */
-
-  /* return rl + rl2; */
-  return QBuffer::readData(data, len);
-}
-
-};
-
-
-
 static void test();
 
 int main(int argc, char** argv)
@@ -251,8 +175,8 @@ int main(int argc, char** argv)
   QPushButton* button_play = new QPushButton("Play");
   QPushButton* button_play_loop = new QPushButton("Play loop");
   QPushButton* button_stop = new QPushButton("Stop");
+  QLineEdit* loops_edit = new QLineEdit();
   QVBoxLayout* layout = new QVBoxLayout;
-
 
   if(QAudioDeviceInfo::defaultOutputDevice().isNull())
   {
@@ -273,105 +197,48 @@ int main(int argc, char** argv)
   }
 
 
-  QFile hardfile("../sirena_001.wav");
-  qDebug() << hardfile.open(QIODevice::ReadOnly);
+  QFile sound_file("../sirena_001.wav");
+  if(!sound_file.open(QFile::OpenModeFlag::ReadOnly)) 
+  {
+    qDebug() << "Can't open sound file.";
+  }
 
+  LQPlaySound* play_sound = new LQPlaySound(&sound_file);
 
-  QByteArray data = hardfile.readAll();
+  /* play_sound->setLoops(3); */
+  qDebug() << "Play loops = " << play_sound->loops();
 
-
-
-  /* data.data()[] */
-
-
-
-  /* file.seek(44); // Length of wav header */
-
-  QAudioFormat format;
-
-
-  QString descr = QString::fromLatin1(data.data(), 12);
-
-  qDebug() << "Descriptor = " << descr;
-
-  QString descr_riff = QString::fromLatin1(data.data(), 4);
-  QString descr_wave = QString::fromLatin1(&data.data()[8], 4);
-
-  if(descr_riff != QString("RIFF")) qDebug() << "Wrong RIFF descriptor";
-  else qDebug() << "RIFF descriptro is OK";
-  if(descr_wave != QString("WAVE")) qDebug() << "Wrong WAVE descriptor";
-  else qDebug() << "WAVE descriptro is OK";
-
-
-
-  quint16 num_channels = *((quint16*)(&(data.data()[22])));
-  quint32 sample_rate = *((quint32*)(&(data.data()[24])));
-  quint32 byte_rate = *((quint32*)(&(data.data()[28])));
-  quint16 bits_per_sample = *((quint16*)(&(data.data()[34])));
-
-  qDebug() << "Num channels = " << num_channels;
-  qDebug() << "Sample rate = " << sample_rate;
-  qDebug() << "Byte rate = " << byte_rate;
-  qDebug() << "Bits per sample" << bits_per_sample;
-
-  format.setSampleSize(16);
-
-  format.setSampleRate(sample_rate);
-
-  /* format.setSampleRate(44100); */
-  /* format.setChannelCount(1);    // mono */
-  format.setChannelCount(2); // stereo
-  format.setCodec("audio/pcm");
-  format.setByteOrder(QAudioFormat::LittleEndian);
-  format.setSampleType(QAudioFormat::SignedInt);
-
-  QAudioOutput* audioOutput = new QAudioOutput(format);
-
-  audioOutput->setNotifyInterval(1);
-  qDebug() << "Notify interval" << audioOutput->notifyInterval();
-
-
-  /* data = data.mid(44); */
-  /* data = data.mid(36); */
-  /* QBuffer file(&data); */
-  CLoopBuffer file(&data);
-
-  file.open(QIODevice::OpenModeFlag::ReadOnly);
-
-
-
-  QObject::connect(audioOutput, &QAudioOutput::stateChanged,
-      [&file, audioOutput](QAudio::State _state)
+  QObject::connect(loops_edit, &QLineEdit::editingFinished,
+      [play_sound, loops_edit]()
       {
-        qDebug() << _state;
-
-
-        switch(_state)
+        if(loops_edit->text().isNull()) return;
+        if(loops_edit->text() == "") return;
+        if(loops_edit->text().toLower() == "inf")
         {
-        case QAudio::State::IdleState:
-          file.seek(44);
-          audioOutput->start(&file);
-          break;
-
-        default:
-          break;
+          play_sound->setLoops(LQPlaySound::Infinite);
+          qDebug() << "Set inf";
+          return;
         }
-
+        bool flag = false;
+        int loops = loops_edit->text().toInt(&flag);
+        if(flag)
+        {
+          play_sound->setLoops(loops);
+        }
+        else
+        {
+          loops_edit->setText(QString("%1").arg(play_sound->loops()));
+        }
       });
 
-
-
-
-  qDebug() << audioOutput->state();
-
-
   QObject::connect(button_play, &QPushButton::pressed,
-      [audioOutput, &file]()
+      [play_sound]()
       {
         qDebug() << "-----------------Play sound";
 
-        file.seek(44);
-        audioOutput->start(&file);
+        /* file.seek(44); */
+        /* audioOutput->start(&file); */
+        play_sound->play();
       });
 
   QObject::connect(button_play_loop, &QPushButton::pressed,
@@ -380,13 +247,15 @@ int main(int argc, char** argv)
       });
 
   QObject::connect(button_stop, &QPushButton::pressed,
-      [audioOutput]()
+      [play_sound]()
       {
-        qDebug() << "-----------------Play sound";
-        audioOutput->stop();
+        qDebug() << "-----------------Stop sound";
+        /* audioOutput->stop(); */
+        play_sound->stop();
       });
 
 
+  layout->addWidget(loops_edit);
   layout->addWidget(button_play);
   layout->addWidget(button_play_loop);
   layout->addWidget(button_stop);
