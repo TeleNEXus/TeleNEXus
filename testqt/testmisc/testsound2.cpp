@@ -24,11 +24,34 @@ class LQBuffer : public QBuffer
 {
 public:
   using QBuffer::QBuffer;
+
+
+  virtual bool atEnd() const override
+  {
+    return false;
+  }
+
+  virtual bool seek(qint64 pos) override
+  {
+    QBuffer::seek(pos);
+    return true;
+  }
+
   virtual qint64	readData(char *data, qint64 len) override
   {
-    /* if(atEnd()) seek(44); */
-    if(atEnd()) seek(44);
-    return QBuffer::readData(data, len);
+    qint64 rd1 = QBuffer::readData(data, len);
+
+    if(rd1 == len)
+    {
+      return rd1;
+    }
+
+    QBuffer::seek(44);
+    /* seek(44 + (len - rd1)); */
+    qint64 rd2 = QBuffer::readData(&data[rd1], len-rd1);
+
+    return len;
+
   }
 };
 
@@ -219,19 +242,23 @@ int main(int argc, char** argv)
   }
 
 
-  QFile sound_file("../sirena1.wav");
+  /* QFile sound_file("../sirena1.wav"); */
+  /* QFile sound_file("../sirena_001.wav"); */
+  QFile sound_file("../discord-sounds.wav");
+  /* QFile sound_file("../sirena_003.wav"); */
   /* QFile sound_file("../beep-07a.wav"); */
   if(!sound_file.open(QFile::OpenModeFlag::ReadOnly)) 
   {
     qDebug() << "Can't open sound file.";
   }
 
-  QByteArray sound_data = sound_file.readAll();
+  /* QByteArray sound_data = sound_file.readAll(); */
 
-  LQBuffer sound_buffer(&sound_data);
-  sound_buffer.open(QIODevice::ReadOnly);
+  /* LQBuffer sound_buffer(&sound_data); */
+  /* sound_buffer.open(QIODevice::ReadOnly); */
 
-  LQPlaySound* play_sound = new LQPlaySound(&sound_buffer);
+  /* LQPlaySound* play_sound = new LQPlaySound(&sound_buffer); */
+  LQPlaySound* play_sound = new LQPlaySound(&sound_file);
 
   /* play_sound->setLoops(3); */
   qDebug() << "Play loops = " << play_sound->loops();
