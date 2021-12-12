@@ -23,6 +23,69 @@
 #include <qaudio.h>
 #include <QDebug>
 
+//------------------------------------------------------------------------------
+void LQPlaySound::LCAudioBuffer::setAudioOutput(QAudioOutput* _out)
+{
+  mpOut = _out;
+}
+
+//------------------------------------------------------------------------------
+bool	LQPlaySound::LCAudioBuffer::atEnd() const
+{
+  qDebug() << QStringLiteral("atEnd()");
+  return QBuffer::atEnd();
+}
+
+//------------------------------------------------------------------------------
+qint64	LQPlaySound::LCAudioBuffer::pos() const
+{
+  qint64 pos = QBuffer::pos() + mAddPos; 
+  return pos; 
+}
+
+//------------------------------------------------------------------------------
+bool	LQPlaySound::LCAudioBuffer::seek(qint64 pos)
+{
+  mAddPos = 0;
+  mStopFlag = false;
+  return QBuffer::seek(pos);
+}
+
+//------------------------------------------------------------------------------
+qint64	LQPlaySound::LCAudioBuffer::readData(char *data, qint64 len)
+{
+  qDebug() << QString("readData(len = %1)").arg(len);
+
+  if(mStopFlag)
+  {
+    /* memset(data, 0, len); */
+
+    /* if(mpOut != nullptr) */
+    /* { */
+    /*   mpOut->stop(); */
+    /* } */
+    /* QBuffer::seek(0); */
+    /* mStopFlag = false; */
+    /* mAddPos += len; */
+    return 0;
+  }
+
+  qint64 rl = QBuffer::readData(data, len);
+
+  if(rl < len)
+  {
+    mStopFlag = true;
+    mAddPos += len - rl;
+    memset(&data[rl], 0, len - rl);
+  }
+  return len;
+}
+
+
+
+
+
+
 LQPlaySound::LQPlaySound(QObject *parent) :
   QObject(parent)
   ,mLoops(0)
@@ -132,14 +195,6 @@ bool LQPlaySound::setDevice(QIODevice* _device)
   QAudioFormat format;
 
 
-
-  /* format.setChannelCount(2); */
-  /* format.setSampleRate(44100); */
-  /* format.setSampleSize(16); */
-  /* format.setCodec("audio/pcm"); */
-  /* format.setByteOrder(QAudioFormat::LittleEndian); */
-  /* format.setSampleType(QAudioFormat::SignedInt); */
-
   format.setChannelCount(num_channels);
   format.setSampleRate(sample_rate);
   format.setSampleSize(bits_per_sample);
@@ -153,7 +208,7 @@ bool LQPlaySound::setDevice(QIODevice* _device)
   mAudioData.resize(mAudioData.size() - (mAudioData.size()%4));
   mBuffer.setData(mAudioData);
   mBuffer.open(QBuffer::ReadOnly);
-
+  /* mBuffer.setAudioOutput(mpAOut); */
 
 
   QObject::connect(mpAOut, &QAudioOutput::stateChanged,
