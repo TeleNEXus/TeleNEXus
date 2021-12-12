@@ -70,7 +70,7 @@ public:
 
     if(mStopFlag)
     {
-      memset(data, 0, len);
+      /* memset(data, 0, len); */
 
       /* if(data != nullptr) */
       /* { */
@@ -86,8 +86,8 @@ public:
       }
 
       mStopFlag = false;
-      mAddPos += len;
-      return len;
+      /* mAddPos += len; */
+      return 0;
     }
 
     qint64 rl = QBuffer::readData(data, len);
