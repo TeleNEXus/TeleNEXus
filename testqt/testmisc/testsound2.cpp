@@ -45,9 +45,6 @@ public:
   }
 
 
-
-
-
   /* virtual bool	canReadLine() const override */
   /* virtual void	close() override */
   /* virtual bool	open(QIODevice::OpenMode flags) override */
@@ -64,13 +61,7 @@ public:
   virtual bool	seek(qint64 pos) override
   {
     qDebug() << QStringLiteral("seek() = ") << pos;
-    /* mAddPos = 0; */
-    /* mStopFlag = false; */
 
-    /* if(pos > size()) */
-    /* { */
-    /*   pos = size(); */
-    /* } */
     return QBuffer::seek(pos);
   }
 
@@ -142,11 +133,15 @@ public:
   enum ELoop{ Infinite = -1 };
 private:
 
+  QAudioFormat mFormat;
   LCAudioBuffer mBuffer;
   /* QBuffer mBuffer; */
   QByteArray mAudioData;
+  qint64 mPos = 0;
 
   QIODevice* mpDevice;
+  QIODevice* mpOut = nullptr;
+
   int mLoops;
   int mLoopsCounter;
   QAudioOutput* mpAOut;
@@ -183,8 +178,6 @@ public:
     quint32 byte_rate = *((quint32*)(&(mAudioData.data()[28])));
     quint16 bits_per_sample = *((quint16*)(&(mAudioData.data()[34])));
 
-    QAudioFormat format;
-
 
 
     qDebug() << "chunk_size       = " << chunk_size;
@@ -200,12 +193,12 @@ public:
     /* format.setByteOrder(QAudioFormat::LittleEndian); */
     /* format.setSampleType(QAudioFormat::SignedInt); */
 
-    format.setChannelCount(num_channels);
-    format.setSampleRate(sample_rate);
-    format.setSampleSize(bits_per_sample);
-    format.setCodec("audio/pcm");
-    format.setByteOrder(QAudioFormat::LittleEndian);
-    format.setSampleType(QAudioFormat::SignedInt);
+    mFormat.setChannelCount(num_channels);
+    mFormat.setSampleRate(sample_rate);
+    mFormat.setSampleSize(bits_per_sample);
+    mFormat.setCodec("audio/pcm");
+    mFormat.setByteOrder(QAudioFormat::LittleEndian);
+    mFormat.setSampleType(QAudioFormat::SignedInt);
 
     qDebug() << "Audio data full size = " << mAudioData.size();
     mAudioData = mAudioData.mid(44);
@@ -213,68 +206,7 @@ public:
     mAudioData.resize(mAudioData.size() - (mAudioData.size()%4));
     qDebug() << "Audio data align size = " << mAudioData.size();
 
-
-    mBuffer.setData(mAudioData);
-    mBuffer.open(QIODevice::ReadOnly);
-
-    mpAOut = new QAudioOutput(format);
-
     mBuffer.setAudioAutput(mpAOut);
-
-    QObject::connect(mpAOut, &QAudioOutput::stateChanged,
-        [this](QAudio::State _state)
-        {
-          qDebug() << "Audio out state = " << _state;
-          switch(_state)
-          {
-
-          /* case QAudio::State::IdleState: */
-          /*   mpAOut->stop(); */
-          /*   mBuffer.reset(); */
-          /*   break; */
-
-          case QAudio::State::StoppedState:
-
-            mpAOut->reset();
-
-            if(mLoops == static_cast<int>(ELoop::Infinite))
-            {
-              startPrivate();
-              break;
-            } 
-
-            if(mLoops == 0) 
-            {
-              mpAOut->stop();
-              break;
-            }
-
-            mLoopsCounter--;
-            if(mLoopsCounter >= 0)
-            {
-              startPrivate();
-            }
-            else
-            {
-              mLoopsCounter = 0;
-              mpAOut->stop();
-            }
-            break;
-
-          case QAudio::State::SuspendedState:
-          case QAudio::State::IdleState:
-          case QAudio::State::InterruptedState:
-            mpAOut->stop();
-            mpAOut->reset();
-            mBuffer.reset();
-            break;
-
-          default:
-            
-            break;
-          }
-
-        });
 
   }
 
@@ -315,9 +247,34 @@ public:
 
   void play()
   {
-    if(mpAOut == nullptr) return;
-    startPrivate();
-    mLoopsCounter = mLoops;
+    mpAOut = new QAudioOutput(mFormat);
+
+    mpOut = mpAOut->start(); 
+
+    if(mpOut ==  nullptr) qDebug() << "Wrong io";
+
+
+    connect(mpOut, &QIODevice::bytesWritten,
+        [](qint64 len)
+        {
+          qDebug() << "Signal bytes writen.";
+          /* /1* mPos += len; *1/ */
+          /* if(mPos >= mAudioData.size()) */
+          /* { */
+          /*   mPos = 0; */
+          /* } */
+          /* mpOut->write(&( mAudioData.data()[mPos] ), mAudioData.size()  - mPos); */
+        });
+
+    connect(mpAOut, &QAudioOutput::stateChanged,
+        [](QAudio::State _state)
+        {
+          qDebug().noquote() << "State = " << _state;
+        });
+
+
+
+    mpOut->write(&(mAudioData.data()[0]), mAudioData.size());
   }
 
   void stop()
@@ -384,10 +341,10 @@ int main(int argc, char** argv)
 /* QAudioOutput(pulseaudio): pa_stream_write, error = Недопустимый параметр */
                       
 
-  /* QFile sound_file("../k2.wav"); */
+  QFile sound_file("../k2.wav");
   /* QFile sound_file("../k1.wav"); */
   /* QFile sound_file("../sirena1.wav"); */
-  QFile sound_file("../sirena_001.wav");
+  /* QFile sound_file("../sirena_001.wav"); */
   /* QFile sound_file("../discord-sounds.wav"); */
   /* QFile sound_file("../sirena_003.wav"); */
   /* QFile sound_file("../beep-07a.wav"); */
