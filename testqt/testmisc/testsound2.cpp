@@ -23,79 +23,80 @@
 #include <functional>
 
 
-class LCAudioBuffer : public QBuffer
-{
-private:
-  qint64 mAddPos = 0;
-  bool mStopFlag = false;
-  QAudioOutput* mpOut = nullptr;
+/* class LCAudioBuffer : public QBuffer */
+/* { */
+/* private: */
+/*   qint64 mAddPos = 0; */
+/*   bool mStopFlag = false; */
+/*   QAudioOutput* mpOut = nullptr; */
   
-public:
-  using QBuffer::QBuffer;
+/* public: */
+/*   using QBuffer::QBuffer; */
 
-  void setAudioAutput(QAudioOutput* _out)
-  {
-    mpOut = _out;
-  }
+/*   void setAudioAutput(QAudioOutput* _out) */
+/*   { */
+/*     mpOut = _out; */
+/*   } */
 
-  virtual bool	atEnd() const override
-  {
-    qDebug() << QStringLiteral("atEnd()");
-    return QBuffer::atEnd();
-  }
+/*   virtual bool	atEnd() const override */
+/*   { */
+/*     qDebug() << QStringLiteral("atEnd()"); */
+/*     return QBuffer::atEnd(); */
+/*   } */
 
-  virtual qint64	pos() const override
-  {
-    /* qint64 pos = QBuffer::pos() + mAddPos; */ 
-    qint64 pos = QBuffer::pos();
-    qDebug() << QStringLiteral("pos() = ") << pos;
-    return pos; 
-    /* return QBuffer::pos(); */
-  }
+/*   virtual qint64	pos() const override */
+/*   { */
+/*     /1* qint64 pos = QBuffer::pos() + mAddPos; *1/ */ 
+/*     qint64 pos = QBuffer::pos(); */
+/*     qDebug() << QStringLiteral("pos() = ") << pos; */
+/*     return pos; */ 
+/*     /1* return QBuffer::pos(); *1/ */
+/*   } */
 
-  virtual bool	seek(qint64 pos) override
-  {
-    qDebug() << QStringLiteral("seek() = ") << pos;
+/*   virtual bool	seek(qint64 pos) override */
+/*   { */
+/*     qDebug() << QStringLiteral("seek() = ") << pos; */
 
-    return QBuffer::seek(pos);
-  }
+/*     return QBuffer::seek(pos); */
+/*   } */
 
-  /* virtual qint64	size() const override */
+/*   /1* virtual qint64	size() const override *1/ */
 
-  virtual qint64	readData(char *data, qint64 len) override
-  {
-    qDebug() << QString("readData(len = %1)").arg(len);
+/*   virtual qint64	readData(char *data, qint64 len) override */
+/*   { */
 
-    if(mStopFlag)
-    {
-      memset(data, 0, len);
+/*     qDebug() << QString("readData(len = %1)").arg(len); */
 
-      if(mpOut != nullptr)
-      {
-        mpOut->stop();
-      }
-      QBuffer::seek(0);
-      /* mAddPos = 0; */
-      mStopFlag = false;
-      mAddPos += len;
-      return len;
-    }
+/*     if(mStopFlag) */
+/*     { */
+/*       memset(data, 0, len); */
 
-    qint64 rl = QBuffer::readData(data, len);
+/*       if(mpOut != nullptr) */
+/*       { */
+/*         mpOut->stop(); */
+/*       } */
+/*       QBuffer::seek(0); */
+/*       /1* mAddPos = 0; *1/ */
+/*       mStopFlag = false; */
+/*       mAddPos += len; */
+/*       return len; */
+/*     } */
 
-    if(rl < len)
-    {
-      qDebug() << "rl = " << rl;
-      mStopFlag = true;
-      mAddPos += len - rl;
-      memset(&data[rl], 0, len - rl);
-    }
+/*     qint64 rl = QBuffer::readData(data, len); */
 
-    return len;
-  }
-  /* virtual qint64	writeData(const char *data, qint64 len) override */
+/*     if(rl < len) */
+/*     { */
+/*       qDebug() << "rl = " << rl; */
+/*       mStopFlag = true; */
+/*       mAddPos += len - rl; */
+/*       memset(&data[rl], 0, len - rl); */
+/*     } */
 
-};
+/*     return len; */
+/*   } */
+/*   /1* virtual qint64	writeData(const char *data, qint64 len) override *1/ */
+
+/* }; */
 
 class LQPlaySound : QObject
 {
@@ -104,10 +105,10 @@ public:
 private:
 
   QAudioFormat mFormat;
-  /* LCAudioBuffer mBuffer; */
-  QBuffer mBuffer;
+  LCAudioBuffer mBuffer;
+  /* QBuffer mBuffer; */
   QByteArray mAudioData;
-  /* qint64 mPos = 0; */
+  qint64 mPos = 0;
 
   QIODevice* mpDevice;
   QIODevice* mpOut = nullptr;

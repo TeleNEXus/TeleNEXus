@@ -31,12 +31,12 @@
   <SCRIPTS file="scripts.xml"/>
 
   <SOUNDS>
-    <sound file="sounds/beep_001.wav"   controlSource="localsource" controlData="sound_ctrl_beep_001_0" repeat="0"   />
+    <!-- <sound file="sounds/beep_001.wav"   controlSource="localsource" controlData="sound_ctrl_beep_001_0" repeat="0"   /> -->
     <!-- <sound file="sounds/sirena_001.wav"   controlSource="localsource" controlData="sound_ctrl_beep_001_0" repeat="inf"   /> -->
     <!-- <sound file="sounds/k1.wav"   controlSource="localsource" controlData="sound_ctrl_beep_001_0" repeat="0"   /> -->
     <!-- <sound file="sounds/music/discord-sounds.wav"   controlSource="localsource" controlData="sound_ctrl_beep_001_0" repeat="0"   /> -->
 
-    <!-- <sound file="sounds/k2.wav"   controlSource="localsource" controlData="sound_ctrl_beep_001_0" repeat="0"   /> -->
+    <sound file="sounds/k2.wav"   controlSource="localsource" controlData="sound_ctrl_beep_001_0" repeat="0"   />
     <!-- <sound file="sounds/beep_001.wav"   controlSource="localsource" controlData="sound_ctrl_beep_001_2" repeat="3"   /> -->
     <sound file="sounds/k2.wav"   controlSource="localsource" controlData="sound_ctrl_beep_001_2" repeat="0"   />
     <sound file="sounds/sirena_001.wav" controlSource="localsource" controlData="sound_ctrl_sirena_001" repeat="inf" />
