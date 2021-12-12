@@ -50,7 +50,7 @@ public:
 
     if(!mpDevice->isOpen()) return;
 
-    QByteArray mAudioData = mpDevice->readAll();
+    mAudioData = mpDevice->readAll();
     mpDevice->close();
 
     if(mAudioData.isNull()) 
@@ -108,7 +108,21 @@ public:
 
 
     mpAOut = new QAudioOutput(format);
+    /* mpAOut->setNotifyInterval(10); */
+    mpAOut->setNotifyInterval(100);
 
+    /* QObject::connect(mpAOut, &QAudioOutput::notify, */
+    /*     [this]() */
+    /*     { */
+    /*       /1* qDebug() << "Notify buffer pos = " << mBuffer.pos(); *1/ */
+    /*       /1* mBuffer.reset(); *1/ */
+    /*       if(mBuffer.pos() == mAudioData.size()) */ 
+    /*       { */
+    /*         /1* mBuffer.seek(0); *1/ */
+    /*         mpAOut->stop(); */
+    /*       } */
+
+    /*     }); */
     QObject::connect(mpAOut, &QAudioOutput::stateChanged,
         [this](QAudio::State _state)
         {
@@ -116,6 +130,7 @@ public:
           switch(_state)
           {
           case QAudio::State::IdleState:
+          case QAudio::State::StoppedState:
 
             if(mLoops == static_cast<int>(ELoop::Infinite))
             {
@@ -253,10 +268,10 @@ int main(int argc, char** argv)
 /* QAudioOutput(pulseaudio): pa_stream_write, error = Недопустимый параметр */
                       
 
-  QFile sound_file("../k2.wav");
+  /* QFile sound_file("../k2.wav"); */
   /* QFile sound_file("../k1.wav"); */
   /* QFile sound_file("../sirena1.wav"); */
-  /* QFile sound_file("../sirena_001.wav"); */
+  QFile sound_file("../sirena_001.wav");
   /* QFile sound_file("../discord-sounds.wav"); */
   /* QFile sound_file("../sirena_003.wav"); */
   /* QFile sound_file("../beep-07a.wav"); */
