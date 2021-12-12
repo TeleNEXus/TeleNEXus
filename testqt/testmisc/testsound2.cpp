@@ -44,6 +44,9 @@ public:
     return QBuffer::atEnd();
   }
 
+
+
+
   /* virtual bool	canReadLine() const override */
   /* virtual void	close() override */
   /* virtual bool	open(QIODevice::OpenMode flags) override */
@@ -60,6 +63,12 @@ public:
     qDebug() << QStringLiteral("seek() = ") << pos;
     mAddPos = 0;
     mStopFlag = false;
+
+    if(pos > this->size())
+    {
+      pos = this->size();
+    }
+
     return QBuffer::seek(pos);
   }
   /* virtual qint64	size() const override */
@@ -70,15 +79,15 @@ public:
 
     if(mStopFlag)
     {
-      /* memset(data, 0, len); */
+      memset(data, 0, len);
 
-      /* if(data != nullptr) */
-      /* { */
-      /*   for(qint64 i = 0; i < len; i++) */
-      /*   { */
-      /*     data[0] = 0; */
-      /*   } */
-      /* } */
+      if(data != nullptr)
+      {
+        for(qint64 i = 0; i < len; i++)
+        {
+          data[0] = 0;
+        }
+      }
 
       if(mpOut != nullptr)
       {
@@ -86,8 +95,8 @@ public:
       }
 
       mStopFlag = false;
-      /* mAddPos += len; */
-      return 0;
+      mAddPos += len;
+      return len;
     }
 
     qint64 rl = QBuffer::readData(data, len);
