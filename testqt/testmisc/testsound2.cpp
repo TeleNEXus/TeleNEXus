@@ -104,10 +104,10 @@ public:
 private:
 
   QAudioFormat mFormat;
-  LCAudioBuffer mBuffer;
-  /* QBuffer mBuffer; */
+  /* LCAudioBuffer mBuffer; */
+  QBuffer mBuffer;
   QByteArray mAudioData;
-  qint64 mPos = 0;
+  /* qint64 mPos = 0; */
 
   QIODevice* mpDevice;
   QIODevice* mpOut = nullptr;

@@ -56,8 +56,8 @@ public:
 private:
   /* QIODevice* mpDevice; */
   QByteArray mAudioData;
-  /* QBuffer    mBuffer; */
-  LCAudioBuffer mBuffer;
+  QBuffer    mBuffer;
+  /* LCAudioBuffer mBuffer; */
   
   int mLoops;
   int mLoopsCounter;

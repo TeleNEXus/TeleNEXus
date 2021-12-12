@@ -58,16 +58,18 @@ qint64	LQPlaySound::LCAudioBuffer::readData(char *data, qint64 len)
 
   if(mStopFlag)
   {
-    /* memset(data, 0, len); */
+    memset(data, 0, len);
 
-    /* if(mpOut != nullptr) */
-    /* { */
-    /*   mpOut->stop(); */
-    /* } */
-    /* QBuffer::seek(0); */
-    /* mStopFlag = false; */
-    /* mAddPos += len; */
-    return 0;
+    if(mpOut != nullptr)
+    {
+      /* mpOut->stop(); */
+      mpOut->suspend();
+    }
+
+    QBuffer::seek(0);
+    mStopFlag = false;
+    mAddPos += len;
+    return len;
   }
 
   qint64 rl = QBuffer::readData(data, len);
@@ -217,6 +219,9 @@ bool LQPlaySound::setDevice(QIODevice* _device)
         switch(_state)
         {
         case QAudio::State::IdleState:
+        /* case QAudio::State::StoppedState: */
+            /* mpAOut->stop(); */
+            /* break; */
 
           if(mLoops == static_cast<int>(ELoop::Infinite))
           {
