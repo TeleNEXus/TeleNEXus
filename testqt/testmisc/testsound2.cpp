@@ -64,30 +64,43 @@ public:
     mAddPos = 0;
     mStopFlag = false;
 
-    if(pos > this->size())
+    if(pos > size())
     {
-      pos = this->size();
+      pos = size();
     }
-
     return QBuffer::seek(pos);
   }
+
   /* virtual qint64	size() const override */
 
   virtual qint64	readData(char *data, qint64 len) override
   {
+    /* qDebug() << QString("readData(len = %1)").arg(len); */
+
+    /* qint64 rl = QBuffer::readData(data, len); */
+
+    /* if(rl < len) */
+    /* { */
+    /*   QBuffer::reset(); */
+      
+
+    /* } */
+
+    /* return len; */
+
     qDebug() << QString("readData(len = %1)").arg(len);
 
     if(mStopFlag)
     {
       memset(data, 0, len);
 
-      if(data != nullptr)
-      {
-        for(qint64 i = 0; i < len; i++)
-        {
-          data[0] = 0;
-        }
-      }
+      /* if(data != nullptr) */
+      /* { */
+      /*   for(qint64 i = 0; i < len; i++) */
+      /*   { */
+      /*     data[0] = 0; */
+      /*   } */
+      /* } */
 
       if(mpOut != nullptr)
       {
@@ -316,6 +329,7 @@ private:
     /* mpAOut->reset(); */
     /* mpDevice->seek(44); */
     mBuffer.seek(0);
+    mBuffer.reset();
     /* mpAOut->start(&mBuffer); */
     /* mpAOut->reset(); */
     mpAOut->stop();
