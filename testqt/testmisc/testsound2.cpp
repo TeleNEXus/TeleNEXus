@@ -57,7 +57,7 @@ public:
 
   virtual bool	seek(qint64 pos) override
   {
-    qDebug() << QStringLiteral("seek()");
+    qDebug() << QStringLiteral("seek() = ") << pos;
     mAddPos = 0;
     mStopFlag = false;
     return QBuffer::seek(pos);
