@@ -22,6 +22,7 @@
 #define LQPLAYSOUND_H_
 
 #include <QObject>
+#include <QBuffer>
 
 class QIODevice;
 class QAudioOutput;
@@ -32,7 +33,10 @@ public:
   enum ELoop{ Infinite = -1 };
 
 private:
-  QIODevice* mpDevice;
+  /* QIODevice* mpDevice; */
+  QByteArray mAudioData;
+  QBuffer    mBuffer;
+  
   int mLoops;
   int mLoopsCounter;
   QAudioOutput* mpAOut;
@@ -44,7 +48,7 @@ public:
 
   virtual ~LQPlaySound();
 
-  QIODevice* device() const {return mpDevice;}
+  /* QIODevice* device() const {return mpDevice;} */
 
   bool isFinished() const;
   int loops() const { return mLoops; }

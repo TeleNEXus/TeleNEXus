@@ -25,7 +25,6 @@
 
 LQPlaySound::LQPlaySound(QObject *parent) :
   QObject(parent)
-  ,mpDevice(nullptr)
   ,mLoops(0)
   ,mLoopsCounter(0)
   ,mpAOut(nullptr)
@@ -69,7 +68,7 @@ void LQPlaySound::setLoops(int _number)
 void LQPlaySound::play()
 {
   if(mpAOut == nullptr) return;
-  if(mpAOut->error() != QAudio::NoError) return;
+  /* if(mpAOut->error() != QAudio::NoError) return; */
   startPrivate();
   mLoopsCounter = mLoops;
 }
@@ -84,10 +83,9 @@ void LQPlaySound::stop()
 
 void LQPlaySound::startPrivate()
 {
-  if(mpAOut->error() != QAudio::NoError) return;
-  mpDevice->reset();
-  mpDevice->seek(44);
-  mpAOut->start(mpDevice);
+  mpAOut->stop();
+  mBuffer.reset();
+  mpAOut->start(&mBuffer);
 }
 
 
@@ -100,24 +98,25 @@ bool LQPlaySound::setDevice(QIODevice* _device)
     mpAOut = nullptr;
   }
 
-  mpDevice = _device;
-  if(!mpDevice->isOpen()) 
+  if(!_device->isOpen()) 
   {
     mErrorMessage = "Sound data device is not open.";
     return false;
   }
 
-  //Reading header of WAVE sound file.
-  QByteArray wav_header_data = mpDevice->read(44);
 
-  if(wav_header_data.isNull()) 
+
+  //Reading of WAVE sound file.
+  mAudioData = _device->readAll();
+
+  if(mAudioData.isNull()) 
   {
     mErrorMessage = "Can't read WAVE header from device.";
     return false;
   }
 
-  QString descr_riff = QString::fromLatin1(wav_header_data.data(), 4);
-  QString descr_wave = QString::fromLatin1(&wav_header_data.data()[8], 4);
+  QString descr_riff = QString::fromLatin1(mAudioData.data(), 4);
+  QString descr_wave = QString::fromLatin1(&mAudioData.data()[8], 4);
 
   if((descr_riff != QString("RIFF")) || (descr_wave != QString("WAVE"))) 
   {
@@ -125,31 +124,37 @@ bool LQPlaySound::setDevice(QIODevice* _device)
     return false;
   }
 
-  quint16 num_channels = *((quint16*)(&(wav_header_data.data()[22])));
-  quint32 sample_rate = *((quint32*)(&(wav_header_data.data()[24])));
+  quint16 num_channels = *((quint16*)(&(mAudioData.data()[22])));
+  quint32 sample_rate = *((quint32*)(&(mAudioData.data()[24])));
   /* quint32 byte_rate = *((quint32*)(&(data.data()[28]))); */
-  quint16 bits_per_sample = *((quint16*)(&(wav_header_data.data()[34])));
+  quint16 bits_per_sample = *((quint16*)(&(mAudioData.data()[34])));
 
   QAudioFormat format;
 
 
 
-  format.setChannelCount(2);
-  format.setSampleRate(44100);
-  format.setSampleSize(16);
-  format.setCodec("audio/pcm");
-  format.setByteOrder(QAudioFormat::LittleEndian);
-  format.setSampleType(QAudioFormat::SignedInt);
-
-  /* format.setChannelCount(num_channels); */
-  /* format.setSampleRate(sample_rate); */
-  /* format.setSampleSize(bits_per_sample); */
+  /* format.setChannelCount(2); */
+  /* format.setSampleRate(44100); */
+  /* format.setSampleSize(16); */
   /* format.setCodec("audio/pcm"); */
   /* format.setByteOrder(QAudioFormat::LittleEndian); */
   /* format.setSampleType(QAudioFormat::SignedInt); */
 
+  format.setChannelCount(num_channels);
+  format.setSampleRate(sample_rate);
+  format.setSampleSize(bits_per_sample);
+  format.setCodec("audio/pcm");
+  format.setByteOrder(QAudioFormat::LittleEndian);
+  format.setSampleType(QAudioFormat::SignedInt);
 
   mpAOut = new QAudioOutput(format);
+
+  mAudioData = mAudioData.mid(44);
+  mAudioData.resize(mAudioData.size() - (mAudioData.size()%4));
+  mBuffer.setData(mAudioData);
+  mBuffer.open(QBuffer::ReadOnly);
+
+
 
   QObject::connect(mpAOut, &QAudioOutput::stateChanged,
       [this](QAudio::State _state)
