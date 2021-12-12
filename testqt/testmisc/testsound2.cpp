@@ -18,7 +18,12 @@
 #include <QAudioOutput>
 #include <QAudioDeviceInfo>
 #include <QBuffer>
+#include <QAudioBuffer>
 
+
+class LCAudioBuffer : QBuffer
+{
+};
 
 class LQPlaySound : QObject
 {
@@ -54,7 +59,6 @@ public:
     }
 
 
-
     QString descr_riff = QString::fromLatin1(mAudioData.data(), 4);
     QString descr_wave = QString::fromLatin1(&mAudioData.data()[8], 4);
 
@@ -68,6 +72,7 @@ public:
     quint16 bits_per_sample = *((quint16*)(&(mAudioData.data()[34])));
 
     QAudioFormat format;
+
 
 
     qDebug() << "chunk_size       = " << chunk_size;
@@ -93,9 +98,8 @@ public:
     qDebug() << "Audio data full size = " << mAudioData.size();
     mAudioData = mAudioData.mid(44);
     qDebug() << "Audio data size = " << mAudioData.size();
-
-    mAudioData.append(QByteArray(byte_rate - mAudioData.size(), 0));
-    qDebug() << "Audio data size after add = " << mAudioData.size();
+    mAudioData.resize(mAudioData.size() - (mAudioData.size()%4));
+    qDebug() << "Audio data align size = " << mAudioData.size();
 
 
     mBuffer.setData(mAudioData);
@@ -249,15 +253,20 @@ int main(int argc, char** argv)
 /* QAudioOutput(pulseaudio): pa_stream_write, error = Недопустимый параметр */
                       
 
-
-
-  /* QFile sound_file("../k2.wav"); */
+  QFile sound_file("../k2.wav");
   /* QFile sound_file("../k1.wav"); */
   /* QFile sound_file("../sirena1.wav"); */
-  QFile sound_file("../sirena_001.wav");
+  /* QFile sound_file("../sirena_001.wav"); */
   /* QFile sound_file("../discord-sounds.wav"); */
   /* QFile sound_file("../sirena_003.wav"); */
   /* QFile sound_file("../beep-07a.wav"); */
+              /* QFile sound_file("/home/serg/D_DRIVE/music/knopka-klik-blizkii-myagkii-priglushennyii.wav"); */
+  /* QFile sound_file("/home/serg/D_DRIVE/music/knopka-klik-vyisokii-myagkii-blizkii-nejnyii.wav"); */
+
+  /* QFile sound_file("/home/serg/D_DRIVE/music/knopka-klik-vyisokii-rezkii-blizkii.wav"); */
+  /* QFile sound_file("/home/serg/D_DRIVE/music/knopka-klik-vyisokii-zvonkii-blizkii-gromkii.wav"); */
+  /* QFile sound_file("/home/serg/D_DRIVE/music/sirena-korabelnaya-trevoga-na-korable-26750.wav"); */
+
   if(!sound_file.open(QFile::OpenModeFlag::ReadOnly)) 
   {
     qDebug() << "Can't open sound file.";
