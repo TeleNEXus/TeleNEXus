@@ -44,11 +44,6 @@ public:
     return QBuffer::atEnd();
   }
 
-
-  /* virtual bool	canReadLine() const override */
-  /* virtual void	close() override */
-  /* virtual bool	open(QIODevice::OpenMode flags) override */
-
   virtual qint64	pos() const override
   {
     /* qint64 pos = QBuffer::pos() + mAddPos; */ 
@@ -71,57 +66,32 @@ public:
   {
     qDebug() << QString("readData(len = %1)").arg(len);
 
+    if(mStopFlag)
+    {
+      memset(data, 0, len);
+
+      if(mpOut != nullptr)
+      {
+        mpOut->stop();
+      }
+      QBuffer::seek(0);
+      /* mAddPos = 0; */
+      mStopFlag = false;
+      mAddPos += len;
+      return len;
+    }
+
     qint64 rl = QBuffer::readData(data, len);
 
     if(rl < len)
     {
-      
-      QBuffer::reset();
-      QBuffer::readData(&(data[rl]), len - rl);
+      qDebug() << "rl = " << rl;
+      mStopFlag = true;
+      mAddPos += len - rl;
+      memset(&data[rl], 0, len - rl);
     }
 
     return len;
-
-
-
-    /* qDebug() << QString("readData(len = %1)").arg(len); */
-
-    /* if(mStopFlag) */
-    /* { */
-    /*   memset(data, 0, len); */
-
-    /*   /1* if(data != nullptr) *1/ */
-    /*   /1* { *1/ */
-    /*   /1*   for(qint64 i = 0; i < len; i++) *1/ */
-    /*   /1*   { *1/ */
-    /*   /1*     data[0] = 0; *1/ */
-    /*   /1*   } *1/ */
-    /*   /1* } *1/ */
-
-    /*   if(mpOut != nullptr) */
-    /*   { */
-    /*     mpOut->stop(); */
-    /*   } */
-    /*   QBuffer::seek(0); */
-    /*   mAddPos = 0; */
-
-
-    /*   mStopFlag = false; */
-    /*   /1* mAddPos += len; *1/ */
-    /*   return len; */
-    /* } */
-
-    /* qint64 rl = QBuffer::readData(data, len); */
-
-    /* if(rl < len) */
-    /* { */
-    /*   qDebug() << "rl = " << rl; */
-    /*   mStopFlag = true; */
-    /*   mAddPos += len - rl; */
-    /*   memset(&data[rl], 0, len - rl); */
-    /* } */
-
-    /* return len; */
   }
   /* virtual qint64	writeData(const char *data, qint64 len) override */
 
