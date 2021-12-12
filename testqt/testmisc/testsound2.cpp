@@ -47,27 +47,30 @@ public:
 
 
 
+
   /* virtual bool	canReadLine() const override */
   /* virtual void	close() override */
   /* virtual bool	open(QIODevice::OpenMode flags) override */
 
   virtual qint64	pos() const override
   {
-    qint64 pos = QBuffer::pos() + mAddPos; 
+    /* qint64 pos = QBuffer::pos() + mAddPos; */ 
+    qint64 pos = QBuffer::pos();
     qDebug() << QStringLiteral("pos() = ") << pos;
     return pos; 
+    /* return QBuffer::pos(); */
   }
 
   virtual bool	seek(qint64 pos) override
   {
     qDebug() << QStringLiteral("seek() = ") << pos;
-    mAddPos = 0;
-    mStopFlag = false;
+    /* mAddPos = 0; */
+    /* mStopFlag = false; */
 
-    if(pos > size())
-    {
-      pos = size();
-    }
+    /* if(pos > size()) */
+    /* { */
+    /*   pos = size(); */
+    /* } */
     return QBuffer::seek(pos);
   }
 
@@ -75,54 +78,59 @@ public:
 
   virtual qint64	readData(char *data, qint64 len) override
   {
-    /* qDebug() << QString("readData(len = %1)").arg(len); */
-
-    /* qint64 rl = QBuffer::readData(data, len); */
-
-    /* if(rl < len) */
-    /* { */
-    /*   QBuffer::reset(); */
-      
-
-    /* } */
-
-    /* return len; */
-
     qDebug() << QString("readData(len = %1)").arg(len);
-
-    if(mStopFlag)
-    {
-      memset(data, 0, len);
-
-      /* if(data != nullptr) */
-      /* { */
-      /*   for(qint64 i = 0; i < len; i++) */
-      /*   { */
-      /*     data[0] = 0; */
-      /*   } */
-      /* } */
-
-      if(mpOut != nullptr)
-      {
-        mpOut->stop();
-      }
-
-      mStopFlag = false;
-      mAddPos += len;
-      return len;
-    }
 
     qint64 rl = QBuffer::readData(data, len);
 
     if(rl < len)
     {
-      qDebug() << "rl = " << rl;
-      mStopFlag = true;
-      mAddPos += len - rl;
-      memset(&data[rl], 0, len - rl);
+      
+      QBuffer::reset();
+      QBuffer::readData(&(data[rl]), len - rl);
     }
 
     return len;
+
+
+
+    /* qDebug() << QString("readData(len = %1)").arg(len); */
+
+    /* if(mStopFlag) */
+    /* { */
+    /*   memset(data, 0, len); */
+
+    /*   /1* if(data != nullptr) *1/ */
+    /*   /1* { *1/ */
+    /*   /1*   for(qint64 i = 0; i < len; i++) *1/ */
+    /*   /1*   { *1/ */
+    /*   /1*     data[0] = 0; *1/ */
+    /*   /1*   } *1/ */
+    /*   /1* } *1/ */
+
+    /*   if(mpOut != nullptr) */
+    /*   { */
+    /*     mpOut->stop(); */
+    /*   } */
+    /*   QBuffer::seek(0); */
+    /*   mAddPos = 0; */
+
+
+    /*   mStopFlag = false; */
+    /*   /1* mAddPos += len; *1/ */
+    /*   return len; */
+    /* } */
+
+    /* qint64 rl = QBuffer::readData(data, len); */
+
+    /* if(rl < len) */
+    /* { */
+    /*   qDebug() << "rl = " << rl; */
+    /*   mStopFlag = true; */
+    /*   mAddPos += len - rl; */
+    /*   memset(&data[rl], 0, len - rl); */
+    /* } */
+
+    /* return len; */
   }
   /* virtual qint64	writeData(const char *data, qint64 len) override */
 
@@ -209,28 +217,9 @@ public:
     mBuffer.setData(mAudioData);
     mBuffer.open(QIODevice::ReadOnly);
 
-
-
     mpAOut = new QAudioOutput(format);
 
     mBuffer.setAudioAutput(mpAOut);
-    
-    /* mpAOut->setNotifyInterval(10); */
-    /* mpAOut->setNotifyInterval(100); */
-
-    /* QObject::connect(mpAOut, &QAudioOutput::notify, */
-    /*     [this]() */
-    /*     { */
-    /*       /1* qDebug() << "Notify buffer pos = " << mBuffer.pos(); *1/ */
-
-    /*       /1* mBuffer.reset(); *1/ */
-    /*       if(mBuffer.pos() == mAudioData.size()) */ 
-    /*       { */
-    /*         /1* mBuffer.seek(0); *1/ */
-    /*         /1* mpAOut->stop(); *1/ */
-    /*       } */
-
-    /*     }); */
 
     QObject::connect(mpAOut, &QAudioOutput::stateChanged,
         [this](QAudio::State _state)
@@ -238,8 +227,15 @@ public:
           qDebug() << "Audio out state = " << _state;
           switch(_state)
           {
-          case QAudio::State::IdleState:
+
+          /* case QAudio::State::IdleState: */
+          /*   mpAOut->stop(); */
+          /*   mBuffer.reset(); */
+          /*   break; */
+
           case QAudio::State::StoppedState:
+
+            mpAOut->reset();
 
             if(mLoops == static_cast<int>(ELoop::Infinite))
             {
@@ -265,7 +261,16 @@ public:
             }
             break;
 
+          case QAudio::State::SuspendedState:
+          case QAudio::State::IdleState:
+          case QAudio::State::InterruptedState:
+            mpAOut->stop();
+            mpAOut->reset();
+            mBuffer.reset();
+            break;
+
           default:
+            
             break;
           }
 
