@@ -111,18 +111,18 @@ public:
     /* mpAOut->setNotifyInterval(10); */
     mpAOut->setNotifyInterval(100);
 
-    /* QObject::connect(mpAOut, &QAudioOutput::notify, */
-    /*     [this]() */
-    /*     { */
-    /*       /1* qDebug() << "Notify buffer pos = " << mBuffer.pos(); *1/ */
-    /*       /1* mBuffer.reset(); *1/ */
-    /*       if(mBuffer.pos() == mAudioData.size()) */ 
-    /*       { */
-    /*         /1* mBuffer.seek(0); *1/ */
-    /*         mpAOut->stop(); */
-    /*       } */
+    QObject::connect(mpAOut, &QAudioOutput::notify,
+        [this]()
+        {
+          /* qDebug() << "Notify buffer pos = " << mBuffer.pos(); */
+          /* mBuffer.reset(); */
+          if(mBuffer.pos() == mAudioData.size()) 
+          {
+            /* mBuffer.seek(0); */
+            mpAOut->stop();
+          }
 
-    /*     }); */
+        });
     QObject::connect(mpAOut, &QAudioOutput::stateChanged,
         [this](QAudio::State _state)
         {
