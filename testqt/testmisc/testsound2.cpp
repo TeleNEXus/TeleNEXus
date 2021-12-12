@@ -21,8 +21,40 @@
 #include <QAudioBuffer>
 
 
-class LCAudioBuffer : QBuffer
+class LCAudioBuffer : public QBuffer
 {
+public:
+  using QBuffer::QBuffer;
+
+
+virtual bool	atEnd() const override
+{
+  qDebug() << QStringLiteral("atEnd()");
+  return QBuffer::atEnd();
+}
+/* virtual bool	canReadLine() const override */
+/* virtual void	close() override */
+/* virtual bool	open(QIODevice::OpenMode flags) override */
+virtual qint64	pos() const override
+{
+  qDebug() << QStringLiteral("pos()");
+  return QBuffer::pos();
+}
+
+virtual bool	seek(qint64 pos) override
+{
+  qDebug() << QStringLiteral("seek()");
+  return QBuffer::seek(pos);
+}
+/* virtual qint64	size() const override */
+
+virtual qint64	readData(char *data, qint64 len) override
+{
+  qDebug() << QString("readData(len = %1)").arg(len);
+  return QBuffer::readData(data, len);
+}
+/* virtual qint64	writeData(const char *data, qint64 len) override */
+
 };
 
 class LQPlaySound : QObject
@@ -31,6 +63,7 @@ public:
   enum ELoop{ Infinite = -1 };
 private:
 
+  /* LCAudioBuffer mBuffer; */
   QBuffer mBuffer;
   QByteArray mAudioData;
 
@@ -109,20 +142,22 @@ public:
 
     mpAOut = new QAudioOutput(format);
     /* mpAOut->setNotifyInterval(10); */
-    mpAOut->setNotifyInterval(100);
+    /* mpAOut->setNotifyInterval(100); */
 
-    QObject::connect(mpAOut, &QAudioOutput::notify,
-        [this]()
-        {
-          /* qDebug() << "Notify buffer pos = " << mBuffer.pos(); */
-          /* mBuffer.reset(); */
-          if(mBuffer.pos() == mAudioData.size()) 
-          {
-            /* mBuffer.seek(0); */
-            mpAOut->stop();
-          }
+    /* QObject::connect(mpAOut, &QAudioOutput::notify, */
+    /*     [this]() */
+    /*     { */
+    /*       /1* qDebug() << "Notify buffer pos = " << mBuffer.pos(); *1/ */
 
-        });
+    /*       /1* mBuffer.reset(); *1/ */
+    /*       if(mBuffer.pos() == mAudioData.size()) */ 
+    /*       { */
+    /*         /1* mBuffer.seek(0); *1/ */
+    /*         /1* mpAOut->stop(); *1/ */
+    /*       } */
+
+    /*     }); */
+
     QObject::connect(mpAOut, &QAudioOutput::stateChanged,
         [this](QAudio::State _state)
         {
@@ -140,7 +175,7 @@ public:
 
             if(mLoops == 0) 
             {
-              /* mpAOut->stop(); */
+              mpAOut->stop();
               break;
             }
 
@@ -152,7 +187,7 @@ public:
             else
             {
               mLoopsCounter = 0;
-              /* mpAOut->stop(); */
+              mpAOut->stop();
             }
             break;
 
@@ -221,7 +256,8 @@ private:
     /* mpDevice->seek(44); */
     mBuffer.seek(0);
     /* mpAOut->start(&mBuffer); */
-    mpAOut->reset();
+    /* mpAOut->reset(); */
+    mpAOut->stop();
     if(mpAOut->state() == QAudio::State::IdleState)
     {
       mpAOut->resume();
@@ -268,10 +304,10 @@ int main(int argc, char** argv)
 /* QAudioOutput(pulseaudio): pa_stream_write, error = Недопустимый параметр */
                       
 
-  /* QFile sound_file("../k2.wav"); */
+  QFile sound_file("../k2.wav");
   /* QFile sound_file("../k1.wav"); */
   /* QFile sound_file("../sirena1.wav"); */
-  QFile sound_file("../sirena_001.wav");
+  /* QFile sound_file("../sirena_001.wav"); */
   /* QFile sound_file("../discord-sounds.wav"); */
   /* QFile sound_file("../sirena_003.wav"); */
   /* QFile sound_file("../beep-07a.wav"); */
@@ -281,6 +317,7 @@ int main(int argc, char** argv)
   /* QFile sound_file("/home/serg/D_DRIVE/music/knopka-klik-vyisokii-rezkii-blizkii.wav"); */
   /* QFile sound_file("/home/serg/D_DRIVE/music/knopka-klik-vyisokii-zvonkii-blizkii-gromkii.wav"); */
   /* QFile sound_file("/home/serg/D_DRIVE/music/sirena-korabelnaya-trevoga-na-korable-26750.wav"); */
+  /* QFile sound_file("/home/serg/D_DRIVE/music/beep-07a.wav"); */
 
   if(!sound_file.open(QFile::OpenModeFlag::ReadOnly)) 
   {
