@@ -19,41 +19,90 @@
 #include <QAudioDeviceInfo>
 #include <QBuffer>
 #include <QAudioBuffer>
+#include <string>
+#include <functional>
 
 
 class LCAudioBuffer : public QBuffer
 {
+private:
+  qint64 mAddPos = 0;
+  bool mStopFlag = false;
+  QAudioOutput* mpOut = nullptr;
+  
 public:
   using QBuffer::QBuffer;
 
+  void setAudioAutput(QAudioOutput* _out)
+  {
+    mpOut = _out;
+  }
 
-virtual bool	atEnd() const override
-{
-  qDebug() << QStringLiteral("atEnd()");
-  return QBuffer::atEnd();
-}
-/* virtual bool	canReadLine() const override */
-/* virtual void	close() override */
-/* virtual bool	open(QIODevice::OpenMode flags) override */
-virtual qint64	pos() const override
-{
-  qDebug() << QStringLiteral("pos()");
-  return QBuffer::pos();
-}
+  virtual bool	atEnd() const override
+  {
+    qDebug() << QStringLiteral("atEnd()");
+    return QBuffer::atEnd();
+  }
 
-virtual bool	seek(qint64 pos) override
-{
-  qDebug() << QStringLiteral("seek()");
-  return QBuffer::seek(pos);
-}
-/* virtual qint64	size() const override */
+  /* virtual bool	canReadLine() const override */
+  /* virtual void	close() override */
+  /* virtual bool	open(QIODevice::OpenMode flags) override */
 
-virtual qint64	readData(char *data, qint64 len) override
-{
-  qDebug() << QString("readData(len = %1)").arg(len);
-  return QBuffer::readData(data, len);
-}
-/* virtual qint64	writeData(const char *data, qint64 len) override */
+  virtual qint64	pos() const override
+  {
+    qint64 pos = QBuffer::pos() + mAddPos; 
+    qDebug() << QStringLiteral("pos() = ") << pos;
+    return pos; 
+  }
+
+  virtual bool	seek(qint64 pos) override
+  {
+    qDebug() << QStringLiteral("seek()");
+    mAddPos = 0;
+    mStopFlag = false;
+    return QBuffer::seek(pos);
+  }
+  /* virtual qint64	size() const override */
+
+  virtual qint64	readData(char *data, qint64 len) override
+  {
+    qDebug() << QString("readData(len = %1)").arg(len);
+
+    if(mStopFlag)
+    {
+      memset(data, 0, len);
+
+      /* if(data != nullptr) */
+      /* { */
+      /*   for(qint64 i = 0; i < len; i++) */
+      /*   { */
+      /*     data[0] = 0; */
+      /*   } */
+      /* } */
+
+      if(mpOut != nullptr)
+      {
+        mpOut->stop();
+      }
+
+      mStopFlag = false;
+      mAddPos += len;
+      return len;
+    }
+
+    qint64 rl = QBuffer::readData(data, len);
+
+    if(rl < len)
+    {
+      qDebug() << "rl = " << rl;
+      mStopFlag = true;
+      mAddPos += len - rl;
+      memset(&data[rl], 0, len - rl);
+    }
+
+    return len;
+  }
+  /* virtual qint64	writeData(const char *data, qint64 len) override */
 
 };
 
@@ -63,8 +112,8 @@ public:
   enum ELoop{ Infinite = -1 };
 private:
 
-  /* LCAudioBuffer mBuffer; */
-  QBuffer mBuffer;
+  LCAudioBuffer mBuffer;
+  /* QBuffer mBuffer; */
   QByteArray mAudioData;
 
   QIODevice* mpDevice;
@@ -141,6 +190,9 @@ public:
 
 
     mpAOut = new QAudioOutput(format);
+
+    mBuffer.setAudioAutput(mpAOut);
+    
     /* mpAOut->setNotifyInterval(10); */
     /* mpAOut->setNotifyInterval(100); */
 
@@ -304,10 +356,10 @@ int main(int argc, char** argv)
 /* QAudioOutput(pulseaudio): pa_stream_write, error = Недопустимый параметр */
                       
 
-  QFile sound_file("../k2.wav");
+  /* QFile sound_file("../k2.wav"); */
   /* QFile sound_file("../k1.wav"); */
   /* QFile sound_file("../sirena1.wav"); */
-  /* QFile sound_file("../sirena_001.wav"); */
+  QFile sound_file("../sirena_001.wav");
   /* QFile sound_file("../discord-sounds.wav"); */
   /* QFile sound_file("../sirena_003.wav"); */
   /* QFile sound_file("../beep-07a.wav"); */
