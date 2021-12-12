@@ -32,22 +32,22 @@ class LQPlaySound : public QObject
 
 private:
   
-class LCAudioBuffer : public QBuffer
-{
-private:
-  qint64 mAddPos = 0;
-  bool mStopFlag = false;
-  QAudioOutput* mpOut = nullptr;
+/* class LCAudioBuffer : public QBuffer */
+/* { */
+/* private: */
+/*   qint64 mAddPos = 0; */
+/*   bool mStopFlag = false; */
+/*   QAudioOutput* mpOut = nullptr; */
   
-public:
-  using QBuffer::QBuffer;
+/* public: */
+/*   using QBuffer::QBuffer; */
 
-  void setAudioOutput(QAudioOutput* _out);
-  virtual bool	atEnd() const override;
-  virtual qint64	pos() const override;
-  virtual bool	seek(qint64 pos) override;
-  virtual qint64	readData(char *data, qint64 len) override;
-};
+/*   void setAudioOutput(QAudioOutput* _out); */
+/*   virtual bool	atEnd() const override; */
+/*   virtual qint64	pos() const override; */
+/*   virtual bool	seek(qint64 pos) override; */
+/*   virtual qint64	readData(char *data, qint64 len) override; */
+/* }; */
 
 
 public:

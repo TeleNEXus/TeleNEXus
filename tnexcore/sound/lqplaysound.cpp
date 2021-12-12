@@ -23,65 +23,65 @@
 #include <qaudio.h>
 #include <QDebug>
 
-//------------------------------------------------------------------------------
-void LQPlaySound::LCAudioBuffer::setAudioOutput(QAudioOutput* _out)
-{
-  mpOut = _out;
-}
+/* //------------------------------------------------------------------------------ */
+/* void LQPlaySound::LCAudioBuffer::setAudioOutput(QAudioOutput* _out) */
+/* { */
+/*   mpOut = _out; */
+/* } */
 
-//------------------------------------------------------------------------------
-bool	LQPlaySound::LCAudioBuffer::atEnd() const
-{
-  qDebug() << QStringLiteral("atEnd()");
-  return QBuffer::atEnd();
-}
+/* //------------------------------------------------------------------------------ */
+/* bool	LQPlaySound::LCAudioBuffer::atEnd() const */
+/* { */
+/*   qDebug() << QStringLiteral("atEnd()"); */
+/*   return QBuffer::atEnd(); */
+/* } */
 
-//------------------------------------------------------------------------------
-qint64	LQPlaySound::LCAudioBuffer::pos() const
-{
-  qint64 pos = QBuffer::pos() + mAddPos; 
-  return pos; 
-}
+/* //------------------------------------------------------------------------------ */
+/* qint64	LQPlaySound::LCAudioBuffer::pos() const */
+/* { */
+/*   qint64 pos = QBuffer::pos() + mAddPos; */ 
+/*   return pos; */ 
+/* } */
 
-//------------------------------------------------------------------------------
-bool	LQPlaySound::LCAudioBuffer::seek(qint64 pos)
-{
-  mAddPos = 0;
-  mStopFlag = false;
-  return QBuffer::seek(pos);
-}
+/* //------------------------------------------------------------------------------ */
+/* bool	LQPlaySound::LCAudioBuffer::seek(qint64 pos) */
+/* { */
+/*   mAddPos = 0; */
+/*   mStopFlag = false; */
+/*   return QBuffer::seek(pos); */
+/* } */
 
-//------------------------------------------------------------------------------
-qint64	LQPlaySound::LCAudioBuffer::readData(char *data, qint64 len)
-{
-  qDebug() << QString("readData(len = %1)").arg(len);
+/* //------------------------------------------------------------------------------ */
+/* qint64	LQPlaySound::LCAudioBuffer::readData(char *data, qint64 len) */
+/* { */
+/*   qDebug() << QString("readData(len = %1)").arg(len); */
 
-  if(mStopFlag)
-  {
-    memset(data, 0, len);
+/*   if(mStopFlag) */
+/*   { */
+/*     memset(data, 0, len); */
 
-    if(mpOut != nullptr)
-    {
-      /* mpOut->stop(); */
-      mpOut->suspend();
-    }
+/*     if(mpOut != nullptr) */
+/*     { */
+/*       /1* mpOut->stop(); *1/ */
+/*       mpOut->suspend(); */
+/*     } */
 
-    QBuffer::seek(0);
-    mStopFlag = false;
-    mAddPos += len;
-    return len;
-  }
+/*     QBuffer::seek(0); */
+/*     mStopFlag = false; */
+/*     mAddPos += len; */
+/*     return len; */
+/*   } */
 
-  qint64 rl = QBuffer::readData(data, len);
+/*   qint64 rl = QBuffer::readData(data, len); */
 
-  if(rl < len)
-  {
-    mStopFlag = true;
-    mAddPos += len - rl;
-    memset(&data[rl], 0, len - rl);
-  }
-  return len;
-}
+/*   if(rl < len) */
+/*   { */
+/*     mStopFlag = true; */
+/*     mAddPos += len - rl; */
+/*     memset(&data[rl], 0, len - rl); */
+/*   } */
+/*   return len; */
+/* } */
 
 
 
@@ -149,6 +149,7 @@ void LQPlaySound::stop()
 void LQPlaySound::startPrivate()
 {
   mpAOut->stop();
+  mpAOut->reset();
   mBuffer.reset();
   mpAOut->start(&mBuffer);
 }
@@ -223,6 +224,7 @@ bool LQPlaySound::setDevice(QIODevice* _device)
             /* mpAOut->stop(); */
             /* break; */
 
+          mpAOut->reset();
           if(mLoops == static_cast<int>(ELoop::Infinite))
           {
             startPrivate();
