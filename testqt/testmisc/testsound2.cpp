@@ -25,6 +25,10 @@ class LQPlaySound : QObject
 public:
   enum ELoop{ Infinite = -1 };
 private:
+
+  QBuffer mBuffer;
+  QByteArray mAudioData;
+
   QIODevice* mpDevice;
   int mLoops;
   int mLoopsCounter;
@@ -38,27 +42,46 @@ public:
     ,mLoopsCounter(0)
     ,mpAOut(nullptr)
   {
+
     if(!mpDevice->isOpen()) return;
 
-    QByteArray wav_header_data = mpDevice->read(44);
+    QByteArray mAudioData = mpDevice->readAll();
+    mpDevice->close();
 
-    if(wav_header_data.isNull()) 
+    if(mAudioData.isNull()) 
     {
       return;
     }
 
-    QString descr_riff = QString::fromLatin1(wav_header_data.data(), 4);
-    QString descr_wave = QString::fromLatin1(&wav_header_data.data()[8], 4);
+
+
+    QString descr_riff = QString::fromLatin1(mAudioData.data(), 4);
+    QString descr_wave = QString::fromLatin1(&mAudioData.data()[8], 4);
 
     if(descr_riff != QString("RIFF"))  return;
     if(descr_wave != QString("WAVE"))  return;
 
-    quint16 num_channels = *((quint16*)(&(wav_header_data.data()[22])));
-    quint32 sample_rate = *((quint32*)(&(wav_header_data.data()[24])));
-    /* quint32 byte_rate = *((quint32*)(&(data.data()[28]))); */
-    quint16 bits_per_sample = *((quint16*)(&(wav_header_data.data()[34])));
+    quint32 chunk_size =  *((quint32*)(&(mAudioData.data()[4])));
+    quint16 num_channels = *((quint16*)(&(mAudioData.data()[22])));
+    quint32 sample_rate = *((quint32*)(&(mAudioData.data()[24])));
+    quint32 byte_rate = *((quint32*)(&(mAudioData.data()[28])));
+    quint16 bits_per_sample = *((quint16*)(&(mAudioData.data()[34])));
 
     QAudioFormat format;
+
+
+    qDebug() << "chunk_size       = " << chunk_size;
+    qDebug() << "num_channels     = " << num_channels;
+    qDebug() << "sample_rate      = " << sample_rate;
+    qDebug() << "byte_rate        = " << byte_rate;
+    qDebug() << "bits_per_sample  = " << bits_per_sample;
+
+    /* format.setChannelCount(2); */
+    /* format.setSampleRate(44100); */
+    /* format.setSampleSize(16); */
+    /* format.setCodec("audio/pcm"); */
+    /* format.setByteOrder(QAudioFormat::LittleEndian); */
+    /* format.setSampleType(QAudioFormat::SignedInt); */
 
     format.setChannelCount(num_channels);
     format.setSampleRate(sample_rate);
@@ -67,11 +90,25 @@ public:
     format.setByteOrder(QAudioFormat::LittleEndian);
     format.setSampleType(QAudioFormat::SignedInt);
 
+    qDebug() << "Audio data full size = " << mAudioData.size();
+    mAudioData = mAudioData.mid(44);
+    qDebug() << "Audio data size = " << mAudioData.size();
+
+    mAudioData.append(QByteArray(byte_rate - mAudioData.size(), 0));
+    qDebug() << "Audio data size after add = " << mAudioData.size();
+
+
+    mBuffer.setData(mAudioData);
+    mBuffer.open(QIODevice::ReadOnly);
+
+
+
     mpAOut = new QAudioOutput(format);
 
     QObject::connect(mpAOut, &QAudioOutput::stateChanged,
         [this](QAudio::State _state)
         {
+          qDebug() << "Audio out state = " << _state;
           switch(_state)
           {
           case QAudio::State::IdleState:
@@ -84,7 +121,7 @@ public:
 
             if(mLoops == 0) 
             {
-              mpAOut->stop();
+              /* mpAOut->stop(); */
               break;
             }
 
@@ -96,7 +133,7 @@ public:
             else
             {
               mLoopsCounter = 0;
-              mpAOut->stop();
+              /* mpAOut->stop(); */
             }
             break;
 
@@ -160,8 +197,20 @@ public:
 private:
   void startPrivate()
   {
-    mpDevice->seek(44);
-    mpAOut->start(mpDevice);
+    qDebug() << mpAOut->error();
+    /* mpAOut->reset(); */
+    /* mpDevice->seek(44); */
+    mBuffer.seek(0);
+    /* mpAOut->start(&mBuffer); */
+    mpAOut->reset();
+    if(mpAOut->state() == QAudio::State::IdleState)
+    {
+      mpAOut->resume();
+    }
+    else
+    {
+      mpAOut->start(&mBuffer);
+    }
   }
 };
 
@@ -195,9 +244,17 @@ int main(int argc, char** argv)
     qDebug().noquote() << QString("[%1] : %2").arg(i).arg(avail[i].deviceName());
   }
 
-  QFile sound_file("../k1.wav");
+
+
+/* QAudioOutput(pulseaudio): pa_stream_write, error = Недопустимый параметр */
+                      
+
+
+
+  /* QFile sound_file("../k2.wav"); */
+  /* QFile sound_file("../k1.wav"); */
   /* QFile sound_file("../sirena1.wav"); */
-  /* QFile sound_file("../sirena_001.wav"); */
+  QFile sound_file("../sirena_001.wav");
   /* QFile sound_file("../discord-sounds.wav"); */
   /* QFile sound_file("../sirena_003.wav"); */
   /* QFile sound_file("../beep-07a.wav"); */
