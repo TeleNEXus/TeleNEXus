@@ -35,6 +35,7 @@
             <Button text="Access user1">
               <press>
                 <writeData data="localsource:test_string3:string" value="pressed admin button"/>
+                <writeData data="localsource:sound_ctrl_beep_001_2:string" value="on"/>
               </press>
               <release>
                 <writeData data="localsource:test_string3:string" value="released admin button"/>

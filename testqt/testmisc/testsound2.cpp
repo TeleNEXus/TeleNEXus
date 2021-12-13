@@ -47,7 +47,11 @@ public:
     ,mLoopsCounter(0)
   {
     if(!mpDevice->isOpen()) return;
-    mpPlayer->setMedia(QMediaContent(), mpDevice);
+    mpPlayer->setAudioRole(QAudio::Role::MusicRole);
+    /* mpPlayer->setMedia(QMediaContent(), mpDevice); */
+    mpPlayer->setMedia(0, mpDevice);
+
+
     connect(mpPlayer, &QMediaPlayer::stateChanged,
         [this](QMediaPlayer::State _state)
         {
@@ -85,7 +89,6 @@ public:
 
 
         });
-
   }
 
   virtual ~LQPlaySound()
@@ -116,6 +119,7 @@ public:
   {
     mStopFlag = false;
     mLoopsCounter = mLoops;
+    mpPlayer->stop();
     mpPlayer->play();
   }
 
@@ -166,10 +170,10 @@ int main(int argc, char** argv)
 /* QAudioOutput(pulseaudio): pa_stream_write, error = Недопустимый параметр */
                       
 
-  /* QFile sound_file("../k2.wav"); */
+  QFile sound_file("../k2.wav");
   /* QFile sound_file("../k1.wav"); */
   /* QFile sound_file("../sirena1.wav"); */
-  QFile sound_file("../sirena_001.wav");
+  /* QFile sound_file("../sirena_001.wav"); */
   /* QFile sound_file("../discord-sounds.wav"); */
   /* QFile sound_file("../sirena_003.wav"); */
   /* QFile sound_file("../beep-07a.wav"); */

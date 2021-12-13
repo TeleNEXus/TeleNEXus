@@ -25,54 +25,30 @@
 #include <QBuffer>
 
 class QIODevice;
-class QAudioOutput;
+class QMediaPlayer;
 
 class LQPlaySound : public QObject
 {
-
-private:
-  
-/* class LCAudioBuffer : public QBuffer */
-/* { */
-/* private: */
-/*   qint64 mAddPos = 0; */
-/*   bool mStopFlag = false; */
-/*   QAudioOutput* mpOut = nullptr; */
-  
-/* public: */
-/*   using QBuffer::QBuffer; */
-
-/*   void setAudioOutput(QAudioOutput* _out); */
-/*   virtual bool	atEnd() const override; */
-/*   virtual qint64	pos() const override; */
-/*   virtual bool	seek(qint64 pos) override; */
-/*   virtual qint64	readData(char *data, qint64 len) override; */
-/* }; */
-
-
 public:
+
   enum ELoop{ Infinite = -1 };
+  QMediaPlayer* mpPlayer;
+  bool mStopFlag;
 
 private:
-  /* QIODevice* mpDevice; */
   QByteArray mAudioData;
   QBuffer    mBuffer;
-  /* LCAudioBuffer mBuffer; */
   
   int mLoops;
   int mLoopsCounter;
-  QAudioOutput* mpAOut;
   QString mErrorMessage;
 
 public:
-  /* LQPlaySound() = delete; */
+
   explicit LQPlaySound(QObject *parent = nullptr);
 
   virtual ~LQPlaySound();
 
-  /* QIODevice* device() const {return mpDevice;} */
-
-  bool isFinished() const;
   int loops() const { return mLoops; }
   int loopsRemaining() const;
   void setLoops(int _number);
@@ -82,7 +58,6 @@ public:
   bool setDevice(QIODevice* _device);
 
   QString getErrorMessage(){ return mErrorMessage; }
-
 
 private:
   void startPrivate();
