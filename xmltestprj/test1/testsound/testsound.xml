@@ -27,7 +27,7 @@
               </press>
               <release>
                 <writeData data="localsource:test_string2:string" value="released admin button"/>
-                <writeData data="localsource:sound_ctrl_sirena_001:string" value="off"/>
+                <!-- <writeData data="localsource:sound_ctrl_sirena_001:string" value="off"/> -->
               </release>
             </Button>
 
