@@ -137,6 +137,7 @@ window/lcwindow.cpp \
 applicationinterface.cpp \
 projectsource/projectsource.cpp \
 projectsource/lqrobuffer.cpp \
+sound/lcsounds.cpp \
 sound/lqplaysound.cpp \
 main.cpp \
 
@@ -247,6 +248,7 @@ window/lcwindow.h \
 applicationinterface.h \
 projectsource/projectsource.h \
 projectsource/lqrobuffer.h \
+sound/lcsounds.h \
 sound/lqplaysound.h \
 version.h \
 

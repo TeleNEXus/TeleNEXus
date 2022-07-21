@@ -72,6 +72,8 @@ void LQPlaySound::stop()
   mLoopsCounter = 0;
 }
 
+
+
 bool LQPlaySound::setDevice(QIODevice* _device)
 {
 
