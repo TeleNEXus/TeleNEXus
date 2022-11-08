@@ -29,6 +29,13 @@
 #include <QDebug>
 #include <QDomElement>
 
+static const struct
+{
+  QString memorymap = "memorymap";
+  QString modbussources = "modbussources";
+  QString master = "master";
+  QString source = "source";
+}__slTags;
 
 using LTMastersMap = QMap<QString, QSharedPointer<LQModbusMasterBase>>;
 
@@ -64,13 +71,13 @@ LQDataSources LCXmlModbusSourceBuilder::build(
 
   QDomElement rootElement = domDoc.documentElement();
 
-  if(rootElement.tagName() != "modbussources")
+  if(rootElement.tagName() != __slTags.modbussources)
   {
     _app.message("LCXmlModbusSources: wrong root element");
     return map;
   }
 
-  QDomNodeList nodes = rootElement.elementsByTagName("master");
+  QDomNodeList nodes = rootElement.elementsByTagName(__slTags.master);
 
   if(nodes.isEmpty())
   {
@@ -86,7 +93,7 @@ LQDataSources LCXmlModbusSourceBuilder::build(
     return map;
   }
 
-  nodes = rootElement.elementsByTagName("source");
+  nodes = rootElement.elementsByTagName(__slTags.source);
 
   if(nodes.isEmpty())
   {
@@ -376,22 +383,37 @@ enum class EItemType
 
 //------------------------------------------------------------------------------
 static int addSourceDataItems(
-    LQModbusDataSource* _p_source, const QDomNodeList& _nodes, EItemType _type);
+    LQModbusDataSource* _p_source, 
+    const QDomNodeList& _nodes, 
+    EItemType _type,
+    int _offset);
+
 
 //------------------------------------------------------------------------------
+static const struct
+{
+  QString bitsoffset        = "bitsoffset";
+  QString coilsoffset       = "coilsoffset";
+  QString discinsoffset     = "discinsoffset";
+  QString regsoffset        = "regsoffset";
+  QString inregsregsoffset  = "inregsoffset";
+  QString holdregsoffset    = "holdregsoffset";
+}__slMemoryMapAttributes;
+
 static const struct
 {
   QString coils               = "coil";
   QString discreteinputs      = "discin";
   QString inputregisters      = "inreg";
   QString holdingregisters    = "holdreg";
-}__memoryMapItemElementNames;
+}__slMemoryMapTags;
 
 //------------------------------------------------------------------------------
 static int loadMemoryMap(LQModbusDataSource* _p_source,  
     const QString& _filename, 
     const LIApplication& _app)
 {
+
   QDomDocument domDoc = _app.getDomDocument(_filename);
   if(domDoc.isNull()) return -1;
 
@@ -399,7 +421,7 @@ static int loadMemoryMap(LQModbusDataSource* _p_source,
   int itemsCounter = 0;
   QDomElement rootElement = domDoc.documentElement();
 
-  if(rootElement.tagName() != "memorymap")
+  if(rootElement.tagName() != __slTags.memorymap)
   {
     qDebug() << 
       "LCXmlModbusSources: memory map file " <<  
@@ -407,34 +429,75 @@ static int loadMemoryMap(LQModbusDataSource* _p_source,
     return -2;
   }
 
-  itemnodes = rootElement.elementsByTagName(__memoryMapItemElementNames.coils);
-  if(!itemnodes.isEmpty())
+  //-------------------------------------
+  //get offsets
+  auto getOffset = [&rootElement](const QString& _attr)
   {
-    itemsCounter += addSourceDataItems(_p_source, itemnodes, EItemType::COILS);
+    QString offsetattr;
+    offsetattr = rootElement.attribute(_attr);
+    if(offsetattr.isNull()) return 0;
+    bool flag = false;
+    int offset = offsetattr.toInt(&flag);
+    if(!flag) return 0;
+    return offset;
+  };
+
+  
+  int coilsoffset = 0;
+  int discinsoffset = 0;
+
+  int inregsoffset = 0;
+  int holdregsoffset = 0;
+
+  {
+    int offset;
+    int bitsoffset = getOffset(__slMemoryMapAttributes.bitsoffset);
+    int regsoffset = getOffset(__slMemoryMapAttributes.regsoffset);
+
+    offset = getOffset(__slMemoryMapAttributes.coilsoffset);
+    coilsoffset = (offset == 0) ? (bitsoffset) : (offset);
+
+    offset = getOffset(__slMemoryMapAttributes.discinsoffset);
+    discinsoffset = (offset == 0) ? (bitsoffset) : (offset);
+
+    offset = getOffset(__slMemoryMapAttributes.inregsregsoffset);
+    inregsoffset = (offset == 0) ? (regsoffset) : (offset);
+
+    offset = getOffset(__slMemoryMapAttributes.holdregsoffset);
+    holdregsoffset = (offset == 0) ? (regsoffset) : (offset);
   }
 
-  itemnodes = rootElement.elementsByTagName(
-      __memoryMapItemElementNames.discreteinputs);
+
+  //-------------------------------------
+  itemnodes = rootElement.elementsByTagName(__slMemoryMapTags.coils);
   if(!itemnodes.isEmpty())
   {
     itemsCounter += addSourceDataItems(
-        _p_source, itemnodes, EItemType::DISCRETEINPUTS);
+        _p_source, itemnodes, EItemType::COILS, coilsoffset);
   }
 
   itemnodes = rootElement.elementsByTagName(
-      __memoryMapItemElementNames.inputregisters);
+      __slMemoryMapTags.discreteinputs);
   if(!itemnodes.isEmpty())
   {
     itemsCounter += addSourceDataItems(
-        _p_source, itemnodes, EItemType::INPUTREGISTERS);
+        _p_source, itemnodes, EItemType::DISCRETEINPUTS, discinsoffset);
   }
 
   itemnodes = rootElement.elementsByTagName(
-      __memoryMapItemElementNames.holdingregisters);
+      __slMemoryMapTags.inputregisters);
   if(!itemnodes.isEmpty())
   {
     itemsCounter += addSourceDataItems(
-        _p_source, itemnodes, EItemType::HOLDINGREGISTERS);
+        _p_source, itemnodes, EItemType::INPUTREGISTERS, inregsoffset);
+  }
+
+  itemnodes = rootElement.elementsByTagName(
+      __slMemoryMapTags.holdingregisters);
+  if(!itemnodes.isEmpty())
+  {
+    itemsCounter += addSourceDataItems(
+        _p_source, itemnodes, EItemType::HOLDINGREGISTERS, holdregsoffset);
   }
 
   return itemsCounter;
@@ -453,7 +516,7 @@ static const struct
  * Возвращает количество добавленных сущностей карты памяти.
  */
 static int addSourceDataItems(
-    LQModbusDataSource* _p_source, const QDomNodeList& _nodes, EItemType _type)
+    LQModbusDataSource* _p_source, const QDomNodeList& _nodes, EItemType _type, int _offset)
 {
   QDomElement element;
   QString attr;
@@ -480,6 +543,8 @@ static int addSourceDataItems(
     {
       continue;
     }
+
+    addr += _offset;
 
     attr = element.attribute(__memoryMapItemAttributes.size);
     if(attr.isNull())
