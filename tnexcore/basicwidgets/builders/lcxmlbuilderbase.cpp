@@ -182,8 +182,11 @@ QWidget* LCXmlBuilderBase::build( const QDomElement& _element,
 {
   auto ret = [&_element, &_app](QWidget* _w)
   {
-    LCQWidgetVisibleControl::build(_element, _w, _app);
-    LQEventsFilter::install(_w, _element, _app);
+    if(_w != nullptr)
+    {
+      LCQWidgetVisibleControl::build(_element, _w, _app);
+      LQEventsFilter::install(_w, _element, _app);
+    }
     return _w;
   };
 
@@ -195,11 +198,12 @@ QWidget* LCXmlBuilderBase::build( const QDomElement& _element,
     if(el.tagName() != _element.tagName()) return nullptr;
     return ret(build(el, _app));
   }
-  return ret(buildLocal( _element, _app));
+  return ret(buildLocal(_element, _app));
 }
 
 //------------------------------------------------------------------------------
-bool LCXmlBuilderBase::setWidgetPosition(const QDomElement& _element, QWidget* _widget)
+bool LCXmlBuilderBase::setWidgetPosition(
+    const QDomElement& _element, QWidget* _widget)
 {
   bool ret = false;
   attributeToValues<int>(
@@ -214,7 +218,8 @@ bool LCXmlBuilderBase::setWidgetPosition(const QDomElement& _element, QWidget* _
 }
 
 //------------------------------------------------------------------------------
-bool LCXmlBuilderBase::setWidgetSize(const QDomElement& _element, QWidget* _widget)
+bool LCXmlBuilderBase::setWidgetSize(
+    const QDomElement& _element, QWidget* _widget)
 {
   bool ret = false;
   attributeToValues<int>(
@@ -229,7 +234,8 @@ bool LCXmlBuilderBase::setWidgetSize(const QDomElement& _element, QWidget* _widg
 }
 
 //------------------------------------------------------------------------------
-bool LCXmlBuilderBase::setWidgetFixedSize(const QDomElement& _element, QWidget* _widget)
+bool LCXmlBuilderBase::setWidgetFixedSize(
+    const QDomElement& _element, QWidget* _widget)
 {
   bool ret = false;
   attributeToValues<int>(
@@ -265,7 +271,9 @@ void LCXmlBuilderBase::setWidgetName(
 }
 
 //------------------------------------------------------------------------------
-void LCXmlBuilderBase::setWidgetStyle(const QString& _style, QWidget* _widget, 
+void LCXmlBuilderBase::setWidgetStyle(
+    const QString& _style, 
+    QWidget* _widget, 
     const QString& _objectName)
 {
   QString outstyle = _style; 
@@ -284,7 +292,8 @@ void LCXmlBuilderBase::setWidgetStyle(const QString& _style, QWidget* _widget,
     QString style_id = 
       rexpr_style_id_extract.match(style_desc).captured();
 
-    QString load_style = CApplicationInterface::getInstance().getWidgetStyle(style_id);
+    QString load_style = 
+      CApplicationInterface::getInstance().getWidgetStyle(style_id);
     if(load_style.isNull())
     {
       outstyle.remove(style_desc);

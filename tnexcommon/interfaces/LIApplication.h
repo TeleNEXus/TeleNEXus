@@ -84,8 +84,10 @@ public:
 
   virtual void message(const QString& _msg, 
       EMessageType _mt = EMessageType::Untyped) const = 0;
+
   virtual void warning(const QString& _msg, 
       EMessageType _mt = EMessageType::Untyped) const = 0;
+
   virtual void error(const QString& _msg, 
       EMessageType _mt = EMessageType::Untyped) const = 0;
 
@@ -93,7 +95,8 @@ public:
       const QString& _accessId,
       const QSet<QEvent::Type>& _events) const = 0;
 
-  virtual QSharedPointer<QIODevice> getFileDevice(const QString& _fileName) const = 0;
+  virtual QSharedPointer<QIODevice> 
+    getFileDevice(const QString& _fileName) const = 0;
 };
 
 #endif // LIAPPLICATION_H
