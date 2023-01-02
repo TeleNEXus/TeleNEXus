@@ -180,25 +180,28 @@ LCXmlBuilderBase::~LCXmlBuilderBase()
 QWidget* LCXmlBuilderBase::build( const QDomElement& _element, 
     const LIApplication&    _app)
 {
-  auto ret = [&_element, &_app](QWidget* _w)
-  {
-    if(_w != nullptr)
-    {
-      LCQWidgetVisibleControl::build(_element, _w, _app);
-      LQEventsFilter::install(_w, _element, _app);
-    }
-    return _w;
-  };
+  QWidget* w = nullptr;
 
-  QString attr_file = _element.attribute(__slAttributes.file);
-  if(!attr_file.isNull())
-  {
-    QDomElement el = _app.getDomDocument(attr_file).documentElement();
-    if(el.isNull()) return nullptr;
-    if(el.tagName() != _element.tagName()) return nullptr;
-    return ret(build(el, _app));
-  }
-  return ret(buildLocal(_element, _app));
+  auto builder = 
+    [this, &_app, &w](const QDomElement& _element)
+    {
+      if(_element.isNull())
+      {
+        return;
+      }
+
+      w = buildLocal(_element, _app);
+
+      if(w != nullptr)
+      {
+        LCQWidgetVisibleControl::build(_element, w, _app);
+        LQEventsFilter::install(w, _element, _app);
+      }
+    };
+
+  _app.buildFromFile(_element, builder);
+
+  return w;
 }
 
 //------------------------------------------------------------------------------

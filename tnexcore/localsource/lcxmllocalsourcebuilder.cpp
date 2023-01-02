@@ -29,7 +29,6 @@
 static const struct
 {
   QString id      = "id";
-  QString file    = "file";
   QString mapfile = "mapfile";
   QString source  = "source";
   QString type    = "type";
@@ -73,19 +72,15 @@ LQDataSources LCXmlLocalSourceBuilder::build(
     const QDomElement &_element, 
     const LIApplication& _app)
 {
-  Q_UNUSED(_element);
-  Q_UNUSED(_app);
+  LQDataSources data_sources;
 
-  QString attr_file = _element.attribute(__slAttributes.file);
-  if(!attr_file.isNull())
-  {
-    QDomElement el = _app.getDomDocument(attr_file).documentElement();
-    if(el.isNull()) return LQDataSources();
-    if(el.tagName() != _element.tagName()) return LQDataSources();
-    return build(el, _app);
-  }
-
-  return buildLocal( _element, _app);
+  auto builder = 
+    [&data_sources, &_app](const QDomElement& _element)
+    {
+      data_sources = buildLocal(_element, _app);
+    };
+  _app.buildFromFile(_element, builder);
+  return data_sources;
 }
 
 //==============================================================================buildLocal
@@ -98,7 +93,6 @@ static void buildSource(
 static LQDataSources buildLocal(
     const QDomElement& _element, const LIApplication& _app)
 {
-
   LQDataSources sources;
 
   for(auto node  = _element.firstChildElement(__slAttributes.source);
@@ -125,7 +119,8 @@ static void buildSource(
   if(attr_id.isNull()) return;
   QString attr_mapfile = _element.attribute(__slAttributes.mapfile);
   if(attr_mapfile.isNull()) return;
-  QDomElement map_element = _app.getDomDocument(attr_mapfile).documentElement();
+  QDomElement map_element = 
+    _app.loadDomDocument(attr_mapfile).documentElement();
   if(map_element.isNull()) return;
   if(map_element.tagName() != __slTags.localsourcemap) return;
 

@@ -99,37 +99,36 @@ static QWidget* uploadWidget(const QDomElement& _element)
   auto main_widget_element = _element.firstChildElement(__slTags.mainWidget);
   if(main_widget_element.isNull())
   {
-    __smWarning("Can't find main widget element");
+    __smWarning(QString("Window has no element '%1'.")
+        .arg(__slTags.mainWidget));
     return widget;
   }
 
-  for(auto node = main_widget_element.firstChild(); 
-      !node.isNull(); 
-      node = node.nextSibling())
+  QDomElement widget_element = main_widget_element.firstChildElement();
+  if(widget_element.isNull())
   {
-    if(node.isElement())
-    {
-      auto el = node.toElement();
-      auto builder = __smApp.getWidgetBuilder(el.tagName());
-      if(!builder.isNull())
-      {
-        widget = builder->build(el, __smApp);
-        if(widget) 
-        { 
-          __smMessage(
-              QString("Main widget element '%1' was created")
-              .arg(el.tagName()));
-          break; 
-        }
-      }
-    }
+    __smWarning(QString("Can't find main widget element."));
+    return widget;
   }
+
+  auto builder = __smApp.getWidgetBuilder(widget_element.tagName());
+  if(builder.isNull())
+  {
+    __smWarning(QString("Can't find builder for widget '%1'.")
+        .arg(widget_element.tagName()));
+    return widget;
+  }
+
+  widget = builder->build(widget_element, __smApp);
 
   if(!widget)
   {
     __smWarning("Can't create main widget element");
   }
 
+  __smMessage(
+      QString("Main widget element '%1' was created")
+      .arg(widget_element.tagName()));
   return widget;
 }
 
@@ -147,7 +146,9 @@ static LCWindow* uploadWindow(QWidget* _widget, const QDomElement& _element)
   auto get_icon = 
     [](const QDomElement& _element)
     {
-      QString icon_name = _element.attribute(__slAttributes.icon);
+      QString icon_name = 
+        CApplicationInterface::getInstance().toProjectRelativeFilePath(
+            _element.attribute(__slAttributes.icon));
       if(icon_name.isNull()) return QIcon();
       return QIcon(icon_name);
     };
@@ -313,57 +314,20 @@ void upload(
     const QDomElement &_rootElement)
 {
 
-  auto  load_element = [](const QDomElement& _element)
-  {
-    QString attr_file =  _element.attribute(__slAttributes.file);
-
-    auto add_attrs = 
-      [](QDomElement& _element, const QDomNamedNodeMap& _attributes)
-      {
-        for(int i = 0; i < _attributes.length(); i++)
-        {
-          auto att = _attributes.item(i).toAttr();
-          if(att.name() != __slAttributes.file)
-          {
-            _element.setAttribute(att.name(), att.value());
-          }
-        }
-      };
-
-    if(!attr_file.isNull())
+  auto builder = 
+    [](const QDomElement& _element)
     {
-      QDomElement el = __smApp.getDomDocument(attr_file).documentElement();
-      if(el.tagName() != __slTags.window)
-      {
-        __smWarning(
-            QString(
-              "Wrong root element tag '%1' in file '%2'")
-            .arg(el.tagName())
-            .arg(attr_file));
-        return QDomElement();
-      }
-      add_attrs(el, _element.attributes());
-      return el;
-    }
-    return _element;
-  };
+      if(_element.isNull()) return;
 
-  const auto upload_local = 
-    [&load_element](const QDomElement& _element)
-    {
-      QDomElement el = load_element(_element);
-      if(el.isNull()) return;
-
-      QWidget* widget = uploadWidget(el);
+      QWidget* widget = uploadWidget(_element);
 
       if(widget == nullptr) return;
 
       LCWindow*  window = uploadWindow(widget, _element);
 
+      auto sp_win = QSharedPointer<LIWindow>(window);
 
       QString attr_id = _element.attribute(__slAttributes.id);
-
-      auto sp_win = QSharedPointer<LIWindow>(window);
 
       if(!attr_id.isNull()) 
       {
@@ -380,13 +344,14 @@ void upload(
         if(attr == QStringLiteral("true"))
         {
           auto wp_win = sp_win.toWeakRef();
-          auto show = [wp_win, widget]() 
-          {
-            auto sp = wp_win.toStrongRef();
-            if(sp.isNull()) return;
-            sp->action(QStringLiteral("show"));
-            /* QCoreApplication::sendEvent(widget, new QShowEvent()); */
-          };
+          auto show = 
+            [wp_win]() 
+            {
+              auto sp = wp_win.toStrongRef();
+              if(sp.isNull()) return;
+              sp->action(QStringLiteral("show"));
+              /* QCoreApplication::sendEvent(widget, new QShowEvent()); */
+            };
           __slShowList << show;
         }
       }
@@ -401,7 +366,9 @@ void upload(
     __smMessage(
         QString("\n\tBegining deploy window described in line %1")
         .arg(element.lineNumber()));
-    upload_local(element);
+
+    CApplicationInterface::getInstance().buildFromFile(element, builder);
+
     __smMessage(
         QString("\n\tEnd deploy window described in line %1\n")
         .arg(element.lineNumber()));

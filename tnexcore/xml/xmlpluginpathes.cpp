@@ -54,13 +54,13 @@ void upload(const QDomElement& _rootElement)
   QDomNodeList nodes = _rootElement.elementsByTagName(__slTags.rootTag); 
   auto element_pathes = _rootElement.firstChildElement(__slTags.rootTag);
 
-  auto add_path = 
+  auto add_def_path = 
     [&added_pathes, &default_plugin_path]()
     {
       __slPlaginLibPaths << added_pathes << default_plugin_path;
     };
 
-  if(element_pathes.isNull()) { return add_path(); }
+  if(element_pathes.isNull()) { return add_def_path(); }
 
   for(auto element_item = element_pathes.firstChildElement(__slTags.add);
       !element_item.isNull();
@@ -77,9 +77,9 @@ void upload(const QDomElement& _rootElement)
     added_pathes << path;
   }
 
-  if(added_pathes.isEmpty()) { return add_path(); }
+  if(added_pathes.isEmpty()) { return add_def_path(); }
 
-  add_path();
+  add_def_path();
 
   QString message("Add plugins pathes:\n");
 

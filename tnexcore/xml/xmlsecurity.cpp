@@ -40,7 +40,6 @@ static const struct
   QString file = "file";
 }__slAttributes;
 
-
 namespace xmlsecurity
 {
 void upload(const QDomElement& _rootElement)
@@ -60,14 +59,14 @@ void upload(const QDomElement& _rootElement)
     end_upload();
     return;
   }
-  QString attr_file = element.attribute(__slAttributes.file);
-  if(!attr_file.isNull())
-  {
-    element = xmlcommon::loadDomDocument(attr_file).documentElement();
-    if(element.isNull()) { return end_upload(); }
-  }
+  auto builder = 
+    [](const QDomElement& _element)
+    {
+      LCSecurity::instance().init(_element);
+    };
 
-  LCSecurity::instance().init(element);
+  CApplicationInterface::getInstance().buildFromFile(element, builder);
+
   end_upload();
 }
 

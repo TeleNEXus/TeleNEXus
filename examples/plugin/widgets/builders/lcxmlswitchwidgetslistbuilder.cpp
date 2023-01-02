@@ -85,7 +85,7 @@ QWidget* LCXmlSwitchWidgetsListBuilder::build( const QDomElement& _element,
 
   if(!attr_file.isNull())
   {
-    QDomElement el = _app.getDomDocument(attr_file).documentElement();
+    QDomElement el = _app.loadDomDocument(attr_file).documentElement();
     if(el.isNull()) return nullptr;
     if(el.tagName() != _element.tagName()) return nullptr;
     return (build(el, _app));

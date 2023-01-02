@@ -61,47 +61,31 @@ LQDataSources LCXmlModbusSourceBuilder::build(
   Q_UNUSED(_app);
   LQDataSources map;
 
-  QString xmlfilename = _element.attribute("file");
+  auto builder = 
+    [&_app, &map](const QDomElement& _element)
+    {
+      QDomNodeList nodes = _element.elementsByTagName(__slTags.master);
+      if(nodes.isEmpty())
+      {
+        _app.message("LCXmlModbusSources: no elements modbus masters");
+        return;
+      }
+      LTMastersMap masters = createMasters(nodes);
+      if(masters.isEmpty())
+      {
+        _app.message("LCXmlModbusSources: no valid modbus masters");
+        return;
+      }
+      nodes = _element.elementsByTagName(__slTags.source);
+      if(nodes.isEmpty())
+      {
+        _app.message("LCXmlModbusSources: no elements modbus source");
+        return;
+      }
+      createSources(nodes, masters, map, _app);
+    };
 
-  if(xmlfilename.isNull()) return map;
-
-  QDomDocument domDoc = _app.getDomDocument(xmlfilename);
-
-  if(domDoc.isNull()) return map;
-
-  QDomElement rootElement = domDoc.documentElement();
-
-  if(rootElement.tagName() != __slTags.modbussources)
-  {
-    _app.message("LCXmlModbusSources: wrong root element");
-    return map;
-  }
-
-  QDomNodeList nodes = rootElement.elementsByTagName(__slTags.master);
-
-  if(nodes.isEmpty())
-  {
-    _app.message("LCXmlModbusSources: no elements modbus masters");
-    return map;
-  }
-
-  LTMastersMap masters = createMasters(nodes);
-
-  if(masters.isEmpty())
-  {
-    _app.message("LCXmlModbusSources: no valid modbus masters");
-    return map;
-  }
-
-  nodes = rootElement.elementsByTagName(__slTags.source);
-
-  if(nodes.isEmpty())
-  {
-    _app.message("LCXmlModbusSources: no elements modbus source");
-    return map;
-  }
-
-  createSources(nodes, masters, map, _app);
+  _app.buildFromFile(_element, builder);
 
   return map;
 }
@@ -414,7 +398,7 @@ static int loadMemoryMap(LQModbusDataSource* _p_source,
     const LIApplication& _app)
 {
 
-  QDomDocument domDoc = _app.getDomDocument(_filename);
+  QDomDocument domDoc = _app.loadDomDocument(_filename);
   if(domDoc.isNull()) return -1;
 
   QDomNodeList itemnodes;
@@ -516,7 +500,10 @@ static const struct
  * Возвращает количество добавленных сущностей карты памяти.
  */
 static int addSourceDataItems(
-    LQModbusDataSource* _p_source, const QDomNodeList& _nodes, EItemType _type, int _offset)
+    LQModbusDataSource* _p_source, 
+    const QDomNodeList& _nodes, 
+    EItemType _type, 
+    int _offset)
 {
   QDomElement element;
   QString attr;

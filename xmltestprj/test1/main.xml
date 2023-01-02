@@ -12,6 +12,10 @@
   <SOURCEBUILDERS file="sourcebuilders.xml"/>
   <!-- <SOURCEBUILDERS file="sourcebuilders.xml"/> -->
 
+  <WIDGETBUILDERS>
+    <switchWidgetsList      lib="examplewidgets" handler="getSwitchWidgetsListBuilder"/>
+  </WIDGETBUILDERS>
+
   <SOURCES file="sources.xml"/>
 
   <!-- <LAYOUTBUILDERS> -->
@@ -20,9 +24,6 @@
   <!--   <layoutHBox     lib="basiclayouts" libhandler="getHBoxLayoutBuilder" /> -->
   <!-- </LAYOUTBUILDERS> -->
 
-  <WIDGETBUILDERS>
-    <switchWidgetsList      lib="examplewidgets" handler="getSwitchWidgetsListBuilder"/>
-  </WIDGETBUILDERS>
 
   <DATAFORMATS file="formatters.xml"/>
 
@@ -87,7 +88,7 @@
     requiredAccess="security_required_access_id"
     currentAccess="security_current_access_id"
     command="security_command_stream"
-    noAccess="No authorization">
+    noAccess="No au thorization">
 
     <access id="user"  level="0" password="111"/>
     <access id="admin" level="1" password="222"/>

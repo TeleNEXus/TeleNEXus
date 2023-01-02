@@ -72,25 +72,34 @@ QSharedPointer<LCDirProjectSource> LCDirProjectSource::create(
 QSharedPointer<QIODevice> LCDirProjectSource::getFileDevice(
     const QString& _fileName) const
 {
+  const LIApplication& app = CApplicationInterface::getInstance();
 
-  QFileInfo fi(_fileName);
+
+  QString file_name = app.toProjectRelativeFilePath(_fileName);
+
+  if(file_name.length() == 0)
+  {
+    app.warning(QString("Project source: wrong file name."));
+  }
+
+  QFileInfo fi(file_name);
 
   if(!fi.exists())
   {
-    CApplicationInterface::getInstance().warning(
+    app.warning(
         QString("Project source: Can't find file '%1'")
-      .arg(_fileName));
+      .arg(file_name));
     return nullptr;
   }
 
   if(fi.isDir())
   {
-    CApplicationInterface::getInstance().warning(
-        QString("Project source: There is directory at the path '%1'")
-        .arg(_fileName));
+    app.warning(
+        QString("Project source: '%1' is a directory")
+        .arg(file_name));
     return nullptr;
   }
-  return QSharedPointer<QIODevice>(new QFile(_fileName));
+  return QSharedPointer<QIODevice>(new QFile(file_name));
 }
 
 //==============================================================================
@@ -112,39 +121,40 @@ QSharedPointer<LCPacketProjectSource> LCPacketProjectSource::create(
 QSharedPointer<QIODevice> 
 LCPacketProjectSource::getFileDevice(const QString& _fileName) const
 {
-  QString file_name;
+  const LIApplication& app = CApplicationInterface::getInstance();
 
+  QString file_name = app.toProjectRelativeFilePath(_fileName);
 
-  if(_fileName.contains(QRegExp("^\\.\\/")))
+  if(file_name.length() == 0)
   {
-    file_name = _fileName.mid(2);
+    app.warning(QString("Project source: wrong file name."));
   }
 
-  auto it = mFilesMap->find(_fileName);
+  auto it = mFilesMap->find(file_name);
 
   if(it != mFilesMap->end())
   {
     return QSharedPointer<QIODevice>(new LQROBuffer(&it.value()));
   }
 
-  QFileInfo fi(_fileName);
+  QFileInfo fi(file_name);
 
   if(!fi.exists()) 
   {
-    CApplicationInterface::getInstance().warning(
+    app.warning(
         QString("Project source: Can't find file '%1'")
-        .arg(fi.fileName()));
+        .arg(_fileName));
     return nullptr;
   }
 
   if(fi.isDir())
   {
-    CApplicationInterface::getInstance().warning(
-        QString("Project source: There is directory at the path '%1'")
+    app.warning(
+        QString("Project source: There is a directory at the path '%1'")
         .arg(_fileName));
     return nullptr;
   }
 
-  return QSharedPointer<QIODevice>(new QFile(_fileName));
+  return QSharedPointer<QIODevice>(new QFile(file_name));
 }
 

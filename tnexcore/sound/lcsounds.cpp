@@ -38,10 +38,10 @@ static const struct
 
 static const struct
 {
-  QString file    = "file";
+  QString file          = "file";
   QString controlSource = "controlSource";
-  QString controlData = "controlData";
-  QString repeat  = "repeat";
+  QString controlData   = "controlData";
+  QString repeat        = "repeat";
 }__slAttribute;
 
 //==============================================================================
@@ -64,27 +64,16 @@ LCSounds& LCSounds::instance()
 //------------------------------------------------------------------------------
 void LCSounds::addSounds(const QDomElement& _element)
 {
-
   auto add_sound = 
     [](const QDomElement& _element)
     {
-
-      qDebug() <<"++++add sound 0";
       QString attr = _element.attribute(__slAttribute.file);
       if(attr.isNull()) return;
-      qDebug() <<"++++add sound 1";
       auto fd = CApplicationInterface::getInstance().getFileDevice(attr);
       if(fd.isNull()) return;
-      qDebug() <<"++++add sound 2";
       if(!fd->open(QIODevice::OpenModeFlag::ReadOnly)) return;
-
-      qDebug() <<"++++add sound 3";
       auto spplay = QSharedPointer<LQPlaySound>(new LQPlaySound());
-
-      qDebug() <<"++++add sound 4";
       QByteArray* data = new QByteArray;
-
-      qDebug() <<"++++add sound 5";
       QBuffer* buffer = new QBuffer(data);
       QObject::connect(buffer, &QBuffer::destroyed,
           [data](QObject*)
@@ -93,32 +82,24 @@ void LCSounds::addSounds(const QDomElement& _element)
           });
 
       buffer->setParent(spplay.data());
-
-      qDebug() <<"++++add sound 5";
       *data = fd->readAll();
       if(data->isNull())
       {
         //error
         return;
       }
-
-      qDebug() <<"++++add sound 6";
       buffer->open(QIODevice::ReadOnly);
       if(spplay->setDevice(buffer) == false)
       {
         //error
         return;
       }
-
-      qDebug() <<"++++add sound 7";
       attr = _element.attribute(__slAttribute.controlSource);
       if(attr.isNull())
       {
         //error
         return;
       }
-
-      qDebug() <<"++++add sound 8";
 
       auto source = CApplicationInterface::getInstance().getDataSource(attr);
       if(source.isNull())
@@ -127,7 +108,6 @@ void LCSounds::addSounds(const QDomElement& _element)
         return;
       }
 
-      qDebug() <<"++++add sound 9";
       attr = _element.attribute(__slAttribute.controlData);
       if(attr.isNull())
       {
@@ -135,7 +115,6 @@ void LCSounds::addSounds(const QDomElement& _element)
         return;
       }
 
-      qDebug() <<"++++add sound 10";
       auto reader = source->createReader(attr);
       if(reader.isNull())
       {
@@ -143,7 +122,6 @@ void LCSounds::addSounds(const QDomElement& _element)
         return;
       }
 
-      qDebug() <<"++++add sound 11";
       attr = _element.attribute(__slAttribute.repeat);
       if(!attr.isNull())
       {
@@ -162,8 +140,6 @@ void LCSounds::addSounds(const QDomElement& _element)
         }
       }
 
-      qDebug() <<"++++add sound 12";
-
       auto handler = 
         [spplay](QSharedPointer<QByteArray> _data, LIRemoteDataSource::EReadStatus _status)
         {
@@ -178,8 +154,6 @@ void LCSounds::addSounds(const QDomElement& _element)
             spplay->stop();
           }
         };
-
-      qDebug() <<"++++add sound 5";
       reader->setHandler(handler);
       reader->connectToSource();
       __slLocalData.mSoundControllers << reader;
@@ -191,7 +165,6 @@ void LCSounds::addSounds(const QDomElement& _element)
       el = el.nextSiblingElement(__slTags.sound))
   {
     add_sound(el);
-    qDebug() << "Add sound";
   }
 }
 

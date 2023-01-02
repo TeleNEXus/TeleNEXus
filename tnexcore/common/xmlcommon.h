@@ -79,7 +79,7 @@ QMap<QString, QString> parseAttributes(
 SDataSpecification parseDataSpecification(const QString _dataSpec,
     std::function<void(const QString& _error)> _err = [](const QString&){});
 
-QDomDocument loadDomDocument(const QString& _fileName);
+/* QDomDocument loadDomDocument(const QString& _fileName); */
 
 /* 
  * Parses the string with values and returns a QStringList with them.

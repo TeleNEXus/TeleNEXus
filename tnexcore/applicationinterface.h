@@ -29,9 +29,6 @@ class LIProjectSource;
 
 class CApplicationInterface : public LIApplication
 {
-public:
-
-
 private:
   CApplicationInterface();
   CApplicationInterface(const CApplicationInterface&) = delete;
@@ -40,18 +37,30 @@ private:
 public:
   static CApplicationInterface& getInstance();
 
-
   void setMessageOn(bool _flag);
 
   void setProjectSource(QSharedPointer<LIProjectSource> _prjSource);
 
   virtual QString getProjectPath() const override;
 
+  virtual QString getCurrentPath() const override;
+
+  virtual QString toProjectRelativeFilePath(
+      const QString& _path) const override;
+
+  virtual QSharedPointer<QIODevice> 
+    getFileDevice(const QString& _fileName) const override;
+
+  virtual QDomDocument 
+    loadDomDocument(const QString& _fileName) const override;
+
+  virtual void buildFromFile(
+      const QDomElement& _element, 
+      const std::function<void(const QDomElement&)>& _builder,
+      const QString& _fileAttribute = QString("file")) const override;
+
   virtual QSharedPointer<LIXmlRemoteDataSourceBuilder> 
     getDataSourceBuilder( const QString& _name) const override;
-
-  virtual QSharedPointer<LIRemoteDataSource> 
-    getDataSource(const QString& _name) const override;
 
   virtual QSharedPointer<LIXmlLayoutBuilder> 
     getLayoutBuilder(const QString& _name) const override;
@@ -59,9 +68,8 @@ public:
   virtual QSharedPointer<LIXmlWidgetBuilder> 
     getWidgetBuilder(const QString& _name) const override;
 
-  virtual QDomDocument 
-    getDomDocument(const QString& _fileName) const override;
-
+  virtual QSharedPointer<LIRemoteDataSource> 
+    getDataSource(const QString& _name) const override;
 
   virtual QSharedPointer<LIWindow> 
     getWindow(const QString& _windowId) const override;
@@ -89,9 +97,6 @@ public:
   virtual QObject* createSecurityEventFilter(
       const QString& _accessId,
       const QSet<QEvent::Type>& _events) const override;
-
-  virtual QSharedPointer<QIODevice> getFileDevice(const QString& _fileName) const override;
-
 };
 
 #endif /* APPLICATIONINTERFACE_H_ */
