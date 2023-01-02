@@ -145,6 +145,7 @@ QDomDocument CApplicationInterface::loadDomDocument(
     const QString& _fileName) const
 {
   auto fd = getFileDevice(_fileName);
+
   if(fd.isNull())
   {
     warning(
