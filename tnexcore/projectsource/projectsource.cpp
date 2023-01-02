@@ -75,9 +75,9 @@ QSharedPointer<QIODevice> LCDirProjectSource::getFileDevice(
   const LIApplication& app = CApplicationInterface::getInstance();
 
 
-  qDebug() << "File name before " << _fileName;
+  app.warning(QString("File name before = '%1'").arg(_fileName));
   QString file_name = app.toProjectRelativeFilePath(_fileName);
-  qDebug() << "File name after " << file_name;
+  app.warning(QString("File name after = '%1'").arg(file_name));
 
   if(file_name.length() == 0)
   {

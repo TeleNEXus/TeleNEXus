@@ -218,6 +218,10 @@ void CApplicationInterface::buildFromFile(
 
   lv_CurrentPath = QFileInfo(file).path();
 
+  lv_CurrentPath.remove(QRegExp("^\\.\\/"));
+  lv_CurrentPath.remove(QRegExp("^\\."));
+  qDebug() << "Set current path = " << lv_CurrentPath;
+
   //Add all attributes except file namt. 
   for(int i = 0; i < _element.attributes().length(); i++)
   {
