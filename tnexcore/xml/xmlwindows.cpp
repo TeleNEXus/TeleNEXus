@@ -146,9 +146,12 @@ static LCWindow* uploadWindow(QWidget* _widget, const QDomElement& _element)
   auto get_icon = 
     [](const QDomElement& _element)
     {
+      qDebug() << "++++++++++++Get Icon";
       QString icon_name = 
         CApplicationInterface::getInstance().toProjectRelativeFilePath(
             _element.attribute(__slAttributes.icon));
+
+      qDebug() << "++++++++++++Get Icon " << icon_name;
       if(icon_name.isNull()) return QIcon();
       return QIcon(icon_name);
     };
