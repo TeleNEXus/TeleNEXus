@@ -234,26 +234,14 @@ static void scriptExecute(const QDomElement &_element)
 
 static void uploadLocal(const QDomElement& _element)
 {
-  static const LIApplication& app = CApplicationInterface::getInstance();
-  QString attr_file = _element.attribute(__slAttributes.file);
-
-  if(!attr_file.isNull())
-  {
-    QDomElement el = app.getDomDocument(attr_file).documentElement();
-    if(el.isNull()) return;
-    if(el.tagName() != _element.tagName())
+  auto builder = 
+    [](const QDomElement& _element)
     {
-      __smWarning(
-          QString("Wrong element tag name '%1'")
-          .arg(_element.tagName()));
-      return;
-    }
-    uploadLocal(el);
-  }
-
-  scriptUpload(_element);
-  scriptLaunch(_element);
-  scriptExecute(_element);
+      scriptUpload(_element);
+      scriptLaunch(_element);
+      scriptExecute(_element);
+    };
+  CApplicationInterface::getInstance().buildFromFile(_element, builder);
 }
 
 //==============================================================================

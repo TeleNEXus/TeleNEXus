@@ -235,7 +235,7 @@ static void load(
   CApplicationInterface::getInstance().message(
       QString("%1\tparce file '%2'\n").arg(message).arg(fileName));
 
-  domDoc = CApplicationInterface::getInstance().getDomDocument(fileName);
+  domDoc = CApplicationInterface::getInstance().loadDomDocument(fileName);
   if(domDoc.isNull()) return;
 
 

@@ -29,7 +29,8 @@ public:
   LCXmlScrollAreaBuilder();
   virtual ~LCXmlScrollAreaBuilder();
 protected:
-  virtual QWidget* buildLocal(const QDomElement& _element, const LIApplication& _app) override final;
+  virtual QWidget* buildLocal(
+      const QDomElement& _element, const LIApplication& _app) override final;
 };
 
 #endif /* LCXMLSCROLLAREABUILDER_H_ */

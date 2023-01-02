@@ -55,21 +55,21 @@ void upload(const QDomElement& _rootElement)
   __smMessage( "\n\tBegin deploy sounds.\n");
 
   QDomElement element = _rootElement.firstChildElement(__slTags.sounds);
+
   if(element.isNull()) 
   {
     __smMessage("\n\tProject has no sounds block.\n");
-    end_upload();
-    return;
+    return end_upload();
   }
 
-  QString attr_file = element.attribute(__slAttributes.file);
-  if(!attr_file.isNull())
-  {
-    element = xmlcommon::loadDomDocument(attr_file).documentElement();
-    if(element.isNull()) { return end_upload(); }
-  }
+  auto builder = 
+    [](const QDomElement& _element)
+    {
+      LCSounds::instance().addSounds(_element);
+    };
 
-  LCSounds::instance().addSounds(element);
+  CApplicationInterface::getInstance().buildFromFile(element, builder); 
+
   end_upload();
 }
 

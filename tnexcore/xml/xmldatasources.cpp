@@ -39,10 +39,10 @@ static const struct
   QString rootTag = "SOURCES";
 }__slTags;
 
-static const struct
-{
-  QString file = "file";
-}__slAttributes;
+/* static const struct */
+/* { */
+/*   QString file = "file"; */
+/* }__slAttributes; */
 
 //==============================================================================
 static QMap<QString, QSharedPointer<LIRemoteDataSource>> __slSources;
@@ -69,58 +69,48 @@ void upload(const QDomElement& _rootElement)
     return ret();
   }
 
-  QString attr_file = element.attribute(__slAttributes.file);
-
-  if(!attr_file.isNull())
-  {
-    auto ddoc = xmlcommon::loadDomDocument(attr_file);
-    if(ddoc.isNull()) 
+  auto builder = 
+    [](const QDomElement& _element)
     {
-      return ret();
-    }
-
-    element = ddoc.documentElement();
-
-    if(element.tagName() != __slTags.rootTag) 
-    { 
-      __smWarning(QString("Wrong element tag name '%1' in file '%2'").arg(element.tagName()));
-      return ret(); 
-    }
-  }
-
-  //Addin data sources
-  QDomNode node = element.firstChild();
-
-  for(auto node = element.firstChildElement(); 
-      !node.isNull(); 
-      node = node.nextSiblingElement())
-  {
-    QDomElement el = node.toElement();
-    __smMessage(QString("Begining add sources type of %1").arg(el.tagName()));
-    auto builder = builders::sources::getBuilder(el.tagName());
-
-    if(!builder.isNull())
-    {
-      auto sources = builder->build(el, CApplicationInterface::getInstance());
-      auto it = sources.begin();
-      if(it != sources.end())
+      if(_element.isNull()) 
       {
-        while(it != sources.end())
-        {
-          if(__slSources.find(it.key()) != sources.end())
-          {
-            __slSources.insert(it.key(), it.value());
-          }
-          it++;
-        }
+        return;
       }
-    }
-    else
-    {
-      __smWarning(QString("Can't find builder for source %1").arg(el.tagName()));
-    }
-    __smMessage(QString("End add sources type of %1").arg(el.tagName()));
-  }
+
+      for(auto node = _element.firstChildElement(); 
+          !node.isNull(); 
+          node = node.nextSiblingElement())
+      {
+        QDomElement el = node.toElement();
+        __smMessage(QString("Begining add sources type of %1").arg(el.tagName()));
+        auto builder = builders::sources::getBuilder(el.tagName());
+
+        if(!builder.isNull())
+        {
+          auto sources = builder->build(el, CApplicationInterface::getInstance());
+          auto it = sources.begin();
+          if(it != sources.end())
+          {
+            while(it != sources.end())
+            {
+              if(__slSources.find(it.key()) != sources.end())
+              {
+                __slSources.insert(it.key(), it.value());
+              }
+              it++;
+            }
+          }
+        }
+        else
+        {
+          __smWarning(
+              QString("Can't find builder for source %1").arg(el.tagName()));
+        }
+        __smMessage(QString("End add sources type of %1").arg(el.tagName()));
+      }
+    };
+
+  CApplicationInterface::getInstance().buildFromFile(element, builder);
   return ret();
 }
 

@@ -92,6 +92,7 @@ int main(int argc, char *argv[])
   signal(SIGTERM, appExit);
   QLoggingCategory::setFilterRules("qt5ct.debug=false");
   const LIApplication& appinterface = CApplicationInterface::getInstance();
+
   QApplication app(argc, argv);
 
   app.setApplicationName("TeleNEXus");
@@ -103,7 +104,6 @@ int main(int argc, char *argv[])
   QStringList params_list;
 
   QSharedPointer<LIProjectSource> prjsource;
-
 
   switch(__s_parseCommandLine(parser, params_list, msg))
   {
@@ -266,7 +266,7 @@ static int __s_projectDeploy(QApplication& _app)
 
   appinterface.message("Opening the main project file...");
 
-  domDoc = CApplicationInterface::getInstance().getDomDocument("main.xml");
+  domDoc = CApplicationInterface::getInstance().loadDomDocument("main.xml");
 
   if(domDoc.isNull())
   {

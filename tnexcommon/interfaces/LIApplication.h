@@ -23,9 +23,11 @@
 
 #include <QSharedPointer>
 #include <QEvent>
+#include <functional>
 
 class QString;
 class QDir;
+class QDomElement;
 
 class LIXmlRemoteDataSourceBuilder;
 class LIXmlLayoutBuilder;
@@ -51,13 +53,26 @@ public:
   };
 
   LIApplication(){}
+
   virtual QString getProjectPath() const = 0;
+  
+  virtual QString getCurrentPath() const = 0;
+
+  virtual QString toProjectRelativeFilePath(const QString& _path) const = 0;
+
+  virtual QSharedPointer<QIODevice> 
+    getFileDevice(const QString& _fileName) const = 0;
+
+  virtual QDomDocument 
+    loadDomDocument(const QString& _fileName) const = 0; 
+
+  virtual void buildFromFile(
+      const QDomElement& _element, 
+      const std::function<void(const QDomElement&)>& _builder,
+      const QString& _fileAttribute = QString("file")) const = 0;
 
   virtual QSharedPointer<LIXmlRemoteDataSourceBuilder> 
     getDataSourceBuilder(const QString& _name) const = 0;
-
-  virtual QSharedPointer<LIRemoteDataSource> 
-    getDataSource(const QString& _name) const = 0;
 
   virtual QSharedPointer<LIXmlLayoutBuilder> 
     getLayoutBuilder(const QString& _name) const = 0;
@@ -65,8 +80,8 @@ public:
   virtual QSharedPointer<LIXmlWidgetBuilder> 
     getWidgetBuilder(const QString& _name) const = 0;
 
-  virtual QDomDocument 
-    getDomDocument(const QString& _fileName) const = 0; 
+  virtual QSharedPointer<LIRemoteDataSource> 
+    getDataSource(const QString& _name) const = 0;
 
   virtual QSharedPointer<LIWindow> 
     getWindow(const QString& _windowId) const = 0;
@@ -95,8 +110,6 @@ public:
       const QString& _accessId,
       const QSet<QEvent::Type>& _events) const = 0;
 
-  virtual QSharedPointer<QIODevice> 
-    getFileDevice(const QString& _fileName) const = 0;
 };
 
 #endif // LIAPPLICATION_H

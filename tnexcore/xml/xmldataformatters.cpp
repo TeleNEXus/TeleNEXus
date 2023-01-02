@@ -54,40 +54,9 @@ static QMap<QString, QSharedPointer<LIDataFormatter>> __slFormattersMap;
 //==============================================================================
 void uploadLocal(const QDomElement& _element)
 {
-  QString attr_file =  _element.attribute(__slAttributes.file);
-
-  if(!attr_file.isNull())
-  {
-
-
-    auto ddoc = xmlcommon::loadDomDocument(attr_file);
-
-    if(!ddoc.isNull())
-    {
-      QDomElement el = ddoc.documentElement();
-      if(!el.isNull())
-      {
-
-        if(el.tagName() == __slTags.rootTag) 
-        {
-          uploadLocal(el);
-        }
-        else
-        {
-          __smWarning(QString("Wrong root element '%1'").arg(el.tagName()));
-        }
-
-      }
-      else
-      {
-        __smWarning(QString("File '%1' has not root element.").arg(attr_file));
-      }
-    }
-    return;
-  }
 
   //----------------------------------------------------------upload_script[]
-  static auto upload_script = 
+  auto upload_script = 
     [](const QDomElement& _element)
     {
       QString attr_id = _element.attribute(__slAttributes.id);
@@ -126,23 +95,28 @@ void uploadLocal(const QDomElement& _element)
       __slFormattersMap.insert(attr_id, formatter);
     };
 
-
-  for(auto node = _element.firstChild();
-      !node.isNull();
-      node = node.nextSibling())
-  {
-    auto el = node.toElement();
-    if(el.isNull()) {continue;}
-
-    if(el.tagName() == __slTags.script)
+  auto builder = 
+    [&upload_script, &upload_std](const QDomElement& _element)
     {
-      upload_script(el);
-    }
-    else if(el.tagName() == __slTags.stdformat)
-    {
-      upload_std(el);
-    }
-  }
+      for(auto node = _element.firstChild();
+          !node.isNull();
+          node = node.nextSibling())
+      {
+        auto el = node.toElement();
+        if(el.isNull()) {continue;}
+
+        if(el.tagName() == __slTags.script)
+        {
+          upload_script(el);
+        }
+        else if(el.tagName() == __slTags.stdformat)
+        {
+          upload_std(el);
+        }
+      }
+    };
+
+  CApplicationInterface::getInstance().buildFromFile(_element, builder);
 }
 
 //==============================================================================xmldataformatters

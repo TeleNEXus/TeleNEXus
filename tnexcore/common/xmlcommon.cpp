@@ -333,10 +333,11 @@ SDataSpecification parseDataSpecification(const QString _dataSpec,
     std::function<void(const QString& _error)> _err)
 {
   QString error;
-  auto spec_list = parseValues(_dataSpec, QChar(':'), [&error](const QString& _str)
-      {
-        error = _str;
-      });
+  auto spec_list = 
+    parseValues(_dataSpec, QChar(':'), [&error](const QString& _str)
+        {
+          error = _str;
+        });
 
   if(!error.isNull())
   {
@@ -361,47 +362,48 @@ SDataSpecification parseDataSpecification(const QString _dataSpec,
 }
 
 //------------------------------------------------------------------------------
-QDomDocument loadDomDocument (const QString& _fileName)
-{
+//TODO: Изменить интерфейс функции на
+// bool loadDomDocument(QDomDocument& _doc, const QString& _fileName)
+/* QDomDocument loadDomDocument(const QString& _fileName) */
+/* { */
+/*   auto fd = CApplicationInterface::getInstance().getFileDevice(_fileName); */
 
-  auto fd = CApplicationInterface::getInstance().getFileDevice(_fileName);
+/*   if(fd.isNull()) */
+/*   { */
+/*     CApplicationInterface::getInstance().warning( */
+/*         QString("Load DOM Document error:\n\t from file '%1'") */
+/*         .arg(_fileName)); */
+/*     return QDomDocument(); */
+/*   } */
 
-  if(fd.isNull())
-  {
-    CApplicationInterface::getInstance().warning(
-        QString("Load DOM Document error:\n\t from file '%1'")
-        .arg(_fileName));
-    return QDomDocument();
-  }
+/*   QDomDocument domDoc; */
+/*   QString errorStr; */
+/*   int errorLine; */
+/*   int errorColumn; */
 
-  QDomDocument domDoc;
-  QString errorStr;
-  int errorLine;
-  int errorColumn;
-
-  if(!domDoc.setContent(fd.data(), true, &errorStr, &errorLine, &errorColumn))
-  {
-    CApplicationInterface::getInstance().warning(
-        QString("Load DOM Document error:\n"
-          "\tparse file %1\n"       
-          "\terror at line: %2\n"   
-          "\tcolumn: %3\n"          
-          "\tmsg: %4\n")
-        .arg(_fileName)
-        .arg(errorLine)
-        .arg(errorColumn)
-        .arg(errorStr));
-  }
-  else
-  {
-    CApplicationInterface::getInstance().message(
-        QString("Load DOM Document:\n\tdocument with element '%1' from file '%2' is loaded")
-        .arg(domDoc.documentElement().tagName())
-        .arg(_fileName));
-  }
-
-  return domDoc;
-}
+/*   if(!domDoc.setContent(fd.data(), true, &errorStr, &errorLine, &errorColumn)) */
+/*   { */
+/*     CApplicationInterface::getInstance().warning( */
+/*         QString("Load DOM Document error:\n" */
+/*           "\tparse file %1\n" */       
+/*           "\terror at line: %2\n" */   
+/*           "\tcolumn: %3\n" */          
+/*           "\tmsg: %4\n") */
+/*         .arg(_fileName) */
+/*         .arg(errorLine) */
+/*         .arg(errorColumn) */
+/*         .arg(errorStr)); */
+/*   } */
+/*   else */
+/*   { */
+/*     CApplicationInterface::getInstance().message( */
+/*         QString("Load DOM Document:\n\t\ */
+/*           document with element '%1' from file '%2' is loaded") */
+/*         .arg(domDoc.documentElement().tagName()) */
+/*         .arg(_fileName)); */
+/*   } */
+/*   return domDoc; */
+/* } */
 
 } /* namespace xmlcommon */
 

@@ -87,17 +87,12 @@ QString getWidgetStyle(const QString& _styleId)
 //==============================================================================uploadElement
 static void uploadElement(const QDomElement& _element)
 {
-  QString attr_file = _element.attribute(__slAttributes.file);
-
-  if(!attr_file.isNull())
-  {
-    auto ddoc = xmlcommon::loadDomDocument(attr_file);
-    if(!ddoc.isNull()) uploadStyles(ddoc.documentElement());
-  }
-  else
-  {
-    uploadStyles(_element);
-  }
+  auto builder = 
+    [](const QDomElement& _element)
+    {
+      uploadStyles(_element);
+    };
+  CApplicationInterface::getInstance().buildFromFile(_element, builder);
 }
 
 //==============================================================================uploadStyle
