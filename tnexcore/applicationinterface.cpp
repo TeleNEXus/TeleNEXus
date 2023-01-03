@@ -95,6 +95,16 @@ QString CApplicationInterface::getCurrentPath() const
 }
 
 //------------------------------------------------------------------------------
+QString CApplicationInterface::toProjectRelativePath(
+    const QString& _fileName) const
+{
+  QString file_path = toProjectRelativeFilePath(_fileName);
+  QString file_name = QFileInfo(file_path).fileName();
+  return 
+    file_path.remove(QRegExp(QString("\\/*%1$").arg(file_name)));
+}
+
+//------------------------------------------------------------------------------
 QString CApplicationInterface::toProjectRelativeFilePath(
     const QString& _fileName) const
 {
@@ -191,51 +201,33 @@ void CApplicationInterface::buildFromFile(
 {
   QString file = _element.attribute(_fileAttribute);
 
-  qDebug() << "buildFromFile 1";
 
   if(file.isNull())
   {
-    qDebug() << "buildFromFile 2";
     _builder(_element);
     return;
   }
 
-  qDebug() << "buildFromFile 3";
   QDomDocument ddoc = loadDomDocument(file);
 
   if(ddoc.isNull()) 
   {
-    qDebug() << "buildFromFile 4";
     _builder(QDomElement());
     return;
   }
 
-  qDebug() << "buildFromFile 5";
   QDomElement loaded_element = ddoc.documentElement();
 
   if(loaded_element.tagName() != _element.tagName())
   {
-    qDebug() << "buildFromFile 6";
     _builder(QDomElement());
     return;
   }
 
-  qDebug() << "buildFromFile 7";
   QString pathbuff = lv_CurrentPath;
 
+  lv_CurrentPath = toProjectRelativePath(file);
 
-  QString path = toProjectRelativeFilePath(file); 
-  path = QFileInfo(file).path();
-  lv_CurrentPath = path;
-
-
-
-  /* lv_CurrentPath = QFileInfo(file).path(); */
-
-  lv_CurrentPath.remove(QRegExp("^\\.\\/"));
-  lv_CurrentPath.remove(QRegExp("^\\."));
-
-  qDebug() << QString("+++++++Current path: '%1'").arg(lv_CurrentPath);
   //Add all attributes except file namt. 
   for(int i = 0; i < _element.attributes().length(); i++)
   {
@@ -249,12 +241,12 @@ void CApplicationInterface::buildFromFile(
   if(loaded_element.hasAttribute(_fileAttribute))
   {
     buildFromFile(loaded_element, _builder, _fileAttribute);
-    return;
   }
   else
   {
     _builder(loaded_element);
   }
+
   lv_CurrentPath = pathbuff;
 }
 
