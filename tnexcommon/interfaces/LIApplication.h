@@ -58,7 +58,9 @@ public:
   
   virtual QString getCurrentPath() const = 0;
 
-  virtual QString toProjectRelativeFilePath(const QString& _path) const = 0;
+  virtual QString toProjectRelativeFilePath(const QString& _file) const = 0;
+
+  virtual QString toProjectRelativePath(const QString& _file) const = 0;
 
   virtual QSharedPointer<QIODevice> 
     getFileDevice(const QString& _fileName) const = 0;

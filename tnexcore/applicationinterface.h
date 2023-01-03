@@ -46,7 +46,10 @@ public:
   virtual QString getCurrentPath() const override;
 
   virtual QString toProjectRelativeFilePath(
-      const QString& _path) const override;
+      const QString& _file) const override;
+
+  virtual QString toProjectRelativePath(
+      const QString& _file) const override;
 
   virtual QSharedPointer<QIODevice> 
     getFileDevice(const QString& _fileName) const override;
