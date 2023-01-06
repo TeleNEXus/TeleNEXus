@@ -254,21 +254,26 @@ void LQModbusDataSource::customEvent(QEvent* _event)
 QSharedPointer<LIRemoteDataReader> LQModbusDataSource::createReader(
     const QString& _dataName)
 {
-  return LQModbusDataReader::create(_dataName, mwpThis);
+  return LQModbusDataReader::create(
+      LCModbusDataMap::convertDataName(_dataName), mwpThis);
 }
 
 //------------------------------------------------------------------------------
 QSharedPointer<LIRemoteDataWriter> LQModbusDataSource::createWriter(
     const QString& _dataName)
 {
-  return LQModbusDataWriter::create(_dataName, mwpThis);
+  return LQModbusDataWriter::create(
+      LCModbusDataMap::convertDataName(_dataName), mwpThis);
 }
 
 //------------------------------------------------------------------------------
 QByteArray LQModbusDataSource::read(
     const QString& _dataId, EReadStatus* _status)
 {
-  auto req = LQReadSyncReq::create(mwpThis.lock(), _dataId, this->thread());
+  auto req = LQReadSyncReq::create(
+      mwpThis.lock(), 
+      LCModbusDataMap::convertDataName(_dataId), 
+      thread());
   return req->readSync(_status);
 }
 
@@ -276,7 +281,10 @@ QByteArray LQModbusDataSource::read(
 EWriteStatus LQModbusDataSource::write(
     const QString& _dataId, const QByteArray& _data)
 {
-  auto req = LQWriteSyncReq::create(mwpThis.lock(), _dataId, thread());
+  auto req = LQWriteSyncReq::create(
+      mwpThis.lock(), 
+      LCModbusDataMap::convertDataName(_dataId), 
+      thread());
   return req->writeSync(_data);
 }
 
@@ -284,7 +292,9 @@ EWriteStatus LQModbusDataSource::write(
 void LQModbusDataSource::read(
       const QString& _dataId, TReadHandler _handler)
 {
-  auto reader = LQModbusDataReader::create(_dataId, mwpThis);
+  auto reader = LQModbusDataReader::create(
+      LCModbusDataMap::convertDataName(_dataId), 
+      mwpThis);
   if(reader.isNull())
   {
     _handler(QSharedPointer<QByteArray>(new QByteArray), EReadStatus::Undef);
@@ -300,7 +310,9 @@ void LQModbusDataSource::write(
       const QByteArray& _data,
       TWriteHandler _handler)
 {
-  auto writer = LQModbusDataWriter::create(_dataId, mwpThis);
+  auto writer = LQModbusDataWriter::create(
+      LCModbusDataMap::convertDataName(_dataId), 
+      mwpThis);
   if(writer.isNull())
   {
     _handler(EWriteStatus::Failure);

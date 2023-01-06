@@ -331,6 +331,7 @@ public:
   void read(QSharedPointer<LQModbusDataReader> _reader);
   void connectReader(QSharedPointer<LQModbusDataReader> _reader);
   void disconnectReader(QSharedPointer<LQModbusDataReader> _reader);
+  static QString convertDataName(const QString& _dataName);
 };
 
 #endif /* LCMODBUSDATAMAP_H_ */

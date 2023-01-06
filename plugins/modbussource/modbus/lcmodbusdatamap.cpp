@@ -584,7 +584,8 @@ void LCModbusDataMap::update()
 void LCModbusDataMap::addItemHoldingRegs(
     const QString& _name, quint16 _addr, quint16 _size)
 {
-  mMapItems[_name] = QSharedPointer<CIDataMapItem>( 
+  mMapItems[convertDataName(_name)] = 
+    QSharedPointer<CIDataMapItem>( 
       new CAddressedDataMapItem(_addr, _size, mControllerHoldingRegs));
 }
 
@@ -592,7 +593,8 @@ void LCModbusDataMap::addItemHoldingRegs(
 void LCModbusDataMap::addItemInputRegs(
     const QString& _name, quint16 _addr, quint16 _size)
 {
-  mMapItems[ _name] = QSharedPointer<CIDataMapItem>(
+  mMapItems[convertDataName(_name)] = 
+    QSharedPointer<CIDataMapItem>(
       new CAddressedDataMapItem(_addr, _size, mControllerInputRegs));
 }
 
@@ -600,7 +602,8 @@ void LCModbusDataMap::addItemInputRegs(
 void LCModbusDataMap::addItemDiscreteInputs(
     const QString& _name, quint16 _addr, quint16 _size)
 {
-  mMapItems[_name] = QSharedPointer<CIDataMapItem>(
+  mMapItems[convertDataName(_name)] = 
+    QSharedPointer<CIDataMapItem>(
       new CAddressedDataMapItem(_addr, _size, mControllerDiscreteInputs));
 
 }
@@ -609,7 +612,8 @@ void LCModbusDataMap::addItemDiscreteInputs(
 void LCModbusDataMap::addItemCoils(
     const QString& _name, quint16 _addr, quint16 _size)
 {
-  mMapItems[_name] = QSharedPointer<CIDataMapItem>(
+  mMapItems[convertDataName(_name)] = 
+    QSharedPointer<CIDataMapItem>(
       new CAddressedDataMapItem(_addr, _size, mControllerCoils));
 }
 
@@ -661,6 +665,11 @@ void LCModbusDataMap::disconnectReader(
   (*it)->disconnectReader(_reader);
 }
 
+//------------------------------------------------------------------------------
+QString LCModbusDataMap::convertDataName(const QString& _dataName)
+{
+  return QString(_dataName).remove(QChar(' '));
+}
 
 //==============================================================================doInParts
 static void doInParts(
@@ -692,3 +701,4 @@ static void doInParts(
     if(break_flag) break;
   }
 }
+
