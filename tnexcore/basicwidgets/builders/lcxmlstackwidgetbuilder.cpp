@@ -87,7 +87,7 @@ QWidget* LCXmlStackWidgetBuilder::buildLocal(
 
   if(source.isNull() || format.isNull())
   {
-    stacked_widget = new LCQStackWidget(); 
+    return nullptr;
   }
   else
   {
