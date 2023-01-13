@@ -125,7 +125,8 @@ QWidget* buildWindow(const QApplication& _app, const QString& _history_file)
   QWidget* widget = new QWidget();
 
   QPushButton* buttonAddDir = new QPushButton(QObject::tr("Add project path"));
-  QPushButton* buttonAddFile = new QPushButton(QObject::tr("Add pack file"));
+  QPushButton* buttonAddFile = new QPushButton(QObject::tr("Add project file"));
+  QPushButton* buttonAddPackFile = new QPushButton(QObject::tr("Add pack file"));
   QPushButton* buttonRemove = new QPushButton(QObject::tr("Remove"));
   QPushButton* buttonLaunch = new QPushButton(QObject::tr("Launch"));
   QCheckBox* terminalCheckBox = new QCheckBox(QObject::tr("Launch in terminal"));
@@ -137,6 +138,7 @@ QWidget* buildWindow(const QApplication& _app, const QString& _history_file)
 
   buttonsLayout->addWidget(buttonAddDir);
   buttonsLayout->addWidget(buttonAddFile);
+  buttonsLayout->addWidget(buttonAddPackFile);
   buttonsLayout->addWidget(buttonRemove);
   buttonsLayout->addWidget(terminalCheckBox);
   buttonsLayout->addStretch();
@@ -194,7 +196,25 @@ QWidget* buildWindow(const QApplication& _app, const QString& _history_file)
         if(!dir.isNull()) projectList->addItem(dir);
       });
 
+
   QObject::connect(buttonAddFile, &QPushButton::pressed, 
+      [widget, projectList]()
+      {
+
+        auto file = 
+          QFileDialog::getOpenFileName(
+              widget, 
+              QStringLiteral("Open main xml file"), 
+              QString(""), 
+              QStringLiteral("Pack files (*.xml)"));
+
+        QFileInfo fileinfo(file);
+
+        if(!file.isNull()) projectList->addItem(file);
+      });
+
+
+  QObject::connect(buttonAddPackFile, &QPushButton::pressed, 
       [widget, projectList]()
       {
 

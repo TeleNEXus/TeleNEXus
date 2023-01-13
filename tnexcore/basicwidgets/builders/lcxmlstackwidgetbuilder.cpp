@@ -133,6 +133,21 @@ QWidget* LCXmlStackWidgetBuilder::buildLocal(
       stacked_widget->addWidget(_widget, _matching);
     };
 
+  //add items
+  for(QDomNode node = _element.firstChildElement(__slTags.item);
+      !node.isNull();
+      node = node.nextSiblingElement(__slTags.item))
+  {
+    auto el = node.toElement();
+    if(el.isNull()) continue;
+    QString attr_matching = el.attribute(__slAttributes.matching);
+    if(attr_matching.isNull()) continue;
+    auto matching_bytes = format->toBytes(attr_matching);
+    if(matching_bytes.isNull()) continue;
+    auto matching_string = format->toString(matching_bytes);
+    if(matching_string.isNull()) continue;
+    add_widget(el, matching_string, add_item);
+  }
 
   //add item undef
   [&_element, &add_widget, &stacked_widget]()
@@ -157,23 +172,6 @@ QWidget* LCXmlStackWidgetBuilder::buildLocal(
           stacked_widget->addWidgetWrong(_widget);
         });
   }();
-
-
-  //add items
-  for(QDomNode node = _element.firstChildElement(__slTags.item);
-      !node.isNull();
-      node = node.nextSiblingElement(__slTags.item))
-  {
-    auto el = node.toElement();
-    if(el.isNull()) continue;
-    QString attr_matching = el.attribute(__slAttributes.matching);
-    if(attr_matching.isNull()) continue;
-    auto matching_bytes = format->toBytes(attr_matching);
-    if(matching_bytes.isNull()) continue;
-    auto matching_string = format->toString(matching_bytes);
-    if(matching_string.isNull()) continue;
-    add_widget(el, matching_string, add_item);
-  }
 
   setWidgetName(      _element, stacked_widget);
   setWidgetStyle(     _element, stacked_widget);

@@ -10,21 +10,26 @@
     </message>
     <message>
         <location filename="main.cpp" line="128"/>
+        <source>Add project file</source>
+        <translation>Добавить файл</translation>
+    </message>
+    <message>
+        <location filename="main.cpp" line="129"/>
         <source>Add pack file</source>
         <translation>Добавить пакет</translation>
     </message>
     <message>
-        <location filename="main.cpp" line="129"/>
+        <location filename="main.cpp" line="130"/>
         <source>Remove</source>
         <translation>Удалить</translation>
     </message>
     <message>
-        <location filename="main.cpp" line="130"/>
+        <location filename="main.cpp" line="131"/>
         <source>Launch</source>
         <translation>Запустить</translation>
     </message>
     <message>
-        <location filename="main.cpp" line="131"/>
+        <location filename="main.cpp" line="132"/>
         <source>Launch in terminal</source>
         <translation>Запустить в терминале</translation>
     </message>

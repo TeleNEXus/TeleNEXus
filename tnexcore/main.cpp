@@ -45,6 +45,8 @@
 #include <QDataStream>
 #include <QCryptographicHash>
 
+#include <stdio.h>
+
 #define __smCompressLevel 3
 #define __smQuitMessage QStringLiteral("Quit from TeleNEXus")
 #define __smHashAlgorithm (QCryptographicHash::Sha256) 
@@ -70,7 +72,7 @@ enum class EParseCommandLineResult
 static EParseCommandLineResult __s_parseCommandLine(
     QCommandLineParser& _parser, QStringList& _params, QString& _msg);
 //------------------------------------------------------------------------------
-static int __s_projectDeploy(QApplication& _app);
+static int __s_projectDeploy(QApplication& _app, const QString& _engryFile);
 //------------------------------------------------------------------------------
 static int __s_compilProject(
     const QString& _sourcePath, const QString& _targetFileName);
@@ -105,6 +107,8 @@ int main(int argc, char *argv[])
 
   QSharedPointer<LIProjectSource> prjsource;
 
+  QString entry_point("main.xml");
+
   switch(__s_parseCommandLine(parser, params_list, msg))
   {
   case EParseCommandLineResult::CommandLineError:
@@ -125,7 +129,7 @@ int main(int argc, char *argv[])
       QString launch_param;
       if(argc < 2) 
       {
-        launch_param = QString("./");
+        launch_param = QString("./main.xml");
       }
       else
       {
@@ -142,7 +146,42 @@ int main(int argc, char *argv[])
         return -1;
       }
 
-      if(fi.isFile())
+
+
+      if(fi.isDir())
+      {
+        qDebug().noquote() << 
+          QString("Launch from dir '%1'").arg(fi.absoluteFilePath());
+        QDir::setCurrent(fi.absoluteFilePath());
+        prjsource = LCDirProjectSource::create(fi.absoluteFilePath(), msg);
+        qDebug().noquote() << msg;
+        if(prjsource.isNull()) 
+        {
+          return -1;
+        }
+        qDebug().noquote()<< 
+          QString("Project source from path '%1' is created")
+          .arg(fi.absoluteFilePath());
+        CApplicationInterface::getInstance().setProjectSource(prjsource);
+      }
+      else if(fi.suffix() == QStringLiteral("xml"))
+      {
+        entry_point = fi.fileName();
+        qDebug().noquote() << 
+          QString("Launch from file '%1'").arg(fi.absoluteFilePath());
+        QDir::setCurrent(fi.absolutePath());
+        prjsource = LCDirProjectSource::create(fi.absolutePath(), msg);
+        qDebug().noquote() << msg;
+        if(prjsource.isNull()) 
+        {
+          return -1;
+        }
+        qDebug().noquote()<< 
+          QString("Project source from '%1' is created")
+          .arg(fi.absoluteFilePath());
+        CApplicationInterface::getInstance().setProjectSource(prjsource);
+      }
+      else
       {
         qDebug().noquote() << 
           QString("Launch using a packet file '%1'").arg(fi.absoluteFilePath());
@@ -159,24 +198,6 @@ int main(int argc, char *argv[])
         prjsource = LCPacketProjectSource::create(files_data);
         CApplicationInterface::getInstance().setProjectSource(prjsource);
         CApplicationInterface::getInstance().setMessageOn(false);
-
-        /* return 0; */
-      }
-      else
-      {
-        qDebug().noquote() << 
-          QString("Launch from dir '%1'").arg(fi.absoluteFilePath());
-        QDir::setCurrent(fi.absoluteFilePath());
-        prjsource = LCDirProjectSource::create(fi.absoluteFilePath(), msg);
-        qDebug().noquote() << msg;
-        if(prjsource.isNull()) 
-        {
-          return -1;
-        }
-        qDebug().noquote()<< 
-          QString("Project source from path '%1' is created")
-          .arg(fi.absoluteFilePath());
-        CApplicationInterface::getInstance().setProjectSource(prjsource);
       }
     }
     break;
@@ -185,7 +206,12 @@ int main(int argc, char *argv[])
     break;
   }
 
-  if(__s_projectDeploy(app) < 0) return -1;
+  if(__s_projectDeploy(app, entry_point) < 0) 
+  {
+    /* volatile char ch; */
+    /* ch = getchar(); */
+    return -1;
+  }
 
   QObject::connect(&app, &QApplication::aboutToQuit,
       [&](){
@@ -254,7 +280,7 @@ __s_parseCommandLine(
 }
 
 //------------------------------------------------------------------------------
-static int __s_projectDeploy(QApplication& _app)
+static int __s_projectDeploy(QApplication& _app, const QString& _entryFile)
 {
   const CApplicationInterface& appinterface = 
     CApplicationInterface::getInstance();
@@ -266,7 +292,7 @@ static int __s_projectDeploy(QApplication& _app)
 
   appinterface.message("Opening the main project file...");
 
-  domDoc = CApplicationInterface::getInstance().loadDomDocument("main.xml");
+  domDoc = CApplicationInterface::getInstance().loadDomDocument(_entryFile);
 
   if(domDoc.isNull())
   {
