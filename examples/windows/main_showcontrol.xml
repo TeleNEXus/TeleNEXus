@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<APPLICATION>
+
+  <WINDOW 
+    id="Win1" 
+    file="showcontrol/window1.xml"
+    icon="../pictures/picture_1.png"
+    visible="true"
+    title="Window 1" 
+    showMode="normal"
+    modality="false"
+    flags="" 
+    position="100;100"
+    size="300;100"
+    screen="0">
+  </WINDOW>
+
+  <WINDOW 
+    id="Win2" 
+    file="showcontrol/window2.xml" 
+    icon="../pictures/picture_2.png"
+    visible="false"
+    title="Window 2" 
+    showMode="normal"
+    modality="false"
+    flags="" 
+    position="400;200" 
+    size="300;100"
+    screen="0"/>
+
+</APPLICATION>
+
+

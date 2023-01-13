@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<WINDOW>
+  <mainWidget>
+    <Frame>
+      <layout>
+        <LayoutHBox>
+          <layouts>
+            <LayoutVBox>
+              <widgets>
+
+                <Button text="Show Window 1">
+                  <press>
+                    <controlWindow windowId="Win2" action="show"/>
+                  </press>
+                </Button>
+
+                <Button text="Hide Window 2">
+                  <press>
+                    <controlWindow windowId="Win2" action="hide"/>
+                  </press>
+                </Button>
+
+              </widgets>
+              <stretch/>
+            </LayoutVBox>
+          </layouts>
+          <stretch/>
+        </LayoutHBox>
+      </layout>
+    </Frame>
+  </mainWidget>
+</WINDOW>
+
+

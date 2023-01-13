@@ -1,0 +1,19 @@
+--------------------------------------------------------------------------------
+                            Window desctioptions.
+--------------------------------------------------------------------------------
+  Main tag: WINDOW
+
+  Attributes: 
+    id            "id string"
+    title         "title string"
+    icon          "file name"
+    visible       "[false, true]"
+    showMode      "[normal, fullScreen, minimized, maximized]"
+    modality      "[true, false]"
+    flags         "stayOnTop|frameless"
+    position      "x;y"
+    size          "x;y"
+    screen        "N"
+
+  Tags:
+   mainWidget 
