@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<WINDOW>
+  <mainWidget>
+    <Frame>
+      <widgets>
+        <Label text="Label 1" position="10;10"/>
+        <Label text="Label 2" position="40;30"/>
+        <Label text="Label 3" position="70;50"/>
+      </widgets>
+    </Frame>
+  </mainWidget>
+</WINDOW>
+
