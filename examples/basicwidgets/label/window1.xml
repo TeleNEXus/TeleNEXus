@@ -2,8 +2,7 @@
 
 <WINDOW>
   <mainWidget>
-    <Frame>
-    </Frame>
+    <Label text="Label 1"/>
   </mainWidget>
 </WINDOW>
 

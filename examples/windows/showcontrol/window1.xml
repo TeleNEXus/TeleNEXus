@@ -9,9 +9,27 @@
             <LayoutVBox>
               <widgets>
 
-                <Button text="Show Window 1">
+                <Button text="Show Window 1 normal">
                   <press>
-                    <controlWindow windowId="Win2" action="show"/>
+                    <controlWindow windowId="Win2" action="show(normal)"/>
+                  </press>
+                </Button>
+
+                <Button text="Show Window 1 full screen">
+                  <press>
+                    <controlWindow windowId="Win2" action="show(fullScreen)"/>
+                  </press>
+                </Button>
+
+                <Button text="Show Window 1 minimized">
+                  <press>
+                    <controlWindow windowId="Win2" action="show(minimized)"/>
+                  </press>
+                </Button>
+
+                <Button text="Show Window 1 maximized">
+                  <press>
+                    <controlWindow windowId="Win2" action="show(maximized)"/>
                   </press>
                 </Button>
 

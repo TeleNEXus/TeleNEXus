@@ -39,8 +39,8 @@ static const struct
 
 static const struct
 {
-  QString sourceId    = "sourceId";
-  QString dataId      = "dataId";
+  QString sourceId    = "source";
+  QString dataId      = "data";
   QString format      = "format";
   QString showValue   = "showValue";
   QString hideValue   = "hideValue";

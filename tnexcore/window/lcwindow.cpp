@@ -73,7 +73,10 @@ private:
     TAction mHideAction;
   public:
     CStateMinimized(){}
-    void init(CStateBase* _stateShow, CStateBase* _stateHidden, const TAction& _hideAction)
+    void init(
+        CStateBase* _stateShow, 
+        CStateBase* _stateHidden, 
+        const TAction& _hideAction)
     {
       mpStateShow   = _stateShow;
       mpStateHidden = _stateHidden;
@@ -223,18 +226,13 @@ class CShowParameterValues
 {
 private:
   QMap<QString, LIWindow::EShowMode> mParametersMap;
-public:
-  static const QString normal;
-  static const QString fullScreen;
-  static const QString minimized;
-  static const QString maximized;
 private:
   CShowParameterValues()
   {
-    mParametersMap.insert(normal,     LIWindow::EShowMode::normal);
-    mParametersMap.insert(fullScreen, LIWindow::EShowMode::fullScreen);
-    mParametersMap.insert(minimized,  LIWindow::EShowMode::minimized);
-    mParametersMap.insert(maximized,  LIWindow::EShowMode::maximized);
+    mParametersMap.insert(QStringLiteral("normal"),     LIWindow::EShowMode::normal);
+    mParametersMap.insert(QStringLiteral("fullScreen"), LIWindow::EShowMode::fullScreen);
+    mParametersMap.insert(QStringLiteral("minimized"),  LIWindow::EShowMode::minimized);
+    mParametersMap.insert(QStringLiteral("maximized"),  LIWindow::EShowMode::maximized);
   }
   CShowParameterValues(const CShowParameterValues&) = delete;
   CShowParameterValues& operator=(const CShowParameterValues&) = delete;
@@ -263,10 +261,6 @@ public:
   }
 };
 
-const QString CShowParameterValues::normal      = "normal";
-const QString CShowParameterValues::fullScreen  = "fullScreen";
-const QString CShowParameterValues::minimized   = "minimized";
-const QString CShowParameterValues::maximized   = "maximized";
 
 //==============================================================================SLocalData
 struct SLocalData

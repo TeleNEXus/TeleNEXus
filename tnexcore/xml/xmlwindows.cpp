@@ -64,16 +64,6 @@ static const struct
   QString modality = "modality";
   QString showMode = "showMode";
   QString flags = "flags";
-
-  struct 
-  {
-    QString attribute = "event";
-    struct 
-    {
-      QString show = "show";
-      QString hide = "hide";
-    }vals;
-  }event;
   QString size = "size";
   QString position = "position";
 

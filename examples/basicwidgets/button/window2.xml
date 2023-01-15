@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<WINDOW>
+  <mainWidget>
+    <Frame>
+      <layout>
+        <LayoutVBox>
+          <widgets>
+            <Button text="Button 1" icon="file=pictures/picture_1.png">
+              <press delay="1000">
+                <writeData data="localsource:string1:string" value="Press button 1"/>
+              </press>
+              <release>
+                <writeData data="localsource:string1:string" value="Release button 1"/>
+              </release>
+            </Button>
+
+            <Button text="Button 2" icon="file=pictures/picture_2.png; size=(30,30)">
+              <press>
+                <writeData data="localsource:string2:string" value="Press button 2"/>
+              </press>
+              <release>
+                <writeData data="localsource:string2:string" value="Release button 2"/>
+              </release>
+            </Button>
+          </widgets>
+        </LayoutVBox>
+      </layout>
+    </Frame>
+  </mainWidget>
+</WINDOW>
+

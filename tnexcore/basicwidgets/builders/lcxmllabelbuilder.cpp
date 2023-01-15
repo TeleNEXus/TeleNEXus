@@ -86,8 +86,6 @@ QWidget* LCXmlLabelBuilder::buildLocal(
       return new QLabel(_element.tagName());
     };
 
-
-
   auto build_data = 
     [&_element, &_app, &ret]()
     {

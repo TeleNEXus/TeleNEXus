@@ -10,7 +10,7 @@
     title="Window 1" 
     showMode="normal"
     modality="false"
-    flags="" 
+    flags="stayOnTop" 
     position="100;100"
     size="300;100"
     screen="0">

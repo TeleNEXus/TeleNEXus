@@ -1,0 +1,38 @@
+
+<!-- All time in msec -->
+
+<BasicWidgetTag>
+  <events>
+    <press delay="1000">
+      <!-- mouse press event -->
+
+      <writeData data="sourceId:dataId:formatId" value="value"/>
+
+      <controlScript scriptId="scriptId" scriptAction="launch(500)"/>
+      <!-- <controlScript scriptId="scriptId" scriptAction="start"/> -->
+      <!-- <controlScript scriptId="scriptId" scriptAction="stop"/> -->
+
+      <controlWindow windowId="Win1" action="show(normal)"/> 
+      <!-- <controlWindow windowId="Win1" action="show(fullScreen)"/> --> 
+      <!-- <controlWindow windowId="Win1" action="show(minimized)"/> --> 
+      <!-- <controlWindow windowId="Win1" action="show(maximized)"/> --> 
+      <!-- <controlWindow windowId="Win1" action="hide"/> --> 
+    </press>
+
+    <release>
+      <!-- mouse release event -->
+      <!-- ********** -->
+    </release>
+
+    <show>
+      <!-- widget show event -->
+      <!-- ********** -->
+    </show>
+
+    <hide>
+      <!-- widget hide event -->
+      <!-- ********** -->
+    </hide>
+  </events>
+
+</BasicWidgetTag>

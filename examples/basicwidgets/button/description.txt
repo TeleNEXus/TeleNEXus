@@ -1,13 +1,14 @@
 --------------------------------------------------------------------------------
                             Label desctioptions.
 --------------------------------------------------------------------------------
-  Main tag: Label
+  Main tag: <Button>
 
+  ------------------------------------
   Attributes: 
+  ------------------------------------
 
-  ------------------------------------
-  Attributes common to base widgets
-  ------------------------------------
+  Attributes common to base widgets:
+
   file            "file"
   position        "x;y"
   fixedSize       "width;height"
@@ -19,11 +20,22 @@
                    [showValue, hideValue]=value; 
                    undefState=[show, hide]"
 
+  Specific attributes:
+
+  text    "ButtonText"
+  icon    "file=iconFileName; size=(width;height)"
+
   ------------------------------------
-  Specific attributes
+  Tags:
   ------------------------------------
-      |data       "sourceId:dataId:formatterId"
-  Or  |text       "text"
-      |movie      "movie file name"
-      |picture    "file=fileName; size=(width;height)"
+
+    <press>
+      describes the actions when the button is pressed
+      Attributes:
+        delay
+          delay in detecting a press in msec
+
+    <release>
+      describes the actions when the button is released 
+
 

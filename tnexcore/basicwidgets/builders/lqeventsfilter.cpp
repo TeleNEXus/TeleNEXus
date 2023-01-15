@@ -102,9 +102,8 @@ void LQEventsFilter::install(
     };
 
   auto install_actions =
-    [
-    &get_actions,
-    &actions_map](const QString _action_name, QEvent::Type _event_type)
+    [&get_actions,&actions_map]
+    (const QString _action_name, QEvent::Type _event_type)
     {
       TActions actions = get_actions(_action_name);
       if(actions.size() == 0) return;
