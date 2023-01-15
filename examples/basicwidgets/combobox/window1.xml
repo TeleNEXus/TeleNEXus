@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<WINDOW>
+  <mainWidget>
+    <Frame>
+      <layout>
+        <LayoutVBox>
+          <widgets>
+            <LineEdit data="localsource:val1:uint8"/>
+
+            <ComboBox data="localsource:val1:uint8">
+              <item name="value[0]" value="0"/>
+              <item name="value[1]" value="1"/>
+              <item name="value[2]" value="2"/>
+            </ComboBox>
+
+            <LineEdit data="localsource:val2:uint8"/>
+            <ComboBox dataRead="localsource:val1:uint8" dataWrite="localsource:val2:uint8">
+              <item name="value[0]" value="0"/>
+              <item name="value[1]" value="1"/>
+              <item name="value[2]" value="2"/>
+            </ComboBox>
+
+          </widgets>
+        </LayoutVBox>
+      </layout>
+    </Frame>
+  </mainWidget>
+</WINDOW>
+

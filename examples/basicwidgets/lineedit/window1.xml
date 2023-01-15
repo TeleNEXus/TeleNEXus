@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<WINDOW>
+  <mainWidget>
+    <Frame>
+      <layout>
+        <LayoutVBox>
+          <widgets>
+            <LineEdit data="localsource:val1:uint8"/>
+            <LineEdit data="localsource:val2:uint8"/>
+            <LineEdit dataRead="localsource:val1:uint8" dataWrite="localsource:val2:uint8"/>
+            <LineEdit dataRead="localsource:val2:uint8" dataWrite="localsource:val1:uint8"/>
+            <LineEdit data="localsource:string1:string"/>
+            <LineEdit data="localsource:string2:string"/>
+          </widgets>
+        </LayoutVBox>
+      </layout>
+    </Frame>
+  </mainWidget>
+</WINDOW>
+

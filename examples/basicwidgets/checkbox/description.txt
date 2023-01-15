@@ -1,0 +1,29 @@
+--------------------------------------------------------------------------------
+                            CheckBox desctioptions.
+--------------------------------------------------------------------------------
+  Main tag: CheckBox 
+
+  ------------------------------------
+  Attributes: 
+  ------------------------------------
+
+  Attributes common to base widgets:
+
+  file            "file"
+  position        "x;y"
+  fixedSize       "width;height"
+  size            "width;height"
+  style           "Style string"
+  visibility      "source=id; 
+                   data=id; 
+                   format=id; 
+                   [showValue, hideValue]=value; 
+                   undefState=[show, hide]"
+
+  Specific attributes:
+
+   data         "sourceId:dataId:formatterId"
+   checkValue   "CheckValue"
+   uncheckValue "CheckValue"
+
+

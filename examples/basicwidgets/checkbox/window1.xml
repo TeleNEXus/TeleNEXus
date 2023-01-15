@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<WINDOW>
+  <mainWidget>
+    <Frame>
+      <layout>
+        <LayoutVBox>
+          <widgets>
+            <Label data="localsource:val1:uint8"/>
+            <CheckBox data="localsource:val1:uint8" checkValue="1" uncheckValue="2"/>
+            <Label data="localsource:string1:string"/>
+            <CheckBox data="localsource:string1:string" checkValue="Check" uncheckValue="Uncheck"/>
+          </widgets>
+          <stretch/>
+        </LayoutVBox>
+      </layout>
+    </Frame>
+  </mainWidget>
+</WINDOW>
+

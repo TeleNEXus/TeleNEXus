@@ -1,0 +1,34 @@
+--------------------------------------------------------------------------------
+                            LineEdit desctioptions.
+--------------------------------------------------------------------------------
+  Main tag: LineEdit 
+
+  Attributes: 
+
+  ------------------------------------
+  Attributes common to base widgets
+  ------------------------------------
+  file            "file"
+  position        "x;y"
+  fixedSize       "width;height"
+  size            "width;height"
+  style           "Style string"
+  visibility      "source=id; 
+                   data=id; 
+                   format=id; 
+                   [showValue, hideValue]=value; 
+                   undefState=[show, hide]"
+
+  ------------------------------------
+  Specific attributes
+  ------------------------------------
+   data       "sourceId:dataId:formatterId"
+   ---
+   Or
+   ---
+   dataRead   "sourceId:dataId:formatterId"
+   dataWrite  "sourceId:dataId:formatterId"
+   ---------------------------------------
+   keyboard   "keyboardId"
+
+
