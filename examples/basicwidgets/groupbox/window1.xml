@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<WINDOW>
+  <mainWidget>
+    <Frame>
+      <layout>
+        <LayoutVBox>
+          <widgets>
+
+
+            <GroupBox label="Group Box 1">
+              <layout>
+                <LayoutVBox>
+                  <widgets>
+                    <Label text="Label 1" />
+                    <Label text="Label 2" />
+                    <Label text="Label 3" />
+                  </widgets>
+                </LayoutVBox>
+              </layout>
+            </GroupBox>
+
+
+          </widgets>
+        </LayoutVBox>
+      </layout>
+    </Frame>
+  </mainWidget>
+</WINDOW>
+

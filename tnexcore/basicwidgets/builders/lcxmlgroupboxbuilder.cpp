@@ -35,7 +35,6 @@ static const struct
 //------------------------------------------------------------------------------
 static const struct
 {
-  /* QString style = "style"; */
   QString label = "label";
 } __slAttributes;
 
