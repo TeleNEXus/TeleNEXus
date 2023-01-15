@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<WINDOW>
+  <mainWidget>
+    <Frame>
+      <widgets>
+
+        <Label data="localsource:string2:string" position="10;10" size="100; 15"/>
+
+        <TouchArea position="40;40">
+          <released picture="file=pictures/picture_1.png; size=(50,50)">
+            <writeData data="localsource:string2:string" value="Released"/>
+          </released>
+          <pressed  picture="file=pictures/picture_2.png; size=(50,50)">
+            <writeData data="localsource:string2:string" value="Pressed"/>
+          </pressed>
+        </TouchArea>
+
+      </widgets>
+    </Frame>
+  </mainWidget>
+</WINDOW>
+

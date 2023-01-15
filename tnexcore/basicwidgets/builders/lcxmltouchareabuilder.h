@@ -23,11 +23,11 @@
 
 #include "lcxmlbuilderbase.h"
 
-class LCXmlPushAreaBuilder: public LCXmlBuilderBase 
+class LCXmlTouchAreaBuilder: public LCXmlBuilderBase 
 {
 public:
-  LCXmlPushAreaBuilder();
-  virtual ~LCXmlPushAreaBuilder();
+  LCXmlTouchAreaBuilder();
+  virtual ~LCXmlTouchAreaBuilder();
 protected:
   virtual QWidget* buildLocal(
       const QDomElement& _element, const LIApplication& _app) override final;

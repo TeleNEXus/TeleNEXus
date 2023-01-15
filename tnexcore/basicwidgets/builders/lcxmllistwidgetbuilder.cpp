@@ -30,9 +30,7 @@
 static const struct
 {
   QString icon      = "icon";
-  QString format    = "format";
   QString data      = "data";
-  QString source    = "source";
   QString text      = "text";
   QString matching  = "matching";
 }__slAttributes;

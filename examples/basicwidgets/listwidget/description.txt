@@ -1,0 +1,35 @@
+--------------------------------------------------------------------------------
+                            ListWidget desctioptions.
+--------------------------------------------------------------------------------
+  Main tag: ListWidget 
+
+  ---------------------------------------
+  Attributes: 
+  ---------------------------------------
+
+  Attributes common to base widgets:
+
+  file            "file"
+  position        "x;y"
+  fixedSize       "width;height"
+  size            "width;height"
+  style           "Style string"
+  visibility      "source=id; 
+                   data=id; 
+                   format=id; 
+                   [showValue, hideValue]=value; 
+                   undefState=[show, hide]"
+
+  Specific attributes:
+
+    data       "sourceId:dataId:formatterId"
+
+  ---------------------------------------
+  Tags:
+  ---------------------------------------
+    <item>
+      Attributes:
+        icon      "file=iconFileName; size=(width;height)"
+        text      "Displayed text"
+        matching  "Matching Value"
+

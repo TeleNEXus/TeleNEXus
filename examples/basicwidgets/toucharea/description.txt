@@ -1,0 +1,38 @@
+--------------------------------------------------------------------------------
+                    TouchArea desctioptions.
+--------------------------------------------------------------------------------
+  Main tag: TouchArea
+
+  ------------------------------------
+  Attributes: 
+  ------------------------------------
+
+  Attributes common to base widgets:
+
+    file            "file"
+    position        "x;y"
+    fixedSize       "width;height"
+    size            "width;height"
+    style           "Style string"
+    visibility      "source=id; 
+    data=id; 
+    format=id; 
+    [showValue, hideValue]=value; 
+    undefState=[show, hide]"
+
+  Specific attributes:
+
+  Tags:
+
+    <pressed>
+      describes the actions when the touch area is pressed
+      Attributes:
+         picture    "file=fileName; size=(width,height)" 
+         movie      "fileName"
+
+    <released>
+      describes the actions when the touch area is released 
+      Attributes:
+         picture    "file=fileName; size=(width,height)" 
+         movie      "fileName"
+

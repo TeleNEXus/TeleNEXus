@@ -19,7 +19,7 @@
  * along with TeleNEXus.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "lcxmlpushareabuilder.h"
+#include "lcxmltouchareabuilder.h"
 #include "lcxmlstdactionbuilder.h"
 
 #include "widgets/lcqpushlabel.h"
@@ -42,23 +42,23 @@ static const struct
 
 static const struct 
 {
-  QString pressed  = "press";
-  QString released = "release";
+  QString pressed  = "pressed";
+  QString released = "released";
 }__slTags;
 
 //==============================================================================
-LCXmlPushAreaBuilder::LCXmlPushAreaBuilder()
+LCXmlTouchAreaBuilder::LCXmlTouchAreaBuilder()
 {
 }
 
 //------------------------------------------------------------------------------
-LCXmlPushAreaBuilder::~LCXmlPushAreaBuilder()
+LCXmlTouchAreaBuilder::~LCXmlTouchAreaBuilder()
 {
 }
 
 
 //------------------------------------------------------------------------------
-QWidget* LCXmlPushAreaBuilder::buildLocal(
+QWidget* LCXmlTouchAreaBuilder::buildLocal(
     const QDomElement& _element, const LIApplication& _app)
 {
 
