@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<WINDOW>
+  <mainWidget>
+    <Frame>
+      <layout>
+        <LayoutVBox>
+          <widgets>
+
+            <ComboBox data="localsource:string1:string">
+              <item name="String 1" value="String 1"/>
+              <item name="String 2" value="String 2"/>
+              <item name="String 3" value="String 3"/>
+              <item name="String 4" value="String 4"/>
+            </ComboBox>
+
+            <LineEdit data="localsource:string1:string"/>
+
+            <StackWidget data="localsource:string1:string">
+              <itemUndef>
+                <Label text="Undefined data value."/>
+              </itemUndef>
+              <itemWrong>
+                <Label text="Wrong data value."/>
+              </itemWrong>
+              <item matching="String 1">
+                <Label picture="file=pictures/picture_1.png"/>
+              </item>
+              <item matching="String 2">
+                <Label picture="file=pictures/picture_2.png"/>
+              </item>
+              <item matching="String 3">
+                <Label movie="movies/movie_1.gif"/>
+              </item>
+              <item matching="String 4">
+                <Label movie="movies/movie_2.gif"/>
+              </item>
+            </StackWidget>
+
+            <!-- Undefined data value example (data id string3 does not exist) -->
+            <StackWidget data="localsource:string3:string">
+              <itemUndef>
+                <Label text="Undefined data value."/>
+              </itemUndef>
+              <itemWrong>
+                <Label text="Wrong data value."/>
+              </itemWrong>
+              <item matching="String 1">
+                <Label picture="file=pictures/picture_1.png"/>
+              </item>
+              <item matching="String 2">
+                <Label picture="file=pictures/picture_2.png"/>
+              </item>
+            </StackWidget>
+
+          </widgets>
+        </LayoutVBox>
+      </layout>
+    </Frame>
+  </mainWidget>
+</WINDOW>
+

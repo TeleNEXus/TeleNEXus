@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<WINDOW>
+  <mainWidget>
+    <Table>
+      <row label="Row 1"/>
+      <row label="Row 2"/>
+      <row label="Row 3"/>
+
+      <col label="Column 1">
+        <Label text="Col 1; Row 1"/>
+        <Label text="Col 1; Row 2"/>
+        <Label text="Col 1; Row 3"/>
+      </col>
+
+      <col label="Column 2">
+        <Label text="Col 2; Row 1"/>
+        <Label text="Col 2; Row 2"/>
+        <Label text="Col 2; Row 3"/>
+      </col>
+
+      <col label="Column 3">
+        <Label text="Col 3; Row 1"/>
+        <Label text="Col 3; Row 2"/>
+        <Label text="Col 3; Row 3"/>
+      </col>
+
+    </Table>
+  </mainWidget>
+</WINDOW>
+

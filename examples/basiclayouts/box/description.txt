@@ -1,0 +1,27 @@
+--------------------------------------------------------------------------------
+                            Box layout desctioptions.
+--------------------------------------------------------------------------------
+  Main tag: LayoutVBox, LayoutHBox
+
+  Attributes: 
+    spacing   "Spacing in pixels"
+    dir       "[reverse, forward]"
+
+  Tags:
+
+    <widgets>
+      Widgets list
+    </widgets>
+      Attributes:
+        align   "left|right|center|hcenter|top|bottom|vcenter"
+
+    <layouts>
+      Layouts list
+    </layouts>
+
+    <spacing/>
+      Attributes:
+        value="Spacing in pixels"
+
+    <stretch/>
+

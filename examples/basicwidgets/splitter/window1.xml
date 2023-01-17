@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<WINDOW>
+  <mainWidget>
+    <Frame>
+      <layout>
+        <LayoutVBox>
+          <widgets>
+
+            <SplitterVertical>
+              <LineEdit data="localsource:string1:string"/>
+              <LineEdit data="localsource:string2:string"/>
+            </SplitterVertical>
+
+          </widgets>
+          <layouts>
+            <LayoutHBox>
+              <widgets>
+
+                <SplitterHorizontal>
+                  <LineEdit data="localsource:string1:string"/>
+                  <LineEdit data="localsource:string2:string"/>
+                </SplitterHorizontal>
+
+              </widgets>
+            </LayoutHBox>
+          </layouts>
+        </LayoutVBox>
+      </layout>
+    </Frame>
+  </mainWidget>
+</WINDOW>
+

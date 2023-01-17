@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<WINDOW>
+  <mainWidget>
+    <ScrollArea>
+      <Frame>
+        <widgets>
+          <Label text="Label 1" position="10;10"/>
+          <Label text="Label 2" position="40;30"/>
+          <Label text="Label 3" position="70;50"/>
+          <Label text="Label 4" position="100;70"/>
+          <Label text="Label 5" position="120;90"/>
+          <Label text="Label 6" position="150;110"/>
+          <Label text="Label 7" position="180;130"/>
+        </widgets>
+      </Frame>
+    </ScrollArea>
+  </mainWidget>
+</WINDOW>

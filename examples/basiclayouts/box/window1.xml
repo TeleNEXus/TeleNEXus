@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<WINDOW>
+  <mainWidget>
+    <Frame>
+      <layout>
+        <LayoutVBox spacing="10">
+
+          <widgets>
+            <Label text="Label 1"/>
+            <Label text="Label 2"/>
+            <Label text="Label 3"/>
+          </widgets>
+
+          <spacing value="50"/>
+
+          <widgets align="right">
+            <Label text="Label 4"/>
+            <Label text="Label 5"/>
+            <Label text="Label 6"/>
+          </widgets>
+
+          <stretch/>
+
+          <widgets>
+            <Label text="Label 4"/>
+            <Label text="Label 5"/>
+            <Label text="Label 6"/>
+          </widgets>
+
+          <stretch/>
+
+          <layouts>
+            <LayoutHBox dir="reverse">
+              <widgets>
+                <Label text="Label 7"/>
+                <Label text="Label 8"/>
+                <Label text="Label 9"/>
+              </widgets>
+            </LayoutHBox>
+          </layouts>
+
+        </LayoutVBox>
+
+      </layout>
+    </Frame>
+  </mainWidget>
+</WINDOW>
+

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<WINDOW>
+  <mainWidget>
+    <Frame>
+      <layout>
+
+        <LayoutGrid hspacing="50" vspacing="20">
+
+          <row minheight="100">
+            <stretch/>
+            <widgets align="left">
+              <Label text="Label 11"/>
+              <Label text="Label 12"/>
+              <Label text="Label 13"/>
+            </widgets>
+          </row>
+
+          <row>
+            <widgets>
+              <Label text="Label 21"/>
+              <Label text="Label 22"/>
+              <Label text="Label 23"/>
+            </widgets>
+          </row>
+          <row>
+            <widgets>
+              <Label text="Label 31"/>
+              <Label text="Label 32"/>
+              <Label text="Label 33"/>
+            </widgets>
+          </row>
+          <col minwidth="100">
+            <stretch/>
+            <widgets align="right">
+              <Label text="Label 14"/>
+              <Label text="Label 24"/>
+              <Label text="Label 34"/>
+            </widgets>
+          </col>
+
+        </LayoutGrid>
+
+      </layout>
+    </Frame>
+  </mainWidget>
+</WINDOW>
+

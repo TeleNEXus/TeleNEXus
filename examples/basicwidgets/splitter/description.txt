@@ -1,0 +1,27 @@
+--------------------------------------------------------------------------------
+                            Splitter desctioptions.
+--------------------------------------------------------------------------------
+  Main tags: SplitterVertical, SplitterHorizontal
+
+  ---------------------------------------
+  Attributes: 
+  ---------------------------------------
+
+  Attributes common to base widgets:
+
+  file            "file"
+  position        "x;y"
+  fixedSize       "width;height"
+  size            "width;height"
+  style           "Style string"
+  visibility      "source=id; 
+                   data=id; 
+                   format=id; 
+                   [showValue, hideValue]=value; 
+                   undefState=[show, hide]"
+
+  Specific attributes:
+
+  ---------------------------------------
+  Tags:
+  ---------------------------------------

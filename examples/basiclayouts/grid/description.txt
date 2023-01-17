@@ -1,0 +1,36 @@
+--------------------------------------------------------------------------------
+                            Grid layout desctioptions.
+--------------------------------------------------------------------------------
+  Main tag: LayoutGrid
+
+  Attributes: 
+    hspacing   "Horizontal spacing in pixels"
+    vspacing   "Vertical spacing in pixels"
+
+  Tags:
+
+    <row>
+      Attributes:
+        minheight   "Minimum height value"
+
+      Tags:
+        <widgets>
+          Attributes:
+            align   "left|right|center|hcenter|top|bottom|vcenter"
+        <layouts>
+        <stretch>
+          Attributes:
+            value   "Stretch value"
+
+    <col>
+      Attributes:
+        minwidth   "Minimum width value"
+      Tags:
+        <widgets>
+          Attributes:
+            align   "left|right|center|hcenter|top|bottom|vcenter"
+        <layouts>
+        <stretch>
+          Attributes:
+            value   "Stretch value"
+

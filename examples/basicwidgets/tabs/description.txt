@@ -1,0 +1,33 @@
+--------------------------------------------------------------------------------
+                    Tabs desctioptions.
+--------------------------------------------------------------------------------
+  Main tag: Tabs 
+
+  ------------------------------------
+  Attributes: 
+  ------------------------------------
+
+  Attributes common to base widgets:
+
+    file            "file"
+    position        "x;y"
+    fixedSize       "width;height"
+    size            "width;height"
+    style           "Style string"
+    visibility      "source=id; 
+    data=id; 
+    format=id; 
+    [showValue, hideValue]=value; 
+    undefState=[show, hide]"
+
+  Specific attributes:
+    side          "[Top, Bottom, Right, Left]"
+    styleBar      "Style of the bar"
+
+  Tags:
+
+    <item>
+      Attributes:
+        text  "Text field"
+        icon  "file=iconFileName; size=(width,height)"
+

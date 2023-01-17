@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<WINDOW>
+  <mainWidget>
+    <Tabs side="Left">
+      <item text="Tab 1">
+        <Label text="Label tab 1"/>
+      </item>
+      <item text="Tab 2">
+        <Label text="Label tab 2"/>
+      </item>
+      <item text="Tab 3">
+        <Label text="Label tab 3"/>
+      </item>
+      <item text="Tab 4">
+        <Label text="Label tab 4"/>
+      </item>
+      <item text="Tab 5">
+        <Label text="Label tab 5"/>
+      </item>
+    </Tabs>
+  </mainWidget>
+</WINDOW>
+
