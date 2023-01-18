@@ -1,4 +1,4 @@
-﻿/* 
+﻿/*
  * TeleNEXus is a simple SCADA programm
  *
  * Copyright (C) 2020 Sergey S. Kuzmenko
@@ -28,31 +28,32 @@
 class LCFormatterF32 : public LCFormatterBase
 {
 private:
-    int     mFieldWidth;        //Ширина поля.
-    char    mFormat;
-    int     mPrecision;
-    QChar   mFillChar;          //Символ заполнения выравнивания.
-    float   mLessIsZero;
+  int     mFieldWidth;
+  char    mFormat;
+  int     mPrecision;
+  QChar   mFillChar;
+  float   mLessIsZero;
 
-    QDoubleValidator mValidator;   //Контроллер диапазона ввода.
+  QDoubleValidator mValidator;
 
 public:
-    explicit LCFormatterF32(    int     _fieldWidth     = 0,
-                                          char    _format         = 'g',
-                                          int     _precision      = -1,
-                                          int     _decimals       = 1000,
-                                          QChar   _fillChar       = QChar(' '),
-                                          float   _lessIsZero     = 0.0f);
-    virtual ~LCFormatterF32();
-    virtual QString     toString(const QByteArray& _data) override;
-    virtual QByteArray  toBytes(const QString& _str) override;
-    virtual QValidator* validator() override;
+  explicit LCFormatterF32(
+      int     _fieldWidth     = 0,
+      char    _format         = 'g',
+      int     _precision      = -1,
+      int     _decimals       = 1000,
+      QChar   _fillChar       = QChar(' '),
+      float   _lessIsZero     = 0.0f);
+  virtual ~LCFormatterF32();
+  virtual QString     toString(const QByteArray& _data) override;
+  virtual QByteArray  toBytes(const QString& _str) override;
+  virtual QValidator* validator() override;
 
-    void setFieldWidth(int _fieldWidth){mFieldWidth = _fieldWidth;}
-    void setFillChar(QChar _c){mFillChar = _c;}
-    void setFormat(char _format){mFormat = _format;}
-    void setPrecision(int _precision){mPrecision = _precision;}
-    void setLessIsZero(float _lessIsZero);
+  void setFieldWidth(int _fieldWidth){mFieldWidth = _fieldWidth;}
+  void setFillChar(QChar _c){mFillChar = _c;}
+  void setFormat(char _format){mFormat = _format;}
+  void setPrecision(int _precision){mPrecision = _precision;}
+  void setLessIsZero(float _lessIsZero);
 };
 
 

@@ -119,7 +119,7 @@ public:
           int base = attr.toInt(&flag);
           if(flag)
           {
-            _formatter->setFieldWidth(base);
+            _formatter->setBase(base);
           }
         }
 
@@ -136,7 +136,8 @@ public:
     __formatterCreators.insert(__slStdFormatterNames.format_bitfield,
         [](const QDomElement& _element)
         {
-          TFormatter std_bitfield = __slStdFormattersMap.value(__slStdFormatterNames.format_bitfield); 
+          TFormatter std_bitfield =
+            __slStdFormattersMap.value(__slStdFormatterNames.format_bitfield); 
           bool ok_size = false;
           int size = 0;
           QChar separator;
