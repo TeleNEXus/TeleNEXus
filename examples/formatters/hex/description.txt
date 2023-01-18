@@ -1,0 +1,16 @@
+--------------------------------------------------------------------------------
+                        hex
+--------------------------------------------------------------------------------
+  Desctiprion of the hex-based format. 
+    Tag:
+      std
+
+        Common attributes:
+          id        "NewFormatIdString"
+          format    "hex"
+
+        Additional attribute:
+          dataSize  "DataSizeInBytes"
+          separator "Char for separate 2 tetrads"
+       
+

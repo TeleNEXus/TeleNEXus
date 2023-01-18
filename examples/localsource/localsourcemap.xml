@@ -1,0 +1,19 @@
+<localsourcemap>
+
+  <bits  id="bits_val_bits_1"  defval="1101"/>
+  <bits  id="bits_val_bits_2"  size="6"/>
+
+  <bytes id="bytes_val_uint8"     type="uint8"      defval="1"/>
+  <bytes id="bytes_val_uint16"    type="uint16"     defval="2"/>
+  <bytes id="bytes_val_uint32"    type="uint32"     defval="3"/>
+  <bytes id="bytes_val_int8"      type="int8"       defval="4"/>
+  <bytes id="bytes_val_int16"     type="int16"      defval="5"/>
+  <bytes id="bytes_val_int32"     type="int32"      defval="6"/>
+  <bytes id="bytes_val_float32"   type="float32"    defval="7"/>
+  <bytes id="bytes_val_string"    type="string"     defval="Type string"/>
+
+  <string id="string_val_string" defval="String Value"/>
+  <stream id="stream_textstream" />
+
+</localsourcemap>
+

@@ -1,0 +1,15 @@
+--------------------------------------------------------------------------------
+                        bitfield
+--------------------------------------------------------------------------------
+  Desctiprion of the bitfield-based format. 
+    Tag:
+      std
+
+        Common attributes:
+          id        "NewFormatIdString"
+          format    "bitfield"
+
+        Additional attribute:
+          dataSize  "DataSizeInBytes"
+          separator "Char for separate 8-bits"
+       

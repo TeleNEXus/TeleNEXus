@@ -1,0 +1,17 @@
+--------------------------------------------------------------------------------
+                        ints
+--------------------------------------------------------------------------------
+  Desctiprion of the bool-based format. 
+    Tag:
+      std
+
+        Common attributes:
+          id        "NewFormatIdString"
+          format    "[uint8, int8, uint16, int16, uint32, int32]"
+
+        Additional attribute:
+          fieldWidth    "The count of characters in the notation of the number"
+          base          "Number system"
+          fillChar      "Filling character"
+
+

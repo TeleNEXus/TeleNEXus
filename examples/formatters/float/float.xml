@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<Frame>
+  <layout>
+    <LayoutVBox>
+      <widgets>
+        <LineEdit data="localsource:val_float32:float32"/>
+        <Label data="localsource:val_float32:float32"/>
+        <Label data="localsource:val_float32:float32_fw5_p1_mf_liz0.1_fc0"/>
+        <Label data="localsource:val_float32:float32_fw9_p5_mf_fc0"/>
+      </widgets>
+      <stretch/>
+    </LayoutVBox>
+  </layout>
+</Frame>
+

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<Frame>
+  <layout>
+    <LayoutVBox>
+      <widgets>
+        <LineEdit data="localsource:val_uint8:uint8"/>
+        <LineEdit data="localsource:val_uint8:bool_+-"/>
+        <Label data="localsource:val_uint8:bool"/>
+        <Label data="localsource:val_uint8:bool_+-"/>
+      </widgets>
+      <stretch/>
+    </LayoutVBox>
+  </layout>
+</Frame>
+

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<WINDOW>
+  <mainWidget>
+    <Tabs>
+
+      <item text="bitfield">
+        <Frame file="bitfield/bitfield.xml"/>
+      </item>
+
+      <item text="bits">
+        <Frame file="bits/bits.xml"/>
+      </item>
+
+      <item text="hex">
+        <Frame file="hex/hex.xml"/>
+      </item>
+
+      <item text="bool">
+        <Frame file="bool/bool.xml"/>
+      </item>
+
+      <item text="ints">
+        <Frame file="ints/ints.xml"/>
+      </item>
+
+      <item text="float">
+        <Frame file="float/float.xml"/>
+      </item>
+
+      <item text="string">
+        <Frame file="string/string.xml"/>
+      </item>
+
+      <item text="textstream">
+        <Frame file="textstream/textstream.xml"/>
+      </item>
+
+      <item text="script">
+        <Frame file="script/script.xml"/>
+      </item>
+
+    </Tabs>
+  </mainWidget>
+</WINDOW>
+

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<Frame>
+  <layout>
+    <LayoutVBox>
+      <widgets>
+        <LineEdit data="localsource:val_uint16:uint16"/>
+        <LineEdit data="localsource:val_uint16:uint16_fw5_b10_fc0"/>
+        <Label data="localsource:val_uint16:uint16"/>
+        <Label data="localsource:val_uint16:uint16_fw5_b10_fc0"/>
+        <Label data="localsource:val_uint16:uint16_fw16_b2_fc0"/>
+        <Label data="localsource:val_uint16:uint16_fw4_b16_fc0"/>
+      </widgets>
+      <stretch/>
+    </LayoutVBox>
+  </layout>
+</Frame>
+
+

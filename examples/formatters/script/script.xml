@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<Frame>
+  <layout>
+    <LayoutVBox>
+      <widgets>
+        <LineEdit data="localsource:val_uint32:uint32"/>
+        <LineEdit data="localsource:val_uint32:scaledInt32_xxx.x"/>
+        <Label data="localsource:val_uint32:uint32"/>
+        <Label data="localsource:val_uint32:scaledInt32_xxx.x"/>
+      </widgets>
+      <stretch/>
+    </LayoutVBox>
+  </layout>
+</Frame>
+
+
+

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<Frame>
+  <layout>
+    <LayoutVBox>
+      <widgets>
+        <LineEdit data="localsource:val_uint16:uint16"/>
+        <LineEdit data="localsource:val_uint16:bitfield1"/>
+        <Label data="localsource:val_uint16:bitfield"/>
+        <Label data="localsource:val_uint16:bitfield1"/>
+      </widgets>
+      <stretch/>
+    </LayoutVBox>
+  </layout>
+</Frame>
+

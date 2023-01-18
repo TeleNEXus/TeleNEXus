@@ -1,0 +1,19 @@
+<Frame>
+  <layout>
+    <LayoutVBox>
+      <widgets>
+
+        <Label text="Use specific character sequences: \0 \b \f \n \r \t \v \x0000"/>
+        <LineEdit data="localsource:textstream:textstream"/>
+        <Label data="localsource:textstream:textstream"/>
+        <Button text="Write to text stream">
+          <press>
+            <writeData data="localsource:textstream:textstream" value="Test text string"/>
+          </press>
+        </Button>
+      </widgets>
+      <stretch/>
+    </LayoutVBox>
+  </layout>
+</Frame>
+

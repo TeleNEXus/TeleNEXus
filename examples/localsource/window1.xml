@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<WINDOW>
+  <mainWidget>
+    <Table>
+      <col label="ID" width="150"/>
+      <col label="Show Value" width="150"/>
+      <col label="Change Value" width="150"/>
+      <row>
+        <Label text="bits_val_bits_1"/>
+        <Label data="localsource:bits_val_bits_1:bits"/>
+        <LineEdit data="localsource:bits_val_bits_1:bits"/>
+      </row>
+      <row>
+        <Label text="bits_val_bits_2"/>
+        <Label data="localsource:bits_val_bits_2:bits"/>
+        <LineEdit data="localsource:bits_val_bits_2:bits"/>
+      </row>
+      <row>
+        <Label text="bytes_val_uint8"/>
+        <Label data="localsource:bytes_val_uint8:uint8"/>
+        <LineEdit data="localsource:bytes_val_uint8:uint8"/>
+      </row>
+      <row>
+        <Label text="bytes_val_uint16"/>
+        <Label data="localsource:bytes_val_uint16:uint16"/>
+        <LineEdit data="localsource:bytes_val_uint16:uint16"/>
+      </row>
+      <row>
+        <Label text="bytes_val_uint32"/>
+        <Label data="localsource:bytes_val_uint32:uint32"/>
+        <LineEdit data="localsource:bytes_val_uint32:uint32"/>
+      </row>
+      <row>
+        <Label text="bytes_val_int8"/>
+        <Label data="localsource:bytes_val_int8:int8"/>
+        <LineEdit data="localsource:bytes_val_int8:int8"/>
+      </row>
+      <row>
+        <Label text="bytes_val_int16"/>
+        <Label data="localsource:bytes_val_int16:int16"/>
+        <LineEdit data="localsource:bytes_val_int16:int16"/>
+      </row>
+      <row>
+        <Label text="bytes_val_int32"/>
+        <Label data="localsource:bytes_val_int32:int32"/>
+        <LineEdit data="localsource:bytes_val_int32:int32"/>
+      </row>
+      <row>
+        <Label text="bytes_val_float32"/>
+        <Label data="localsource:bytes_val_float32:float32"/>
+        <LineEdit data="localsource:bytes_val_float32:float32"/>
+      </row>
+      <row>
+        <Label text="bytes_val_string"/>
+        <Label data="localsource:bytes_val_string:string"/>
+        <LineEdit data="localsource:bytes_val_string:string"/>
+      </row>
+
+      <row>
+        <Label text="string_val_string"/>
+        <Label data="localsource:string_val_string:string"/>
+        <LineEdit data="localsource:string_val_string:string"/>
+      </row>
+
+      <row>
+        <Label text="stream_textstream"/>
+        <Label data="localsource:stream_textstream:string"/>
+        <LineEdit data="localsource:stream_textstream:string"/>
+      </row>
+      <row>
+        <Label text=""/>
+        <Label text=""/>
+        <Button text="Write to text stream">
+          <press>
+            <writeData data="localsource:stream_textstream:string" value="Test text string"/>
+          </press>
+        </Button>
+      </row>
+
+    </Table>
+  </mainWidget>
+</WINDOW>
+

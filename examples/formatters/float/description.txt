@@ -1,0 +1,24 @@
+--------------------------------------------------------------------------------
+                        float32
+--------------------------------------------------------------------------------
+  Desctiprion of the float32-based format. 
+    Tag:
+      std
+
+        Common attributes:
+          id        "NewFormatIdString"
+          format    "[float32]"
+
+        Additional attribute:
+          fieldWidth    "The count of characters in the notation of the number"
+          precision     "Number simbols after point"
+          fillChar      "Filling character"
+          mode          "[e, E, f, g, G]"
+                        where:
+                          e	- format as [-]9.9e[+|-]999
+                          E	- format as [-]9.9E[+|-]999
+                          f	- format as [-]9.9
+                          g	- use e or f format, whichever is the most concise
+                          G	- use E or f format, whichever is the most concise
+          lessIsZero    "The lower value is displayed as zero"
+

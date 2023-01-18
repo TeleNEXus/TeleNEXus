@@ -1,0 +1,13 @@
+<localsourcemap>
+
+  <bytes id="val_uint8"   type="uint8"      defval="1"/>
+  <bytes id="val_uint16"  type="uint16"     defval="0"/>
+  <bytes id="val_uint32"  type="uint32"     defval="0"/>
+  <bytes id="val_float32" type="float32"    defval="0"/>
+
+  <string id="val_string" defval="String Value 1"/>
+  <stream id="textstream" />
+
+
+</localsourcemap>
+

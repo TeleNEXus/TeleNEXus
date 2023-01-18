@@ -1,0 +1,15 @@
+--------------------------------------------------------------------------------
+                        bits
+--------------------------------------------------------------------------------
+  Desctiprion of the bits-based format. 
+    Tag:
+      std
+
+        Common attributes:
+          id        "NewFormatIdString"
+          format    "bits"
+
+        Additional attribute:
+          dataSize  "DataSizeInBytes"
+          separator "Char for separate bits"
+

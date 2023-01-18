@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<DATAFORMATS>
+
+  <std id="bitfield1" format="bitfield" dataSize="2" separator=" "/>
+  <std id="bits1"     format="bits"     dataSize="2" separator=" "/>
+  <std id="hex1"      format="hex"      dataSize="2" separator=" "/>
+  <std id="bool_+-"   format="bool"     true="+"     false="-"/>
+  <std id="uint16_fw16_b2_fc0"  format="uint16"   fieldWidth="16" base="2"  fillChar="0"/>
+  <std id="uint16_fw5_b10_fc0"  format="uint16"   fieldWidth="5"  base="10" fillChar="0"/>
+  <std id="uint16_fw4_b16_fc0"  format="uint16"   fieldWidth="4"  base="16" fillChar="0"/>
+  <std id="float32_fw5_p1_mf_liz0.1_fc0"  format="float32" fieldWidth="5"  precision="1" mode="f" lessIsZero="0.1" fillChar="0"/>
+  <std id="float32_fw9_p5_mf_fc0"         format="float32" fieldWidth="9"  precision="5" mode="f" fillChar="0"/>
+
+  <script id="scaledInt32_xxx.x" file="script/scaledInt32.js">
+    <attributes min="-999.99" max="999.99" format="xxx.xx" />
+    <attributes file="scripts/formatters/scaledInt32.js" id="scaledInt32_xxx.x" />
+  </script>
+
+</DATAFORMATS>
+
+

@@ -1,0 +1,15 @@
+--------------------------------------------------------------------------------
+                        bool
+--------------------------------------------------------------------------------
+  Desctiprion of the bool-based format. 
+    Tag:
+      std
+
+        Common attributes:
+          id        "NewFormatIdString"
+          format    "bool"
+
+        Additional attribute:
+          true      "True string"
+          false     "False string"
+
