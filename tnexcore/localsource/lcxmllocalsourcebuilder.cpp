@@ -55,8 +55,6 @@ static const struct
   QString type_int32    = "int32";
   QString type_float32  = "float32";
   QString type_string   = "string";
-  QString type_string16 = "string16";
-  QString type_hex      = "hex";
 }__slBytesTypes;
 
 //==============================================================================
