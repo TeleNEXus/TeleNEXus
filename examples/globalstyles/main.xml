@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<APPLICATION>
+
+  <GLOBALSTYLE file="Darkeum.qss"/>
+  <!-- <GLOBALSTYLE file="Integrid.qss"/> -->
+
+  <SOURCES>
+    <Localsources>
+      <source id="localsource" mapfile="localsourcemap.xml"  />
+    </Localsources>
+  </SOURCES>
+
+  <WINDOW 
+    id="Window1" 
+    file="window1.xml"
+    visible="true"
+    title="Window 1" 
+    showMode="normal"
+    modality="false"
+    flags="" 
+    position="100;100" 
+    size="400;300"
+    screen="0"/>
+
+</APPLICATION>

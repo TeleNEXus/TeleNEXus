@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Table 
+  styleTable="$(TableStyle1)" 
+  styleHeader="$(TableHeaderStyle1)" 
+  styleCorner="$(TableCornerstyle1)">
+  <col label="Collumn 1"/>
+  <col label="Collumn 2"/>
+  <col label="Collumn 3"/>
+  <row>
+    <Label text="Text label 11"/>
+    <Label text="Text label 12"/>
+    <Label text="Text label 13"/>
+  </row>
+  <row>
+    <Label text="Text label 21"/>
+    <Label text="Text label 22"/>
+    <Label text="Text label 23"/>
+  </row>
+  <row>
+    <Label text="Text label 31"/>
+    <Label text="Text label 32"/>
+    <Label text="Text label 33"/>
+  </row>
+</Table>
+

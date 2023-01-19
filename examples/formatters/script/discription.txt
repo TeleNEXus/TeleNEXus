@@ -1,23 +1,24 @@
 --------------------------------------------------------------------------------
       java script formatter
 --------------------------------------------------------------------------------
-Preface:
-  Destined for formatting non-standard data type. 
+1. Abstract:
+  Destined for formatting non-standard data type or non-standard formatting. 
 
-Java script requirements:
+2. Java script requirements:
   The script must contain the implementation of three functions:
     1) function Validate(string value)
     2) function ToString(bytes array)
     3) function ToBytes(string value)
 
-Script integrated in formatters xml file:
-  Tag:
-    <script>
-      Attributes:
-        id    "formatter id string"
-        file  "java script file name"
-      Tags:
-        <attributes>
-          Attributes:
-            Any attributes defined by the developer for passing to the script.
-            These attributes can be read using the global variable "Attributes".
+3. Script element description.
+    Tag:
+      <script>
+        Attributes:
+          id    "formatter id string"
+          file  "java script file name"
+        Tags:
+          <attributes>
+            Attributes:
+              Any attributes defined by the developer for passing 
+              to the script. These attributes can be read using the 
+              global variable "Attributes".

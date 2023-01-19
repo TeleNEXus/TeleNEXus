@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Table 
+  styleTable="$(TableStyle1)" 
+  styleHeader="$(TableHeaderStyle1)" 
+  styleCorner="$(TableCornerstyle1)">
+  <col label="Collumn 1"/>
+  <col label="Collumn 2"/>
+  <col label="Collumn 3"/>
+  <row>
+    <Label text="Text label 11"  style="(...){color: rgb(255,0,0)}"/>
+    <Label text="Text label 12"  style="(...){color: green}"/>
+    <Label text="Text label 13"  style="(...){color: green}"/>
+  </row>
+  <row>
+    <Label text="Text label 21" style="(...){color: green}"/>
+    <Label text="Text label 22" style="(...){color: rgb(0,255,0)}"/>
+    <Label text="Text label 23" style="(...){color: green}"/>
+  </row>
+  <row>
+    <Label text="Text label 31" style="(...){color: green}"/>
+    <Label text="Text label 32" style="(...){color: green}"/>
+    <Label text="Text label 33" style="(...){color: rgb(0,0,255)}"/>
+  </row>
+</Table>
+

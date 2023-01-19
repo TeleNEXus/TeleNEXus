@@ -1,0 +1,35 @@
+--------------------------------------------------------------------------------
+                Section WIDGETSTYLES desctiption.
+--------------------------------------------------------------------------------
+
+1. Abstract.
+
+1.1 Introduction.
+  The TeleNEXus widget style system is designed to expand the capabilities
+  of the developer in the field of user interface design and is based on 
+  Qt Style Sheets. When creating a new style for a widget, one additional rule 
+  is used - the widget class name must be replaced with the entry "(...)".
+
+1.2 WIDGETSTYLES section.
+   Designed to describe common styles for groups of the same type of widgets for
+   further use of them using the "style" attribute. For use
+   The style described in the WIDGETSTYLES section uses a line like this:
+     "$(StyleId)"
+     where:
+       $()      - key symbols;
+       StyleId  - string identifier of the style described 
+                  in the WIDGETSTYLE section.
+
+2. Section element description.
+
+Main Tag: 
+  <WIDGETSTYLES>
+    Attributes: 
+      file  "File name"
+    Tags:
+      <Developer-defined style identifier>
+        Attributes:
+             |file    "file with style sheet"
+          Or | 
+             |style   "Style sheet"
+

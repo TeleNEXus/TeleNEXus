@@ -1,0 +1,22 @@
+--------------------------------------------------------------------------------
+                Section GLOBALSTYLE desctiption.
+--------------------------------------------------------------------------------
+
+1. Abstract.
+
+1.1 Introduction.
+  The TeleNEXus widget style system is designed to expand the capabilities
+  of the developer in the field of user interface design and is based on 
+  Qt Style Sheets.
+
+1.2 GLOBALSTYLE section.
+  This section is intended for connecting the style file of 
+  the whole application.
+
+2. Section element description.
+
+Main Tag: 
+  <GLOBALSTYLE>
+    Attributes: 
+      file  "File name of style sheet"
+

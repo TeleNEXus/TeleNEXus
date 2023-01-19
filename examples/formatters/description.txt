@@ -1,27 +1,37 @@
 --------------------------------------------------------------------------------
-                            DATAFORMATS desctioptions.
+                            DATAFORMATS desctiption.
 --------------------------------------------------------------------------------
-  Main tag: DATAFORMATS
+1. Abstract:
+  The section is intended for adding additional methods of processing 
+  data defined by the developer.
 
-  Attributes: 
+2. Section element description.
 
-  Tags:
-    <std>
-      Common attributes:
-        id      "Formatter's id"
-        format  "[bitfield, bits, hex, bool, uint8, int8, uint16, int16,
-                  uint32, int32, float32, string, textstream]"
-      Attributes:
-        Specific to a given base format.
+Main Tag: 
+  <DATAFORMATS>
+    Attributes: 
+      file  "Data formats file name"
+    Tags:
+      <std>
+        Abstract:
+          Formatting methods based on standard.
+        Common attributes:
+          id      "Formatter's id"
+          format  "[bitfield, bits, hex, bool, uint8, int8, uint16, int16,
+                    uint32, int32, float32, string, textstream]"
+        Attributes:
+          Specific to a given base format.
 
-    <script>
-      Attributes:
-        id      "Formatter's id"
-        file    "Java script file name"
-      Tags:
-        <atributes>
-          Attributes:
-            Any attributes defined by the developer for passing to the script.
-            These attributes can be read using the global variable "Attributes".
+      <script>
+        Abstract:
+          Formatting methods based on JavaScript.
+        Attributes:
+          id      "Formatter's id"
+          file    "Java script file name"
+        Tags:
+          <atributes>
+            Abstract:
+              Any attributes defined by the developer for passing to the script.
+              These attributes can be read using the global variable "Attributes".
           
 

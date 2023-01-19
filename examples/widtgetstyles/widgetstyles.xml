@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<WIDGETSTYLES>
+  <LabelStyle1  style="(...){color:red; font: 30pt italic blod Arial}"/>
+  <ButtonStyle1 style="(...){color:red}"/>
+  <ButtonStyle2 style="
+    (...):hover {background:blue; color:red}
+    (...):!hover {background:red; color:blue}
+    "/>
+  <ButtonStyle3 file="button.style" />
+  <TableStyle1       style = "(...){background:lightgrey}"           />
+  <TableHeaderStyle1 style = "(...){background:blue; color:yellow}"  />
+  <TableCornerstyle1 style = "(...){background:blue; color:yellow}"  />
+  <LineEditStyle1 style="(...){color:red; background: black; font: bold italic 16pt DejavuSansMono}"/>
+  <LineEditStyle2 style="(...){color:green; background: black; font: bold italic 16pt DejavuSansMono}"/>
+  <LineEditStyle3 style="(...){color:yellow; background: black; font: bold italic 16pt DejavuSansMono}"/>
+
+</WIDGETSTYLES>
+
