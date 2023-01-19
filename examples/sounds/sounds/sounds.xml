@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<SOUNDS>
+  <sound file="beep.wav"   controlSource="localsource" controlData="sound_ctrl_beep"         repeat="0"/>
+  <sound file="beep.wav"   controlSource="localsource" controlData="sound_ctrl_beep_r4"      repeat="4"/>
+  <sound file="k1.wav"     controlSource="localsource" controlData="sound_ctrl_k1"           repeat="0"/>
+  <sound file="k2.wav"     controlSource="localsource" controlData="sound_ctrl_k2"           repeat="0"/>
+  <sound file="sirena.wav" controlSource="localsource" controlData="sound_ctrl_sirena"       repeat="0"/>
+  <sound file="sirena.wav" controlSource="localsource" controlData="sound_ctrl_sirena_r4"    repeat="4"/>
+  <sound file="sirena.wav" controlSource="localsource" controlData="sound_ctrl_sirena_rinf"  repeat="inf"/>
+</SOUNDS>
+

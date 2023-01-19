@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<WINDOW>
+  <mainWidget>
+    <Frame>
+      <layout>
+        <LayoutVBox>
+          <widgets>
+            <Label data="localsource:string1:string"/>
+            <Button text="beep">
+              <press>
+                <writeData data="localsource:sound_ctrl_beep:string" value="on"/>
+                <writeData data="localsource:string1:string" value="Push button beep"/>
+              </press>
+              <release>
+                <writeData data="localsource:string1:string" value="Release button beep"/>
+              </release>
+            </Button>
+            <Button text="beep repeat 4">
+              <press>
+                <writeData data="localsource:sound_ctrl_beep_r4:string" value="on"/>
+                <writeData data="localsource:string1:string" value="Push button beep repeat 4"/>
+              </press>
+              <release>
+                <writeData data="localsource:string1:string" value="Release button beep repeat 4"/>
+              </release>
+            </Button>
+            <Button text="k1">
+              <press>
+                <writeData data="localsource:sound_ctrl_k1:string" value="on"/>
+                <writeData data="localsource:string1:string" value="Push button k1"/>
+              </press>
+              <release>
+                <writeData data="localsource:string1:string" value="Release button k1"/>
+              </release>
+            </Button>
+            <Button text="Sirena">
+              <press>
+                <writeData data="localsource:sound_ctrl_sirena:string" value="on"/>
+                <writeData data="localsource:string1:string" value="Push button Sirena"/>
+              </press>
+              <release>
+                <writeData data="localsource:string1:string" value="Release button Sirena"/>
+              </release>
+            </Button>
+            <Button text="Sirena repeat 4">
+              <press>
+                <writeData data="localsource:sound_ctrl_sirena_r4:string" value="on"/>
+                <writeData data="localsource:string1:string" value="Push button Sirena repeat 4"/>
+              </press>
+              <release>
+                <writeData data="localsource:string1:string" value="Release button Sirena repeat 4"/>
+              </release>
+            </Button>
+            <Button text="Sirena repeat inf">
+              <press>
+                <writeData data="localsource:sound_ctrl_sirena_rinf:string" value="on"/>
+                <writeData data="localsource:string1:string" value="Push button Sirena repeat inf"/>
+              </press>
+              <release>
+                <writeData data="localsource:string1:string" value="Release button Sirena repeat inf"/>
+                <writeData data="localsource:sound_ctrl_sirena_rinf:string" value="off"/>
+              </release>
+            </Button>
+          </widgets>
+          <stretch/>
+        </LayoutVBox>
+      </layout>
+    </Frame>
+  </mainWidget>
+</WINDOW>
+

@@ -44,6 +44,13 @@ static const struct
   QString repeat        = "repeat";
 }__slAttribute;
 
+static const struct
+{
+  QString commandSoundOn        = "on";
+  QString commandSoundOff       = "off";
+  QString reapeatCountsInfinite = "inf";
+}__slStringValues;
+
 //==============================================================================
 static struct 
 {
@@ -125,7 +132,7 @@ void LCSounds::addSounds(const QDomElement& _element)
       attr = _element.attribute(__slAttribute.repeat);
       if(!attr.isNull())
       {
-        if(attr.toLower() == "inf") 
+        if(attr.toLower() == __slStringValues.reapeatCountsInfinite) 
         {
           spplay->setLoops(LQPlaySound::Infinite);
         }
@@ -145,11 +152,11 @@ void LCSounds::addSounds(const QDomElement& _element)
         {
           if(_status != LIRemoteDataSource::EReadStatus::Valid) return;
           QString command = QString::fromUtf8(*(_data.data())).toLower();
-          if(command == "on")
+          if(command == __slStringValues.commandSoundOn)
           {
             spplay->play();
           }
-          else if(command == "off")
+          else if(command == __slStringValues.commandSoundOff)
           {
             spplay->stop();
           }

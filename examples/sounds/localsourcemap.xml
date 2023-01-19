@@ -1,0 +1,17 @@
+<localsourcemap>
+
+  <bytes id="val1"     type="uint8"      defval="1"/>
+  <bytes id="val2"     type="uint8"      defval="2"/>
+  <string id="string1" defval="String 1"/>
+  <string id="string2" defval="String 2"/>
+
+  <stream id="sound_ctrl_beep"        />
+  <stream id="sound_ctrl_beep_r4"     />
+  <stream id="sound_ctrl_k1"          />
+  <stream id="sound_ctrl_k2"          />
+  <stream id="sound_ctrl_sirena"      />
+  <stream id="sound_ctrl_sirena_r4"   />
+  <stream id="sound_ctrl_sirena_rinf" />
+
+</localsourcemap>
+

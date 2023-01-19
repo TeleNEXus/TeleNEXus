@@ -1,0 +1,28 @@
+--------------------------------------------------------------------------------
+                Section SOUNDS desctiption.
+--------------------------------------------------------------------------------
+
+1. Abstract.
+  The section is designed to implement the TeleNEXus audio subsystem.
+
+2. Section element description.
+
+Main Tag: 
+  <SOUNDS>
+    Attributes: 
+      file  "File name"
+      Tags:
+        <sound>
+          Attributes:
+            file              "Sound media file name"
+            controlSource     "Control sound data source id"
+            controlData       "Control sound data id"
+            repeat            "[Number of repeat, inf]"
+
+3. Control sound.
+  To control the playback of sound files, it is necessary to record control 
+  commands in the data cell associated with it. The following control commands 
+  are supported:
+    "on"  - sound on;
+    "off" - sound off;
+
