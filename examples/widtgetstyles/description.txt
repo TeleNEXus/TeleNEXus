@@ -5,7 +5,7 @@
 1. Abstract.
 
 1.1 Introduction.
-  The TeleNEXus widget style system is designed to expand the capabilities
+  The TeleNEXus widget style system is useful to expand the capabilities
   of the developer in the field of user interface design and is based on 
   Qt Style Sheets. When creating a new style for a widget, one additional rule 
   is used - the widget class name must be replaced with the entry "(...)".
