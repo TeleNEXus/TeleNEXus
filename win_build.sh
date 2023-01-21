@@ -1,5 +1,7 @@
 #!/bin/bash
 
+
+
 qmake=qmake.exe
 make=mingw32-make.exe
 
