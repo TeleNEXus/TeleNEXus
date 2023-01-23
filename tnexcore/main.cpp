@@ -19,6 +19,7 @@
  * along with TeleNEXus.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+
 #include "version.h"
 #include "applicationinterface.h"
 #include "xmlbuilders.h"
