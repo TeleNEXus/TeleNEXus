@@ -46,8 +46,6 @@
 #include <QDataStream>
 #include <QCryptographicHash>
 
-#include <stdio.h>
-
 #define __smCompressLevel 3
 #define __smQuitMessage QStringLiteral("Quit from TeleNEXus")
 #define __smHashAlgorithm (QCryptographicHash::Sha256) 
