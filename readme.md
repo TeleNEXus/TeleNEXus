@@ -28,6 +28,47 @@
  - Ability to connect plugins in the form of dynamic libraries for
    expanding the possibilities of building a graphical interface and implementing
    data transfer protocols.
+
+# Compiling.
+  The project consists of three separately compiled parts:
+- The main part of TeleNEXus located in the folder `tnexcore`;
+- The launcher located in the `tools/launcher` folder;
+- MODBUS data source implementation plugin in the `plugins/modvussource` folder.
+
+##Linux.
+  To fully compile the entire project, you can use the bash script file
+*build.sh* with the *-jN* option indicating the number of compilation threads, or you can
+compile all parts separately using qmake and make.
+After compilation, you can use the install.sh script which will copy
+executable files and plugins to the `/opt/tnex` and `/opt/tnex/plugins` folders, as well as
+create a tnex link in `/usr/bin/`
+
+## Windows.
+  If you have the Linux Subsystem for Windows installed on your system, you can
+use the bash script file *win_build.sh* with the *-jN* option to specify
+number of compilation threads.
+  The *win_build.sh* file contains substitutions for the qmake and make commands at the beginning
+which need to be changed in accordance with the utilities you have installed.
+  You can use QtCreator to compile all parts individually. For this
+need to open files with `.pro` extension in QtCreator and after settings
+projects to compile.
+  After compiling the project, you need to deploy it using
+Qt utility *windeployqt.ext*, or if compilation was done by a script
+*win_build.sh*, you can use the *win_deploy.sh* script as a result of work
+which the `win_deploy` folder should appear containing all executable files
+and libraries necessary for the program to work.
+
+# Usage.
+## Console.
+   There are two ways to run a project in the console:
+   - Go to the project folder and run the tnex command, this will produce
+   search for the root file of the project with the name *main.xml*;
+   - Run a command like *tnex "xml file name or path to project"*
+## tnexluncher project manager.
+   Using this small program, you can quickly launch different projects.
+   The program has a simple graphical interface and supports all possible
+   project launch options
+
 #
 \[RU\]
 #
@@ -61,13 +102,40 @@ Data Acquisitionи) и ICS (Industrial Control System) систем.
 
 # Компилирование.
   Проект состоит из трех отдельно компилируемых частей:
-  - Основная часть TeleNEXus расположенная в папке tnexcore;
-  - Программа запуска расположенная в папку tools/launcher;
-  - Плагин реализации источника данных MODBUS в папке plugins/modvussource.
+- Основная часть TeleNEXus расположенная в папке `tnexcore`;
+- Программа запуска расположенная в папке `tools/launcher`;
+- Плагин реализации источника данных MODBUS в папке `plugins/modvussource`.
+
 ## Linux.
   Для полной компиляции всего проекта можно исользовать файл bash скрипта
-  build.sh с параметром -jN указывающий количество потоков компиляции, или можно
-  компилировать все части по отдельности, используя утилиту qmake и make.
-  После компиляции можно использовать скрипт install.sh который скопирует
-  исполняемые файлы и плагины в папку /opt/tnex и /opt/tnex/plugins, а также
-  создаые ссылку tnex в папке /usr/bin/
+*build.sh* с параметром *-jN* указывающий количество потоков компиляции, или можно
+компилировать все части по отдельности, используя утилиту qmake и make.
+После компиляции можно использовать скрипт install.sh который скопирует
+исполняемые файлы и плагины в папку `/opt/tnex` и `/opt/tnex/plugins`, а также
+создаые ссылку tnex в папке `/usr/bin/`
+
+## Windows.
+  Если в вашей системе установлена подсистема Linux для Windows можно 
+исользовать файл bash скрипта *win_build.sh* с параметром *-jN* указывающий 
+количество потоков компиляции.
+  В файле *win_build.sh* в начале указаны подстановки для команды qmake и make
+которые необходимо изменить в соотвенствии с установленными у вас утилитами.
+  Вы можете QtCreator, чтобы компилировать все части по отдельности. Для этого 
+необходимо открыть файлы с расширением `.pro` в QtCreator и после настроек 
+проектов произвести компиляцию.
+  После компиляции проекта необходимо произвести его развертывание используя 
+утилиту Qt *windeployqt.ext*, или если компиляция производилась скриптом  
+*win_build.sh*, можно использовать скрипт *win_deploy.sh* в результате работы 
+которого должна появиться папка `win_deploy` содержащая все исполняемые файлы
+и библиотеки небоходимые для работы программы.
+
+# Использование.
+## Консоль.
+  Для запуска проекта в консоли можно использовать два пути:
+  - Перейти в папку проекта и запустить команду tnex, при этом будет произведен
+  поиск корневого файла проекта с именем *main.xml*;
+  - Выполнить команду вида *tnex "xml file name or path to project"*
+## Менеджер проектов tnexluncher.
+  Используя эту небольшую программу можно быстро запускать разные проекты.
+  Программа имеет простой графический интерфейс и поддерфивает все возможные
+  варианты запуска проекта.
