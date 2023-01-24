@@ -1,6 +1,6 @@
-
+#
 \[En\]
-
+#
 # Introduction.
    TeleNEXus is a program for building SCADA (Supervisory Control And
  Data Acquisition) and ICS (Industrial Control System) systems.
@@ -28,9 +28,9 @@
  - Ability to connect plugins in the form of dynamic libraries for
    expanding the possibilities of building a graphical interface and implementing
    data transfer protocols.
-
+#
 \[RU\]
-
+#
 # Введение.
   TeleNEXus это программа для построения SCADA (Supervisory Control And 
 Data Acquisitionи) и ICS (Industrial Control System) систем. 
