@@ -41,7 +41,7 @@ then
 fi
 
 echo "Copy TeleNEXus executable file."
-cp "./tnexcore/__builds/tnex" "/opt/tnex/"
+cp "./tnexcore/__builds/tnex" "$v_install_path"
 
 
 echo "Create program link \"tnex\" in \"/usr/bin/\""
@@ -53,23 +53,23 @@ then
 fi
 
 echo "Copy MODBUS plugin library file."
-cp "./plugins/modbussource/__builds/libmodbussource.so" "/opt/tnex/plugins/"
+cp "./plugins/modbussource/__builds/libmodbussource.so" "${v_install_path}/${v_plugins_path}/"
 
 
 echo "Copy files of the TeleNEXus launcher."
 
 
-if ! cp "./tools/launcher/main_en.qm" "/opt/tnex"
+if ! cp "./tools/launcher/main_en.qm" "$v_install_path"
 then
   echo "Can't copy endglish language map file."
 fi 
 
-if ! cp "./tools/launcher/main_ru.qm" "/opt/tnex"
+if ! cp "./tools/launcher/main_ru.qm" "$v_install_path"
 then
   echo "Can't copy russian language map file."
 fi 
 
-if ! cp "./tools/launcher/__builds/launcher" "/opt/tnex"
+if ! cp "./tools/launcher/__builds/launcher" "$v_install_path"
 then
   echo "Can't copy executable TeleNEXus launcher file"
 else 
