@@ -1,4 +1,6 @@
 #
+TeleNEXus is a program for building SCADA
+#
 \[En\]
 #
 # Introduction.
