@@ -2,7 +2,6 @@
 v_install_path="/opt/tnex/"
 v_plugins_path="plugins/"
 
-
 uninstall ()
 {
   echo "Remove programm path \"$v_install_path\""

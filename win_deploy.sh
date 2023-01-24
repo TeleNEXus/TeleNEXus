@@ -18,28 +18,28 @@ echo "$v_offset_line Deploy for Windows `pwd`"
 # Create work dirs
 createDir ()
 {
-    if [ ! -d "$1" ] 
-    then
-        mkdir "$1"
-        echo "Create dir $1"
-    fi
+  if [ ! -d "$1" ] 
+  then
+    mkdir "$1"
+    echo "Create dir $1"
+  fi
 }
 
 #Remove work dirs
 deleteDir ()
 {
-    if [ -d "$1" ] 
-    then
-        rm -r "$1"
-        echo "Delete dir $1"
-    fi
+  if [ -d "$1" ] 
+  then
+    rm -r "$1"
+    echo "Delete dir $1"
+  fi
 }
 
 if [ "$1" == "--clear" ]
 then
-    echo "$v_offset_line Clear win deploy"
-    deleteDir "$v_deploy_path"
-    exit 0
+  echo "$v_offset_line Clear win deploy"
+  deleteDir "$v_deploy_path"
+  exit 0
 fi
 
 createDir "$v_deploy_path"
