@@ -206,7 +206,7 @@ QWidget* buildWindow(const QApplication& _app, const QString& _history_file)
               widget, 
               QStringLiteral("Open main xml file"), 
               QString(""), 
-              QStringLiteral("Pack files (*.xml)"));
+              QStringLiteral("Main file (*.xml)"));
 
         QFileInfo fileinfo(file);
 
@@ -221,7 +221,7 @@ QWidget* buildWindow(const QApplication& _app, const QString& _history_file)
         auto file = 
           QFileDialog::getOpenFileName(
               widget, 
-              QStringLiteral("Open main xml file"), 
+              QStringLiteral("Open pack file"), 
               QString(""), 
               QStringLiteral("Pack files (*.pack);;All files (*.*)"));
 
