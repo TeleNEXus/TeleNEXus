@@ -35,7 +35,7 @@
 - The launcher located in the `tools/launcher` folder;
 - MODBUS data source implementation plugin in the `plugins/modvussource` folder.
 
-##Linux.
+## Linux.
   To fully compile the entire project, you can use the bash script file
 *build.sh* with the *-jN* option indicating the number of compilation threads, or you can
 compile all parts separately using qmake and make.
