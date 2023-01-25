@@ -336,7 +336,7 @@ void LCSecurity::autorize(const QString& _accessId, const QString& _password)
   CApplicationInterface::getInstance().message(
       QString("Set autorized access '%1'").arg(_accessId));
 
-  hideAccessWindow();
+  /* hideAccessWindow(); */
 
   if(mResetTime < 0) return;
   mpTimer->start(mResetTime);
