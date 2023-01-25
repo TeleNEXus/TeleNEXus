@@ -1,13 +1,21 @@
 <?xml version="1.0" encoding="UTF-8" ?>
+
 <WINDOW>
   <mainWidget>
     <Frame>
-      <LayoutVBox>
-        <widgets>
-          <LineEdit data="localsource:bytes_val_int32:int32" />
-        </widgets>
-        <stretch/>
-      </LayoutVBox>
+      <layout>
+        <LayoutVBox>
+          <widgets>
+            <Label text="With screen keyboard"/>
+            <LineEdit data="localsource:bytes_val_int32:int32" keyboard="keyboard"/>
+            <LineEdit data="localsource:bytes_val_float32:float32" keyboard="keyboard"/>
+            <Label text="Without screen keyboard"/>
+            <LineEdit data="localsource:bytes_val_int32:int32"/>
+            <LineEdit data="localsource:bytes_val_float32:float32"/>
+          </widgets>
+          <stretch/>
+        </LayoutVBox>
+      </layout>
     </Frame>
   </mainWidget>
 </WINDOW>

@@ -15,5 +15,8 @@
   <string id="string_val_string" defval="String Value"/>
   <stream id="stream_textstream" />
 
+  <string id="keyboard_data" defval="Keyboard data"/>
+  <stream id="keyboard_stream"/>
+
 </localsourcemap>
 

@@ -8,6 +8,23 @@
     </Localsources>
   </SOURCES>
 
+  <KEYBOARD 
+    id="keyboard" 
+    window="keyboard_window"
+    source="localsource" 
+    stream="keyboard_stream"
+    data="keyboard_data" />
+
+  <WINDOW 
+    id="keyboard_window" 
+    file="keyboard_window.xml" 
+    visible="false"
+    title="Digital Keyboard" 
+    showMode="normal"
+    modality="true"
+    flags="stayOnTop" 
+    position="200;200" />
+
   <WINDOW 
     id="main_window" 
     file="main_window.xml"
