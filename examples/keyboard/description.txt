@@ -1,0 +1,27 @@
+--------------------------------------------------------------------------------
+                            KEYBOARD desctiption.
+--------------------------------------------------------------------------------
+1. Abstract:
+
+    On-screen keyboards are designed to enter data when using
+  TouchScreen displays, as well as for creating specific input elements.
+
+2. Keyboard element description.
+
+Main Tag: 
+  <KEYBOARD>
+    Attributes: 
+      id        "Keyboard id"
+      window    "Keyboard windows id"
+      source    "Data source id"
+      stream    "Keyboard stream"
+      data      "Keyboard data"
+
+3. Using keyboard.
+
+    Of the standard widgets, only LineEdit is an input element,
+  accordingly, only when using it, you can use the on-screen
+  keyboard for data entry.
+
+  As an example:
+    <LineEdit data="sourceId:dataId:formatter" keyboard="KeyboardId"/>
