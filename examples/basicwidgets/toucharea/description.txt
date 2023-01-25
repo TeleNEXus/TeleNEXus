@@ -21,6 +21,7 @@
     undefState=[show, hide]"
 
   Specific attributes:
+    access     "AccessLevelId"
 
   Tags:
 

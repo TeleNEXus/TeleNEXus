@@ -1,0 +1,21 @@
+<localsourcemap>
+
+  <bytes id="bytes_val_int32"     type="int32"      defval="333"/>
+  <bytes id="bytes_val_float32"   type="float32"    defval="7.77"/>
+  <bytes id="bytes_val_string"    type="string"     defval="Type string"/>
+
+  <!-- Security access -->
+  <string id="empty_string" defval=""/>
+
+  <stream id="security_password_stream"/>
+  <stream id="security_command_stream"/>
+
+  <string id="security_required_access_id" defval="Master"/>
+  <string id="security_current_access_id" defval="No access"/>
+
+  <string id="security_keyboard_data" defval=""/>
+  <stream id="security_keyboard_stream"/>
+
+</localsourcemap>
+
+

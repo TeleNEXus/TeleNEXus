@@ -1,0 +1,34 @@
+--------------------------------------------------------------------------------
+                            SECURITY desctiption.
+--------------------------------------------------------------------------------
+1. Abstract:
+   The section is intended for differentiation of access rights 
+by different levels.
+
+2. Keyboard element description.
+
+Main Tag: 
+  <SECURITY>
+    Attributes: 
+        |window              "Access window id"
+    Or  |
+        |passwordKeyboard    "Access keyboard id" 
+    resetTime           "30"
+    source              "Data source id" 
+    passwordStream      "Data Strim Id with password"
+    requiredAccess      "Data String id with required access id"
+    currentAccess       "Data String id with current access id"
+    command             "Data Stream id of commands"
+    noAccess            "No access string valu of current access id"
+
+    Tags:
+      <access>
+        Attributes:
+          id        "Access id"
+          level     "Access level (0,1,..,n)"
+          password  "Password"
+
+3. Authorization access is supported by the following widgets:
+  <Button     access="AccessId">
+  <LineEdit   access="AccessId">
+  <TouchArea  access="AccessId">

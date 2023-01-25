@@ -24,6 +24,7 @@
 
   text    "ButtonText"
   icon    "file=iconFileName; size=(width;height)"
+  access  "AccessLevelId"
 
   ------------------------------------
   Tags:

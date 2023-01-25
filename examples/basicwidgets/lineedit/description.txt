@@ -28,6 +28,7 @@
    ---
    dataRead   "sourceId:dataId:formatterId"
    dataWrite  "sourceId:dataId:formatterId"
+   access     "AccessLevelId"
    ---------------------------------------
    keyboard   "keyboardId"
 

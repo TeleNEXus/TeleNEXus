@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<APPLICATION>
+
+  <SOURCES>
+    <Localsources>
+      <source id="localsource" mapfile="localsourcemap.xml"  />
+    </Localsources>
+  </SOURCES>
+
+  <SECURITY 
+    passwordKeyboard="AccessKeyboard" 
+    resetTime="30"
+    source="localsource" 
+    passwordStream="security_password_stream"
+    requiredAccess="security_required_access_id"
+    currentAccess="security_current_access_id"
+    command="security_command_stream"
+    noAccess="No access">
+
+    <access id="Master"     level="0"   password="000"/>
+    <access id="Service"    level="1"   password="111"/>
+    <access id="Product"    level="2"   password="222"/>
+    <access id="Developer"  level="3"   password="333"/>
+
+  </SECURITY>
+
+  <KEYBOARD 
+    id="AccessKeyboard" 
+    window="AccessKeyboardWindow"
+    source="localsource" 
+    stream="security_keyboard_stream"
+    data="security_keyboard_data" />
+
+  <WINDOW 
+    id="window1" 
+    file="window1.xml"
+    visible="true"
+    title="Window 1" 
+    showMode="normal"
+    modality="false"
+    flags="" 
+    position="100;100" 
+    size="500;200"
+    screen="0"/>
+
+  <WINDOW 
+    id="AccessKeyboardWindow" 
+    file="access_keyboard.xml" 
+    visible="false"
+    title="Password Digital Keyboard" 
+    showMode="normal"
+    modality="true"
+    flags="stayOnTop;frameless" 
+    screen="0"
+    position="322;110"/>
+
+</APPLICATION>
+

@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<WINDOW>
+  <mainWidget>
+    <Frame fixedSize="380;380">
+      <layout>
+        <LayoutVBox>
+
+          <layouts>
+
+            <LayoutHBox>
+              <widgets>
+                <Label text="Required access:"/>
+              </widgets>
+              <stretch/>
+              <widgets>
+                <ComboBox data="localsource:security_required_access_id:string">
+                  <item name="Master"    value="Master"   />
+                  <item name="Service"   value="Service"  />
+                  <item name="Product"   value="Product"  />
+                  <item name="Developer" value="Developer"/>
+                </ComboBox>
+              </widgets>
+            </LayoutHBox>
+
+            <LayoutHBox>
+              <widgets>
+                <Label text="Password:"/>
+              </widgets>
+
+              <stretch/>
+
+              <widgets>
+                  <!-- dataWrite="localsource:security_password_stream:string"/> -->
+                <LineEdit 
+                  echoMode="password"
+                  dataRead="localsource:security_keyboard_data:string" 
+                  dataWrite="localsource:security_password_stream:string"/>
+              </widgets>
+            </LayoutHBox>
+
+            <LayoutHBox>
+              <widgets>
+                <Label text="Current access:" />
+              </widgets>
+              <stretch/>
+              <widgets>
+                <Label 
+                  data="localsource:security_current_access_id:string"/>
+              </widgets>
+            </LayoutHBox>
+
+          </layouts>
+
+          <layouts>
+            <LayoutGrid vspacing="15" hspacing="15">
+              <row align="right">
+                <widgets>
+                  <Button text="7" fixedSize="60;60" style="(...){font: 20pt}">
+                    <release>
+                      <writeData data="localsource:security_keyboard_stream:string" value="7"/>
+                    </release>
+                  </Button>
+
+                  <Button text="8" fixedSize="60;60" style="(...){font: 20pt}">
+                    <release>
+                      <writeData data="localsource:security_keyboard_stream:string" value="8"/>
+                    </release>
+                  </Button>
+
+                  <Button text="9" fixedSize="60;60" style="(...){font: 20pt}">
+                    <release>
+                      <writeData data="localsource:security_keyboard_stream:string" value="9"/>
+                    </release>
+                  </Button>
+
+                  <Label text=""/>
+
+
+                  <Button text="X" fixedSize="60;60" style="(...){font: 20pt}">
+                    <release>
+                      <controlWindow windowId="AccessKeyboardWindow" action="hide"/>
+                    </release>
+                  </Button>
+
+                </widgets>
+              </row>
+
+              <row align="right">
+                <widgets>
+                  <Button text="4" fixedSize="60;60" style="(...){font: 20pt}">
+                    <release>
+                      <writeData data="localsource:security_keyboard_stream:string" value="4"/>
+                    </release>
+                  </Button>
+
+                  <Button text="5" fixedSize="60;60" style="(...){font: 20pt}">
+                    <release>
+                      <writeData data="localsource:security_keyboard_stream:string" value="5"/>
+                    </release>
+                  </Button>
+
+                  <Button text="6" fixedSize="60;60" style="(...){font: 20pt}">
+                    <release>
+                      <writeData data="localsource:security_keyboard_stream:string" value="6"/>
+                    </release>
+                  </Button>
+
+                  <Button text="⤎" fixedSize="60;60" style="(...){font: 20pt}">
+                    <release>
+                      <writeData data="localsource:security_keyboard_stream:string" value="[Backspace]"/>
+                    </release>
+                  </Button>
+
+                  <Button text="C" fixedSize="60;60" style="(...){font: 20pt}">
+                    <release>
+                      <writeData data="localsource:security_keyboard_stream:string" value="[Clear]"/>
+                    </release>
+                  </Button>
+
+                </widgets>
+              </row>
+
+              <row align="right">
+                <widgets>
+                  <Button text="1" fixedSize="60;60" style="(...){font: 20pt}">
+                    <release>
+                      <writeData data="localsource:security_keyboard_stream:string" value="1"/>
+                    </release>
+                  </Button>
+
+                  <Button text="2" fixedSize="60;60" style="(...){font: 20pt}">
+                    <release>
+                      <writeData data="localsource:security_keyboard_stream:string" value="2"/>
+                    </release>
+                  </Button>
+
+                  <Button text="3" fixedSize="60;60" style="(...){font: 20pt}">
+                    <release>
+                      <writeData data="localsource:security_keyboard_stream:string" value="3"/>
+                    </release>
+                  </Button>
+
+                </widgets>
+              </row>
+
+              <row>
+                <widgets>
+                  <Button text="." fixedSize="60;60" style="(...){font: 20pt}">
+                    <release>
+                      <writeData data="localsource:security_keyboard_stream:string" value="."/>
+                    </release>
+                  </Button>
+
+                  <Button text="0" fixedSize="60;60" style="(...){font: 20pt}">
+                    <release>
+                      <writeData data="localsource:security_keyboard_stream:string" value="0"/>
+                    </release>
+                  </Button>
+
+                  <Button text="-" fixedSize="60;60" style="(...){font: 20pt}">
+                    <release>
+                      <writeData data="localsource:security_keyboard_stream:string" value="-"/>
+                    </release>
+                  </Button>
+
+
+                  <Button text="↵" fixedSize="135;60" style="(...){font: 20pt}">
+                    <release>
+                      <writeData data="localsource:security_keyboard_stream:string" value="[Enter]"/>
+                      <writeData data="localsource:security_keyboard_stream:string" value="[Clear]"/>
+                    </release>
+                  </Button>
+
+                </widgets>
+              </row>
+
+            </LayoutGrid>
+          </layouts>
+        </LayoutVBox>
+      </layout>
+    </Frame>
+  </mainWidget>
+</WINDOW>
+
+

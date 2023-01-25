@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<WINDOW>
+  <mainWidget>
+    <Frame>
+      <layout>
+        <LayoutVBox>
+          <widgets>
+            <Label text="Access 'Master'"/>
+            <LineEdit data="localsource:bytes_val_int32:int32" access="Master"/>
+            <Label text="Access 'Service'"/>
+            <LineEdit data="localsource:bytes_val_float32:float32" access="Service"/>
+            <Label text="Access 'Product'"/>
+            <LineEdit data="localsource:bytes_val_int32:int32" access="Product"/>
+            <Label text="Access 'Developer'"/>
+            <LineEdit data="localsource:bytes_val_float32:float32" access="Developer"/>
+            <Button text="Reset Access">
+              <release>
+                <writeData data="localsource:security_command_stream:string" value="reset"/>
+              </release>
+            </Button>
+          </widgets>
+          <stretch/>
+        </LayoutVBox>
+      </layout>
+    </Frame>
+  </mainWidget>
+</WINDOW>
+
