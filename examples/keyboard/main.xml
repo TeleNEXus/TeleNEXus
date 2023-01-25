@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<APPLICATION>
+
+  <SOURCES>
+    <Localsources>
+      <source id="localsource" mapfile="localsourcemap.xml"  />
+    </Localsources>
+  </SOURCES>
+
+  <WINDOW 
+    id="main_window" 
+    file="main_window.xml"
+    visible="true"
+    title="Window 1" 
+    showMode="normal"
+    modality="false"
+    flags="" 
+    position="100;100" 
+    size="500;200"
+    screen="0"/>
+
+</APPLICATION>
+

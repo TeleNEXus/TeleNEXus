@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<WINDOW>
+  <mainWidget>
+    <Frame>
+      <LayoutVBox>
+        <widgets>
+          <LineEdit data="localsource:bytes_val_int32:int32" />
+        </widgets>
+        <stretch/>
+      </LayoutVBox>
+    </Frame>
+  </mainWidget>
+</WINDOW>
+
