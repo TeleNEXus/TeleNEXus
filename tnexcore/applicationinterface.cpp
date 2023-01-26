@@ -361,4 +361,26 @@ QObject* CApplicationInterface::createSecurityEventFilter(
   return LCSecurity::instance().createEventFilter(_accessId, _events);
 }
 
+//------------------------------------------------------------------------------
+bool CApplicationInterface::parseDataSpecification(
+      const QString& _stringToParse,
+      QString& _sourceId, 
+      QString& _dataId, 
+      QString& _formatterId) const
+{
+  bool err_flag = false;
+  xmlcommon::SDataSpecification data_spec = 
+    xmlcommon::parseDataSpecification(
+        _stringToParse,
+        [&err_flag](const QString& _errStr)
+        {
+          Q_UNUSED(_errStr);
+          err_flag = true;
+        });
+  if(err_flag) return false;
+  _sourceId = data_spec.sourceId;
+  _dataId = data_spec.dataId;
+  _formatterId = data_spec.formatterId;
+  return true;
+}
 

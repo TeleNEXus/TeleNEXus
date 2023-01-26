@@ -40,6 +40,7 @@ class LIJScriptService;
 class QIODevice;
 
 #include "LIRemoteDataSource.h"
+#include "LIDataSpecification.h"
 
 class LIApplication
 {
@@ -111,6 +112,17 @@ public:
   virtual QObject* createSecurityEventFilter(
       const QString& _accessId,
       const QSet<QEvent::Type>& _events) const = 0;
+
+ /* 
+  * Parses the data description string presented in the format: 
+  *       'SourceId:DataId:formatterId'
+  * Return 'true' if parsing was successful, otherwise 'false'.
+  */
+  virtual bool parseDataSpecification(
+      const QString& _stringToParse,
+      QString& _sourceId, 
+      QString& _dataId, 
+      QString& _formatterId) const = 0;
 
 };
 

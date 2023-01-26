@@ -100,6 +100,12 @@ public:
   virtual QObject* createSecurityEventFilter(
       const QString& _accessId,
       const QSet<QEvent::Type>& _events) const override;
+
+  virtual bool parseDataSpecification(
+      const QString& _stringToParse,
+      QString& _sourceId, 
+      QString& _dataId, 
+      QString& _formatterId) const override;
 };
 
 #endif /* APPLICATIONINTERFACE_H_ */
