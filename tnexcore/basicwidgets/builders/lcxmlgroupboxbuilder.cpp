@@ -115,7 +115,7 @@ QWidget* LCXmlGroupBoxBuilder::buildLocal(
 
   LCWidget* widget = new LCWidget(_element.attribute(__slAttributes.label));
 
-  setWidgetName(_element, widget); 
+  setWidgetName(widget); 
   setWidgetStyle(_element, widget);
 
   QDomNode  node = _element.firstChildElement(__slTags.layout);

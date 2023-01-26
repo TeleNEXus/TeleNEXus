@@ -190,7 +190,7 @@ QWidget* LCXmlTouchAreaBuilder::buildLocal(
       release_actions, 
       push_delay);
 
-  setWidgetName(      _element, push_label);
+  setWidgetName(push_label);
   setWidgetStyle(     _element, push_label);
   setWidgetSize(      _element, push_label);
   setWidgetPosition(  _element, push_label);

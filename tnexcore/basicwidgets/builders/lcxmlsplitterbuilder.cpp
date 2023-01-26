@@ -56,7 +56,7 @@ QWidget* LCXmlSplitterBuilder::buildLocal(
     }
   }
 
-  setWidgetName(      _element, splitter);
+  setWidgetName(splitter);
   setWidgetStyle(     _element, splitter);
   setWidgetSize(      _element, splitter);
   setWidgetPosition(  _element, splitter);

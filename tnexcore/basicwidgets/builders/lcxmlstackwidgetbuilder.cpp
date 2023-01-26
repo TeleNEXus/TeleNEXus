@@ -173,7 +173,7 @@ QWidget* LCXmlStackWidgetBuilder::buildLocal(
         });
   }();
 
-  setWidgetName(      _element, stacked_widget);
+  setWidgetName(stacked_widget);
   setWidgetStyle(     _element, stacked_widget);
   setWidgetSize(      _element, stacked_widget);
   setWidgetPosition(  _element, stacked_widget);

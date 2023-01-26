@@ -120,7 +120,7 @@ QWidget* LCXmlDataLineEditBuilder::buildLocal(
       }
 
 
-      setWidgetName(      _element, data_line_edit);
+      setWidgetName(data_line_edit);
       setWidgetStyle(     _element, data_line_edit);
       setWidgetSize(      _element, data_line_edit);
       setWidgetPosition(  _element, data_line_edit);

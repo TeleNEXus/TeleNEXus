@@ -177,7 +177,7 @@ QWidget* LCXmlTableWidgetBuilder::buildLocal(
           .arg(QStringLiteral("QTableCornerButton::section")));
     };
 
-  setWidgetName(      _element, buildData.mpTable);
+  setWidgetName(buildData.mpTable);
   set_style_table();
   set_style_header();
   set_style_corner();

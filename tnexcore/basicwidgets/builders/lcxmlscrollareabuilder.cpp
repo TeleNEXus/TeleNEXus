@@ -72,7 +72,7 @@ QWidget* LCXmlScrollAreaBuilder::buildLocal(
     scrollarea->setWidget(new QWidget);
   }
 
-  setWidgetName(      _element, scrollarea);
+  setWidgetName(scrollarea);
   setWidgetStyle(     _element, scrollarea);
   setWidgetSize(      _element, scrollarea);
   setWidgetPosition(  _element, scrollarea);

@@ -72,7 +72,7 @@ QWidget* LCXmlLabelBuilder::buildLocal(
   auto ret = 
     [&_element](QLabel* _label)
     {
-      setWidgetName(      _element, _label);
+      setWidgetName(_label);
       setWidgetStyle(     _element, _label);
       setWidgetSize(      _element, _label);
       setWidgetPosition(  _element, _label);

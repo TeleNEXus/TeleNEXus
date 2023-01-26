@@ -85,7 +85,7 @@ QWidget* LCXmlDataComboBoxBuilder::buildLocal(
 
       buildCombobox(_element, combo_box, formatter_read);
 
-      setWidgetName(      _element, combo_box);
+      setWidgetName(combo_box);
       setWidgetStyle(     _element, combo_box);
       setWidgetSize(      _element, combo_box);
       setWidgetPosition(  _element, combo_box);

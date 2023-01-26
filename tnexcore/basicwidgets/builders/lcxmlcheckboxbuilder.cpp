@@ -73,7 +73,7 @@ QWidget* LCXmlCheckBoxBuilder::buildLocal(
           check_value, 
           uncheck_value);
 
-      setWidgetName(      _element, check_box);
+      setWidgetName(check_box);
       setWidgetStyle(     _element, check_box);
       setWidgetSize(      _element, check_box);
       setWidgetPosition(  _element, check_box);

@@ -104,8 +104,8 @@ QWidget* LCXmlFrameBuilder::buildLocal(
 {
   LCWidget* widget = new LCWidget;
 
-  setWidgetName(_element, widget); 
-  setWidgetStyle(_element, widget);
+  setWidgetName(            widget); 
+  setWidgetStyle(_element,  widget);
 
   QDomNode  node = _element.firstChildElement(__slTags.layout);
 

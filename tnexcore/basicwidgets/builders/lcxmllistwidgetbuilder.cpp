@@ -118,7 +118,7 @@ QWidget* LCXmlListWidgetBuilder::buildLocal(
     add_item(node);
   }
 
-  setWidgetName(      _element, list_widget);
+  setWidgetName(list_widget);
   setWidgetStyle(     _element, list_widget);
   setWidgetSize(      _element, list_widget);
   setWidgetPosition(  _element, list_widget);

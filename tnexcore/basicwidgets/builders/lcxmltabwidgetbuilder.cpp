@@ -92,7 +92,7 @@ QWidget* LCXmlTabWidgetBuilder::buildLocal(
     index++;
   }
 
-  setWidgetName(      _element, tabwidget);
+  setWidgetName(tabwidget);
   setWidgetStyle(     _element, tabwidget);
 
   setWidgetStyle(
