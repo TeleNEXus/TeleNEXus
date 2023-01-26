@@ -64,6 +64,7 @@ flags = [
              '-I', '.',
              '-I', '../widgets',
              '-I', '../widgets/builders',
+             '-I', '../widgets/widgets',
              '-I', '../../../tnexcommon/interfaces',
              '-I', '../../../tnexcommon/interfaces/remotedata',
              '-I', '../../../tnexcommon/interfaces/xmlbuilders',

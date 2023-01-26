@@ -28,10 +28,11 @@ INCLUDEPATH +=                              \
     ../../../tnexcommon/interfaces/keyboard     \
     ../../../tnexcommon/interfaces              \
     ./builders                              \
+    ./widgets                              \
 
 SOURCES += \
     examplewidgets.cpp \
-    builders/lcxmlswitchwidgetslistbuilder.cpp \
+    builders/lcxmllcdnumberbuilder.cpp \
 
 HEADERS += \
     ../../../tnexcommon/interfaces/LIApplication.h \
@@ -45,7 +46,7 @@ HEADERS += \
     ../../../tnexcommon/interfaces/keyboard/LIKeyboardListener.h \
     examplewidgets_global.h \
     examplewidgets.h \
-    builders/lcxmlswitchwidgetslistbuilder.h \
+    builders/lcxmllcdnumberbuilder.h \
 
 # Default rules for deployment.
 unix {

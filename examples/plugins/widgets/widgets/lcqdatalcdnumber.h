@@ -18,19 +18,40 @@
  * You should have received a copy of the GNU General Public License
  * along with TeleNEXus.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef LCXMLSWITCHWIDGETSLISTBUILDER_H_
-#define LCXMLSWITCHWIDGETSLISTBUILDER_H_
+#ifndef LCQDATALABEL_H
+#define LCQDATALABEL_H
 
-#include "LIXmlWidgetBuilder.h"
+#include "lqextendevent.h"
 
-class LCXmlSwitchWidgetsListBuilder : public LIXmlWidgetBuilder 
+#include "LIDataFormatter.h"
+#include "LIRemoteDataReader.h"
+#include "LIRemoteDataSource.h"
+
+#include <QLCDNumber>
+
+class LCQDataLcdNumber : public QLCDNumber
 {
-public:
-  LCXmlSwitchWidgetsListBuilder();
-  virtual ~LCXmlSwitchWidgetsListBuilder();
-  virtual QWidget* build(const QDomElement& _element,
-      const LIApplication& _app) override;
+  Q_OBJECT;
 private:
-  QWidget* buildLocal(const QDomElement& _element, const LIApplication& _app);
+
+  QSharedPointer<LIRemoteDataReader>  mDataReader;
+  QSharedPointer<LIDataFormatter> mFormatter;
+
+public:
+  explicit LCQDataLcdNumber(QWidget* _parent = nullptr);
+
+  explicit LCQDataLcdNumber(   
+      const QString&                      _dataName,
+      QSharedPointer<LIRemoteDataSource>  _dataSource,
+      QSharedPointer<LIDataFormatter>     _formatter,
+      QWidget* _parent = nullptr);
+
+  virtual ~LCQDataLcdNumber();
+  virtual bool event(QEvent *e) override;
+private:
+  bool mFlagActive;
+  void setActive(bool _flag);
 };
-#endif /* LCXMLSWITCHWIDGETSLISTBUILDER_H_ */
+
+#endif // LCQDATALABEL_H
+

@@ -19,11 +19,9 @@
  * along with TeleNEXus.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include "examplewidgets.h"
-#include "lcxmlswitchwidgetslistbuilder.h"
-#include <qnamespace.h>
-
+#include "lcxmllcdnumberbuilder.h"
 //------------------------------------------------------------------------------
-void* getSwitchWidgetsListBuilder()
+void* getLcdNumber()
 {
-  return new LCXmlSwitchWidgetsListBuilder;
+  return new LCXmlLcdNumberBuilder;
 }

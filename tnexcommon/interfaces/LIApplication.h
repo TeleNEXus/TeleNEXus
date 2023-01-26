@@ -40,7 +40,6 @@ class LIJScriptService;
 class QIODevice;
 
 #include "LIRemoteDataSource.h"
-#include "LIDataSpecification.h"
 
 class LIApplication
 {

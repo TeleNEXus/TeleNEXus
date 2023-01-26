@@ -2,6 +2,7 @@
                             SECURITY desctiption.
 --------------------------------------------------------------------------------
 1. Abstract:
+
    The section is intended for differentiation of access rights 
 by different levels.
 
