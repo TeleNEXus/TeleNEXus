@@ -21,32 +21,34 @@ DEFINES += QT_DEPRECATED_WARNINGS
 # You can also select to disable deprecated APIs only up to a certain version of Qt.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
-INCLUDEPATH +=                              \
-    ../../../tnexcommon                         \
-    ../../../tnexcommon/interfaces/xmlbuilders  \
-    ../../../tnexcommon/interfaces/remotedata   \
-    ../../../tnexcommon/interfaces/keyboard     \
-    ../../../tnexcommon/interfaces              \
-    ./builders                              \
-    ./widgets                              \
+INCLUDEPATH +=                                      \
+    ../../../../tnexcommon                          \
+    ../../../../tnexcommon/interfaces/xmlbuilders   \
+    ../../../../tnexcommon/interfaces/remotedata    \
+    ../../../../tnexcommon/interfaces/keyboard      \
+    ../../../../tnexcommon/interfaces               \
+    ./builders                                      \
+    ./widgets                                       \
 
 SOURCES += \
     examplewidgets.cpp \
     builders/lcxmllcdnumberbuilder.cpp \
+    widgets/lcqdatalcdnumber.cpp \
 
 HEADERS += \
-    ../../../tnexcommon/interfaces/LIApplication.h \
-    ../../../tnexcommon/interfaces/LIDataFormatter.h \
-    ../../../tnexcommon/interfaces/remotedata/LIRemoteDataReader.h \
-    ../../../tnexcommon/interfaces/remotedata/LIRemoteDataSource.h \
-    ../../../tnexcommon/interfaces/remotedata/LIRemoteDataWriter.h \
-    ../../../tnexcommon/interfaces/xmlbuilders/LIXmlLayoutBuilder.h \
-    ../../../tnexcommon/interfaces/xmlbuilders/LIXmlWidgetBuilder.h \
-    ../../../tnexcommon/interfaces/keyboard/LIKeyboard.h \
-    ../../../tnexcommon/interfaces/keyboard/LIKeyboardListener.h \
+    ../../../../tnexcommon/interfaces/LIApplication.h \
+    ../../../../tnexcommon/interfaces/LIDataFormatter.h \
+    ../../../../tnexcommon/interfaces/remotedata/LIRemoteDataReader.h \
+    ../../../../tnexcommon/interfaces/remotedata/LIRemoteDataSource.h \
+    ../../../../tnexcommon/interfaces/remotedata/LIRemoteDataWriter.h \
+    ../../../../tnexcommon/interfaces/xmlbuilders/LIXmlLayoutBuilder.h \
+    ../../../../tnexcommon/interfaces/xmlbuilders/LIXmlWidgetBuilder.h \
+    ../../../../tnexcommon/interfaces/keyboard/LIKeyboard.h \
+    ../../../../tnexcommon/interfaces/keyboard/LIKeyboardListener.h \
     examplewidgets_global.h \
     examplewidgets.h \
     builders/lcxmllcdnumberbuilder.h \
+    widgets/lcqdatalcdnumber.h \
 
 # Default rules for deployment.
 unix {

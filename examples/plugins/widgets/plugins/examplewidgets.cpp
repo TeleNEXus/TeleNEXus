@@ -21,7 +21,7 @@
 #include "examplewidgets.h"
 #include "lcxmllcdnumberbuilder.h"
 //------------------------------------------------------------------------------
-void* getLcdNumber()
+void* getLcdNumberBuilder()
 {
   return new LCXmlLcdNumberBuilder;
 }

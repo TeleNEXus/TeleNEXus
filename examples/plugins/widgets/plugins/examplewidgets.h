@@ -23,6 +23,6 @@
 
 #include "examplewidgets_global.h"
 
-extern "C" void* getLcdNumber();
+extern "C" void* getLcdNumberBuilder();
 
 #endif // EXAMPLEWIDGETS_H

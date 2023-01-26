@@ -22,52 +22,38 @@
 #include "lcqdatalcdnumber.h"
 #include <QCoreApplication>
 #include <QDebug>
-#include <qnamespace.h>
-
-class CReaderStub : public LIRemoteDataReader
-{
-public:
-  CReaderStub(){}
-  virtual ~CReaderStub(){}
-  virtual void readRequest()override {}
-  virtual void connectToSource()override {}
-  virtual void disconnectFromSource()override {}
-  virtual void setHandler(THandler)override {}
-};
 
 #define lm_UndefValue QStringLiteral("----")
 
 //==============================================================================LCQDataLcdNumber
 LCQDataLcdNumber::LCQDataLcdNumber(QWidget* _parent) : 
-  QLCDNumber(_parent), 
+  QLCDNumber(_parent),
   mFlagActive(false)
 {
   display(lm_UndefValue);
   setEnabled(false);
 }
 
-
-LCQDataLcdNumber::LCQDataLcdNumber(const QString& _dataName,
-    QSharedPointer<LIRemoteDataSource> _dataSource,
-    QSharedPointer<LIDataFormatter> _formatter,
-    QWidget* _parent) :    
-  QLCDNumber(_parent), 
-  mFormatter(_formatter),
-  mFlagActive(false)
+LCQDataLcdNumber::~LCQDataLcdNumber()
 {
-  display(lm_UndefValue);
-  setEnabled(false);
+}
 
-  mDataReader = _dataSource->createReader(_dataName);
+//------------------------------------------------------------------------------init
+void LCQDataLcdNumber::init(
+    const QString&                      _dataId,
+    QSharedPointer<LIRemoteDataSource>  _dataSource,
+    QSharedPointer<LIDataFormatter>     _formatter)
+{
+
+  mDataReader = _dataSource->createReader(_dataId);
 
   if(mDataReader.isNull())
   {
-    mDataReader = QSharedPointer<LIRemoteDataReader>(new CReaderStub);
     return;
   }
 
   mDataReader->setHandler(
-      [this](
+      [this, _formatter](
         QSharedPointer<QByteArray> _data, 
         LIRemoteDataReader::EReadStatus _status)
       {
@@ -80,20 +66,18 @@ LCQDataLcdNumber::LCQDataLcdNumber(const QString& _dataName,
           }
           else
           {
-            display(mFormatter.data()->toString(*_data));
+            display(_formatter.data()->toString(*_data));
             setEnabled(true);
           }
         }
       });
 }
 
-LCQDataLcdNumber::~LCQDataLcdNumber()
-{
-}
-
 //------------------------------------------------------------------------------setActive
 void LCQDataLcdNumber::setActive(bool _flag)
 {
+  if(mDataReader.isNull()) return;
+
   if(_flag)
   {
     mFlagActive = true;

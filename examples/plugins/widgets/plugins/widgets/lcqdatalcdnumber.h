@@ -27,6 +27,7 @@
 #include "LIRemoteDataReader.h"
 #include "LIRemoteDataSource.h"
 
+#include <QSharedPointer>
 #include <QLCDNumber>
 
 class LCQDataLcdNumber : public QLCDNumber
@@ -35,19 +36,18 @@ class LCQDataLcdNumber : public QLCDNumber
 private:
 
   QSharedPointer<LIRemoteDataReader>  mDataReader;
-  QSharedPointer<LIDataFormatter> mFormatter;
 
 public:
   explicit LCQDataLcdNumber(QWidget* _parent = nullptr);
 
-  explicit LCQDataLcdNumber(   
-      const QString&                      _dataName,
-      QSharedPointer<LIRemoteDataSource>  _dataSource,
-      QSharedPointer<LIDataFormatter>     _formatter,
-      QWidget* _parent = nullptr);
-
   virtual ~LCQDataLcdNumber();
   virtual bool event(QEvent *e) override;
+
+  void init(
+      const QString&                      _dataId,
+      QSharedPointer<LIRemoteDataSource>  _dataSource,
+      QSharedPointer<LIDataFormatter>     _formatter);
+
 private:
   bool mFlagActive;
   void setActive(bool _flag);
