@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<APPLICATION>
+
+  <WIDGETSTYLES file="widgetstyles.xml" />
+
+  <PLAGINPATHES>
+    <add path="plugins/__builds/"/>
+  </PLAGINPATHES>
+
+  <WIDGETBUILDERS>
+    <LcdNumber lib="examplewidgets" handler="getLcdNumberBuilder"/>
+  </WIDGETBUILDERS>
+
+  <SOURCES>
+    <Localsources>
+      <source id="localsource" mapfile="localsourcemap.xml"  />
+    </Localsources>
+  </SOURCES>
+
+  <WINDOW 
+    file="window1.xml" 
+    id="window1" 
+    visible="true"
+    title="Window 1" 
+    showMode="normal"
+    modality="false"
+    flags="" 
+    size="400;400"
+    screen="0"
+    position="100;100"
+    />
+
+</APPLICATION>
+

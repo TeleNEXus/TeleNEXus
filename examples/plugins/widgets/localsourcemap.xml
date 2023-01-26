@@ -1,0 +1,12 @@
+<localsourcemap>
+
+  <bytes id="val_uint8"   type="uint8"      defval="1"/>
+  <bytes id="val_uint16"  type="uint16"     defval="2"/>
+  <bytes id="val_uint32"  type="uint32"     defval="3"/>
+
+  <bytes id="val_float32" type="float32"    defval="4.456"/>
+
+  <string id="lcd_string" defval="1234567890abcdefgh"/>
+
+</localsourcemap>
+

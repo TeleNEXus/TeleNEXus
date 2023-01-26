@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<WINDOW>
+  <mainWidget>
+    <Frame>
+      <layout>
+        <LayoutVBox>
+          <widgets>
+            <Label text="Text label 1"/>
+            <LcdNumber data="localsource:val_float32:float32"/>
+            <LcdNumber 
+              data="localsource:val_float32:float32"
+              fixedHeight="50"
+              segmentStyle="flat"
+              style="$(LcdNumber)"
+              />
+
+            <LineEdit data="localsource:lcd_string:string"/>
+
+            <LcdNumber 
+              data="localsource:lcd_string:string"
+              fixedHeight="30"
+              segmentStyle="flat"
+              digitCount="20"
+              style="$(LcdNumber)"
+              />
+
+            <Frame>
+              <widgets>
+                <LcdNumber 
+                  data="localsource:val_float32:float32"
+                  posx="20"
+                  posy="30"
+                  width="200"
+                  height="150"
+                  segmentStyle="flat"
+                  style="(...){color: red; background-color: black}"
+                  />
+              </widgets>
+            </Frame>
+          </widgets>
+          <stretch/>
+        </LayoutVBox>
+      </layout>
+    </Frame>
+  </mainWidget>
+</WINDOW>
