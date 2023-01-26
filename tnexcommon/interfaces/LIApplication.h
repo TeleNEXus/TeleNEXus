@@ -99,6 +99,16 @@ public:
 
   virtual QString getWidgetStyle(const QString& _styleId) const = 0;
 
+  /*
+   * Set widget unique name and return them
+   */
+  virtual QString setWidgetUniqName(QWidget* _widget) const = 0;
+
+  virtual void setWidgetStyle(
+      const QString& _style, 
+      QWidget* _widget,
+      const QString& _objectName  = QString()) const = 0;
+
   virtual void message(const QString& _msg, 
       EMessageType _mt = EMessageType::Untyped) const = 0;
 

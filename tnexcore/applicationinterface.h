@@ -88,6 +88,13 @@ public:
 
   virtual QString getWidgetStyle(const QString& _styleId) const override;
 
+  virtual QString setWidgetUniqName(QWidget* _widget) const override;
+
+  virtual void setWidgetStyle( 
+      const QString& _style, 
+      QWidget* _widget,
+      const QString& _objectName = QString()) const override;
+
   virtual void message(const QString& _msg, 
       EMessageType _mt = EMessageType::Untyped) const override;
 

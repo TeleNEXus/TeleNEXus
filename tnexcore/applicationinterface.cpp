@@ -39,6 +39,8 @@
 #include <iostream>
 #include <QBuffer>
 #include <QFileInfo>
+#include <QRegularExpression>
+#include <QWidget>
 
 #define lm_DateTimeFormat QStringLiteral("yyyy:MM:dd|hh:mm:ss")
 
@@ -100,7 +102,7 @@ QString CApplicationInterface::toProjectRelativePath(
 {
   QString file_path = toProjectRelativeFilePath(_fileName);
   QString file_name = QFileInfo(file_path).fileName();
-  return 
+  return
     file_path.remove(QRegExp(QString("\\/*%1$").arg(file_name)));
 }
 
@@ -173,9 +175,9 @@ QDomDocument CApplicationInterface::loadDomDocument(
   {
     warning(
         QString("Load DOM Document error:\n"
-          "\tparse file %1\n"       
-          "\terror at line: %2\n"   
-          "\tcolumn: %3\n"          
+          "\tparse file %1\n"
+          "\terror at line: %2\n"
+          "\tcolumn: %3\n"
           "\tmsg: %4\n")
         .arg(_fileName)
         .arg(errorLine)
@@ -195,9 +197,9 @@ QDomDocument CApplicationInterface::loadDomDocument(
 
 //------------------------------------------------------------------------------
 void CApplicationInterface::buildFromFile(
-      const QDomElement& _element, 
-      const std::function<void(const QDomElement&)>& _builder,
-      const QString& _fileAttribute) const
+    const QDomElement& _element,
+    const std::function<void(const QDomElement&)>& _builder,
+    const QString& _fileAttribute) const
 {
   QString file = _element.attribute(_fileAttribute);
 
@@ -210,7 +212,7 @@ void CApplicationInterface::buildFromFile(
 
   QDomDocument ddoc = loadDomDocument(file);
 
-  if(ddoc.isNull()) 
+  if(ddoc.isNull())
   {
     _builder(QDomElement());
     return;
@@ -228,7 +230,7 @@ void CApplicationInterface::buildFromFile(
 
   lv_CurrentPath = toProjectRelativePath(file);
 
-  //Add all attributes except file namt. 
+  //Add all attributes except file namt.
   for(int i = 0; i < _element.attributes().length(); i++)
   {
     auto attr = _element.attributes().item(i).toAttr();
@@ -318,12 +320,78 @@ QString CApplicationInterface::getWidgetStyle(const QString& _styleId) const
 }
 
 //------------------------------------------------------------------------------
-void CApplicationInterface::message(const QString& _msg, 
+QString CApplicationInterface::setWidgetUniqName(QWidget* _widget) const
+{
+  static quint64 counter = 0;
+
+  QString name = QString("%1_%2")
+    .arg(_widget->metaObject()->className())
+    .arg(counter);
+
+  _widget->setObjectName(name);
+  counter++;
+  return name;
+}
+
+//------------------------------------------------------------------------------
+void CApplicationInterface::setWidgetStyle(
+    const QString& _style, QWidget* _widget,
+    const QString& _objectName) const
+{
+  QString outstyle = _style;
+
+  const QRegularExpression rexpr_style_id_desc(
+      QStringLiteral("\\$\\([^\\(\\)\\$]+\\)"));
+
+  const QRegularExpression rexpr_style_id_extract(
+      QStringLiteral("(?<=\\$\\()(.*)(?=\\))"));
+
+  auto mit= rexpr_style_id_desc.globalMatch(_style);
+
+  while(mit.hasNext())
+  {
+    QString style_desc = mit.next().captured();
+    QString style_id =
+      rexpr_style_id_extract.match(style_desc).captured();
+
+    QString load_style =
+      CApplicationInterface::getInstance().getWidgetStyle(style_id);
+    if(load_style.isNull())
+    {
+      outstyle.remove(style_desc);
+    }
+    else
+    {
+      outstyle.replace(style_desc, load_style);
+    }
+  }
+
+  auto set_style =
+    [_widget, &outstyle](const QString& _objectName)
+    {
+      outstyle.replace(QStringLiteral("(...)"), _objectName);
+      _widget->setStyleSheet(outstyle);
+    };
+
+  if(_objectName.isNull())
+  {
+    set_style(QString("%1#%2")
+        .arg(_widget->metaObject()->className())
+        .arg(_widget->objectName()));
+  }
+  else
+  {
+    set_style(_objectName);
+  }
+}
+
+//------------------------------------------------------------------------------
+void CApplicationInterface::message(const QString& _msg,
     EMessageType _mt) const
 {
   Q_UNUSED(_mt);
   if(!__slLocalData.mFlagMessageOn) return;
-  qDebug("%s", qPrintable( 
+  qDebug("%s", qPrintable(
         QString("M[%1]> %2")
         .arg(QDateTime::currentDateTime().toString(lm_DateTimeFormat))
         .arg(_msg)));
@@ -335,41 +403,41 @@ void CApplicationInterface::warning(const QString& _msg,
 {
   Q_UNUSED(_mt);
   if(!__slLocalData.mFlagMessageOn) return;
-  qDebug("%s", qPrintable( 
-    QString("W[%1]> %2")
-    .arg(QDateTime::currentDateTime().toString(lm_DateTimeFormat))
-    .arg(_msg)));
+  qDebug("%s", qPrintable(
+        QString("W[%1]> %2")
+        .arg(QDateTime::currentDateTime().toString(lm_DateTimeFormat))
+        .arg(_msg)));
 }
 
 //------------------------------------------------------------------------------
-void CApplicationInterface::error(const QString& _msg, 
+void CApplicationInterface::error(const QString& _msg,
     EMessageType _mt) const
 {
   Q_UNUSED(_mt);
   if(!__slLocalData.mFlagMessageOn) return;
-  qDebug("%s", qPrintable( 
-    QString("E[%1]> %2")
-    .arg(QDateTime::currentDateTime().toString(lm_DateTimeFormat))
-    .arg(_msg)));
+  qDebug("%s", qPrintable(
+        QString("E[%1]> %2")
+        .arg(QDateTime::currentDateTime().toString(lm_DateTimeFormat))
+        .arg(_msg)));
 }
 
 //------------------------------------------------------------------------------
 QObject* CApplicationInterface::createSecurityEventFilter(
-      const QString& _accessId,
-      const QSet<QEvent::Type>& _events) const
+    const QString& _accessId,
+    const QSet<QEvent::Type>& _events) const
 {
   return LCSecurity::instance().createEventFilter(_accessId, _events);
 }
 
 //------------------------------------------------------------------------------
 bool CApplicationInterface::parseDataSpecification(
-      const QString& _stringToParse,
-      QString& _sourceId, 
-      QString& _dataId, 
-      QString& _formatterId) const
+    const QString& _stringToParse,
+    QString& _sourceId,
+    QString& _dataId,
+    QString& _formatterId) const
 {
   bool err_flag = false;
-  xmlcommon::SDataSpecification data_spec = 
+  xmlcommon::SDataSpecification data_spec =
     xmlcommon::parseDataSpecification(
         _stringToParse,
         [&err_flag](const QString& _errStr)
