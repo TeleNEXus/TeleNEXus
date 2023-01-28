@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<memorymap>
+
+  <discin name="din_0" addr="0" size="1" />
+  <discin name="din_1" addr="1" size="1" />
+  <discin name="din_2" addr="2" size="1" />
+  <discin name="din_3" addr="3" size="1" />
+  <discin name="din_4" addr="4" size="1" />
+  <discin name="din_5" addr="5" size="1" />
+  <discin name="din_6" addr="6" size="1" />
+  <discin name="din_7" addr="7" size="1" />
+  <discin name="din_8" addr="8" size="1" />
+  <discin name="din_9" addr="9" size="1" />
+
+  <coil name="coil_0" addr="0" size="1" />
+  <coil name="coil_1" addr="1" size="1" />
+  <coil name="coil_2" addr="2" size="1" />
+  <coil name="coil_3" addr="3" size="1" />
+  <coil name="coil_4" addr="4" size="1" />
+  <coil name="coil_5" addr="5" size="1" />
+  <coil name="coil_6" addr="6" size="1" />
+  <coil name="coil_7" addr="7" size="1" />
+  <coil name="coil_8" addr="8" size="1" />
+  <coil name="coil_9" addr="9" size="1" />
+
+  <inreg name="inreg_0" addr="0" size="1" />
+  <inreg name="inreg_1" addr="1" size="1" />
+  <inreg name="inreg_2" addr="2" size="1" />
+  <inreg name="inreg_3" addr="3" size="1" />
+  <inreg name="inreg_4" addr="4" size="1" />
+  <inreg name="inreg_5" addr="5" size="1" />
+  <inreg name="inreg_6" addr="6" size="1" />
+  <inreg name="inreg_7" addr="7" size="1" />
+  <inreg name="inreg_8" addr="8" size="1" />
+  <inreg name="inreg_9" addr="9" size="1" />
+
+  <holdreg name="holdreg_0" addr="0" size="1" />
+  <holdreg name="holdreg_1" addr="1" size="1" />
+  <holdreg name="holdreg_2" addr="2" size="1" />
+  <holdreg name="holdreg_3" addr="3" size="1" />
+  <holdreg name="holdreg_4" addr="4" size="1" />
+  <holdreg name="holdreg_5" addr="5" size="1" />
+  <holdreg name="holdreg_6" addr="6" size="1" />
+  <holdreg name="holdreg_7" addr="7" size="1" />
+  <holdreg name="holdreg_8" addr="8" size="1" />
+  <holdreg name="holdreg_9" addr="9" size="1" />
+
+</memorymap>
+
+

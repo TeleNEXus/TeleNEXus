@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<modbussources>
+    
+  <master  
+    name="master_tcp" 
+    type="tcp" 
+    url="127.0.0.1:1502"/>
+
+  <source  
+    name="dev1" 
+    master="master_tcp" 
+    devid="1" 
+    mapfile="dev1_memory_map.xml" 
+    maxbytes="16" 
+    updatetime="500"/>
+
+  <!-- <master -->  
+  <!--   name="master_rtu" --> 
+  <!--   type="rtu" --> 
+  <!--   portname="COM3" --> 
+  <!--   baud="115200" --> 
+  <!--   parity="odd" --> 
+  <!--   databits="8" --> 
+  <!--   stopbits="1" --> 
+  <!--   timeout="100" /> -->
+
+  <!-- <source -->  
+  <!--   name="dev1" --> 
+  <!--   master="master_rtu" --> 
+  <!--   devid="1" --> 
+  <!--   maxbytes="16" -->
+  <!--   mapfile="dev1_memory_map.xml" --> 
+  <!--   updatetime="500"/> -->
+
+</modbussources>
+

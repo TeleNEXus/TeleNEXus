@@ -1,0 +1,145 @@
+--------------------------------------------------------------------------------
+                  MODBUS data source
+--------------------------------------------------------------------------------
+
+1. Abstract.
+
+  The modbussource plugin implements MODBUS RTU and MODBUS TCP masters.
+Despite the fact that the implementation of the modbus data source is moved to 
+a separate library, this plugin is standard and installed in the folder
+default plugin search {tnexdir}/plugins.
+
+2. Plugin connection.
+
+2.1 If the plugin library is not installed in the default search folder
+{tnexdir}/plugins, then the path to it must be specified in the PLAGINPATHES 
+section:
+
+  <PLAGINPATHES>
+    <add path="Path to plugins lib"/>
+  </PLAGINPATHES>
+
+2.2 The plugin library contains a single function with signature 'extern "C"
+void* getModbusSourceBuilder()'. The function returns a pointer to void which
+is translated into a pointer to the interface class of the data source builder
+LIRemoteDataSource described in header file
+'tnexcommon/interfaces/remotedata/LIRemoteDataSource'.
+
+2.3 To connect the data source builder, use the section
+SOURCEBUILDERS with the following description:
+
+  Main Tag: 
+    <SOURCEBUILDERS>
+      Attributes:
+        file    "File name"
+      Tabs:
+        <ModbusSourceBuilderId>
+          Attributes:
+            lib       "modbussource"
+            handler   "getModbusSourceBuilder"
+
+3. Adding data sources.
+
+   The SOURCES section is used to describe MODBUS data sources. Having following 
+description:
+
+  Main Tag:
+    <SOURCES>
+      Attributes:
+        file    "File name"
+      Tags:
+        <ModbusSourceBuilderId>
+          Attributes:
+            file  "MODBUS data source description file name"
+
+4. MODBUS data sources description file.
+
+  The file contains a description of the MODBUS master devices and their 
+associated data sources connecting to slave devices. The XML file has
+the following structure:
+
+  Main Tag:
+    <ModbusSourceBuilderId>
+      Tags:
+        <master>
+          Attributs for MODBUS RTU:
+            name            "master id" 
+            type            "rtu" 
+            portname        "Port name for Windows ('COMn') or serial device
+                            file name for Linux ('/dev/tty*')" 
+            baud            "standart baud rates" 
+            parity          "[no, even, odd, space, mark]" 
+            databits        "Data bits, usually 8, dependents from system" 
+            stopbits        "[1,2]" 
+            timeout         "Response timeout in ms"
+
+          Attributs for MODBUS TCP:
+            name            "master id" 
+            type            "tcp"
+            url             "ip:port"
+        
+        <source>
+          Attributes:
+            name          "Source Id" 
+            master        "Master Id" 
+            devid         "MODBUS device number 0..255" 
+            mapfile       "Device memory map file name" 
+            maxbytes      "max bytes for read from slave" 
+            updatetime    "Update time in ms"
+      
+5. Slave memory map file.
+
+  The structure of the memory map file.
+
+  Main Tag:
+    <memorymap>
+      Attributes:
+        bitsoffset        "Common offset for discrete inputs and coils"
+        coilsoffset       "Coils offset"
+        discinsoffset     "Discrete inputs offset"
+        regsoffset        "Common offset for registers"
+        inregsregsoffset  "Input registers offset"
+        holdregsoffset    "Holding registers offset"
+
+      tags:
+        <discin>
+            Describes discrete inputs.
+          Attributes:
+            name        "Data Id"
+            addr        "Slave data address"
+            size        "Size in bits"
+
+        <coil>
+            Describes discrete coils.
+          Attributes:
+            name        "Data Id"
+            addr        "Slave data address"
+            size        "Size in bits"
+
+        <inreg>
+            Describes input registers.
+          Attributes:
+            name        "Data Id"
+            addr        "Slave data address"
+            size        "Size in 16-bits registers"
+
+        <holdreg>
+            Describes holding registers.
+          Attributes:
+            name        "Data Id"
+            addr        "Slave data address"
+            size        "Size in 16-bits registers"
+
+6. Using example.
+
+  When using the example, it is necessary to receive data via the modbus 
+protocol, for this it is supposed to use the example described in the library
+git@github.com:qt/qtserialbus.git, which is also used when implementing the 
+modbus plugin. The required example is located in the 
+{repository dir }/examples/serialbus/modbus/slave folder. Also this example 
+can be run using QtCreator.
+
+
+
+
+

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<Table>
+  <col label="Name"/>
+  <col label="Address"/>
+  <col label="State"/>
+
+  <row>
+    <Label text="din_0"/>
+    <Label text="0"/>
+    <Label data="dev1:din_0:bool"/>
+  </row>
+
+  <row>
+    <Label text="din_1"/>
+    <Label text="1"/>
+    <Label data="dev1:din_1:bool"/>
+  </row>
+
+  <row>
+    <Label text="din_2"/>
+    <Label text="2"/>
+    <Label data="dev1:din_2:bool"/>
+  </row>
+
+  <row>
+    <Label text="din_3"/>
+    <Label text="3"/>
+    <Label data="dev1:din_3:bool"/>
+  </row>
+
+  <row>
+    <Label text="din_4"/>
+    <Label text="4"/>
+    <Label data="dev1:din_4:bool"/>
+  </row>
+
+  <row>
+    <Label text="din_5"/>
+    <Label text="5"/>
+    <Label data="dev1:din_5:bool"/>
+  </row>
+
+  <row>
+    <Label text="din_6"/>
+    <Label text="6"/>
+    <Label data="dev1:din_6:bool"/>
+  </row>
+
+  <row>
+    <Label text="din_7"/>
+    <Label text="7"/>
+    <Label data="dev1:din_7:bool"/>
+  </row>
+
+  <row>
+    <Label text="din_8"/>
+    <Label text="8"/>
+    <Label data="dev1:din_8:bool"/>
+  </row>
+
+  <row>
+    <Label text="din_9"/>
+    <Label text="9"/>
+    <Label data="dev1:din_9:bool"/>
+  </row>
+
+</Table>
+

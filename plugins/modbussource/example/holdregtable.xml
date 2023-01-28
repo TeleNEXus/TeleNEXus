@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<Table>
+
+  <col label="Name">
+    <Label text="holdreg_0"/>
+    <Label text="holdreg_1"/>
+    <Label text="holdreg_2"/>
+    <Label text="holdreg_3"/>
+    <Label text="holdreg_4"/>
+    <Label text="holdreg_5"/>
+    <Label text="holdreg_6"/>
+    <Label text="holdreg_7"/>
+    <Label text="holdreg_8"/>
+    <Label text="holdreg_9"/>
+  </col>
+
+  <col label="Address">
+    <Label text="0"/>
+    <Label text="1"/>
+    <Label text="2"/>
+    <Label text="3"/>
+    <Label text="4"/>
+    <Label text="5"/>
+    <Label text="6"/>
+    <Label text="7"/>
+    <Label text="8"/>
+    <Label text="9"/>
+  </col>         
+
+  <col label="Value Dec">
+    <LineEdit data="dev1:holdreg_0:uint16"/>
+    <LineEdit data="dev1:holdreg_1:uint16"/>
+    <LineEdit data="dev1:holdreg_2:uint16"/>
+    <LineEdit data="dev1:holdreg_3:uint16"/>
+    <LineEdit data="dev1:holdreg_4:uint16"/>
+    <LineEdit data="dev1:holdreg_5:uint16"/>
+    <LineEdit data="dev1:holdreg_6:uint16"/>
+    <LineEdit data="dev1:holdreg_7:uint16"/>
+    <LineEdit data="dev1:holdreg_8:uint16"/>
+    <LineEdit data="dev1:holdreg_9:uint16"/>
+  </col>
+
+  <col label="Value Hex">
+    <LineEdit data="dev1:holdreg_0:hex"/>
+    <LineEdit data="dev1:holdreg_1:hex"/>
+    <LineEdit data="dev1:holdreg_2:hex"/>
+    <LineEdit data="dev1:holdreg_3:hex"/>
+    <LineEdit data="dev1:holdreg_4:hex"/>
+    <LineEdit data="dev1:holdreg_5:hex"/>
+    <LineEdit data="dev1:holdreg_6:hex"/>
+    <LineEdit data="dev1:holdreg_7:hex"/>
+    <LineEdit data="dev1:holdreg_8:hex"/>
+    <LineEdit data="dev1:holdreg_9:hex"/>
+  </col>
+
+</Table>
+
+

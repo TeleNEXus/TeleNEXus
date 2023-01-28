@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<WINDOW>
+  <mainWidget>
+    <Tabs>
+
+      <item text="Coils">
+        <Table file="coiltable.xml"/>
+      </item>
+
+      <item text="Discrete inputs">
+        <Table file="discintable.xml"/>
+      </item>
+
+      <item text="Input registers">
+        <Table file="inregtable.xml"/>
+      </item>
+
+      <item text="Holding registers">
+        <Table file="holdregtable.xml"/>
+      </item>
+
+    </Tabs>
+  </mainWidget>
+</WINDOW>
+
+

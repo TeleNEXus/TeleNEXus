@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<Table>
+
+  <col label="Name">
+    <Label text="coil_0"/>
+    <Label text="coil_1"/>
+    <Label text="coil_2"/>
+    <Label text="coil_3"/>
+    <Label text="coil_4"/>
+    <Label text="coil_5"/>
+    <Label text="coil_6"/>
+    <Label text="coil_7"/>
+    <Label text="coil_8"/>
+    <Label text="coil_9"/>
+  </col>
+
+  <col label="Address">
+    <Label text="0"/>
+    <Label text="1"/>
+    <Label text="2"/>
+    <Label text="3"/>
+    <Label text="4"/>
+    <Label text="5"/>
+    <Label text="6"/>
+    <Label text="7"/>
+    <Label text="8"/>
+    <Label text="9"/>
+  </col>         
+
+  <col label="State">
+    <CheckBox data="dev1:coil_0:bool" checkValue="true" uncheckValue="false"/>
+    <CheckBox data="dev1:coil_1:bool" checkValue="true" uncheckValue="false"/>
+    <CheckBox data="dev1:coil_2:bool" checkValue="true" uncheckValue="false"/>
+    <CheckBox data="dev1:coil_3:bool" checkValue="true" uncheckValue="false"/>
+    <CheckBox data="dev1:coil_4:bool" checkValue="true" uncheckValue="false"/>
+    <CheckBox data="dev1:coil_5:bool" checkValue="true" uncheckValue="false"/>
+    <CheckBox data="dev1:coil_6:bool" checkValue="true" uncheckValue="false"/>
+    <CheckBox data="dev1:coil_7:bool" checkValue="true" uncheckValue="false"/>
+    <CheckBox data="dev1:coil_8:bool" checkValue="true" uncheckValue="false"/>
+    <CheckBox data="dev1:coil_9:bool" checkValue="true" uncheckValue="false"/>
+  </col>
+
+</Table>
+
