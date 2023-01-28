@@ -1,0 +1,105 @@
+--------------------------------------------------------------------------------
+        Plugins
+--------------------------------------------------------------------------------
+  Content.
+
+  1. Introduction.
+  2. Widgets.
+  3. Widget layouts.
+  4. Data sources.
+  5. Section PLAGINPATHES.
+
+1. Introduction.
+
+   Plugins are designed to extend the standard functionality of an application.
+   There are currently 3 types of plug-ins available:
+   - Widgets;
+   - Widget layout;
+   - Data sources.
+
+2.Widgets.
+
+2.1 Library.
+   Widget extension plugin is a dynamic library with
+   an interface containing functions that return a pointer to a child
+   abstract class LIXmlEidgetBuilder described in the header file
+   '{tnexroot}/tnexcommon/interfaces/LIXmlWidgetBuilder.h'.
+   Library function signature:
+     extern "C" void* getWidgetBuilder();
+   The function returns a pointer to void which is then cast to a pointer
+   LIXmlEidgetBuilder.
+
+2.2 Section WIDGETBUILDERS.
+  The section describes importing widgets.
+  Main Tag:
+    <WIDGETBUILDERS>
+      Attributes:
+        file    "File name."
+      Tags:
+        <WidgetBuilderId>
+          Attribute:
+            lib       "Library name without the 'lib' prefix and extensions
+                      '.dll', '.so' ect"
+            handler   "Library function name"
+
+3. Widget layouts.
+
+3.1 Library.
+   The widget layout extension plugin is a dynamic
+   a library with an interface containing functions that return a pointer to 
+   a child abstract class LIXmlLayoutBuilder described in the header file
+   '{tnexroot}/tnexcommon/interfaces/LIXmlLayoutBuilder.h'.
+   Library function signature:
+     extern "C" void* getLayoutBuilder();
+   The function returns a pointer to void which is then cast to a pointer
+   LIXmlLayoutBuilder.
+
+3.2 Section LAYOUTBUILDERS.
+  The section describes widget layouts.
+  Main Tag:
+    <LAYOUTBUILDERS>
+      Attributes:
+        file    "File name."
+      Tags:
+        <LayoutBuilderId>
+          Attribute:
+            lib       "Library name without the 'lib' prefix and extensions
+                      '.dll', '.so' ect"
+            handler   "Library function name"
+
+4. Data sources.
+
+4.1 Library.
+   The data source extension plugin is a dynamic
+   a library with an interface containing functions that return a pointer to 
+   a child of the abstract class LIXmlRemoteDataSourceBuilder described in
+   header file
+   '{tnexroot}/tnexcommon/interfaces/LIXmlRemoteDataSourceBuilder.h'.
+   Library function signature:
+     extern "C" void* getSourceBuilder();
+   The function returns a pointer to void which is then cast to the pointer
+   LIXmlRemoteDataSourceBuilder.
+
+4.2 Section SOURCEBUILDERS.
+  The section describes importing data sources.
+  Main Tag:
+    <SOURCEBUILDERS>
+      Attributes:
+        file    "File name."
+      Tags:
+        <LayoutBuilderId>
+          Attribute:
+            lib       "Library name without the 'lib' prefix and extensions
+                      '.dll', '.so' ect"
+            handler   "Library function name"
+
+5. Section PLAGINPATHES.
+
+  Describes the search paths for plugin libraries.
+  Mait Tag:
+    <PLAGINPATHES>
+      Tags:
+        <add>
+          Attribute:
+            path  "Path to the directory with plugins"
+
