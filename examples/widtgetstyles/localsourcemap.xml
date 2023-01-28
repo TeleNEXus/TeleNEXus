@@ -2,8 +2,8 @@
 
   <bytes id="val1"     type="uint8"      defval="1"/>
   <bytes id="val2"     type="uint8"      defval="2"/>
-  <string id="lcd_string" defval="1234567890abcdefgh"/>
-
+  <string id="string1" defval="String 1"/>
+  <string id="string2" defval="String 2"/>
 
 </localsourcemap>
 
