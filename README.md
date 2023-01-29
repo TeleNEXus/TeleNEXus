@@ -49,10 +49,10 @@ executable files and plugins to the `/opt/tnex` and `/opt/tnex/plugins` folders,
 create a tnex link in `/usr/bin/`
 
   Build and installation example:
-
-  `$./build.sh`
-
-  `$sudo ./install.sh`
+  ```
+  $./build.sh
+  $sudo ./install.sh
+  ```
 
 ## Windows.
   If you have the Linux Subsystem for Windows installed on your system, you can
@@ -70,17 +70,15 @@ which the `win_deploy` folder should appear containing all executable files
 and libraries necessary for the program to work.
 
   Build and deploy example:
-
-  `$./win_build.sh`
-
-  `$./win_deploy.sh`
-
+  ```
+  $./win_build.sh
+  $./win_deploy.sh
+  ```
   or
-
-  `$bash win_build.sh`
-
-  `$bash win_deploy.sh`
-
+  ```
+  $bash win_build.sh
+  $bash win_deploy.sh
+  ```
 
 # Usage.
 ## Console.
@@ -165,10 +163,10 @@ Data Acquisitionи) и ICS (Industrial Control System) систем.
 создаые ссылку tnex в папке `/usr/bin/`
 
   Пример сборки:
-
-  `$./build.sh`
-
-  `$sudo ./install.sh`
+  ```
+  $./build.sh
+  $sudo ./install.sh
+  ```
 
 ## Windows.
   Если в вашей системе установлена подсистема Linux для Windows можно 
@@ -186,16 +184,15 @@ Data Acquisitionи) и ICS (Industrial Control System) систем.
 и библиотеки небоходимые для работы программы.
 
   Пример сборки:
-
-  `$./win_build.sh`
-
-  `$./win_deploy.sh`
-
+  ```
+  $./win_build.sh
+  $./win_deploy.sh
+  ```
   or
-
-  `$bash win_build.sh`
-
-  `$bash win_deploy.sh`
+  ```
+  $bash win_build.sh
+  $bash win_deploy.sh
+  ```
 
 # Использование.
 ## Консоль.
