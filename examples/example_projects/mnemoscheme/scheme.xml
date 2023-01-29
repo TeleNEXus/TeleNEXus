@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<Frame size="500;400">
+  <widgets>
+    <Label picture="file=pictures/mnemo_base.png; size=(500,400)"/>
+
+    <Label text="Push switches" position="20;20"/>
+
+    <StackWidget position="55;80" data="localsource:state_switch_1:uint8" >
+      <events>
+        <press>
+          <writeData data="localsource:state_switch_1:uint8" value="1"/>
+          <writeData data="localsource:state_switch_2:uint8" value="0"/>
+          <writeData data="localsource:state_switch_3:uint8" value="0"/>
+          <writeData data="localsource:state_switch_4:uint8" value="0"/>
+          <writeData data="localsource:sound_switch:string" value="on"/>
+        </press>
+      </events>
+      <itemUndef>
+        <Label picture="file=pictures/switch_undef.png; size=(42,47)" />
+      </itemUndef>
+      <itemWrong>
+        <Label picture="file=pictures/switch_undef.png; size=(42,47)" />
+      </itemWrong>
+      <item matching="0">
+        <Label picture="file=pictures/switch_off.png; size=(42,47)" />
+      </item>
+      <item matching="1">
+        <Label picture="file=pictures/switch_on.png; size=(42,47)" />
+      </item>
+    </StackWidget>
+
+    <StackWidget position="154;80" data="localsource:state_switch_2:uint8" >
+      <events>
+        <press>
+          <writeData data="localsource:state_switch_1:uint8" value="0"/>
+          <writeData data="localsource:state_switch_2:uint8" value="1"/>
+          <writeData data="localsource:state_switch_3:uint8" value="0"/>
+          <writeData data="localsource:state_switch_4:uint8" value="0"/>
+          <writeData data="localsource:sound_switch:string" value="on"/>
+        </press>
+      </events>
+      <itemUndef>
+        <Label picture="file=pictures/switch_undef.png; size=(42,47)" />
+      </itemUndef>
+      <itemWrong>
+        <Label picture="file=pictures/switch_undef.png; size=(42,47)" />
+      </itemWrong>
+      <item matching="0">
+        <Label picture="file=pictures/switch_off.png; size=(42,47)" />
+      </item>
+      <item matching="1">
+        <Label picture="file=pictures/switch_on.png; size=(42,47)" />
+      </item>
+    </StackWidget>
+
+    <StackWidget position="254;80" data="localsource:state_switch_3:uint8" >
+      <events>
+        <press>
+          <writeData data="localsource:state_switch_1:uint8" value="0"/>
+          <writeData data="localsource:state_switch_2:uint8" value="0"/>
+          <writeData data="localsource:state_switch_3:uint8" value="1"/>
+          <writeData data="localsource:state_switch_4:uint8" value="0"/>
+          <writeData data="localsource:sound_switch:string" value="on"/>
+        </press>
+      </events>
+      <itemUndef>
+        <Label picture="file=pictures/switch_undef.png; size=(42,47)" />
+      </itemUndef>
+      <itemWrong>
+        <Label picture="file=pictures/switch_undef.png; size=(42,47)" />
+      </itemWrong>
+      <item matching="0">
+        <Label picture="file=pictures/switch_off.png; size=(42,47)" />
+      </item>
+      <item matching="1">
+        <Label picture="file=pictures/switch_on.png; size=(42,47)" />
+      </item>
+    </StackWidget>
+
+    <StackWidget position="354;80" data="localsource:state_switch_4:uint8" >
+      <events>
+        <press>
+          <writeData data="localsource:state_switch_1:uint8" value="0"/>
+          <writeData data="localsource:state_switch_2:uint8" value="0"/>
+          <writeData data="localsource:state_switch_3:uint8" value="0"/>
+          <writeData data="localsource:state_switch_4:uint8" value="1"/>
+          <writeData data="localsource:sound_switch:string" value="on"/>
+        </press>
+      </events>
+      <itemUndef>
+        <Label picture="file=pictures/switch_undef.png; size=(42,47)" />
+      </itemUndef>
+      <itemWrong>
+        <Label picture="file=pictures/switch_undef.png; size=(42,47)" />
+      </itemWrong>
+      <item matching="0">
+        <Label picture="file=pictures/switch_off.png; size=(42,47)" />
+      </item>
+      <item matching="1">
+        <Label picture="file=pictures/switch_on.png; size=(42,47)" />
+      </item>
+    </StackWidget>
+
+    <StackWidget position="55;194" data="localsource:state_switch_1:uint8" >
+      <itemUndef>
+        <Label picture="file=pictures/lamp_undef.png; size=(42,47)" />
+      </itemUndef>
+      <itemWrong>
+        <Label picture="file=pictures/lamp_undef.png; size=(42,47)" />
+      </itemWrong>
+      <item matching="0">
+        <Label picture="file=pictures/lamp_off.png; size=(42,47)" />
+      </item>
+      <item matching="1">
+        <Label picture="file=pictures/lamp_on.png; size=(42,47)" />
+      </item>
+    </StackWidget>
+
+    <StackWidget position="154;194" data="localsource:state_switch_2:uint8" >
+      <itemUndef>
+        <Label picture="file=pictures/lamp_undef.png; size=(42,47)" />
+      </itemUndef>
+      <itemWrong>
+        <Label picture="file=pictures/lamp_undef.png; size=(42,47)" />
+      </itemWrong>
+      <item matching="0">
+        <Label picture="file=pictures/lamp_off.png; size=(42,47)" />
+      </item>
+      <item matching="1">
+        <Label picture="file=pictures/lamp_on.png; size=(42,47)" />
+      </item>
+    </StackWidget>
+
+    <StackWidget position="254;194" data="localsource:state_switch_3:uint8" >
+      <itemUndef>
+        <Label picture="file=pictures/lamp_undef.png; size=(42,47)" />
+      </itemUndef>
+      <itemWrong>
+        <Label picture="file=pictures/lamp_undef.png; size=(42,47)" />
+      </itemWrong>
+      <item matching="0">
+        <Label picture="file=pictures/lamp_off.png; size=(42,47)" />
+      </item>
+      <item matching="1">
+        <Label picture="file=pictures/lamp_on.png; size=(42,47)" />
+      </item>
+    </StackWidget>
+
+    <StackWidget position="354;194" data="localsource:state_switch_4:uint8" >
+      <itemUndef>
+        <Label picture="file=pictures/lamp_undef.png; size=(42,47)" />
+      </itemUndef>
+      <itemWrong>
+        <Label picture="file=pictures/lamp_undef.png; size=(42,47)" />
+      </itemWrong>
+      <item matching="0">
+        <Label picture="file=pictures/lamp_off.png; size=(42,47)" />
+      </item>
+      <item matching="1">
+        <Label picture="file=pictures/lamp_on.png; size=(42,47)" />
+      </item>
+    </StackWidget>
+
+  </widgets>
+</Frame>
+

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<APPLICATION>
+
+  <SOURCES>
+    <Localsources>
+      <source id="localsource" mapfile="localsourcemap.xml" />
+    </Localsources>
+  </SOURCES>
+
+  <SOUNDS file="sounds.xml"/>
+
+  <WINDOW 
+    id="Window1" 
+    file="window1.xml"
+    visible="true"
+    title="Scheme Example" 
+    showMode="normal"
+    modality="false"
+    flags="" 
+    position="100;100" 
+    size="600;500"
+    screen="0"/>
+
+</APPLICATION>
+
+

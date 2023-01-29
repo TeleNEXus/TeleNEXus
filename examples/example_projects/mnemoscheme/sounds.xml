@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<SOUNDS>
+  <sound file="sounds/k1.wav" controlSource="localsource" controlData="sound_switch" repeat="0"/>
+</SOUNDS>

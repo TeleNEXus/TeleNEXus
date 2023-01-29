@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<Table>
+  <col label="Name">
+    <Label text="Switch 1"/>
+    <Label text="Switch 2"/>
+    <Label text="Switch 3"/>
+    <Label text="Switch 4"/>
+  </col>
+  <col label="State">
+    <ComboBox data="localsource:state_switch_1:uint8">
+      <item name="Off"  value="0"/>
+      <item name="On"   value="1"/>
+    </ComboBox>
+    <ComboBox data="localsource:state_switch_2:uint8">
+      <item name="Off"  value="0"/>
+      <item name="On"   value="1"/>
+    </ComboBox>
+    <ComboBox data="localsource:state_switch_3:uint8">
+      <item name="Off"  value="0"/>
+      <item name="On"   value="1"/>
+    </ComboBox>
+    <ComboBox data="localsource:state_switch_4:uint8">
+      <item name="Off"  value="0"/>
+      <item name="On"   value="1"/>
+    </ComboBox>
+  </col>
+  <col label="Value">
+    <LineEdit data="localsource:state_switch_1:uint8"/>
+    <LineEdit data="localsource:state_switch_2:uint8"/>
+    <LineEdit data="localsource:state_switch_3:uint8"/>
+    <LineEdit data="localsource:state_switch_4:uint8"/>
+  </col>
+</Table>

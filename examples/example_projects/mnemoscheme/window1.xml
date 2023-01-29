@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<WINDOW>
+  <mainWidget>
+    <Tabs>
+      <item text="Scheme">
+        <ScrollArea style="(...){background:green; qproperty-alignment: AlignCenter;}" >
+          <Frame file="scheme.xml"/>
+        </ScrollArea>
+      </item>
+
+      <item text="States">
+        <Table file="states_table.xml"/>
+      </item>
+
+    </Tabs>
+  </mainWidget>
+</WINDOW>
+
