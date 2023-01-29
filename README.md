@@ -85,6 +85,11 @@ and libraries necessary for the program to work.
 
 ![Screenshot](./docs/pictures/widget_styles_example.png)
 
+  Screenshot of the on-screen keyboard example
+  `examples/keyboard`.
+
+![Screenshot](./docs/pictures/keyboard_example.png)
+
 #
 \[RU\]
 #
@@ -171,3 +176,8 @@ Data Acquisitionи) и ICS (Industrial Control System) систем.
   `examples/widgetstyles`.
 
 ![Screenshot](./docs/pictures/widget_styles_example.png)
+
+  Снимок экрана примера экранной клавиатуры
+  `examples/keyboard`.
+
+![Screenshot](./docs/pictures/keyboard_example.png)
