@@ -21,7 +21,7 @@
  - For the development of the project you need only a text editor;
  - Security system to restrict access to the functions described
    systems;
- - Ability to work in embedded systems with TouchScreen screens;
+ - Ability to work in embedded systems with touchscreen;
  - Built-in ability to create on-screen keyboards;
  - Ability to use JavaScript to describe behavior
    systems, data processing, and response to operator actions;
@@ -68,6 +68,14 @@ and libraries necessary for the program to work.
    Using this small program, you can quickly launch different projects.
    The program has a simple graphical interface and supports all possible
    project launch options
+
+# Examples.
+  Examples of simple projects designed to familiarize with the functions 
+  of the program are given in the folder './examples'
+
+# Showcase
+![alt text](./docs/pictures/scheme_example.png)
+![alt text](./docs/pictures/widget_styles_example.png)
 
 #
 \[RU\]
@@ -137,5 +145,9 @@ Data Acquisitionи) и ICS (Industrial Control System) систем.
   - Выполнить команду вида `tnex "xml file name or path to project"`
 ## Менеджер проектов tnexluncher.
   Используя эту небольшую программу можно быстро запускать разные проекты.
-  Программа имеет простой графический интерфейс и поддерфивает все возможные
+  Программа имеет простой графический интерфейс и поддерживает все возможные
   варианты запуска проекта.
+
+# Examples.
+  Examples of simple projects designed to familiarize with the functions 
+  of the program are given in the folder './examples'
