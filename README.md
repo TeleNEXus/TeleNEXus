@@ -159,3 +159,15 @@ Data Acquisitionи) и ICS (Industrial Control System) систем.
 # Examples.
   Examples of simple projects designed to familiarize with the functions 
   of the program are given in the folder './examples'
+
+## Снимки экрана
+
+  Снимок экрана простого проекта схемы типа "Набор лампочек и кнопочек"
+  `examples/example_projects/mnemoscheme`.
+
+![Screenshot](./docs/pictures/scheme_example.png)
+
+  Снимок экрана проекта примеров стилей оформления виджетов
+  `examples/widgetstyles`.
+
+![Screenshot](./docs/pictures/widget_styles_example.png)
