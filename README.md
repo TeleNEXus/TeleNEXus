@@ -30,10 +30,15 @@
    data transfer protocols.
 
 # Compiling.
+
+## Composition of build.
   The project consists of three separately compiled parts:
 - The main part of TeleNEXus located in the folder `tnexcore`;
 - The launcher located in the `tools/launcher` folder;
 - MODBUS data source implementation plugin in the `plugins/modvussource` folder.
+
+## Version Qt.
+ TeleNEXus was build using Qt 5.12.8.
 
 ## Linux.
   To fully compile the entire project, you can use the bash script file
@@ -42,6 +47,9 @@ compile all parts separately using qmake and make.
 After compilation, you can use the install.sh script which will copy
 executable files and plugins to the `/opt/tnex` and `/opt/tnex/plugins` folders, as well as
 create a tnex link in `/usr/bin/`
+  Build and installation example:
+  `$./build.sh`
+  `$sudo ./install.sh`
 
 ## Windows.
   If you have the Linux Subsystem for Windows installed on your system, you can
@@ -57,6 +65,13 @@ Qt utility `windeployqt.ext`, or if compilation was done by a script
 `win_build.sh`, you can use the `win_deploy.sh` script as a result of work
 which the `win_deploy` folder should appear containing all executable files
 and libraries necessary for the program to work.
+  Build and deploy example:
+  `$./win_build.sh`
+  `$./win_deploy.sh`
+  or
+  `$bash win_build.sh`
+  `$bash win_deploy.sh`
+
 
 # Usage.
 ## Console.
@@ -122,10 +137,15 @@ Data Acquisitionи) и ICS (Industrial Control System) систем.
   протоколов передачи данных.
 
 # Компилирование.
+
+## Состав сборки.
   Проект состоит из трех отдельно компилируемых частей:
 - Основная часть TeleNEXus расположенная в папке `tnexcore`;
 - Программа запуска расположенная в папке `tools/launcher`;
 - Плагин реализации источника данных MODBUS в папке `plugins/modvussource`.
+
+## Версия Qt.
+  Для сборки TeleNEXus использовалась версия Qt 5.12.8.
 
 ## Linux.
   Для полной компиляции всего проекта можно исользовать файл bash скрипта
@@ -134,6 +154,9 @@ Data Acquisitionи) и ICS (Industrial Control System) систем.
 После компиляции можно использовать скрипт install.sh который скопирует
 исполняемые файлы и плагины в папку `/opt/tnex` и `/opt/tnex/plugins`, а также
 создаые ссылку tnex в папке `/usr/bin/`
+  Пример сборки:
+  `$./build.sh`
+  `$sudo ./install.sh`
 
 ## Windows.
   Если в вашей системе установлена подсистема Linux для Windows можно 
@@ -149,6 +172,12 @@ Data Acquisitionи) и ICS (Industrial Control System) систем.
 `win_build.sh`, можно использовать скрипт `win_deploy.sh` в результате работы 
 которого должна появиться папка `win_deploy` содержащая все исполняемые файлы
 и библиотеки небоходимые для работы программы.
+  Пример сборки:
+  `$./win_build.sh`
+  `$./win_deploy.sh`
+  or
+  `$bash win_build.sh`
+  `$bash win_deploy.sh`
 
 # Использование.
 ## Консоль.
