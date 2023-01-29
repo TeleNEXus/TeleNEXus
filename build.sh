@@ -1,9 +1,5 @@
 #!/bin/bash
 
-
-# QMAKE=qmake
-# MAKE=make
-
 if [ -z ${QMAKE} ]; then
   QMAKE=qmake
 fi
@@ -12,13 +8,14 @@ if [ -z ${MAKE} ]; then
   MAKE=make
 fi
 
-
-
 v_launcher="`pwd`/tools/launcher"
 v_modbussource="`pwd`/plugins/modbussource"
 v_tnexcore="`pwd`/tnexcore"
 v_examplewidgets="`pwd`/examples/plugins/widgets/plugins"
 
+# -----------------------------------
+# Specify folder name for build.
+# -----------------------------------
 v_build_dir_name=__builds
 
 v_offset_line="================================================"
@@ -79,13 +76,13 @@ createBuildDir "$v_examplewidgets"
 
 # ./version.sh
 
-echo "$v_offset_line QMAKE"
+echo "$v_offset_line $QMAKE"
 MAKEPrg "$v_launcher" $QMAKE
 MAKEPrg "$v_modbussource" $QMAKE
 MAKEPrg "$v_tnexcore" $QMAKE
 MAKEPrg "$v_examplewidgets" $QMAKE
 
-echo "$v_offset_line MAKE $1"
+echo "$v_offset_line $MAKE $1"
 MAKEPrg "$v_launcher" $MAKE $1
 MAKEPrg "$v_modbussource" $MAKE $1
 MAKEPrg "$v_tnexcore" $MAKE $1

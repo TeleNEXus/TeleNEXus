@@ -1,15 +1,33 @@
 #!/bin/bash
 
-qmake=qmake.exe
-make=mingw32-make.exe
+# -----------------------------------
+# Specify windows deploy utility
+# -----------------------------------
+WINDEPLOYQT=windeployqt.exe 
 
+# -----------------------------------
+# Specify the file paths to deploy.
+# -----------------------------------
+
+# TeleNEXus luncher
 v_launcher_exe="`pwd`/tools/launcher/__builds/release/launcher.exe"
+
+# TeleNEXus luncher translate files.
 v_launcher_lang_ru="`pwd`/tools/launcher/main_ru.qm"
 v_launcher_lang_en="`pwd`/tools/launcher/main_en.qm"
+
+# Plugin Modbus.
 v_modbussource="`pwd`/plugins/modbussource/__builds/release/modbussource.dll"
+
+# TeleNEXus core application.
 v_tnex="`pwd`/tnexcore/__builds/release/tnex.exe"
 
+# -----------------------------------
+# Specify deploy folder path. 
+# -----------------------------------
 v_deploy_path="`pwd`/win_deploy/"
+
+
 
 v_offset_line="================================================"
 
@@ -59,10 +77,11 @@ cp $v_launcher_lang_en $v_deploy_path/
 
 cd "$v_deploy_path"
 
-windeployqt.exe --compiler-runtime --no-translations --no-system-d3d-compiler --release --no-quick-import  ./tnex.exe
-windeployqt.exe --compiler-runtime --no-translations --no-system-d3d-compiler --release --no-quick-import  ./modbussource.dll
-windeployqt.exe --compiler-runtime --no-translations --no-system-d3d-compiler --release --no-quick-import  ./launcher.exe
+$WINDEPLOYQT --compiler-runtime --no-translations --no-system-d3d-compiler --release --no-quick-import  ./tnex.exe
+$WINDEPLOYQT --compiler-runtime --no-translations --no-system-d3d-compiler --release --no-quick-import  ./modbussource.dll
+$WINDEPLOYQT --compiler-runtime --no-translations --no-system-d3d-compiler --release --no-quick-import  ./launcher.exe
 
 createDir plugins
 mv ./modbussource.dll ./plugins/
 mv ./launcher.exe ./tnexlauncher.exe
+
