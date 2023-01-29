@@ -74,12 +74,16 @@ and libraries necessary for the program to work.
   of the program are given in the folder './examples'
 
 ## Showcase
+
   Screenshot of the sample project with the scheme "Set of light bulbs and buttons"
   `examples/example_projects/mnemoscheme`.
-![alt text](./docs/pictures/scheme_example.png)
+
+![Screenshot](./docs/pictures/scheme_example.png)
+
   Screenshot of widget style examples
   `examples/widgetstyles`.
-![alt text](./docs/pictures/widget_styles_example.png)
+
+![Screenshot](./docs/pictures/widget_styles_example.png)
 
 #
 \[RU\]
