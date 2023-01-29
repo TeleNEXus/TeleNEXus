@@ -74,7 +74,7 @@ createBuildDir "$v_modbussource"
 createBuildDir "$v_tnexcore"
 createBuildDir "$v_examplewidgets"
 
-# ./version.sh
+./version.sh
 
 echo "$v_offset_line $QMAKE"
 MAKEPrg "$v_launcher" $QMAKE

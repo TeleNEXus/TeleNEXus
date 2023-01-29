@@ -1,5 +1,5 @@
 #!/bin/bash
-baseversion="1.0"
+baseversion="0.3"
 echo "===============================Generate new build number"
 oldnumber=$(cat ./buildcounter.cnt)
 echo "Old build number:    $oldnumber"
