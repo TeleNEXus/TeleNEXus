@@ -73,8 +73,12 @@ and libraries necessary for the program to work.
   Examples of simple projects designed to familiarize with the functions 
   of the program are given in the folder './examples'
 
-# Showcase
+## Showcase
+  Screenshot of the sample project with the scheme "Set of light bulbs and buttons"
+  `examples/example_projects/mnemoscheme`.
 ![alt text](./docs/pictures/scheme_example.png)
+  Screenshot of widget style examples
+  `examples/widgetstyles`.
 ![alt text](./docs/pictures/widget_styles_example.png)
 
 #
