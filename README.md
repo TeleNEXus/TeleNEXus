@@ -225,3 +225,4 @@ Data Acquisitionи) и ICS (Industrial Control System) систем.
   `examples/keyboard`.
 
 ![Screenshot](./docs/pictures/keyboard_example.png)
+
