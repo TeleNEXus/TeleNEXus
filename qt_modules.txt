@@ -1,0 +1,8 @@
+Linux Qt 5.12.8 modules:
+
+  qt5-default
+  libqt5serialbus5-def
+  libqt5serialport5-def
+  qtmultimedia5-dev
+  qtdeclarative5-dev
+
