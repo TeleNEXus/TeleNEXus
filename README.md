@@ -9,10 +9,10 @@
  is that when using the graphical interface for
  building SCADA systems after a certain level of complexity becomes
  time-consuming not only to make changes, but also to track them.
-   An analogy can be drawn with digital systems, which
- great to develop with graphical tools only up to
- a certain limit, and then comes the turn of hardware description languages
- integrated circuits such as VHDL or Verilog.
+   > An analogy can be drawn with digital systems, which
+ > great to develop with graphical tools only up to
+ > a certain limit, and then comes the turn of hardware description languages
+ > integrated circuits such as VHDL or Verilog.
    The software basis of TeleNEXus is the Qt framework, due to which
  provides cross-platform.
 
@@ -123,10 +123,10 @@ Data Acquisitionи) и ICS (Industrial Control System) систем.
 заключается в том, что при использовании графического интерфейса для 
 построения SCADA систем после определенного уровня сложности становится 
 трудоемко не только вносить изменения, но и производить их отслеживание. 
-  Можно провести аналогию с цифровыми системами, которые 
-прекрасно разрабатывать при помощи графических инструментов только до
-определенного предела, а затем наступает очередь языков описания аппаратуры 
-интегральных схем таких как VHDL или Verilog.
+  > Можно провести аналогию с цифровыми системами, которые 
+> прекрасно разрабатывать при помощи графических инструментов только до
+> определенного предела, а затем наступает очередь языков описания аппаратуры 
+> интегральных схем таких как VHDL или Verilog.
   Програмной основой TeleNEXus является фреймворк Qt за счет чего 
 обеспечивается кроссплатформенность.
 
