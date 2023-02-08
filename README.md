@@ -2,19 +2,12 @@
 \[En\]
 #
 # Introduction.
-   TeleNEXus is a program for building SCADA (Supervisory Control And
- Data Acquisition) and ICS (Industrial Control System) systems.
-   The ideological basis of TeleNEXus is a description of the graphical interface and other
- elements through Extensible Markup Language XML. The main meaning of this
- is that when using the graphical interface for
- building SCADA systems after a certain level of complexity becomes
- time-consuming not only to make changes, but also to track them.
-   > An analogy can be drawn with digital systems, which
- > great to develop with graphical tools only up to
- > a certain limit, and then comes the turn of hardware description languages
- > integrated circuits such as VHDL or Verilog.
-   The software basis of TeleNEXus is the Qt framework, due to which
- provides cross-platform.
+TeleNEXus is a program for building SCADA (Supervisory Control And
+Data Acquisition) and ICS (Industrial Control System) systems.
+The system project is a set of extensible markup language (XML) files that 
+describe the graphical interface, data sets and their presentation methods.
+The software basis of TeleNEXus is the Qt framework, due to which
+provides cross-platform.
 
 # Features.
  - Cross-platform;
@@ -116,18 +109,11 @@ and libraries necessary for the program to work.
 \[RU\]
 #
 # Введение.
-  TeleNEXus это программа для построения SCADA (Supervisory Control And 
+TeleNEXus это программа для построения SCADA (Supervisory Control And 
 Data Acquisitionи) и ICS (Industrial Control System) систем. 
-  Идейная основа TeleNEXus это описание графического интерфейса и других 
-элементов посредством расширяемого языка разметки XML. Основной смысл этого
-заключается в том, что при использовании графического интерфейса для 
-построения SCADA систем после определенного уровня сложности становится 
-трудоемко не только вносить изменения, но и производить их отслеживание. 
-  > Можно провести аналогию с цифровыми системами, которые 
-> прекрасно разрабатывать при помощи графических инструментов только до
-> определенного предела, а затем наступает очередь языков описания аппаратуры 
-> интегральных схем таких как VHDL или Verilog.
-  Програмной основой TeleNEXus является фреймворк Qt за счет чего 
+Проект ситсемы представляет собой набор файлов расширяемого языка разметка 
+(XML) описывающие графический интерфейс, наборы данных и спобобы их представления.
+Програмной основой TeleNEXus является фреймворк Qt за счет чего 
 обеспечивается кроссплатформенность.
 
 # Особенности.
