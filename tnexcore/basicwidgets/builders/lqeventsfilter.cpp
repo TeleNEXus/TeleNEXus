@@ -29,6 +29,7 @@
 #include <QTimer>
 #include <QWidget>
 #include <qnamespace.h>
+#include <QMouseEvent>
 
 
 //==============================================================================

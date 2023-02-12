@@ -25,6 +25,7 @@
 #include <QObject>
 #include <QSharedPointer>
 #include <QEvent>
+#include <QMap>
 
 class QTimer;
 class QDomElement;
