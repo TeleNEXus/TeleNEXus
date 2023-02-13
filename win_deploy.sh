@@ -77,9 +77,21 @@ cp $v_launcher_lang_en $v_deploy_path/
 
 cd "$v_deploy_path"
 
-$WINDEPLOYQT --compiler-runtime --no-translations --no-system-d3d-compiler --release --no-quick-import  ./tnex.exe
-$WINDEPLOYQT --compiler-runtime --no-translations --no-system-d3d-compiler --release --no-quick-import  ./modbussource.dll
-$WINDEPLOYQT --compiler-runtime --no-translations --no-system-d3d-compiler --release --no-quick-import  ./launcher.exe
+# $WINDEPLOYQT --compiler-runtime --no-translations --no-system-d3d-compiler --release --no-quick-import  ./tnex.exe
+# $WINDEPLOYQT --compiler-runtime --no-translations --no-system-d3d-compiler --release --no-quick-import  ./modbussource.dll
+# $WINDEPLOYQT --compiler-runtime --no-translations --no-system-d3d-compiler --release --no-quick-import  ./launcher.exe
+
+# $WINDEPLOYQT --compiler-runtime --no-translations --no-system-d3d-compiler --debug --no-quick-import  ./tnex.exe
+# $WINDEPLOYQT --compiler-runtime --no-translations --no-system-d3d-compiler --debug --no-quick-import  ./modbussource.dll
+# $WINDEPLOYQT --compiler-runtime --no-translations --no-system-d3d-compiler --debug --no-quick-import  ./launcher.exe
+
+$WINDEPLOYQT --compiler-runtime --no-translations --no-system-d3d-compiler  --no-quick-import  ./tnex.exe
+$WINDEPLOYQT --compiler-runtime --no-translations --no-system-d3d-compiler  --no-quick-import  ./modbussource.dll
+$WINDEPLOYQT --compiler-runtime --no-translations --no-system-d3d-compiler  --no-quick-import  ./launcher.exe
+
+# $WINDEPLOYQT  ./tnex.exe
+# $WINDEPLOYQT  ./modbussource.dll
+# $WINDEPLOYQT  ./launcher.exe
 
 createDir plugins
 mv ./modbussource.dll ./plugins/
