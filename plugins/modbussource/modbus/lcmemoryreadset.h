@@ -22,7 +22,6 @@
 #ifndef LCMEMORYSET_H_
 #define LCMEMORYSET_H_
 
-/* #include <QLinkedList> */
 #include <list>
 #include <QDebug>
 #include <QPair>

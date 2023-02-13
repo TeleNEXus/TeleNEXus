@@ -522,16 +522,16 @@ void LCModbusDataMap::CAddressedDataMapItem::notifyReaders(
 void LCModbusDataMap::CAddressedDataMapItem::connectReader(
     QWeakPointer<LQModbusDataReader> _reader)
 {
-  if(mReadersList.isEmpty()) mController.inssertReadDataItem(mspReadSetData);
-  mReadersList << _reader;
+  if(mReadersList.empty()) mController.inssertReadDataItem(mspReadSetData);
+  mReadersList.push_back(_reader);
 }
 
 //------------------------------------------------------------------------------
 void LCModbusDataMap::CAddressedDataMapItem::disconnectReader(
     QWeakPointer<LQModbusDataReader> _reader)
 {
-  mReadersList.removeAll(_reader);
-  if(mReadersList.isEmpty())
+  mReadersList.remove(_reader);
+  if(mReadersList.empty())
   {
     mController.removeReadDataItem(mspReadSetData);
   }

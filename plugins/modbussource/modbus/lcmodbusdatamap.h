@@ -27,8 +27,8 @@
 #include "lcmemoryreadset.h"
 
 #include <QString>
-#include <QLinkedList>
 #include <QMap>
+#include <list>
 
 
 
@@ -266,7 +266,7 @@ private:
     };
 
     QSharedPointer<LCMemoryReadSet::CIData> mspReadSetData;
-    QLinkedList<QWeakPointer<LQModbusDataReader>> mReadersList;
+    std::list<QWeakPointer<LQModbusDataReader>> mReadersList;
     CIAddressedDataController& mController;
 
   public:
@@ -288,7 +288,7 @@ private:
 
     virtual bool hasNoReaders(void) const override 
     {
-      return mReadersList.isEmpty();
+      return mReadersList.empty();
     }
 
     virtual void connectReader(
