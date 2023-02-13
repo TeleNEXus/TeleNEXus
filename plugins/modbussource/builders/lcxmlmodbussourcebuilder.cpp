@@ -307,7 +307,7 @@ static QSharedPointer<LQModbusMasterBase> createMasterRtu(
   attr = _element.attribute(__mastersRtuAttributes.timeout);
   timeout = attr.toInt(&boolBuff);
 
-  if(boolBuff)
+  if(!boolBuff)
   {
     master->connectToPort(  portName,
         static_cast<QSerialPort::BaudRate>(baud),
