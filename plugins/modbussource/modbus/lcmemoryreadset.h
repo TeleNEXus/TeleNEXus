@@ -1,4 +1,4 @@
-/* 
+/*
  * TeleNEXus is a simple SCADA programm
  *
  * Copyright (C) 2020 Sergey S. Kuzmenko
@@ -22,7 +22,8 @@
 #ifndef LCMEMORYSET_H_
 #define LCMEMORYSET_H_
 
-#include <QLinkedList>
+/* #include <QLinkedList> */
+#include <list>
 #include <QDebug>
 #include <QPair>
 #include <QSharedPointer>
@@ -42,7 +43,7 @@ public:
     CIData(){}
     virtual ~CIData(){}
     virtual int getAddress() const = 0;
-    virtual int getSize() const = 0; 
+    virtual int getSize() const = 0;
     virtual void setData(const QByteArray& _data, int status) = 0;
   };
 
@@ -59,15 +60,15 @@ private:
     CDataItem() : CAddrPair(-1, -1), mUniteIndex(1){}
 
     CDataItem(int _first, int _second) :
-      CAddrPair(_first, _second), 
+      CAddrPair(_first, _second),
       mUniteIndex(1){}
 
-    explicit CDataItem( int _first, int _second, QWeakPointer<CIData> _wpData) : 
-      CAddrPair(_first, _second), 
+    explicit CDataItem( int _first, int _second, QWeakPointer<CIData> _wpData) :
+      CAddrPair(_first, _second),
       mUniteIndex(1) { mDataList << _wpData;}
 
     bool isNull() const
-    { 
+    {
       return ((first < 0) || (second < 0)) ? (true) : (false);
     }
 
@@ -77,7 +78,7 @@ private:
   };
 
 private:
-  using CMemorySetList = QLinkedList<CDataItem>;
+  using CMemorySetList = std::list<CDataItem>;
   using CMemoryDataMap = QMultiMap<CAddrPair, QWeakPointer<CIData>>;
 
 private:

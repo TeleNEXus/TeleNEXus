@@ -133,7 +133,6 @@ LCMemoryReadSet::~LCMemoryReadSet()
 //------------------------------------------------------------------------------
 void LCMemoryReadSet::compilDataMap()
 {
-
   mListCompil.clear();
 
   enum class EState
@@ -176,7 +175,7 @@ void LCMemoryReadSet::compilDataMap()
 
           if(itdm == mDataMap.end())
           {
-            mListCompil << item_acc;
+            mListCompil.push_back(item_acc);
             return false;
           }
 
@@ -205,7 +204,7 @@ void LCMemoryReadSet::compilDataMap()
             }
           }
           
-          mListCompil << item_acc;
+          mListCompil.push_back(item_acc);
           state = EState::st0;
         }
         break;
