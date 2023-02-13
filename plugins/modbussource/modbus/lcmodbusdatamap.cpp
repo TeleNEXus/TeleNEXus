@@ -313,20 +313,20 @@ void LCModbusDataMap::CControllerBitsBase::removeReadDataItem(
 void LCModbusDataMap::CControllerBitsBase::read(
     quint16 _addr, quint16 _size, QSharedPointer<LQModbusDataReader> _reader)
 {
-  EReadStatus status = EReadStatus::Wrong;
-  quint8 buff[_size];
   auto sp = mwpMaster.lock();
-
 
   if(!sp.isNull())
   {
+    quint8 buff[_size];
+    EReadStatus status = EReadStatus::Wrong;
     if(readBits(sp.data(), _addr, _size, buff).status ==
         LQModbusMasterBase::SReply::EStatus::OK)
     {
       status = EReadStatus::Valid;
     }
+    _reader->notifyListener(QByteArray((char*)buff, _size), status);
   }
-  _reader->notifyListener(QByteArray((char*)buff, _size), status);
+  _reader->notifyListener(EReadStatus::Wrong);
 }
 
 //------------------------------------------------------------------------------
