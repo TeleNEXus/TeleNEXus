@@ -262,13 +262,13 @@ QSharedPointer<LIJScriptService> getScript(const QString& _scriptId)
 //------------------------------------------------------------------------------upload
 void upload( const QDomElement &_rootElement)
 {
-  QDomElement el = _rootElement.firstChildElement(__slTags.rootTag);
-  if(el.isNull()) 
-  {
-    return;
-  }
   __smMessage("\n\tBegining deploy of scripts\n");
-  uploadLocal(el);
+  for( auto element = _rootElement.firstChildElement(__slTags.rootTag); 
+      !element.isNull();
+      element = element.nextSiblingElement(__slTags.rootTag))
+  {
+    uploadLocal(element);
+  }
   __smMessage("\n\tEnd deploy of scripts\n");
 }
 }
