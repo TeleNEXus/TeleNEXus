@@ -398,11 +398,90 @@ static int loadMemoryMap(LQModbusDataSource* _p_source,
     const LIApplication& _app)
 {
 
-  QDomDocument domDoc = _app.loadDomDocument(_filename);
-  if(domDoc.isNull()) return -1;
+  int items_counter = 0;
 
-  QDomNodeList itemnodes;
-  int itemsCounter = 0;
+  auto loader = 
+    [&items_counter, _p_source](const QDomElement& _element)
+    {
+      //-------------------------------------
+      //get offsets
+      auto getOffset = [&_element](const QString& _attr)
+      {
+        QString offsetattr;
+        offsetattr = _element.attribute(_attr);
+        if(offsetattr.isNull()) return 0;
+        bool flag = false;
+        int offset = offsetattr.toInt(&flag);
+        if(!flag) return 0;
+        return offset;
+      };
+
+      QDomNodeList itemnodes;
+
+      int coilsoffset = 0;
+      int discinsoffset = 0;
+
+      int inregsoffset = 0;
+      int holdregsoffset = 0;
+
+      {
+        int offset;
+        int bitsoffset = getOffset(__slMemoryMapAttributes.bitsoffset);
+        int regsoffset = getOffset(__slMemoryMapAttributes.regsoffset);
+
+        offset = getOffset(__slMemoryMapAttributes.coilsoffset);
+        coilsoffset = (offset == 0) ? (bitsoffset) : (offset);
+
+        offset = getOffset(__slMemoryMapAttributes.discinsoffset);
+        discinsoffset = (offset == 0) ? (bitsoffset) : (offset);
+
+        offset = getOffset(__slMemoryMapAttributes.inregsregsoffset);
+        inregsoffset = (offset == 0) ? (regsoffset) : (offset);
+
+        offset = getOffset(__slMemoryMapAttributes.holdregsoffset);
+        holdregsoffset = (offset == 0) ? (regsoffset) : (offset);
+      }
+
+      //-------------------------------------
+      itemnodes = _element.elementsByTagName(__slMemoryMapTags.coils);
+      if(!itemnodes.isEmpty())
+      {
+        items_counter += addSourceDataItems(
+            _p_source, itemnodes, EItemType::COILS, coilsoffset);
+      }
+
+      itemnodes = _element.elementsByTagName(
+          __slMemoryMapTags.discreteinputs);
+      if(!itemnodes.isEmpty())
+      {
+        items_counter += addSourceDataItems(
+            _p_source, itemnodes, EItemType::DISCRETEINPUTS, discinsoffset);
+      }
+
+      itemnodes = _element.elementsByTagName(
+          __slMemoryMapTags.inputregisters);
+      if(!itemnodes.isEmpty())
+      {
+        items_counter += addSourceDataItems(
+            _p_source, itemnodes, EItemType::INPUTREGISTERS, inregsoffset);
+      }
+
+      itemnodes = _element.elementsByTagName(
+          __slMemoryMapTags.holdingregisters);
+      if(!itemnodes.isEmpty())
+      {
+        items_counter += addSourceDataItems(
+            _p_source, itemnodes, EItemType::HOLDINGREGISTERS, holdregsoffset);
+      }
+    };
+
+  QDomDocument domDoc = _app.loadDomDocument(_filename);
+
+  if(domDoc.isNull()) 
+  {
+    return items_counter;
+  }
+
   QDomElement rootElement = domDoc.documentElement();
 
   if(rootElement.tagName() != __slTags.memorymap)
@@ -410,81 +489,12 @@ static int loadMemoryMap(LQModbusDataSource* _p_source,
     qDebug() << 
       "LCXmlModbusSources: memory map file " <<  
       _filename << " wrong root element";
-    return -2;
+    return items_counter;
   }
 
-  //-------------------------------------
-  //get offsets
-  auto getOffset = [&rootElement](const QString& _attr)
-  {
-    QString offsetattr;
-    offsetattr = rootElement.attribute(_attr);
-    if(offsetattr.isNull()) return 0;
-    bool flag = false;
-    int offset = offsetattr.toInt(&flag);
-    if(!flag) return 0;
-    return offset;
-  };
+  _app.buildFromFile(rootElement, loader);
 
-  
-  int coilsoffset = 0;
-  int discinsoffset = 0;
-
-  int inregsoffset = 0;
-  int holdregsoffset = 0;
-
-  {
-    int offset;
-    int bitsoffset = getOffset(__slMemoryMapAttributes.bitsoffset);
-    int regsoffset = getOffset(__slMemoryMapAttributes.regsoffset);
-
-    offset = getOffset(__slMemoryMapAttributes.coilsoffset);
-    coilsoffset = (offset == 0) ? (bitsoffset) : (offset);
-
-    offset = getOffset(__slMemoryMapAttributes.discinsoffset);
-    discinsoffset = (offset == 0) ? (bitsoffset) : (offset);
-
-    offset = getOffset(__slMemoryMapAttributes.inregsregsoffset);
-    inregsoffset = (offset == 0) ? (regsoffset) : (offset);
-
-    offset = getOffset(__slMemoryMapAttributes.holdregsoffset);
-    holdregsoffset = (offset == 0) ? (regsoffset) : (offset);
-  }
-
-
-  //-------------------------------------
-  itemnodes = rootElement.elementsByTagName(__slMemoryMapTags.coils);
-  if(!itemnodes.isEmpty())
-  {
-    itemsCounter += addSourceDataItems(
-        _p_source, itemnodes, EItemType::COILS, coilsoffset);
-  }
-
-  itemnodes = rootElement.elementsByTagName(
-      __slMemoryMapTags.discreteinputs);
-  if(!itemnodes.isEmpty())
-  {
-    itemsCounter += addSourceDataItems(
-        _p_source, itemnodes, EItemType::DISCRETEINPUTS, discinsoffset);
-  }
-
-  itemnodes = rootElement.elementsByTagName(
-      __slMemoryMapTags.inputregisters);
-  if(!itemnodes.isEmpty())
-  {
-    itemsCounter += addSourceDataItems(
-        _p_source, itemnodes, EItemType::INPUTREGISTERS, inregsoffset);
-  }
-
-  itemnodes = rootElement.elementsByTagName(
-      __slMemoryMapTags.holdingregisters);
-  if(!itemnodes.isEmpty())
-  {
-    itemsCounter += addSourceDataItems(
-        _p_source, itemnodes, EItemType::HOLDINGREGISTERS, holdregsoffset);
-  }
-
-  return itemsCounter;
+  return items_counter;
 }
 
 //------------------------------------------------------------------------------
