@@ -72,11 +72,14 @@ the following structure:
             databits        "Data bits, usually 8, dependents from system" 
             stopbits        "[1,2]" 
             timeout         "Response timeout in ms"
+            retries         "Number retries before of a request fail."
 
           Attributs for MODBUS TCP:
             name            "master id" 
             type            "tcp"
             url             "ip:port"
+            timeout         "Response timeout in ms"
+            retries         "Number retries before of a request fail."
         
         <source>
           Attributes:

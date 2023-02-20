@@ -56,10 +56,12 @@ QSharedPointer<LQModbusMasterTcp> LQModbusMasterTcp::create()
 }
 
 //------------------------------------------------------------------------------
-void LQModbusMasterTcp::connectToHost(const QUrl& _url)
+void LQModbusMasterTcp::connectToHost(const QUrl& _url, int _timeout, int _retries)
 {
   mPort = _url.port();
   mHostName = _url.host();
+  mTimeout = _timeout;
+  mRetries = _retries;
   connectRequest();
 }
 
@@ -84,7 +86,9 @@ QModbusClient* LQModbusMasterTcp::createMaster()
   mpMaster->setConnectionParameter(
       QModbusDevice::NetworkAddressParameter, mHostName);
 
-  mpMaster->setTimeout(500);
+  mpMaster->setTimeout(mTimeout);
+  mpMaster->setNumberOfRetries(mRetries);
+
   return mpMaster;
 }
 

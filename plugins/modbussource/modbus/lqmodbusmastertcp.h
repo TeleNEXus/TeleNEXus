@@ -34,6 +34,8 @@ class LQModbusMasterTcp : public LQModbusMasterBase
 private:
   quint16             mPort;
   QString             mHostName;
+  int                 mTimeout;
+  int                 mRetries;
   QModbusTcpClient*   mpMaster;
   QThread*            mpThread;
 
@@ -48,7 +50,7 @@ public:
   static QSharedPointer<LQModbusMasterTcp> create();
 
 public slots:
-  void connectToHost(const QUrl& _url);
+  void connectToHost(const QUrl& _url, int _timeout, int _retries);
   void disconnectFromHost();
 
 private:

@@ -36,6 +36,7 @@ LQModbusMasterRtu::LQModbusMasterRtu(QObject* _parent) :
   mDataBits (QSerialPort::DataBits::UnknownDataBits),
   mStopBits (QSerialPort::StopBits::UnknownStopBits),
   mTimeout(500),
+  mRetries(3),
   mpMaster(nullptr),
   mpThread(nullptr)
 {
@@ -55,7 +56,8 @@ void LQModbusMasterRtu::connectToPort(
     QSerialPort::Parity     _parity,
     QSerialPort::DataBits   _dataBits,
     QSerialPort::StopBits   _stopBits,
-    int                     _timeout)
+    int                     _timeout,
+    int                     _retries)
 {
   mPortName   = _portName;
   mParity     = _parity;
@@ -63,6 +65,7 @@ void LQModbusMasterRtu::connectToPort(
   mDataBits   = _dataBits;
   mStopBits   = _stopBits;
   mTimeout    = _timeout;
+  mRetries    = _retries;
   connectRequest();
 }
 
@@ -110,6 +113,8 @@ QModbusClient* LQModbusMasterRtu::createMaster()
       QModbusDevice::SerialStopBitsParameter, mStopBits);
 
   mpMaster->setTimeout(mTimeout);
+
+  mpMaster->setNumberOfRetries(mRetries);
 
   return mpMaster;
 }

@@ -39,6 +39,7 @@ private:
   QSerialPort::DataBits mDataBits;
   QSerialPort::StopBits mStopBits;
   int mTimeout;
+  int mRetries;
   QModbusRtuSerialMaster* mpMaster;
   QThread* mpThread;
 
@@ -59,7 +60,8 @@ public:
         QSerialPort::Parity     _parity,
         QSerialPort::DataBits   _dataBits,
         QSerialPort::StopBits   _stopBits,
-        int                     _timeout = 500);
+        int                     _timeout,
+        int                     _retries);
   void disconnectFromPort();
 
 protected:

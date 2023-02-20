@@ -188,6 +188,8 @@ static const struct
 {
   QString name        = "name";
   QString type        = "type";
+  QString timeout     = "timeout";
+  QString retries     = "retries";
 }__mastersCommonAttributes;
 
 //------------------------------------------------------------------------------
@@ -239,7 +241,6 @@ static const struct
   QString parity      = "parity";
   QString databits    = "databits";
   QString stopbits    = "stopbits";
-  QString timeout     = "timeout";
 
   static QSerialPort::Parity getParity(const QString& _name)
   {
@@ -275,6 +276,7 @@ static QSharedPointer<LQModbusMasterBase> createMasterRtu(
   int dataBits;
   int stopBits;
   int timeout;
+  int retries;
 
   bool boolBuff = false;
 
@@ -304,26 +306,29 @@ static QSharedPointer<LQModbusMasterBase> createMasterRtu(
 
   master = LQModbusMasterRtu::create();
 
-  attr = _element.attribute(__mastersRtuAttributes.timeout);
+  attr = _element.attribute(__mastersCommonAttributes.timeout);
   timeout = attr.toInt(&boolBuff);
-
   if(!boolBuff)
   {
-    master->connectToPort(  portName,
-        static_cast<QSerialPort::BaudRate>(baud),
-        static_cast<QSerialPort::Parity>(parity),
-        static_cast<QSerialPort::DataBits>(dataBits),
-        static_cast<QSerialPort::StopBits>(stopBits));
+    timeout = 500;
   }
-  else
+
+  boolBuff = false;
+
+  attr = _element.attribute(__mastersCommonAttributes.retries);
+  retries = attr.toInt(&boolBuff);
+  if(!boolBuff)
   {
-    master->connectToPort(  portName,
-        static_cast<QSerialPort::BaudRate>(baud),
-        static_cast<QSerialPort::Parity>(parity),
-        static_cast<QSerialPort::DataBits>(dataBits),
-        static_cast<QSerialPort::StopBits>(stopBits),
-        timeout);
+    retries = 3;
   }
+
+  master->connectToPort(  portName,
+      static_cast<QSerialPort::BaudRate>(baud),
+      static_cast<QSerialPort::Parity>(parity),
+      static_cast<QSerialPort::DataBits>(dataBits),
+      static_cast<QSerialPort::StopBits>(stopBits),
+      timeout,
+      retries);
 
 LABELRET:
   return master;
@@ -341,17 +346,33 @@ static QSharedPointer<LQModbusMasterBase> createMasterTcp(
     const QDomElement _element)
 {
   QSharedPointer<LQModbusMasterTcp> master;
-  QString urlstr = _element.attribute(__mastersTcpAttributes.url);
+  QString attr = _element.attribute(__mastersTcpAttributes.url);
+  int timeout;
+  int retries;
+  bool bool_buff = false;
 
-  if(urlstr.isNull()) return master;
+  if(attr.isNull()) return master;
 
-  QUrl url = QUrl::fromUserInput(urlstr);
+  QUrl url = QUrl::fromUserInput(attr);
+
+  attr = _element.attribute(__mastersCommonAttributes.timeout);
+  timeout = attr.toInt(&bool_buff);
+  if(!bool_buff)
+  {
+    timeout = 500;
+  }
+  bool_buff= false;
+  attr = _element.attribute(__mastersCommonAttributes.retries);
+  retries = attr.toInt(&bool_buff);
+  if(!bool_buff)
+  {
+    retries = 3;
+  }
 
   if(url.isValid())
   {
     master = LQModbusMasterTcp::create();
-    master->connectToHost(url);
-
+    master->connectToHost(url, timeout, retries);
   }
   return master;
 }
