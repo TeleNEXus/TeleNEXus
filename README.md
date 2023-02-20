@@ -31,7 +31,7 @@ provides cross-platform.
 - MODBUS data source implementation plugin in the `plugins/modvussource` folder.
 
 ## Version Qt.
- TeleNEXus was build using Qt 5.12.8.
+ TeleNEXus was build using Qt 5.15.
 
 ## Linux.
   To fully compile the entire project, you can use the bash script file
@@ -138,7 +138,7 @@ Data Acquisitionи) и ICS (Industrial Control System) систем.
 - Плагин реализации источника данных MODBUS в папке `plugins/modvussource`.
 
 ## Версия Qt.
-  Для сборки TeleNEXus использовалась версия Qt 5.12.8.
+  Для сборки TeleNEXus использовалась версия Qt 5.15.
 
 ## Linux.
   Для полной компиляции всего проекта можно исользовать файл bash скрипта
